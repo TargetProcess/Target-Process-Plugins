@@ -1,0 +1,11 @@
+<?xml version="1.0"?> 
+<?xml-stylesheet type="text/xsl" href="../xsl/allsubjects.xsl"?>
+<!DOCTYPE notification [
+	<!ENTITY subj_en SYSTEM "../lang/en/subjects.xml">
+	<!ENTITY subj_ru SYSTEM "../lang/ru/subjects.xml">
+]>
+
+<notification>
+&subj_en;
+&subj_ru;
+</notification>

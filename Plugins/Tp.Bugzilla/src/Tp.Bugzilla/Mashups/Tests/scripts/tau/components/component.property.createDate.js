@@ -1,0 +1,1 @@
+define(["tau/components/component.property.date"],function(a){return{create:function(b){b=b||{},b.propertyName="createDate";return a.create(b)}}})

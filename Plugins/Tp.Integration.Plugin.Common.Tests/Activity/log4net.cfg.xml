@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net xsi:noNamespaceSchemaLocation="http://csharptest.net/downloads/schema/log4net.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<appender name="PluginLogAppender" type="log4net.Appender.RollingFileAppender">
+		<file value="Log.txt"/>
+		<appendToFile value="true" />
+		<rollingStyle value="Size" />
+		<maxSizeRollBackups value="3" />
+		<maximumFileSize value="10KB" />
+		<staticLogFileName value="true" />
+		<immediateFlush value="true" />
+		<layout type="Tp.Integration.Plugin.Common.Logging.CsvLayout" />
+		<lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+		<encoding value="utf-8" />
+	</appender>
+
+	<appender name="PluginErrorLoggerAppender" type="Tp.Integration.Plugin.Common.Activity.PluginRollingFileAppender">
+		<folder value="Logs" />
+		<file value="Error.txt"/>
+		<appendToFile value="true" />
+		<rollingStyle value="Size" />
+		<maxSizeRollBackups value="10" />
+		<maximumFileSize value="30KB" />
+		<staticLogFileName value="true" />
+		<layout type="Tp.Integration.Plugin.Common.Logging.CsvLayout" />
+		<lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+		<encoding value="utf-8" />
+	</appender>
+	<appender name="PluginActivityLoggerAppender" type="Tp.Integration.Plugin.Common.Activity.PluginRollingFileAppender">
+		<folder value="Logs" />
+		<file value="Activity.txt"/>
+		<appendToFile value="true" />
+		<rollingStyle value="Size" />
+		<maxSizeRollBackups value="10" />
+		<maximumFileSize value="30KB" />
+		<staticLogFileName value="true" />
+		<layout type="Tp.Integration.Plugin.Common.Logging.CsvLayout" />
+		<lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+		<encoding value="utf-8" />
+	</appender>
+
+	<logger name="PluginErrorLogger">
+		<level value="ERROR"/>
+		<appender-ref ref="PluginErrorLoggerAppender"/>
+	</logger>
+	<logger name="PluginActivityLogger">
+		<level value="INFO"/>
+		<appender-ref ref="PluginActivityLoggerAppender"/>
+	</logger>
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="PluginLogAppender" />
+	</root>
+</log4net>

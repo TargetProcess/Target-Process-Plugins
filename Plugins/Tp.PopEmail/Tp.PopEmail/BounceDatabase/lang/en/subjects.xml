@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/subjects.xsl"?>
+<!--DOCTYPE subjects SYSTEM "../../dtd/subjects.dtd"-->
+<subjects lang="en">
+	<include>
+		<subject keyword="[Autoreply]" type="auto" />
+		<subject keyword="away from my mail" />
+
+		<subject keyword="Considered UNSOLICITED BULK EMAIL from you" type="spam" />
+		<subject keyword="change {0} address" type="change" />
+
+		<subject keyword="Delivery Notification: Delivery has failed" />
+		<subject keyword="Delivery failure" />
+		<subject keyword="Delivery Notification for" />
+		<subject keyword="Delivery Status" />
+		<subject keyword="DELIVERY FAILURE:" />
+		<subject keyword="Delivery Status Notification" />
+		<subject keyword="Delivery Confirmation" type="deliv" />
+
+		<subject keyword="E-mail address changed" type="change" />
+
+		<subject keyword="Failure notice" />
+		<subject keyword="Failed mail" />
+
+
+		<subject keyword="Mail delivery failed: returning message to sender" />
+		<subject keyword="Mail delivery failed:" />
+		<subject keyword="Mail System Error - Returned Mail"  />
+		<subject keyword="Mail System Error - Undeliverable Mail" />
+		<subject keyword="Mail message detected as spam" type="spam" />
+		<subject keyword="Message Delivery Failure" />
+		<subject keyword="Message Delivery Delay" />
+
+		<subject keyword="NON-DELIVERY" />
+		<subject keyword="Nondeliverable mail" />
+		<subject keyword="Norton AntiVirus detected and quarantined a virus in a message yo u sent" type="virus" />
+
+		<subject keyword="Potential Junk Mail moved to Junk Mail Folder" type="spam" />
+		<subject keyword="Permanent Delivery Failure" />
+
+		<subject keyword="Returned mail" />
+		<subject keyword="Receipt Confirmation" />
+		<subject keyword="RCPT:" />
+		<subject keyword="request {0} addition" />
+
+		<subject keyword="Warning: {0} message delayed" type="temp" />
+		<subject keyword="Warning: message {0} delayed" type="temp" />
+		<subject keyword="WARNING. Mail Delayed:" type="temp" />
+		<subject keyword="Warning: could not send message for past" type="temp" />
+
+		<subject keyword="unable to deliver mail" />
+		<subject keyword="Undeliverable Message" />
+		<subject keyword="Undeliverable mail" />
+		<subject keyword="Undelivered Mail Returned to Sender"  />
+		<subject keyword="Undeliverable:" />
+	</include>
+	<exclude>
+		<subject keyword="Re:" match="start" />
+		<subject keyword="Re[{0}]:" match="start" />
+		<subject keyword="Fw:" match="start" />
+		<subject keyword="Fwd:" match="start" />
+	</exclude>
+
+</subjects>

@@ -1,0 +1,1 @@
+define(["Underscore"],function(a){var b={pluralize:function(b,c){var d=a.isArray(b)?b:b.split("|"),e=function(a){return a===1?0:1},f=e(c);return d[f]?d[f]:d[0]}};return b})

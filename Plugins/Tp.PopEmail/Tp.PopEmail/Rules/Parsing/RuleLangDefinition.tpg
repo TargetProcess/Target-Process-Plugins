@@ -1,0 +1,35 @@
+//Tiny Parser Generator v1.3
+//Copyright © Herre Kuijpers 2008-2012
+
+NUMBER -> @"[0-9]+";
+EOF -> @"^$";
+STRING_PARAM -> @"'[^']+'";
+
+[Skip] WHITESPACE -> @"\s+";
+
+WhenKeyword -> @"when";
+
+SubjectContainsKeyword -> @"subject contains";
+SubjectContainsClause -> SubjectContainsKeyword STRING_PARAM;
+
+ThenKeyword -> @"then";
+
+AttachToProjectKeyword -> @"attach to project";
+AttachToProjectClause -> AttachToProjectKeyword NUMBER;
+
+CreateRequestKeyword -> @"create request in project";
+CreateRequestClause -> CreateRequestKeyword NUMBER;
+
+CompanyMatchedKeyword -> @"company matched to project";
+CompanyMatchedClause -> CompanyMatchedKeyword NUMBER;
+
+AndKeyword -> @"and";
+
+WhenStatement -> (SubjectContainsClause AndKeyword?) | (CompanyMatchedClause AndKeyword?);
+WhenPart -> WhenKeyword WhenStatement+;
+
+ThenStatement -> (AttachToProjectClause AndKeyword?) | (CreateRequestClause AndKeyword?);
+ThenPart -> ThenKeyword ThenStatement+;
+
+
+Start -> (WhenPart ThenPart) | (ThenPart) EOF;

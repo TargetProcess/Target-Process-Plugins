@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/common/ui.template.user"],function(a){var b={name:"user-list",markup:'<div class="role-title">${role.name}</div>{{tmpl(users) "user"}}',dependencies:["user"]};return a.register(b)})

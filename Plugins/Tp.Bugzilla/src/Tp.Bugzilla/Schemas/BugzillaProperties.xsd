@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="bugzilla_properties">    
+    <xs:complexType>
+      <xs:sequence>
+        
+        <xs:element ref="script_version" />
+        <xs:element ref="custom_fields" />
+        <xs:element ref="severities" />
+        <xs:element ref="priorities" />
+        <xs:element ref="statuses" />        
+        <xs:element ref="resolutions" />
+		  <xs:element ref="timezone" />
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="timezone" type="xs:string" />
+  <xs:element name="script_version" type="xs:string" />
+  <xs:element name="name" type="xs:string" />  
+  <xs:element name="custom_fields">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="severities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="priorities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="statuses">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="resolutions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+ 

@@ -1,0 +1,11 @@
+<!ELEMENT placeholders (regexps+)>
+<!ATTLIST placeholders
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT regexps (regexp+, mask)>
+
+<!ELEMENT regexp EMPTY>
+<!ATTLIST regexp
+	name	CDATA #REQUIRED>
+
+<!ELEMENT mask (#PCDATA)>

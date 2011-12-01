@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"list",markup:['<div class="tau-list">',"</div>"]};return a.register(b)})

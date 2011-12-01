@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"container.list",markup:['<div class="tau-container ${cssClass}"></div>'],dependencies:[]};return a.register(b)})

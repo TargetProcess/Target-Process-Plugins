@@ -1,0 +1,27 @@
+id: 0-1.0.r3/0
+type: file
+pred: 0-1.0.r2/80
+count: 2
+text: 1 0 61 49 cc1d478b5502441cc8ad9175d1d057b1 a4f071cc903263c32f2d4d9ebc89c9fdb5afb965 2-2/_1
+cpath: /readme.txt
+copyroot: 0 /
+
+PLAIN
+K 10
+readme.txt
+V 15
+file 0-1.0.r3/0
+END
+ENDREP
+id: 0.0.r3/238
+type: dir
+pred: 0.0.r2/320
+count: 3
+text: 3 184 41 41 8f20df46695c49fc1bf8012ddfaada09
+cpath: /
+copyroot: 0 /
+
+0-1.0.t2-2 modify-file true false /readme.txt
+
+
+238 364

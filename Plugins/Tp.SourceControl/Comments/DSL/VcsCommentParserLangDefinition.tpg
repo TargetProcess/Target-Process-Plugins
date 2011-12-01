@@ -1,0 +1,115 @@
+//Tiny Parser Generator v1.3
+//Copyright © Herre Kuijpers 2008-2012
+
+<% @TinyPG Language="C#"%>
+
+//add registered keywords here
+IdKeyword1 -> @"id:";
+IdKeyword2 -> @"#";
+TimeKeyword -> @"time:";
+StatusKeyword1 -> @"status:";
+StatusKeyword2 -> @"state:";
+CommentKeyword1 -> @"comment:";
+CommentKeyword2 -> @"comments:";
+CommentKeyword3 -> @"comm:";
+CommentKeyword4 -> @"cmt:";
+
+EOF -> @"^$";
+[Skip] SPACE -> @"\s+";
+Delimiter -> @":";
+PUNCTUATIONMARK -> @"[,\.\?!;]+";
+COMMA -> @",";
+NUMBER -> @"[0-9]+";
+DECIMAL -> @"\d+(\.\d+)?";
+//list all the registered keywords inside
+ANY_TEXT -> @"(.(?<!#)(?<!(id|time|status|state|comment|comm|comments|cmt):))+\s";
+ANY_SYMBOL -> @"((?!#)(?!(id|time|status|state|comment|comm|comments|cmt):).)";
+
+Start -> (ActionNode)* EOF
+{
+	var result = new List<AssignRevisionToEntityAction>();
+	int i = 0;
+	while($ActionNode[i] != null)
+	{
+		result.AddRange($ActionNode[i] as List<AssignRevisionToEntityAction>);
+		i++;
+	}
+
+	return result;
+};
+
+ActionNode-> ANY_TEXT* (EntityIdClause COMMA*)* (PostTimeClause|PostCommentClause|ChangeStatusClause|ANY_TEXT)* 
+{
+	var result = new List<AssignRevisionToEntityAction>();
+	int i = 0;
+	while ($EntityIdClause[i] != null)
+	{
+		result.Add($EntityIdClause[i] as AssignRevisionToEntityAction);
+		i++;
+	}
+	var childActions = new List<IAction>();
+	i = 0;
+	while ($PostTimeClause[i] != null)
+	{
+		childActions.Add($PostTimeClause as IAction);
+		i++;
+	}
+	i = 0;
+	while ($PostCommentClause[i] != null)
+	{
+		childActions.Add($PostCommentClause[i] as IAction);
+		i++;
+	}
+	i = 0;
+	while ($ChangeStatusClause[i] != null)
+	{
+		childActions.Add($ChangeStatusClause[i] as IAction);
+		i++;
+	}
+
+	foreach (var action in result)
+	{
+		action.Children.AddRange(childActions);
+	}
+
+	return result;
+};
+
+EntityIdClause -> ANY_SYMBOL* (IdKeyword1|IdKeyword2) NUMBER ANY_SYMBOL*
+{
+	return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32($NUMBER));
+};
+
+PostTimeClause -> TimeKeyword DECIMAL (Delimiter DECIMAL)? 
+{
+	decimal? timeLeft = null;
+	if ($DECIMAL[1] != null)
+	{
+		timeLeft = Convert.ToDecimal($DECIMAL[1]);
+	}
+	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal($DECIMAL), timeLeft);
+};
+
+ChangeStatusClause -> (StatusKeyword1|StatusKeyword2) ANY_TEXT
+{
+	return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(Convert.ToString($ANY_TEXT).Trim().Trim(','));
+};
+
+PostCommentClause -> (CommentKeyword1|CommentKeyword2|CommentKeyword3|CommentKeyword4) ANY_TEXT*
+{
+	int i = 0;
+	StringBuilder result = new StringBuilder();
+	while ($ANY_TEXT[i] != null)
+	{
+		result.AppendLine(Convert.ToString($ANY_TEXT[i]).Trim());
+		i++;
+	}
+	if(result.Length > Environment.NewLine.Length)
+	{
+		result.Remove(result.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+	}
+	
+	return ObjectFactory.GetInstance<IActionFactory>().CreatePostCommentAction(result.ToString());
+};
+
+

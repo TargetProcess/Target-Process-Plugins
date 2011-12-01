@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(a){return a.extend({options:{spinnerClass:"ui-spinner"},"bus beforeInit":function(a){var b=this;b.element&&b.element.addClass(b.options.spinnerClass)},"bus afterRender":function(a){var b=this;b.element=a.data.element,b.element.removeClass(b.options.spinnerClass)}})})

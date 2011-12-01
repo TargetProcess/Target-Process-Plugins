@@ -1,0 +1,57 @@
+id: 0-7.0.r7/0
+type: dir
+count: 0
+cpath: /first folder
+copyroot: 0 /
+
+id: 3-7.0.r7/70
+type: dir
+count: 0
+cpath: /second folder/subdir
+copyroot: 0 /
+
+PLAIN
+K 6
+subdir
+V 15
+dir 3-7.0.r7/70
+END
+ENDREP
+id: 2-7.0.r7/198
+type: dir
+count: 0
+text: 7 149 36 36 e7f1d4756661dd9b747196888c83dd21
+cpath: /second folder
+copyroot: 0 /
+
+PLAIN
+K 12
+first folder
+V 14
+dir 0-7.0.r7/0
+K 10
+readme.txt
+V 16
+file 0-1.0.r6/56
+K 13
+second folder
+V 16
+dir 2-7.0.r7/198
+END
+ENDREP
+id: 0.0.r7/456
+type: dir
+pred: 0.0.r6/295
+count: 7
+text: 7 322 121 121 e319800467ae13f27ff1caf006520815
+cpath: /
+copyroot: 0 /
+
+_0.0.t6-6 add-dir false false /first folder
+
+_2.0.t6-6 add-dir false false /second folder
+
+_3.0.t6-6 add-dir false false /second folder/subdir
+
+
+456 584

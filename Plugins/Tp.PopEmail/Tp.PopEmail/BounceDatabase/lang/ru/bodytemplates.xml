@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/bodytemplates.xsl"?>
+<!--DOCTYPE bodytemplates SYSTEM "../../dtd/bodytemplates.dtd"-->
+<bodytemplates lang="ru">
+	<contents priority="1">
+		<![CDATA[ВНИМАНИЕ: сообщение на адрес '<{TO_EMAIL}>' не доставлено
+LOCAL module(account memo) reports:
+{DESCRIPTION}]]>
+	</contents>
+</bodytemplates>

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"customField-richtext",markup:['<div class="ui-customfield ui-customfield-richtext">','   <div class="ui-customfield__value value">{{html value}}</div>',"</div>"]};return a.register(b)})

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"pluginsList-profile",markup:["<ul>",'   <li class="name tau-profileName"><a href="${editUrl}">${name}</a></li>','   <li class="delete"><a class="tau-profile-actions button danger" href=""><span class="delete-icon"></span></a></li>',"</ul>"]};return a.register(b)})

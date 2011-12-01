@@ -1,0 +1,1804 @@
+token=undefined&selenium.version=1.0-beta-2&selenium.revision=2330&result=failed&totalTime=66&numTestPasses=4&numTestFailures=1&numCommandPasses=5&numCommandFailures=1&numCommandErrors=1&testTable.1=<div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">BuildUp</td></tr>
+</thead><tbody>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>open</td>
+	<td>../../home.html</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Begin Intervention</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>firstname</td>
+	<td>admin</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>patientnumber</td>
+	<td>robertremien</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>login</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>firstname</td>
+	<td>Test</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>lastname</td>
+	<td>test</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>patientnumber</td>
+	<td>goodpassword</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@value='Add']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>firstname</td>
+	<td>TestPatient</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>lastname</td>
+	<td>test</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>patientnumber</td>
+	<td>123</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@value='Add']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//img[@alt='Masivukeni Logo']</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+
+
+</div>&testTable.2=<div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">BadPassword</td></tr>
+</thead><tbody>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>open</td>
+	<td>../../home.html</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Begin Intervention</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>firstname</td>
+	<td>Test</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>patientnumber</td>
+	<td>badpassword</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>login_link</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertAlert</td>
+	<td>Login failed!</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+
+
+</div>&testTable.3=<div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">LoginPatient</td></tr>
+</thead><tbody>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>open</td>
+	<td>../../home.html</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Begin Intervention</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>firstname</td>
+	<td>TestPatient</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>patientnumber</td>
+	<td>123</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>login_link</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertTextPresent</td>
+	<td>123</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>verifyText</td>
+	<td>user_fullname</td>
+	<td>TestPatient test</td>
+</tr>
+
+</tbody></table>
+
+
+</div>&testTable.4=<div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_failed"><td rowspan="1" colspan="3">FullIntervention</td></tr>
+</thead><tbody>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>open</td>
+	<td>../../client_login_confirm.html</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>login</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>session1</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity1']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity2</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity3']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q1' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q2' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q3' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q4' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q5' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>q6</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q7' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q8' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q9' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q10' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q1' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q2' and @value='1']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q3' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>q4</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>q5</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>q6</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q7' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q8' and @value='3']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q9' and @value='4']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='q10' and @value='2']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity15']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity4</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//div[@id='bottom2-fruit']/input</td>
+	<td>test1</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//div[@id='middle3-fruit']/input</td>
+	<td>test2</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//div[@id='bottom3-fruit']/input</td>
+	<td>test3</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//div[@id='middle2-fruit']/input</td>
+	<td>test4</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//div[@id='top2-fruit']/input</td>
+	<td>test5</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='bottom2-fruit']/div[1]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='middle3-fruit']/div[1]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='top2-fruit']/div[1]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='bottom3-fruit']/div[1]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='middle3-fruit']/div[1]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='middle4-fruit']/div[1]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity5</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity16</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity57</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity6</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='session2']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity17</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity18</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>select_line_2</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='sonke_didanosine100']/div[2]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='sonke_didanosine_50']/div[2]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='kaletra']/div[3]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>sonke_didanosine_50_image</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>kaletra_image</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>kaletra_image</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>sonke_didanosine100_image</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity19</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity20']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity21</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity22']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity58</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='step2']</td>
+	<td>bottom</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='step3']</td>
+	<td>bottom-middle</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='step4']</td>
+	<td>top-middle</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='goal']</td>
+	<td>top</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity23']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>session3</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity7']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity8']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity9</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity10</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>bad2_moving</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>bad1_moving</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity11</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity64']/span</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity12</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>issue</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>issue</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>issue</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>prev-issue-link</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>issue</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//input[@name='issue' and @value='No']</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>other</td>
+	<td>my different issue is special</td>
+</tr>
+<tr class="  status_failed" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>issue</td>
+	<td>Timed&nbsp;out&nbsp;after&nbsp;30000ms</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='issue-list']/div[3]/div[2]/img</td>
+	<td></td>
+</tr>
+<tr class="  status_failed" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td>Element&nbsp;next-game-part-link&nbsp;not&nbsp;found</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>ask</td>
+	<td>ask info</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>aim</td>
+	<td>aim info</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives</td>
+	<td>alt1</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives2</td>
+	<td>alt2</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives3</td>
+	<td>alt3</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>action</td>
+	<td>action foo</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Choose a Problem</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='issue-list']/div[3]/div[1]</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Choose a Problem</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='issue-list']/div[14]/div[2]/img</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity59']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity14']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>session4</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity24</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity25']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity26</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity27']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>ask</td>
+	<td>another question</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>aim</td>
+	<td>before i say hello</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives</td>
+	<td>become a monk</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives2</td>
+	<td>save the world</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives3</td>
+	<td>apathy</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>action</td>
+	<td>thinking</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity28']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity29']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity30</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity60</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='step3']</td>
+	<td>changed bottom-middle</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity31']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>session5</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity32</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity33']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity34']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity35</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity36</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity37']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='issue-list']/div[4]/div[2]/img</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>ask</td>
+	<td>do i drink too much?</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>aim</td>
+	<td>take medication</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives</td>
+	<td>take them drunk</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>alternatives2</td>
+	<td>get a friend to help</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>action</td>
+	<td>take them before i get drunk</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>form-continue</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity61</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='step4']</td>
+	<td>top-middle (changed)</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity38</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>session6</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity39']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity40</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity41']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity42']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>show-support</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>click</td>
+	<td>show-disclosure</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity43']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity44']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity45</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity63</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='goal']</td>
+	<td>top (changed)</td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity46']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>session7</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity49']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity55</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity50']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity51</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity52']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>activity53</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=return to task overview</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>next-game-part-link</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//a[@id='activity54']/span</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>tasklink</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>complete</td>
+	<td></td>
+</tr>
+<tr class="" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Logout</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+
+
+</div>&testTable.5=<div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">Login</td></tr>
+</thead><tbody>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>open</td>
+	<td>../../home.html</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>link=Begin Intervention</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>firstname</td>
+	<td>Test</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>patientnumber</td>
+	<td>goodpassword</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>login_link</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertTextPresent</td>
+	<td>goodpassword</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>verifyText</td>
+	<td>user_fullname</td>
+	<td>Test test</td>
+</tr>
+
+</tbody></table>
+
+
+</div>&numTestTotal=5&suite=
+<table id="suiteTable" class="selenium" border="1" cellpadding="1" cellspacing="1"><tbody>
+<tr class="title  status_failed"><td><b>Test Suite</b></td></tr>
+<tr class="  status_passed"><td><a href="BuildUp.html">BuildUp</a></td></tr>
+<tr class="  status_passed"><td><a href="BadPassword.html">BadPassword</a></td></tr>
+<tr class="  status_passed"><td><a href="LoginPatient.html">LoginPatient</a></td></tr>
+<tr class="  status_failed"><td><a href="FullIntervention.html">FullIntervention</a></td></tr>
+<tr class="  status_passed"><td><a href="Login.html">Login</a></td></tr>
+</tbody></table>
+
+
+&log=info: Starting test /site_media/tests/BuildUp.html
+info: Executing: |open | ../../home.html |  |
+info: Executing: |clickAndWait | link=Begin Intervention |  |
+info: Executing: |type | firstname | admin |
+info: Executing: |type | patientnumber | robertremien |
+info: Executing: |clickAndWait | login |  |
+info: Executing: |type | firstname | Test |
+info: Executing: |type | lastname | test |
+info: Executing: |type | patientnumber | goodpassword |
+info: Executing: |click | //input[@value='Add'] |  |
+info: Executing: |type | firstname | TestPatient |
+info: Executing: |type | lastname | test |
+info: Executing: |type | patientnumber | 123 |
+info: Executing: |click | //input[@value='Add'] |  |
+info: Executing: |clickAndWait | //img[@alt='Masivukeni Logo'] |  |
+info: Starting test /site_media/tests/BadPassword.html
+info: Executing: |open | ../../home.html |  |
+info: Executing: |clickAndWait | link=Begin Intervention |  |
+info: Executing: |type | firstname | Test |
+info: Executing: |type | patientnumber | badpassword |
+info: Executing: |click | login_link |  |
+info: Executing: |assertAlert | Login failed! |  |
+info: Starting test /site_media/tests/LoginPatient.html
+info: Executing: |open | ../../home.html |  |
+info: Executing: |clickAndWait | link=Begin Intervention |  |
+info: Executing: |type | firstname | TestPatient |
+info: Executing: |type | patientnumber | 123 |
+info: Executing: |clickAndWait | login_link |  |
+info: Executing: |assertTextPresent | 123 |  |
+info: Executing: |verifyText | user_fullname | TestPatient test |
+info: Starting test /site_media/tests/FullIntervention.html
+info: Executing: |open | ../../client_login_confirm.html |  |
+info: Executing: |clickAndWait | login |  |
+info: Executing: |clickAndWait | session1 |  |
+info: Executing: |clickAndWait | //a[@id='activity1']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity2 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity3']/span |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |click | //input[@name='q1' and @value='2'] |  |
+info: Executing: |click | //input[@name='q2' and @value='2'] |  |
+info: Executing: |click | //input[@name='q3' and @value='3'] |  |
+info: Executing: |click | //input[@name='q4' and @value='2'] |  |
+info: Executing: |click | //input[@name='q5' and @value='3'] |  |
+info: Executing: |click | q6 |  |
+info: Executing: |click | //input[@name='q7' and @value='3'] |  |
+info: Executing: |click | //input[@name='q8' and @value='3'] |  |
+info: Executing: |click | //input[@name='q9' and @value='3'] |  |
+info: Executing: |click | //input[@name='q10' and @value='3'] |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |click | //input[@name='q1' and @value='2'] |  |
+info: Executing: |click | //input[@name='q2' and @value='1'] |  |
+info: Executing: |click | //input[@name='q3' and @value='2'] |  |
+info: Executing: |click | q4 |  |
+info: Executing: |click | q5 |  |
+info: Executing: |click | q6 |  |
+info: Executing: |click | //input[@name='q7' and @value='2'] |  |
+info: Executing: |click | //input[@name='q8' and @value='3'] |  |
+info: Executing: |click | //input[@name='q9' and @value='4'] |  |
+info: Executing: |click | //input[@name='q10' and @value='2'] |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity15']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity4 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |type | //div[@id='bottom2-fruit']/input | test1 |
+info: Executing: |type | //div[@id='middle3-fruit']/input | test2 |
+info: Executing: |type | //div[@id='bottom3-fruit']/input | test3 |
+info: Executing: |type | //div[@id='middle2-fruit']/input | test4 |
+info: Executing: |type | //div[@id='top2-fruit']/input | test5 |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |click | //div[@id='bottom2-fruit']/div[1] |  |
+info: Executing: |click | //div[@id='middle3-fruit']/div[1] |  |
+info: Executing: |click | //div[@id='top2-fruit']/div[1] |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |click | //div[@id='bottom3-fruit']/div[1] |  |
+info: Executing: |click | //div[@id='middle3-fruit']/div[1] |  |
+info: Executing: |click | //div[@id='middle4-fruit']/div[1] |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity5 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity16 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity57 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity6 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='session2']/span |  |
+info: Executing: |clickAndWait | activity17 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity18 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |click | select_line_2 |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |click | //div[@id='sonke_didanosine100']/div[2] |  |
+info: Executing: |click | //div[@id='sonke_didanosine_50']/div[2] |  |
+info: Executing: |click | //div[@id='kaletra']/div[3] |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |click | sonke_didanosine_50_image |  |
+info: Executing: |click | kaletra_image |  |
+info: Executing: |click | kaletra_image |  |
+info: Executing: |click | sonke_didanosine100_image |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity19 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity20']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity21 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity22']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity58 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |type | //input[@name='step2'] | bottom |
+info: Executing: |type | //input[@name='step3'] | bottom-middle |
+info: Executing: |type | //input[@name='step4'] | top-middle |
+info: Executing: |type | //input[@name='goal'] | top |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity23']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | session3 |  |
+info: Executing: |clickAndWait | //a[@id='activity7']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity8']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity9 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity10 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |click | bad2_moving |  |
+info: Executing: |click | bad1_moving |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity11 |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | //a[@id='activity64']/span |  |
+info: Executing: |clickAndWait | complete |  |
+info: Executing: |clickAndWait | activity12 |  |
+info: Executing: |clickAndWait | tasklink |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+info: Executing: |click | issue |  |
+info: Executing: |click | issue |  |
+info: Executing: |click | issue |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | prev-issue-link |  |
+info: Executing: |click | issue |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |click | //input[@name='issue' and @value='No'] |  |
+info: Executing: |type | other | my different issue is special |
+info: Executing: |clickAndWait | issue |  |
+warn: currentTest.recordFailure: Timed out after 30000ms
+info: Executing: |click | //div[@id='issue-list']/div[3]/div[2]/img |  |
+info: Executing: |clickAndWait | next-game-part-link |  |
+error: Element next-game-part-link not found
+warn: currentTest.recordFailure: Element next-game-part-link not found
+info: Starting test /site_media/tests/Login.html
+info: Executing: |open | ../../home.html |  |
+info: Executing: |clickAndWait | link=Begin Intervention |  |
+info: Executing: |type | firstname | Test |
+info: Executing: |type | patientnumber | goodpassword |
+info: Executing: |clickAndWait | login_link |  |
+info: Executing: |assertTextPresent | goodpassword |  |
+info: Executing: |verifyText | user_fullname | Test test |
+

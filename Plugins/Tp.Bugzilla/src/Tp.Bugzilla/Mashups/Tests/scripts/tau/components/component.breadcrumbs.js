@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.breadcrumbs","tau/models/model.breadcrumbs.entity","tau/components/extensions/breadcrumbs/extension.breadcrumbs.items","tau/ui/templates/breadcrumbs/ui.template.breadcrumbs"],function(a,b,c,d,e){return{create:function(f){var g={extensions:[b,c,d],template:e};return a.create(g,f)}}})

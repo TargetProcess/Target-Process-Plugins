@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="de.vogella.junit.first" project="de.vogella.junit.first" tests="4" started="4" failures="1" errors="0" ignored="1">
+  <testsuite name="de.vogella.junit.first.MyClassTest" time="0.0">
+    <testcase name="testMultiply" classname="de.vogella.junit.first.MyClassTest" time="0.0">
+      <failure>java.lang.AssertionError: Result expected:&lt;50&gt; but was:&lt;2&gt;&#13;
+	at org.junit.Assert.fail(Assert.java:91)&#13;
+	at org.junit.Assert.failNotEquals(Assert.java:645)&#13;
+	at org.junit.Assert.assertEquals(Assert.java:126)&#13;
+	at org.junit.Assert.assertEquals(Assert.java:470)&#13;
+	at de.vogella.junit.first.MyClassTest.testMultiply(MyClassTest.java:13)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
+	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)&#13;
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runNotIgnored(BlockJUnit4ClassRunner.java:79)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:71)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:49)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)&#13;
+&#13;
+</failure>
+    </testcase>
+    <testcase name="testSubstract" classname="de.vogella.junit.first.MyClassTest" time="0.0"/>
+    <testcase name="testAdd" classname="de.vogella.junit.first.MyClassTest" time="0.0"/>
+    <testcase name="testDivide" classname="de.vogella.junit.first.MyClassTest" time="0.0" ignored="true"/>
+  </testsuite>
+</testrun>

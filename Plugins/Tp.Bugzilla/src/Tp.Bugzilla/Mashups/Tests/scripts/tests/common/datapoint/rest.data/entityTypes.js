@@ -1,0 +1,1 @@
+define(["Underscore"],function(a){return{getEntityTypes:function(){return[{__type:"entityType",id:15,name:"Bug"}]}}})

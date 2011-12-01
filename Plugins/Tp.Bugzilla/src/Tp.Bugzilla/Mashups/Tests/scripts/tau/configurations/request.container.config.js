@@ -1,0 +1,1 @@
+define(["tau/configurations/baseAssignable.container.config","tau/models/model.extensions"],function(a,b){var c=a.extend({getAdditionalInfoAliases:function(){return["CreationDate","CompletionDate"]},getActionsAliases:function(){return["Add Time","Create Bug","Create User Story","Create Task","Create Feature","-----","Old View","Old Edit","Print","-----","Delete"]}});return c})

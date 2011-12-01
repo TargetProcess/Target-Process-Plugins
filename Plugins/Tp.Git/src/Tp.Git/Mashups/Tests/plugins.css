@@ -1,0 +1,302 @@
+.normal {
+    font-weight: normal !important;
+}
+
+.bold {
+    font-weight: bold !important;
+}
+
+.base_bg {
+    background-color: #f5f6f7;
+}
+
+.box {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+.plugins {
+    padding: 10px 0px;
+}
+
+.active-user{
+    background-color: #dddddd;
+}
+
+.plugins .h2 {
+    color: #333;
+    font-size: 18px;
+    font-weight: normal !important;
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.plugins .h3 {
+    color: #333;
+    font-size: 14px;
+    font-weight: bold !important;
+    margin: 0px 0px 5px 0px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.plugins .note {
+    color: #333;
+    font-size: 12px;
+    font-weight: normal !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    padding: 0px 0px 3px 0px;
+}
+
+.plugins .note .small {
+    font-size: 11px;
+    color: #768696;
+    font-weight: normal !important;
+}
+
+.plugins .label {
+    color: #333;
+    font-size: 12px;
+    font-weight: bold !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    padding: 0px 0px 3px 0px;
+}
+
+.plugins .label .small {
+    font-size: 11px;
+    color: #768696;
+    font-weight: normal !important;
+}
+
+.plugins .label .error {
+    font-size: 11px;
+    font-weight: normal !important;
+    color: #d20000;
+}
+
+.plugins .input {
+    border: 1px solid #9ea4ad;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    padding: 5px 6px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    webkit-box-shadow: inset 0px 1px 1px #ddd;
+    -moz-box-shadow: inset 0px 1px 1px #ddd;
+    box-shadow: inset 0px 1px 1px #ddd;
+}
+
+.plugins .input:focus {
+    background-color: #e6eff8;
+    border: 1px solid #8e9bae;
+}
+
+.plugins .input.error {
+    border: 1px solid #d20000;
+    background-color: #ffe6e6;
+    color: #d20000;
+    font-weight: bold;
+}
+
+.plugins .input.error:focus {
+    background-color: #ffe6e6;
+}
+
+.plugins .select {
+    border: 1px solid #9ea4ad;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    padding: 5px 6px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    webkit-box-shadow: inset 0px 1px 1px #ddd;
+    -moz-box-shadow: inset 0px 1px 1px #ddd;
+    box-shadow: inset 0px 1px 1px #ddd;
+}
+
+.plugins .select:focus {
+    background-color: #e6eff8;
+    border: 1px solid #8e9bae;
+}
+
+.plugins .textarea {
+    border: 1px solid #9ea4ad;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    padding: 5px 6px 5px 6px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    webkit-box-shadow: inset 0px 1px 1px #ddd;
+    -moz-box-shadow: inset 0px 1px 1px #ddd;
+    box-shadow: inset 0px 1px 1px #ddd;
+}
+
+.plugins .textarea:focus {
+    background-color: #e6eff8;
+    border: 1px solid #8e9bae;
+}
+
+.plugins .task-creator-settings {
+    width: 680px;
+    height: auto;
+    display: table;
+    margin: 20px 0px 20px 0px;
+    background-color: #f5f6f7;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+.plugins .task-creator-settings .pad-box {
+    padding: 15px;
+    display: block;
+}
+
+.plugins .svn-settings {
+    width: 680px;
+    height: auto;
+    display: table;
+    margin: 20px 0px 10px 0px;
+    background-color: #f5f6f7;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+.plugins .svn-settings .pad-box {
+    padding: 15px;
+}
+
+.plugins .svn-map-users {
+    width: 680px;
+    height: auto;
+    display: table;
+    margin: 20px 0px 10px 0px;
+    background-color: #f5f6f7;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+.plugins .svn-map-users .pad-box {
+    padding: 15px;
+}
+
+.plugins .svn-map-users .users-block {
+    padding: 0px;
+    margin: 0px;
+}
+
+.plugins .svn-map-users .users-block li {
+    display: inline-block;
+    padding: 5px 10px 0px 0px;
+    list-style: none;
+    width: 275px;
+    zoom: 1;
+    *display: inline;
+}
+
+.plugins .svn-map-users .users-block li input {
+    width: 275px;
+}
+
+.plugins .svn-map-users .users-block .chain {
+    background: url("../../img/plugins/chain-small.png") top left no-repeat;
+    width: 10px;
+}
+
+.plugins .svn-map-users .users-block .chain-no {
+    width: 10px;
+}
+
+.plugins .svn-map-users .search-users-popover {
+    width: auto;
+    height: auto;
+    position: absolute;
+    z-index: 10000000;
+    background: #fff;
+    color: #333;
+    left: 610px;
+    margin: 0px;
+    padding: 0px;
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 1px 10px #999;
+    -moz-box-shadow: 0px 1px 10px #999;
+}
+
+.plugins .svn-map-users .search-users-popover .user {
+    padding: 0px;
+    margin: 5px;
+}
+
+.plugins .svn-map-users .search-users-popover .user:hover {
+    padding: 0px;
+    margin: 5px;
+    cursor: pointer;
+    background: #f5f6f7;
+}
+
+.plugins .svn-map-users .search-users-popover .user li {
+    display: inline-block;
+    padding: 5px;
+    width: 220px;
+    list-style: none;
+    zoom: 1;
+    *display: inline;
+}
+
+.plugins .svn-map-users .search-users-popover .user li.avatar {
+    width: 25px;
+    padding: 5px;
+}
+
+.plugins .add-more {
+    background: url("../../img/plugins/add-more-icon.png") top left no-repeat;
+    padding: 0px 0px 0px 20px;
+}
+
+.plugins .separator {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #d9dee6;
+}
+
+.plugins .check-block {
+    padding: 15px;
+}
+
+.plugins .message-error {
+    color: #d20000;
+    font-size: 12px;
+    font-weight: bold !important;
+    border: solid 0px 1px 1px 1px #333;
+}
+
+.plugins .save-block {
+    padding: 10px 15px;
+}

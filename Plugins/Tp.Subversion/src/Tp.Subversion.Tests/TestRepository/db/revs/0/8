@@ -1,0 +1,66 @@
+DELTA
+SVNENDREP
+id: 2-8.0.r8/17
+type: file
+count: 0
+text: 8 0 4 0 d41d8cd98f00b204e9800998ecf8427e da39a3ee5e6b4b0d3255bfef95601890afd80709 7-7/_4
+cpath: /second folder/subdir/somefile.txt
+copyroot: 0 /
+
+PLAIN
+K 12
+somefile.txt
+V 16
+file 2-8.0.r8/17
+END
+ENDREP
+id: 3-7.0.r8/262
+type: dir
+pred: 3-7.0.r7/70
+count: 1
+text: 8 205 44 44 1705d8110f537bbd60a1c26772bdf5af
+cpath: /second folder/subdir
+copyroot: 0 /
+
+PLAIN
+K 6
+subdir
+V 16
+dir 3-7.0.r8/262
+END
+ENDREP
+id: 2-7.0.r8/461
+type: dir
+pred: 2-7.0.r7/198
+count: 1
+text: 8 411 37 37 02a16bd078dea8d6969efbc9a4e9655c
+cpath: /second folder
+copyroot: 0 /
+
+PLAIN
+K 12
+first folder
+V 14
+dir 0-7.0.r7/0
+K 10
+readme.txt
+V 16
+file 0-1.0.r6/56
+K 13
+second folder
+V 16
+dir 2-7.0.r8/461
+END
+ENDREP
+id: 0.0.r8/738
+type: dir
+pred: 0.0.r7/456
+count: 8
+text: 8 604 121 121 a1bf1f4f7b6541003b570075cc4716b9
+cpath: /
+copyroot: 0 /
+
+_2.0.t7-7 add-file true false /second folder/subdir/somefile.txt
+
+
+738 866

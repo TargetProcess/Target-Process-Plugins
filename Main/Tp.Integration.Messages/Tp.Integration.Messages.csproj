@@ -1,0 +1,396 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EF010D25-B262-4051-B369-BD62F334A190}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Integration.Messages</RootNamespace>
+    <AssemblyName>Tp.Integration.Messages</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU'">
+    <OutputPath>bin\FuncTests\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Tp.Integration.Messages.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Microsoft\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountName.cs" />
+    <Compile Include="AdditionalEntityAttributes.cs" />
+    <Compile Include="Commands\ExecutePluginCommandCommand.cs" />
+    <Compile Include="Commands\PluginCommandResponseMessage.cs" />
+    <Compile Include="Commands\PostTimeCommand.cs" />
+    <Compile Include="Commands\ChangeEntityStateCommand.cs" />
+    <Compile Include="ComponentModel\PasswordAttribute.cs" />
+    <Compile Include="ComponentModel\TextBoxAttribute.cs" />
+    <Compile Include="ComponentModel\TpCategotyAttribute.cs" />
+    <Compile Include="ComponentModel\TPDescriptionAttribute.cs" />
+    <Compile Include="ComponentModel\MailProtocolAttribute.cs" />
+    <Compile Include="ComponentModel\SerializableDictionary.cs" />
+    <Compile Include="ComponentModel\SerializableStringDictionary.cs" />
+    <Compile Include="ComponentModel\StringDictionaryAttribute.cs" />
+    <Compile Include="ComponentModel\ProjectIdAttribute.cs" />
+    <Compile Include="ComponentModel\TextAreaAttribute.cs" />
+    <Compile Include="DataTransferObject.cs" />
+    <Compile Include="Entities\ApplicationContextDataDTO.cs" />
+    <Compile Include="Entities\AssignableDTO.cs" />
+    <Compile Include="Entities\AttachmentDTO.cs" />
+    <Compile Include="Entities\AttachmentFileDTO.cs" />
+    <Compile Include="Entities\BugDTO.cs" />
+    <Compile Include="Entities\BuildDTO.cs" />
+    <Compile Include="Entities\CommentDTO.cs" />
+    <Compile Include="Entities\CompanyDTO.cs" />
+    <Compile Include="Entities\ContactDTO.cs" />
+    <Compile Include="Entities\CustomActivityDTO.cs" />
+    <Compile Include="Entities\CustomFieldDTO.cs" />
+    <Compile Include="Entities\CustomReportDTO.cs" />
+    <Compile Include="Entities\EmailAttachmentDTO.cs" />
+    <Compile Include="Entities\EntityStateDTO.cs" />
+    <Compile Include="Entities\EntityTypeDTO.cs" />
+    <Compile Include="Entities\ExternalReferenceDTO.cs" />
+    <Compile Include="Entities\FeatureDTO.cs" />
+    <Compile Include="Entities\GeneralDTO.cs" />
+    <Compile Include="Entities\GeneralFieldExtensionDTO.cs" />
+    <Compile Include="Entities\GeneralListItemDTO.cs" />
+    <Compile Include="Entities\GeneralNumericPriorityListItemDTO.cs" />
+    <Compile Include="Entities\GeneralUserDTO.cs" />
+    <Compile Include="Entities\GlobalSettingDTO.cs" />
+    <Compile Include="Entities\ImpedimentDTO.cs" />
+    <Compile Include="Entities\IterationDTO.cs" />
+    <Compile Include="Entities\LicenseDTO.cs" />
+    <Compile Include="Entities\LookupFilterDto.cs" />
+    <Compile Include="Entities\MessageDTO.cs" />
+    <Compile Include="Entities\MessageGeneralDTO.cs" />
+    <Compile Include="Entities\MessageUidDTO.cs" />
+    <Compile Include="Entities\MilestoneDTO.cs" />
+    <Compile Include="Entities\PasswordRecoveryDTO.cs" />
+    <Compile Include="Entities\PluginProfileDTO.cs" />
+    <Compile Include="Entities\PluginProfileMessageDTO.cs" />
+    <Compile Include="Entities\PracticeDTO.cs" />
+    <Compile Include="Entities\PriorityDTO.cs" />
+    <Compile Include="Entities\ProcessDTO.cs" />
+    <Compile Include="Entities\ProcessPracticeDTO.cs" />
+    <Compile Include="Entities\ProgramDTO.cs" />
+    <Compile Include="Entities\ProjectDTO.cs" />
+    <Compile Include="Entities\ProjectMemberDTO.cs" />
+    <Compile Include="Entities\ReleaseDTO.cs" />
+    <Compile Include="Entities\RequestDTO.cs" />
+    <Compile Include="Entities\RequesterDTO.cs" />
+    <Compile Include="Entities\RequestGeneralDTO.cs" />
+    <Compile Include="Entities\RequestGeneralListItemDTO.cs" />
+    <Compile Include="Entities\RequestRequesterDTO.cs" />
+    <Compile Include="Entities\RequestTypeDTO.cs" />
+    <Compile Include="Entities\RevisionAssignableDTO.cs" />
+    <Compile Include="Entities\RevisionDTO.cs" />
+    <Compile Include="Entities\RevisionFileDTO.cs" />
+    <Compile Include="Entities\RoleDTO.cs" />
+    <Compile Include="Entities\RoleEffortDTO.cs" />
+    <Compile Include="Entities\RoleEntityTypeDTO.cs" />
+    <Compile Include="Entities\RuleDTO.cs" />
+    <Compile Include="Entities\SavedFilterDTO.cs" />
+    <Compile Include="Entities\SeverityDTO.cs" />
+    <Compile Include="Entities\SolutionDTO.cs" />
+    <Compile Include="Entities\SystemUserDTO.cs" />
+    <Compile Include="Entities\TagBundleDTO.cs" />
+    <Compile Include="Entities\TagBundleTagDTO.cs" />
+    <Compile Include="Entities\TagDTO.cs" />
+    <Compile Include="Entities\TagGeneralDTO.cs" />
+    <Compile Include="Entities\TaskDTO.cs" />
+    <Compile Include="Entities\TeamDTO.cs" />
+    <Compile Include="Entities\TeamListItemDTO.cs" />
+    <Compile Include="Entities\TermDTO.cs" />
+    <Compile Include="Entities\TestCaseDTO.cs" />
+    <Compile Include="Entities\TestCaseRunDTO.cs" />
+    <Compile Include="Entities\TestCaseTestPlanDTO.cs" />
+    <Compile Include="Entities\TestPlanDTO.cs" />
+    <Compile Include="Entities\TestPlanRunDTO.cs" />
+    <Compile Include="Entities\TimeDTO.cs" />
+    <Compile Include="Entities\TpEventDTO.cs" />
+    <Compile Include="Entities\TpProfileDTO.cs" />
+    <Compile Include="Entities\TpProjectProfileDTO.cs" />
+    <Compile Include="Entities\TpSessionDTO.cs" />
+    <Compile Include="Entities\UserDTO.cs" />
+    <Compile Include="Entities\UserStoryDTO.cs" />
+    <Compile Include="EntityLifecycle\Commands\Attachment.cs" />
+    <Compile Include="EntityLifecycle\Commands\AttachmentFile.cs" />
+    <Compile Include="EntityLifecycle\Commands\Bug.cs" />
+    <Compile Include="EntityLifecycle\Commands\Build.cs" />
+    <Compile Include="EntityLifecycle\Commands\Comment.cs" />
+    <Compile Include="EntityLifecycle\Commands\Company.cs" />
+    <Compile Include="EntityLifecycle\Commands\Contact.cs" />
+    <Compile Include="EntityLifecycle\Commands\CustomActivity.cs" />
+    <Compile Include="EntityLifecycle\Commands\CustomField.cs" />
+    <Compile Include="EntityLifecycle\Commands\EntityState.cs" />
+    <Compile Include="EntityLifecycle\Commands\Feature.cs" />
+    <Compile Include="EntityLifecycle\Commands\Impediment.cs" />
+    <Compile Include="EntityLifecycle\Commands\Iteration.cs" />
+    <Compile Include="EntityLifecycle\Commands\Message.cs" />
+    <Compile Include="EntityLifecycle\Commands\Process.cs" />
+    <Compile Include="EntityLifecycle\Commands\Program.cs" />
+    <Compile Include="EntityLifecycle\Commands\Project.cs" />
+    <Compile Include="EntityLifecycle\Commands\ProjectMember.cs" />
+    <Compile Include="EntityLifecycle\Commands\Release.cs" />
+    <Compile Include="EntityLifecycle\Commands\Request.cs" />
+    <Compile Include="EntityLifecycle\Commands\Requester.cs" />
+    <Compile Include="EntityLifecycle\Commands\Role.cs" />
+    <Compile Include="EntityLifecycle\Commands\RoleEffort.cs" />
+    <Compile Include="EntityLifecycle\Commands\Solution.cs" />
+    <Compile Include="EntityLifecycle\Commands\Tag.cs" />
+    <Compile Include="EntityLifecycle\Commands\TagBundle.cs" />
+    <Compile Include="EntityLifecycle\Commands\Task.cs" />
+    <Compile Include="EntityLifecycle\Commands\Team.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestCase.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestPlan.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestPlanRun.cs" />
+    <Compile Include="EntityLifecycle\Commands\Time.cs" />
+    <Compile Include="EntityLifecycle\Commands\User.cs" />
+    <Compile Include="EntityLifecycle\Commands\UserStory.cs" />
+    <Compile Include="EntityLifecycle\DeleteEntityCommand.cs" />
+    <Compile Include="EntityLifecycle\CreateEntityCommand.cs" />
+    <Compile Include="EntityLifecycle\DtoType.cs" />
+    <Compile Include="EntityLifecycle\EntityCommonCommands.cs" />
+    <Compile Include="EntityLifecycle\EntityCreatedMessage.cs" />
+    <Compile Include="EntityLifecycle\EntityDeletedMessage.cs" />
+    <Compile Include="EntityLifecycle\EntityUpdatedMessage.cs" />
+    <Compile Include="EntityLifecycle\ICreateEntityCommand.cs" />
+    <Compile Include="EntityLifecycle\ISagaMessage.cs" />
+    <Compile Include="EntityLifecycle\ITargetProcessCommand.cs" />
+    <Compile Include="EntityLifecycle\ITargetProcessMessage.cs" />
+    <Compile Include="EntityLifecycle\Messages\AttachmentFile.cs" />
+    <Compile Include="EntityLifecycle\Messages\Attachment.cs" />
+    <Compile Include="EntityLifecycle\Messages\Bug.cs" />
+    <Compile Include="EntityLifecycle\Messages\Build.cs" />
+    <Compile Include="EntityLifecycle\Messages\Comment.cs" />
+    <Compile Include="EntityLifecycle\Messages\Company.cs" />
+    <Compile Include="EntityLifecycle\Messages\Contact.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomActivity.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomField.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomReport.cs" />
+    <Compile Include="EntityLifecycle\Messages\EntityState.cs" />
+    <Compile Include="EntityLifecycle\Messages\Feature.cs" />
+    <Compile Include="EntityLifecycle\Messages\GlobalSetting.cs" />
+    <Compile Include="EntityLifecycle\Messages\Impediment.cs" />
+    <Compile Include="EntityLifecycle\Messages\Iteration.cs" />
+    <Compile Include="EntityLifecycle\Messages\Message.cs" />
+    <Compile Include="EntityLifecycle\Messages\MessageUid.cs" />
+    <Compile Include="EntityLifecycle\Messages\Milestone.cs" />
+    <Compile Include="EntityLifecycle\Messages\Priority.cs" />
+    <Compile Include="EntityLifecycle\Messages\Process.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProcessPractice.cs" />
+    <Compile Include="EntityLifecycle\Messages\Program.cs" />
+    <Compile Include="EntityLifecycle\Messages\Project.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProjectMember.cs" />
+    <Compile Include="EntityLifecycle\Messages\Release.cs" />
+    <Compile Include="EntityLifecycle\Messages\Request.cs" />
+    <Compile Include="EntityLifecycle\Messages\Requester.cs" />
+    <Compile Include="EntityLifecycle\Messages\Revision.cs" />
+    <Compile Include="EntityLifecycle\Messages\RevisionAssignable.cs" />
+    <Compile Include="EntityLifecycle\Messages\RevisionFile.cs" />
+    <Compile Include="EntityLifecycle\Messages\Role.cs" />
+    <Compile Include="EntityLifecycle\Messages\RoleEffort.cs" />
+    <Compile Include="EntityLifecycle\Messages\RoleEntityType.cs" />
+    <Compile Include="EntityLifecycle\Messages\Rule.cs" />
+    <Compile Include="EntityLifecycle\Messages\Severity.cs" />
+    <Compile Include="EntityLifecycle\Messages\Solution.cs" />
+    <Compile Include="EntityLifecycle\Messages\Tag.cs" />
+    <Compile Include="EntityLifecycle\Messages\TagBundle.cs" />
+    <Compile Include="EntityLifecycle\Messages\Task.cs" />
+    <Compile Include="EntityLifecycle\Messages\Team.cs" />
+    <Compile Include="EntityLifecycle\Messages\Term.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestCase.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestCaseRun.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestCaseTestPlan.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestPlan.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestPlanRun.cs" />
+    <Compile Include="EntityLifecycle\Messages\Time.cs" />
+    <Compile Include="EntityLifecycle\Messages\User.cs" />
+    <Compile Include="EntityLifecycle\Messages\UserStory.cs" />
+    <Compile Include="EntityLifecycle\Queries\EntityState.cs" />
+    <Compile Include="EntityLifecycle\Queries\GlobalSetting.cs" />
+    <Compile Include="EntityLifecycle\Queries\MessageUid.cs" />
+    <Compile Include="EntityLifecycle\Queries\Priority.cs" />
+    <Compile Include="EntityLifecycle\Queries\Project.cs" />
+    <Compile Include="EntityLifecycle\Queries\QueryBase.cs" />
+    <Compile Include="EntityLifecycle\Queries\Requester.cs" />
+    <Compile Include="EntityLifecycle\Queries\Role.cs" />
+    <Compile Include="EntityLifecycle\Queries\Severity.cs" />
+    <Compile Include="EntityLifecycle\Queries\TestCaseRun.cs" />
+    <Compile Include="EntityLifecycle\Queries\TestCaseTestPlan.cs" />
+    <Compile Include="EntityLifecycle\Queries\User.cs" />
+    <Compile Include="EntityLifecycle\SagaMessage.cs" />
+    <Compile Include="EntityLifecycle\UpdateEntityCommand.cs" />
+    <Compile Include="Enums\ActionTypeEnum.cs" />
+    <Compile Include="Enums\ContentTypeEnum.cs" />
+    <Compile Include="Enums\FieldType.cs" />
+    <Compile Include="Enums\FileActionEnum.cs" />
+    <Compile Include="Enums\HistoryTypeEnum.cs" />
+    <Compile Include="Enums\MessageTypeEnum.cs" />
+    <Compile Include="Enums\ModificationTypeEnum.cs" />
+    <Compile Include="Enums\RequesterSourceTypeEnum.cs" />
+    <Compile Include="Enums\RequestSourceEnum.cs" />
+    <Compile Include="Enums\RoleExtension.cs" />
+    <Compile Include="Enums\SourceControlTypeEnum.cs" />
+    <Compile Include="ForeignKeyAttribute.cs" />
+    <Compile Include="PluginLifecycle\EmbeddedPluginCommands.cs" />
+    <Compile Include="PluginLifecycle\IPluginLifecycleMessage.cs" />
+    <Compile Include="PluginLifecycle\IPluginLocalMessage.cs" />
+    <Compile Include="PluginLifecycle\Mashup.cs" />
+    <Compile Include="PluginLifecycle\MashupConfig.cs" />
+    <Compile Include="PluginLifecycle\MashupPlaceholder.cs" />
+    <Compile Include="PluginLifecycle\MashupCollection.cs" />
+    <Compile Include="PluginLifecycle\PluginAccount.cs" />
+    <Compile Include="PluginLifecycle\PluginAccountMessage.cs" />
+    <Compile Include="PluginLifecycle\PluginCommand\IPluginCommand.cs" />
+    <Compile Include="PluginLifecycle\PluginInfo.cs" />
+    <Compile Include="PluginLifecycle\PluginInfoMessage.cs" />
+    <Compile Include="PluginLifecycle\PluginProfile.cs" />
+    <Compile Include="PluginLifecycle\PluginMashupMessage.cs" />
+    <Compile Include="PluginLifecycle\PluginProfileDto.cs" />
+    <Compile Include="PluginLifecycle\ProfileEditorMashupName.cs" />
+    <Compile Include="PluginLifecycle\ProfileErrorCheckResult.cs" />
+    <Compile Include="PluginLifecycle\ProfileUpdatedMessage.cs" />
+    <Compile Include="PluginLifecycle\ProfileAddedMessage.cs" />
+    <Compile Include="PluginLifecycle\ProfileDeletedMessage.cs" />
+    <Compile Include="PluginName.cs" />
+    <Compile Include="PrimaryKeyAttribute.cs" />
+    <Compile Include="ProfileName.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelationAttribute.cs" />
+    <Compile Include="RelationNameAttribute.cs" />
+    <Compile Include="ServiceBus\BusExtensions.cs" />
+    <Compile Include="ServiceBus\Serialization\AdvancedXmlSerializer.cs" />
+    <Compile Include="ServiceBus\Serialization\BinaryContainer.cs" />
+    <Compile Include="ServiceBus\Serialization\ConfigureAdvancedXmlSerializer.cs" />
+    <Compile Include="ServiceBus\Serialization\IXmlSerializationTag.cs" />
+    <Compile Include="ServiceBus\Serialization\XmlDeserializer.cs" />
+    <Compile Include="ServiceBus\Serialization\XmlSerializationHelpers.cs" />
+    <Compile Include="ServiceBus\Serialization\XmlSerializationTag.cs" />
+    <Compile Include="ServiceBus\Serialization\XmlSerializer.cs" />
+    <Compile Include="ServiceBus\Transport\ConfigMsmqTransport.cs" />
+    <Compile Include="ServiceBus\Transport\ConfigureMsmqTransport.cs" />
+    <Compile Include="ServiceBus\Transport\IMsmqTransport.cs" />
+    <Compile Include="ServiceBus\Transport\MessageLabelParser.cs" />
+    <Compile Include="ServiceBus\Transport\PluginQueue.cs" />
+    <Compile Include="ServiceBus\Transport\PluginQueueFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Extensions\ObservableExtensions.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Interfaces\IMessageSource.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Pump\MessageSource.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Log\LoggerContextSensitive.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Log\ILoggerContextSensitive.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Interfaces\IMessageConsumer.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Interfaces\IMessageProducer.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Interfaces\IRouterFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Interfaces\IProducerConsumerFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Log\LoggerContext.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MessageAccountParser.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MessageEx.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MessageOrigin.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MessageQueueFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MsmqMessageProducer.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MsmqRouterFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRoutableTransport.cs" />
+    <Compile Include="ServiceBus\Transport\Router\RoutableTransportMode.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Pump\MessageConsumer.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Exceptions\MessageConsumerException.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Pump\MessageRouter.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MsmqMessageRouter.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Utils\StopwatchObserver.cs" />
+    <Compile Include="ServiceBus\Transport\Transport.cs" />
+    <Compile Include="ServiceBus\Transport\UiPriority\MsmqUiPriorityTransport.cs" />
+    <Compile Include="TargetProcessLifecycle\ITargetProcessLifecycleMessage.cs" />
+    <Compile Include="TargetProcessLifecycle\TargetProcessExceptionThrownMessage.cs" />
+    <Compile Include="TargetProcessLifecycle\TargetProcessStartedMessage.cs" />
+    <Compile Include="Ticker\CheckIntervalElapsedMessage.cs" />
+    <Compile Include="Ticker\ISynchronizableProfile.cs" />
+    <Compile Include="Ticker\LastSyncDate.cs" />
+    <Compile Include="Ticker\TickMessage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TpPublic.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

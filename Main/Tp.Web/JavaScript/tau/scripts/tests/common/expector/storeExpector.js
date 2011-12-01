@@ -1,0 +1,1 @@
+define(function(){function a(a){this.testContext=a}a.prototype={done:function(a){function b(a){a&&a.success.call(a.scope||a)}a?this.testContext.store.expects().done(TypeOf.isA(a)).andStub(b):this.testContext.store.expects().done()}};return a})

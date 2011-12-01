@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="windows-1251"?> 
+<?xml-stylesheet type="text/xsl" href="../xsl/allbodytemplates.xsl"?>
+<!DOCTYPE notification [
+	<!ELEMENT notification (bodytemplates+)>
+	<!ENTITY % bodytemplates SYSTEM "../dtd/bodytemplates.dtd">
+	%bodytemplates;
+
+
+	<!ENTITY templ_en SYSTEM "../lang/en/bodytemplates.xml">
+	<!ENTITY templ_ru SYSTEM "../lang/ru/bodytemplates.xml">
+
+	<!--%bodytemplates;-->
+]>
+<notification>
+
+&templ_en;
+&templ_ru;
+</notification>

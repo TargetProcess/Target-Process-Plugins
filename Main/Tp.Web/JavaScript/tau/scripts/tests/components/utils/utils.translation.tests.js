@@ -1,0 +1,1 @@
+define(["tau/utils/utils.translation"],function(a){var b=function(){module("[utils.translation] tests"),test("should allow to pluralize",function(){equals(a.pluralize("day|days",1),"day"),equals(a.pluralize("day|days",14),"days")})};return{run:b}})

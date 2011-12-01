@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"container.tabsHeader",markup:['<div class="box table">','   <ul class="entity-tabs">',"   </ul>","</div>"],dependencies:[]};return a.register(b)})

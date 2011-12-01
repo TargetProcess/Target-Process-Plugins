@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/from.xsl"?>
+<!--DOCTYPE from SYSTEM "../../dtd/from.dtd"-->
+<from lang="en">
+	<fromnames>
+		<fromaddress keyword="Content-filter at" />
+		<fromaddress keyword="Delivery Subsystem" />
+		<fromaddress keyword="Expired Account" />
+		<fromaddress keyword="Internet Mail Delivery" />
+		<fromaddress keyword="MAILER-DAEMON" />
+		<fromaddress keyword="Mail Administrator" />
+		<fromaddress keyword="Mail Delivery System" />
+		<fromaddress keyword="Mail Delivery Subsystem" />
+		<fromaddress keyword="NAV for Microsoft Exchange-MAILSERVER" />
+		<fromaddress keyword="Postmaster" />
+		<fromaddress keyword="Systemadministrator" />
+		<fromaddress keyword="System Administrator" />
+		<fromaddress keyword="Microsoft Exchange" />
+		<fromaddress keyword="Mailer Daemon" />
+	</fromnames>
+	<fromemails>
+		<fromaddress keyword="admin" />
+		<fromaddress keyword="administrator" />
+		<fromaddress keyword="nothere" />
+		<fromaddress keyword="NAVMSE-MAILSERVER" />
+		<fromaddress keyword="postmaster" />
+		<fromaddress keyword="pmaster" />
+		<fromaddress keyword="webmaster" />
+		<fromaddress keyword="webadmin" />
+		<fromaddress keyword="Mailer-Daemon" />
+		<fromaddress keyword="MDaemon" />
+		<fromaddress keyword="AntiVirus_SMTP_Gateway" />
+		<fromaddress keyword="LAPOP_SMTP_Gateway" />
+		<fromaddress keyword="Microsoft Exchange" />
+		<fromaddress keyword="Mailer Daemon" />
+	</fromemails>
+	<fromremarks>
+		<fromaddress keyword="Mail Delivery System" />
+	</fromremarks>
+	<fromstrings>
+		<fromaddress keyword="" match="all" />
+	</fromstrings>
+</from>

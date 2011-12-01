@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"list-grid-row-simple",markup:["<tr>","   {{each(i, field) $item.parent.data.config.views[0].fields}}","       <td>${$item.data[field.dataIndex]}</td>","   {{/each}}","</tr>"]};return a.register(b)})

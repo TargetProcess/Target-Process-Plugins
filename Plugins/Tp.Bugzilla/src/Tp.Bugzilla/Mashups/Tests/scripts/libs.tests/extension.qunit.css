@@ -1,0 +1,23 @@
+#qunit-tests.cardview li {
+    margin: 1px;
+    padding: 1px;
+    float: left;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    list-style-position: outside;
+    border: solid 1px gray;
+}
+#qunit-tests.cardview > li:last-child {
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+}
+#qunit-tests.failedonly > .pass {
+    display: none;
+}
+#qunit-testresult .error {
+    color: red;
+    font-weight:bold;
+}

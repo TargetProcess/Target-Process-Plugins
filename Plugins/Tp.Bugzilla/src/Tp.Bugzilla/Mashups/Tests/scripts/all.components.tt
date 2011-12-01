@@ -1,0 +1,27 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".js" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+require([
+<#
+
+var currentPath = Host.ResolvePath("tau\\components");
+var files = Directory.GetFiles(currentPath, "*.js");
+
+foreach(var file in files) {	
+	var name = new FileInfo(file).Name.Replace(".js", string.Empty);
+	
+#>
+    'tau/components/<#= name #>',
+<#}#>
+    'tau/components/extensions/print.convert.extension'
+],
+function() {
+    return {};
+});

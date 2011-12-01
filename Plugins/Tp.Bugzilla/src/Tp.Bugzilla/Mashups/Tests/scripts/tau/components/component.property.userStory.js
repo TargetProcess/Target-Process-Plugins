@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){b.propertyName="userStory",b.showUrl=!0,b.alignElementSelector=".property-text",b.showEmptyDataMessage=!0,b.editorComponentConfig={type:"state-list",listType:"userStory",maxHeight:200,filter:!0,expandable:!0,showEmptyDataMessage:!0,showClearValue:!0};return a.create(b)}}})

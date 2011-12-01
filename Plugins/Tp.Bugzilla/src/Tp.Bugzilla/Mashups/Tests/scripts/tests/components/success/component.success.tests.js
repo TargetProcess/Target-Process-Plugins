@@ -1,0 +1,1 @@
+define(["Underscore","tests/components/description/component.description.tests","tau/components/component.success","tests/common/testData"],function(a,b,c,d){return{run:function(){var e=a.clone(d.description),f="success";e[f]=e.description,b.generateRichTextFieldTest(f,e,c)}}})

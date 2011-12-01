@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.userList","tau/components/extensions/userList/extension.userList.editable","tau/ui/templates/filteredUserList/ui.template.filteredUserList"],function(a,b,c,d){return{create:function(e){var f={extensions:[b,c],template:d};return a.create(f,e)}}})

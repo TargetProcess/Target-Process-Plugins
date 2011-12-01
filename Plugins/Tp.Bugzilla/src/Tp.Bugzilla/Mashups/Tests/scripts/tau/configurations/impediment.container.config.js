@@ -1,0 +1,1 @@
+define(["tau/configurations/baseContainable.container.config","tau/models/model.extensions","tau/utils/utils.urlBuilder"],function(a,b,c){var d=a.extend({getActionsAliases:function(){return["Old View","Old Edit","Print","-----","Delete"]},getAdditionalInfoAliases:function(){return["Priority","CreationDate","CompletionDate"]}});return d})

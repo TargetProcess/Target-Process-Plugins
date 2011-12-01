@@ -1,0 +1,181 @@
+﻿// 
+// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using System;
+using System.Linq;
+using NServiceBus;
+using NServiceBus.Saga;
+using Tp.Integration.Common;
+using Tp.Integration.Messages.EntityLifecycle.Queries;
+using Tp.Integration.Plugin.Common;
+
+namespace Tp.Bugzilla.Synchronizer
+{
+	public class BugzillaProfileInitializationSaga : NewProfileInitializationSaga<BugzillaProfileInitializationSagaData>,
+	                                                 IHandleMessages<EntityStateQueryResult>,
+	                                                 IHandleMessages<SeverityQueryResult>,
+	                                                 IHandleMessages<PriorityQueryResult>,
+	                                                 IHandleMessages<ProjectQueryResult>,
+	                                                 IHandleMessages<UserQueryResult>,
+	                                                 IHandleMessages<RoleQueryResult>
+	{
+		public const string BugEntityTypeName = "Tp.BusinessObjects.Bug";
+
+		public override void ConfigureHowToFindSaga()
+		{
+			ConfigureMapping<EntityStateQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<SeverityQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<PriorityQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<ProjectQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<UserQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<RoleQueryResult>(saga => saga.Id, message => message.SagaId);
+		}
+
+		protected override void OnStartInitialization()
+		{
+			Data.AllEntityStatesCount = int.MinValue;
+			Data.AllSeveritiesCount = int.MinValue;
+			Data.AllPrioritiesCount = int.MinValue;
+			Data.AllProjectsCount = int.MinValue;
+			Data.AllUsersCount = int.MinValue;
+			Data.AllRolesCount = int.MinValue;
+			Send(new EntityStateQuery {ProjectId = StorageRepository().GetProfile<BugzillaProfile>().Project});
+			Send(new PriorityQuery {EntityType = "Bug"});
+			Send(new RetrieveAllSeveritiesQuery());
+			Send(new RetrieveAllProjectsQuery());
+			Send(new RetrieveAllUsersQuery());
+			Send(new RetrieveAllRolesQuery());
+		}
+
+		public void Handle(EntityStateQueryResult message)
+		{
+			Data.AllEntityStatesCount = message.QueryResultCount;
+			if (message.Dtos != null)
+			{
+				Data.EntityStatesRetrievedCount += message.Dtos.Length;
+				foreach (var entityStateDto in message.Dtos.Where(entityStateDto => entityStateDto.EntityTypeName == BugEntityTypeName))
+				{
+					StorageRepository().Get<EntityStateDTO>().Add(entityStateDto);
+				}
+			}
+			CompleteSagaIfNecessary();
+		}
+
+		private void CompleteSagaIfNecessary()
+		{
+			if (Data.EntityStatesRetrievedCount == Data.AllEntityStatesCount
+			    && Data.AllSeveritiesCount == Data.SeveritiesRetrievedCount
+			    && Data.AllPrioritiesCount == Data.PrioritiesRetrievedCount
+			    && Data.AllProjectsCount == Data.ProjectsRetrievedCount
+			    && Data.AllUsersCount == Data.UsersRetrievedCount
+			    && Data.AllRolesCount == Data.RolesRetrievedCount)
+				MarkAsComplete();
+		}
+
+		public void Handle(SeverityQueryResult message)
+		{
+			Data.AllSeveritiesCount = message.QueryResultCount;
+			if (message.Dtos != null)
+			{
+				Data.SeveritiesRetrievedCount+=message.Dtos.Length;
+				foreach (var severityDto in message.Dtos)
+				{
+					StorageRepository().Get<SeverityDTO>().Add(severityDto);
+				}
+				
+			}
+			CompleteSagaIfNecessary();
+		}
+
+		public void Handle(PriorityQueryResult message)
+		{
+			Data.AllPrioritiesCount = message.QueryResultCount;
+			if (message.Dtos != null)
+			{
+				Data.PrioritiesRetrievedCount += message.Dtos.Length;
+				foreach (var priorityDto in message.Dtos)
+				{
+					StorageRepository().Get<PriorityDTO>().Add(priorityDto);
+				}
+			}
+			CompleteSagaIfNecessary();
+		}
+
+		public void Handle(ProjectQueryResult message)
+		{
+			Data.AllProjectsCount = message.QueryResultCount;
+			if (message.Dtos != null)
+			{
+				var project = StorageRepository().GetProfile<BugzillaProfile>().Project;
+				Data.ProjectsRetrievedCount += message.Dtos.Length;
+				foreach (var projectDto in message.Dtos.Where(projectDto => projectDto.ID == project))
+				{
+					StorageRepository().Get<ProjectDTO>().Add(projectDto);
+				}
+			}
+			CompleteSagaIfNecessary();
+		}
+
+		public void Handle(UserQueryResult message)
+		{
+			Data.AllUsersCount = message.QueryResultCount;
+			if (message.Dtos != null)
+			{
+				Data.UsersRetrievedCount += message.Dtos.Length;
+				foreach (var userDto in message.Dtos.Where(u => u.IsActiveNotDeletedUser()))
+				{
+					StorageRepository().Get<UserDTO>(userDto.ID.ToString()).Add(userDto);
+					StorageRepository().Get<UserDTO>(userDto.Email).Add(userDto);
+				}
+			}
+			CompleteSagaIfNecessary();
+		}
+
+		public void Handle(RoleQueryResult message)
+		{
+			Data.AllRolesCount = message.QueryResultCount;
+			if (message.Dtos != null)
+			{
+				Data.RolesRetrievedCount += message.Dtos.Length;
+				foreach (var roleDto in message.Dtos)
+				{
+					StorageRepository().Get<RoleDTO>().Add(roleDto);
+				}
+			}
+			CompleteSagaIfNecessary();
+		}
+	}
+
+	public class BugzillaProfileInitializationSagaData : ISagaEntity
+	{
+		public Guid Id { get; set; }
+		public string Originator { get; set; }
+		public string OriginalMessageId { get; set; }
+
+		public int EntityStatesRetrievedCount { get; set; }
+
+		public int AllEntityStatesCount { get; set; }
+
+		public int AllSeveritiesCount { get; set; }
+
+		public int SeveritiesRetrievedCount { get; set; }
+
+		public int AllPrioritiesCount { get; set; }
+
+		public int PrioritiesRetrievedCount { get; set; }
+
+		public int AllProjectsCount { get; set; }
+
+		public int ProjectsRetrievedCount { get; set; }
+
+		public int AllUsersCount { get; set; }
+
+		public int UsersRetrievedCount { get; set; }
+
+		public int AllRolesCount { get; set; }
+
+		public int RolesRetrievedCount { get; set; }
+	}
+}

@@ -1,0 +1,1 @@
+(function(){require.config({paths:{jQuery:"tau/libs/jquery/lib.jquery",Underscore:"tau/libs/underscore/lib.underscore"}}),require(["jQuery","Underscore","tests/integration/context","tests/integration/story"]),require.onError=function(a){console.log("File wasn't loaded:"+a.message)}})()

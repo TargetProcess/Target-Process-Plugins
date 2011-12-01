@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A8BEBA8D-1C63-4FEB-B7DC-45BCCECB2BB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.MashupManager</RootNamespace>
+    <AssemblyName>Tp.MashupManager</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomCommands\CrudMashupCommand.cs" />
+    <Compile Include="CustomCommands\DeleteMashupCommand.cs" />
+    <Compile Include="CustomCommands\GetMashupInfoCommand.cs" />
+    <Compile Include="CustomCommands\GetProfileInfoCommand.cs" />
+    <Compile Include="CustomCommands\AddMashupCommand.cs" />
+    <Compile Include="DeleteProfileCommandHandler.cs" />
+    <Compile Include="IMashupInfoRepository.cs" />
+    <Compile Include="SingleProfile.cs" />
+    <Compile Include="MashupDto.cs" />
+    <Compile Include="CustomCommands\UpdateMashupCommand.cs" />
+    <Compile Include="MashupInfoRepository.cs" />
+    <Compile Include="MashupManagerProfile.cs" />
+    <Compile Include="MashupsOnPluginStartSender.cs" />
+    <Compile Include="PluginRegistry.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
+      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
+      <Link>App.config</Link>
+    </None>
+    <None Include="Install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\PluginUiLayout\placeholders.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\SettingsLink\placeholders.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="PluginSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Uninstall.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mashups\PluginUiLayout\PluginLayout.js" />
+    <Content Include="Mashups\ProfileEditor\CommandGateway.js" />
+    <Content Include="Mashups\ProfileEditor\EditorTemplate.js" />
+    <Content Include="Mashups\ProfileEditor\MashupsManagerEditor.js" />
+    <Content Include="Mashups\ProfileEditor\ProfileNameSource.js" />
+    <Content Include="Mashups\ProfileEditor\ProfileRepository.js" />
+    <Content Include="Mashups\ProfileEditor\RegisterMashup.js" />
+    <Content Include="Mashups\SettingsLink\LinkRenderer.js" />
+    <Content Include="Mashups\Tests\mashupManagerEditor.tests.js" />
+    <Content Include="Mashups\Tests\index.html" />
+    <Content Include="Mashups\Tests\Libs\ExtJS\ext-base.js" />
+    <Content Include="Mashups\Tests\Libs\ExtJS\Extensions.js" />
+    <Content Include="Mashups\Tests\Libs\ExtJS\url.js" />
+    <Content Include="Mashups\Tests\Libs\jquery.simulate.js" />
+    <Content Include="Mashups\Tests\Libs\jquery\jquery.js" />
+    <Content Include="Mashups\Tests\Libs\jquery\jquery.tmpl.js" />
+    <Content Include="Mashups\Tests\Libs\jquery\jquery.ui.js" />
+    <Content Include="Mashups\Tests\Libs\jsmock.js" />
+    <Content Include="Mashups\Tests\Libs\Mashups.js" />
+    <Content Include="Mashups\Tests\Libs\qunit.css" />
+    <Content Include="Mashups\Tests\Libs\qunit.js" />
+    <Content Include="Mashups\Tests\Libs\require.js" />
+    <Content Include="Mashups\Tests\Libs\test-runner.js" />
+    <Content Include="Mashups\Tests\Libs\testsuite.js" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\*.*  $(TargetDir)Mashups\ProfileEditor\*.* /Y
+echo F | xcopy $(ProjectDir)Mashups\SettingsLink\*.*  $(TargetDir)Mashups\SettingsLink\*.* /Y
+echo F | xcopy $(ProjectDir)Mashups\PluginUiLayout\*.*  $(TargetDir)Mashups\PluginUiLayout\*.* /Y
+
+echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

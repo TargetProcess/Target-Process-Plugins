@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FBC9EDC9-DD35-4590-8D25-E4B978F57DF1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Subversion</RootNamespace>
+    <AssemblyName>Tp.Subversion</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn, Version=1.6016.1637.10768, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
+      <HintPath>..\..\libs\SharpSvn\64\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tp.Service.Proxies">
+      <HintPath>..\..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\SubversionCheckConnectionCommand.cs" />
+    <Compile Include="StructureMap\SubversionRegistry.cs" />
+    <Compile Include="StructureMap\SvnPluginExcludedAssemblies.cs" />
+    <Compile Include="SubversionPluginProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subversion\CurrentProfileToSvnConnectionSettingsAdapter.cs" />
+    <Compile Include="Subversion\Subversion.cs" />
+    <Compile Include="Subversion\SubversionErrorResolver.cs" />
+    <Compile Include="Subversion\SubversionRevisionIdComparer.cs" />
+    <Compile Include="Subversion\SubversionUtils.cs" />
+    <Compile Include="Subversion\SvnRevisionId.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
+      <Link>App.config</Link>
+    </None>
+    <None Include="Install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="PluginSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Uninstall.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Update.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mashups\Tests\scripts\ExtJS\Extensions.js" />
+    <Content Include="Mashups\Tests\scripts\ExtJS\Libs\adapter\ext\ext-base.js" />
+    <Content Include="Mashups\Tests\scripts\ExtJS\Libs\ext-all.js" />
+    <Content Include="Mashups\Tests\scripts\ExtJS\url.js" />
+    <Content Include="Mashups\Tests\scripts\libs\jquery\jquery.js" />
+    <Content Include="Mashups\Tests\scripts\libs\jquery\jquery.tmpl.js" />
+    <Content Include="Mashups\Tests\scripts\libs\jquery\jquery.ui.js" />
+    <Content Include="Mashups\Tests\scripts\tp\bus.js" />
+    <Content Include="Mashups\Tests\scripts\tp\plugins\commandGateway.js" />
+    <Content Include="Mashups\Tests\scripts\tp\plugins\errorMessageContainer.js" />
+    <Content Include="Mashups\Tests\scripts\tp\jquery.utils.js" />
+    <Content Include="Mashups\Tests\scripts\tp\plugins\navigator.js" />
+    <Content Include="Mashups\Tests\scripts\tp\plugins\profileControlsBlock.js" />
+    <Content Include="Mashups\Tests\scripts\tp\plugins\profileNameSource.js" />
+    <Content Include="Mashups\Tests\scripts\tp\plugins\profileRepository.js" />
+    <Content Include="Mashups\Tests\scripts\tp\status.js" />
+    <Content Include="subversion-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\ProfileEditor\registerMashup.js" />
+    <Content Include="Mashups\ProfileEditor\SubversionProfileEditor.js" />
+    <Content Include="Mashups\ProfileEditor\userMappingEditor.js" />
+    <Content Include="Mashups\Tests\checkConnection.tests.js" />
+    <Content Include="Mashups\Tests\index.html" />
+    <Content Include="Mashups\Tests\scripts\libs.tests\jquery.simulate.js" />
+    <Content Include="Mashups\Tests\scripts\libs.tests\jsmock.js" />
+    <Content Include="Mashups\Tests\scripts\libs.tests\qunit.css" />
+    <Content Include="Mashups\Tests\scripts\libs.tests\qunit.js" />
+    <Content Include="Mashups\Tests\scripts\libs.tests\test-runner.js" />
+    <Content Include="Mashups\Tests\scripts\libs.tests\testsuite.js" />
+    <Content Include="Mashups\Tests\scripts\tp\Mashups.js" />
+    <Content Include="Mashups\Tests\Mocks\commandGatewayMock.js" />
+    <Content Include="Mashups\Tests\Mocks\navigatorMock.js" />
+    <Content Include="Mashups\Tests\Mocks\profilenamesourcemock.js" />
+    <Content Include="Mashups\Tests\Mocks\profilerepositorymock.js" />
+    <Content Include="Mashups\Tests\Mocks\restServiceMock.js" />
+    <Content Include="Mashups\Tests\plugins.css" />
+    <Content Include="Mashups\Tests\profileEditor.tests.js" />
+    <Content Include="Mashups\Tests\scripts\require.js" />
+    <Content Include="Mashups\Tests\synchronizeUser.widget.tests.js" />
+    <Content Include="Mashups\Tests\testConfiguration.js" />
+    <Content Include="Mashups\Tests\tpUserAutocomplete.widget.tests.js" />
+    <Content Include="Mashups\Tests\userMappingEditor.tests.js" />
+    <Content Include="Mashups\Tests\userMappingLine.tests.js" />
+    <Content Include="Mashups\Tests\userRepository.tests.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
+      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\*.*  $(TargetDir)Mashups\ProfileEditor\*.* /Y /E
+
+echo F | move /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>rd /S /Q $(TargetDir)Mashups\tests\scripts
+echo F | xcopy $(ProjectDir)..\..\..\..\Main\Tp.Web\JavaScript\tau\scripts\*.*  $(ProjectDir)Mashups\tests\scripts\*.* /Y /E
+echo F | xcopy $(ProjectDir)..\..\..\..\Main\Tp.Web\JavaScript\ExtJs\*.*  $(ProjectDir)Mashups\tests\scripts\ExtJs\*.*  /Y /E</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

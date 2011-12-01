@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.tags","tau/models/model.tags.editable","tau/ui/extensions/ui.extensions.onMarkAsDuplicate","tau/components/extensions/tags/extension.tags.editable","tau/ui/templates/tags/ui.template.tags"],function(a,b,c,d,e,f){return{create:function(g){var h={extensions:[b,c,e,d],template:f};return a.create(h,g)}}})

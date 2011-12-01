@@ -1,0 +1,1 @@
+var tau=tau||{};tau.makeSame=function(a,b){var c=_.extend({},a);_.each(_.keys(a),function(a){b.hasOwnProperty(a)||delete c[a]});return c}

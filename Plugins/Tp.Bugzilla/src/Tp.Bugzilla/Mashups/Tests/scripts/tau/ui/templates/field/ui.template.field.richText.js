@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"description",markup:['<div class="ui-description">','   <div class="ui-description__inner">',"      {{html html}}","   </div>","</div>"],dependencies:[]};return a.register(b)})

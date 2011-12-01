@@ -1,0 +1,1 @@
+define(["tau/models/customField/model.customField.url.editable"],function(a,b){var c=a.extend({onInit:function(){var a=this,b=this.config.context,c=b.entity.entityType.name},"bus afterSaveToStore":function(){this.bus.fire("refreshRow",{})}});return c})

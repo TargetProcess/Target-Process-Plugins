@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{187F5B55-6AFD-4838-B107-F7E7AD641BBF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Integration.Plugin.Common.Tests</RootNamespace>
+    <AssemblyName>Tp.Integration.Plugin.Common.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\Libs\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\Libs\NServiceBus\binaries\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Extended.BddStory">
+      <HintPath>..\..\Libs\NBehave\NBehave.Extended.BddStory.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Narrator.Framework">
+      <HintPath>..\..\Libs\NBehave\NBehave.Narrator.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Spec.Framework">
+      <HintPath>..\..\Libs\NBehave\NBehave.Spec.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Spec.NUnit">
+      <HintPath>..\..\Libs\NBehave\NBehave.Spec.NUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\NUnit\framework\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\Libs\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Microsoft\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tp.Testing.Common.NBehave">
+      <HintPath>..\..\Libs\NBehave\Tp.Testing.Common.NBehave.dll</HintPath>
+    </Reference>
+    <Reference Include="Tp.Testing.Common.NUnit">
+      <HintPath>..\..\Libs\NUnit\addins\Tp.Testing.Common.NUnit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Activity\ActivityLoggingActionSteps.cs" />
+    <Compile Include="Activity\ActivityLoggingContext.cs" />
+    <Compile Include="Activity\ActivityLoggingPluginLifecycleTests.cs" />
+    <Compile Include="Activity\ActivityTestBase.cs" />
+    <Compile Include="Activity\FakeActivityLogger.cs" />
+    <Compile Include="Activity\Log4NetFileRepositoryMock.cs" />
+    <Compile Include="Activity\SampleSagaMessage.cs" />
+    <Compile Include="Activity\ShouldLogUnhandledExceptions.cs" />
+    <Compile Include="Activity\ShouldManipulatePluginProfilesActivityLogsTests.cs" />
+    <Compile Include="Activity\ShouldRetrieveActivityLogTests.cs" />
+    <Compile Include="Common\CommandBusTests.cs" />
+    <Compile Include="Common\InitializationSagaSpecs.cs" />
+    <Compile Include="Common\PluginCommand\GetProfilesCommandSpecs.cs" />
+    <Compile Include="Common\PluginCommand\PluginCommandHandlerSpecs.cs" />
+    <Compile Include="Common\PluginCommand\PluginCommandMockRepository.cs" />
+    <Compile Include="Common\PluginCommand\SyncNowCommandSpecs.cs" />
+    <Compile Include="Common\PluginCommand\WhenAddANewProfileSpecs.cs" />
+    <Compile Include="Common\PluginGatewaySpecs.cs" />
+    <Compile Include="Common\PluginLifecycleActionSteps.cs" />
+    <Compile Include="Common\PluginLifecycleSpecs.cs" />
+    <Compile Include="Common\PluginProfileSerializationTests.cs" />
+    <Compile Include="Common\PluginSqlPersisterSpecs.cs" />
+    <Compile Include="Common\PluginStorageWithInMemoryPersisterMockRegistry.cs" />
+    <Compile Include="Common\PluginTickSpecs.cs" />
+    <Compile Include="Common\ProfileGatewaySpecs.cs" />
+    <Compile Include="Common\ProfileStorageSpecs.cs" />
+    <Compile Include="Common\ProfileStorageSqlPersisterSpecs.cs" />
+    <Compile Include="Common\SagaPersister\TpDatabaseSagaPersisterSpecs.cs" />
+    <Compile Include="Common\SampleJiraProfile.cs" />
+    <Compile Include="Common\SampleProfileSerialized.cs" />
+    <Compile Include="Common\ServiceBus\MsmqTransportWithUiSupportTests.cs" />
+    <Compile Include="Common\ServiceBus\QueueNameParsingTests.cs" />
+    <Compile Include="Common\SqlPersisterSpecBase.cs" />
+    <Compile Include="Common\StorageMock.cs" />
+    <Compile Include="Common\TestProfile.cs" />
+    <Compile Include="Common\TransportMockTests.cs" />
+    <Compile Include="Concurrency\AccountCollectionTests.cs" />
+    <Compile Include="Concurrency\Utils\Chess.cs" />
+    <Compile Include="Concurrency\Utils\ChessTest.cs" />
+    <Compile Include="Concurrency\DomainObjectConcurrencyTest.cs" />
+    <Compile Include="Concurrency\ProfileCollectionTests.cs" />
+    <Compile Include="Concurrency\ProfileTests.cs" />
+    <Compile Include="Core\PushAttachmentsToTPSagaSpecs.cs" />
+    <Compile Include="Messages\NServiceBus\AdvancedXmlSerializerSpecs.cs" />
+    <Compile Include="NserviceBusMockRegistry.cs" />
+    <Compile Include="Router\MessageConsumerTest.cs" />
+    <Compile Include="Router\MessageRouterTest.cs" />
+    <Compile Include="Router\Model\AssertObserver.cs" />
+    <Compile Include="Router\Model\Generator.cs" />
+    <Compile Include="Router\Model\TestMessage.cs" />
+    <Compile Include="Router\Model\TestMessageProducer.cs" />
+    <Compile Include="Router\Model\TestMessageRouter.cs" />
+    <Compile Include="Router\Model\TestRouterFactory.cs" />
+    <Compile Include="Router\Model\TestRouterHelper.cs" />
+    <Compile Include="Router\Model\Waiter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RhinoMocks\RhinoMockExtensions.cs" />
+    <Compile Include="StructureMapRegistryTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Libs\NBehave\languages.yml">
+      <Link>languages.yml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TpPublic.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Activity\log4net.cfg.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
+      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
+      <Name>Tp.Integration.Testing.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>IF EXIST $(ProjectDir)..\..\Libs\chess echo F | xcopy $(ProjectDir)..\..\Libs\chess\*.*  $(TargetDir)Concurrency\chess\*.* /Y /E</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

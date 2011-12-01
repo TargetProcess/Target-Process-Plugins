@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/editable-base"],function(a){return a.extend({"bus contentRendered":function(a){var b=a.data.element,c=this;b.find(".drop-down-option").click(function(){var a=$(this).tmplItem().data;b.find(".select-value").text(a.value.name);var d={};d[a.name]={id:a.value.id},c.bus.fire("save",d)})},"bus afterSave":function(){this.bus.fire("refresh",{})}})})

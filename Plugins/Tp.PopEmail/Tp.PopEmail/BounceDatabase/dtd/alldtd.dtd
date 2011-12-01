@@ -1,0 +1,17 @@
+	<!ENTITY % types SYSTEM "dtd/types.dtd">
+	<!ENTITY % from SYSTEM "dtd/from.dtd">
+	<!ENTITY % subjects SYSTEM "dtd/subjects.dtd">
+	<!ENTITY % descriptions SYSTEM "dtd/descriptions.dtd">
+	<!ENTITY % placeholders SYSTEM "dtd/placeholders.dtd">
+	<!ENTITY % bodytemplates SYSTEM "dtd/bodytemplates.dtd">
+
+	<!ENTITY types_en SYSTEM "lang/en/types.xml">
+	<!ENTITY from_en SYSTEM "lang/en/from.xml">
+	<!ENTITY subj_en SYSTEM "lang/en/subjects.xml">
+	<!ENTITY subj_ru SYSTEM "lang/ru/subjects.xml">
+	<!ENTITY desc_en SYSTEM "lang/en/descriptions.xml">
+
+	<!ENTITY regexp_en SYSTEM "lang/en/placeholders.xml">
+
+	<!ENTITY templ_en SYSTEM "lang/en/bodytemplates.xml">
+	<!ENTITY templ_ru SYSTEM "lang/ru/bodytemplates.xml">

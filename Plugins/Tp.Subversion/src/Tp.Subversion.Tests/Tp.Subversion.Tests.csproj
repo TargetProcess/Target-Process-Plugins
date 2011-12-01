@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A20B33E6-F564-492D-B79A-13436EBAD357}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Subversion</RootNamespace>
+    <AssemblyName>Tp.Subversion.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NBehave.Narrator.Framework">
+      <HintPath>..\..\..\..\Libs\NBehave\NBehave.Narrator.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\Libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core">
+      <HintPath>..\..\..\..\Libs\NUnit\lib\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Libs\NUnit\framework\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\..\..\Libs\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tp.Testing.Common.NBehave">
+      <HintPath>..\..\..\..\Libs\NBehave\Tp.Testing.Common.NBehave.dll</HintPath>
+    </Reference>
+    <Reference Include="Tp.Testing.Common.NUnit">
+      <HintPath>..\..\..\..\Libs\NUnit\addins\Tp.Testing.Common.NUnit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EditProfileFeature\AutomappingFeature\WhenAutomappingRequestedSpecs.cs" />
+    <Compile Include="EditProfileFeature\CheckConnectionSpecs.cs" />
+    <Compile Include="EditProfileFeature\CommandActionSteps.cs" />
+    <Compile Include="EditProfileFeature\SaveSpecs.cs" />
+    <Compile Include="Comments\CommentParserActionSteps.cs" />
+    <Compile Include="Comments\CommentParserSpecs.cs" />
+    <Compile Include="LegacyProfileConversionFeature\LegacyProfileConversionActionSteps.cs" />
+    <Compile Include="LegacyProfileConversionFeature\LegacyProfileConversionUnitTestRegistry.cs" />
+    <Compile Include="LegacyProfileConversionFeature\WhenOldProfileHasInacceptableName.cs" />
+    <Compile Include="LegacyProfileConversionFeature\WhenThereIsAnOldPluginProfile.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Subversion\ProcessNewRevisionOnlyFeature.cs" />
+    <Compile Include="TargetProcessControlByCommentsPostingFeature\ShouldPostTimeSpecs.cs" />
+    <Compile Include="TargetProcessControlByCommentsPostingFeature\ShouldChangeStatusSpecs.cs" />
+    <Compile Include="TargetProcessControlByCommentsPostingFeature\ShouldPostCommentSpecs.cs" />
+    <Compile Include="TargetProcessControlByCommentsPostingFeature\ShouldProcessEntityIdSpecs.cs" />
+    <Compile Include="TargetProcessControlByCommentsPostingFeature\ShouldSupportMultilineCommentSpecs.cs" />
+    <Compile Include="TargetProcessControlByCommentsPostingFeature\ShouldSupportMultipleEntityControlSpecs.cs" />
+    <Compile Include="Context\ContextExpectations.cs" />
+    <Compile Include="Context\CreateCommandExpectations.cs" />
+    <Compile Include="Context\VcsPluginContext.cs" />
+    <Compile Include="MessageQueueExtensions.cs" />
+    <Compile Include="StructureMap\VcsEnvironmentRegistry.cs" />
+    <Compile Include="StructureMap\VcsMockEnvironmentRegistry.cs" />
+    <Compile Include="StructureMap\VersionControlSystemMock.cs" />
+    <Compile Include="Subversion\LocalRepositorySettings.cs" />
+    <Compile Include="Subversion\SubversionIntegrationTests.cs" />
+    <Compile Include="Subversion\VcsPluginIntegrationSpecs.cs" />
+    <Compile Include="UserMappingFeature\UserMappingFeatureActionSteps.cs" />
+    <Compile Include="ValidateProfileUponSaveFeature\WhenProfileIsSavingSpecs.cs" />
+    <Compile Include="UserMappingFeature\WhenCommitMadeByTpUserSpecs.cs" />
+    <Compile Include="VcsPluginActionSteps.cs" />
+    <Compile Include="VcsPluginSpecs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WhenVcsRevisionContainsEntityId.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
+      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
+      <Name>Tp.Integration.Testing.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.LegacyProfileConversion.Common.Testing\Tp.LegacyProfileConversion.Common.Testing.csproj">
+      <Project>{05A1F4C0-E8E5-4310-A655-20F98DFD2921}</Project>
+      <Name>Tp.LegacyProfileConversion.Common.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
+      <Name>Tp.LegacyProfileConversion.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Subversion.LegacyProfileConversion\Tp.Subversion.LegacyProfileConversion.csproj">
+      <Project>{C990B8D9-09D1-4662-B934-6F653083051A}</Project>
+      <Name>Tp.Subversion.LegacyProfileConversion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Subversion\Tp.Subversion.csproj">
+      <Project>{FBC9EDC9-DD35-4590-8D25-E4B978F57DF1}</Project>
+      <Name>Tp.Subversion</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Libs\NBehave\languages.yml">
+      <Link>languages.yml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo D | xcopy /E $(ProjectDir)TestRepository $(TargetDir)TestRepository /Y
+echo D | xcopy /E $(ProjectDir)EmptyRepository $(TargetDir)EmptyRepository /Y</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>rmdir $(TargetDir)UI /S /Q</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

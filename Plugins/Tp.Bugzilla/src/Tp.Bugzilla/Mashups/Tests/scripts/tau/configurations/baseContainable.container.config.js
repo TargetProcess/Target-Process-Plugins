@@ -1,0 +1,1 @@
+define(["tau/configurations/base.container.config","tau/models/model.extensions","tau/utils/utils.urlBuilder"],function(a,b,c){var d=a.extend({init:function(b){a.prototype.init.call(this,b);var d=b.context.entity;this.registerAction("Add Iteration",{label:"Add "+this.getTermName("Iteration"),url:c.getAddIterationForReleaseUrl(d.id),practices:["Iterations"]})}});return d})

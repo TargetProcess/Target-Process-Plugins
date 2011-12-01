@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="D:\trunk\Code\Main\Tp.UnitTests\bin\Tp.UnitTests.exe" total="3" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2011-06-13" time="15:45:02">
+  <environment nunit-version="2.5.9.10348" clr-version="2.0.50727.5444" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="D:\trunk\Code\Libs\NUnit" machine-name="VASKOVSKIY" user="vaskovskiy" user-domain="OFFICE" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="Assembly" name="D:\trunk\Code\Main\Tp.UnitTests\bin\Tp.UnitTests.exe" executed="True" result="Success" success="True" time="16.111" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="Tp" executed="True" result="Success" success="True" time="16.097" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="BusinessObjects" executed="True" result="Success" success="True" time="16.094" asserts="0">
+            <results>
+              <test-suite type="Namespace" name="Components" executed="True" result="Success" success="True" time="16.093" asserts="0">
+                <results>
+                  <test-suite type="Namespace" name="AccessManagerSpecs" executed="True" result="Success" success="True" time="16.089" asserts="0">
+                    <results>
+                      <test-suite type="TestFixture" name="AccessManagerSpecs" executed="True" result="Success" success="True" time="16.087" asserts="3">
+                        <results>
+                          <test-case name="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase_1001" executed="True" result="Success" success="True" time="6.006" asserts="5" />
+                          <test-case name="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase_1002" executed="True" result="Failure" success="False" time="4.534" asserts="3" >
+                           <failure>
+                             <message><![CDATA[ Expected: 1 But was:  0]]></message>
+                             <stack-trace><![CDATA[at Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase2() in D:\trunk\Code\Main\Tp.UnitTests\AccessManagerSpecs\AccessManagerSpecs.cs:line 178]]></stack-trace>
+                            </failure>
+                          </test-case>
+                          <test-case name="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase_1004" executed="False" result="Ignored" >
+                           <reason>
+                            <message><![CDATA[]]></message>
+                           </reason>
+                          </test-case>
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

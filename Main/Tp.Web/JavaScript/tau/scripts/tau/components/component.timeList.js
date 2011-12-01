@@ -1,0 +1,1 @@
+define(["tau/components/component.list.creator","tau/models/model.timeList","tau/ui/templates/timeList/ui.template.timeList"],function(a,b,c){return{create:function(d){var e={ModelType:b,template:c,message:"No time records found"};return a.create(e,d)}}})

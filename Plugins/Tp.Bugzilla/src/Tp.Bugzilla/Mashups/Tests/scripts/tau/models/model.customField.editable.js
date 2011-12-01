@@ -1,0 +1,1 @@
+define(["tau/core/model.editable.base"],function(a){var b=a.extend({category:"edit",name:"Editable custom field","bus dataBind":function(){this.bus.fire("permissionsReady",{editable:!0,deletable:!0})}});return b})

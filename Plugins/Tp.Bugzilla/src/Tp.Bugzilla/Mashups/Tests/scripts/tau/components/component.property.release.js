@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){b.propertyName="release",b.showUrl=!0,b.alignElementSelector=".property-text",b.editorComponentConfig={type:"state-list",listType:"release",expandable:!0,filter:!0,showEmptyDataMessage:!0,defaultValueLabel:"current",fullModeLabel:"show old",clearValueLabel:"backlog"};return a.create(b)}}})

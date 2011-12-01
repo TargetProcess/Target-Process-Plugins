@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/additionalInfo/ui.template.additionalInfo.row"],function(a){var b={name:"additionalInfo",markup:['<div class="box">','   <table class="additional-info-table">','       <tbody>{{tmpl(entities) "additionalInfo-row"}}</tbody>',"   </table>","</div>"],dependencies:["additionalInfo-row"]};return a.register(b)})

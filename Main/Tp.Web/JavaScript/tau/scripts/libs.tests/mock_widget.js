@@ -1,0 +1,1 @@
+$.widget("ui.mock",{options:{value:0,onCreated:function(){},onDestroy:function(){}},_create:function(){this.options.onCreated.call(this)},destroy:function(){this.options.onDestroy(),$.Widget.prototype.destroy.call(this)}})

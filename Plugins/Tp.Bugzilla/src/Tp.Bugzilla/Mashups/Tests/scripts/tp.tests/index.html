@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>jQuery UI User List Test Suite</title>
+
+    <link rel="stylesheet" href="../libs.tests/qunit.css" type="text/css"/>
+    <script type="text/javascript" src="../libs.tests/qunit.js"></script>
+    <script type="text/javascript" src="../libs.tests/jsmock.js"></script>
+    <script type="text/javascript" src="../require.js"></script>
+    <script type="text/javascript" src="mocks/jquery.iframeMock.js"></script>
+    <script type="text/javascript" src="mocks/restServiceMock.js"></script>
+
+    <script type="text/javascript" src="../../../ExtJs/Libs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../../ExtJs/Libs/ext-all.js"></script>
+    <script type="text/javascript" src="../../../ExtJs/Extensions.js"></script>
+    <script type="text/javascript" src="../../../ExtJs/url.js"></script>
+
+    <script type="text/javascript">
+        window.jsErrors = [];
+        window.onerror = function(errorMessage) {
+            window.jsErrors[window.jsErrors.length] = errorMessage;
+        };
+
+        appHostAndPath = '';
+
+        require.config({
+            baseUrl:'..'
+        });
+        require(
+                [
+                    'tp/bus',
+                    'libs/jquery/jquery.ui',
+                    'libs/jquery/jquery.tmpl',
+                    'tp/jquery.utils',
+                    'tp/ChangeLog',
+                    'tp/status',
+                    'tp/plugins/navigator',
+                    'tp/plugins/profileNameSource',
+                    'tp/plugins/profileControlsBlock',
+                    'tp/plugins/errorMessageContainer',
+                    'tp/plugins/pluginsRepository',
+                    'tp/plugins/profileRepository',
+                    'tp/plugins/bugzilla/bugsRepository',
+                    'tp/plugins/userRepository'
+                ],
+                function() {
+                    require([
+                        "tp.tests/bus.tests",
+                        "tp.tests/tp.jquery.utils.tests",
+                        "tp.tests/changeLogIterator.tests",
+                        "tp.tests/changeLogLink.tests",
+                        "tp.tests/changeLogPopup.tests",
+                        "tp.tests/navigationButton.tests",
+                        "tp.tests/status.tests",
+                        "tp.tests/plugins/profileControlsBlock.tests",
+                        "tp.tests/plugins/errorMessageContainer.tests",
+                        "tp.tests/plugins/pluginsRepository.tests",
+                        "tp.tests/plugins/profileRepository.tests",
+                        "tp.tests/plugins/bugzilla/bugsRepository.tests",
+                        "tp.tests/plugins/userRepository.tests",
+                        "tp.tests/plugins/vcs/tpUserAutocomplete.widget.tests",
+                        "tp.tests/plugins/vcs/synchronizeUser.widget.tests"
+                    ]);
+                });
+    </script>
+</head>
+
+<body>
+<h1 id="qunit-header">jQuery UI User List Test Suite</h1>
+
+<h2 id="qunit-banner"></h2>
+<ol id="qunit-tests"></ol>
+</body>
+</html>

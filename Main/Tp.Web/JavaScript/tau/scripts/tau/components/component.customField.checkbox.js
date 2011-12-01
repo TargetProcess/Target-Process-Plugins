@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.customField","tau/models/model.customField.editable","tau/components/extensions/customField/extension.customField.checkbox.editable","tau/ui/templates/customField/ui.template.customField.checkbox"],function(a,b,c,d,e){return{create:function(f){var g={ModelType:b,template:e,extensions:[c,d]};return a.create(g,f)}}})

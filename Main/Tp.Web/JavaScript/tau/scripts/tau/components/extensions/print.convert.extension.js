@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base","tau/configurations/converters/converter.print"],function(a,b){return a.extend({"bus onConfigContainerCreated":function(a){var c=a.data;b.convert(c),c.children.push({type:"print"})}})})

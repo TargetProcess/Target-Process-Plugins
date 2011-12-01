@@ -1,0 +1,1 @@
+define(["Underscore"],function(a){return{"auto include beforeSave":function(b,c){var d=this,e=b.data.obj;for(var f=0;f<c.fields.length;f++){var g=c.fields[f];d.store.isPropertyInitialized(e.id,e.type,g)&&a.mergeFields(b.data.cmd.config.fields,[g])}}}})

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"collapsibleHeader",markup:['<div class="ui-collapsible-header">','    <div class="ui-children-container"></div>',"</div>"]};return a.register(b)})

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/state/ui.template.state.option"],function(a){var b={name:"state-list",markup:['<div class="ui-drop-down">','    <div class="drop-down-list"><div class="drop-down-list__inner i-inner">{{tmpl(states) "state-option"}}</div></div>',"</div>"],dependencies:["state-option"]};return a.register(b)})

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"tag-item",markup:['<li class="ui-tags__tag" rel="tag">',"   <span>${$item.data}</span>","</li>"],dependencies:[]};return a.register(b)})

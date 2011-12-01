@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/event"],function(a,b,c){var d=function(d,e){var f=e._create||function(){};e._create=function(){var a=this;f.apply(a,arguments),a.bus=a.options.bus||a.element.data("bus"),c.subscribeOn(a)},a.extend(e,{_fire:function(){this.bus.fire.apply(this.bus,arguments)}}),b.widget(d,e)};return{widget:d}})

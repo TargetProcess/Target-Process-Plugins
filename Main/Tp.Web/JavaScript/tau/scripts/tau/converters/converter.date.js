@@ -1,0 +1,1 @@
+define(["libs/date.format"],function(){var a={convertDateToMothDayYearString:function(a){var b=a.toDateString().split(" ");b.splice(0,1);return b.join("-")},convertDateToMothDayYearTimeString:function(a){return a.format("MMM-dd-yyyy HH:mm")},convertTimeString:function(a){var b=":",c=a.toTimeString().split(b);return[c[0],c[1]].join(b)}};return a})

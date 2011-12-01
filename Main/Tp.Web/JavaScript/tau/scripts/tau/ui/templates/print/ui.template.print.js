@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/common/ui.template.buttonAction"],function(a){var b={name:"print",markup:['<div class="ui-print">','   <div class="ui-print__controls">','       {{tmpl([{id: "x", className: "ui-print__controls__print", title: "Print"}]) "button-action"}}',"   </div>","</div>"],dependencies:["button-action"]};return a.register(b)})

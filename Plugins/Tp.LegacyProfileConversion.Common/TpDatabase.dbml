@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TargetProcessTest" Class="TpDatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=True" SettingsObjectName="Tp.LegacyProfileConvertsion.Common.Properties.Settings" SettingsPropertyName="TargetProcessTestConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Project" Member="Projects">
+    <Type Name="Project">
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ProgramOfProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProcessID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SourceControlType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SCConnectionString" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SCUser" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SCPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SCStartingRevision" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsProduct" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsInboundMailEnabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InboundMailServer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="InboundMailPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InboundMailUseSSL" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InboundMailLogin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InboundMailPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InboundMailProtocol" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="InboundMailCreateRequests" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InboundMailAutomaticalEmailCheckTime" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InboundMailAutoCheck" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InboundMailReplyAddress" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Abbreviation" Type="System.String" DbType="NVarChar(6)" CanBeNull="true" />
+      <Association Name="Project_General" Member="Generals" ThisKey="ProjectID" OtherKey="ParentProjectID" Type="General" />
+      <Association Name="Project_TestPlan" Member="TestPlans" ThisKey="ProjectID" OtherKey="ProjectID" Type="TestPlan" />
+      <Association Name="General_Project" Member="General" ThisKey="ProjectID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TpUser" Member="TpUsers">
+    <Type Name="TpUser">
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Login" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SecretWord" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeleteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsAdministrator" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ActiveDirectoryName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="WeeklyAvailableHours" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="CurrentAllocation" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CurrentAvailableHours" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="AvailableFrom" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AvailableFutureAllocation" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AvailableFutureHours" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="SourceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ContactOwnerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsObserver" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Skills" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Association Name="TpUser_TpUser" Member="TpUsers" ThisKey="UserID" OtherKey="ContactOwnerID" Type="TpUser" />
+      <Association Name="TpUser_General" Member="Generals" ThisKey="UserID" OtherKey="LastCommentUserID" Type="General" />
+      <Association Name="TpUser_General1" Member="Generals1" ThisKey="UserID" OtherKey="LastEditorID" Type="General" />
+      <Association Name="TpUser_General2" Member="Generals2" ThisKey="UserID" OtherKey="OwnerID" Type="General" />
+      <Association Name="TpUser_TpUser" Member="TpUser1" ThisKey="ContactOwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MessageUid" Member="MessageUids">
+    <Type Name="MessageUid">
+      <Column Name="MessageUidID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UID" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="MailServer" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="MailLogin" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.General" Member="Generals">
+    <Type Name="General">
+      <Column Name="GeneralID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LastCommentDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="NumericPriority" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CustomField1" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField2" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField3" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField4" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField5" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField6" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField7" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField8" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField9" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField10" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField11" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField12" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField13" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField14" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="CustomField15" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="LastCommentUserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ParentProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OwnerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LastEditorID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="General_Project" Member="Project" ThisKey="GeneralID" OtherKey="ProjectID" Type="Project" Cardinality="One" />
+      <Association Name="General_TestPlan" Member="TestPlan" ThisKey="GeneralID" OtherKey="TestPlanID" Type="TestPlan" Cardinality="One" />
+      <Association Name="Project_General" Member="Project1" ThisKey="ParentProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+      <Association Name="TpUser_General" Member="TpUser" ThisKey="LastCommentUserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+      <Association Name="TpUser_General1" Member="TpUser1" ThisKey="LastEditorID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+      <Association Name="TpUser_General2" Member="TpUser2" ThisKey="OwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PluginProfile" Member="PluginProfiles">
+    <Type Name="PluginProfile">
+      <Column Name="PluginProfileID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PluginName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ProfileName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SyncDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Settings" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GlobalSetting" Member="GlobalSettings">
+    <Type Name="GlobalSetting">
+      <Column Name="GlobalSettingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Logo" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="SMTPServer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SMTPPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SMTPLogin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SMTPPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SMTPAuthentication" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsEmailNotificationsEnabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="SMTPSender" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="HelpDeskPortalPath" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="NotifyRequester" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="NotifyAutoCreatedRequester" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AppHostAndPath" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="DisableHttpAccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CsvExportDelimiter" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Revision" Member="Revisions">
+    <Type Name="Revision">
+      <Column Name="RevisionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SourceControlID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CommitDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PluginProfileID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AuthorID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestPlan" Member="TestPlans">
+    <Type Name="TestPlan">
+      <Column Name="InitialEstimate" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="TestPlanID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="TestPlan_TestCaseTestPlan" Member="TestCaseTestPlans" ThisKey="TestPlanID" OtherKey="TestPlanID" Type="TestCaseTestPlan" />
+      <Association Name="General_TestPlan" Member="General" ThisKey="TestPlanID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+      <Association Name="Project_TestPlan" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestCaseTestPlan" Member="TestCaseTestPlans">
+    <Type Name="TestCaseTestPlan">
+      <Column Name="TestCaseTestPlanID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TestPlanID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TestCaseID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="TestPlan_TestCaseTestPlan" Member="TestPlan" ThisKey="TestPlanID" OtherKey="TestPlanID" Type="TestPlan" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

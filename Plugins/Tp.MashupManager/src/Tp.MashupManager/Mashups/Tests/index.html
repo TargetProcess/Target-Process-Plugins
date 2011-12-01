@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>jQuery UI User List Test Suite</title>
+
+    <link rel="stylesheet" href="Libs/qunit.css" type="text/css"/>
+    <script type="text/javascript" src="Libs/qunit.js"></script>
+    <script type="text/javascript" src="Libs/require.js"></script>
+	<script type="text/javascript" src="Libs/ExtJS/ext-base.js"></script>
+	<script type="text/javascript" src="Libs/ExtJS/Extensions.js"></script>
+	<script type="text/javascript" src="Libs/ExtJS/url.js"></script>
+    <script type="text/javascript" src="Libs/Mashups.js"></script>
+    <script type="text/javascript">
+        Sys = {
+            WebForms: {
+                PageRequestManager: {
+                    getInstance: function () {
+                        return { add_pageLoaded: function() { } };
+                    }
+                }
+            }
+        };
+
+        appHostAndPath = '';
+
+//        require.config({
+//            baseUrl: ".."
+//        });
+
+        require([
+                "../ProfileEditor/MashupsManagerEditor.js",
+                "../ProfileEditor/EditorTemplate.js"
+                ],
+                function () {
+                    require([
+                            "mashupManagerEditor.tests.js"
+                        ]);
+                });
+
+    </script>
+</head>
+<body>
+
+<h1 id="qunit-header">jQuery UI User List Test Suite</h1>
+
+<h2 id="qunit-banner"></h2>
+<ol id="qunit-tests"></ol>
+
+</body>
+</html>

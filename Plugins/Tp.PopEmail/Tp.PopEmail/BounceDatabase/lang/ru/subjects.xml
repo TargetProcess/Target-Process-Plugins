@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/subjects.xsl"?>
+<!--DOCTYPE subjects SYSTEM "../../dtd/subjects.dtd"-->
+<subjects lang="ru">
+	<include>
+		<subject keyword="ВНИМАНИЕ: Сообщение не доставлено" />
+	</include>
+</subjects>

@@ -1,0 +1,13 @@
+<!ELEMENT from (fromnames?, fromemails?, fromremarks?, fromstrings?)>
+<!ATTLIST from
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT fromnames (fromaddress+)>
+<!ELEMENT fromemails (fromaddress+)>
+<!ELEMENT fromremarks (fromaddress+)>
+<!ELEMENT fromstrings (fromaddress+)>
+
+<!ELEMENT fromaddress EMPTY>
+<!ATTLIST fromaddress
+	keyword	CDATA #REQUIRED
+	match (start|end|any|all) "any">

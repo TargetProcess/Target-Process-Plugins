@@ -1,0 +1,1 @@
+define(["libs/underscore","libs/jquery/jquery","libs/jquery/jquery.ui"],function(a,b,c){var d={_:a,$:b};return d})

@@ -1,0 +1,6 @@
+<!ELEMENT bodytemplates (contents+)>
+<!ATTLIST bodytemplates
+	lang	CDATA #REQUIRED>
+<!ELEMENT contents (#PCDATA)>
+<!ATTLIST contents
+	priority	CDATA #REQUIRED>

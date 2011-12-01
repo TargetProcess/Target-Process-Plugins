@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base"],function(a,b){var c=b.extend({onInit:function(){var b=this.config.items,c=[],d=0;a(b).each(function(a){if(a==="-----"){if(d===0)return;d=0}else++d;c.push(a)});var e={items:c};this.bus.fire("dataBind",e)}});return c})

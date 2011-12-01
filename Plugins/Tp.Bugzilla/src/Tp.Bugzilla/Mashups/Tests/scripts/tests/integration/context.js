@@ -1,0 +1,1 @@
+define(["tests/integration/spec"],function(a){(new a("context")).then(function(a){equals(a.id,this.entity.id,"id of context equals to entity id"),ok(a.loggedUser,"logged user is provided"),ok(a.culture,"culture is provided"),ok(a.selectedProjects,"projects are provided"),ok(a.processes,"processes are provided")});return{}})

@@ -1,0 +1,12 @@
+<!ELEMENT subjects (include?, exclude?)>
+<!ATTLIST subjects
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT include (subject+)>
+<!ELEMENT exclude (subject+)>
+
+<!ELEMENT subject EMPTY>
+<!ATTLIST subject
+	keyword	CDATA #REQUIRED
+	type		CDATA #IMPLIED
+	match (start|end|any|all) "any">

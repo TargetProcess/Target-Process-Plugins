@@ -1,0 +1,10 @@
+<!ELEMENT types (type*)>
+<!ATTLIST types
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT type (type*)>
+<!ATTLIST type
+	name		CDATA #REQUIRED
+	id			CDATA	#REQUIRED
+	priority	CDATA #IMPLIED
+ 	reserved (yes|no) "no">

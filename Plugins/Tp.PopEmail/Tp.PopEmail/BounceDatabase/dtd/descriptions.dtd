@@ -1,0 +1,8 @@
+<!ELEMENT descriptions (description+)>
+<!ATTLIST descriptions
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT description EMPTY>
+<!ATTLIST description
+	keyword	CDATA #REQUIRED
+	type		CDATA #REQUIRED>

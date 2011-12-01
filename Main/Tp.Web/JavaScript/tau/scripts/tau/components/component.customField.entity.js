@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.customField","tau/ui/templates/customField/ui.template.customField.entity"],function(a,b,c){return{create:function(d){var e={ModelType:b,template:c};return a.create(e,d)}}})

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/breadcrumbs/ui.template.breadcrumbs.item"],function(a){var b={name:"breadcrumbs",markup:["{{if items.length}}",'   <ul class="ui-breadcrumbs">','       {{tmpl(items) "breadcrumbs-item"}}',"   </ul>","{{/if}}"],dependencies:["breadcrumbs-item"]};return a.register(b)})

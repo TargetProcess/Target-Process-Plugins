@@ -1,0 +1,1 @@
+define(["tests/components/customField/component.customField.specification.base","tau/components/component.customField.richtext"],function(a,b){var c=function(){a.run("richtext.base",b,{name:"CF Rich",type:"richtext",required:!1,listed:!0},"Rich text",function(){var a=this.$el,b=this.data;equals(a.find(".value:first").html(),b.value,"Content is valid")})};return{run:c}})

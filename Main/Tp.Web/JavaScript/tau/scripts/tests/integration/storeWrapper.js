@@ -1,0 +1,1 @@
+define(["tau/configurator","tau/core/tau","tau/core/types.targetprocess"],function(a,b,c){var d=window.location.href.toLowerCase(),e=d.substr(0,d.indexOf("javascript")-1),f={id:parseInt(b.getValueFromQueryString("id"))};return{entity:f,getStore:function(){a.clear(),a.setApplicationPath(e);return a.getStore()}}})

@@ -1,0 +1,1 @@
+define(["jQuery","tau/components/extensions/component.extension.base","libs/jquery/jquery.notifyBar"],function(a,b){var c=b.extend({"bus error":function(b){var c=b.data.message;a.notifyBar({cls:"error",html:c,delay:6e6})}});return c})

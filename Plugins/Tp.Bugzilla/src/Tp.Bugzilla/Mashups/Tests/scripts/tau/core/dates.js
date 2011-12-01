@@ -1,0 +1,1 @@
+define(function(){var dates={fromStringToDate:function(dateString){return eval(["new ",dateString.replace(/\//gi,"")].join(""))},parse:function(a){return a?a.constructor==Date?a:this.fromStringToDate(a):null}};return dates})

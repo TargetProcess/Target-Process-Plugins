@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/extensions/component.creator.extension","tau/ui/extensions/comments/ui.extension.commentList.editable"],function(a,b,c){return{create:function(){var d={extensions:[b,c]};return a.create(d,{name:"comment.commentList"})}}})

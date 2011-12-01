@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){b.propertyName="severity",b.editorType="",b.showUrl=!1,b.alignElementSelector=".property-text",b.showEmptyDataMessage=!0,b.editorComponentConfig={type:"state-list",listType:"severity",maxHeight:200};return a.create(b)}}})

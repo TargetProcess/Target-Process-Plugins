@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(a,b,c){return c.extend({"bus testCaseWasAdded":function(a){this.fire("evictTestCases"),this.fire("refresh")},"bus testCaseStateWasChanged":function(a){this.fire("evictTestCases"),this.fire("refresh")}})})

@@ -1,0 +1,393 @@
+﻿// 
+// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Web;
+using SharpSvn;
+using SharpSvn.Security;
+using Tp.Core;
+using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.Validation;
+using Tp.SourceControl.Commands;
+using Tp.SourceControl.Settings;
+using Tp.SourceControl.VersionControlSystem;
+
+namespace Tp.Subversion.Subversion
+{
+	public class Subversion : VersionControlSystem
+	{
+		private SvnClient _client;
+
+		private string _root;
+		private string _projectPath;
+
+		public Subversion(ISourceControlConnectionSettingsSource settings, ICheckConnectionErrorResolver errorResolver, IActivityLogger logger)
+			: base(settings, errorResolver, logger)
+		{
+			Connect();
+		}
+
+		private void Connect()
+		{
+			var client = Client;//trigger connection validation
+		}
+
+		private SvnClient Client
+		{
+			get
+			{
+				if (_client != null)
+				{
+					return _client;
+				}
+
+				_client = CreateSvnClient();
+
+				try
+				{
+					var info = GetRepositoryInfo();
+
+					_root = info.RepositoryRoot.AbsoluteUri;
+					_projectPath = HttpUtility.UrlDecode(info.Uri.AbsoluteUri.Substring(_root.Length));
+					_root.Remove(_root.Length - 1, 1);
+				}
+				catch (SvnException ex)
+				{
+					_logger.Error("Connection failed.", ex);
+					throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message.Trim()), ex);
+				}
+				return _client;
+			}
+		}
+
+		#region ISourceControlSession Members
+
+		private SvnRevisionId GetLastRevisionId()
+		{
+			try
+			{
+				var repos = _settings.Uri;
+				SvnInfoEventArgs info;
+				Client.GetInfo(repos, out info);
+
+				return info.Revision;
+			}
+			catch (SvnException ex)
+			{
+				_logger.Error("Svn plugin Error when gettin revision id.", ex);
+				throw;
+			}
+		}
+
+		private SvnInfoEventArgs GetRepositoryInfo(string root)
+		{
+			_logger.DebugFormat("Getting repository info '{0}'", root);
+
+			var repos = new Uri(root);
+			SvnInfoEventArgs info;
+			Client.GetInfo(repos, out info);
+			return info;
+		}
+
+		public override RevisionInfo[] GetRevisions(RevisionRange revisionRange)
+		{
+			try
+			{
+				SvnRevisionId fromChangeset = revisionRange.FromChangeset;
+				SvnRevisionId toChangeset = revisionRange.ToChangeset;
+
+				_logger.DebugFormat("Getting revision infos [{0}:{1}]", fromChangeset, toChangeset);
+				var arg = new SvnLogArgs(new SvnRevisionRange(fromChangeset.Value, toChangeset.Value)) {ThrowOnError = true};
+				return SubversionUtils.ArrayOfSvnRevisionToArrayOfRevisionInfo(GetSvnRevisions(arg), this).ToArray();
+			}
+			catch (SvnException e)
+			{
+				throw new VersionControlException(String.Format("Subversion exception: {0}", e.Message), e);
+			}
+		}
+
+		private Collection<SvnLogEventArgs> GetSvnRevisions(SvnLogArgs arg)
+		{
+			return GetSvnRevisions(arg, _projectPath);
+		}
+
+		private Collection<SvnLogEventArgs> GetSvnRevisions(SvnLogArgs arg, string path)
+		{
+			var targetPath = GetPath(path);
+			Collection<SvnLogEventArgs> svnRevisions;
+			if (Client.GetLog(targetPath, arg,
+			                   out svnRevisions))
+			{
+				RemoveChangedItemFromOtherProject(svnRevisions);
+				return svnRevisions;
+			}
+
+			return null;
+		}
+
+		private Uri GetPath(string path)
+		{
+			return new Uri(new Uri(_root), path);
+		}
+
+		private void RemoveChangedItemFromOtherProject(IEnumerable<SvnLogEventArgs> svnRevisions)
+		{
+			var listOfRevision = new List<SvnLogEventArgs>();
+			var removedChangedPaths = new List<SvnChangeItem>();
+			foreach (var svnRevision in svnRevisions)
+			{
+				_logger.DebugFormat("Processing SVN Revision #{0} for removing", svnRevision.Revision);
+
+				if (svnRevision.ChangedPaths == null)
+				{
+					continue;
+				}
+
+				listOfRevision.Clear();
+
+				removedChangedPaths.AddRange(svnRevision.ChangedPaths.Where(x => !x.RepositoryPath.ToString().StartsWith(_projectPath)));
+
+				foreach (var changeItem in removedChangedPaths)
+				{
+					svnRevision.ChangedPaths.Remove(changeItem);
+				}
+
+				_logger.DebugFormat("SVN Revision #{0} is processed for removing", svnRevision.Revision);
+			}
+		}
+
+		public RevisionInfo[] GetRevisions(RevisionRange revisionsRange, string path)
+		{
+			_logger.DebugFormat("GET SVN Revisions for {0} [{1}, {2}]", path, revisionsRange.FromChangeset, revisionsRange.ToChangeset);
+			var arg = CreateSvnLogArgument(path, new RevisionRange(revisionsRange.FromChangeset, revisionsRange.ToChangeset));
+			var tpRevisionInfo = SubversionUtils.ArrayOfSvnRevisionToArrayOfRevisionInfo(GetSvnRevisions(arg, path), this);
+			_logger.DebugFormat("SVN Revisions for {0} [{1}, {2}] is retrieved", path, revisionsRange.FromChangeset, revisionsRange.ToChangeset);
+
+			return tpRevisionInfo.ToArray();
+		}
+
+		private SvnLogArgs CreateSvnLogArgument(string path, RevisionRange revisionRange)
+		{
+			return new SvnLogArgs(CreateSvnRevisionRangeBy(revisionRange)) {BaseUri = GetPath(path), ThrowOnError = true};
+		}
+
+		private static SvnRevisionRange CreateSvnRevisionRangeBy(RevisionRange revisionRange)
+		{
+			SvnRevisionId fromChangeset = revisionRange.FromChangeset;
+			SvnRevisionId toChangeSet = revisionRange.ToChangeset;
+			return new SvnRevisionRange(fromChangeset.Value, toChangeSet.Value);
+		}
+
+		public override string GetTextFileContent(RevisionId changeset, string path)
+		{
+			try
+			{
+				using (var stream = GetSVNFileStream(changeset, path))
+				{
+					stream.Position = 0;
+					return new StreamReader(stream).ReadToEnd();
+				}
+			}
+			catch (SvnFileSystemException ex)
+			{
+				throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
+			}
+		}
+
+		private MemoryStream GetSVNFileStream(SvnRevisionId changeset, string path)
+		{
+			var memoryStream = new MemoryStream();
+			SvnTarget target;
+			//If you use Uri you should encode '#' as %23, as Uri's define the # as Fragment separator.
+			//And in this case the fragment is not send to the server.
+			path = path.Replace("#", "%23");
+			if (SvnTarget.TryParse(GetPath(path).AbsolutePath, out target))
+			{
+				if (FileWasDeleted(path, changeset))
+				{
+					return new MemoryStream();
+				}
+
+				var uriTarget = new SvnUriTarget(_root + path, changeset.Value);
+				var svnWriteArgs = new SvnWriteArgs {Revision = changeset.Value};
+
+				Client.Write(uriTarget, memoryStream, svnWriteArgs);
+				return memoryStream;
+			}
+			return new MemoryStream();
+		}
+
+		private bool FileWasDeleted(string path, SvnRevisionId changeset)
+		{
+			var revisionId = new RevisionId {Value = changeset.Value.ToString()};
+			var arg = new SvnLogArgs(CreateSvnRevisionRangeBy(new RevisionRange(revisionId, revisionId)))
+			{BaseUri = new Uri(_root), ThrowOnError = true};
+
+			var revisions = GetSvnRevisions(arg, String.Empty);
+
+			var item = revisions[0].ChangedPaths.FirstOrDefault(itemCollection => itemCollection.Path == path);
+
+			return item != null && item.Action == SvnChangeAction.Delete;
+		}
+
+		private SvnClient CreateSvnClient()
+		{
+			var client = new SvnClient();
+			client.Authentication.DefaultCredentials = new NetworkCredential(_settings.Login, _settings.Password);
+			client.Authentication.SslServerTrustHandlers +=
+				delegate(object sender, SvnSslServerTrustEventArgs args)
+				{
+					// If needed we can look at the rest of the arguments of 'args' whether 
+					// we wish to accept. If accept:
+					args.AcceptedFailures = args.Failures;
+					args.Save = true; // Save acceptance to authentication store
+				};
+			return client;
+		}
+
+		public override byte[] GetBinaryFileContent(RevisionId changeset, string path)
+		{
+			try
+			{
+				using (var stream = GetSVNFileStream(new SvnRevisionId(changeset), path))
+				{
+					return stream.ToArray();
+				}
+			}
+			catch (SvnFileSystemException ex)
+			{
+				throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
+			}
+		}
+
+		private SvnInfoEventArgs GetRepositoryInfo()
+		{
+			SvnInfoEventArgs info = null;
+			Exception exception = null;
+			var repositoryUri = new Uri(_settings.Uri).AbsoluteUri;
+
+			var thread = new Thread(() =>
+			                        {
+			                        	try
+			                        	{
+			                        		info = GetRepositoryInfo(repositoryUri);
+			                        	}
+			                        	catch (Exception ex)
+			                        	{
+			                        		exception = ex;
+			                        	}
+			                        });
+			thread.Start();
+			var timeoutAcquired = !thread.Join(TimeSpan.FromSeconds(5));
+
+			if (timeoutAcquired)
+			{
+				thread.Abort();
+				thread.Join();
+			}
+
+			if (!timeoutAcquired && exception != null)
+			{
+				throw exception;
+			}
+
+			if (timeoutAcquired)
+			{
+				throw new SvnException(string.Format("Timeout while connecting to svn repository {0}", _settings.Uri));
+			}
+
+			return info;
+		}
+
+		public override void CheckRevision(RevisionId revision, PluginProfileErrorCollection errors)
+		{
+			try
+			{
+				GetRevisions(new RevisionRange(revision, revision));
+			}
+			catch (VersionControlException e)
+			{
+				_errorResolver.HandleConnectionError(e, errors);
+			}
+		}
+
+		public override string[] RetrieveAuthors(DateRange dateRange)
+		{
+			var startRevision = new SvnRevision(dateRange.StartDate.GetValueOrDefault());
+			var endRevision = new SvnRevision(dateRange.EndDate.GetValueOrDefault());
+
+			var range = new SvnRevisionRange(startRevision, endRevision);
+			var result = GetSvnRevisions(new SvnLogArgs(range));
+			return result.Select(x => x.Author).Where(y => !string.IsNullOrEmpty(y)).Distinct().ToArray();
+		}
+
+		#endregion
+
+		public override void Dispose()
+		{
+			if (_client == null)
+			{
+				return;
+			}
+			_client.Dispose();
+			_client = null;
+			GC.SuppressFinalize(this);
+		}
+
+		public override RevisionRange[] GetFromTillHead(RevisionId from, int pageSize)
+		{
+			var lastRevision = GetLastRevisionId();
+
+			return GetFromTo(@from, lastRevision, pageSize);
+		}
+
+		private static RevisionRange[] GetFromTo(SvnRevisionId @from, SvnRevisionId lastRevision, int pageSize)
+		{
+			var result = new List<RevisionRange>();
+
+			while (from.Value <= lastRevision.Value)
+			{
+				var fromRevisionId = from;
+
+				RevisionRange revisionRange;
+
+				var fromRevision = fromRevisionId;
+				if ((fromRevisionId.Value + pageSize) < lastRevision.Value)
+				{
+					revisionRange = new RevisionRange(fromRevision, new RevisionId {Value = (fromRevisionId.Value + pageSize - 1).ToString()});
+				}
+				else
+				{
+					revisionRange = new RevisionRange(fromRevision, lastRevision);
+				}
+
+				result.Add(revisionRange);
+
+				from = new SvnRevisionId(fromRevisionId.Value + pageSize);
+			}
+			return result.ToArray();
+		}
+
+		public override RevisionRange[] GetAfterTillHead(RevisionId @from, int pageSize)
+		{
+			SvnRevisionId svnRevisionId = from;
+			svnRevisionId = svnRevisionId.Value + 1;
+			return GetFromTillHead(svnRevisionId, pageSize);
+		}
+
+		public override RevisionRange[] GetFromAndBefore(RevisionId @from, RevisionId to, int pageSize)
+		{
+			SvnRevisionId lastRevision = ((SvnRevisionId) to).Value - 1;
+			return GetFromTo(@from, lastRevision, pageSize);
+		}
+	}
+}

@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.label","tau/ui/templates/label/ui.template.label","tau/ui/extensions/label/ui.extension.label"],function(a,b,c,d){return{create:function(e){var f={ModelType:b,template:c,extensions:e.extensions||[]};f.extensions.push(d);return a.create(f,e)}}})

@@ -1,0 +1,1 @@
+define(["tau/components/component.list.creator","tau/models/model.entityList","tau/ui/templates/entityList/ui.template.entityList"],function(a,b,c){return{create:function(d){var e={ModelType:b,template:c,message:"No tasks and bugs found"};return a.create(e,d)}}})

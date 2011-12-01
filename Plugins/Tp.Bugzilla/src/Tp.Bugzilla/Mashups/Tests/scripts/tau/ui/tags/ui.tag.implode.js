@@ -1,0 +1,1 @@
+define(["Underscore"],function(a){return{register:function(b,c){c.$tau=c.$tau||{},c.$tau.text_implode=function(b){var c=new String(b);if(a.isString(b))c=b;else if(a.isArray(b)){var d=a.clone(b),e=d.pop();c=a.filter([d.join(", "),e],function(a){return a!=!1}).join(" &amp; ")}return c}}}})

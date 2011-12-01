@@ -1,0 +1,1 @@
+define(["tau/components/component.field.richText"],function(a){return{create:function(b){b=b||{},b.shortcutProcessorTarget=".ui-description__inner",b.fieldName="steps";return a.create(b)}}})

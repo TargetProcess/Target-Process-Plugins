@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>jQuery UI User List Test Suite</title>
+		<link rel="stylesheet" href="scripts/libs.tests/qunit.css" type="text/css" />
+		<link rel="stylesheet" href="plugins.css" type="text/css" />
+		<script type="text/javascript" src="scripts/libs.tests/qunit.js"> </script>
+		<script type="text/javascript" src="scripts/require.js"> </script>
+		<script type="text/javascript" src="scripts/tp/Mashups.js"> </script>
+	
+		<script type="text/javascript" src="scripts/ExtJs/Libs/adapter/ext/ext-base.js"> </script>
+		<script type="text/javascript" src="scripts/ExtJs/Libs/ext-all.js"> </script>
+		<script type="text/javascript" src="scripts/ExtJs/Extensions.js"> </script>
+		<script type="text/javascript" src="scripts/ExtJs/url.js"></script>
+
+		<script type="text/javascript" src="Mocks/profilerepositorymock.js"> </script>
+		<script type="text/javascript" src="Mocks/profilenamesourcemock.js"> </script>
+		<script type="text/javascript" src="Mocks/navigatorMock.js"> </script>
+		<script type="text/javascript" src="Mocks/commandGatewayMock.js"> </script>
+		<script type="text/javascript" src="scripts/tp.tests/mocks/restServiceMock.js"> </script>
+		<script type="text/javascript">
+		window.jsErrors = [];
+		window.onerror = function(errorMessage) {
+			window.jsErrors[window.jsErrors.length] = errorMessage;
+		};
+
+		appHostAndPath = '';
+
+		require.config({
+				baseUrl: "scripts"
+			});
+
+		require([
+				"../../ProfileEditor/userMappingEditor",
+				"../../ProfileEditor/ProfileEditor",
+				"testConfiguration.js"
+			],
+			function() {
+				require([
+						"../profileEditor.tests",
+						"../userMappingEditor.tests",
+						"../checkConnection.tests",
+						"../userMappingLine.tests"]);
+			});
+	</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">
+			jQuery UI User List Test Suite</h1>
+		<h2 id="qunit-banner">
+		</h2>
+		<ol id="qunit-tests">
+		</ol>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.title","tau/models/model.title.editable","tau/components/extensions/title/extension.title.editable","tau/ui/templates/title/ui.template.title"],function(a,b,c,d,e){return{create:function(f){var g={extensions:[b,c,d],template:e};return a.create(g,f)}}})

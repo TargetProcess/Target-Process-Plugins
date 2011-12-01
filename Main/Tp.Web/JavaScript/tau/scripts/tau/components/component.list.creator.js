@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/extensions/baseList/ui.extension.baseList"],function(a,b){return{create:function(c,d){d.emptyDataMessage=c.message,d.contentSelector=c.template.options.contentSelector,c.showEmptyMessage!==!1&&(c.extensions=c.extensions||[],c.extensions.push(b));return a.create(c,d)}}})

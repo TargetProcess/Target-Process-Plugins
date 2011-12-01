@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(a){return a.extend({"bus onConfigContainerCreated":function(a){this.config&&this.config.store&&(this.promise=this.config.store.freeze())},"bus afterInit":function(a){!this.promise||(this.promise.unfreeze(),delete this.promise)}})})

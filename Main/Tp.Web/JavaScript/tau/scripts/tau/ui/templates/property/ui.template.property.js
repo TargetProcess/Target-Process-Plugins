@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"property",markup:['<div><span class="property"><span class="property-text">${text}</span></span>',"{{if  hasUrl}}",'<span class="entity-url"><a target="_blank" class="external-view" href="${externalUrl}"></a></span>',"{{/if}}</div>"].join("")};return a.register(b)})

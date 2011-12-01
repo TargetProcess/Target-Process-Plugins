@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="bugzilla">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="bug" />
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="required" />
+      <xs:attribute name="urlbase" type="xs:string" use="required" />
+      <xs:attribute name="maintainer" type="xs:string" use="required" />
+      <xs:attribute name="exporter" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="bug">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="bug_id" />
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="alias" />
+          <xs:element ref="creation_ts" />
+          <xs:element ref="short_desc" />
+          <xs:element ref="delta_ts" />
+          <xs:element ref="reporter_accessible" />
+          <xs:element ref="cclist_accessible" />
+          <xs:element ref="classification_id" />
+          <xs:element ref="classification" />
+          <xs:element ref="product" />
+          <xs:element ref="component" />
+          <xs:element ref="version" />
+          <xs:element ref="rep_platform" />
+          <xs:element ref="op_sys" />
+          <xs:element ref="bug_status" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="resolution" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="dup_id" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="bug_file_loc" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="status_whiteboard" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="keywords" />
+          <xs:element ref="priority" />
+          <xs:element ref="bug_severity" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="target_milestone" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="dependson" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="blocked" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="votes" />
+          <xs:element ref="everconfirmed" />
+          <xs:element ref="reporter" />
+          <xs:element ref="assigned_to" />
+          <xs:element minOccurs="0" maxOccurs="1" ref="qa_contact" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="cc" />
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element ref="estimated_time" />
+            <xs:element ref="remaining_time" />
+            <xs:element ref="actual_time" />
+            <xs:element ref="deadline" />
+          </xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="group" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="flag" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="long_desc" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="attachment" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="custom_field" />
+        </xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="error">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="NotFound" />
+            <xs:enumeration value="NotPermitted" />
+            <xs:enumeration value="InvalidBugId" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="bug_id" type="xs:string" />
+  <xs:element name="alias" type="xs:string" />
+  <xs:element name="reporter_accessible" type="xs:string" />
+  <xs:element name="cclist_accessible" type="xs:string" />
+  <xs:element name="exporter" type="xs:string" />
+  <xs:element name="urlbase" type="xs:string" />
+  <xs:element name="bug_status" type="xs:string" />
+  <xs:element name="classification_id" type="xs:string" />
+  <xs:element name="classification" type="xs:string" />
+  <xs:element name="product" type="xs:string" />
+  <xs:element name="priority" type="xs:string" />
+  <xs:element name="version" type="xs:string" />
+  <xs:element name="rep_platform" type="xs:string" />
+  <xs:element name="assigned_to" type="xs:string" />
+  <xs:element name="delta_ts" type="xs:string" />
+  <xs:element name="component" type="xs:string" />
+  <xs:element name="reporter" type="xs:string" />
+  <xs:element name="target_milestone" type="xs:string" />
+  <xs:element name="bug_severity" type="xs:string" />
+  <xs:element name="creation_ts" type="xs:string" />
+  <xs:element name="qa_contact" type="xs:string" />
+  <xs:element name="status_whiteboard" type="xs:string" />
+  <xs:element name="op_sys" type="xs:string" />
+  <xs:element name="resolution" type="xs:string" />
+  <xs:element name="dup_id" type="xs:string" />
+  <xs:element name="bug_file_loc" type="xs:string" />
+  <xs:element name="short_desc" type="xs:string" />
+  <xs:element name="keywords" type="xs:string" />
+  <xs:element name="dependson" type="xs:string" />
+  <xs:element name="blocked" type="xs:string" />
+  <xs:element name="votes" type="xs:string" />
+  <xs:element name="everconfirmed" type="xs:string" />
+  <xs:element name="cc" type="xs:string" />
+  <xs:element name="group" type="xs:string" />
+  <xs:element name="estimated_time" type="xs:string" />
+  <xs:element name="remaining_time" type="xs:string" />
+  <xs:element name="actual_time" type="xs:string" />
+  <xs:element name="deadline" type="xs:string" />
+  <xs:element name="custom_field">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cf_name" />
+        <xs:element ref="cf_value" />
+        <xs:element ref="cf_type" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="cf_values" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="cf_legal_values" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cf_name" type="xs:string" />
+  <xs:element name="cf_value" type="xs:string" />
+  <xs:element name="cf_type" type="xs:string" />
+  <xs:element name="cf_values">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cf_value" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cf_legal_values">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cf_value" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="long_desc">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="who" />
+        <xs:element ref="bug_when" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="work_time" />
+        <xs:element ref="thetext" />
+      </xs:sequence>
+      <xs:attribute name="encoding">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="base64" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="isprivate">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="0" />
+            <xs:enumeration value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="who" type="xs:string" />
+  <xs:element name="bug_when" type="xs:string" />
+  <xs:element name="work_time" type="xs:string" />
+  <xs:element name="thetext" type="xs:string" />
+  <xs:element name="attachment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="attachid" />
+        <xs:element ref="date" />
+        <xs:element ref="desc" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="filename" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="type" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="size" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="attacher" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="data" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="flag" />
+      </xs:sequence>
+      <xs:attribute name="isobsolete">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="0" />
+            <xs:enumeration value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="ispatch">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="0" />
+            <xs:enumeration value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="isprivate">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="0" />
+            <xs:enumeration value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="attachid" type="xs:string" />
+  <xs:element name="date" type="xs:string" />
+  <xs:element name="desc" type="xs:string" />
+  <xs:element name="filename" type="xs:string" />
+  <xs:element name="type" type="xs:string" />
+  <xs:element name="size" type="xs:string" />
+  <xs:element name="attacher" type="xs:string" />
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="encoding">
+            <xs:simpleType>
+              <xs:restriction base="xs:NMTOKEN">
+                <xs:enumeration value="base64" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="flag">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="status" type="xs:string" use="required" />
+      <xs:attribute name="setter" type="xs:string" />
+      <xs:attribute name="requestee" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

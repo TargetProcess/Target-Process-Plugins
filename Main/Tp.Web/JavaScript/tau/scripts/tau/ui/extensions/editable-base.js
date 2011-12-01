@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.creator.extension"],function(a){return a.extend({category:"edit","bus permissionsReady+afterRender":function(a){var b=this,c=a.permissionsReady.data;!c.editable||b.onEditActivated({element:a.afterRender.data.element})},onEditActivated:function(a){}})})

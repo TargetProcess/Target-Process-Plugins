@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Integration.Plugin.Common</RootNamespace>
+    <AssemblyName>Tp.Integration.Plugin.Common</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU'">
+    <OutputPath>bin\FuncTests\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Tp.Integration.Plugin.Common.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3">
+      <HintPath>..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Testing">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Tp.Service.Proxies">
+      <HintPath>..\..\Libs\Tp.Service.Proxies.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Activity\ActivityDto.cs" />
+    <Compile Include="Activity\ActivityFilter.cs" />
+    <Compile Include="Activity\ActivityLogFile.cs" />
+    <Compile Include="Activity\ActivityType.cs" />
+    <Compile Include="Activity\ActivityLoggerFactory.cs" />
+    <Compile Include="Activity\ActivityLoggerRegistry.cs" />
+    <Compile Include="Activity\ActivityLogInitialization.cs" />
+    <Compile Include="Activity\ActivityLogRecord.cs" />
+    <Compile Include="Activity\DateRangeExtensions.cs" />
+    <Compile Include="Activity\ILog4NetFileRepository.cs" />
+    <Compile Include="Activity\Log4NetActivityLog.cs" />
+    <Compile Include="Activity\IActivityLog.cs" />
+    <Compile Include="Activity\IActivityLogPathProvider.cs" />
+    <Compile Include="Activity\Log4NetFileRepository.cs" />
+    <Compile Include="Activity\TpLogManager.cs" />
+    <Compile Include="AssembliesHost.cs" />
+    <Compile Include="ConfigureSagaPersister.cs" />
+    <Compile Include="Events\AccountCollectionCreated.cs" />
+    <Compile Include="Domain\AccountDomainObject.cs" />
+    <Compile Include="Domain\AccountCollection.cs" />
+    <Compile Include="Domain\AccountDomainObjectVersion.cs" />
+    <Compile Include="Domain\CurrentProfile.cs" />
+    <Compile Include="Domain\CurrentProfileCollection.cs" />
+    <Compile Include="Domain\IPluginCurrentObjectContext.cs" />
+    <Compile Include="Domain\IPluginCurrentObjectContextReadonly.cs" />
+    <Compile Include="Domain\PluginCurrentObjectContext.cs" />
+    <Compile Include="Domain\IAccount.cs" />
+    <Compile Include="Domain\IAccountCollection.cs" />
+    <Compile Include="Domain\IAccountReadonly.cs" />
+    <Compile Include="Domain\IPluginContext.cs" />
+    <Compile Include="Domain\IProfile.cs" />
+    <Compile Include="Domain\IProfileCollection.cs" />
+    <Compile Include="Domain\IProfileCollectionReadonly.cs" />
+    <Compile Include="Domain\IProfileReadonly.cs" />
+    <Compile Include="Domain\ISpecificStorage.cs" />
+    <Compile Include="Domain\IStorageRepository.cs" />
+    <Compile Include="Domain\PluginContext.cs" />
+    <Compile Include="PluginRuntime.cs" />
+    <Compile Include="Domain\ProfileCollection.cs" />
+    <Compile Include="Domain\ProfileCreationArgs.cs" />
+    <Compile Include="Domain\ProfileDomainObject.cs" />
+    <Compile Include="Domain\ProfileExtensions.cs" />
+    <Compile Include="Domain\ProfileSafeNull.cs" />
+    <Compile Include="Domain\ProfileStorageRepository.cs" />
+    <Compile Include="Domain\StorageRepositoryDelegate.cs" />
+    <Compile Include="Events\Aggregator\Event.cs" />
+    <Compile Include="Events\Aggregator\EventAggregator.cs" />
+    <Compile Include="Events\Aggregator\EventBase.cs" />
+    <Compile Include="Events\Aggregator\IEventAggregator.cs" />
+    <Compile Include="Events\ProfileChanged.cs" />
+    <Compile Include="Events\ProfileCollectionChanged.cs" />
+    <Compile Include="Gateways\ProfileGatewayFactory.cs" />
+    <Compile Include="Handlers\ExceptionHandler.cs" />
+    <Compile Include="Gateways\ProfileGateway.cs" />
+    <Compile Include="Handlers\ProfileUpdatedHandler.cs" />
+    <Compile Include="IAssembliesHost.cs" />
+    <Compile Include="ICommandBus.cs" />
+    <Compile Include="IExcludedAssemblyNamesSource.cs" />
+    <Compile Include="ILocalBus.cs" />
+    <Compile Include="Gateways\IProfileGateway.cs" />
+    <Compile Include="Gateways\IProfileGatewayFactory.cs" />
+    <Compile Include="InitializationSaga.cs" />
+    <Compile Include="Logging\CsvExceptionPatternConverter.cs" />
+    <Compile Include="Logging\CsvLayout.cs" />
+    <Compile Include="Activity\IActivityLogger.cs" />
+    <Compile Include="Activity\PluginActivityLogger.cs" />
+    <Compile Include="Activity\PluginRollingFileAppender.cs" />
+    <Compile Include="Activity\ActivityLogPathProvider.cs" />
+    <Compile Include="Logging\CsvMessagePatternConverter.cs" />
+    <Compile Include="Mashup\PluginMashupFolder.cs" />
+    <Compile Include="NewProfileInitializationSaga.cs" />
+    <Compile Include="Mashup\IPluginMashupRepository.cs" />
+    <Compile Include="Mashup\PluginMashup.cs" />
+    <Compile Include="Mashup\PluginProfileEditorMashup.cs" />
+    <Compile Include="Mashup\PluginProfileEditorMashupFolder.cs" />
+    <Compile Include="PluginCommand\Embedded\AddOrUpdateProfileCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\CheckActivityLogForErrorsCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\ClearActivityLogCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\DeleteProfileCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\GetActivityLogCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\GetCommandsCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\GetProfileCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\GetProfilesCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\PluginProfileDtoSerializer.cs" />
+    <Compile Include="PluginCommand\Embedded\AddProfileCommand.cs" />
+    <Compile Include="PluginCommand\Embedded\EditProfileCommandBase.cs" />
+    <Compile Include="PluginCommand\Embedded\ProfileCommandBase.cs" />
+    <Compile Include="PluginCommand\Embedded\SyncNowCommand.cs" />
+    <Compile Include="PluginCommand\IPluginCommandRepository.cs" />
+    <Compile Include="PluginCommand\PluginCommandRepository.cs" />
+    <Compile Include="PluginCommand\PluginCommandHandler.cs" />
+    <Compile Include="PluginData.cs" />
+    <Compile Include="PluginLifecycle\DefaultPluginMashupRepository.cs" />
+    <Compile Include="PluginLifecycle\PluginIcon.cs" />
+    <Compile Include="PluginSettings.cs" />
+    <Compile Include="Logging\ILogManager.cs" />
+    <Compile Include="ProfileAttribute.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SagaPersister\TpDatabaseSagaPersister.cs" />
+    <Compile Include="Storage\Persisters\AccountPersister.cs" />
+    <Compile Include="Storage\Persisters\IAccountPersister.cs" />
+    <Compile Include="Storage\Persisters\IProfilePersister.cs" />
+    <Compile Include="Storage\Persisters\ProfilePersister.cs" />
+    <Compile Include="Storage\ProfileId.cs" />
+    <Compile Include="Storage\Repositories\AccountRepository.cs" />
+    <Compile Include="Storage\Repositories\IAccountRepository.cs" />
+    <Compile Include="Storage\Repositories\IProfileFactory.cs" />
+    <Compile Include="Storage\Repositories\IProfileRepository.cs" />
+    <Compile Include="Storage\Repositories\ProfileRepository.cs" />
+    <Compile Include="Storage\Persisters\PluginPersister.cs" />
+    <Compile Include="Storage\Persisters\IProfileStoragePersister.cs" />
+    <Compile Include="Storage\Persisters\ProfileStoragePersistanceStrategies\IStoragePersistanceStrategy.cs" />
+    <Compile Include="Storage\Persisters\ProfileStoragePersistanceStrategies\NamedStoragePersistanceStrategy.cs" />
+    <Compile Include="Storage\Persisters\ProfileStoragePersistanceStrategies\NotNamedStoragePersistanceStrategy.cs" />
+    <Compile Include="Storage\Persisters\ProfileStorageSqlPersister.cs" />
+    <Compile Include="Storage\Persisters\Serialization\BlobSerializer.cs" />
+    <Compile Include="Storage\Persisters\Serialization\IBlobSerializer.cs" />
+    <Compile Include="Storage\Persisters\Serialization\JsonBlobSerializer.cs" />
+    <Compile Include="Storage\Persisters\Serialization\XmlBlobSerializer.cs" />
+    <Compile Include="Storage\Persisters\ISavingChangesEventHandler.cs" />
+    <Compile Include="Storage\Persisters\PluginDatabaseModel.cs">
+      <DependentUpon>PluginDatabaseModel.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Storage\Persisters\PluginDatabaseModel1.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginDatabaseModel.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Storage\Persisters\ProfileStorage.cs" />
+    <Compile Include="Storage\Persisters\ProfileStorageCollection.cs" />
+    <Compile Include="Storage\Persisters\ProfileToStorageAdapter.cs" />
+    <Compile Include="Storage\Persisters\StorageName.cs" />
+    <Compile Include="TpBus.cs" />
+    <Compile Include="ICustomPluginSpecifyMessageHandlerOrdering.cs" />
+    <Compile Include="ITpBus.cs" />
+    <Compile Include="PluginLifecycle\PluginInfoSender.cs" />
+    <Compile Include="AssemblyScanner.cs" />
+    <Compile Include="Storage\Persisters\DatabaseConfiguration.cs" />
+    <Compile Include="Domain\IPluginMetadata.cs" />
+    <Compile Include="Storage\Persisters\IDatabaseConfiguration.cs" />
+    <Compile Include="PluginLifecycle\TargetProcessLifecycleMessageHandler.cs" />
+    <Compile Include="Ticker\CheckIntervalElapsedMessageHandler.cs" />
+    <Compile Include="Ticker\Timer.cs" />
+    <Compile Include="TpSaga.cs" />
+    <Compile Include="PluginAssemblyAttribute.cs" />
+    <Compile Include="PluginEndpoint.cs" />
+    <Compile Include="PluginLifecycle\PluginInitializer.cs" />
+    <Compile Include="ServiceManager.cs" />
+    <Compile Include="Gateways\PluginGateway.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructureMap\PluginRegistry.cs" />
+    <Compile Include="UpdatedProfileInitializationSaga.cs" />
+    <Compile Include="Mapping\MappingLookup.cs" />
+    <Compile Include="Mapping\MappingContainer.cs" />
+    <Compile Include="Mapping\MappingElement.cs" />
+    <Compile Include="Validation\IValidatable.cs" />
+    <Compile Include="Validation\PluginProfileError.cs" />
+    <Compile Include="Validation\PluginProfileErrorCollection.cs" />
+    <Compile Include="Validation\PluginProfileValidationException.cs" />
+    <Compile Include="Validation\ProfileDtoValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Storage\Persisters\PluginDatabaseModel.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>PluginDatabaseModel1.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="TpPublic.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Storage\Persisters\PluginDatabaseModel.dbml.layout">
+      <DependentUpon>PluginDatabaseModel.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

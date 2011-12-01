@@ -1,0 +1,1 @@
+define(["order!libs/jquery/jquery","order!libs/jquery/jquery.ui"],function(){return $})

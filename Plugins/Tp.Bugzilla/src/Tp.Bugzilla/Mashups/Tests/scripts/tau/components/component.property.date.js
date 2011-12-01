@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.property.date","tau/components/extensions/property/extension.property.refresher","tau/ui/templates/property/ui.template.property"],function(a,b,c,d){return{create:function(e){var f={ModelType:b,template:d,extensions:[c]};return a.create(f,e)}}})

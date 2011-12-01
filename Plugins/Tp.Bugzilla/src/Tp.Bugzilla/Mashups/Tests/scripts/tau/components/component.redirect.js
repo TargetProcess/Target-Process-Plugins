@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.menu.actions","tau/components/extensions/redirect/extension.redirect","tau/ui/templates/menu/ui.template.menu.actions"],function(a,b,c,d){return{create:function(b){var d={extensions:[c]};return a.create(d,b)}}})

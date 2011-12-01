@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/bus"],function(a,b,c){return{create:function(){var a=new c;a.on("initialize",function(){a.fire("beforeInit"),a.fire("afterInit"),a.fire("dataBind")}),a.on("dataBind",function(){a.fire("beforeRender"),a.fire("afterRender",{element:b('<div class="component2">Component 2</div>')})});return a}}})

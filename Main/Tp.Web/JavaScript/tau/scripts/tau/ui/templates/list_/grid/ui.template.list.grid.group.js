@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/list_/grid/ui.template.list.grid.row"],function(a){var b={name:"list-grid-group",markup:['<div class="tau-list__group">','   <h2 class="tau-list__group__header">${key.name}</h2>','   <table class="tau-list__table">{{tmpl(items) "list-grid-row" }}</table>',"</div>"],dependencies:["list-grid-row"]};return a.register(b)})

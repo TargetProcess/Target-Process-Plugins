@@ -1,0 +1,1 @@
+define(["tau/components/component.list.creator","tau/models/model.requestList","tau/ui/templates/requestList/ui.template.requestList","tau/components/extensions/requestsList/extension.requestList.refresher"],function(a,b,c,d){return{create:function(e){var f={extensions:[d],ModelType:b,template:c,message:"No requests found"};return a.create(f,e)}}})

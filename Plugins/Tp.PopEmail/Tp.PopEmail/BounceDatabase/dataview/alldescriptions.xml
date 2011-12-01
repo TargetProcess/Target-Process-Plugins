@@ -1,0 +1,9 @@
+<?xml version="1.0" ?> 
+<?xml-stylesheet type="text/xsl" href="../xsl/alldescriptions.xsl"?>
+<!DOCTYPE notification [
+	<!ENTITY desc_en SYSTEM "../lang/en/descriptions.xml">
+]>
+
+<notification>
+&desc_en;
+</notification>

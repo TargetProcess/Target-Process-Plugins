@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base","tau/utils/utils.redirect"],function(a,b){return a.extend({_redirect:function(a){this.redirect.redirect(a)},"bus afterInit":function(a){this.redirect=new b(a.data.config.context),this._redirect(a.data.config.to)},"bus redirect":function(a){this._redirect(a.data.to)}})})

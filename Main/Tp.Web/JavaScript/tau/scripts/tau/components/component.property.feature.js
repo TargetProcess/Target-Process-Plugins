@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){b.propertyName="feature",b.showUrl=!0,b.alignElementSelector=".property-text",b.showEmptyDataMessage=!0,b.editorComponentConfig={type:"state-list",listType:"feature",maxHeight:200,filter:!0,showClearValue:!0,showEmptyDataMessage:!0,fullModeLabel:"show old"};return a.create(b)}}})

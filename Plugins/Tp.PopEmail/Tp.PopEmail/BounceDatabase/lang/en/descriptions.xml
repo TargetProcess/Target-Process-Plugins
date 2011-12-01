@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/descriptions.xsl"?>
+<!--DOCTYPE descriptions SYSTEM "../../dtd/descriptions.dtd"-->
+<descriptions lang="en">
+	<description keyword="4.1.8" type="soft" />
+	<description keyword="4.2.1" type="hard" />
+	<description keyword="4.2.2" type="soft" />
+	<description keyword="4.4.2" type="soft" />
+	<description keyword="4.4.4" type="soft" />
+	<description keyword="4.4.5" type="soft" />
+	<description keyword="4.4.7" type="soft" />
+	<description keyword="5.1.1" type="hard" />
+	<description keyword="5.1.2" type="hard" />
+	<description keyword="5.2.1" type="otherblock" />
+	<description keyword="5.4.0" type="soft" />
+	<description keyword="5.4.6" type="hard" />
+	<description keyword="5.5.0" type="hard" />
+	<description keyword="5.5.6" type="hard" />
+	<description keyword="5.7.0" type="soft" />
+	<description keyword="5.7.2" type="hard" />
+
+	<description keyword="421" type="hard" />
+	<description keyword="490 Temporary rejected" type="soft" />
+	<description keyword="550 Too many retries" type="hard" />
+	<description keyword="550 Access to" type="soft" />
+	<description keyword="550 Blocked" type="hard" />
+	<description keyword="550 in your email client" type="hard" />
+	<description keyword="550 Command RCPT User" type="hard" />
+	<description keyword="550 recipient" type="hard" />
+	<description keyword="550 Unknown local part" type="hard" />
+	<description keyword="550 unknown user" type="hard" />
+	<description keyword="550 unknown" type="soft" />
+	<description keyword="550 Mail refused" type="hard" />
+	<description keyword="550 relay" type="soft" />
+	<description keyword="550 User" type="soft" />
+	<description keyword="550 REQUESTED ACTION NOT TAKEN: DNS FAILURE" type="hard" />
+	<description keyword="550 Protocol violation" type="soft" />
+	<description keyword="551 not our customer" type="hard" />
+	<description keyword="554 RCPT first" type="hard" />
+	<description keyword="554 delivery error" type="hard" />
+	<description keyword="516 sender" type="soft" />
+	<description keyword="571 mail relay" type="soft" />
+
+<!-- A -->
+	<description keyword="Address invalid" type="hard" />
+	<description keyword="account has been disabled or discontinued" type="hard" />
+	<description keyword="account is over quota" type="soft" />
+	<description keyword="Account is temporarily over quota" type="soft" />
+	<description keyword="Account Unavailable: Possible Forgery" type="otherblock" />
+	<description keyword="Account is disabled" type="hard" />
+	<description keyword="Account Inactive" type="hard" />
+	<description keyword="account is full" type="soft" />
+	<description keyword="account has been disabled" type="hard" />
+	<description keyword="Address not known" type="hard" />
+	<description keyword="addressee unknown" type="hard" />
+	<description keyword="Access denied" type="soft" />
+	<description keyword="a valid email address" type="hard" />
+	<description keyword="account is disabled" type="hard" />
+	<description keyword="Authentication required" type="soft" />
+	<description keyword="Account discontinued" type="hard" />
+	<description keyword="account expired" type="hard" />
+	<description keyword="address rejected" type="hard" />
+	<description keyword="administrativley disabled" type="hard" />
+	<description keyword="account not activated" type="hard" />
+	<description keyword="A restriction in the system prevented delivery of the message" type="soft" />
+	<description keyword="address unknown" type="hard" />
+	<description keyword="Account Disable" type="hard" />
+	<description keyword="address no longer accepts mail" type="hard" />
+	<description keyword="account will be terminated" type="hard" />
+	<description keyword="as soon as I return"  type="auto" />
+	<description keyword="a loop was found" type="soft" />
+	<description keyword="addresses below have changed" type="hard" />
+	<description keyword="Address is unrecognized" type="hard" />
+	<description keyword="Attached is your mail message which could not be delivered" type="hard" />
+
+
+<!-- B -->
+	<description keyword="Bad SMTP prompt at the host" type="hard" />
+	<description keyword="Blocked address" type="hard" />
+	<description keyword="Blokiran adres" type="hard" />
+	<description keyword="box full" type="soft" />
+	<description keyword="box is full" type="soft" />
+	<description keyword="Bad Recipient" type="hard" />
+
+
+<!-- C -->
+	<description keyword="Cannot mail directly to files" type="hard" />
+	<description keyword="connection reset by peer" type="soft" />
+	<description keyword="Connection refused by" type="soft" />
+	<description keyword="Connection{0}refused" type="soft" />
+	<description keyword="Cannot route mail to user" type="hard" />
+	<description keyword="Cannot resolve" type="hard" />
+	<description keyword="Can&#x27;t connect to host" type="hard" />
+	<description keyword="Carefully check that it was spelled correctly" type="hard" />
+	<description keyword="configured to reject your mail" type="soft" />
+	<description keyword="Connection timed out" type="hard" />
+	<description keyword="Cannot route to" type="soft" />
+	<description keyword="check if address is correct" type="hard" />
+	<description keyword="cannot relay" type="soft" />
+	<description keyword="Can&#x27;t find mailnode" type="hard" />
+	<description keyword="content rejected" type="soft" />
+	<description keyword="create permissions on this folder" type="soft" />
+	<description keyword="closed due to inactivity" type="hard" />
+	<description keyword="configured to reject mail from" type="soft" />
+	<description keyword="computer could not be found" type="hard" />
+	<description keyword="Can&#x27;t create output" type="soft" />
+	<description keyword="Connection not authorised" type="soft" />
+	<description keyword="connection broken" type="soft" />
+
+
+<!-- D -->
+	<description keyword="domain doesn't exist or is not active in this server" type="hard" />
+	<description keyword="Denied" type="hard" />
+	<description keyword="DNS server failure" type="hard" />
+	<description keyword="Deferred" type="soft" />
+	<description keyword="Delivery time expired" type="hard" />
+	<description keyword="Delivery to the following recipients failed" type="hard" />
+	<description keyword="delivery temporarily suspended" type="soft" />
+	<description keyword="destination addresses were unknown" type="hard" />
+	<description keyword="Destination E/Mail Address is not known in this Domain" type="hard" />
+	<description keyword="DNS server could not be contacted" type="soft" />
+	<description keyword="does not exist" type="hard" />
+	<description keyword="doesn&#x27;t exist" type="hard" />
+	<description keyword="Delivery will be attempted for"  type="temp" />
+	<description keyword="discarded by mail filter" type="soft" />
+	<description keyword="DNS Loop" type="soft" />
+	<description keyword="does not like recipient" type="hard" />
+	<description keyword="do not relay" type="soft" />
+	<description keyword="data format error" type="soft" />
+	<description keyword="disk full" type="soft" />
+	<description keyword="DNS_Server_error" type="soft" />
+	<description keyword="DELIVERY FAILURE" type="hard" />
+
+<!-- E -->
+	<description keyword="E-mail domain {0} moved to" type="change" />
+	<description keyword="exceeded storage allocation" type="soft" />
+	<description keyword="error while writing to dropfile" type="soft" />
+	<description keyword="exceeded their disk quota" type="soft" />
+	<description keyword="error in recipient address" type="hard" />
+	<description keyword="exceed storage quota" type="soft" />
+	<description keyword="eMail-ID does not exist" type="hard" />
+	<description keyword="exceeded dropfile size quota" type="soft" />
+	<description keyword="email name is not found" type="hard" />
+	<description keyword="Email{0}Address was not found" type="hard" />
+	<description keyword="exceeds allowed message count" type="soft" />
+	<description keyword="email address has changed" type="hard" />
+	<description keyword="exceeds mailbox storage" type="soft" />
+	<description keyword="E-mail was received"  type="deliv" />
+	<description keyword="email address is invalid" type="hard" />
+	<description keyword="Error Connecting to domain" type="hard" />
+	<description keyword="Error_connection_broken" type="soft" />
+
+<!-- F -->
+	<description keyword="Failed to accept the recipients" type="hard" />
+	<description keyword="failed" type="soft" />
+	<description keyword="full inbox" type="soft" />
+	<description keyword="following address(es) failed" type="hard" />
+	<description keyword="Found prohibited words in the mail" type="soft" />
+	<description keyword="failed to open files for write" type="soft" />
+	<description keyword="forced failure" type="soft" />
+
+
+<!-- G -->
+	<description keyword="General Error" type="hard" />
+	<description keyword="General Failure" type="hard" />
+
+
+<!-- H -->
+	<description keyword="host name is unknown" type="hard" />
+	<description keyword="Host not found" type="hard" />
+	<description keyword="Helo command rejected" type="soft" />
+	<description keyword="has been blocked" type="soft" />
+	<description keyword="Host Unknown" type="hard" />
+	<description keyword="have stoped using my email account" type="hard" />
+
+
+<!-- I -->
+	<description keyword="Illegal Attachment" type="otherblock" />
+	<description keyword="Illegal {0}e-mail {0}address" type="hard" />
+	<description keyword="Invalid recipient" type="hard" />
+	<description keyword="invalid address" type="hard" />
+	<description keyword="invalid user" type="hard" />
+	<description keyword="inactive user" type="hard" />
+	<description keyword="is not a valid maildrop" type="hard" />
+	<description keyword="is not responding" type="soft" />
+	<description keyword="is not a valid user" type="hard" />
+	<description keyword="is still underway" type="soft" />
+	<description keyword="Insufficient disk space" type="soft" />
+	<description keyword="I/O error encountered" type="soft" />
+	<description keyword="is unknown" type="hard" />
+	<description keyword="invalid mailbox" type="hard" />
+	<description keyword="is Inactive  on this domain" type="hard" />
+	<description keyword="is no longer active" type="hard" />
+	<description keyword="is now disabled with SMTP service" type="hard" />
+	<description keyword="I will be back"  type="temp" />
+	<description keyword="I don&#x27;t treat it as local" type="soft" />
+	<description keyword="INCORRECT DOMAIN" type="hard" />
+	<description keyword="I have a new email" type="hard" />
+	<description keyword="I couldn&#x27;t find any host named" type="hard" />
+	<description keyword="I am away"  type="auto" />
+	<description keyword="I no longer answer email" type="soft" />
+	<description keyword="I wasn't able to establish an SMTP connection" type="soft" />
+	<description keyword="Invalid final delivery userid" type="hard" />
+	<description keyword="is not my user" type="hard" />
+	<description keyword="invalid email address" type="hard" />
+	<description keyword="is not available" type="hard" />
+	<description keyword="is not reachable by email" type="hard" />
+
+<!-- J -->
+	<description keyword="Junk mail received" type="spam" />
+<!-- K -->
+<!-- L -->
+	<description keyword="Local configuration error" type="soft" />
+	<description keyword="Local user only" type="soft" />
+	<description keyword="local delivery failed" type="soft" />
+	<description keyword="loops back to myself" type="soft" />
+
+<!-- M -->
+	<description keyword="mail server permanently rejected message" type="hard" />
+	<description keyword="Mailbox temporarily disabled" type="hard" />
+	<description keyword="Mailbox currently suspended" type="hard" />
+	<description keyword="Mailbox disabled for this recipient" type="otherblock" />
+	<description keyword="Mail Refused" type="otherblock" />
+	<description keyword="Mail contains Profany text inside" type="spam" />
+	<description keyword="MAILBOX NOT FOUND" type="hard" />
+	<description keyword="Mailbox full" type="soft" />
+	<description keyword="Mailbox unknown" type="hard" />
+	<description keyword="malformed address" type="hard" />
+	<description keyword="mailbox unavailable" type="hard" />
+	<description keyword="mailbox is full" type="soft" />
+	<description keyword="message was not delivered within" type="soft" />
+	<description keyword="message that you sent has not yet been delivered to one or more of its recipients" type="soft" />
+	<description keyword="mailbox exceeds allowed size" type="soft" />
+	<description keyword="mailbox inactive" type="hard" />
+	<description keyword="Message will exceed maximum mailbox size" type="soft" />
+	<description keyword="Mailbox or Conference is full" type="soft" />
+	<description keyword="Message delayed"  type="temp" />
+	<description keyword="mail box space not enough" type="soft" />
+	<description keyword="mailbox has been suspended" type="hard" />
+	<description keyword="Mailbox disabled" type="hard" />
+	<description keyword="mailbox name not allowed" type="hard" />
+	<description keyword="mailbox is disabled" type="hard" />
+	<description keyword="mailbox is inactive" type="hard" />
+	<description keyword="Mailbox_quota_exceeded" type="soft" />
+	<description keyword="mail loop" type="soft" />
+	<description keyword="Maximum hop count exceeded" type="soft" />
+	<description keyword="Mailbox voll" type="soft" />
+	<description keyword="mailbox is temporarily suspended" type="soft" />
+	<description keyword="message has been received"  type="deliv" />
+	<description keyword="Mail quota exceeded" type="soft" />
+	<description keyword="mail quota" type="soft" />
+	<description keyword="Message rejected due to content" type="soft" />
+	<description keyword="maximum allowed" type="soft" />
+	<description keyword="mail exceeded the maximum hop count" type="soft" />
+	<description keyword="message can't be delivered" type="hard" />
+
+<!-- N -->
+	<description keyword="No such user" type="hard" />
+	<description keyword="No such host is known" type="hard" />
+	<description keyword="No such account" type="hard" />
+	<description keyword="No such mail drop" type="hard" />
+	<description keyword="No such recipient" type="hard" />
+	<description keyword="no such mailbox" type="hard" />
+	<description keyword="no such address" type="hard" />
+	<description keyword="No user here by that name" type="hard" />
+	<description keyword="no mailbox here by that name" type="hard" />
+	<description keyword="Not server for" type="hard" />
+	<description keyword="No SMTP prompt at the host" type="hard" />
+	<description keyword="no route to host" type="soft" />
+	<description keyword="no DNS A-data returned" type="soft" />
+	<description keyword="Name server timeout" type="soft" />
+	<description keyword="No such user here" type="hard" />
+	<description keyword="not listed in public Name" type="hard" />
+	<description keyword="not accepting mail from" type="spam" />
+	<description keyword="not known here" type="hard" />
+	<description keyword="non-fatal"  type="temp" />
+	<description keyword="No action is required on your part"  type="temp" />
+	<description keyword="non-existent host" type="hard" />
+	<description keyword="not listed in Domino Directory" type="hard" />
+	<description keyword="not a valid mailbox" type="hard" />
+	<description keyword="not accepted" type="hard" />
+	<description keyword="non-local recipient" type="hard" />
+	<description keyword="not local host hello" type="soft" />
+	<description keyword="not a valid account" type="hard" />
+	<description keyword="not a gateway" type="soft" />
+	<description keyword="not known at this site" type="hard" />
+	<description keyword="not accepting mail with attachments" type="soft" />
+	<description keyword="Not found in directory" type="hard" />
+	<description keyword="new email address" type="soft" />
+	<description keyword="no longer with us" type="hard" />
+	<description keyword="no account by that name" type="hard" />
+	<description keyword="No reply is necessary" type="auto" />
+	<description keyword="Network is unreachable" type="soft" />
+	<description keyword="Name service error" type="soft" />
+	<description keyword="name server reports that it is having technical problems" type="soft" />
+	<description keyword="number of messages in recipient's mailbox exceeded the local limit" type="soft" />
+	<description keyword="not currently being accepted for this mailbox" type="soft" />
+
+
+<!-- O -->
+	<description keyword="Other address status" type="hard" />
+	<description keyword="Over quota" type="soft" />
+	<description keyword="over the allowed quota" type="soft" />
+	<description keyword="out of the office"  type="auto" />
+	<description keyword="over the storage quota" type="soft" />
+	<description keyword="out of quota" type="soft" />
+	<description keyword="on vacation"  type="auto" />
+	<description keyword="Operation timed out" type="soft" />
+	<description keyword="over disk quota" type="soft" />
+	<description keyword="Over STORAGE quota" type="soft" />
+
+
+<!-- P -->
+	<description keyword="Please contact {0} with any questions" type="otherblock" />
+	<description keyword="points back to us" type="hard" />
+	<description keyword="Protocol violation" type="hard" />
+	<description keyword="permission denied" type="hard" />
+	<description keyword="post got bad listname" type="hard" />
+	<description keyword="Possible spam" type="soft" />
+	<description keyword="Please check the spelling" type="hard" />
+	<description keyword="permanent delivery errors" type="hard" />
+	<description keyword="Pop3 Before authentication" type="soft" />
+	<description keyword="please try later" type="soft" />
+
+
+<!-- Q -->
+	<description keyword="Quota exceeded" type="soft" />
+	<description keyword="Quota violation" type="soft" />
+	<description keyword="quota limit" type="soft" />
+
+
+<!-- R -->
+	<description keyword="RCPT first" type="hard" />
+	<description keyword="relay mail disabled" type="hard" />
+	<description keyword="Resources temporarily unavailable" type="soft" />
+	<description keyword="recipient reached disk quota" type="hard" />
+	<description keyword="Recipient unknown" type="hard" />
+	<description keyword="Relaying denied" type="soft" />
+	<description keyword="retry timeout exceeded" type="soft" />
+	<description keyword="recipient storage full" type="hard" />
+	<description keyword="Recipient user name  not unique" type="hard" />
+	<description keyword="retry time not reached for any host after a long failure period" type="hard" />
+	<description keyword="relaying denied" type="soft" />
+	<description keyword="Recipient ok" type="soft" />
+	<description keyword="recipient was unavailable" type="soft" />
+	<description keyword="received the email"  type="deliv" />
+	<description keyword="received your email"  type="deliv" />
+	<description keyword="recipient moved" type="hard" />
+	<description keyword="recipient could not be processed" type="soft" />
+	<description keyword="Reciver {0} not exists" type="hard" />
+	<description keyword="relaying mail" type="soft" />
+	<description keyword="Requested action aborted" type="soft" />
+	<description keyword="reached disk quota" type="soft" />
+	<description keyword="relay mail" type="soft" />
+	<description keyword="Relay request denied" type="soft" />
+	<description keyword="Remote sending only allowed with authentication" type="soft" />
+	<description keyword="rejected by content" type="soft" />
+	<description keyword="rejected for policy reasons" type="soft" />
+	<description keyword="Rule imposed mailbox access" type="soft" />
+	<description keyword="reply to you"  type="temp" />
+	<description keyword="Relaying not allowed" type="soft" />
+
+
+<!-- S -->
+	<description keyword="SPAM" type="spam" />
+	<description keyword="Spam Filter" type="spam" />
+	<description keyword="Some addresses were rejected" type="hard" />
+	<description keyword="space shortage" type="soft" />
+	<description keyword="space critically low" type="soft" />
+	<description keyword="Service not available" type="soft" />
+	<description keyword="service unavailable" type="soft" />
+	<description keyword="Server too busy" type="soft" />
+	<description keyword="server rejected" type="soft" />
+	<description keyword="server refused mail" type="soft" />
+	<description keyword="server dropped connection" type="soft" />
+	<description keyword="Syntax error in address" type="hard" />
+	<description keyword="SYNTAX ERROR IN PARAMETERS OR ARGUMENTS" type="hard" />
+	<description keyword="system busy" type="soft" />
+
+<!-- T -->
+	<description keyword="The recipient cannot be verified" type="hard" />
+	<description keyword="The person you are trying to reach worked for" type="change" />
+	<description keyword="The person you are trying to contact ({0}) no longer works at" type="change" />
+	<description keyword="The user name is invalid" type="soft" />
+	<description keyword="The recipient name is not recognized" type="hard" />
+	<description keyword="The e-mail message could not be delivered because the{0}user's mailfolder is full" type="soft" />
+	<description keyword="This Message is not welcome" type="soft" />
+	<description keyword="This message has been forwarded"  type="fw" />
+	<description keyword="this message is unwanted here" type="soft" />
+	<description keyword="This address is not allowed" type="hard" />
+	<description keyword="This account is not" type="hard" />
+	<description keyword="This email could not be delivered" type="hard" />
+	<description keyword="This is a permanent error" type="hard" />
+	<description keyword="this address does not exist" type="hard" />
+	<description keyword="This user doesn't have a {0} account" type="hard" />
+	<description keyword="This system is configured to reject mail from {0}" type="otherblock" />
+	<description keyword="This address no longer accepts mail" type="hard" />
+	<description keyword="This user doesn&#x27;t have a" type="hard" />
+	<description keyword="that domain isn&#x27;t in my list of allowed rcpthosts" type="soft" />
+	<description keyword="this message has been in the queue too long" type="soft" />
+	<description keyword="this warning"  type="temp" />
+	<description keyword="temporarily restricted from receiving email" type="soft" />
+	<description keyword="try again later" type="soft" />
+	<description keyword="to verify they are valid" type="hard" />
+	<description keyword="too many messages on the server" type="soft" />
+	<description keyword="too many letters during this connection" type="soft" />
+	<description keyword="too many connections" type="soft" />
+	<description keyword="Too Many Hops" type="soft" />
+	<description keyword="Too much sessions in a connection" type="soft" />
+	<description keyword="temp failure; user is invited to retry" type="soft" />
+	<description keyword="Temporary local problem" type="soft" />
+
+
+<!-- U -->
+	<description keyword="Unsupported mail destination" type="hard" />
+	<description keyword="unrouteable address" type="hard" />
+	<description keyword="Unable to switch maildir" type="hard" />
+	<description keyword="Unable to deliver message to the following recipients" type="hard" />
+	<description keyword="unable to connect" type="hard" />
+	<description keyword="unsolicited bulk e-mail (UBE)" type="spam" />
+	<description keyword="unrecognised recipient" type="hard" />
+	<description keyword="Use cadence email address" type="soft" />
+	<description keyword="user account inactive" type="hard" />
+	<description keyword="user currently not able to receive mail" type="soft" />
+	<description keyword="unresolvable relay" type="soft" />
+	<description keyword="unrecoverable error" type="soft" />
+	<description keyword="User{0}has exhausted allowed storage space" type="soft" />
+	<description keyword="User mailbox exceeds allowed size" type="soft" />
+	<description keyword="User&#x27;s Disk Quota Exceeded" type="soft" />
+	<description keyword="User unknown in local recipient table" type="hard" />
+	<description keyword="User {0} not listed in" type="hard" />
+	<description keyword="User mailbox exceeds allowed message count" type="soft" />
+	<description keyword="User unknown" type="hard" />
+	<description keyword="user not found" type="hard" />
+	<description keyword="User not known" type="hard" />
+	<description keyword="user is not authorized to receive e-mail" type="hard" />
+	<description keyword="user does not have an account" type="hard" />
+	<description keyword="user is over quota" type="soft" />
+	<description keyword="User not a member of domain" type="hard" />
+	<description keyword="User Blocked" type="soft" />
+	<description keyword="User is no longer" type="hard" />
+	<description keyword="User disabled" type="hard" />
+	<description keyword="user has moved" type="hard" />
+	<description keyword="unable to validate recipient" type="hard" />
+	<description keyword="undelivered message follows" type="soft" />
+	<description keyword="undeliverable to" type="soft" />
+	<description keyword="Unrouteable address" type="hard" />
+	<description keyword="Unknown Error" type="soft" />
+	<description keyword="unknown user" type="hard" />
+	<description keyword="unknow user" type="hard" />
+	<description keyword="unknown or illegal alias" type="hard" />
+	<description keyword="unknown local mailbox" type="hard" />
+	<description keyword='unknown local-part "{0}" in domain' type="hard" />
+	<description keyword="unknown local-part" type="hard" />
+	<description keyword="Unknown local part" type="hard" />
+	<description keyword="unknown address" type="hard" />
+	<description keyword="Unknown host" type="hard" />
+	<description keyword="unknown virtual user" type="hard" />
+	<description keyword="Unknown Recipient" type="hard" />
+	<description keyword="Unknown Account" type="hard" />
+
+
+<!-- V -->
+	<description keyword="virus found" type="virus" />
+	<description keyword="Virus {0} was found" type="virus" />
+
+
+<!-- W -->
+	<description keyword="we do not relay" type="hard" />
+	<description keyword="we refuse to relay" type="hard" />
+	<description keyword="We do not accept mail from spammers" type="spam" />
+	<description keyword="Will keep trying"  type="temp" />
+	<description keyword="we will reply"  type="temp" />
+	<description keyword="WARNING MESSAGE ONLY"  type="temp" />
+	<description keyword="was undeliverable to the following" type="soft" />
+	<description keyword="while receiving the initial server greeting" type="soft" />
+
+
+<!-- Y -->
+	<description keyword="your message looks like a spam" type="spam" />
+	<description keyword="Your Domain does not have access" type="soft" />
+	<description keyword="Your message has encountered delivery problems" type="hard" />
+
+	<description keyword="5.3.0" type="soft" />
+	<description keyword="5.7.1" type="soft" />
+
+</descriptions>

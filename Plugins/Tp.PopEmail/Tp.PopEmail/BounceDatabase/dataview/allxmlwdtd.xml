@@ -1,0 +1,99 @@
+<?xml version="1.0" ?> 
+<!DOCTYPE notification [
+	<!ELEMENT notification ANY>
+
+<!ELEMENT types (type*)>
+<!ATTLIST types
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT type (type*)>
+<!ATTLIST type
+	name		CDATA #REQUIRED
+	id			CDATA	#REQUIRED
+	priority	CDATA	#REQUIRED
+ 	reserved (yes|no) "no">
+
+<!ELEMENT from (fromnames?, fromemails?, fromremarks?, fromstrings?)>
+<!ATTLIST from
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT fromnames (fromaddress+)>
+<!ELEMENT fromemails (fromaddress+)>
+<!ELEMENT fromremarks (fromaddress+)>
+<!ELEMENT fromstrings (fromaddress+)>
+
+<!ELEMENT fromaddress EMPTY>
+<!ATTLIST fromaddress
+	keyword	CDATA #REQUIRED
+	match (start|end|any|all) "any">
+
+<!ELEMENT subjects (include?, exclude?)>
+<!ATTLIST subjects
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT include (subject+)>
+<!ELEMENT exclude (subject+)>
+
+<!ELEMENT subject EMPTY>
+<!ATTLIST subject
+	keyword	CDATA #REQUIRED
+	type		CDATA #IMPLIED
+	match (start|end|any|all) "any">
+
+<!ELEMENT descriptions (description+)>
+<!ATTLIST descriptions
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT description EMPTY>
+<!ATTLIST description
+	keyword	CDATA #REQUIRED
+	type		CDATA #REQUIRED>
+
+<!ELEMENT placeholders (regexps+)>
+<!ATTLIST placeholders
+	lang	CDATA #REQUIRED>
+
+<!ELEMENT regexps (regexp+, mask)>
+
+<!ELEMENT regexp EMPTY>
+<!ATTLIST regexp
+	name	CDATA #REQUIRED>
+
+<!ELEMENT mask (#PCDATA)>
+
+<!ELEMENT bodytemplates (contents+)>
+<!ATTLIST bodytemplates
+	lang	CDATA #REQUIRED>
+<!ELEMENT contents (#PCDATA)>
+<!ATTLIST contents
+	priority	CDATA #REQUIRED>
+
+	<!ENTITY types_en SYSTEM "../lang/en/types.xml">
+	<!ENTITY from_en SYSTEM "../lang/en/from.xml">
+	<!ENTITY subj_en SYSTEM "../lang/en/subjects.xml">
+	<!ENTITY subj_ru SYSTEM "../lang/ru/subjects.xml">
+	<!ENTITY desc_en SYSTEM "../lang/en/descriptions.xml">
+
+	<!ENTITY regexp_en SYSTEM "../lang/en/placeholders.xml">
+
+	<!ENTITY templ_en SYSTEM "../lang/en/bodytemplates.xml">
+	<!ENTITY templ_ru SYSTEM "../lang/ru/bodytemplates.xml">
+
+]>
+
+<notification>
+&types_en;
+
+&from_en;
+
+&subj_en;
+&subj_ru;
+
+&desc_en;
+
+&regexp_en;
+
+&templ_en;
+&templ_ru;
+
+</notification>

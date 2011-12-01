@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/placeholders.xsl"?>
+<!--DOCTYPE placeholders SYSTEM "../../dtd/placeholders.dtd"-->
+<placeholders lang="en">
+	<regexps>
+		<regexp name="BLANK" />
+		<regexp name="DESCRIPTION" />
+		<regexp name="ORIG_MESSAGE" />
+		<regexp name="REASON" />
+		<regexp name="SUBJECT" />
+		<mask>
+			<![CDATA[.*?]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="DAYS" />
+		<mask>
+			<![CDATA[\d+ days?]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="DELIVERY_ATTEMPT_DATETIME" />
+		<regexp name="RECEIVED_DATETIME" />
+		<regexp name="SENT_DATETIME" />
+		<mask>
+			<![CDATA[(\w{3}, )?\d{1,2} \w{3} \d{4} \d{1,2}:\d{2}:\d{2}( [+-]\d{4})?( (\(\w{3,4}\)|\w{3,4}))?]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="RECEIVED_DATETIME_YMD" />
+		<mask>
+			<![CDATA[\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}:\d{2}( [+-]\d{4})?( (\(\w{3,4}\)|\w{3,4}))?]]>
+		</mask>
+	</regexps>
+
+
+	<regexps>
+		<regexp name="ERROR_NUM" />
+		<mask>
+			<![CDATA[\d+]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="FROM_HOST" />
+		<regexp name="TO_HOST" />
+		<regexp name="TO_DOMAIN" />
+		<mask>
+			<![CDATA[[a-z0-9-\.]+]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="FROM_IP" />
+		<regexp name="TO_IP" />
+		<mask>
+			<![CDATA[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="TO_EMAIL" />
+		<mask>
+			<![CDATA[([a-zA-Z0-9_\-\.'%]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,6}|\d{1,3})(\]?)]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="FROM_EMAIL" />
+		<regexp name="TO_FORWARDEMAIL" />
+		<mask>
+			<![CDATA[([a-zA-Z0-9_\-\.']+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9\-]+\.?)+))([a-zA-Z]{2,6}|\d{1,3})?(\]?)]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="POSTMASTER" />
+		<mask>
+			<![CDATA[([a-zA-Z0-9_\-\.']+)(@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,6}|\d{1,3})(\]?))?]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="HOURS" />
+		<mask>
+			<![CDATA[\d+(\.\d)? hour\(?s?\)?]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="TO_NAME" />
+		<mask>
+			<![CDATA[[\w ,\\]+]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="TO_LOGIN" />
+		<mask>
+			<![CDATA[[a-zA-Z0-9_\-\.]+]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="MDS_NAME" />
+		<mask>
+			<![CDATA[[\w ]+]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="REFERENCE_CODE" />
+		<mask>
+			<![CDATA[[\d\w-/\.@<>]+]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="KERIO_NUM" />
+		<mask>
+			<![CDATA[\d+\.\d+\.\d+]]>
+		</mask>
+	</regexps>
+
+</placeholders>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/types.xsl"?>
+<!--DOCTYPE types SYSTEM "../../dtd/types.dtd"-->
+<types lang="en">
+	<type name="Undeliverable" id="undeliv">
+		<type name="Hard" id="hard" priority="5" />
+		<type name="Soft" id="soft" priority="4" />
+	</type>
+	<type name="Blocked" id="block">
+		<type name="Spam" id="spam" priority="1" />
+		<type name="Virus" id="virus" priority="1" />
+		<type name="ChallengeResponse" id="challenge" priority="1" reserved="yes" />
+		<type name="OtherBlocked" id="otherblock" priority="2" />
+	</type>
+	<type name="Informational" id="info">
+		<type name="AutoReply" id="auto" priority="1" />
+		<type name="AddressChanged" id="change" priority="1" />
+		<type name="Modified" id="modif" priority="1" reserved="yes" />
+		<type name="Forwarded" id="fw" priority="1" reserved="yes" />
+		<type name="Subscribe" id="subscr" priority="1" reserved="yes" />
+		<type name="Unsubscribe" id="unsubscr" priority="1" reserved="yes" />
+	</type>
+	<type name="Warning" id="warn">
+		<type name="Temporary" id="temp" priority="1" />
+	</type>
+	<type name="Receipt" id="rcpt">
+		<type name="Delivered" id="deliv" priority="1" />
+		<type name="Read" id="read" priority="1" reserved="yes" />
+	</type>
+	<type name="Unknown" id="unknown" priority="10" reserved="yes" />
+</types>
