@@ -107,7 +107,7 @@ namespace Tp.Integration.Plugin.Common.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Routable")]
+        [global::System.Configuration.DefaultSettingValueAttribute("UiPriority")]
         public string Transport {
             get {
                 return ((string)(this["Transport"]));
