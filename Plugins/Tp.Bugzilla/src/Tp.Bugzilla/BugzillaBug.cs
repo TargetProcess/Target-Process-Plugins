@@ -103,7 +103,7 @@ namespace Tp.Bugzilla
 				                      		FileName = attachmentFileName,
 											Description = attachment.desc,
 											OwnerId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(attachment.attacher),
-				                      		CreateDate = CreateDateConverter.ParseFromUniversalTime(attachment.date)
+				                      		CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(attachment.date)
 				                      	});
 			}
 
@@ -118,6 +118,11 @@ namespace Tp.Bugzilla
 				name = attachment.desc;
 
 			return name;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("Bugzilla ID: {1}; Bug Name: {0}", short_desc, bug_id);
 		}
 	}
 }

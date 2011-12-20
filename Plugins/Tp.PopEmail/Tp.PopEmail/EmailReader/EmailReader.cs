@@ -96,9 +96,10 @@ namespace Tp.PopEmailIntegration.EmailReader
 				{
 					mailMessage = ConvertToNetMailMessage(mailBeeMailMessage);
 				}
-				catch
+				catch(Exception e)
 				{
 					//Just skip this message
+					_log.Error(String.Format("Error parsing message."), e);
 					return true;
 				}
 

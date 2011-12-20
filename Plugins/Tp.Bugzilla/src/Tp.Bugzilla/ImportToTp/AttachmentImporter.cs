@@ -8,7 +8,7 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Plugin.Core.Attachments;
 
@@ -19,16 +19,18 @@ namespace Tp.Bugzilla.ImportToTp
 	{
 		private readonly IStorageRepository _storageRepository;
 		private readonly ILocalBus _localBus;
+		private readonly IActivityLogger _logger;
 
-		public AttachmentImporter(IStorageRepository storageRepository, ILocalBus localBus)
+		public AttachmentImporter(IStorageRepository storageRepository, ILocalBus localBus, IActivityLogger logger)
 		{
 			_storageRepository = storageRepository;
 			_localBus = localBus;
+			_logger = logger;
 		}
 
 		public void Handle(NewBugImportedToTargetProcessMessage message)
 		{
-			PushAttachmentsToTp(message.TpBugId, message.BugzillaBug.attachmentCollection);
+			PushAttachmentsToTp(message.TpBugId, message.BugzillaBug, message.BugzillaBug.attachmentCollection);
 		}
 
 		public void Handle(ExistingBugImportedToTargetProcessMessage message)
@@ -38,11 +40,12 @@ namespace Tp.Bugzilla.ImportToTp
 
 			AttachmentFolder.Delete(message.BugzillaBug.attachmentCollection.Except(newAttachments).Select(x => x.FileId));
 
-			PushAttachmentsToTp(message.TpBugId, newAttachments);
+			PushAttachmentsToTp(message.TpBugId, message.BugzillaBug, newAttachments);
 		}
 
-		private void PushAttachmentsToTp(int? tpBugId, List<LocalStoredAttachment> attachments)
+		private void PushAttachmentsToTp(int? tpBugId, BugzillaBug bug, List<LocalStoredAttachment> attachments)
 		{
+			_logger.InfoFormat("Processing attachments. Bug: {0}", bug.ToString());
 			_localBus.SendLocal(new PushAttachmentsToTpCommandInternal
 			                    	{
 			                    		LocalStoredAttachments = attachments.ToArray(),

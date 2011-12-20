@@ -15,6 +15,7 @@ using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.TargetProcessLifecycle;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Plugin.Core.Attachments;
 
 namespace Tp.Bugzilla.ImportToTp
@@ -25,14 +26,16 @@ namespace Tp.Bugzilla.ImportToTp
 	                             IHandleMessages<BugUpdatedMessage>,
 	                             IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
+		private readonly IActivityLogger _logger;
 		private readonly IBugzillaInfoStorageRepository _bugzillaInfoStorageRepository;
 
 		public BugImportSaga()
 		{
 		}
 
-		public BugImportSaga(IBugzillaInfoStorageRepository bugzillaInfoStorageRepository)
+		public BugImportSaga(IActivityLogger logger, IBugzillaInfoStorageRepository bugzillaInfoStorageRepository)
 		{
+			_logger = logger;
 			_bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
 		}
 
@@ -53,11 +56,13 @@ namespace Tp.Bugzilla.ImportToTp
 
 			if (storedBug == null)
 			{
+				_logger.InfoFormat("Importing bug. {0}", message.BugzillaBug.ToString());
 				Send(new CreateBugCommand(tpBug.BugDto));
 				Data.CreatingBug = true;
 			}
 			else
 			{
+				_logger.InfoFormat("Updating bug. {0}", message.BugzillaBug.ToString());
 				tpBug.BugDto.ID = storedBug.Value;
 				Send(new UpdateBugCommand(tpBug.BugDto) {ChangedFields = tpBug.ChangedFields.ToArray()});
 				// We will not receive BugUpdatedMessage if no fields were changed. So we should process related entities immediately.
@@ -74,18 +79,24 @@ namespace Tp.Bugzilla.ImportToTp
 
 			_bugzillaInfoStorageRepository.SaveBugsRelation(tpBugId, new BugzillaBugInfo(bugzillaBug){TpId = message.Dto.ID});
 
+			_logger.InfoFormat("Bug imported. {0}; TargetProcess Bug ID: {1}", bugzillaBug.ToString(), message.Dto.BugID);
+
 			SendLocal(new NewBugImportedToTargetProcessMessage { TpBugId = tpBugId, BugzillaBug = bugzillaBug });
 			MarkAsComplete();
 		}
 
 		public void Handle(BugUpdatedMessage message)
 		{
+			_logger.InfoFormat("Bug updated. {0}; TargetProcess Bug ID: {1}", Data.BugzillaBug, message.Dto.BugID);
+
 			DoNotContinueDispatchingCurrentMessageToHandlers();
 			MarkAsComplete();
 		}
 
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
+			_logger.Error("Error occured", new Exception(message.ExceptionString));
+
 			if (Data.CreatingBug)
 			{
 				AttachmentFolder.Delete(Data.BugzillaBug.attachmentCollection.Select(x => x.FileId));

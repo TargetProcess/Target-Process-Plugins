@@ -62,7 +62,7 @@ namespace Tp.Subversion.UserMappingFeature
 					|vcsuser	|tpuser	|
 					|John		|John   |
 			When plugin started up
-			Then log should contain message: Can't map svn user 'Bob' - no mapping."
+			Then log should contain message: Can't map vcs user 'Bob' - no mapping."
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
 		}
 

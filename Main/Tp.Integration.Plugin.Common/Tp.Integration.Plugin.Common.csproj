@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Integration.Plugin.Common</RootNamespace>
     <AssemblyName>Tp.Integration.Plugin.Common</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -90,6 +90,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
@@ -136,6 +137,7 @@
     <Compile Include="Domain\ISpecificStorage.cs" />
     <Compile Include="Domain\IStorageRepository.cs" />
     <Compile Include="Domain\PluginContext.cs" />
+    <Compile Include="PluginDataFolder.cs" />
     <Compile Include="PluginRuntime.cs" />
     <Compile Include="Domain\ProfileCollection.cs" />
     <Compile Include="Domain\ProfileCreationArgs.cs" />

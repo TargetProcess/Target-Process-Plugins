@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"diagnostics.globalListeners.details",markup:['<span class="tau-global-listener ui-link">${name}</span><br/>'],dependencies:[]};return a.register(b)})

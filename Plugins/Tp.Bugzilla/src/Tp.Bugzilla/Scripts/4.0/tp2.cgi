@@ -13,9 +13,7 @@ use Bugzilla::BugMail;
 use Bugzilla::Search;
 use Bugzilla::Status;
 use Date::Parse;
-
 use MIME::Base64;
-
 use Data::Dumper;
 require Data::Dumper;
 

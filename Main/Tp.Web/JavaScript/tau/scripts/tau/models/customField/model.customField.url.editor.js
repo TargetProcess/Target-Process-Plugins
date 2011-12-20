@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/model.customField"],function(a,b){var c=b.extend({_beforeSave:function(a){return!0},_afterSave:function(a){return!0}});return c})

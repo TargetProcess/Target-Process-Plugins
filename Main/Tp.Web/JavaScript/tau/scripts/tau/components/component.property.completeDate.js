@@ -1,1 +1,1 @@
-define(["tau/components/component.property.date"],function(a){return{create:function(b){b=b||{},b.propertyName="endDate";return a.create(b)}}})
+define(["tau/components/component.property.date"],function(a){return{create:function(b){return b=_.clone(b||{}),b.propertyName="endDate",a.create(b)}}})

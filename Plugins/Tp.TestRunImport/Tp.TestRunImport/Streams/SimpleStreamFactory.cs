@@ -154,7 +154,10 @@ namespace Tp.Integration.Plugin.TestRunImport.Streams
 				using (var downloadFileResponse = (FtpWebResponse)ftpWebRequest.GetResponse())
 				{
 					var stream = new MemoryStream();
-					CopyTo(downloadFileResponse.GetResponseStream(), stream);
+					using (var responseStream = downloadFileResponse.GetResponseStream())
+					{
+						CopyTo(responseStream, stream);
+					}
 					stream.Seek(0, SeekOrigin.Begin);
 
 					return new StreamFactoryResult

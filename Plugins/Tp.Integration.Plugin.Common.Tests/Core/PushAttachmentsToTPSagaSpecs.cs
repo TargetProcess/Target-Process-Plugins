@@ -59,13 +59,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Core
 				       		}
 				       		return new AttachmentCreatedMessage {Dto = new AttachmentDTO {OriginalFileName = x.FileName, OwnerID = x.OwnerId, Description = x.Description}};
 				       	});
-			Directory.Delete(ObjectFactory.GetInstance<IAttachmentFolderPath>().Value);
+			Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path);
 		}
 
 		[TearDown]
 		private void TearDown()
 		{
-			Directory.Delete(ObjectFactory.GetInstance<IAttachmentFolderPath>().Value, true);
+			Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path, true);
 		}
 
 		[Test]
@@ -153,7 +153,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Core
 		[Then("attachment folder should be empty")]
 		public void AttachmentFolderShouldBeEmpty()
 		{
-			Directory.GetFiles(ObjectFactory.GetInstance<IAttachmentFolderPath>().Value).Should(Be.Empty);
+			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Should(Be.Empty);
 		}
 	}
 }

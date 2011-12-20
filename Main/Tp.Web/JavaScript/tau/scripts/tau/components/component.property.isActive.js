@@ -1,0 +1,1 @@
+define(["tau/components/component.property.bool"],function(a){return{create:function(b){return b=b||{},b.propertyName="isActive",a.create(b)}}})

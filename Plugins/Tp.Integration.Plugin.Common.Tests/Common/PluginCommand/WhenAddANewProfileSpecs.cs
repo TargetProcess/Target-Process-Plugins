@@ -38,7 +38,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		{
 			@"Given no profile name provided
 				When trying to add a profile with name ' ' for account 'Account'
-				Then validation errors for field 'Name' should be 'Profile name should not be empty'"
+				Then validation errors for field 'Name' should be 'Profile Name is required'"
 				.Execute();
 		}
 
@@ -74,7 +74,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		{
 			@"Given going to add profile
 				When trying to add a profile with name 'invalid-profile-name' for account 'Account'
-				Then validation errors for field 'Name' should be 'You can only use letters, numbers, space and underscore symbol in Profile name'"
+				Then validation errors for field 'Name' should be 'You can only use letters, numbers, space and underscore symbol in Profile Name'"
 				.Execute();
 		}
 		

@@ -6,5 +6,6 @@ namespace Tp.Core.Interfaces
 		bool Contains(string name);
 		void SetValue(string name, object value);
 		void Remove(string name);
+		string Print();
 	}
 }

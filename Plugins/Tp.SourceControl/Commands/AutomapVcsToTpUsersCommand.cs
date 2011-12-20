@@ -92,10 +92,10 @@ namespace Tp.SourceControl.Commands
 		private void UpdateWithUnmappedSvnAuthors(AutomapVcsToTpUsersCommandResponse result,
 		                                          IEnumerable<string> authors)
 		{
-			var svnUnmappedUsersCount = GetSvnUnmappedUsersCount(authors, result.UserLookups.Keys.ToArray());
-			if (svnUnmappedUsersCount != 0)
+			var vcsUnmappedUsers = GetVcsUnmappedUsersCount(authors, result.UserLookups.Keys.ToArray());
+			if (vcsUnmappedUsers != 0)
 			{
-				result.Comment += string.Format(", and no matches were found for {0} {1} user(s)", svnUnmappedUsersCount, PluginName);
+				result.Comment += string.Format(", and no matches were found for {0} {1} user(s)", vcsUnmappedUsers, PluginName);
 			}
 		}
 
@@ -104,7 +104,7 @@ namespace Tp.SourceControl.Commands
 			get { return _pluginMetadata.PluginData.Name; }
 		}
 
-		private static int GetSvnUnmappedUsersCount(IEnumerable<string> allSvnAuthors, IEnumerable<string> mappedSvnAuthors)
+		private static int GetVcsUnmappedUsersCount(IEnumerable<string> allSvnAuthors, IEnumerable<string> mappedSvnAuthors)
 		{
 			return allSvnAuthors.Except(mappedSvnAuthors).Count();
 		}

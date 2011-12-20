@@ -44,7 +44,7 @@ namespace Tp.Integration.Plugin.Common.Validation
 		{
 			if (_dto.Name.IsNullOrWhitespace())
 			{
-				errors.Add(new PluginProfileError {FieldName = "Name", Message = "Profile name should not be empty"});
+				errors.Add(new PluginProfileError {FieldName = "Name", Message = "Profile Name is required"});
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace Tp.Integration.Plugin.Common.Validation
 				errors.Add(new PluginProfileError
 				           	{
 				           		FieldName = "Name",
-				           		Message = "You can only use letters, numbers, space and underscore symbol in Profile name"
+				           		Message = "You can only use letters, numbers, space and underscore symbol in Profile Name"
 				           	});
 			}
 		}

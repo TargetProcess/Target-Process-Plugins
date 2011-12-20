@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Tp.Integration.Messages.SerializationPatches;
 
 namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 {
@@ -18,18 +19,33 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 
 		public static object Deserialize(XDocument stateData, string keyType)
 		{
+			try
+			{
+				return DeserializeInternal(stateData, keyType);
+			}
+			catch (Exception)
+			{
+				var reader = stateData.CreateReader();
+				reader.MoveToContent();
+				var patchedText = SerializationPatcher.Apply(reader.ReadOuterXml());
+
+				return DeserializeInternal(XDocument.Parse(patchedText), keyType);
+			}
+		}
+
+		private static object DeserializeInternal(XDocument stateData, string keyType)
+		{
 			foreach (IBlobSerializer serializer in Serializers)
 			{
 				try
 				{
 					return serializer.Deserialize(stateData, keyType);
 				}
-				catch
+				catch (Exception)
 				{
 					continue;
 				}
 			}
-
 			throw new ApplicationException(string.Format("Can't deserialize plugin storage data of type '{0}'", keyType));
 		}
 

@@ -13,6 +13,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 		{
 		}
 
+		public int ReceiveCallCount { get; private set; }
+
+		protected override void Receive(TestMessage message)
+		{
+			ReceiveCallCount++;
+		}
+
 		protected override void Preprocess(TestMessage message)
 		{
 		}

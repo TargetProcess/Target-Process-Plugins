@@ -12,6 +12,7 @@ use Bugzilla::Bug;
 use Bugzilla::Search;
 use Date::Parse;
 use Data::Dumper;
+use MIME::Base64;
 require Data::Dumper;
 
 Bugzilla->login;

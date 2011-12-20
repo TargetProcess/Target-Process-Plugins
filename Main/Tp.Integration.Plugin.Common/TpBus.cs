@@ -10,14 +10,15 @@ using Tp.Integration.Messages;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.ServiceBus;
+using Tp.Integration.Messages.ServiceBus.UnicastBus;
 
 namespace Tp.Integration.Plugin.Common
 {
 	public class TpBus : ITpBus
 	{
-		private readonly IBus _bus;
+		private readonly IBusExtended _bus;
 
-		public TpBus(IBus bus)
+		public TpBus(IBusExtended bus)
 		{
 			_bus = bus;
 		}
@@ -75,6 +76,13 @@ namespace Tp.Integration.Plugin.Common
 			_bus.SetOut(profileName);
 			_bus.SetOut(accountName);
 			_bus.SendLocal(message);
+		}
+
+		public void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message)
+		{
+			_bus.SetOut(profileName);
+			_bus.SetOut(accountName);
+			_bus.SendLocalUi(message);
 		}
 
 		public void Send(params IPluginLifecycleMessage[] pluginLifecycleMessages)

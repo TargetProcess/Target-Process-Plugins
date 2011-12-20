@@ -17,6 +17,7 @@ namespace Tp.MashupManager
 	[DataContract, Serializable]
 	public class MashupDto
 	{
+		public const string PlaceholdersCfgFileName = "placeholders.cfg";
 		public const string AccountCfgFileName = "account.cfg";
 		public const string MashupFileName = "mashup.js";
 
@@ -32,7 +33,7 @@ namespace Tp.MashupManager
 
 		[DataMember]
 		public string Script { get; set; }
-
+		
 		#region Public methods
 
 		public static MashupDto CreateEmptyMashup(string name)
@@ -47,13 +48,18 @@ namespace Tp.MashupManager
 
 		public PluginMashupMessage CreatePluginMashupMessage()
 		{
+			return CreatePluginMashupMessage(_context.AccountName);
+		}
+
+		public PluginMashupMessage CreatePluginMashupMessage(AccountName accountName)
+		{
 			return new PluginMashupMessage
-			       	{
-			       		MashupName = GetMashupName(),
-			       		Placeholders = GetPlaceholders(),
-			       		PluginMashupScripts = GetMashupScripts(),
-			       		PluginName = IsAccountEmpty ? string.Empty : _context.AccountName.Value
-			       	};
+			{
+				MashupName = GetMashupName(accountName),
+				Placeholders = GetPlaceholders(),
+				PluginMashupScripts = GetMashupScripts(),
+				PluginName = string.Empty
+			};
 		}
 
 		#endregion
@@ -65,15 +71,13 @@ namespace Tp.MashupManager
 			get { return ObjectFactory.GetInstance<IPluginContext>(); }
 		}
 
-		private string GetMashupName()
+		private string GetMashupName(AccountName accountName)
 		{
-			return Name;
-
-//			return IsAccountEmpty
-//				? Name
-//				: string.Format("{0} {1}", _context.AccountName.Value, Name);
+			return IsAccountEmpty
+				? Name
+				: string.Format("{0} {1}", accountName.Value, Name);
 		}
-
+		
 		private bool IsAccountEmpty
 		{
 			get { return _context.AccountName == AccountName.Empty; }

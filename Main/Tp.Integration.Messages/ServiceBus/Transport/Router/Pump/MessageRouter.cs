@@ -8,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Threading;
+using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 {
-	public abstract class MessageRouter<TMessage> : MessageConsumer<TMessage>
+	public abstract class MessageRouter<TMessage> : MessageConsumer<TMessage> where TMessage : class
 	{
 		private readonly ILoggerContextSensitive _log;
 		private readonly Func<TMessage, string> _tagMessageProvider;
@@ -22,7 +23,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		private Action<TMessage> _handleMessage;
 		private int _childrenCount;
 
-		protected MessageRouter(IMessageSource<TMessage> messageSource, IProducerConsumerFactory<TMessage> producerConsumerFactory, Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
+		protected MessageRouter(IMessageSource<TMessage> messageSource,
+		                        IProducerConsumerFactory<TMessage> producerConsumerFactory,
+		                        Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
 			: base(messageSource, scheduler)
 		{
 			_log = log;
@@ -35,25 +38,37 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		{
 			get { return MessageSource.Name + "~router"; }
 		}
-		
+
 		protected override void ConsumeCore(Action<TMessage> handleMessage)
 		{
 			_handleMessage = handleMessage;
-			base.ConsumeCore(Receive);
+			base.ConsumeCore(m =>
+			                 	{
+			                 		if (IsTransactional)
+			                 		{
+			                 			new TransactionWrapper().RunInTransaction(() => Process(m), IsolationLevel, TransactionTimeout);
+			                 		}
+			                 		else
+			                 		{
+										Process(m);
+			                 		}
+			                 	});
 		}
+
+		protected abstract void Receive(TMessage message);
 
 		protected abstract void Preprocess(TMessage message);
 
 		protected override void OnDispose()
 		{
 			base.OnDispose();
-			foreach (IMessageConsumer<TMessage> consumer in _routerItems.Values.Select(r => r.Consumer))
+			foreach (var consumer in _routerItems.Values.Select(r => r.Consumer))
 			{
 				consumer.Dispose();
 			}
 		}
 
-		private void Receive(TMessage message)
+		private void Process(TMessage message)
 		{
 			_log.Debug(LoggerContext.New(Name), "thread pool info.");
 			string messageTag = _tagMessageProvider(message);
@@ -62,6 +77,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 				_handleMessage(message);
 				return;
 			}
+
+			Receive(message);
 			Preprocess(message);
 			Child child = GetOrCreateRouterItem(messageTag);
 			child.Producer.Produce(message);
@@ -80,33 +97,28 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 
 		private Child Create(string sourceName)
 		{
-			IMessageSource<TMessage> source = _producerConsumerFactory.CreateSource(sourceName);
-			return Create(source);
-		}
-
-		private Child Create(IMessageSource<TMessage> source)
-		{
 			Interlocked.Increment(ref _childrenCount);
+			IMessageSource<TMessage> source = _producerConsumerFactory.CreateSource(sourceName);
 			IMessageConsumer<TMessage> consumer = _producerConsumerFactory.CreateConsumer(source);
 			IMessageProducer<TMessage> producer = _producerConsumerFactory.CreateProducer(source);
 			consumer.AddObserver(new DisposeProducerOnCompleteObserver(producer, _log));
 			consumer.Consume(_handleMessage);
 			return new Child
-			{
-				Source = source,
-				Consumer = consumer,
-				Producer = producer
-			};
+			       	{
+			       		Source = source,
+			       		Consumer = consumer,
+			       		Producer = producer
+			       	};
 		}
 
-		struct Child
+		private struct Child
 		{
 			public IMessageProducer<TMessage> Producer { get; set; }
 			public IMessageSource<TMessage> Source { get; set; }
 			public IMessageConsumer<TMessage> Consumer { get; set; }
 		}
 
-		class DisposeProducerOnCompleteObserver : IObserver<TMessage>
+		private class DisposeProducerOnCompleteObserver : IObserver<TMessage>
 		{
 			private readonly IMessageProducer<TMessage> _producer;
 			private readonly ILoggerContextSensitive _log;

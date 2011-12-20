@@ -13,7 +13,6 @@ using StructureMap;
 using Tp.Bugzilla.BugzillaQueries;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla

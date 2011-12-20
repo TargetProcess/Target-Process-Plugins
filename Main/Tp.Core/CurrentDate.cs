@@ -102,8 +102,8 @@ namespace Tp.Core
 		public static IDisposable SetCurrentDateStrategy(Func<DateTime> getter)
 		{
 			var oldKeeper = TimeKeeper;
-			var newKeeper = getter == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(getter);
-			return ScopedAction.New(()=>TimeKeeper=newKeeper, ()=>TimeKeeper=oldKeeper);
+			TimeKeeper = getter == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(getter);
+			return Disposable.Create(()=>TimeKeeper=oldKeeper);
 		}
 	}
 }

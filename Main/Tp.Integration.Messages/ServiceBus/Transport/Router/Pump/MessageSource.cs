@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
@@ -6,19 +8,24 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 	public class MessageSource<TMessage> : IMessageSource<TMessage>
 	{
 		private readonly string _name;
-		private readonly IObservable<TMessage> _observable;
+		private readonly IEnumerable<IObservable<TMessage>> _observables;
 
-		public MessageSource(string name, IObservable<TMessage> observable)
+		public MessageSource(string name, IEnumerable<IObservable<TMessage>> observables)
 		{
 			_name = name;
-			_observable = observable;
+			_observables = observables;
 		}
 
 		public string Name { get { return _name; } }
 
-		public IDisposable Subscribe(IObserver<TMessage> observer)
+		public IEnumerator<IObservable<TMessage>> GetEnumerator()
 		{
-			return _observable.Subscribe(observer);
+			return _observables.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 	}
 }

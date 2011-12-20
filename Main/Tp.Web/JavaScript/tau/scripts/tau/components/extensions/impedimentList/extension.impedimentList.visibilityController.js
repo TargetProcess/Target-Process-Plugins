@@ -1,0 +1,1 @@
+define(["jQuery","tau/components/extensions/component.extension.base"],function(a,b){return b.extend({"bus afterRender":function(a){a.data.element.hide()},"bus afterRender+impedimentsCountRetrieved":function(a){if(a.impedimentsCountRetrieved.data.count>0){var b=a.afterRender.data.element;this.config.disableAnimation?b.show():b.slideDown("slow")}}})})

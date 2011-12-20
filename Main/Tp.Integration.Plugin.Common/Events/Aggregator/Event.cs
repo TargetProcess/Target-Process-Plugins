@@ -8,7 +8,7 @@ namespace Tp.Integration.Plugin.Common.Events
 		public IDisposable Subscribe(Action<TEvent> handler)
 		{
 			Action<EventArgs> coreHandler = e => handler((TEvent) e);
-			return Subscribe(coreHandler);
+			return base.Subscribe(coreHandler);
 		}
 
 		public void Raise(TEvent e)

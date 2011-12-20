@@ -7,6 +7,7 @@ using System.Reflection;
 using NServiceBus.Saga;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.Events.Aggregator;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.StructureMap;
 using Tp.Integration.Testing.Common.Persisters;
@@ -16,9 +17,7 @@ namespace Tp.Integration.Testing.Common
 	public class AssemblyScannerMockRegistry : PluginRegistry
 	{
 		public AssemblyScannerMockRegistry()
-			: this(typeof (AssemblyScannerMockRegistry).Assembly)
-		{
-		}
+			: this(typeof (AssemblyScannerMockRegistry).Assembly) {}
 
 		public AssemblyScannerMockRegistry(Assembly pluginAssembly)
 		{

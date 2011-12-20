@@ -1,0 +1,1 @@
+define(["tau/components/component.assignmentsList","tau/ui/templates/assignmentsList/ui.template.feature.assignmentsList"],function(a,b){return{create:function(c){return a.create(c,{template:b})}}})

@@ -16,14 +16,14 @@ using Tp.Bugzilla.BugzillaQueries;
 using Tp.Bugzilla.CustomCommand.Dtos;
 using Tp.Bugzilla.ImportToTp;
 using Tp.Bugzilla.Tests.Mocks;
+using Tp.Core;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.EntityLifecycle.Queries;
-using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 using Tp.Integration.Testing.Common;
 using Tp.Plugin.Core;
 
@@ -68,28 +68,28 @@ namespace Tp.Bugzilla.Tests
 			TpAttachments = new List<AttachmentDTO>();
 			BugzillaBugInfos = new List<BugzillaBugInfo>();
 			MappingSource = new MappingSource
-								{
-									States = new MappingSourceEntry
-												{
-													ThirdPartyItems = new List<string>(),
-													TpItems = new List<MappingLookup>()
-												},
-									Severities = new MappingSourceEntry
-													{
-														ThirdPartyItems = new List<string>(),
-														TpItems = new List<MappingLookup>()
-													},
-									Priorities = new MappingSourceEntry
-													{
-														ThirdPartyItems = new List<string>(),
-														TpItems = new List<MappingLookup>()
-													},
-									Roles = new MappingSourceEntry
-									        	{
-									        		ThirdPartyItems = new List<string>(),
-													TpItems = new List<MappingLookup>()
-									        	}
-								};
+			                	{
+			                		States = new MappingSourceEntry
+			                		         	{
+			                		         		ThirdPartyItems = new List<string>(),
+			                		         		TpItems = new List<MappingLookup>()
+			                		         	},
+			                		Severities = new MappingSourceEntry
+			                		             	{
+			                		             		ThirdPartyItems = new List<string>(),
+			                		             		TpItems = new List<MappingLookup>()
+			                		             	},
+			                		Priorities = new MappingSourceEntry
+			                		             	{
+			                		             		ThirdPartyItems = new List<string>(),
+			                		             		TpItems = new List<MappingLookup>()
+			                		             	},
+			                		Roles = new MappingSourceEntry
+			                		        	{
+			                		        		ThirdPartyItems = new List<string>(),
+			                		        		TpItems = new List<MappingLookup>()
+			                		        	}
+			                	};
 		}
 
 		public IBugzillaInfoStorageRepository StorageRepository
@@ -122,7 +122,8 @@ namespace Tp.Bugzilla.Tests
 			                        		var bugChunkSize = MockRepository.GenerateStub<IBugChunkSize>();
 			                        		bugChunkSize.Stub(y => y.Value).Return(1);
 			                        		x.For<IBugChunkSize>().HybridHttpOrThreadLocalScoped().Use(bugChunkSize);
-			                        		x.For<IBugzillaInfoStorageRepository>().HybridHttpOrThreadLocalScoped().Use<BugzillaInfoStorageRepository>();
+			                        		x.For<IBugzillaInfoStorageRepository>().HybridHttpOrThreadLocalScoped().Use
+			                        			<BugzillaInfoStorageRepository>();
 			                        		x.For<IBugzillaActionFactory>().HybridHttpOrThreadLocalScoped().Use<BugzillaActionFactory>();
 			                        	});
 
@@ -251,7 +252,6 @@ namespace Tp.Bugzilla.Tests
 
 		public static BugzillaProfile GetBugzillaProfile(int projectId)
 		{
-
 			return new BugzillaProfile
 			       	{
 			       		Project = projectId,
@@ -276,7 +276,7 @@ namespace Tp.Bugzilla.Tests
 
 		public void CreateRole(string roleName)
 		{
-			Roles.Add(new RoleDTO { Name = roleName, ID = GetNextId() });
+			Roles.Add(new RoleDTO {Name = roleName, ID = GetNextId()});
 		}
 
 		private void SetDefaultRolesMapping(BugzillaProfile profile)
@@ -303,7 +303,7 @@ namespace Tp.Bugzilla.Tests
 		private object GetBugzillaProfileWithDefaultRolesMapping(int projectId)
 		{
 			var profile = GetBugzillaProfile(projectId);
-			
+
 			SetDefaultRolesMapping(profile);
 
 			return profile;
@@ -312,6 +312,15 @@ namespace Tp.Bugzilla.Tests
 		private static TransportMock TransportMock
 		{
 			get { return ObjectFactory.GetInstance<TransportMock>(); }
+		}
+
+		public TimeSpan TimeOffset
+		{
+			get
+			{
+				var now = CurrentDate.Value;
+				return now - now.ToUniversalTime();
+			}
 		}
 	}
 }

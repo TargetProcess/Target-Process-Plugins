@@ -1,1 +1,1 @@
-define(["tp/plugins/profileNameSource","tp/Mashups"],function(a){function b(a){this._create(a)}b.prototype={_create:function(b){this.profileNameSource=a},backToPlugins:function(){window.location.href=(new Tp.WebServiceURL("/Admin/Plugins.aspx")).toString()}};return new b})
+define(["tp/plugins/profileNameSource","tp/Mashups"],function(a){function b(a){this._create(a)}return b.prototype={_create:function(b){this.profileNameSource=a},backToPlugins:function(){window.location.href=(new Tp.WebServiceURL("/Admin/Plugins.aspx")).toString()}},new b})

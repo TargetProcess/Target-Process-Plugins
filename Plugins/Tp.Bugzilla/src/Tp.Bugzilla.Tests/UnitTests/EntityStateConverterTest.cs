@@ -9,6 +9,7 @@ using Rhino.Mocks;
 using StructureMap;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Integration.Common;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
 using Tp.Testing.Common.NUnit;
@@ -35,31 +36,32 @@ namespace Tp.Bugzilla.Tests.UnitTests
 			_context.AddProfile(1);
 
 			StorageRepository.GetProfile<BugzillaProfile>().StatesMapping = new MappingContainer
-			                                                      	{
-			                                                      		new MappingElement
-			                                                      			{
-			                                                      				Key = "OPEN",
-			                                                      				Value = new MappingLookup {Id = 1, Name = "Open"}
-			                                                      			},
-			                                                      		new MappingElement
-			                                                      			{
-			                                                      				Key = "Done",
-			                                                      				Value = new MappingLookup {Id = 2, Name = "Closed"}
-			                                                      			}
-			                                                      	};
+			                                                                	{
+			                                                                		new MappingElement
+			                                                                			{
+			                                                                				Key = "OPEN",
+			                                                                				Value = new MappingLookup {Id = 1, Name = "Open"}
+			                                                                			},
+			                                                                		new MappingElement
+			                                                                			{
+			                                                                				Key = "Done",
+			                                                                				Value =
+			                                                                					new MappingLookup {Id = 2, Name = "Closed"}
+			                                                                			}
+			                                                                	};
 
 			StorageRepository.Get<EntityStateDTO>().AddRange(new[]
-			                                       	{
-			                                       		new EntityStateDTO {ID = 1, Name = "Open"},
-			                                       		new EntityStateDTO {ID = 2, Name = "Closed"},
-			                                       		new EntityStateDTO {ID = 3, Name = "In Progress"},
-			                                       		new EntityStateDTO {ID = 4, Name = "Invalid"}
-			                                       	});
+			                                                 	{
+			                                                 		new EntityStateDTO {ID = 1, Name = "Open"},
+			                                                 		new EntityStateDTO {ID = 2, Name = "Closed"},
+			                                                 		new EntityStateDTO {ID = 3, Name = "In Progress"},
+			                                                 		new EntityStateDTO {ID = 4, Name = "Invalid"}
+			                                                 	});
 
 			var service = MockRepository.GenerateStub<IBugzillaService>();
 			service.Stub(s => s.GetStatuses()).Return(new List<string> {"OPEN", "Done", "In Progress"});
 
-			_converter = new EntityStateConverter(StorageRepository, service);
+			_converter = new EntityStateConverter(StorageRepository, service, ObjectFactory.GetInstance<IActivityLogger>());
 		}
 
 		[Test]

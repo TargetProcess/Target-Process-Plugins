@@ -7,7 +7,6 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
@@ -25,7 +24,7 @@ namespace Tp.Bugzilla.Synchronizer
 		public void Handle(EntityStateUpdatedMessage message)
 		{
 			Update(message.Dto);
-			
+
 			Storage.GetProfile<BugzillaProfile>().StatesMapping
 				.Where(m => m.Value.Id == message.Dto.ID)
 				.ForEach(m => m.Value.Name = message.Dto.Name);
@@ -39,7 +38,7 @@ namespace Tp.Bugzilla.Synchronizer
 		public void Handle(EntityStateDeletedMessage message)
 		{
 			Delete(message.Dto);
-			
+
 			Storage.GetProfile<BugzillaProfile>().StatesMapping
 				.RemoveAll(m => m.Value.Id == message.Dto.ID);
 		}
@@ -47,7 +46,8 @@ namespace Tp.Bugzilla.Synchronizer
 		protected override bool NeedToProcess(EntityStateDTO dto)
 		{
 			var project = Storage.Get<ProjectDTO>().Single(p => p.ID == Profile.Project);
-			return dto.ProcessID == project.ProcessID && dto.EntityTypeName == BugzillaProfileInitializationSaga.BugEntityTypeName;
+			return dto.ProcessID == project.ProcessID &&
+			       dto.EntityTypeName == BugzillaProfileInitializationSaga.BugEntityTypeName;
 		}
 	}
 }

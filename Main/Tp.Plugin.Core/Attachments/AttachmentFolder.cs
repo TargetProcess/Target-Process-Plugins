@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using StructureMap;
+using Tp.Integration.Plugin.Common;
 
 namespace Tp.Plugin.Core.Attachments
 {
@@ -72,7 +73,7 @@ namespace Tp.Plugin.Core.Attachments
 
 		public static string GetAttachmentFileFullPath(FileId fileId)
 		{
-			return Path.Combine(ObjectFactory.GetInstance<IAttachmentFolderPath>().Value, fileId.Value.ToString());
+			return Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, fileId.Value.ToString());
 		}
 
 		public static FileId Save(Stream contentStream)

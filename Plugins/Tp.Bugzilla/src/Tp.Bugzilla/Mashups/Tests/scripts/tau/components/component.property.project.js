@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){return b.propertyName="project",b.showUrl=!0,b.editable=!1,b.alignElementSelector=".property-text",a.create(b)}}})

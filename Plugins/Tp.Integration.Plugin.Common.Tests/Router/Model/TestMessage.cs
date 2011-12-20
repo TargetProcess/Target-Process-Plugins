@@ -1,6 +1,6 @@
 namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 {
-	struct TestMessage
+	class TestMessage
 	{
 		private readonly string _tag;
 		private readonly string _body;

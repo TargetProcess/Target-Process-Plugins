@@ -6,15 +6,15 @@
 using System;
 using System.Linq;
 using Tp.Integration.Common;
-using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
 	public class SeverityConverter : GuessConverter<SeverityDTO>
 	{
-		public SeverityConverter(IStorageRepository storageRepository) : base(storageRepository)
+		public SeverityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
 		{
 		}
 
@@ -41,6 +41,11 @@ namespace Tp.Bugzilla.BugFieldConverters
 		protected override BugField BugField
 		{
 			get { return BugField.SeverityID; }
+		}
+
+		protected override string BugFieldName
+		{
+			get { return "Severity"; }
 		}
 	}
 }

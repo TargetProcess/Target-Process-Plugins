@@ -12,9 +12,9 @@ using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common;
-using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.ImportToTp
 {
@@ -26,15 +26,17 @@ namespace Tp.Bugzilla.ImportToTp
 	{
 		private readonly IStorageRepository _storageRepository;
 		private readonly IUserMapper _userMapper;
+		private readonly IActivityLogger _logger;
 
 		public ImportAssignmentSaga()
 		{
 		}
 
-		public ImportAssignmentSaga(IStorageRepository storageRepository, IUserMapper userMapper)
+		public ImportAssignmentSaga(IStorageRepository storageRepository, IUserMapper userMapper, IActivityLogger logger)
 		{
 			_storageRepository = storageRepository;
 			_userMapper = userMapper;
+			_logger = logger;
 		}
 
 		public override void ConfigureHowToFindSaga()
@@ -83,7 +85,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 		private void CompleteIfNecessary()
 		{
-			if(Data.ActionsInProgress == 0)
+			if (Data.ActionsInProgress == 0)
 				MarkAsComplete();
 		}
 
@@ -107,13 +109,14 @@ namespace Tp.Bugzilla.ImportToTp
 		{
 			if (role != null && tpUserId.HasValue)
 			{
+				_logger.InfoFormat("Assigning user. TargetProcess Bug ID: {0}; User ID: {1}; Role: {2}", tpBugId, tpUserId, role.Name);
 				Data.ActionsInProgress++;
 				Send(new CreateTeamCommand(new TeamDTO
-				                                       	{
-				                                       		AssignableID = tpBugId.GetValueOrDefault(),
-				                                       		UserID = tpUserId,
-				                                       		RoleID = role.Id
-				                                       	}));
+				                           	{
+				                           		AssignableID = tpBugId.GetValueOrDefault(),
+				                           		UserID = tpUserId,
+				                           		RoleID = role.Id
+				                           	}));
 			}
 		}
 
@@ -128,6 +131,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 			tpTeam.ForEach(x =>
 			               	{
+								_logger.InfoFormat("Unassigning user. TargetProcess Bug ID: {0}; Role: {1}", bugId, role.Name);
 			               		Data.ActionsInProgress++;
 			               		Send(new DeleteTeamCommand(x.ID.GetValueOrDefault()));
 			               	});

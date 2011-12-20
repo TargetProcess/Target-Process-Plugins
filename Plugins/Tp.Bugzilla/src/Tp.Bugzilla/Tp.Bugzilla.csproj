@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Bugzilla</RootNamespace>
     <AssemblyName>Tp.Bugzilla</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,7 +86,7 @@
     <Compile Include="IUserMapper.cs" />
     <Compile Include="BugFieldConverters\OwnerConverter.cs" />
     <Compile Include="Mappers\BugzillaFieldsMapper.cs" />
-    <Compile Include="Mappers\EntityStateMapper.cs" />
+    <Compile Include="Mappers\IBugzillaFieldsMapper.cs" />
     <Compile Include="Mappers\MappingExtensions.cs" />
     <Compile Include="BugzillaInfo.cs" />
     <Compile Include="Synchronizer\RoleChangedHandler.cs" />

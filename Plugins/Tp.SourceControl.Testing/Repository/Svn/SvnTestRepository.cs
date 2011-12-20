@@ -9,7 +9,6 @@ using System.Text;
 using SharpSvn;
 using SharpSvn.Security;
 using StructureMap;
-using Tp.Testing.Core;
 
 namespace Tp.SourceControl.Testing.Repository.Svn
 {
@@ -33,7 +32,7 @@ namespace Tp.SourceControl.Testing.Repository.Svn
 
 		private void Checkout()
 		{
-			LocalRepositoryCheckedOutPath.DeleteDirectory();
+			System.IO.DirectoryExtensions.DeleteDirectory(LocalRepositoryCheckedOutPath);
 
 			_client.CheckOut(new SvnUriTarget(LocalRepositoryPath), LocalRepositoryCheckedOutPath);
 			_client.Update(LocalRepositoryCheckedOutPath);
@@ -62,12 +61,12 @@ namespace Tp.SourceControl.Testing.Repository.Svn
 
 		private SvnClient _client;
 
-		public string Login
+		public override string Login
 		{
 			get { return "test"; }
 		}
 
-		public string Password
+		public override string Password
 		{
 			get { return "123456"; }
 		}
@@ -77,7 +76,7 @@ namespace Tp.SourceControl.Testing.Repository.Svn
 			get { return LocalRepositoryPath + "CheckedOut"; }
 		}
 
-		public void Commit(string commitComment)
+		public override void Commit(string commitComment)
 		{
 			string changedFilePath = Path.Combine(LocalRepositoryCheckedOutPath, "readme.txt");
 			using (var changedFile = File.OpenWrite(changedFilePath))

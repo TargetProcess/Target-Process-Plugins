@@ -3,14 +3,9 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using NUnit.Framework;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Exceptions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
-using Tp.Integration.Messages.ServiceBus.Transport.Router.Pump;
 using Tp.Integration.Plugin.Common.Tests.Router.Model;
 using Tp.Testing.Common.NUnit;
 
@@ -22,15 +17,15 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 		[Test]
 		public void CheckIsRunningTest()
 		{
-			var waiter = new Waiter();
-			IMessageSource<TestMessage> source = Generator.CreateSource(TestRouterHelper.SOURCE, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE, null);
-			using (IMessageConsumer<TestMessage> consumer = CreateConsumer(source, new AssertObserver(messages => { })))
+			IMessageSource<TestMessage> source = MessageGenerator.CreateSource(TestRouterHelper.SourceName, TestRouterHelper.MessagesCountToGenerate);
+			var waiter = new Waiter(waitablesCount:1);
+			var factory = new TestRouterFactory(waiter, messages =>{});
+			using (IMessageConsumer<TestMessage> consumer = factory.CreateConsumer(source))
 			{
-				waiter.Register(consumer);
 				consumer.IsRunning.Should(Be.False);
 				consumer.Consume(TestRouterHelper.HandleMessage);
 				consumer.IsRunning.Should(Be.True);
-				TestRouterHelper.WaitFor(waiter);
+				waiter.Wait();
 				consumer.IsRunning.Should(Be.True);
 			}
 		}
@@ -38,14 +33,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 		[Test]
 		public void CheckOrderTest()
 		{
-			IEnumerable<string> expectedOrder = TestRouterHelper.Sequence(0, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE);
-			var waiter = new Waiter();
-			IMessageSource<TestMessage> source = Generator.CreateSource(TestRouterHelper.SOURCE, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE, null);
-			using (IMessageConsumer<TestMessage> consumer = CreateConsumer(source, new AssertObserver(messages => TestRouterHelper.CheckOrder(messages, expectedOrder))))
+			IMessageSource<TestMessage> source = MessageGenerator.CreateSource(TestRouterHelper.SourceName, TestRouterHelper.MessagesCountToGenerate);
+			var waiter = new Waiter(waitablesCount:1);
+			var factory = new TestRouterFactory(waiter, messages => messages.CheckOrder(TestRouterHelper.Sequence(0, TestRouterHelper.MessagesCountToGenerate)));
+			using(IMessageConsumer<TestMessage> consumer = factory.CreateConsumer(source))
 			{
-				waiter.Register(consumer);
 				consumer.Consume(TestRouterHelper.HandleMessage);
-				TestRouterHelper.WaitFor(waiter, true);
+				waiter.Wait(true);
 			}
 		}
 
@@ -53,28 +47,22 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 		public void SwallowExceptionTest()
 		{
 			const int errorMessageIndex = 5;
-			IEnumerable<string> expectedOrder = TestRouterHelper.SequenceExcluding(0, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE, errorMessageIndex);
-			var waiter = new Waiter();
-			IMessageSource<TestMessage> source = Generator.CreateSource(TestRouterHelper.SOURCE, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE, errorMessageIndex);
-			var o = source.Catch((Exception e) =>
-			                      	{
-			                      		Console.WriteLine(e.ToString());
-			                      		return source;
-			                      	});
-			using (var consumer = CreateConsumer(new MessageSource<TestMessage>(source.Name, o), new AssertObserver(messages => TestRouterHelper.CheckOrder(messages, expectedOrder))))
+			var waiter = new Waiter(waitablesCount:1);
+			IMessageSource<TestMessage> source = MessageGenerator.CreateSource(TestRouterHelper.SourceName, TestRouterHelper.MessagesCountToGenerate, errorMessageIndex, swallowException:true);
+			var factory = new TestRouterFactory(waiter, messages => messages.CheckOrder(TestRouterHelper.SequenceExcluding(0, TestRouterHelper.MessagesCountToGenerate, errorMessageIndex)));
+			using (IMessageConsumer<TestMessage> consumer = factory.CreateConsumer(source))
 			{
-				waiter.Register(consumer);
 				consumer.Consume(TestRouterHelper.HandleMessage);
-				TestRouterHelper.WaitFor(waiter, true);
+				waiter.Wait(true);
 			}
 		}
 
 		[Test, ExpectedException(typeof (MessageConsumerException))]
 		public void DenyMonitorChangingOfRunningMessageConsumer()
 		{
-			IEnumerable<string> expectedOrder = TestRouterHelper.Sequence(0, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE);
-			IMessageSource<TestMessage> source = Generator.CreateSource(TestRouterHelper.SOURCE, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE, null);
-			using (IMessageConsumer<TestMessage> consumer = CreateConsumer(source, new AssertObserver(messages => TestRouterHelper.CheckOrder(messages, expectedOrder))))
+			IMessageSource<TestMessage> source = MessageGenerator.CreateSource(TestRouterHelper.SourceName, TestRouterHelper.MessagesCountToGenerate);
+			var factory = new TestRouterFactory(new Waiter(waitablesCount: 1), messages => messages.CheckOrder(TestRouterHelper.Sequence(0, TestRouterHelper.MessagesCountToGenerate)));
+			using (IMessageConsumer<TestMessage> consumer = factory.CreateConsumer(source))
 			{
 				consumer.Consume(TestRouterHelper.HandleMessage);
 				consumer.AddObserver(null);
@@ -84,23 +72,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 		[Test, ExpectedException(typeof (MessageConsumerException))]
 		public void DenyWhileChangingOfRunningMessageConsumer()
 		{
-			IEnumerable<string> expectedOrder = TestRouterHelper.Sequence(0, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE);
-			IMessageSource<TestMessage> source = Generator.CreateSource(TestRouterHelper.SOURCE, TestRouterHelper.MESSAGES_COUNT_TO_GENERATE, null);
-			using (IMessageConsumer<TestMessage> consumer = CreateConsumer(source, new AssertObserver(messages => TestRouterHelper.CheckOrder(messages, expectedOrder))))
+			IMessageSource<TestMessage> source = MessageGenerator.CreateSource(TestRouterHelper.SourceName, TestRouterHelper.MessagesCountToGenerate);
+			var factory = new TestRouterFactory(new Waiter(waitablesCount: 1), messages => messages.CheckOrder(TestRouterHelper.Sequence(0, TestRouterHelper.MessagesCountToGenerate)));
+			using (IMessageConsumer<TestMessage> consumer = factory.CreateConsumer(source))
 			{
 				consumer.Consume(TestRouterHelper.HandleMessage);
 				consumer.While = null;
 			}
-		}
-
-		private static IMessageConsumer<TestMessage> CreateConsumer(IMessageSource<TestMessage> messageSource, IObserver<TestMessage> observer)
-		{
-			var consumer = new MessageConsumer<TestMessage>(messageSource, Scheduler.ThreadPool)
-			               	{
-								While = m => TestMessage.IsNotStopMessage(messageSource.Name, m)
-			               	};
-			consumer.AddObserver(observer);
-			return consumer;
 		}
 	}
 }

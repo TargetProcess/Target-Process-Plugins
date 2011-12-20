@@ -8,24 +8,28 @@ using System.Linq;
 using StructureMap;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common;
-using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
+using Tp.MashupManager.MashupStorage;
+using log4net;
 
 namespace Tp.MashupManager
 {
 	public class MashupInfoRepository : IMashupInfoRepository
 	{
 		private readonly ITpBus _bus;
-		private readonly IActivityLogger _logger;
+		private readonly IMashupScriptStorage _scriptStorage;
 		private readonly IPluginContext _context;
+		private readonly ILog _log;
 		public const string ProfileName = "Mashups";
 
-		public MashupInfoRepository(IActivityLogger logger, IPluginContext context, ITpBus bus)
+		public MashupInfoRepository(ILogManager logManager, IPluginContext context, ITpBus bus, IMashupScriptStorage scriptStorage)
 		{
 			_bus = bus;
-			_logger = logger;
+			_scriptStorage = scriptStorage;
+			_log = logManager.GetLogger(GetType());
 			_context = context;
 		}
 
@@ -33,6 +37,7 @@ namespace Tp.MashupManager
 		{
 			var errors = new PluginProfileErrorCollection();
 
+			NormalizeMashup(dto);
 			ValidateNameNotEmpty(dto, errors);
 			ValidateNameContainsOnlyValidChars(dto, errors);
 			ValidateNameUniqueness(dto, errors);
@@ -41,16 +46,18 @@ namespace Tp.MashupManager
 			{
 				AddMashupNameToPlugin(dto);
 
-				Profile.Get<MashupDto>(dto.Name).Add(dto);
+				_scriptStorage.SaveMashup(dto);
+
 				_bus.Send(dto.CreatePluginMashupMessage());
 
-				_logger.InfoFormat("Add mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
+				_log.InfoFormat("Add mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
 			}
 			return errors;
 		}
 
 		public PluginProfileErrorCollection Update(UpdateMashupDto dto)
 		{
+			NormalizeMashup(dto);
 			if (dto.IsNameChanged())
 			{
 				var addErrors = Add(dto);
@@ -73,30 +80,32 @@ namespace Tp.MashupManager
 		{
 			DeleteMashupNameToPlugin(name);
 
-			Profile.Get<MashupDto>(name).Remove(m => m.Name == name);
-
+			_scriptStorage.DeleteMashup(name);
+			
 			var dto = MashupDto.CreateEmptyMashup(name);
 
 			_bus.Send(dto.CreatePluginMashupMessage());
 
-			_logger.InfoFormat("Clean mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
+			_log.InfoFormat("Clean mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
 
 			return new PluginProfileErrorCollection();
-		}
-
-		private IProfile Profile
-		{
-			get { return ObjectFactory.GetInstance<ISingleProfile>().Profile; }
 		}
 
 		private MashupManagerProfile ManagerProfile
 		{
 			get
 			{
-				return Profile != null
-						? Profile.GetProfile<MashupManagerProfile>()
+				IProfile profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
+
+				return profile != null
+						? profile.GetProfile<MashupManagerProfile>()
 						: null;
 			}
+		}
+
+		private void NormalizeMashup(MashupDto mashup)
+		{
+			mashup.Name = mashup.Name.Trim();
 		}
 
 		private void AddMashupNameToPlugin(MashupDto dto)
@@ -122,10 +131,11 @@ namespace Tp.MashupManager
 
 			if (!errors.Any())
 			{
-				Profile.Get<MashupDto>(dto.Name).ReplaceWith(dto);
+				_scriptStorage.SaveMashup(dto);
+
 				_bus.Send(dto.CreatePluginMashupMessage());
 
-				_logger.InfoFormat("Update mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name,
+				_log.InfoFormat("Update mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name,
 				                   _context.AccountName.Value);
 
 				return new PluginProfileErrorCollection();
@@ -139,7 +149,7 @@ namespace Tp.MashupManager
 				errors.Add(new PluginProfileError
 				           	{
 				           		FieldName = MashupDto.NameField,
-				           		Message = "Mashup with the same name already exists"
+				           		Message = "Mashup name should be specified"
 				           	});
 		}
 

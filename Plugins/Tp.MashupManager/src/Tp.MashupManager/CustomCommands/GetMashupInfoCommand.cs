@@ -3,13 +3,12 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Linq;
 using StructureMap;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
-using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
+using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager.CustomCommands
 {
@@ -17,21 +16,15 @@ namespace Tp.MashupManager.CustomCommands
 	{
 		public PluginCommandResponseMessage Execute(string args)
 		{
-			var mashup = ObjectFactory.GetInstance<ISingleProfile>().Profile.Get<MashupDto>(args);
-			var count = mashup.Count();
+			var mashup = ObjectFactory.GetInstance<IMashupScriptStorage>().GetMashup(args);
 
-			if (count == 1)
+			if (mashup != null)
 			{
 				return new PluginCommandResponseMessage
-				       	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = mashup.Single().Serialize()};
+				       	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = mashup.Serialize()};
 			}
-
-			if (count == 0)
-			{
-				return GetErrorResponse(string.Format("Mashup with name \"{0}\" doesn't exist", args));
-			}
-
-			return GetErrorResponse(string.Format("There are more than one mashup with name \"{0}\"", args));
+			
+			return GetErrorResponse(string.Format("Mashup with name \"{0}\" doesn't exist", args));
 		}
 
 		public string Name

@@ -4,13 +4,22 @@
 // 
 using NServiceBus;
 using Tp.Integration.Messages.TargetProcessLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Integration.Plugin.Common.Handlers
 {
 	public class ExceptionHandler : IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
+		private readonly IActivityLogger _logger;
+
+		public ExceptionHandler(IActivityLogger logger)
+		{
+			_logger = logger;
+		}
+
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
+			//_logger.Error(string.Format("TargetProcess has thrown an exception : {0}",message.ExceptionString));
 		}
 	}
 }

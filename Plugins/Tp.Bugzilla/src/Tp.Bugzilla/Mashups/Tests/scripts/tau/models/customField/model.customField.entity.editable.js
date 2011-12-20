@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/model.customField.editable"],function(a,b){return b.extend({"bus entitySelected":function(a){var b={},c={name:this.config.data.name,value:null};b.customFields=[c];var d=a.data.entity;d&&d.id&&(c.value={id:d.id}),this.fire("save",{$set:b})}})})

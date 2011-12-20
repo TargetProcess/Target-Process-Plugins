@@ -6,6 +6,8 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Threading;
 
 namespace Tp.TestRunImport.Tests.FtpIntegration
 {
@@ -14,7 +16,7 @@ namespace Tp.TestRunImport.Tests.FtpIntegration
 		private const string ProcessName = "ftpdmin";
 		private readonly Process _ftpProcess;
 
-		public FtpIntegrationServer(string rootDirectory, int port = 21, bool hideFtpWindow = true)
+		public FtpIntegrationServer(string rootDirectory, int port = 21, bool hideFtpWindow = false)
 		{
 			var processesByName = Process.GetProcessesByName(ProcessName);
 			foreach (var p in processesByName.Where(p => !p.HasExited))
@@ -29,6 +31,21 @@ namespace Tp.TestRunImport.Tests.FtpIntegration
 								WindowStyle = hideFtpWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal
 							};
 			_ftpProcess = Process.Start(psInfo);
+			Warmup(port);
+		}
+
+		private static void Warmup(int port)
+		{
+			try
+			{
+				var request = (FtpWebRequest) WebRequest.Create("ftp://127.0.0.1:{0}".Fmt(port));
+				using (request.GetResponse())
+				{
+				}
+			}
+			catch
+			{
+			}
 		}
 
 		public void Dispose()

@@ -4,6 +4,7 @@
 // 
 
 using System;
+using Tp.Core;
 using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
@@ -18,14 +19,14 @@ namespace Tp.Bugzilla.ConnectionValidators
 		{
 			try
 			{
-				Data = new BugzillaUrl(_profile).GetChangedBugsIds(DateTime.Now);
+				Data = new BugzillaUrl(_profile).GetChangedBugsIds(CurrentDate.Value);
 			}
 			catch (Exception)
 			{
 				errors.Add(new PluginProfileError
 				           	{
 				           		FieldName = BugzillaProfile.QueriesField,
-				           		Message = "The defined Bugzilla saved query(ies) is(are) not valid",
+				           		Message = "The defined Bugzilla Saved Searches are not valid",
 								AdditionalInfo = ValidationErrorType.QueryNotFound.ToString()
 				           	});
 			}

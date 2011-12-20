@@ -116,7 +116,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Queries))
 			{
-				errors.Add(new PluginProfileError {FieldName = QueriesField, Message = "Query should not be empty"});
+				errors.Add(new PluginProfileError {FieldName = QueriesField, Message = "Saved Search is required"});
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace Tp.Bugzilla
 		{
 			if (Project <= 0)
 			{
-				errors.Add(new PluginProfileError {FieldName = ProjectField, Message = "Project should not be empty"});
+				errors.Add(new PluginProfileError { FieldName = ProjectField, Message = "Project is required" });
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Password))
 			{
-				errors.Add(new PluginProfileError {FieldName = PasswordField, Message = "Password should not be empty"});
+				errors.Add(new PluginProfileError { FieldName = PasswordField, Message = "Password is required" });
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Login))
 			{
-				errors.Add(new PluginProfileError {FieldName = LoginField, Message = "Login should not be empty"});
+				errors.Add(new PluginProfileError { FieldName = LoginField, Message = "Login is required" });
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Url))
 			{
-				errors.Add(new PluginProfileError {FieldName = UrlField, Message = "Url should not be empty"});
+				errors.Add(new PluginProfileError { FieldName = UrlField, Message = "Url is required" });
 			}
 		}
 

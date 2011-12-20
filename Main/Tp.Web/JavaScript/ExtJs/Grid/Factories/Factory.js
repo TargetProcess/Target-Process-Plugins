@@ -39,7 +39,6 @@ Tp.controls.grid.ConfigurableFactory = Ext.extend(Object, {
         return eval("new " + gridPanelType + "(config)");
     },
 
-
     createInnerGridPanel: function(initialConfig, context) {
         var config = this.getInnerListConfigurationFactory(initialConfig).createConfig(context);
         return eval("new " + innerGridPanelType + "(config)");
@@ -53,7 +52,6 @@ Tp.controls.grid.ConfigurableFactory = Ext.extend(Object, {
 
             throw "GridProxy is undefined";
         }
-
     }
 
 });

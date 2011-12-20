@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){return a.register({name:"ui.template.userIcon",markup:['<span class="ui-assignment__user user" userId="${id}">','   <img src="${avatar}" style="width:24px; height:24px;" alt="${name}" title="${name}" class="user-name" />',"</span>"].join(""),dependencies:[]})})

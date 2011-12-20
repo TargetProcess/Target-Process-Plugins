@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Subversion</RootNamespace>
     <AssemblyName>Tp.Subversion</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +79,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\SubversionCheckConnectionCommand.cs" />
+    <Compile Include="SerializationPatches\Xml\AttachToEntitySagaPatch.cs" />
+    <Compile Include="SerializationPatches\Xml\CreateRevisionSagaPatch.cs" />
+    <Compile Include="SerializationPatches\Xml\NewRevisionDetectedLocalMessagePatch.cs" />
+    <Compile Include="SerializationPatches\Xml\NewRevisionRangeDetectedLocalMessagePatch.cs" />
+    <Compile Include="SerializationPatches\Xml\RevisionCreatedLocalMessagePatch.cs" />
+    <Compile Include="SerializationPatches\Xml\RevisionRangeInStoragePatch.cs" />
+    <Compile Include="SerializationPatches\Xml\SvnActionPatch.cs" />
+    <Compile Include="SerializationPatches\Xml\SvnPatchCollection.cs" />
     <Compile Include="StructureMap\SubversionRegistry.cs" />
     <Compile Include="StructureMap\SvnPluginExcludedAssemblies.cs" />
     <Compile Include="SubversionPluginProfile.cs" />
@@ -174,6 +183,10 @@
     <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
       <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
       <Name>Tp.SourceControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Subversion.InstallHelper\Tp.Subversion.InstallHelper.csproj">
+      <Project>{17D234DF-2359-4503-9051-1A0ABE5028DB}</Project>
+      <Name>Tp.Subversion.InstallHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

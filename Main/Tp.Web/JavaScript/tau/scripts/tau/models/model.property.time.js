@@ -1,0 +1,1 @@
+define(["tau/models/model.property.simple"],function(a){return a.extend({floatToString:function(a){return a.toFixed(2).replace(".00","")},_getEffortPoints:function(){return this.config.context.getEffortPoint().shortName},onEntityRetrieved:function(a){var b=a[0].data[this.propertyName],c={text:this.floatToString(b),point:this._getEffortPoints()};this.fire("dataBind",c)}})})

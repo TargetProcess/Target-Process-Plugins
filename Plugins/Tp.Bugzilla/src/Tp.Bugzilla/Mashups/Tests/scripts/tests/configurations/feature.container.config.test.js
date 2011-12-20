@@ -1,0 +1,1 @@
+define(["tau/configurations/feature.container.config"],function(a){module("Feature config test",{setup:function(){}}),test("should create valid feature config",function(){var b=new a})})

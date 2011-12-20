@@ -30,7 +30,7 @@ namespace Tp.Bugzilla.ConnectionValidators
 					new PluginProfileError
 						{
 							Message = string.Format(
-								"The 'tp2.cgi' script version '{0}' not supported by this plugin. Please update your 'tp2.cgi' script and try again.",
+								"The 'tp2.cgi' script version '{0}' is not supported by this plugin. Please update your 'tp2.cgi' script and try again.",
 								string.IsNullOrEmpty(bugzillaProperties.script_version) ? "undefined" : bugzillaProperties.script_version),
 								AdditionalInfo = ValidationErrorType.InvalidTpCgiVersion.ToString()
 						});

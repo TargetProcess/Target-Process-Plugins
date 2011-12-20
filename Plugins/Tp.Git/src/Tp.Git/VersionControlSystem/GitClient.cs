@@ -3,12 +3,15 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NGit;
 using NGit.Revwalk;
 using NGit.Revwalk.Filter;
 using NGit.Transport;
+using StructureMap;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -114,7 +117,7 @@ namespace Tp.Git.VersionControlSystem
 				revWalk.SetRevFilter(ApplyNoMergesFilter(filter));
 
 				var commits = (from revision in revWalk orderby revision.CommitTime ascending select revision).ToArray().Split(pageSize);
-				RevisionRange[] fromTillHead = commits.Select(x => new RevisionRange(x.First().CommitTime.ToString(), x.Last().CommitTime.ToString())).ToArray();
+				var fromTillHead = commits.Select(x => new RevisionRange(x.First().CommitTime.ToString(), x.Last().CommitTime.ToString())).ToArray();
 				return fromTillHead;
 			}
 			finally
@@ -123,36 +126,64 @@ namespace Tp.Git.VersionControlSystem
 			}
 		}
 
-		public static GitClient Connect(GitRepositoryFolder repositoryFolder, ISourceControlConnectionSettingsSource settings, ProgressMonitor progressMonitor)
+		public static GitClient Connect(ISourceControlConnectionSettingsSource settings)
 		{
+			var repositoryFolder = GetLocalRepository(settings);
 			if (IsRepositoryUriChanged(repositoryFolder, settings))
 			{
 				repositoryFolder.Delete();
+				repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
+				var repoFolderStorage = Repository.Get<GitRepositoryFolder>();
+				repoFolderStorage.ReplaceWith(repositoryFolder);
 			}
 
 			NGit.Api.Git nativeGit;
-			if (repositoryFolder.Exists())
+			try
 			{
-				nativeGit = NGit.Api.Git.Open(repositoryFolder.Value);
-				nativeGit.Clean().Call();
-				nativeGit.Fetch().SetRemoveDeletedRefs(true).Call();
+				var credentialsProvider = new UsernamePasswordCredentialsProvider(settings.Login, settings.Password);
+				if (repositoryFolder.Exists())
+				{
+					nativeGit = NGit.Api.Git.Open(repositoryFolder.Value);
+					nativeGit.Clean().Call();
+					nativeGit.Fetch().SetCredentialsProvider(credentialsProvider).SetRemoveDeletedRefs(true).Call();
+				}
+				else
+				{
+					nativeGit = NGit.Api.Git.CloneRepository()
+						.SetURI(settings.Uri)
+						.SetNoCheckout(true)
+						.SetCredentialsProvider(credentialsProvider)
+						.SetDirectory(repositoryFolder.Value).Call();
+				}
 			}
-			else
+			catch (ArgumentNullException exception)
 			{
-				nativeGit = NGit.Api.Git.CloneRepository()
-					.SetURI(settings.Uri)
-					.SetNoCheckout(true)
-					.SetProgressMonitor(progressMonitor)
-					.SetCredentialsProvider(new UsernamePasswordCredentialsProvider(settings.Login, settings.Password))
-					.SetDirectory(repositoryFolder.Value).Call();
+				throw new ArgumentException(GitCheckConnectionErrorResolver.INVALID_URI_OR_INSUFFICIENT_ACCESS_RIGHTS_ERROR_MESSAGE, exception);
 			}
-
 			return new GitClient(nativeGit);
 		}
 
 		private static bool IsRepositoryUriChanged(GitRepositoryFolder repositoryFolder, ISourceControlConnectionSettingsSource settings)
 		{
 			return (settings.Uri.ToLower() != repositoryFolder.RepoUri.ToLower()) && repositoryFolder.Exists();
+		}
+
+		private static IStorageRepository Repository
+		{
+				get { return ObjectFactory.GetInstance<IStorageRepository>(); }
+		}
+
+		private static GitRepositoryFolder GetLocalRepository(ISourceControlConnectionSettingsSource settings)
+		{
+				var repoFolderStorage = Repository.Get<GitRepositoryFolder>();
+				if (repoFolderStorage.Empty())
+				{
+						var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
+						repoFolderStorage.ReplaceWith(repositoryFolder);
+						return repositoryFolder;
+				}
+
+				return repoFolderStorage.Single();
 		}
 	}
 }

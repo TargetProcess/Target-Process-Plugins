@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Transactions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Exceptions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Extensions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 {
-	public class MessageConsumer<TMessage> : IMessageConsumer<TMessage>
+	public class MessageConsumer<TMessage> : IMessageConsumer<TMessage> where TMessage : class
 	{
 		private readonly IMessageSource<TMessage> _messageSource;
 		private readonly IScheduler _scheduler;
 		private IObservable<TMessage> _observable;
 		private IDisposable _subscription;
 		private volatile bool _isRunning;
-		private volatile bool _disposed;
 		private Predicate<TMessage> _while;
 		private readonly List<IObserver<TMessage>> _observers;
 
@@ -29,6 +30,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		{
 			get { return _messageSource.Name + "~consumer"; }
 		}
+
+		public bool IsTransactional { get; set; }
+		public IsolationLevel IsolationLevel { get; set; }
+		public TimeSpan TransactionTimeout { get; set; }
 
 		public void AddObserver(IObserver<TMessage> observer)
 		{
@@ -45,13 +50,13 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 
 		protected virtual void ConsumeCore(Action<TMessage> handleMessage)
 		{
-			_observable = _messageSource.Until(ResolveWhile(), handleMessage, Finally, _scheduler);
+			var @while = While ?? (_ => true);
+			_observable = _messageSource.Iterate(handleMessage, _scheduler).TakeWhile(m => @while(m));
 			_subscription = _observable.Subscribe(new CompositeObserver(_observers));
 		}
 
 		public void Dispose()
 		{
-			_disposed = true;
 			if (_subscription != null)
 			{
 				_subscription.Dispose();
@@ -80,35 +85,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			get { return _messageSource; }
 		}
 
-		protected void ThrowIfRunning()
+		private void ThrowIfRunning()
 		{
 			if (IsRunning)
 			{
 				throw new MessageConsumerException(string.Format("Cannot change already running MessageConsumer"));
 			}
-		}
-
-		private void Finally()
-		{
-			if(_disposed)
-			{
-				OnDispose();
-			}
-		}
-
-		private Predicate<TMessage> ResolveWhile()
-		{
-			return While != null ? (Predicate<TMessage>)CustomWhile : IsNotDisposed;
-		}
-
-		private bool IsNotDisposed(TMessage _)
-		{
-			return !_disposed;
-		}
-
-		private bool CustomWhile(TMessage m)
-		{
-			return While(m) && IsNotDisposed(m);
 		}
 
 		protected virtual void OnDispose()
@@ -118,7 +100,6 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		private class CompositeObserver : IObserver<TMessage>
 		{
 			private readonly List<IObserver<TMessage>> _observers;
-
 			public CompositeObserver(List<IObserver<TMessage>> observers)
 			{
 				_observers = observers;

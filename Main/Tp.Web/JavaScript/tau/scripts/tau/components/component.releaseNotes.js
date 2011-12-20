@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.releaseNotes","tau/ui/templates/releaseNotes/ui.template.releaseNotes"],function(a,b,c){return{create:function(d){var e={extensions:[b],template:c};return a.create(e,d)}}})

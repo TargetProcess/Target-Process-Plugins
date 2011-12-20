@@ -4,12 +4,15 @@
 // 
 
 using System;
+using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.VersionControlSystem
 {
+	[DataContract]
 	[Serializable]
 	public class RevisionId
 	{
+		[DataMember]
 		public string Value { get; set; }
 
 		public static implicit operator RevisionId(string revisionId)

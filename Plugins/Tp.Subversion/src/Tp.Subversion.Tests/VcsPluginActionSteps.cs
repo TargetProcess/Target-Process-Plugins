@@ -16,6 +16,7 @@ using Tp.Integration.Messages.TargetProcessLifecycle;
 using Tp.Integration.Testing.Common;
 using Tp.Integration.Testing.Common.Persisters;
 using Tp.SourceControl.VersionControlSystem;
+using Tp.SourceControl.Workflow;
 using Tp.SourceControl.Workflow.Workflow;
 using Tp.Subversion.Context;
 using Tp.Testing.Common.NUnit;

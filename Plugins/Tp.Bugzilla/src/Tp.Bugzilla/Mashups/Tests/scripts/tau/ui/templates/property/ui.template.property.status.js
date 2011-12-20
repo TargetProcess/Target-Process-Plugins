@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"property-last-status",markup:["<div>",'   <div class="ui-status {{if value === true}}green{{/if}}{{if value === false}}red{{/if}}">',"   {{if value === true}}","       Passed","   {{/if}}","   {{if value === false}}","       Failed","   {{/if}}","</div>","</div>"].join("")};return a.register(b)})

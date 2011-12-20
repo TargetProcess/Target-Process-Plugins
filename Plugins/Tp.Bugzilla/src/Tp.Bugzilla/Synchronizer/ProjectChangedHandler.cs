@@ -7,7 +7,6 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer

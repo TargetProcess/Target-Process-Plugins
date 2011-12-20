@@ -3,11 +3,14 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using Tp.Integration.Messages.SerializationPatches;
 using Tp.Integration.Plugin.Common;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.StructureMap;
 using Tp.SourceControl.VersionControlSystem;
+using Tp.Subversion.SerializationPatches;
+using Tp.Subversion.SerializationPatches.Xml;
 using Tp.Subversion.Subversion;
 
 namespace Tp.Subversion.StructureMap
@@ -16,7 +19,8 @@ namespace Tp.Subversion.StructureMap
 	{
 		public SubversionRegistry()
 		{
-			For<IExcludedAssemblyNamesSource>().Singleton().Use<SvnPluginExcludedAssemblies>();
+			For<IExcludedAssemblyNamesSource>().HybridHttpOrThreadLocalScoped().Use<SvnPluginExcludedAssemblies>();
+			For<IPatchCollection>().Use<SvnPatchCollection>();
 		}
 
 		protected override void ConfigureCheckConnectionErrorResolver()

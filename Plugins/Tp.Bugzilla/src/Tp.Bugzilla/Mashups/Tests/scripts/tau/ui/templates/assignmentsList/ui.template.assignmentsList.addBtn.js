@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"assignments-add-btn",markup:['<button class="add-btn',"{{if allowAdd == false}}"," disabled","{{/if}}",'" type="button"><div>AddAssignment</div></button>'].join(""),dependencies:["user"]};return a.register(b)})
+define(["tau/core/templates-factory"],function(a){var b={name:"assignments-add-btn",markup:['<button class="add-btn',"{{if allowAdd == false}}"," disabled","{{/if}}",'" type="button"><div>AddAssignment</div></button>'].join(""),dependencies:[]};return a.register(b)})

@@ -28,6 +28,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
 
 		public void Handle(ExecutePluginCommandCommand message)
 		{
+			_log.Info("Executing plugin command : {0}".Fmt(message.CommandName));
 			try
 			{
 				var replyMessage = new PluginCommandResponseMessage();
@@ -52,6 +53,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
 			}
 			catch (PluginProfileValidationException validationException)
 			{
+				_log.Info("Profile validation failed during executing command {0} : {1}".Fmt(message.CommandName, validationException.Errors.Serialize()));
 				_tpBus.Reply(new PluginCommandResponseMessage
 				             	{
 				             		ResponseData = validationException.Errors.Serialize(),

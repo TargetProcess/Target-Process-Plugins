@@ -31,9 +31,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 	[ActionSteps]
 	public class PluginLifecycleActionSteps
 	{
-		[Given(
-			@"plugin receives '$commandName' command and account '$accountName' with profile '$profileName'"
-			)]
+		[Given(@"plugin receives '$commandName' command and account '$accountName' with profile '$profileName'")]
 		public void ReceivePluginSpecificChangePluginProfileCommand(string commandName, string accountName, string profileName)
 		{
 			ObjectFactory.GetInstance<PluginContextMock>().AccountName = accountName;

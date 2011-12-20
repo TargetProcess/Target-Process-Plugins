@@ -20,7 +20,7 @@ tau.mashups
                     mappingTemplate: 'batched',
                     key: 'StatesMapping',
                     Caption: 'States Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess states mapping by name (Ex: Resolved -> Fixed)<br/> Required for correct bugs import.',
+                    Description: 'Specify Bugzilla-to-TargetProcess states mapping by name (Ex: Resolved <span class="mapping-notes-chain">&nbsp;</span> Fixed)<br/><a href="http://help.targetprocess.com/workflow/work_by_role" target="_blank">Learn how to change States in TargetProcess</a>',
                     KeyName: 'Bugzilla Status',
                     ValueName: 'TargetProcess State',
                     onAutomap: $.proxy(this.automap, this)
@@ -31,7 +31,7 @@ tau.mashups
                     mappingTemplate: 'batched',
                     key: 'SeveritiesMapping',
                     Caption: 'Severities Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess severities mapping by name (Ex: Critical -> Major)<br/> Required for correct bugs import.',
+                    Description: 'Specify Bugzilla-to-TargetProcess severities mapping by name (Ex: Critical <span class="mapping-notes-chain">&nbsp;</span> Major)<br/><a href="http://help.targetprocess.com/settings/severity" target="_blank">Learn how to change Severities for Bugs in TargetProcess</a>',
                     KeyName: 'Bugzilla Severity',
                     ValueName: 'TargetProcess Severity',
                     onAutomap: $.proxy(this.automap, this)
@@ -42,7 +42,7 @@ tau.mashups
                     mappingTemplate: 'batched',
                     key: 'PrioritiesMapping',
                     Caption: 'Priorities Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess priorities mapping by name (Ex: Good -> Must Have)<br/> Required for correct bugs import.',
+                    Description: 'Specify Bugzilla-to-TargetProcess priorities mapping by name (Ex: Good <span class="mapping-notes-chain">&nbsp;</span> Must Have)<br/><a href="http://help.targetprocess.com/settings/bv" target="_blank">Learn how to change Priorities for Bugs in TargetProcess</a>',
                     KeyName: 'Bugzilla Priority',
                     ValueName: 'TargetProcess Priority',
                     onAutomap: $.proxy(this.automap, this)
@@ -53,7 +53,7 @@ tau.mashups
                     mappingTemplate: 'standalone',
                     key: 'RolesMapping',
                     Caption: 'Roles Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess roles mapping by name (Ex: Assignee -> Developer)<br/> Required for correct bugs import.',
+                    Description: 'Specify Bugzilla-to-TargetProcess roles mapping by name (Ex: Assignee <span class="mapping-notes-chain">&nbsp;</span> Developer)',
                     KeyName: 'Bugzilla Role',
                     ValueName: 'TargetProcess Role'
                 });
@@ -108,7 +108,7 @@ tau.mashups
                                     })
                                 }
                             };
-                            that.commandGateway.execute('GetMapping',
+                            that.commandGateway.executeForProfile('GetMapping',
                                 dataSource,
                                 $.proxy(that._onGetMappingSuccess(tpInfo), that));
                         }

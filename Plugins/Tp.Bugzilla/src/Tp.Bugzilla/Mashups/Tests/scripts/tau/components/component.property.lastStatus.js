@@ -1,0 +1,1 @@
+define(["tau/components/component.property.bool","tau/ui/templates/property/ui.template.property.status"],function(a,b){return{create:function(c){return c=c||{},c.propertyName="lastStatus",c.template=b,a.create(c)}}})

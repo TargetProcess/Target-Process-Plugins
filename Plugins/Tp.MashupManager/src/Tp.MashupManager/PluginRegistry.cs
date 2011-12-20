@@ -8,6 +8,7 @@ using StructureMap.Configuration.DSL;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Integration.Plugin.Common.PluginCommand;
+using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager
 {
@@ -19,6 +20,8 @@ namespace Tp.MashupManager
 				<MashupManagerPluginSpecifyMessageHandlerOrdering>();
 			For<IMashupInfoRepository>().Use<MashupInfoRepository>();
 			For<ISingleProfile>().Singleton().Use<SingleProfile>();
+			For<IMashupScriptStorage>().Use<MashupScriptStorage>();
+			For<IMashupLocalFolder>().Use<MashupLocalFolder>();
 		}
 
 		public class MashupManagerPluginSpecifyMessageHandlerOrdering : ICustomPluginSpecifyMessageHandlerOrdering

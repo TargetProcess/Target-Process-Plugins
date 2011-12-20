@@ -1,0 +1,1 @@
+define(["tau/models/model.property.text.validation","tau/utils/utils.jsonSchema"],function(a,b){var c=a.extend({category:"edit",schema:b.Schema.create({type:"string",optional:!1,empty:!1,maxLength:3,minLength:0,pre:["trim"]})});return c})

@@ -1,1 +1,1 @@
-define(["order!libs/jquery/jquery","order!libs/jquery/jquery.ui"],function(){return $})
+define(["libs/jquery/jquery","libs/jquery/jquery.ui"],function(){return $})

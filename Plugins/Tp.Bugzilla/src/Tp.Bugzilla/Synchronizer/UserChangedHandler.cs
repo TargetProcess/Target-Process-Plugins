@@ -8,7 +8,6 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
@@ -31,7 +30,7 @@ namespace Tp.Bugzilla.Synchronizer
 
 			userByEmailStorage.Clear();
 			userByIdStorage.Clear();
-			
+
 			Create(message.Dto);
 		}
 
@@ -49,8 +48,8 @@ namespace Tp.Bugzilla.Synchronizer
 		private IStorage<UserDTO> GetChangedUserEmailStorage(UserUpdatedMessage message, IEnumerable<UserDTO> userByIdStorage)
 		{
 			var user = message.ChangedFields.Contains(UserField.Email)
-			       	? userByIdStorage.Single()
-			       	: message.Dto;
+			           	? userByIdStorage.Single()
+			           	: message.Dto;
 
 			return UserByEmailStorage(user);
 		}
@@ -63,7 +62,7 @@ namespace Tp.Bugzilla.Synchronizer
 			UserByIdStorage(dto).Add(dto);
 			UserByEmailStorage(dto).Add(dto);
 		}
-		
+
 		private IStorage<UserDTO> UserByIdStorage(UserDTO user)
 		{
 			return _storage.Get<UserDTO>(user.ID.ToString());

@@ -6,21 +6,20 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 {
 	class Waiter
 	{
-		private int _counter;
+		private int _waitablesCount;
 		private readonly ManualResetEvent _waitEvent;
 
-		public Waiter()
+		public Waiter(int waitablesCount)
 		{
-			_counter = 0;
+			_waitablesCount = waitablesCount;
 			_waitEvent = new ManualResetEvent(false);
 		}
 
 		public void Register(IMessageConsumer<TestMessage> messageConsumer)
 		{
-			Interlocked.Increment(ref _counter);
 			messageConsumer.AddObserver(new Observer<TestMessage>(() =>
 			                                                      	{
-			                                                      		if (Interlocked.Decrement(ref _counter) == 0)
+			                                                      		if (Interlocked.Decrement(ref _waitablesCount) == 0)
 			                                                      		{
 			                                                      			_waitEvent.Set();
 			                                                      		}

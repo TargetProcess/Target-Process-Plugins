@@ -124,6 +124,10 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 			throw new NotImplementedException();
 		}
 
+		public void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message)
+		{
+		}
+
 		public ICallback Send(params ICreateEntityCommand<DataTransferObject>[] createCommands)
 		{
 			CreateCommands.AddRange(createCommands);

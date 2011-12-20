@@ -3,8 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Collections.Generic;
-using System.Text;
 using System;
 using Tp.Integration.Common;
 

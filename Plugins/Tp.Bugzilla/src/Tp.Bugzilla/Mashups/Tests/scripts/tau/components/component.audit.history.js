@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.label","tau/ui/templates/auditHistory/ui.template.auditHistory","tau/ui/extensions/auditHistory/ui.audit.history"],function(a,b,c,d){return{create:function(e){var f={name:"auditHistory",ModelType:b,template:c,extensions:[d]};return a.create(f,e)}}})

@@ -5,10 +5,15 @@
     <title>Tau Tests</title>
     <link rel="stylesheet" type="text/css" href="../libs.tests/qunit.css">
     <link rel="stylesheet" type="text/css" href="../libs.tests/extension.qunit.css">
+    <script type="text/javascript">
+        window.jsErrors = [];
+        window.onerror = function(errorMessage) {
+            window.jsErrors[window.jsErrors.length] = errorMessage;
+        };
+    </script>
 
     <script src="../libs.tests/qunit.js" type="text/javascript"></script>
     <script src="../require.js" data-main="../../scripts/main.tests" type="text/javascript"></script>
-
 </head>
 <body>
 

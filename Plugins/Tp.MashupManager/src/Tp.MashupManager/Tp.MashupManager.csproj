@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.MashupManager</RootNamespace>
     <AssemblyName>Tp.MashupManager</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,6 +57,7 @@
       <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -71,6 +73,10 @@
     <Compile Include="CustomCommands\AddMashupCommand.cs" />
     <Compile Include="DeleteProfileCommandHandler.cs" />
     <Compile Include="IMashupInfoRepository.cs" />
+    <Compile Include="MashupStorage\IMashupLocalFolder.cs" />
+    <Compile Include="MashupStorage\IMashupScriptStorage.cs" />
+    <Compile Include="MashupStorage\MashupLocalFolder.cs" />
+    <Compile Include="MashupStorage\MashupScriptStorage.cs" />
     <Compile Include="SingleProfile.cs" />
     <Compile Include="MashupDto.cs" />
     <Compile Include="CustomCommands\UpdateMashupCommand.cs" />
@@ -124,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mashups\PluginUiLayout\PluginLayout.js" />
+    <Content Include="Mashups\ProfileEditor\CodeEditor.js" />
     <Content Include="Mashups\ProfileEditor\CommandGateway.js" />
     <Content Include="Mashups\ProfileEditor\EditorTemplate.js" />
     <Content Include="Mashups\ProfileEditor\MashupsManagerEditor.js" />

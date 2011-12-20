@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Transactions;
 using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.Config.ConfigurationSource;
@@ -16,6 +18,7 @@ using Tp.Integration.Messages.ServiceBus.Serialization;
 using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Messages.ServiceBus.Transport.Router;
 using Tp.Integration.Messages.ServiceBus.Transport.UiPriority;
+using Tp.Integration.Messages.ServiceBus.UnicastBus;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Integration.Plugin.Common.Properties;
@@ -31,7 +34,8 @@ namespace Tp.Integration.Plugin.Common
 
 			ObjectFactory.Initialize(x => x.Scan(y =>
 			                                     	{
-			                                     		y.AssembliesFromApplicationBaseDirectory();
+														var assembliesToSkip = AssembliesToSkip().Select(Path.GetFileNameWithoutExtension);
+			                                     		y.AssembliesFromApplicationBaseDirectory(assembly => !assembliesToSkip.Contains(assembly.GetName().Name));
 			                                     		y.LookForRegistries();
 			                                     	}));
 
@@ -42,19 +46,19 @@ namespace Tp.Integration.Plugin.Common
 
 			if (Transport == Transport.UiPriority)
 			{
-				config = config.MsmqTransport<MsmqUiPriorityTransport>().IsTransactional(IsTransactional)
+				config = config.MsmqTransport<MsmqUiPriorityTransport>().IsTransactional(IsTransactional).IsolationLevel(IsolationLevel.ReadUncommitted)
 					.PurgeOnStartup(false);
 			}
 			else if (Transport == Transport.Routable)
 			{
-				config = config.MsmqTransport<MsmqRoutableTransport>().IsTransactional(IsTransactional)
+				config = config.MsmqTransport<MsmqRoutableTransport>().IsTransactional(IsTransactional).IsolationLevel(IsolationLevel.ReadUncommitted)
 					.HostingMode(RoutableTransportMode)
 					.PurgeOnStartup(false);
 			}
 
 			var bus = config.Sagas()
 				.TpDatabaseSagaPersister()
-				.UnicastBus()
+				.TpUnicastBus()
 				//.ImpersonateSender(true)
 				.LoadMessageHandlers(GetHandlersOrder()).CreateBus();
 
@@ -78,7 +82,8 @@ namespace Tp.Integration.Plugin.Common
 
 		private static IEnumerable<Assembly> AssembliesToScan()
 		{
-			var result = AllAssemblies.Except("PluginUninstallUtil.exe");
+			var result = AllAssemblies.Except(AssembliesToSkip()[0]);
+			AssembliesToSkip().Skip(1).ForEach(x => result.And(x));
 			var excludedAssemblyNames = ObjectFactory.TryGetInstance<IExcludedAssemblyNamesSource>();
 			if (excludedAssemblyNames != null)
 			{
@@ -87,6 +92,11 @@ namespace Tp.Integration.Plugin.Common
 			}
 
 			return result.ToArray();
+		}
+
+		private static string[] AssembliesToSkip()
+		{
+			return new[] { "PluginUninstallUtil.exe", "Tp.LegacyProfileConversion.Common.dll" };
 		}
 
 		private static First<PluginGateway> GetHandlersOrder()

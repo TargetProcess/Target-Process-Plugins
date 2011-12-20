@@ -6,9 +6,9 @@
 using System;
 using System.Linq;
 using Tp.Integration.Common;
-using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
@@ -16,8 +16,8 @@ namespace Tp.Bugzilla.BugFieldConverters
 	{
 		private readonly IBugzillaService _bugzillaService;
 
-		public EntityStateConverter(IStorageRepository storageRepository, IBugzillaService bugzillaService)
-			: base(storageRepository)
+		public EntityStateConverter(IStorageRepository storageRepository, IBugzillaService bugzillaService, IActivityLogger logger)
+			: base(storageRepository, logger)
 		{
 			_bugzillaService = bugzillaService;
 		}
@@ -47,6 +47,11 @@ namespace Tp.Bugzilla.BugFieldConverters
 			get { return BugField.EntityStateID; }
 		}
 
+		protected override string BugFieldName
+		{
+			get { return "Entity State"; }
+		}
+
 		public string GetMappedBugzillaStatus(BugDTO bug)
 		{
 			var stateId = bug.EntityStateID.GetValueOrDefault();
@@ -54,6 +59,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 
 			if (mappedStates.Count() > 1)
 			{
+				_logger.WarnFormat("State mapping is ambiguous. Bugzilla state is not changed. Entity State: {0}", bug.EntityStateName);
 				return null;
 			}
 

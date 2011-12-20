@@ -4,6 +4,7 @@
 // 
 
 using System;
+using System.Threading;
 using StructureMap;
 using StructureMap.Pipeline;
 using Tp.Integration.Messages.Commands;
@@ -28,19 +29,10 @@ namespace Tp.SourceControl.Commands
 		{
 			var profile = args.DeserializeProfile();
 			var errors = new PluginProfileErrorCollection();
-			OnCheckConnection(errors, (TVcsPluginProfile) profile.Settings);
-			OnExecuted((TVcsPluginProfile) profile.Settings);
-			return errors.Serialize();
-		}
-
-		protected virtual void OnExecuted(TVcsPluginProfile profile) {}
-
-		protected virtual void OnCheckConnection(PluginProfileErrorCollection errors, TVcsPluginProfile settings)
-		{
 			try
 			{
-				var vcs = CreateVcs(settings);
-				CheckStartRevision(settings, vcs, errors);
+				OnCheckConnection(errors, (TVcsPluginProfile)profile.Settings);
+				
 			}
 			catch (StructureMapException e)
 			{
@@ -50,6 +42,17 @@ namespace Tp.SourceControl.Commands
 			{
 				ObjectFactory.GetInstance<ICheckConnectionErrorResolver>().HandleConnectionError(e, errors);
 			}
+
+			OnExecuted((TVcsPluginProfile) profile.Settings);
+			return errors.Serialize();
+		}
+
+		protected virtual void OnExecuted(TVcsPluginProfile profile) {}
+
+		protected virtual void OnCheckConnection(PluginProfileErrorCollection errors, TVcsPluginProfile settings)
+		{
+			var vcs = CreateVcs(settings);
+			CheckStartRevision(settings, vcs, errors);
 		}
 
 		protected virtual IVersionControlSystem CreateVcs(TVcsPluginProfile settings)

@@ -8,6 +8,7 @@ using System.Linq;
 using StructureMap;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.PluginLifecycle;
+using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Mashup;
@@ -22,12 +23,18 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 			_bus = ObjectFactory.GetInstance<ITpBus>();
 			PluginMetadata = ObjectFactory.GetInstance<IPluginMetadata>();
 			_accountCollection = ObjectFactory.GetInstance<IAccountCollection>();
+			_pluginQueueFactory = ObjectFactory.GetInstance<IPluginQueueFactory>();
+			_pluginSettings = ObjectFactory.GetInstance<IPluginSettings>();
+			_pluginIcon = ObjectFactory.GetInstance<PluginIcon>();
 		}
 
 		private readonly IPluginContext _context;
 		private readonly ITpBus _bus;
 		protected readonly IPluginMetadata PluginMetadata;
 		private readonly IAccountCollection _accountCollection;
+		private readonly IPluginQueueFactory _pluginQueueFactory;
+		private readonly IPluginSettings _pluginSettings;
+		private readonly PluginIcon _pluginIcon;
 
 		protected ITpBus Bus
 		{
@@ -54,14 +61,15 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 		private void SendPluginInfoMessage()
 		{
 			var attribute = PluginMetadata.PluginData;
+
 			Bus.Send(new PluginInfoMessage
 			          	{
 			          		Info = new PluginInfo(Context.PluginName)
 			          		       	{
 			          		       		Category = attribute.Category,
 			          		       		Description = attribute.Description,
-			          		       		PluginInputQueue = ObjectFactory.GetInstance<IPluginSettings>().PluginInputQueue,
-			          		       		PluginIconContent = ObjectFactory.GetInstance<PluginIcon>().GetIconContent()
+			          		       		PluginInputQueue = _pluginQueueFactory.Create(_pluginSettings.PluginInputQueue).IndependentAddressForQueue,
+			          		       		PluginIconContent = _pluginIcon.GetIconContent()
 			          		       	}
 			          	});
 		}

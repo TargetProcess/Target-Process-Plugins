@@ -10,6 +10,7 @@ using NBehave.Narrator.Framework;
 using NServiceBus.Saga;
 using StructureMap;
 using Tp.Bugzilla.Synchronizer;
+using Tp.Core;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.Ticker;
@@ -147,7 +148,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Given("bugzilla contains bug with id $bugId")]
 		public void CreateBug(int bugId)
 		{
-			Context.BugzillaBugs.Add(bugId, DateTime.Now);
+			Context.BugzillaBugs.Add(bugId, CurrentDate.Value);
 		}
 
 		[Given("bug $bugId has empty assignee")]

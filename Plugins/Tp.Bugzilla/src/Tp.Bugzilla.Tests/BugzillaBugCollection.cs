@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Tp.Bugzilla.Schemas;
+using Tp.Core;
 
 namespace Tp.Bugzilla.Tests
 {
@@ -32,12 +33,12 @@ namespace Tp.Bugzilla.Tests
 
 		public void Add(int bugId)
 		{
-			_bugs.Add(new bug {bug_id = bugId.ToString(), creation_ts = DateTime.Now.ToString("dd MMM yyyy HH':'mm")});
+			_bugs.Add(new bug {bug_id = bugId.ToString(), creation_ts = CurrentDate.Value.ToString("dd MMM yyyy HH':'mm")});
 		}
 
 		public void Add(int bugId, string name)
 		{
-			_bugs.Add(new bug { bug_id = bugId.ToString(), creation_ts = DateTime.Now.ToString("dd MMM yyyy HH':'mm"), short_desc = name});
+			_bugs.Add(new bug { bug_id = bugId.ToString(), creation_ts = CurrentDate.Value.ToString("dd MMM yyyy HH':'mm"), short_desc = name});
 		}
 
 		public void Add(bug bug)

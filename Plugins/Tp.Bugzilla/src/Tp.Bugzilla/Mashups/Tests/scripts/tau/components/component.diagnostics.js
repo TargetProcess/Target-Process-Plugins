@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/templates/diagnostics/ui.template.diagnostics","tau/components/extensions/diagnostics/extension.diagnostics.base"],function(a,b,c){return{create:function(d){var e={extensions:[c],template:b};return a.create(e,d)}}})

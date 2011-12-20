@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.SourceControl.Testing</RootNamespace>
     <AssemblyName>Tp.SourceControl.Testing</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +35,21 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\Libs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\Tp.Git\libs\NGit\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\Tp.Git\libs\NGit\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="NGit">
+      <HintPath>..\Tp.Git\libs\NGit\NGit.dll</HintPath>
+    </Reference>
+    <Reference Include="NSch">
+      <HintPath>..\Tp.Git\libs\NGit\NSch.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharpen">
+      <HintPath>..\Tp.Git\libs\NGit\Sharpen.dll</HintPath>
+    </Reference>
     <Reference Include="SharpSvn">
       <HintPath>..\..\Libs\svn64\SharpSvn.dll</HintPath>
     </Reference>
@@ -52,6 +68,8 @@
     <Compile Include="Repository\Git\GitTestRepository.cs" />
     <Compile Include="Repository\Git\GitTestRepositoryWithFileDeleted.cs" />
     <Compile Include="Repository\Git\GitTestRepositoryWithMergeCommit.cs" />
+    <Compile Include="Repository\IVcsCredentials.cs" />
+    <Compile Include="Repository\IVcsRepository.cs" />
     <Compile Include="Repository\Svn\SvnTestRepository.cs" />
     <Compile Include="VcsTestRepository.cs" />
   </ItemGroup>

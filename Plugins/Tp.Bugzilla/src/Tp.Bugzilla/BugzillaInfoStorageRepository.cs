@@ -6,7 +6,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tp.Bugzilla.ImportToTp;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 
@@ -41,10 +40,10 @@ namespace Tp.Bugzilla
 
 			return _profiles
 				.Select(profile => new
-				{
-					Bugs = profile.Get<BugzillaBugInfo>(storageNames),
-					BugzillaUrl = GetBugzillaUrlForProfile(profile)
-				})
+				                   	{
+				                   		Bugs = profile.Get<BugzillaBugInfo>(storageNames),
+				                   		BugzillaUrl = GetBugzillaUrlForProfile(profile)
+				                   	})
 				.SelectMany(x => x.Bugs.Select(bugInfo => SetBugUrl(bugInfo, x.BugzillaUrl)))
 				.ToList();
 		}
@@ -52,8 +51,8 @@ namespace Tp.Bugzilla
 		public IEnumerable<BugzillaBugInfo> GetBugzillaBugs(IEnumerable<int> tpBugs)
 		{
 			var storageNames = tpBugs
-				   .Select(x => new StorageName(x.ToString()))
-				   .ToArray();
+				.Select(x => new StorageName(x.ToString()))
+				.ToArray();
 
 			var bugzillaUrl = GetBugzillaUrlForProfile(_repository);
 
@@ -73,7 +72,7 @@ namespace Tp.Bugzilla
 
 		public void SaveBugsRelation(int? tpBugId, BugzillaBugInfo bugzillaBug)
 		{
-			_repository.Get<TargetProcessBugId>(bugzillaBug.Id).ReplaceWith(new TargetProcessBugId { Value = tpBugId.Value });
+			_repository.Get<TargetProcessBugId>(bugzillaBug.Id).ReplaceWith(new TargetProcessBugId {Value = tpBugId.Value});
 
 			SaveBugzillaBugInfo(tpBugId, bugzillaBug);
 		}

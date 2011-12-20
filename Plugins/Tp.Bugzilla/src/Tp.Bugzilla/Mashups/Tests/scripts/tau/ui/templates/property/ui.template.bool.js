@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"property-bool",markup:['<div><span class="property"><div class="ui-checkbox {{if value}}checked{{/if}}{{if !value}}unchecked{{/if}}">&nbsp;</div></span></div>'].join("")};return a.register(b)})

@@ -3,30 +3,49 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
 using StructureMap;
+using Tp.Integration.Messages.TargetProcessLifecycle;
+using Tp.Integration.Plugin.Common.Domain;
+using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager
 {
-	public class MashupsOnPluginStartSender : IWantCustomInitialization
+	public class MashupsOnPluginStartSender : IHandleMessages<TargetProcessStartedMessage>
 	{
-		public void Init()
+		private IEnumerable<IAccountReadonly> Accounts
 		{
-			var profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
+			get { return ObjectFactory.GetInstance<IAccountCollection>(); }
+		}
 
-			if (profile == null) return;
+		private IMashupScriptStorage MashupStorage
+		{
+			get { return ObjectFactory.GetInstance<IMashupScriptStorage>(); }
+		}
 
-			var mashupNames = profile.GetProfile<MashupManagerProfile>().MashupNames;
-			var bus = ObjectFactory.GetInstance<IBus>();
-
-			foreach (var mashupName in mashupNames)
+		public void Handle(TargetProcessStartedMessage message)
+		{
+			foreach (var account in Accounts)
 			{
-				var mashup = profile.Get<MashupDto>(mashupName).SingleOrDefault();
-
-				if (mashup != null)
+				if (!account.Profiles.Any())
 				{
-					bus.Send(mashup.CreatePluginMashupMessage());
+					continue;
+				}
+
+				var profile = account.Profiles.First();
+				var mashupNames = profile.GetProfile<MashupManagerProfile>().MashupNames;
+				var bus = ObjectFactory.GetInstance<IBus>();
+
+				foreach (var mashupName in mashupNames)
+				{
+					var mashup = MashupStorage.GetMashup(mashupName);
+
+					if (mashup != null)
+					{
+						bus.Send(mashup.CreatePluginMashupMessage(account.Name));
+					}
 				}
 			}
 		}

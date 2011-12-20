@@ -11,6 +11,7 @@ using StructureMap;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Bugzilla.Schemas;
 using Tp.Bugzilla.Tests.Mocks;
+using Tp.Core;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Testing.Common.NBehave;
@@ -121,15 +122,15 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
-					And bugzilla has timezone +3 UTC
+					And bugzilla has timezone +5 UTC
 					And bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
 
 					And synchronizing bugzilla bugs
-				When comment 'comment 1' for bug 'bug1' was created on '2010-10-10 13:13' by 'Lansie' in TargetProcess
+				When comment 'comment 1' for bug 'bug1' was created on '2010-10-10 13:13:00' by 'Lansie' in TargetProcess
 				Then bug 1 in bugzilla should have 1 comments
-					And bug 1 in bugzilla should have comment 'comment 1' created on '2010-10-10 15:13' by 'Lansie@mail.com'
+					And bug 1 in bugzilla should have comment 'comment 1' created on '2010-10-10 14:13:00' by 'Lansie@mail.com'
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
 							.And<CommentsFromBugzillaSyncSpecs>());

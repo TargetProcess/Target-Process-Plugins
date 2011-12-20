@@ -26,14 +26,14 @@ namespace Tp.TestRunImport.Tests
 			_dir = new DirectoryInfo(new Uri(string.Format(string.Format("{0}\\{1}", directoryName, FrameworkType))).AbsolutePath);
 		}
 
-		[SetUp]
+		[TestFixtureSetUp]
 		public void SetUp()
 		{
 			_ftpServer = new FtpIntegrationServer(_dir.FullName, 2121);
 			_webServer = new HttpIntegrationServer(_dir.FullName, 2123);
 		}
 
-		[TearDown]
+		[TestFixtureTearDown]
 		public void TearDown()
 		{
 			if (_ftpServer != null)

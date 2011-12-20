@@ -35,9 +35,9 @@ namespace Tp.Integration.Messages.TargetProcessLifecycle
 		{
 		}
 
-		public TargetProcessExceptionThrownMessage(Exception exception)
+		public TargetProcessExceptionThrownMessage(Exception exception, string exceptionContext = null)
 		{
-			ExceptionString = Convert(exception);
+			ExceptionString = Convert(exception) + exceptionContext;
 		}
 
 		public string ExceptionString { get; set; }

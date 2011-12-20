@@ -4,19 +4,21 @@
 // 
 
 using Tp.Integration.Common;
-using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
 	public abstract class GuessConverter<TEntity> : IBugConverter where TEntity : DataTransferObject
 	{
 		private readonly IStorageRepository _storageRepository;
+		protected readonly IActivityLogger _logger;
 
-		protected GuessConverter(IStorageRepository storageRepository)
+		protected GuessConverter(IStorageRepository storageRepository, IActivityLogger logger)
 		{
 			_storageRepository = storageRepository;
+			_logger = logger;
 		}
 
 		public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
@@ -34,6 +36,11 @@ namespace Tp.Bugzilla.BugFieldConverters
 			{
 				SetFieldFromStorage(value, convertedBug);
 			}
+
+			if (!convertedBug.ChangedFields.Contains(BugField))
+			{
+				_logger.ErrorFormat("{0} mapping failed. {1}; Value: {2}", BugFieldName, bugzillaBug.ToString(), value);
+			}
 		}
 
 		protected abstract TEntity GetFromStorage(string value);
@@ -45,6 +52,8 @@ namespace Tp.Bugzilla.BugFieldConverters
 		protected abstract MappingContainer Map { get; }
 
 		protected abstract BugField BugField { get; }
+
+		protected abstract string BugFieldName { get; }
 
 		protected BugzillaProfile Profile
 		{
@@ -63,6 +72,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 			{
 				SetValue(convertedBug, mappedValue.Id);
 				convertedBug.ChangedFields.Add(BugField);
+				_logger.InfoFormat("{0} mapped. Bug: {1}; Value: {2}", BugFieldName, convertedBug.BugDto.Name, value);
 			}
 		}
 
@@ -74,6 +84,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 			{
 				SetValue(convertedBug, state.ID.GetValueOrDefault());
 				convertedBug.ChangedFields.Add(BugField);
+				_logger.InfoFormat("{0} guessed. Bug: {1}; Value: {2}", BugFieldName, convertedBug.BugDto.Name, value);
 			}
 		}
 	}

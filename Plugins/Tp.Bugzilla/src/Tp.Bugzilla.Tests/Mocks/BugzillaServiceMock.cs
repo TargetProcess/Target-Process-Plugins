@@ -159,10 +159,7 @@ namespace Tp.Bugzilla.Tests.Mocks
 
 		public void SetTimeOffset(TimeSpan offset)
 		{
-			var date = DateTime.Now;
-			var currentZoneOffset = date - date.ToUniversalTime();
-
-			_timeOffset = offset + currentZoneOffset;
+			_timeOffset = offset;
 		}
 	}
 

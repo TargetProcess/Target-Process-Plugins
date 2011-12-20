@@ -51,14 +51,6 @@ namespace Tp.Plugin.Core.Attachments
 
 			if (message.LocalStoredAttachments.Count() == 0)
 			{
-				if (Data.MessageId.HasValue)
-				{
-					Log().InfoFormat("No attachments were added to message with id {0}", Data.MessageId);
-				}
-				else
-				{
-					Log().InfoFormat("No attachments were added to general with id {0}", Data.GeneralId);
-				}
 				SendSuccessfullMessage();
 			}
 		}

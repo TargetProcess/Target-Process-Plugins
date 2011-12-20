@@ -4,11 +4,11 @@
 // 
 
 using System;
-using System.Collections;
-using System.Configuration;
 using System.IO;
-using System.Reflection;
 using NGit.Storage.File;
+using StructureMap;
+using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Git.VersionControlSystem
 {
@@ -18,6 +18,9 @@ namespace Tp.Git.VersionControlSystem
 		public string Value { get; set; }
 		public string RepoUri { get; set; }
 
+		[NonSerialized]
+		private bool _wasMarkedAsDeleted;
+
 		public void Delete()
 		{
 			if (!Exists())
@@ -25,13 +28,29 @@ namespace Tp.Git.VersionControlSystem
 				return;
 			}
 
-			ShutdownGit(this);
-			DeleteDirectory();
+			try
+			{
+				ShutdownGit(this);
+			}
+			catch (Exception ex)
+			{
+				ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
+			}
+
+			try
+			{
+				DeleteDirectory();
+			}
+			catch (Exception ex)
+			{
+				_wasMarkedAsDeleted = true;
+				ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
+			}
 		}
 
 		public bool Exists()
 		{
-			return Directory.Exists(Value);
+			return Directory.Exists(Value) && !_wasMarkedAsDeleted;
 		}
 
 		private static void ShutdownGit(GitRepositoryFolder repositoryFolder)
@@ -48,31 +67,12 @@ namespace Tp.Git.VersionControlSystem
 
 		public static GitRepositoryFolder Create(string repoUri)
 		{
-			string gitRootFolderAbsolutePath = GitCloneRootFolder;
-			if (string.IsNullOrEmpty(GitCloneRootFolder))
-			{
-				gitRootFolderAbsolutePath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath);
-			}
-
-			return new GitRepositoryFolder {Value = Path.Combine(gitRootFolderAbsolutePath, Guid.NewGuid().ToString()), RepoUri = repoUri};
+			return new GitRepositoryFolder {Value = Path.Combine(GitCloneRootFolder, Guid.NewGuid().ToString()), RepoUri = repoUri};
 		}
 
 		protected static string GitCloneRootFolder
 		{
-			get
-			{
-				var customPluginConfig = ConfigurationSettings.GetConfig("customPluginSettings") as Hashtable;
-				if (customPluginConfig != null)
-				{
-					var repoRootFolder = customPluginConfig["GitRepoRootFolder"];
-					if (repoRootFolder != null)
-					{
-						return repoRootFolder.ToString();
-					}
-				}
-
-				return ".";
-			}
+			get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
 		}
 	}
 }

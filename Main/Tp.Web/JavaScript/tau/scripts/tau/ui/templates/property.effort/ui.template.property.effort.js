@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/property.effort/ui.template.property.effort.content"],function(a){var b={name:"ui.template.property.effort",markup:['<div class="tau-property">{{tmpl($item.data) "ui.template.property.effort.content"}}</div>'],dependencies:["ui.template.property.effort.content"]};return a.register(b)})

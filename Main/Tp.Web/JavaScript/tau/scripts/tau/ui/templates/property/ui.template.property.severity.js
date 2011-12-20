@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"property-severity",markup:["<div>",'   <span class="property  tau-list-severity-${kind}">','       <span class="property-text">${text}</span>',"   </span>","</div>"].join(""),dependencies:[]};return a.register(b)})

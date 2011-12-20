@@ -18,6 +18,7 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.TargetProcessLifecycle;
+using Tp.Integration.Plugin.Common;
 using Tp.Integration.Testing.Common;
 using Tp.Plugin.Core.Attachments;
 using Tp.Testing.Common.NBehave;
@@ -62,7 +63,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[TearDown]
 		public void TearDown()
 		{
-			Directory.Delete(ObjectFactory.GetInstance<IAttachmentFolderPath>().Value, true);
+			Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path, true);
 		}
 
 		[Test]
@@ -226,7 +227,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var part = GetCreatedAttachmentByName(fileName);
 
-			part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromUniversalTime(creationDate)));
+			part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)));
 
 			Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content));
 		}
@@ -259,7 +260,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("no attachments should present on disk")]
 		public void CheckThatThereIsNoAttachments()
 		{
-			Directory.GetFiles(ObjectFactory.GetInstance<IAttachmentFolderPath>().Value).Count().Should(Be.EqualTo(0));
+			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0));
 		}
 	}
 }

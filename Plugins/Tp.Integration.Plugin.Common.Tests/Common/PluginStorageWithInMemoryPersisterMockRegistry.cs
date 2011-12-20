@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using Tp.Integration.Messages;
+using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
@@ -15,6 +16,7 @@ using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
+using Tp.Integration.Plugin.Common.Tests.Common.ServiceBus;
 using Tp.Integration.Testing.Common.Persisters;
 using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
@@ -73,6 +75,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			For<ILogManager>().HybridHttpOrThreadLocalScoped().Use<TpLogManager>();
 			For<ILog4NetFileRepository>().HybridHttpOrThreadLocalScoped().Use<Log4NetFileRepository>();
 			For<IActivityLogger>().HybridHttpOrThreadLocalScoped().Use<PluginActivityLogger>();
+
+			For<IPluginQueueFactory>().HybridHttpOrThreadLocalScoped().Use<PluginQueueFactoryMock>();
 		}
 
 		protected abstract void SetupPersisters();

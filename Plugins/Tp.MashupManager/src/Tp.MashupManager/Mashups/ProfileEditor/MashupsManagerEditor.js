@@ -1,21 +1,17 @@
 ﻿tau.mashups
     .addDependency("MashupManager/EditorTemplate")
     .addDependency("MashupManager/ProfileRepository")
+    .addDependency("MashupManager/CodeEditor")
     .addDependency("tp/plugins/ErrorMessageContainer")
     .addDependency("tp/status")
-    .addDependency("tp/codemirror/codemirror")
-    .addDependency("tp/codemirror/mode/javascript/javascript")
     .addDependency("libs/jquery/jquery")
     .addDependency("libs/jquery/jquery.tmpl")
     .addDependency("libs/jquery/jquery.ui.confirmation")
-    .addCSS("../../tau/scripts/tp/codemirror/codemirror.css")
-    .addCSS("../../tau/scripts/tp/codemirror/theme/default.css")
-    .addModule("MashupManager/MashupManagerEditor", function (template, repository, errorMessageContainer, status) {
+
+    .addModule("MashupManager/MashupManagerEditor", function (template, repository, codeEditor, errorMessageContainer, status) {
         function managerEditor(config) {
             this._create(config);
-        }
-
-        ;
+        };
 
         managerEditor.prototype = {
             _create: function(config) {
@@ -27,6 +23,12 @@
                 this.errorContainer = new errorMessageContainer({
                     placeholder: this.placeholder,
                     generalErrorContainer: '#failedOperation' });
+
+                this.scriptEditor = new codeEditor({
+                    placeholder: this.placeholder,
+                    textAreaSelector: '#script',
+                    expandButtonSelector: '#expandScript'
+                });
             },
 
             initialize: function() {
@@ -110,12 +112,7 @@
             },
 
             _initMashupAreaControls: function() {
-                this.scriptEditor = CodeMirror.fromTextArea(this.placeholder.find('#script')[0], {
-                    lineNumbers: true,
-                    matchBrackets: true
-                });
-
-                this.placeholder.find('div.CodeMirror-scroll').addClass('mashup-code-editor');
+                this.scriptEditor.initialize();
 
                 this.hiddenMashupName = this.placeholder.find('#hiddenMashupName');
                 this.btnSave = this.placeholder.find('#save');
@@ -141,7 +138,7 @@
             },
 
             _onMashupEditClick: function(a) {
-                if ($(a.target).is("button")) {
+                if (!$(a.target).is("a")) {
                     return;
                 }
 

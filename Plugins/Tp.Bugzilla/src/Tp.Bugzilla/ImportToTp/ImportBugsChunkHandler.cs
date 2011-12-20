@@ -9,7 +9,6 @@ using NServiceBus;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.ImportToTp
@@ -34,8 +33,10 @@ namespace Tp.Bugzilla.ImportToTp
 		{
 			bugCollection bugs;
 
+			_logger.Info("Retrieving changed bugs");
 			if (TryGetChangedBugsChunk(message.BugzillaBugsIds, out bugs))
 			{
+				_logger.InfoFormat("Bugs retrieved. Bugzilla Bug IDs: {0}", string.Join(", ", message.BugzillaBugsIds.Select(x => x.ToString()).ToArray()));
 				CreateBugsInTargetProcess(bugs);
 			}
 			else
@@ -58,7 +59,7 @@ namespace Tp.Bugzilla.ImportToTp
 			}
 			catch (Exception e)
 			{
-				_logger.ErrorFormat("Retrieving changed bugs (with ids: {0}) from Bugzilla failed for the reason : '{1}'",
+				_logger.ErrorFormat("Retrieving changed bugs (with ids: {0}) failed. Bugzilla IDs: {1}",
 				                    string.Join(",", ids.Select(i => i.ToString()).ToArray()), e.Message);
 				bugs = new bugCollection();
 				return false;

@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 namespace Tp.SourceControl.VersionControlSystem
 {
 	[Serializable]
+	[DataContract]
 	public class RevisionRange
 	{
 		public RevisionRange() {}

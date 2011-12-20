@@ -72,7 +72,7 @@ namespace Tp.SourceControl.Workflow.Workflow
 				return userDto.ConvertToUserLookup();
 			}
 
-			_logger().Warn(string.Format("Can't map svn user '{0}' - {1}.", revision.Author, string.Format("no mapping")));
+			_logger().Warn(string.Format("Can't map vcs user '{0}' - {1}.", revision.Author, string.Format("no mapping")));
 
 
 			return DefaultUser;

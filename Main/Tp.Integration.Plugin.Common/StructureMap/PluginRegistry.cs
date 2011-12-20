@@ -4,6 +4,7 @@
 // 
 
 using Microsoft.Web.Services3;
+using NServiceBus;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using Tp.AssignableServiceProxy;
@@ -21,6 +22,7 @@ using Tp.FileServiceProxy;
 using Tp.GeneralServiceProxy;
 using Tp.GeneralUserServiceProxy;
 using Tp.ImpedimentServiceProxy;
+using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
@@ -56,6 +58,7 @@ using Tp.TestPlanServiceProxy;
 using Tp.TimeServiceProxy;
 using Tp.UserServiceProxy;
 using Tp.UserStoryServiceProxy;
+using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
 namespace Tp.Integration.Plugin.Common.StructureMap
 {
@@ -64,6 +67,8 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 		public PluginRegistry()
 		{
 			For<IPluginSettings>().Singleton().Use<PluginSettings>();
+			For<IPluginQueueFactory>().Singleton().Use<PluginQueueFactory>();
+			For<PluginDataFolder>().Singleton().Use<PluginDataFolder>();
 			For<ServiceManager>().Singleton().Use<ServiceManager>();
 			ConfigureWebServices();
 
@@ -89,7 +94,7 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<IAccountPersister>().Singleton().Use(GetAccountPersisterInstance);
 			For<IProfilePersister>().Singleton().Use(GetProfilePersisterInstance);
 			For<IProfileStoragePersister>().Singleton().Use(GetProfileStoragePersisterInstance);
-			For<ITpBus>().Singleton().Use<TpBus>();
+			For<ITpBus>().Singleton().Use(CreateTpBus);
 			Forward<ITpBus, ICommandBus>();
 			Forward<ITpBus, ILocalBus>();
 			FillAllPropertiesOfType<ITpBus>();
@@ -108,6 +113,11 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<IActivityLogPathProvider>().Singleton().Use<ActivityLogPathProvider>();
 			For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
 			For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
+		}
+
+		protected virtual ITpBus CreateTpBus()
+		{
+			return ObjectFactory.GetInstance<TpBus>();
 		}
 
 		protected virtual IActivityLogger CreateActivityLogger()

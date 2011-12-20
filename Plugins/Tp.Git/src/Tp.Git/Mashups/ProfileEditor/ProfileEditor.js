@@ -33,10 +33,11 @@ tau.mashups
 					'				<h3 class="h3">' +
 					'					Repository Settings</h3>' +
 					'				<p class="label">' +
-					'					Enter a full path to the repository&nbsp;<span class="error" name="UriErrorLabel"></span></p>' +
+					'					Enter a full path to the repository&nbsp;<a id="uriExamplesLink" class="small" href="javascript:void(0);">Examples</a>' +
+                    '               <span class="error" name="UriErrorLabel"></span></p>' +
+                    '               <div id="uriExamplesContent" style="display:none" class="small pt-10 pb-10"><p class="label pb-5">URL examples</p><p class="rules-actions">git://github.com/Company/Project.git</p><p class="rules-actions">https://github.com/Company/Project.git</p><p class="rules-actions">file:///c:/Repository</p><p class="rules-actions">//keeper/trunk</p></div><p/> ' +
 					'				<input type="text" class="input" name="Uri" id="uri" value="${Settings.Uri}" style="width: 100%;" /><br />' +
 					'				<p class="label">' +
-					'					<span class="small">(Ex: git://github.com/MyCompany/GreatProject.git)</span></p>' +
 					'				<p class="label pt-10">' +
 					'					Login&nbsp;<span class="error" name="LoginErrorLabel"></span></p>' +
 					'				<input type="text" class="input" id="login" name="Login" value="${Settings.Login}" style="width: 275px;" />' +
@@ -45,7 +46,7 @@ tau.mashups
 					'				<input type="password" class="input" id="password" name="Password" value="${Settings.Password}" style="width: 275px;" />' +
 					'				<p class="label pt-20">' +
 					'					Export all revisions started from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
-					'						style="width: 97px;" />&nbsp;&nbsp;revision&nbsp;<span class="error" name="StartRevisionErrorLabel"></span></p>' +
+					'						style="width: 97px;" /><span class="error" name="StartRevisionErrorLabel"></span></p>' +
 					'			</div>' +
 					'			<div class="check-block">' +
 					'				<p class="message-error pb-10" style="display: none;">' +
@@ -112,6 +113,10 @@ tau.mashups
 	            this.preloader = rendered.find('span.preloader');
 
 	            rendered.appendTo(this.placeHolder);
+
+                rendered.find('#uriExamplesLink').click(function () {
+                    $('#uriExamplesContent').animate({ opacity: 'toggle', height: 'toggle' }, 'slow');
+                });
 
 	            this._disableNameIfNecessary();
 

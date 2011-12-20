@@ -7,9 +7,11 @@ using System;
 using System.Linq;
 using NServiceBus;
 using NServiceBus.Saga;
+using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Queries;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Bugzilla.Synchronizer
 {
@@ -35,6 +37,8 @@ namespace Tp.Bugzilla.Synchronizer
 
 		protected override void OnStartInitialization()
 		{
+			ObjectFactory.GetInstance<IActivityLogger>().Info("Initializing profile");
+
 			Data.AllEntityStatesCount = int.MinValue;
 			Data.AllSeveritiesCount = int.MinValue;
 			Data.AllPrioritiesCount = int.MinValue;

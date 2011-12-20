@@ -3,9 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using StructureMap;
+using NGit.Transport;
 using Tp.Git.VersionControlSystem;
-using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
@@ -21,11 +20,21 @@ namespace Tp.Git
 			settings.ValidateStartRevision(errors);
 		}
 
-		protected override IVersionControlSystem CreateVcs(GitPluginProfile settings)
+		protected override void OnCheckConnection(PluginProfileErrorCollection errors, GitPluginProfile settings)
 		{
 			_folder = GitRepositoryFolder.Create(settings.Uri);
-			return new GitVersionControlSystem(settings, _folder, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
-			                                   ObjectFactory.GetInstance<IActivityLogger>(), new CheckConnectionProgressMonitor());
+			var nativeGit = NGit.Api.Git.Init().SetDirectory(_folder.Value).Call();
+			var transport = Transport.Open(nativeGit.GetRepository(), settings.Uri);
+			try
+			{
+				transport.SetCredentialsProvider(new UsernamePasswordCredentialsProvider(settings.Login, settings.Password));
+				transport.OpenFetch();
+			}
+			catch
+			{
+				transport.Close();
+				throw;
+			}
 		}
 
 		protected override void OnExecuted(GitPluginProfile profile)

@@ -1,0 +1,1 @@
+define(["tau/components/extensions/user/extension.user.editable","tau/models/assignment/model.property.owner.editable","tau/models/userList/extension.model.owner.Excluder"],function(a,b,c){return a.extend({category:"edit",extendEditorConfig:function(a){a.UserExcluder=c},getExtensions:function(){return[b]}})})

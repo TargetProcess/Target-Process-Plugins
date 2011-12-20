@@ -74,8 +74,14 @@ namespace Tp.Integration.Plugin.Common.Domain
 
 		public class ExpressionSafeNull<T1> : Expression
 		{
-			public ExpressionSafeNull() : base(ExpressionType.Call, typeof (T1))
+			public override ExpressionType NodeType
 			{
+				get { return ExpressionType.Call; }
+			}
+
+			public override Type Type
+			{
+				get { return typeof (T1); }
 			}
 		}
 

@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Integration.Plugin.Common.Tests</RootNamespace>
     <AssemblyName>Tp.Integration.Plugin.Common.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -87,9 +88,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Messaging" />
-    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\Microsoft\System.Reactive.dll</HintPath>
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -109,7 +109,6 @@
     <Compile Include="Activity\ActivityLoggingContext.cs" />
     <Compile Include="Activity\ActivityLoggingPluginLifecycleTests.cs" />
     <Compile Include="Activity\ActivityTestBase.cs" />
-    <Compile Include="Activity\FakeActivityLogger.cs" />
     <Compile Include="Activity\Log4NetFileRepositoryMock.cs" />
     <Compile Include="Activity\SampleSagaMessage.cs" />
     <Compile Include="Activity\ShouldLogUnhandledExceptions.cs" />
@@ -152,8 +151,9 @@
     <Compile Include="NserviceBusMockRegistry.cs" />
     <Compile Include="Router\MessageConsumerTest.cs" />
     <Compile Include="Router\MessageRouterTest.cs" />
-    <Compile Include="Router\Model\AssertObserver.cs" />
-    <Compile Include="Router\Model\Generator.cs" />
+    <Compile Include="Router\Model\AccumulatingObserver.cs" />
+    <Compile Include="Router\Model\MessageGenerator.cs" />
+    <Compile Include="Router\Model\MessageQueue.cs" />
     <Compile Include="Router\Model\TestMessage.cs" />
     <Compile Include="Router\Model\TestMessageProducer.cs" />
     <Compile Include="Router\Model\TestMessageRouter.cs" />
@@ -169,6 +169,7 @@
       <Link>languages.yml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="TpPublic.snk" />
   </ItemGroup>
   <ItemGroup>

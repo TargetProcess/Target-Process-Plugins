@@ -1,25 +1,23 @@
-using System.Reactive.Subjects;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 
 namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 {
 	class TestMessageProducer : IMessageProducer<TestMessage>
 	{
-		private readonly ISubject<TestMessage> _subject;
-
-		public TestMessageProducer(ISubject<TestMessage> subject)
+		private readonly MessageQueue<TestMessage> _messageQueue;
+		public TestMessageProducer(MessageQueue<TestMessage> messageQueue)
 		{
-			_subject = subject;
+			_messageQueue = messageQueue;
 		}
 
 		public void Produce(TestMessage message)
 		{
-			_subject.OnNext(message);
+			_messageQueue.Enqueue(message);
 		}
 
 		public string Name
 		{
-			get { return string.Empty; }
+			get { return GetType().Name; }
 		}
 
 		public void Dispose()

@@ -58,7 +58,7 @@ namespace Tp.Git.VersionControlSystem
 			return new GitRevisionId(revisionId);
 		}
 
-		public static implicit operator GitRevisionId(int commitTime)
+		public static implicit operator GitRevisionId(long commitTime)
 		{
 			return new GitRevisionId(new RevisionId {Value = commitTime.ToString()});
 		}
@@ -85,7 +85,7 @@ namespace Tp.Git.VersionControlSystem
 
 		public override string ToString()
 		{
-			return Value.ToString();
+			return string.Format("RevisionId: {0}, Date: {1}", Value.GetTime(),  Value) ;
 		}
 	}
 

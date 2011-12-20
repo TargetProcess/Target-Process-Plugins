@@ -59,7 +59,6 @@ tau.mashups
                 var profile = this.view.getProfile();
 
                 profile.Settings.UserMapping = this.userMappingEditor.getUserMappings();
-
                 profile.Settings.StatesMapping = this.mappingController.getStatesMapping();
                 profile.Settings.SeveritiesMapping = this.mappingController.getSeveritiesMapping();
                 profile.Settings.PrioritiesMapping = this.mappingController.getPrioritiesMapping();

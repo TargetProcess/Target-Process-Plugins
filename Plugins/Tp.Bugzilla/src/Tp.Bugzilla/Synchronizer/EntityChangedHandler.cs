@@ -4,7 +4,6 @@
 // 
 
 using Tp.Integration.Common;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer

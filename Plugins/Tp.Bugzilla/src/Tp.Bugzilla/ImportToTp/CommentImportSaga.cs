@@ -16,6 +16,7 @@ using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.TargetProcessLifecycle;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Bugzilla.ImportToTp
 {
@@ -25,6 +26,17 @@ namespace Tp.Bugzilla.ImportToTp
 	                                 IHandleMessages<CommentCreatedMessage>,
 	                                 IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
+		private readonly IActivityLogger _logger;
+
+		public CommentImportSaga()
+		{
+		}
+
+		public CommentImportSaga(IActivityLogger logger)
+		{
+			_logger = logger;
+		}
+
 		public override void ConfigureHowToFindSaga()
 		{
 			ConfigureMapping<CommentCreatedMessage>(saga => saga.Id, message => message.SagaId);
@@ -43,7 +55,13 @@ namespace Tp.Bugzilla.ImportToTp
 			var newComments =
 				GetComments(message.BugzillaBug).Cast<long_desc>()
 					.Where(comment => !CommentExists(message, comment))
-					.Reverse();
+					.Reverse()
+					.ToList();
+
+			if (newComments.Any())
+			{
+				_logger.InfoFormat("Importing {1} comment(s) for bug. {0}", message.BugzillaBug.ToString(), newComments.Count);
+			}
 
 			CreateComments(newComments, message.TpBugId);
 		}
@@ -51,7 +69,7 @@ namespace Tp.Bugzilla.ImportToTp
 		private bool CommentExists(ExistingBugImportedToTargetProcessMessage message, long_desc comment)
 		{
 			return StorageRepository().Get<CommentDTO>(message.TpBugId.ToString())
-				.Where(c => c.CreateDate == CreateDateConverter.ParseFromUniversalTime(comment.bug_when))
+				.Where(c => c.CreateDate.Value.ToUniversalTime() == CreateDateConverter.ParseToUniversalTime(comment.bug_when))
 				.Any();
 		}
 
@@ -86,7 +104,7 @@ namespace Tp.Bugzilla.ImportToTp
 			              	{
 			              		Description = DescriptionConverter.FormatDescription(bugzillaComment.thetext),
 			              		GeneralID = tpBugId,
-			              		CreateDate = CreateDateConverter.ParseFromUniversalTime(bugzillaComment.bug_when),
+			              		CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(bugzillaComment.bug_when),
 								OwnerID = userId
 			              	};
 
@@ -111,6 +129,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
+			_logger.Error("Comment import failed", new Exception(message.ExceptionString));
 			MarkAsComplete();
 		}
 	}

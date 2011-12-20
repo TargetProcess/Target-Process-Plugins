@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Integration.Testing.Common</RootNamespace>
     <AssemblyName>Tp.Integration.Testing.Common</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +68,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Tp.Core">
@@ -77,6 +79,7 @@
     <Compile Include="CloneExtensions.cs" />
     <Compile Include="CommandExpectationBase.cs" />
     <Compile Include="EntityId.cs" />
+    <Compile Include="FakeActivityLogger.cs" />
     <Compile Include="IOnMessageHandler.cs" />
     <Compile Include="LogMock.cs" />
     <Compile Include="MessageQueue.cs" />

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"property-date",markup:'<div><div class="property"><div class="property-text">${text}</div></div>'};return a.register(b)})

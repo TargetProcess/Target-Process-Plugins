@@ -9,6 +9,7 @@ using Rhino.Mocks;
 using StructureMap.Configuration.DSL;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.ServiceBus;
+using Tp.Integration.Messages.ServiceBus.UnicastBus;
 
 namespace Tp.Integration.Plugin.Common.Tests
 {
@@ -16,12 +17,13 @@ namespace Tp.Integration.Plugin.Common.Tests
 	{
 		public NServiceBusMockRegistry()
 		{
-			For<IBus>().HybridHttpOrThreadLocalScoped().Use(() =>
+			For<IBusExtended>().HybridHttpOrThreadLocalScoped().Use(() =>
 			                                                	{
-			                                                		var bus = MockRepository.GenerateStub<IBus>();
+																	var bus = MockRepository.GenerateStub<IBusExtended>();
 			                                                		Setup(bus);
 			                                                		return bus;
 			                                                	});
+			Forward<IBusExtended, IBus>();
 		}
 
 		public static void Setup(IBus bus)

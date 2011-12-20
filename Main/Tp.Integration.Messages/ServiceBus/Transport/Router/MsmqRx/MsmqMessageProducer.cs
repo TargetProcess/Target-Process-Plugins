@@ -1,3 +1,4 @@
+using System;
 using System.Messaging;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
@@ -8,10 +9,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 	{
 		private readonly string _name;
 		private readonly MessageQueue _queue;
-		private readonly MessageQueueTransactionType _transactionType;
+		private readonly Func<MessageQueueTransactionType> _transactionType;
 		private readonly ILoggerContextSensitive _log;
 
-		public MsmqMessageProducer(string queueName, MessageQueueTransactionType transactionType, ILoggerContextSensitive log)
+		public MsmqMessageProducer(string queueName, Func<MessageQueueTransactionType> transactionType, ILoggerContextSensitive log)
 		{
 			_name = queueName + "~producer";
 			_queue = MessageQueueFactory.GetOrCreateMessageQueue(queueName);
@@ -21,7 +22,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 
 		public void Produce(MessageEx message)
 		{
-			_queue.Send(message.Message, _transactionType);
+			_queue.Send(message.Message, _transactionType());
 			_log.Debug(LoggerContext.New(_name), "msg was routed to child queue.");
 		}
 

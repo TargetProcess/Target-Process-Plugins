@@ -31,10 +31,11 @@ namespace Tp.SourceControl.Workflow.Workflow
 		public void Handle(NewRevisionRangeDetectedLocalMessage message)
 		{
 			var revisions = _versionControlSystem.GetRevisions(message.Range);
-
 			revisions = revisions.Where(ContainsEntityId).ToArray();
+
 			SendLocal(revisions);
 		}
+
 		private bool ContainsEntityId(RevisionInfo revisionInfo)
 		{
 			return !_parser.ParseAssignToEntityAction(revisionInfo).Empty();
@@ -42,7 +43,7 @@ namespace Tp.SourceControl.Workflow.Workflow
 
 		private void SendLocal(IEnumerable<RevisionInfo> revisions)
 		{
-			var messages = revisions.Select(x => new NewRevisionDetectedLocalMessage { Revision = x });
+			var messages = revisions.Select(x => new NewRevisionDetectedLocalMessage {Revision = x});
 			messages.ForEach(x => _bus.SendLocal(x));
 		}
 	}

@@ -6,6 +6,7 @@
 using StructureMap;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.StructureMap;
+using Tp.LegacyProfileConvertsion.Common.StructureMap;
 
 namespace Tp.LegacyProfileConvertsion.Common
 {
@@ -18,7 +19,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 
 			ObjectFactory.Configure(x =>
 			                         {
-			                         	x.AddRegistry<PluginRegistry>();
+																 x.AddRegistry<LegacyProfileConversionRegistry>();
 			                         	x.For<IConvertorArgs>().Use(options);
 			                         });
 

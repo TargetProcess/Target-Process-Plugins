@@ -99,12 +99,12 @@ namespace Tp.Bugzilla.Tests.Integration
 		{
 			Context.CreateDefaultRolesIfNecessary();
 			Context.AddProfileWithDefaultRolesMapping(1, new BugzillaProfile
-								{
-									Url = "http://new-bugzilla/bugzilla363",
-									Login = "bugzilla@targetprocess.com",
-									Password = "bugzillaadmin",
-									Queries = "New",
-																Project = 1
+			                                             	{
+			                                             		Url = "http://new-bugzilla/bugzilla363",
+			                                             		Login = "bugzilla@targetprocess.com",
+			                                             		Password = "bugzillaadmin",
+			                                             		Queries = "New",
+			                                             		Project = 1
 			                                             	});
 		}
 
@@ -112,15 +112,17 @@ namespace Tp.Bugzilla.Tests.Integration
 		public void ChangeAssignmentInBugzilla(int bugId, string userEmail)
 		{
 			_bugzillaResponse =
-				new BugzillaUrl(Profile.GetProfile<BugzillaProfile>()).ExecuteOnBugzilla(new BugzillaAssigneeAction(bugId.ToString(), userEmail));
+				new BugzillaUrl(Profile.GetProfile<BugzillaProfile>()).ExecuteOnBugzilla(new BugzillaAssigneeAction(
+				                                                                         	bugId.ToString(), userEmail));
 		}
 
 		[When("create comment '$comment' for bug bug $bugId by '$ownerEmail' for '$createDate'")]
 		public void CreateComment(string comment, int bugId, string ownerEmail, string createDate)
 		{
 			_bugzillaResponse =
-				new BugzillaUrl(Profile.GetProfile<BugzillaProfile>()).ExecuteOnBugzilla(new BugzillaCommentAction(bugId.ToString(), comment, ownerEmail,
-				                                                                              DateTime.Parse(createDate)));
+				new BugzillaUrl(Profile.GetProfile<BugzillaProfile>()).ExecuteOnBugzilla(new BugzillaCommentAction(
+				                                                                         	bugId.ToString(), comment, ownerEmail,
+				                                                                         	DateTime.Parse(createDate)));
 		}
 
 		[Then("bugzilla should return successful message")]

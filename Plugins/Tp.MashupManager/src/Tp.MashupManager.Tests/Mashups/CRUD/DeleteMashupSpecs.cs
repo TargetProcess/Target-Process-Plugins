@@ -33,7 +33,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 					And profile mashups are: mashup1, mashup2
 				When handle DeleteMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":"""", ""Script"":""""}'
 				Then mashup 'mashup1' should be cleared in profile
-					And mashup 'mashup1' with plugin name 'Account1' should be cleared in TP
+					And mashup 'Account1 mashup1' should be cleared in TP
 					And profile should have following mashups: mashup2
 			".Execute();
 		}

@@ -5,6 +5,7 @@
 
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
+using Tp.Integration.Messages.TargetProcessLifecycle;
 using Tp.Testing.Common.NBehave;
 
 namespace Tp.MashupManager.Tests.Mashups
@@ -18,7 +19,7 @@ namespace Tp.MashupManager.Tests.Mashups
 			@"
 				Given profile created
 					And profile mashups are: mashup1, mashup2
-				When plugin starts
+				When TargetProcess starts
 				Then 2 mashups should be sent to TP
 					And default mashup 'mashup1' should be sent to TP
 					And default mashup 'mashup2' should be sent to TP
@@ -31,16 +32,16 @@ namespace Tp.MashupManager.Tests.Mashups
 		{
 			@"
 				Given no profiles created
-				When plugin starts
+				When TargetProcess starts
 				Then 0 mashups should be sent to TP
 			"
 				.Execute();
 		}
 
-		[When("plugin starts")]
+		[When("TargetProcess starts")]
 		public void ProfileStart()
 		{
-			new MashupsOnPluginStartSender().Init();
+			new MashupsOnPluginStartSender().Handle(new TargetProcessStartedMessage());
 		}
 	}
 }

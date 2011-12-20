@@ -60,14 +60,6 @@ namespace Tp.LegacyProfileConvertsion.Common
 		private IAccount GetAccount()
 		{
 			return _accountCollection.GetOrCreate(_args.AccountName);
-			//var accounts = _accountCollection.GetAll().ToDictionary(acc => acc.Name);
-			//IAccount account;
-			//var accountName = new AccountName(_args.AccountName);
-			//if (accounts.TryGetValue(accountName, out account))
-			//{
-			//    return account;
-			//}
-			//return _accountCollection.Add(accountName);
 		}
 
 		protected abstract void OnProfileMigrated(IStorageRepository storageRepository);
@@ -77,14 +69,14 @@ namespace Tp.LegacyProfileConvertsion.Common
 		protected TpUser GetUserBy(string fieldValue, Func<TpUser, string> getUserFieldValueToCompare)
 		{
 			return _context.TpUsers.ToArray().FirstOrDefault(x =>
-			                                                 	{
-			                                                 		var fieldValueToCompare = getUserFieldValueToCompare(x) ??
-			                                                 		                          string.Empty;
+			                                                 {
+			                                                 	var fieldValueToCompare = getUserFieldValueToCompare(x) ??
+			                                                 	                          string.Empty;
 
-			                                                 		return fieldValueToCompare.ToLower() == fieldValue.ToLower() &&
-			                                                 		       x.DeleteDate == null &&
-			                                                 		       IsUserTypeCorrect(x);
-			                                                 	});
+			                                                 	return fieldValueToCompare.ToLower() == fieldValue.ToLower() &&
+			                                                 	       x.DeleteDate == null &&
+			                                                 	       IsUserTypeCorrect(x);
+			                                                 });
 		}
 
 		protected virtual bool IsUserTypeCorrect(TpUser user)

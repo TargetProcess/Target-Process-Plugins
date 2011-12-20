@@ -1,1 +1,1 @@
-define(["order!libs/underscore"],function(){return _.noConflict()})
+define(["libs/underscore"],function(a){return a})

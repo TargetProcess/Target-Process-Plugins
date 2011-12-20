@@ -79,16 +79,6 @@ namespace Tp.Integration.Plugin.Common.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=TargetProcess.Plugins;Integrated Security=True")]
-        public string TargetProcess_PluginsConnectionString {
-            get {
-                return ((string)(this["TargetProcess_PluginsConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsTransactional {
             get {
@@ -107,10 +97,29 @@ namespace Tp.Integration.Plugin.Common.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("UiPriority")]
+		[global::System.Configuration.DefaultSettingValueAttribute("UiPriority")]
         public string Transport {
             get {
                 return ((string)(this["Transport"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PluginData")]
+        public string PluginDataFolder {
+            get {
+                return ((string)(this["PluginDataFolder"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=TargetProcess.Plugins;Integrated Security=True")]
+        public string TargetProcess_PluginsConnectionString {
+            get {
+                return ((string)(this["TargetProcess_PluginsConnectionString"]));
             }
         }
     }

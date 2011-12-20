@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Integration.Messages</RootNamespace>
     <AssemblyName>Tp.Integration.Messages</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,13 +65,13 @@
     <Reference Include="NServiceBus.Core">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
-    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\Microsoft\System.Reactive.dll</HintPath>
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
@@ -323,6 +324,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationAttribute.cs" />
     <Compile Include="RelationNameAttribute.cs" />
+    <Compile Include="SerializationPatches\IPatch.cs" />
+    <Compile Include="SerializationPatches\IPatchCollection.cs" />
     <Compile Include="ServiceBus\BusExtensions.cs" />
     <Compile Include="ServiceBus\Serialization\AdvancedXmlSerializer.cs" />
     <Compile Include="ServiceBus\Serialization\BinaryContainer.cs" />
@@ -330,6 +333,7 @@
     <Compile Include="ServiceBus\Serialization\IXmlSerializationTag.cs" />
     <Compile Include="ServiceBus\Serialization\XmlDeserializer.cs" />
     <Compile Include="ServiceBus\Serialization\XmlSerializationHelpers.cs" />
+    <Compile Include="SerializationPatches\SerializationPatcher.cs" />
     <Compile Include="ServiceBus\Serialization\XmlSerializationTag.cs" />
     <Compile Include="ServiceBus\Serialization\XmlSerializer.cs" />
     <Compile Include="ServiceBus\Transport\ConfigMsmqTransport.cs" />
@@ -363,6 +367,10 @@
     <Compile Include="ServiceBus\Transport\Router\Utils\StopwatchObserver.cs" />
     <Compile Include="ServiceBus\Transport\Transport.cs" />
     <Compile Include="ServiceBus\Transport\UiPriority\MsmqUiPriorityTransport.cs" />
+    <Compile Include="ServiceBus\UnicastBus\ConfigTpUnicastBus.cs" />
+    <Compile Include="ServiceBus\UnicastBus\ConfigureTpUnicastBus.cs" />
+    <Compile Include="ServiceBus\UnicastBus\IBusExtended.cs" />
+    <Compile Include="ServiceBus\UnicastBus\TpUnicastBus.cs" />
     <Compile Include="TargetProcessLifecycle\ITargetProcessLifecycleMessage.cs" />
     <Compile Include="TargetProcessLifecycle\TargetProcessExceptionThrownMessage.cs" />
     <Compile Include="TargetProcessLifecycle\TargetProcessStartedMessage.cs" />
@@ -372,6 +380,7 @@
     <Compile Include="Ticker\TickMessage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="TpPublic.snk" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,6 @@ using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.ImportToTp
@@ -35,6 +34,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 		public void Handle(TickMessage message)
 		{
+			_logger.Info("Checking changes in Bugzilla");
 			ProcessFailedChunks();
 
 			ProcessNewlyChanges(message.LastSyncDate);
@@ -58,6 +58,11 @@ namespace Tp.Bugzilla.ImportToTp
 
 			if (TryGetChangedIds(dateValue, out changedIds))
 			{
+				if (changedIds.Length > 0)
+				{
+					_logger.InfoFormat("{0} changed bugs found", changedIds.Length);
+				}
+
 				ProcessChangedBugIds(changedIds);
 			}
 			else
@@ -86,6 +91,8 @@ namespace Tp.Bugzilla.ImportToTp
 		private void ProcessFailedChunks()
 		{
 			if (!FailedChunks.Any()) return;
+
+			_logger.Info("Processing failed bugs");
 
 			foreach (var failedChunk in FailedChunks)
 			{
@@ -121,8 +128,7 @@ namespace Tp.Bugzilla.ImportToTp
 			}
 			catch (Exception e)
 			{
-				_logger.ErrorFormat("Retrieving changed bug ids from Bugzilla failed for the reason : '{0}'",
-				                    e.Message);
+				_logger.ErrorFormat("Retrieving changed bugs failed", e);
 				ids = new int[] {};
 
 				return false;

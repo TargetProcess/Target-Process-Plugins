@@ -20,6 +20,7 @@ using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx;
+using Tp.Integration.Messages.ServiceBus.UnicastBus;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 {
@@ -36,7 +37,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 
 		public string UICommandInputQueue
 		{
-			get { return UnicastBus.GetUiQueueName(InputQueue); }
+			get { return TpUnicastBus.GetUiQueueName(InputQueue); }
 		}
 
 		/// <summary>
@@ -63,6 +64,14 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		public bool PurgeOnStartup { get; set; }
 
 		public RoutableTransportMode RoutableTransportMode { get; set; }
+
+		public void ReceiveMessageLater(TransportMessage m, string address)
+		{
+			if (!string.IsNullOrEmpty(address))
+			{
+				Send(m, address);
+			}
+		}
 
 		private int maxRetries = 5;
 
@@ -198,7 +207,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				Logger.Info(LoggerContext.New(inputQueue.Name), "starting...");
 				Logger.Info(LoggerContext.New(commandQueue.Name), "starting...");
 				_inputQueueRouter = CreateAndStartMessageConsumer(inputQueue, GetQueueNameToRouteMessageIn);
-				_uiQueueRouter = CreateAndStartMessageConsumer(commandQueue, m => UnicastBus.GetUiQueueName(GetQueueNameToRouteMessageIn(m)));
+				_uiQueueRouter = CreateAndStartMessageConsumer(commandQueue, m => TpUnicastBus.GetUiQueueName(GetQueueNameToRouteMessageIn(m)));
 				Logger.Info(LoggerContext.New(inputQueue.Name), "started.");
 				Logger.Info(LoggerContext.New(commandQueue.Name), "started.");
 				_queue = inputQueue;
@@ -213,7 +222,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 
 		private IMessageConsumer<MessageEx> CreateAndStartMessageConsumer(IPluginQueue queue, Func<MessageEx, string> routeBy)
 		{
-			var factory = new MsmqRouterFactory(Logger, TimeSpan.FromSeconds(SecondsToWaitForMessage), GetTransactionTypeForSend(), GetTransactionTypeForReceive());
+			var factory = new MsmqRouterFactory(Logger, TimeSpan.FromSeconds(SecondsToWaitForMessage), GetTransactionTypeForSend, GetTransactionTypeForReceive());
 			IMessageConsumer<MessageEx> consumer;
 			IMessageSource<MessageEx> messageSource = factory.CreateSource(queue.Name);
 			switch (RoutableTransportMode)
@@ -227,6 +236,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				default:
 					throw new ApplicationException(string.Format("{0} plugin hosting mode is not supported", RoutableTransportMode.ToString()));
 			}
+
+			consumer.IsTransactional = IsTransactional;
+			consumer.IsolationLevel = IsolationLevel;
+			consumer.TransactionTimeout = TransactionTimeout;
+
 			consumer.Consume(Handle);
 			return consumer;
 		}
@@ -396,6 +410,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			{
 				return;
 			}
+
+			message.DoReceive();
+
 			_messageId = m.Id;
 			if (IsTransactional)
 			{

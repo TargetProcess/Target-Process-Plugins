@@ -15,10 +15,12 @@ using System.Transactions;
 using System.Xml.Serialization;
 using NServiceBus;
 using NServiceBus.Serialization;
+using NServiceBus.Unicast;
 using NServiceBus.Unicast.Transport;
 using NServiceBus.Unicast.Transport.Msmq;
 using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport.Router;
+using Tp.Integration.Messages.ServiceBus.UnicastBus;
 using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
@@ -49,7 +51,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 
 		public string UICommandInputQueue
 		{
-			get { return InputQueue + "UI"; }
+			get { return TpUnicastBus.GetUiQueueName(InputQueue); }
 		}
 
 		/// <summary>
@@ -76,6 +78,13 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		public bool PurgeOnStartup { get; set; }
 
 		public RoutableTransportMode RoutableTransportMode { get; set; }
+		public void ReceiveMessageLater(TransportMessage m, string address)
+		{
+			if (!string.IsNullOrEmpty(address))
+			{
+				Send(m, address);
+			}
+		}
 
 		private int maxRetries = 5;
 
@@ -93,7 +102,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			set { maxRetries = value; }
 		}
 
-		private int secondsToWaitForMessage = 10;
+		private int secondsToWaitForMessage = 1;
 
 		/// <summary>
 		/// Sets the maximum interval of time for when a thread thinks there is a message in the queue

@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Linq;
 using NGit;
 using NGit.Diff;
@@ -18,12 +19,14 @@ namespace Tp.Git.VersionControlSystem
 	{
 		public static RevisionInfo ConvertToRevisionInfo(this RevCommit commit, Repository repository)
 		{
+			var authorIdent = commit.GetAuthorIdent();
+			DateTime commitTime = authorIdent.GetWhen();
 			return new RevisionInfo
 			{
-				Author = commit.GetAuthorIdent().GetName(),
+				Author = authorIdent.GetName(),
 				Comment = commit.GetFullMessage().TrimEnd('\n'),
-				Id = (GitRevisionId) commit.CommitTime,
-				Time = ((GitRevisionId) commit.CommitTime).Value,
+				Id = (GitRevisionId)commitTime,
+				Time = commitTime,
 				Entries = commit.GetEntriesEnc(repository)
 			};
 		}

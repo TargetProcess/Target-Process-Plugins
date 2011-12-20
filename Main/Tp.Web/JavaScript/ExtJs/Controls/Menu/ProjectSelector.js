@@ -306,9 +306,9 @@ Tp.controls.menu.ProjectSelector = Ext.extend(Object, {
 
                 '<div class="projectSelection" style="display:none"><div class="context-popup-uxo-t" style="right: -25px;"></div>',
 				'<tpl if="projects.length &gt; 0">',
-					'<div class="p-5" style="height: 14px; display: block;">',
-						'<a href="javascript:void(0)" class="selectAllProjects" style="font-size: 11px; color: #999; padding: 0px 5px">Select all</a>',
-						'<a href="javascript:void(0)" class="unSelectAllProjects" style="font-size: 11px; color: #999; padding: 0px 5px; display:none">Unselect all</a>',
+					'<div class="p-5" style="height: 18px; display: block;">',
+						'<a href="javascript:void(0)" class="selectAllProjects" style="">select all</a>',
+						'<a href="javascript:void(0)" class="unSelectAllProjects" style="display:none">unselect all</a>',
 					'</div>',
 					'<div style="border-top: 1px solid #ddd"></div>',
 				'</tpl>',

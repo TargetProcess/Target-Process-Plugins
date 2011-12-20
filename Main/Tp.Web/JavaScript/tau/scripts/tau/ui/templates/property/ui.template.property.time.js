@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"property-time",markup:["<div>",'   <div class="property"><div class="property-text">${text}<span class="point">${point}</span></div></div>',"</div>"].join("")};return a.register(b)})

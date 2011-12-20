@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"ui.template.entity.actions",markup:['<div class="tau-entity-actions">','   <span class="tau-entity-actions-target"></span>',"</div>"],dependencies:[]};return a.register(b)})

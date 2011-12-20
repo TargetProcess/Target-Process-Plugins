@@ -37,7 +37,8 @@ namespace Tp.Integration.Plugin.Common
 			{
 				return;
 			}
-			IStorage<ITargetProcessMessage> storage = e.Profile.Get<ITargetProcessMessage>();
+			
+			var storage = e.Profile.Get<ITargetProcessMessage>();
 			foreach (ITargetProcessMessage message in storage)
 			{
 				_bus.SendLocalWithContext(e.Profile.Name, e.AccountName, message);

@@ -1,0 +1,1 @@
+define(["tp/codemirror/src/lib/codemirror","tp/codemirror/src/mode/javascript/javascript"],function(){})

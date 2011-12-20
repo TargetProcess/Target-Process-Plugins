@@ -8,7 +8,7 @@ using NServiceBus;
 using Tp.Bugzilla.BugzillaQueries;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.ImportToBugzilla
@@ -22,15 +22,17 @@ namespace Tp.Bugzilla.ImportToBugzilla
 		private readonly IBugzillaService _service;
 		private readonly IBugzillaActionFactory _actionFactory;
 		private readonly IUserMapper _userMapper;
+		private readonly IActivityLogger _logger;
 
 		public TeamChangedHandler(IStorageRepository storage, IBugzillaInfoStorageRepository bugzillaInfoStorageRepository,
-		                          IBugzillaService service, IBugzillaActionFactory actionFactory, IUserMapper userMapper)
+		                          IBugzillaService service, IBugzillaActionFactory actionFactory, IUserMapper userMapper, IActivityLogger logger)
 		{
 			_storage = storage;
 			_bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
 			_service = service;
 			_actionFactory = actionFactory;
 			_userMapper = userMapper;
+			_logger = logger;
 		}
 
 		public void Handle(TeamUpdatedMessage message)
@@ -59,7 +61,7 @@ namespace Tp.Bugzilla.ImportToBugzilla
 
 		public void Handle(TeamDeletedMessage message)
 		{
-			if(!NeedToProcess(message.Dto))
+			if (!NeedToProcess(message.Dto))
 			{
 				return;
 			}
@@ -78,8 +80,10 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			if (!NeedToProcess(team) || team.RoleName != _storage.GetProfile<BugzillaProfile>().GetAssigneeRole().Name) return;
 
 			var bugzillaBug = _bugzillaInfoStorageRepository.GetBugzillaBug(team.AssignableID);
+			_logger.InfoFormat("Changing bug assignment in Bugzilla. TargetProcess Bug ID: {0}; Email: {1}", bugzillaBug.TpId, userEmail);
 
 			_service.Execute(_actionFactory.GetAssigneeAction(bugzillaBug.Id, userEmail));
+			_logger.InfoFormat("Bug assignment changed in Bugzilla. TargetProcess Bug ID: {0}; Email: {1}", bugzillaBug.TpId, userEmail);
 		}
 	}
 }

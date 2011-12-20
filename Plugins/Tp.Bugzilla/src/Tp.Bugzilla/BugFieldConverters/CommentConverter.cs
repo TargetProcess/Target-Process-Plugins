@@ -11,9 +11,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 
 		public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
 		{
-			
 			convertedBug.BugDto.CommentOnChangingState = StateIsChangedComment;
-			
 		}
 	}
 }

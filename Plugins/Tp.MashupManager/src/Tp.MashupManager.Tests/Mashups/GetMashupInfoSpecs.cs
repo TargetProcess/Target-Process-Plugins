@@ -38,17 +38,6 @@ namespace Tp.MashupManager.Tests.Mashups
 			".Execute();
 		}
 
-		[Test]
-		public void ShouldReturnErrorIfThereAreFewMashupsWithNameSpecified()
-		{
-			@"
-				Given profile created
-					And profile mashups are: mashup1, mashup2, mashup2
-				When handle GetMashupInfoCommand command with args 'mashup2'
-				Then command should return validation error for 'Name' field 'There are more than one mashup with name ""mashup2""'
-			".Execute();
-		}
-
 		[When("handle GetMashupInfoCommand command with args '$args'")]
 		public void HandleGetMashupInfoCommand(string args)
 		{

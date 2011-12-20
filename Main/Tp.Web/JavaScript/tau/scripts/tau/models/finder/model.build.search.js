@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/finder/model.assignable.search"],function(a,b){return b.extend({init:function(a){this._super(a),delete this.properties.state,delete this.properties.priority},getInitialQueryConfig:function(){return{$skip:0,$limit:20,$query:{}}},getInitialQueryString:function(){return""},getType:function(){return"build"}})})

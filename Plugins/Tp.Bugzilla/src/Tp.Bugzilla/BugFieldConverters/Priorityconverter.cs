@@ -6,15 +6,15 @@
 using System;
 using System.Linq;
 using Tp.Integration.Common;
-using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
 	public class PriorityConverter : GuessConverter<PriorityDTO>
 	{
-		public PriorityConverter(IStorageRepository storageRepository) : base(storageRepository)
+		public PriorityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
 		{
 		}
 
@@ -41,6 +41,11 @@ namespace Tp.Bugzilla.BugFieldConverters
 		protected override BugField BugField
 		{
 			get { return BugField.PriorityID; }
+		}
+
+		protected override string BugFieldName
+		{
+			get { return "Priority"; }
 		}
 	}
 }

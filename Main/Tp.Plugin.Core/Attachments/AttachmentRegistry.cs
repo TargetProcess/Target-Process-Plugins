@@ -11,7 +11,6 @@ namespace Tp.Plugin.Core.Attachments
 	{
 		public AttachmentRegistry()
 		{
-			For<IAttachmentFolderPath>().HybridHttpOrThreadLocalScoped().Use<AttachmentFolderPath>();
 			For<IBufferSize>().Singleton().Use(new BufferSize(1000000));
 		}
 	}

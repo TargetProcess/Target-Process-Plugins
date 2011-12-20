@@ -7,7 +7,8 @@ tau.mashups
             {
             	itemText: 'Mashups',
                 itemUrl: '/Admin/EditProfileExt.aspx?PluginName=Mashup+Manager&Placeholders=profileeditormashupmanager',
-                identifyUrlPart: 'PluginName=Mashup+Manager'
+                identifyUrlPart: 'PluginName=Mashup+Manager',
+                classIdentificator: '_mashupsSettingLink'
             }
         );
 

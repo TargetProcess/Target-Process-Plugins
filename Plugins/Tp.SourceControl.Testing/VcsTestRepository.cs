@@ -7,11 +7,12 @@ using System;
 using System.IO;
 using System.Reflection;
 using ICSharpCode.SharpZipLib.Zip;
+using Tp.SourceControl.Testing.Repository;
 using Tp.SourceControl.Testing.Repository.Svn;
 
-namespace Tp.Testing.Core
+namespace Tp.SourceControl.Testing
 {
-	public abstract class VcsTestRepository<TActualVcsRepository>
+	public abstract class VcsTestRepository<TActualVcsRepository> : IVcsRepository
 	{
 		protected VcsTestRepository()
 		{
@@ -61,6 +62,10 @@ namespace Tp.Testing.Core
 		{
 			get { return Name + ".zip"; }
 		}
+
+		public abstract string Login { get; }
+		public abstract string Password { get; }
+		public abstract void Commit(string commitComment);
 
 		protected virtual void OnTestRepositoryDeployed() {}
 	}

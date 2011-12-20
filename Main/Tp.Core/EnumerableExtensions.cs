@@ -148,18 +148,6 @@ namespace System.Linq
 			return Enumerable.Concat(items, additional);
 		}
 
-		public static IEnumerable<TResult> Zip<T1, T2, TResult>(this IEnumerable<T1> first, IEnumerable<T2> second, Func<T1, T2, TResult> selector)
-		{
-			using(var firstEnumerator = first.GetEnumerator())
-			using(var secondEnumrator = second.GetEnumerator())
-			{
-				while (firstEnumerator.MoveNext() && secondEnumrator.MoveNext())
-				{
-					yield return selector(firstEnumerator.Current, secondEnumrator.Current);
-				}
-			}
-		}
-
 		public static bool Empty<T>(this IEnumerable<T> enumerable)
 		{
 			return !enumerable.Any();

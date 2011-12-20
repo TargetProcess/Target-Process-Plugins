@@ -89,7 +89,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.ServiceBus
 
 		public IPluginQueue Create(string queueName)
 		{
-			return new PluginQueueMock(queueName, _messages[queueName], ProcessedMessages);
+			var messages = (!string.IsNullOrEmpty(queueName) && _messages.ContainsKey(queueName)) ? _messages[queueName] : new List<Message>();
+			return new PluginQueueMock(queueName, messages, ProcessedMessages);
 		}
 
 		public void SetMessagesForQueue(string queueName, List<Message> messages)

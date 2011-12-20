@@ -6,29 +6,44 @@
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Tp.Core;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
 	public class CreateDateConverter : IBugConverter
 	{
+		private static readonly Regex DateRegex = new Regex(@"(?<dateTime>.*?)(?<offset>([+-]\d\d\d\d)|[a-z]+)\s*$",
+		                                                    RegexOptions.IgnoreCase);
+
 		public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
 		{
-			convertedBug.BugDto.CreateDate = ParseFromUniversalTime(bugzillaBug.creation_ts);
+			convertedBug.BugDto.CreateDate = ParseFromBugzillaLocalTime(bugzillaBug.creation_ts);
 		}
 
-		public static DateTime ParseFromUniversalTime(string input)
+		public static DateTime Parse(string input)
 		{
 			if (input == null)
 				throw new ArgumentNullException("input");
 
-			int zzz = 0; // time zone offset stored as HH * 100 + MM
-
-			var r = new Regex(@"(?<dateTime>.*?)(?<offset>([+-]\d\d\d\d)|[a-z]+)\s*$", RegexOptions.IgnoreCase);
-			Match m = r.Match(input);
+			var m = DateRegex.Match(input);
 			if (m.Success)
 			{
 				input = m.Groups["dateTime"].Value.Trim();
-				string zone = m.Groups["offset"].Value;
+			}
+
+			return DateTime.ParseExact(input, _formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite);
+		}
+
+		private static TimeSpan GetOffset(string input)
+		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+			int zzz = 0;
+
+			var m = DateRegex.Match(input);
+			if (m.Success)
+			{
+				var zone = m.Groups["offset"].Value;
 				switch (zone.ToLower())
 				{
 					case "brst":
@@ -36,7 +51,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 						break; // Brazil Summer Time (East Daylight)
 					case "adt":
 						zzz = -0300;
-						break; // Atlantic Daylight   
+						break; // Atlantic Daylight
 					case "edt":
 						zzz = -0400;
 						break; // Eastern Daylight
@@ -185,8 +200,9 @@ namespace Tp.Bugzilla.BugFieldConverters
 						zzz = +0200;
 						break; // Ukraine
 					case "bt":
+					case "msk":
 						zzz = +0300;
-						break; // Baghdad, USSR Zone 2
+						break; // Baghdad, USSR Zone 2, Moscow
 					case "wst":
 						zzz = +0800;
 						break; // West Australian Standard
@@ -229,16 +245,31 @@ namespace Tp.Bugzilla.BugFieldConverters
 				}
 			}
 
+			return new TimeSpan(zzz/100, zzz%100, 0);
+		}
 
-			DateTime time = DateTime.ParseExact(input, _formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite);
+		public static DateTime ParseToUniversalTime(string input)
+		{
+			if (input == null)
+				throw new ArgumentNullException("input");
 
-			var offset = new TimeSpan(zzz/100, zzz%100, 0);
-			DateTime dateTime = time.Subtract(offset).ToLocalTime();
+			var time = Parse(input);
+			var offset = GetOffset(input);
+			var dateTime = time.Subtract(offset);
 
-			if (dateTime <= DateTime.Now)
-				return dateTime;
+			return dateTime;
+		}
 
-			return DateTime.Now;
+		public static DateTime ParseFromBugzillaLocalTime(string input)
+		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+
+			var time = Parse(input);
+			var offset = GetOffset(input);
+			var dateTime = time.Subtract(offset).ToLocalTime();
+
+			return dateTime <= CurrentDate.Value ? dateTime : CurrentDate.Value;
 		}
 
 		private static readonly string[] _formats =

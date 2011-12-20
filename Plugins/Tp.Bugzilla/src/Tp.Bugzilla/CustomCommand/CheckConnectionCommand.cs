@@ -7,6 +7,7 @@ using System.Linq;
 using Tp.Bugzilla.CustomCommand.Dtos;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 
@@ -14,6 +15,13 @@ namespace Tp.Bugzilla.CustomCommand
 {
 	public class CheckConnectionCommand : IPluginCommand
 	{
+		private readonly IActivityLogger _logger;
+
+		public CheckConnectionCommand(IActivityLogger logger)
+		{
+			_logger = logger;
+		}
+
 		public PluginCommandResponseMessage Execute(string args)
 		{
 			var errors = new PluginProfileErrorCollection();
@@ -37,12 +45,15 @@ namespace Tp.Bugzilla.CustomCommand
 			{
 				try
 				{
+					_logger.Info("Checking connection");
 					var bugzillaProperties = new BugzillaService().CheckConnection(profile);
+					_logger.Info("Connection success");
 					return new BugzillaProperties(bugzillaProperties);
 				}
 				catch (BugzillaPluginProfileException e)
 				{
 					e.ErrorCollection.ForEach(errors.Add);
+					_logger.WarnFormat("Connection failed");
 				}
 			}
 

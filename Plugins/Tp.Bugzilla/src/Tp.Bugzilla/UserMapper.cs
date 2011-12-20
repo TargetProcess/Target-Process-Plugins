@@ -6,18 +6,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tp.Integration.Common;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla
 {
 	public class UserMapper : IUserMapper
 	{
 		private readonly IStorageRepository _storageRepository;
+		private readonly IActivityLogger _logger;
 		public const string WildcardSymbol = "*";
 
-		public UserMapper(IStorageRepository storageRepository)
+		public UserMapper(IStorageRepository storageRepository, IActivityLogger logger)
 		{
 			_storageRepository = storageRepository;
+			_logger = logger;
 		}
 
 		private BugzillaProfile Profile
@@ -32,7 +36,14 @@ namespace Tp.Bugzilla
 				return null;
 			}
 
-			return GetTpIdFromUserMapping(bugzillaEmail) ?? GetTpIdFromStorage(bugzillaEmail);
+			var result = GetTpIdFromUserMapping(bugzillaEmail) ?? GetTpIdFromStorage(bugzillaEmail);
+
+			if (!result.HasValue)
+			{
+				_logger.WarnFormat("Cannot map user. Email: {0}", bugzillaEmail);
+			}
+
+			return result;
 		}
 
 		public string GetBugzillaEmailBy(int? tpUserId)
@@ -41,38 +52,52 @@ namespace Tp.Bugzilla
 
 			if (mappedUsers.Count() == 1)
 			{
-				var m = mappedUsers.Single();
+				var user = mappedUsers.Single();
 
-				return m != WildcardSymbol ? m : null;
+				if (user.Key != WildcardSymbol)
+				{
+					return user.Key;
+				}
+
+				_logger.WarnFormat("Mapping user by wildcard. User mapping is ambiguous. Bugzilla assignment is not changed. User: {0}", user.Value.Name);
+
+				return null;
 			}
 
-			return mappedUsers.Count() == 0 ? GetBugzillaEmailFromStorage(tpUserId) : null;
+			var result = mappedUsers.Count() == 0 ? GetBugzillaUserFromStorage(tpUserId) : null;
+
+			if (result == null)
+			{
+				_logger.WarnFormat("Cannot map user. TargetProcess User ID: {0}", tpUserId);
+				return null;
+			}
+
+			return result.Email;
 		}
 
-		private List<string> GetMappedBugzillaUsers(int? tpUserId)
+		private List<MappingElement> GetMappedBugzillaUsers(int? tpUserId)
 		{
 			return Profile.UserMapping
 				.Where(x => x.Value.Id == tpUserId)
-				.Select(x => x.Key)
 				.ToList();
 		}
 
-		private string GetBugzillaEmailFromStorage(int? tpUserId)
+		private UserDTO GetBugzillaUserFromStorage(int? tpUserId)
 		{
-			var userFromStorage = _storageRepository.Get<UserDTO>(tpUserId.ToString()).SingleOrDefault();
-
-			return userFromStorage != null
-			       	? userFromStorage.Email
-			       	: null;
+			return _storageRepository.Get<UserDTO>(tpUserId.ToString()).SingleOrDefault();
 		}
 
 		private int? GetTpIdFromStorage(string bugzillaEmail)
 		{
 			var users = _storageRepository.Get<UserDTO>(bugzillaEmail).ToList();
 
-			return users.Count == 1
-			       	? users.Single().ID
-			       	: null;
+			if (users.Count == 1)
+			{
+				var user = users.Single();
+				return user.ID;
+			}
+
+			return null;
 		}
 
 		private int? GetTpIdFromUserMapping(string userEmail)

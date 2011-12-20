@@ -4,10 +4,12 @@
 // 
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
+using Rhino.Mocks;
 using StructureMap;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
@@ -16,6 +18,7 @@ using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.Integration.Testing.Common;
+using Tp.MashupManager.MashupStorage;
 using Tp.Plugin.Core;
 using Tp.Testing.Common.NUnit;
 
@@ -45,7 +48,25 @@ namespace Tp.MashupManager.Tests
 						                                                                        new Assembly[] {}));
 						x.For<IActivityLogger>().HybridHttpOrThreadLocalScoped().Use<ActivityLoggerMock>();
 						x.Forward<IActivityLogger, ActivityLoggerMock>();
+
+						var mashupFolderMock = MockRepository.GenerateStub<IMashupLocalFolder>();
+						mashupFolderMock.Expect(y => y.Path).Return(MashupStorageDirectory);
+						x.For<IMashupLocalFolder>().Use(mashupFolderMock);
 					});
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			if (Directory.Exists(MashupStorageDirectory))
+			{
+				Directory.Delete(MashupStorageDirectory, true);
+			}
+		}
+
+		private static string MashupStorageDirectory
+		{
+			get { return Path.Combine(Directory.GetCurrentDirectory(), "MashupStorage"); }
 		}
 
 		protected static IPluginContext PluginContext
@@ -78,6 +99,11 @@ namespace Tp.MashupManager.Tests
 			get { return TransportMock.TpQueue.GetMessages<PluginMashupMessage>(); }
 		}
 
+		protected static IMashupScriptStorage ScriptStorage
+		{
+			get { return ObjectFactory.GetInstance<IMashupScriptStorage>(); }
+		}
+
 		[Given("no profiles created")]
 		public void NoProfileCreated()
 		{
@@ -108,12 +134,12 @@ namespace Tp.MashupManager.Tests
 
 			foreach (var mashup in mashups)
 			{
-				Profile.Get<MashupDto>(mashup).Add(new MashupDto
-				                                   	{
-				                                   		Name = mashup, 
-														Placeholders = _defaultPlaceholders, 
-														Script = _defaultScript
-				                                   	});
+				ScriptStorage.SaveMashup(new MashupDto
+				{
+					Name = mashup,
+					Placeholders = _defaultPlaceholders,
+					Script = _defaultScript
+				});
 			}
 		}
 
@@ -136,7 +162,6 @@ namespace Tp.MashupManager.Tests
 				mashup.Script.Should(Be.Not.Null.And.Not.Empty);
 			}
 		}
-
 
 		[Then("$count mashups should be sent to TP")]
 		public void CheckCreatedMashupsCount(int count)
@@ -179,13 +204,14 @@ namespace Tp.MashupManager.Tests
 		[Then("$count mashup should be in profile storage")]
 		public void CheckMashupStorage(int count)
 		{
-			Profile.Get<MashupDto>().Count().Should(Be.EqualTo(count));
+			Directory.GetDirectories(MashupStorageDirectory).Count().Should(Be.EqualTo(count));
 		}
 
 		[Then("mashup '$mashupName' with placeholders '$placeholders' and script '$script' should be in profile storage")]
 		public void CheckMashupInStorage(string mashupName, string placeholders, string script)
 		{
-			var mashup = GetMashupFromStorage(mashupName);
+			var mashup = ScriptStorage.GetMashup(mashupName);
+
 			mashup.Name.Should(Be.EqualTo(mashupName));
 			mashup.Placeholders.Should(Be.EqualTo(placeholders));
 			mashup.Script.Should(Be.EqualTo(script));
@@ -242,7 +268,7 @@ namespace Tp.MashupManager.Tests
 
 		protected MashupDto GetMashupFromStorage(string mashupName)
 		{
-			return Profile.Get<MashupDto>(mashupName).SingleOrDefault();
+			return ScriptStorage.GetMashup(mashupName);
 		}
 
 		protected PluginMashupMessage GetMashupMessageByName(string mashupName)

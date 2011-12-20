@@ -44,7 +44,10 @@ namespace Tp.Integration.Common
         /// <summary>
         /// Target Process Entity
         /// </summary>
-        Entity = 7
-        
+        Entity = 7,
+        /// <summary>
+        /// The multiple selection list
+        /// </summary>
+        MultipleSelectionList = 8,
     }
 }

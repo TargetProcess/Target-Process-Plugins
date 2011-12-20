@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.iteration.progressBar","tau/ui/templates/label/ui.template.assignmentEffort.label"],function(a,b,c){return{create:function(d){var e={extensions:[b],template:c};return a.create(e,d)}}})

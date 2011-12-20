@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TargetProcess.Plugins" Class="PluginDatabaseModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=TargetProcess.Plugins;Integrated Security=True" SettingsObjectName="Tp.Integration.Plugin.Common.Properties.Settings" SettingsPropertyName="TargetProcess_PluginsConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Account" Member="Accounts">
     <Type Name="Account">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -15,7 +14,7 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ValueKey" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="ValueBlob" Type="System.Xml.Linq.XDocument" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Member="Name" Type="System.String" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Plugin" Member="Plugins">

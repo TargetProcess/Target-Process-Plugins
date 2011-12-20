@@ -8,7 +8,6 @@ using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Plugin.Common.Domain;
-using Tp.Integration.Plugin.Common.Storage;
 
 namespace Tp.Bugzilla.Synchronizer
 {

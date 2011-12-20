@@ -6,7 +6,6 @@
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
@@ -16,7 +15,8 @@ namespace Tp.Bugzilla.Synchronizer
 	{
 		private readonly IBugzillaInfoStorageRepository _bugzillaInfoStorageRepository;
 
-		public AttachmentChangedHandler(IStorageRepository storage, IBugzillaInfoStorageRepository bugzillaInfoStorageRepository) : base(storage)
+		public AttachmentChangedHandler(IStorageRepository storage,
+		                                IBugzillaInfoStorageRepository bugzillaInfoStorageRepository) : base(storage)
 		{
 			_bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
 		}

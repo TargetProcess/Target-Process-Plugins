@@ -54,11 +54,13 @@ namespace Tp.Bugzilla.ImportToBugzilla
 
 			try
 			{
+				_log.InfoFormat("Updating bug status in Bugzilla. TargetProcess Bug ID: {0}; Bugzilla Bug ID: {1}", message.Dto.ID, bugzillaBug.Id);
 				_bugzillaService.Execute(_actionFactory.GetChangeStatusAction(message.Dto, bugzillaBug.Id, status));
+				_log.InfoFormat("Bug status in Bugzilla updated. TargetProcess Bug ID: {0}; Bugzilla Bug ID: {1}", message.Dto.ID, bugzillaBug.Id);
 			}
 			catch (Exception e)
 			{
-				_log.Error(e.Message);
+				_log.Error(e);
 			}
 		}
 	}

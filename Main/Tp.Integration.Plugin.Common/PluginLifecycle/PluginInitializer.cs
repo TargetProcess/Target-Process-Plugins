@@ -22,12 +22,13 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 			// This message has no handlers. It is sent to awake child queues consumers in msmq router.
 			foreach (var account in AccountCollection)
 			{
-				Bus.SendLocalWithContext(new ProfileName(), account.Name, new PluginStartedMessage());
+				Bus.SendLocalWithContext(new ProfileName(), account.Name, new PluginStartedLocalMessage());
+				Bus.SendLocalUiWithContext(new ProfileName(), account.Name, new PluginStartedLocalMessage());
 			}
 		}
 	}
 
-	public class PluginStartedMessage : ITargetProcessMessage
+	public class PluginStartedLocalMessage : ITargetProcessMessage
 	{
 	}
 }

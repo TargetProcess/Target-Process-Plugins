@@ -21,6 +21,7 @@ using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Tests.Common;
+using Tp.Integration.Testing.Common;
 using Tp.Testing.Common.NUnit;
 using log4net.Core;
 using log4net.Repository.Hierarchy;

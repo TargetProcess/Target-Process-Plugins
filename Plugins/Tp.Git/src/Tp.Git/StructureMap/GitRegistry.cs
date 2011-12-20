@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using NGit.Util;
 using StructureMap;
 using Tp.Git.VersionControlSystem;
 using Tp.Integration.Plugin.Common.Activity;
@@ -32,6 +33,9 @@ namespace Tp.Git.StructureMap
 
 		protected override void ConfigureVersionControlSystem()
 		{
+			var mockSystemReader = new MockSystemReader(SystemReader.GetInstance());
+			SystemReader.SetInstance(mockSystemReader);
+
 			For<IVersionControlSystem>().Use(() =>
 				new GitVersionControlSystem(
 					ObjectFactory.GetInstance<ISourceControlConnectionSettingsSource>(),

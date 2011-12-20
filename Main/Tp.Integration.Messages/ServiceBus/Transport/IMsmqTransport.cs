@@ -67,5 +67,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 		bool PurgeOnStartup { get; set; }
 
 		RoutableTransportMode RoutableTransportMode { get; set; }
+
+		void ReceiveMessageLater(TransportMessage m, string address);
 	}
 }

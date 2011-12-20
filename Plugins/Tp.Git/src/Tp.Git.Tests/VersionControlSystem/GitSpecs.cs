@@ -94,6 +94,24 @@ namespace Tp.Git.Tests.VersionControlSystem
 		}
 
 		[Test]
+		public void ShouldHandleConnectError()
+		{
+			_gitRepoUri = "//bla-bla";
+			try
+			{
+				using (CreateGit())
+				{
+
+				}
+				Assert.Fail("invalid uri did not cause any exceptions");
+			}
+			catch(Exception ex)
+			{
+				ex.Message.Should(Be.EqualTo("invalid uri or insufficient access rights"));
+			}
+		}
+
+		[Test]
 		public void ShouldRetrieveRevisionRangeFromRevisionTillHead()
 		{
 			using (var git = CreateGit())

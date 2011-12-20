@@ -108,5 +108,7 @@ namespace Tp.Integration.Plugin.Common
 		/// </summary>
 		/// <param name="messages">The messages to send.</param>
 		void Reply(params ITargetProcessMessage[] messages);
+
+		void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message);
 	}
 }

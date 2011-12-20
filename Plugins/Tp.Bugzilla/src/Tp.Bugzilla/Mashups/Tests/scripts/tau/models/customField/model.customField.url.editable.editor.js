@@ -1,1 +1,1 @@
-define(["tau/models/customField/model.customField.url.editable"],function(a,b){var c=a.extend({onInit:function(){this.config.data&&this.fire("dataBind",this.config.data)}});return c})
+define(["tau/models/customField/model.customField.url.editable"],function(a,b){var c=a.extend({onInit:function(){this.beforeSaveHandler=!0,this.afterSaveHandler=!0,this.config.data&&this.fire("dataBind",this.config.data)}});return c})

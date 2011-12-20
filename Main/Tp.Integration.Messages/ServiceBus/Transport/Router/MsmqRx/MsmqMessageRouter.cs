@@ -13,6 +13,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 		{
 		}
 
+		protected override void Receive(MessageEx message)
+		{
+			message.DoReceive();
+		}
+
 		protected override void Preprocess(MessageEx message)
 		{
 			MessageLabel messageLabel = MessageLabel.Parse(message.Message.Label);

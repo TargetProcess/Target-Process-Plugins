@@ -5,6 +5,7 @@
 using NServiceBus;
 using NServiceBus.Unicast.Transport;
 using StructureMap;
+using Tp.Integration.Messages.ServiceBus.Transport;
 
 namespace Tp.Integration.Testing.Common
 {
@@ -16,7 +17,9 @@ namespace Tp.Integration.Testing.Common
 			                        	{
 																	x.For<TransportMock>().HybridHttpOrThreadLocalScoped().Use<TransportMock>();
 																	x.Forward<TransportMock, ITransport>();
+																	x.Forward<TransportMock, IMsmqTransport>();
 			                        		x.FillAllPropertiesOfType<ITransport>();
+											x.FillAllPropertiesOfType<IMsmqTransport>();
 			                        	});
 			return config;
 		}

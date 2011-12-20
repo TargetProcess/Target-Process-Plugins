@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Transactions;
 using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.ObjectBuilder;
@@ -23,6 +24,9 @@ using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.ServiceBus;
 using Tp.Integration.Messages.ServiceBus.Serialization;
+using Tp.Integration.Messages.ServiceBus.Transport;
+using Tp.Integration.Messages.ServiceBus.Transport.Router;
+using Tp.Integration.Messages.ServiceBus.UnicastBus;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Gateways;
@@ -32,7 +36,7 @@ using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
 namespace Tp.Integration.Testing.Common
 {
-	public class TransportMock : ITransport
+	public class TransportMock : IMsmqTransport
 	{
 		#region ITransport Members
 
@@ -266,7 +270,7 @@ namespace Tp.Integration.Testing.Common
 				Configure.With(assemblies)
 					.CustomConfigurationSource(new IntegrationTestConfigurationSource(messageAssemblies))
 					.StructureMapBuilder(ObjectFactory.Container)
-					.AdvancedXmlSerializer().TransportMock().Sagas().TpInMemorySagaPersister().UnicastBus().
+					.AdvancedXmlSerializer().TransportMock().Sagas().TpInMemorySagaPersister().TpUnicastBus().
 				LoadMessageHandlers(GetHandlersOrder()).CreateBus().Start();
 
 			return ObjectFactory.GetInstance<TransportMock>();
@@ -484,6 +488,20 @@ namespace Tp.Integration.Testing.Common
 				expectations[typeof (TDto)] = expectation;
 			}
 			return expectations[typeof (TDto)] as TExpectations;
+		}
+
+		public string InputQueue { get; set; }
+		public string ErrorQueue { get; set; }
+		public int MaxRetries { get; set; }
+		public IPluginQueueFactory PluginQueueFactory { get; set; }
+		public bool IsTransactional { get; set; }
+		public TimeSpan TransactionTimeout { get; set; }
+		public IsolationLevel IsolationLevel { get; set; }
+		public bool DoNotCreateQueues { get; set; }
+		public bool PurgeOnStartup { get; set; }
+		public RoutableTransportMode RoutableTransportMode { get; set; }
+		public void ReceiveMessageLater(TransportMessage m, string address)
+		{
 		}
 	}
 

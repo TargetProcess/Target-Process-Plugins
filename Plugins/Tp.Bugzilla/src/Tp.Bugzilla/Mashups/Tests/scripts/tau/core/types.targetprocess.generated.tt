@@ -1,7 +1,6 @@
 ﻿<#@ template hostSpecific="true" #>
 <#@ output extension=".js" #>
 <#@ include file="TpModel.ttinclude"  #>
-
 define(["tau/core/types"], function(tauTypes) {
 	return [
 		{ name:"context" }

@@ -3,8 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using Tp.Testing.Core;
-
 namespace Tp.SourceControl.Testing.Repository.Git
 {
 	public class GitTestRepositoryWithFileDeleted : VcsTestRepository<GitTestRepositoryWithFileDeleted>
@@ -12,6 +10,21 @@ namespace Tp.SourceControl.Testing.Repository.Git
 		protected override string Name
 		{
 			get { return "TestRepositoryWithFileDeleted"; }
+		}
+
+		public override string Login
+		{
+			get { throw new System.NotImplementedException(); }
+		}
+
+		public override string Password
+		{
+			get { throw new System.NotImplementedException(); }
+		}
+
+		public override void Commit(string commitComment)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }
