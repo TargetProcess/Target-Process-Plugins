@@ -185,7 +185,7 @@ Tp.controls.kanbanboard.Container = Ext.extend(Ext.Container, {
 				if (name === 'bButton' && d.scrollHeight - d.clientHeight > d.scrollTop) {
 					this[name].show('display');
 				}
-				this[name].on('mouseenter', function () { autoScrollTask.delay(50, null, null, [autoScrollTask, func, 10]); });
+				this[name].on('mouseenter', function () { autoScrollTask.delay(50, null, null, [autoScrollTask, func, 20]); });
 				this[name].on('mouseleave', function () { autoScrollTask.cancel(); });
 				this[name].on('mouseup', function () { autoScrollTask.cancel(); });
 			}, this);

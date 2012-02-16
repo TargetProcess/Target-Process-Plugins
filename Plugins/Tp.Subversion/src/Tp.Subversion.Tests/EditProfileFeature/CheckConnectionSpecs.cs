@@ -7,8 +7,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using StructureMap;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Testing.Common;
+using Tp.SourceControl.Commands;
 using Tp.SourceControl.Comments;
+using Tp.SourceControl.Diff;
+using Tp.SourceControl.Settings;
 using Tp.Subversion.StructureMap;
 using Tp.Testing.Common.NBehave;
 
@@ -21,10 +25,28 @@ namespace Tp.Subversion.EditProfileFeature
 		public void SetUp()
 		{
 			ObjectFactory.Initialize(x => x.AddRegistry<VcsEnvironmentRegistry>());
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly, new List<Assembly> { typeof(Command).Assembly })));
+			ObjectFactory.Configure(
+				x =>
+				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly,
+				                                                                        new List<Assembly>
+				                                                                        	{typeof (Command).Assembly})));
 		}
 
 		[Test]
+		public void SubversionOnLocalhostShouldBeUpAndRunning()
+		{
+			ConnectionSettings settings = new SubversionPluginProfile();
+
+			settings.Uri = "https://localhost:443/svn/IntegrationTest";
+			settings.Login = "subversion";
+			settings.Password = "123456";
+
+			new Subversion.Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
+			                          ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
+		}
+
+		[Test]
+		[Category("PartUnstable")]
 		public void ShouldBeSuccessOnValidSettings()
 		{
 			@"Given unsaved plugin profile
@@ -103,7 +125,7 @@ namespace Tp.Subversion.EditProfileFeature
 			@"Given unsaved plugin profile
 				And profile repository path is 'http://unknownhost'
 			When checked connection
-			Then error should occur for Uri: ""Could not connect to server. See plugin log for details.""
+			Then error should occur for Uri: ""Could not connect to server. See plugin log for details.|Timeout while connecting to svn repository http://unknownhost. See plugin log for details.""
 			"
 				.Execute(In.Context<CommandActionSteps>());
 		}
@@ -117,6 +139,18 @@ namespace Tp.Subversion.EditProfileFeature
 			Then log should contain message: Connection failed.
 			"
 				.Execute(In.Context<CommandActionSteps>().And<VcsPluginActionSteps>());
+		}
+
+		[Test]
+		public void ShouldFailOnUriWithSsh()
+		{
+			@"Given unsaved plugin profile
+				And profile local repository path is 'svn+ssh://user@ssh.yourdomain.com/path'
+				And profile start revision is 125
+			When checked connection
+			Then error should occur for Uri: ""Connection via SSH is not supported.""
+			"
+				.Execute(In.Context<CommandActionSteps>());
 		}
 
 		[Test]
@@ -139,6 +173,8 @@ namespace Tp.Subversion.EditProfileFeature
 			When checked connection
 			Then error should occur for Login: ""Authorization failed. See plugin log for details.""
 				And error should occur for Password
+				And no errors should occur for Uri
+				And no errors should occur for StartRevision
 			"
 				.Execute(In.Context<CommandActionSteps>());
 		}
@@ -153,6 +189,8 @@ namespace Tp.Subversion.EditProfileFeature
 			When checked connection
 			Then error should occur for Login: ""Authorization failed. See plugin log for details.""
 				And error should occur for Password
+				And no errors should occur for Uri
+				And no errors should occur for StartRevision
 			"
 				.Execute(In.Context<CommandActionSteps>());
 		}

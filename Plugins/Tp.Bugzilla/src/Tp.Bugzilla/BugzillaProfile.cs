@@ -6,7 +6,7 @@
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using Tp.Bugzilla.ImportToTp;
+using Tp.BugTracking.Settings;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Mapping;
@@ -16,17 +16,18 @@ namespace Tp.Bugzilla
 {
 	[Profile, Serializable]
 	[DataContract]
-	public class BugzillaProfile : ISynchronizableProfile, IValidatable
+	public class BugzillaProfile : ISynchronizableProfile, IValidatable, IBugTrackingMappingSource,
+	                               IBugTrackingConnectionSettingsSource
 	{
 		public const string ProfileField = "Profile";
 		public const string PasswordField = "Password";
 		public const string LoginField = "Login";
 		public const string UrlField = "Url";
 		public const string ProjectField = "Project";
-		public const string QueriesField = "Queries";
+		public const string QueriesField = "SavedSearches";
 		public const string UserMappingField = "UserMapping";
 		public const string RolesMappingField = "RolesMapping";
-		private string _queries;
+		private string _savedSearches;
 		private string _url;
 
 		public BugzillaProfile()
@@ -55,14 +56,14 @@ namespace Tp.Bugzilla
 		public int Project { get; set; }
 
 		[DataMember]
-		public string Queries
+		public string SavedSearches
 		{
-			get { return _queries; }
+			get { return _savedSearches; }
 			set
 			{
-				_queries = string.Join(",", value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-				                            	.Select(x => x.Trim())
-				                            	.ToArray());
+				_savedSearches = string.Join(",", value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
+				                                  	.Select(x => x.Trim())
+				                                  	.ToArray());
 			}
 		}
 
@@ -114,7 +115,7 @@ namespace Tp.Bugzilla
 
 		private void ValidateQueries(PluginProfileErrorCollection errors)
 		{
-			if (string.IsNullOrEmpty(Queries))
+			if (string.IsNullOrEmpty(SavedSearches))
 			{
 				errors.Add(new PluginProfileError {FieldName = QueriesField, Message = "Saved Search is required"});
 			}
@@ -124,7 +125,7 @@ namespace Tp.Bugzilla
 		{
 			if (Project <= 0)
 			{
-				errors.Add(new PluginProfileError { FieldName = ProjectField, Message = "Project is required" });
+				errors.Add(new PluginProfileError {FieldName = ProjectField, Message = "Project is required"});
 			}
 		}
 
@@ -132,7 +133,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Password))
 			{
-				errors.Add(new PluginProfileError { FieldName = PasswordField, Message = "Password is required" });
+				errors.Add(new PluginProfileError {FieldName = PasswordField, Message = "Password is required"});
 			}
 		}
 
@@ -140,7 +141,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Login))
 			{
-				errors.Add(new PluginProfileError { FieldName = LoginField, Message = "Login is required" });
+				errors.Add(new PluginProfileError {FieldName = LoginField, Message = "Login is required"});
 			}
 		}
 
@@ -148,7 +149,7 @@ namespace Tp.Bugzilla
 		{
 			if (string.IsNullOrEmpty(Url))
 			{
-				errors.Add(new PluginProfileError { FieldName = UrlField, Message = "Url is required" });
+				errors.Add(new PluginProfileError {FieldName = UrlField, Message = "URL is required"});
 			}
 		}
 
@@ -165,18 +166,19 @@ namespace Tp.Bugzilla
 		{
 			if (RolesMapping.Any(x => x.Value == null || string.IsNullOrEmpty(x.Value.Name)))
 			{
-				errors.Add(new PluginProfileError {FieldName = RolesMappingField, Message = "All Bugzilla roles should be mapped to TP roles"});
+				errors.Add(new PluginProfileError
+				           	{FieldName = RolesMappingField, Message = "All Bugzilla roles should be mapped to TP roles"});
 			}
 		}
 
 		public int SynchronizationInterval
 		{
-			get { return 1; }
+			get { return 5; }
 		}
 
 		public override string ToString()
 		{
-			return string.Format("Url:'{0}', Login: '{1}'", Url, Login);
+			return string.Format("URL:'{0}', Login: '{1}'", Url, Login);
 		}
 	}
 }

@@ -1,9 +1,10 @@
 tau.mashups
     .addDependency("libs/jquery/jquery")
-    .addDependency("tp/codemirror/proxies/javascript")
-    .addCSS("../../tau/scripts/tp/codemirror/src/lib/codemirror.css")
-    .addCSS("../../tau/scripts/tp/codemirror/src/theme/default.css")
-    .addModule("MashupManager/CodeEditor", function () {
+    .addDependency("tp/codemirror/lib/codemirror")
+    .addDependency("tp/codemirror/mode/javascript/javascript")
+    .addCSS("../../tau/scripts/tp/codemirror/lib/codemirror.css")
+    .addCSS("../../tau/scripts/tp/codemirror/theme/default.css")
+    .addModule("MashupManager/CodeEditor", function ($, CodeMirror) {
         function codeEditor(config) {
             this._create(config);
         };
@@ -11,10 +12,7 @@ tau.mashups
         codeEditor.prototype = {
             _create: function(config){
                 this.textAreaSelector = config.textAreaSelector;
-                this.expandButtonSelector = config.expandButtonSelector;
                 this.placeholder = config.placeholder;
-
-                this.maximized = false;
             },
 
             initialize: function(){
@@ -23,39 +21,25 @@ tau.mashups
                     matchBrackets: true
                 });
 
-                this.placeholder.find(this.expandButtonSelector).click($.proxy(this._onFullScreenClick, this));
-
                 this._getCodeEditorBlock().addClass('mashup-code-editor');
                 this._getCodeMirrorBlock().addClass('mashup-code-block');
                 this._getCodeGutterBlock().addClass('mashup-code-gutter');
+
+                $(window).resize($.proxy(this._setCodeBlockWidth, this));
+                this._setCodeBlockWidth();
+
+                var prm = Sys.WebForms.PageRequestManager.getInstance();
+                prm.add_pageLoaded($.proxy(this._setCodeBlockWidth, this));
+
+                $('#lnkHideReport').click($.proxy(this._setCodeBlockWidth, this));
+                $('#lnkShowReport').click($.proxy(this._setCodeBlockWidth, this));
+                $('#rptLinksClosed').click($.proxy(this._setCodeBlockWidth, this));
+
+                this.scriptEditor.refresh();
             },
 
             getValue: function(){
                 return this.scriptEditor.getValue();
-            },
-
-            _onFullScreenClick: function(){
-                if(this._maximized) {
-                    this._setCodeSize(670,340);
-                }
-                else {
-                    this._setCodeSize(800,800);
-                }
-
-                this._maximized = !this._maximized;
-            },
-
-            _setCodeSize: function(width, height){
-                var mirror = this._getCodeMirrorBlock();
-                mirror.width(width);
-                mirror.height(height);
-
-                var editor = this._getCodeEditorBlock();
-                editor.width(width);
-                editor.height(height);
-
-                var gutter = this._getCodeGutterBlock();
-                gutter.height(height);
             },
 
             _getCodeMirrorBlock: function(){
@@ -68,6 +52,18 @@ tau.mashups
 
             _getCodeGutterBlock: function(){
                 return this.placeholder.find('div.CodeMirror-gutter');
+            },
+
+            _setCodeBlockWidth: function(){
+               var etalonLeft = this.placeholder.find(('p.label:contains("Code")')).position().left;
+
+                var screenWidth = $(window).width();
+                var calculatedWidth = screenWidth - etalonLeft;
+
+                $('#mashupDetails').width(calculatedWidth - 20);
+                this._getCodeEditorBlock().width(calculatedWidth - 40);
+                this._getCodeMirrorBlock().width(calculatedWidth - 40);
+                
             }
         };
         return codeEditor;

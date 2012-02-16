@@ -220,8 +220,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.ID == id)
 				.Where(s => s.EntityStateID == id)
 				.Where(s => s.ProcessID == processId)
-				.Where(s => s.Name == name)
-				.Any().Should(Be.True);
+				.Any(s => s.Name == name)
+				.Should(Be.True);
 		}
 
 		[Then("entity states storage should contain item '$name' with id $id")]
@@ -230,8 +230,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			Profile.Get<EntityStateDTO>()
 				.Where(s => s.Name == name)
 				.Where(s => s.ID == id)
-				.Where(s => s.EntityStateID == id)
-				.Any().Should(Be.True);
+				.Any(s => s.EntityStateID == id)
+				.Should(Be.True);
 		}
 
 		[Then("priorities storage should contain $count items")]
@@ -246,8 +246,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			Profile.Get<PriorityDTO>()
 				.Where(s => s.ID == id)
 				.Where(s => s.PriorityID == id)
-				.Where(s => s.Name == name)
-				.Any().Should(Be.True);
+				.Any(s => s.Name == name)
+				.Should(Be.True);
 		}
 
 		[Then("projects storage should contain $count items")]
@@ -262,8 +262,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			Profile.Get<ProjectDTO>()
 				.Where(s => s.ID == id)
 				.Where(s => s.ProjectID == id)
-				.Where(s => s.Name == name)
-				.Any().Should(Be.True);
+				.Any(s => s.Name == name)
+				.Should(Be.True);
 		}
 
 		[Then("projects storage should contain item with id $id and process $processId")]
@@ -272,8 +272,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			Profile.Get<ProjectDTO>()
 				.Where(s => s.ID == id)
 				.Where(s => s.ProjectID == id)
-				.Where(s => s.ProcessID == processId)
-				.Any().Should(Be.True);
+				.Any(s => s.ProcessID == processId)
+				.Should(Be.True);
 		}
 
 		[Then("severities storage should contain $count items")]
@@ -288,8 +288,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			Profile.Get<SeverityDTO>()
 				.Where(s => s.ID == id)
 				.Where(s => s.SeverityID == id)
-				.Where(s => s.Name == name)
-				.Any().Should(Be.True);
+				.Any(s => s.Name == name)
+				.Should(Be.True);
 		}
 
 		[Then(@"bugs with following names should be created in TargetProcess: (?<bugNames>([^,]+,?\s*)+)")]

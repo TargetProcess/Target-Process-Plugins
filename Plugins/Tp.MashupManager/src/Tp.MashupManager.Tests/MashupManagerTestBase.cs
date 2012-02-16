@@ -11,6 +11,7 @@ using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StructureMap;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Activity;
@@ -18,6 +19,7 @@ using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.Integration.Testing.Common;
+using Tp.MashupManager.Dtos;
 using Tp.MashupManager.MashupStorage;
 using Tp.Plugin.Core;
 using Tp.Testing.Common.NUnit;
@@ -124,7 +126,13 @@ namespace Tp.MashupManager.Tests
 		[Given("profile created for account '$accountName'")]
 		public void CreateProfileForAccount(string accountName)
 		{
-			TransportMock.AddProfile(_defaulrProfileName, accountName, new MashupManagerProfile());
+			CreateProfileForAccount(_defaulrProfileName, accountName);
+		}
+
+		[Given("profile '$profileName' created for account '$accountName'")]
+		public void CreateProfileForAccount(string profileName, string accountName)
+		{
+			TransportMock.AddProfile(profileName, accountName, new MashupManagerProfile());
 		}
 
 		[Given(@"profile mashups are: (?<mashups>([^,]+,?\s*)+)")]
@@ -184,8 +192,18 @@ namespace Tp.MashupManager.Tests
 			var mashup = GetMashupMessageByName(mashupName);
 			mashup.MashupName.Should(Be.EqualTo(mashupName));
 			mashup.PluginMashupScripts.Select(s => s.ScriptContent).ToArray().Should(Be.EquivalentTo(new []{script, string.Format("{0}{1}", MashupConfig.AccountsConfigPrefix, accounts)}));
-			mashup.PluginMashupScripts.Select(s => s.FileName).ToArray().Should(Be.EquivalentTo(new[] { MashupDto.AccountCfgFileName, MashupDto.MashupFileName }));
 			mashup.Placeholders.Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim())));
+
+			var scriptNames = mashup.PluginMashupScripts.Select(s => s.FileName).ToArray();
+			scriptNames.Count().Should(Be.EqualTo(2));
+			scriptNames.Should(Contains.Item(MashupDto.AccountCfgFileName));
+			scriptNames.Count(n => n.EndsWith("js")).Should(Be.EqualTo(1));
+		}
+
+		[Then("default mashup '$mashupName' with accounts '$accountName' should be sent to TP")]
+		public void CheckCreatedInTpMashup(string mashupName, string accountName)
+		{
+			CheckCreatedInTpMashup(mashupName, accountName, _defaultPlaceholders, _defaultScript);
 		}
 
 		[Then("mashup '$mashupName' with plugin name '$pluginName' should be sent to TP")]

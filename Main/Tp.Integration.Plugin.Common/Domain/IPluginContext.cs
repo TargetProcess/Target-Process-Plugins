@@ -8,7 +8,8 @@ using Tp.Integration.Messages;
 namespace Tp.Integration.Plugin.Common.Domain
 {
 	/// <summary>
-	/// Provides access for context in which current message is handling.
+	/// Provides access for context in which current message is handling. Almost all classes from API depents on context values.
+	/// Injected into StructureMap container.
 	/// </summary>
 	public interface IPluginContext
 	{

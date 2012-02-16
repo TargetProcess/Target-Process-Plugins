@@ -6,11 +6,14 @@
 using System;
 using System.Linq;
 using NServiceBus;
-using Tp.Integration.Messages.PluginLifecycle;
+using StructureMap;
+using Tp.BugTracking.ImportToTp;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Logging;
+using log4net;
 
 namespace Tp.Bugzilla.ImportToTp
 {
@@ -35,8 +38,8 @@ namespace Tp.Bugzilla.ImportToTp
 		public void Handle(TickMessage message)
 		{
 			_logger.Info("Checking changes in Bugzilla");
-			ProcessFailedChunks();
 
+			ProcessFailedChunks();
 			ProcessNewlyChanges(message.LastSyncDate);
 		}
 
@@ -81,7 +84,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 			while (bugIdsChunk.Any())
 			{
-				_bus.SendLocal(new ImportBugsChunk {BugzillaBugsIds = bugIdsChunk});
+				_bus.SendLocal(new ImportBugsChunk {ThirdPartyBugsIds = bugIdsChunk});
 
 				lastIndex += _bugChunkSize.Value;
 				bugIdsChunk = changedIds.Skip(lastIndex).Take(_bugChunkSize.Value).ToArray();
@@ -96,7 +99,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 			foreach (var failedChunk in FailedChunks)
 			{
-				_bus.SendLocal(new ImportBugsChunk {BugzillaBugsIds = failedChunk.Chunk});
+				_bus.SendLocal(new ImportBugsChunk {ThirdPartyBugsIds = failedChunk.Chunk});
 			}
 
 			FailedChunks.Clear();
@@ -134,15 +137,5 @@ namespace Tp.Bugzilla.ImportToTp
 				return false;
 			}
 		}
-	}
-
-	public class ImportBugToTargetProcessCommand : IPluginLocalMessage
-	{
-		public BugzillaBug BugzillaBug { get; set; }
-	}
-
-	public class ImportBugsChunk : IPluginLocalMessage
-	{
-		public int[] BugzillaBugsIds { get; set; }
 	}
 }

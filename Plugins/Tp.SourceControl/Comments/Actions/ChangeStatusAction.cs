@@ -7,6 +7,7 @@ using System;
 using StructureMap;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.SourceControl.Comments.Actions
@@ -45,6 +46,11 @@ namespace Tp.SourceControl.Comments.Actions
 			       		Comment = Comment,
 			       		DefaultComment = DefaultComment
 			       	};
+		}
+
+		protected override void Log(IActivityLogger logger)
+		{
+			logger.InfoFormat("Changing entity state. Entity ID: {0}; Entity State: {1}; Comment: {2}; Default comment: {3}", EntityId, Status, Comment, DefaultComment);
 		}
 
 		protected override void Visit(IActionVisitor visitor)

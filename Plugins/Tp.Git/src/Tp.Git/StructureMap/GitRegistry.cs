@@ -4,13 +4,15 @@
 // 
 
 using NGit.Util;
-using StructureMap;
+using Tp.Git.RevisionStorage;
 using Tp.Git.VersionControlSystem;
-using Tp.Integration.Plugin.Common.Activity;
+using Tp.Git.Workflow;
 using Tp.SourceControl.Commands;
+using Tp.SourceControl.RevisionStorage;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.StructureMap;
 using Tp.SourceControl.VersionControlSystem;
+using Tp.SourceControl.Workflow.Workflow;
 
 namespace Tp.Git.StructureMap
 {
@@ -36,11 +38,18 @@ namespace Tp.Git.StructureMap
 			var mockSystemReader = new MockSystemReader(SystemReader.GetInstance());
 			SystemReader.SetInstance(mockSystemReader);
 
-			For<IVersionControlSystem>().Use(() =>
-				new GitVersionControlSystem(
-					ObjectFactory.GetInstance<ISourceControlConnectionSettingsSource>(),
-					ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
-					ObjectFactory.GetInstance<IActivityLogger>()));
+			For<IVersionControlSystem>().Use<GitVersionControlSystem>();
+			Forward<IVersionControlSystem, IGitVersionControlSystem>();
+		}
+
+		protected override void ConfigureRevisionStorage()
+		{
+			For<IRevisionStorageRepository>().Use<GitRevisionStorageRepository>();
+		}
+
+		protected override void ConfigureUserMapper()
+		{
+			For<UserMapper>().Use<GitUserMapper>();
 		}
 	}
 }

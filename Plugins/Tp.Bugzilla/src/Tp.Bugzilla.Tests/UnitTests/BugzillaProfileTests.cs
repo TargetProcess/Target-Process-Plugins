@@ -16,9 +16,9 @@ namespace Tp.Bugzilla.Tests.UnitTests
 		{
 			var profile = new BugzillaProfile
 			              	{
-			              		Queries = " query1, query2 "
+			              		SavedSearches = " query1, query2 "
 			              	};
-			profile.Queries.Should(Be.EqualTo("query1,query2"));
+			profile.SavedSearches.Should(Be.EqualTo("query1,query2"));
 		}
 
 		[Test]

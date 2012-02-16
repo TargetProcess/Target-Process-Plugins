@@ -4,6 +4,7 @@
 // 
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework;
@@ -39,6 +40,18 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {Id:1, Comment:""#123 time:1"", Author:""svnuser""}
 				When plugin started up
 				Then time 1 should be posted on entity 123 by the 'tpuser'"
+				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+		}
+
+		[Test]
+		public void ShouldPostTimeInDifferentCultures()
+		{
+			@"Given tp user 'tpuser' with id 5
+					And culture is set to 'de-De'
+					And vcs user 'svnuser' mapped as 'tpuser'
+					And vcs commit is: {Id:1, Comment:""#123 time:1.5"", Author:""svnuser""}
+				When plugin started up
+				Then time 1.5 should be posted on entity 123 by the 'tpuser'"
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
 		}
 
@@ -96,9 +109,10 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
 		}
 
-		[Then(@"time (?<time>[\d+]) should be posted on entity $entityId by the '$tpUserName'")]
-		public void TimeShouldBePosted(int time, int entityId, string userName)
+		[Then(@"time (?<time>[\d]*\.?[\d]*) should be posted on entity $entityId by the '$tpUserName'")]
+		public void TimeShouldBePosted(string timePosted, int entityId, string userName)
 		{
+			var time = double.Parse(timePosted, CultureInfo.InvariantCulture);
 			var postTimeCmd =
 				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PostTimeCommand>().Where(x => x.EntityId == entityId)
 					.Single();
@@ -120,13 +134,15 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		}
 
 		[Then("time spent $timeSpent and time left $timeLeft should be posted on entity $entityId by the '$tpUserName'")]
-		public void TimeShouldBePosted1(double timeSpent, double timeLeft, int entityId, string userName)
+		public void TimeShouldBePosted1(string timeSpent, string timeLeft, int entityId, string userName)
 		{
+			var spent = decimal.Parse(timeSpent, CultureInfo.InvariantCulture);
+			var left = decimal.Parse(timeLeft, CultureInfo.InvariantCulture);
 			var postTimeCmd =
 				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PostTimeCommand>().Where(x => x.EntityId == entityId)
 					.Single();
-			postTimeCmd.Spent.Should(Be.EqualTo(timeSpent));
-			postTimeCmd.Left.Should(Be.EqualTo(timeLeft));
+			postTimeCmd.Spent.Should(Be.EqualTo(spent));
+			postTimeCmd.Left.Should(Be.EqualTo(left));
 
 			var context = Context;
 			var user = context.GetTpUserByName(userName);

@@ -72,7 +72,6 @@ namespace Tp.Integration.Plugin.Common.Domain
 			lock (_gate)
 			{
 				return Accounts.Values.Select(acc => acc.CreateChildVersion().Account)
-										.StaticCast(TypeOf<IAccountReadonly>.Self)
 										.ToList();
 			}
 		}

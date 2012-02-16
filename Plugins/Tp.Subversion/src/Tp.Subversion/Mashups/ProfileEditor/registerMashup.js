@@ -65,24 +65,33 @@ tau.mashups
 
 			renderUserAutocomplete: function () {
 				var that = this;
-				function bindToUserMapping(handler) {
+				function bindToUserMapping(handler, handlerId) {
 					var selector = 'input.tpuser';
 
 					handler(that.placeholder.find(selector));
 
-					$(selector).live('mappingadded', function () {
-						handler($(this));
+					$(selector).live('focus', function () {
+
+						var $el = $(this);
+
+						if ($el.data(handlerId)) {
+							return;
+						}
+
+						$el.data(handlerId, true);
+						handler($el);
 					});
+
 				}
 
 				function usersLoaded(data) {
 					bindToUserMapping(function (elements) {
 						new tpUsersPopoverWidget({ elements: elements, source: data });
-					});
+					}, 'tpUsersPopoverWidget');
 
 					bindToUserMapping(function (elements) {
 						elements.synchronizeUser({ source: data });
-					});
+					}, 'synchronizeUserWidget');
 				};
 				usersLoaded(this.tpUsers);
 			},

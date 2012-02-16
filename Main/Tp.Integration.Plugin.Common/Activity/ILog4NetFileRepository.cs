@@ -8,7 +8,7 @@ using log4net.Repository.Hierarchy;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public interface ILog4NetFileRepository
+	internal interface ILog4NetFileRepository
 	{
 		IEnumerable<ActivityLogRecord> GetActivityRecordsFor(Logger logger, ActivityFilter filter);
 

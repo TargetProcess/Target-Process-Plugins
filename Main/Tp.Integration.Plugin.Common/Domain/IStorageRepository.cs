@@ -9,7 +9,8 @@ using Tp.Integration.Plugin.Common.Storage.Persisters;
 namespace Tp.Integration.Plugin.Common.Domain
 {
 	/// <summary>
-	/// Provides access to storage of objects by type. Storage is profile specific.
+	/// Provides access to storage of objects by type (for current profile). Storage is profile specific.
+	/// Injected into StructureMap container.
 	/// </summary>
 	public interface IStorageRepository : INullable
 	{

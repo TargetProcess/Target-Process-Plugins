@@ -66,6 +66,9 @@ namespace Tp.SourceControl.Testing
 		public abstract string Login { get; }
 		public abstract string Password { get; }
 		public abstract void Commit(string commitComment);
+		public abstract string Commit(string filePath, string changedContent, string commitComment);
+		public abstract void CheckoutBranch(string branch);
+		public abstract string CherryPick(string revisionId);
 
 		protected virtual void OnTestRepositoryDeployed() {}
 	}

@@ -8,5 +8,11 @@ namespace Tp.SourceControl.Testing.Repository
 	public interface IVcsRepository : IVcsCredentials
 	{
 		void Commit(string commitComment);
+
+		string Commit(string filePath, string changedContent, string commitComment);
+
+		void CheckoutBranch(string branch);
+
+		string CherryPick(string revisionId);
 	}
 }

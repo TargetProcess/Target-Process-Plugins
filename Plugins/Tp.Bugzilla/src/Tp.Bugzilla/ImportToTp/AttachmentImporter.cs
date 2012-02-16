@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
+using Tp.BugTracking.ImportToTp;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
@@ -14,8 +15,8 @@ using Tp.Plugin.Core.Attachments;
 
 namespace Tp.Bugzilla.ImportToTp
 {
-	public class AttachmentImporter : IHandleMessages<NewBugImportedToTargetProcessMessage>,
-	                                  IHandleMessages<ExistingBugImportedToTargetProcessMessage>
+	public class AttachmentImporter : IHandleMessages<NewBugImportedToTargetProcessMessage<BugzillaBug>>,
+	                                  IHandleMessages<ExistingBugImportedToTargetProcessMessage<BugzillaBug>>
 	{
 		private readonly IStorageRepository _storageRepository;
 		private readonly ILocalBus _localBus;
@@ -28,19 +29,19 @@ namespace Tp.Bugzilla.ImportToTp
 			_logger = logger;
 		}
 
-		public void Handle(NewBugImportedToTargetProcessMessage message)
+		public void Handle(NewBugImportedToTargetProcessMessage<BugzillaBug> message)
 		{
-			PushAttachmentsToTp(message.TpBugId, message.BugzillaBug, message.BugzillaBug.attachmentCollection);
+			PushAttachmentsToTp(message.TpBugId, message.ThirdPartyBug, message.ThirdPartyBug.attachmentCollection);
 		}
 
-		public void Handle(ExistingBugImportedToTargetProcessMessage message)
+		public void Handle(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message)
 		{
 			var newAttachments =
-				message.BugzillaBug.attachmentCollection.Where(attachment => !AttachmentExists(message, attachment)).ToList();
+				message.ThirdPartyBug.attachmentCollection.Where(attachment => !AttachmentExists(message, attachment)).ToList();
 
-			AttachmentFolder.Delete(message.BugzillaBug.attachmentCollection.Except(newAttachments).Select(x => x.FileId));
+			AttachmentFolder.Delete(message.ThirdPartyBug.attachmentCollection.Except(newAttachments).Select(x => x.FileId));
 
-			PushAttachmentsToTp(message.TpBugId, message.BugzillaBug, newAttachments);
+			PushAttachmentsToTp(message.TpBugId, message.ThirdPartyBug, newAttachments);
 		}
 
 		private void PushAttachmentsToTp(int? tpBugId, BugzillaBug bug, List<LocalStoredAttachment> attachments)
@@ -53,12 +54,11 @@ namespace Tp.Bugzilla.ImportToTp
 			                    	});
 		}
 
-		private bool AttachmentExists(ExistingBugImportedToTargetProcessMessage message, LocalStoredAttachment attachment)
+		private bool AttachmentExists(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message,
+		                              LocalStoredAttachment attachment)
 		{
 			return _storageRepository.Get<AttachmentDTO>()
-				.Where(c => c.GeneralID == message.TpBugId)
-				.Where(c => c.CreateDate == attachment.CreateDate)
-				.Any();
+				.Any(c => c.GeneralID == message.TpBugId && c.CreateDate == attachment.CreateDate);
 		}
 	}
 }

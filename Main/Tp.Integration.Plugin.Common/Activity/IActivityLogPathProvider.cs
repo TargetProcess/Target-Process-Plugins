@@ -1,6 +1,6 @@
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public interface IActivityLogPathProvider
+	internal interface IActivityLogPathProvider
 	{
 		string GetLogPathFor(string accountName, string profileName, string fileName);
 

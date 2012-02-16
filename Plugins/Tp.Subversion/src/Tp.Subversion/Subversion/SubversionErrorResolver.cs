@@ -50,7 +50,7 @@ namespace Tp.Subversion.Subversion
 			}
 			else
 			{
-				errors.Add(ErrorFor(ConnectionSettings.UriField, "Connection failed"));
+				errors.Add(ErrorFor(ConnectionSettings.UriField, e.Message.Fmt("Connection failed. {0}")));
 			}
 		}
 

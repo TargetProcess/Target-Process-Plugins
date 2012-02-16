@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NServiceBus.Unicast.Transport;
 using Newtonsoft.Json;
-using Tp.Bugzilla.CustomCommand.Dtos;
+using Tp.BugTracking.Commands.Dtos;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.ServiceBus;

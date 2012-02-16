@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using StructureMap;
+using Tp.BugTracking;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Bugzilla.Schemas;
 using Tp.Plugin.Core.Attachments;
@@ -16,46 +16,48 @@ using Tp.Plugin.Core.Attachments;
 namespace Tp.Bugzilla
 {
 	[Serializable]
-	[KnownType(typeof(long_desc))]
 	public class BugzillaBug
 	{
 		public string reporter { get; set; }
-	
+
 		public string assigned_to { get; set; }
-	
+
 		public string bug_id { get; set; }
-	
+
 		public string priority { get; set; }
-	
+
 		public string bug_severity { get; set; }
-	
+
 		public string bug_status { get; set; }
-	
+
 		public string op_sys { get; set; }
-	
+
 		public string component { get; set; }
-	
+
 		public string version { get; set; }
-	
+
 		public string classification { get; set; }
-	
+
 		public string rep_platform { get; set; }
-	
+
+		public string description { get; set; }
+
+		public List<BugzillaComment> comments { get; set; }
+
 		public List<custom_field> customFields { get; set; }
-	
-		public long_descCollection long_descCollection { get; set; }
-	
+
 		public string creation_ts { get; set; }
-	
+
 		public string short_desc { get; set; }
-	
+
 		public List<LocalStoredAttachment> attachmentCollection { get; set; }
 
 		public BugzillaBug()
 		{
+			comments = new List<BugzillaComment>();
 		}
 
-		public BugzillaBug(bug bug)
+		public BugzillaBug(bug bug) : this()
 		{
 			bug_id = bug.bug_id;
 			reporter = bug.reporter;
@@ -71,7 +73,20 @@ namespace Tp.Bugzilla
 			rep_platform = bug.rep_platform;
 			customFields = bug.custom_fieldCollection.Cast<custom_field>().ToList();
 
-			long_descCollection = GetDescriptionCollection(bug);
+			var longDescCollection = GetDescriptionCollection(bug);
+			if (longDescCollection.Count > 0)
+			{
+				description = longDescCollection[0].thetext;
+			}
+			if (longDescCollection.Count > 1)
+			{
+				comments = longDescCollection
+					.Cast<long_desc>()
+					.Skip(1)
+					.Select(x => new BugzillaComment(x))
+					.ToList();
+			}
+
 			creation_ts = bug.creation_ts;
 			short_desc = DescriptionConverter.CleanUpContent(bug.short_desc);
 			attachmentCollection = CreateAttachments(bug.attachmentCollection.Cast<attachment>());
@@ -101,8 +116,8 @@ namespace Tp.Bugzilla
 				                      	{
 				                      		FileId = fileId,
 				                      		FileName = attachmentFileName,
-											Description = attachment.desc,
-											OwnerId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(attachment.attacher),
+				                      		Description = attachment.desc,
+				                      		OwnerId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(attachment.attacher),
 				                      		CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(attachment.date)
 				                      	});
 			}

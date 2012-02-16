@@ -20,7 +20,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		public string FileName { get; set; }
 	}
 
-	public class Log4NetFileRepositoryMock : Log4NetFileRepository
+	internal class Log4NetFileRepositoryMock : Log4NetFileRepository
 	{
 		#region Inner storage
 

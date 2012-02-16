@@ -58,7 +58,7 @@ tau.mashups
                         Password: '',
                         Url: '',
                         Project: 0,
-                        Queries: '',
+                        SavedSearches: '',
                         StatesMapping: [],
                         SeveritiesMapping: [],
                         PrioritiesMapping: [],

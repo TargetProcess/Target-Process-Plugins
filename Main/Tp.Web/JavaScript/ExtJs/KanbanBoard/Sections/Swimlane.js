@@ -13,6 +13,8 @@ Tp.controls.kanbanboard.sections.Swimlane = Ext.extend(Tp.controls.kanbanboard.C
 	*/
 	cls: 'kanban-swimlane',
 
+	entities: null,
+
 	//private
 	controller: null,
 
@@ -38,6 +40,7 @@ Tp.controls.kanbanboard.sections.Swimlane = Ext.extend(Tp.controls.kanbanboard.C
 		this.on('add', this.onAdd, this);
 
 		this.on('remove', this.onRemove, this);
+
 	},
 
 	highlighDisabled: function (item, entity) {
@@ -60,10 +63,10 @@ Tp.controls.kanbanboard.sections.Swimlane = Ext.extend(Tp.controls.kanbanboard.C
 		}
 		var uxHeaderFrameEl = this.uxHeader.getEl().parent();
 
-		if (this.swimlane.limit > 0 && this.items.length > this.swimlane.limit) {
+		if (this.swimlane.limit > 0 && this.countItems() > this.swimlane.limit) {
 			uxHeaderFrameEl.addClass('kanban-swimlane-overlimit');
 			uxHeaderFrameEl.removeClass('kanban-swimlane-limitless');
-		} else if (this.swimlane.limit > 0 && this.items.length < this.swimlane.limit) {
+		} else if (this.swimlane.limit > 0 && this.countItems() < this.swimlane.limit) {
 			uxHeaderFrameEl.addClass('kanban-swimlane-limitless');
 			uxHeaderFrameEl.removeClass('kanban-swimlane-overlimit');
 		} else {
@@ -74,15 +77,29 @@ Tp.controls.kanbanboard.sections.Swimlane = Ext.extend(Tp.controls.kanbanboard.C
 		this.updateHeader();
 	},
 
+
+
+	countItems: function () {
+		if (!this.swimlane.entities)
+			return 0;
+		var count = 0;
+		for (var i = 0, len = this.swimlane.entities.length; i < len; i++) {
+			if (this.swimlane.entities[i].entityType.id !== this.controller.process.taskEntityType.id)
+				count++;
+		}
+
+		return count;
+	},
+
 	updateHeader: function () {
 		if (this.uxHeader == null) {
 			return;
 		};
 		var title = this.swimlane.title;
 		if (this.swimlane.limit > 0) {
-			title = this.swimlane.initTitle + ' - ' + this.items.length + ' (limit ' + this.swimlane.limit + ')';
+			title = this.swimlane.initTitle + ' - ' + this.countItems() + ' (limit ' + this.swimlane.limit + ')';
 		} else if (this.items.length > 0 && this.swimlane.name != '__final__') {
-			title = this.swimlane.initTitle + ' - ' + this.items.length;
+			title = this.swimlane.initTitle + ' - ' + this.countItems();
 		}
 		this.uxHeader.el.update(title);
 	},
@@ -99,13 +116,31 @@ Tp.controls.kanbanboard.sections.Swimlane = Ext.extend(Tp.controls.kanbanboard.C
 		this.highlightItemsCount();
 	},
 
-	onAdd: function (ct, item) {
+	onAdd: function (ct) {
 		//we do not need to call dolayout or repaint because sorting happening just in time
 		this.sort();
+
+		if (!this.swimlane.entities)
+			this.swimlane.entities = [];
+		ct.entity && this.swimlane.entities.push(ct.entity);
+
 		this.highlightItemsCount();
 	},
 
-	onRemove: function (ct, item) {
+	onRemove: function (ct) {
+		if (!this.swimlane.entities)
+			this.swimlane.entities = [];
+		var entity = ct.entity;
+		var pos = -1;
+		for (var i = 0, len = this.swimlane.entities.length; i < len; i++) {
+			if (this.swimlane.entities[i] === entity) {
+				pos = i;
+			}
+		}
+		if (pos !== -1) {
+			this.swimlane.entities.splice(pos, 1);
+		}
+
 		this.highlightItemsCount();
 	},
 

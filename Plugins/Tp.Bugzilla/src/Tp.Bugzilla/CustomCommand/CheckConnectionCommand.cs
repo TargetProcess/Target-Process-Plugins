@@ -5,6 +5,7 @@
 
 using System.Linq;
 using Tp.Bugzilla.CustomCommand.Dtos;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common.Activity;

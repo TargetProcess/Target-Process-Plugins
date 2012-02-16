@@ -17,18 +17,39 @@ namespace Tp.Git.VersionControlSystem
 {
 	public static class RevCommitExtensions
 	{
+		public static DateTime GetCommitTime(this RevCommit commit)
+		{
+			return commit.GetCommitterIdent().GetWhen();
+		}
+
+		public static DateTime GetAuthorTime(this RevCommit commit)
+		{
+			return commit.GetAuthorIdent().GetWhen();
+		}
+
 		public static RevisionInfo ConvertToRevisionInfo(this RevCommit commit, Repository repository)
 		{
 			var authorIdent = commit.GetAuthorIdent();
-			DateTime commitTime = authorIdent.GetWhen();
 			return new RevisionInfo
-			{
-				Author = authorIdent.GetName(),
-				Comment = commit.GetFullMessage().TrimEnd('\n'),
-				Id = (GitRevisionId)commitTime,
-				Time = commitTime,
-				Entries = commit.GetEntriesEnc(repository)
-			};
+			       	{
+			       		Author = authorIdent.GetName(),
+			       		Comment = commit.GetComment(),
+			       		Id = commit.Id.Name,
+			       		Time = commit.GetCommitTime(),
+			       		Entries = commit.GetEntriesEnc(repository),
+						Email = authorIdent.GetEmailAddress(),
+						TimeCreated = commit.GetAuthorTime()
+			       	};
+		}
+
+		public static string GetComment(this RevCommit commit)
+		{
+			return commit.GetFullMessage().TrimEnd('\n');
+		}
+
+		public static RevisionId ConvertToRevisionId(this RevCommit commit)
+		{
+			return new RevisionId{Time = commit.GetCommitTime(), Value = commit.Id.Name};
 		}
 
 		private static RevisionEntryInfo[] GetEntriesEnc(this RevCommit commit, Repository repository)

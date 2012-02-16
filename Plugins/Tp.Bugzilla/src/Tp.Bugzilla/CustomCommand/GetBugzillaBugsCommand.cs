@@ -4,9 +4,9 @@
 // 
 
 using StructureMap;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.Bugzilla.CustomCommand
 {

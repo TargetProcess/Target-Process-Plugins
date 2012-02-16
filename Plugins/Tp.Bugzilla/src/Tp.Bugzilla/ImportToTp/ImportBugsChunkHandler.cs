@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using NServiceBus;
+using Tp.BugTracking.ImportToTp;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
@@ -20,8 +21,7 @@ namespace Tp.Bugzilla.ImportToTp
 		private readonly IActivityLogger _logger;
 		private readonly IBugzillaService _bugzillaService;
 
-		public ImportBugsChunkHandler(ILocalBus bus, IStorageRepository storageRepository, IActivityLogger logger,
-		                              IBugzillaService bugzillaService)
+		public ImportBugsChunkHandler(ILocalBus bus, IStorageRepository storageRepository, IActivityLogger logger, IBugzillaService bugzillaService)
 		{
 			_bus = bus;
 			_storageRepository = storageRepository;
@@ -34,14 +34,14 @@ namespace Tp.Bugzilla.ImportToTp
 			bugCollection bugs;
 
 			_logger.Info("Retrieving changed bugs");
-			if (TryGetChangedBugsChunk(message.BugzillaBugsIds, out bugs))
+			if (TryGetChangedBugsChunk(message.ThirdPartyBugsIds, out bugs))
 			{
-				_logger.InfoFormat("Bugs retrieved. Bugzilla Bug IDs: {0}", string.Join(", ", message.BugzillaBugsIds.Select(x => x.ToString()).ToArray()));
+				_logger.InfoFormat("Bugs retrieved. Bugzilla Bug IDs: {0}", string.Join(", ", message.ThirdPartyBugsIds.Select(x => x.ToString()).ToArray()));
 				CreateBugsInTargetProcess(bugs);
 			}
 			else
 			{
-				FailedChunks.Add(new FailedChunk(message.BugzillaBugsIds));
+				FailedChunks.Add(new FailedChunk(message.ThirdPartyBugsIds));
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 			foreach (var bug in bugs)
 			{
-				_bus.SendLocal(new ImportBugToTargetProcessCommand {BugzillaBug = new BugzillaBug(bug)});
+				_bus.SendLocal(new ImportBugToTargetProcessCommand<BugzillaBug> {ThirdPartyBug = new BugzillaBug(bug)});
 			}
 		}
 	}

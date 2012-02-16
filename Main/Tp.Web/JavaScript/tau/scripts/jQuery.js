@@ -1,1 +1,1 @@
-define(["libs/jquery/jquery","libs/jquery/jquery.ui"],function(){return $})
+define(["libs/jquery/jquery","libs/jquery/jquery.ui","libs/jquery/jquery.ui.sortable.performance","libs/jqote2/jquery.jqote2.min"],function(){return $})

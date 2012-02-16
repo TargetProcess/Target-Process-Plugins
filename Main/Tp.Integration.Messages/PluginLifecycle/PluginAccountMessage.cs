@@ -5,13 +5,13 @@
 
 namespace Tp.Integration.Messages.PluginLifecycle
 {
-	public class PluginAccountMessage : IPluginLifecycleMessage
+	public class PluginAccountMessageSerialized : IPluginLifecycleMessage
 	{
-		public PluginAccountMessage()
-		{
-			PluginAccount = new PluginAccount();
-		}
+		public string SerializedMessage { get; set; }
 
-		public PluginAccount PluginAccount { get; set; }
+		public PluginAccount[] GetAccounts()
+		{
+			return string.IsNullOrEmpty(SerializedMessage) ? new PluginAccount[]{} : SerializedMessage.Deserialize<PluginAccount[]>();
+		}
 	}
 }

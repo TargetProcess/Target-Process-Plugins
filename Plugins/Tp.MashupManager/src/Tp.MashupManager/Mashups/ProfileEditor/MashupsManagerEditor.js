@@ -2,13 +2,14 @@
     .addDependency("MashupManager/EditorTemplate")
     .addDependency("MashupManager/ProfileRepository")
     .addDependency("MashupManager/CodeEditor")
+    .addDependency("MashupManager/Previewer")
+    .addDependency("MashupManager/PlaceholderParser")
     .addDependency("tp/plugins/ErrorMessageContainer")
     .addDependency("tp/status")
     .addDependency("libs/jquery/jquery")
     .addDependency("libs/jquery/jquery.tmpl")
     .addDependency("libs/jquery/jquery.ui.confirmation")
-
-    .addModule("MashupManager/MashupManagerEditor", function (template, repository, codeEditor, errorMessageContainer, status) {
+    .addModule("MashupManager/MashupManagerEditor", function (template, repository, codeEditor, previewer, placeholderParser, errorMessageContainer, status) {
         function managerEditor(config) {
             this._create(config);
         };
@@ -26,9 +27,11 @@
 
                 this.scriptEditor = new codeEditor({
                     placeholder: this.placeholder,
-                    textAreaSelector: '#script',
-                    expandButtonSelector: '#expandScript'
+                    textAreaSelector: '#script'
                 });
+
+                this.previewer = new previewer();
+                this.placeholderParser = new placeholderParser();
             },
 
             initialize: function() {
@@ -74,6 +77,8 @@
                 });
 
                 $(mashupName).addClass('selected');
+                this.hiddenPlaceholders.val(mashup.Placeholders);
+                this.previewBlock.show();
             },
 
             _onSaveMashupFail: function(responseText) {
@@ -115,12 +120,23 @@
                 this.scriptEditor.initialize();
 
                 this.hiddenMashupName = this.placeholder.find('#hiddenMashupName');
+                this.hiddenPlaceholders = this.placeholder.find('#placeholdersHidden');
                 this.btnSave = this.placeholder.find('#save');
                 this.btnSave.click($.proxy(this._save, this));
 
                 this.placeholder.find('#name').focus();
 
                 this.placeholder.find('._moreLink').click($.proxy(this._showPlaceholdersHelp, this));
+                this.placeholder.find('#previewButton').click($.proxy(this._preview, this));
+
+                this.placeholderParser.attach(this.placeholder.find('#placeholders'));
+
+                this.previewBlock = this.placeholder.find('#previewBlock');
+                this.previewBlock.css('display', this._isMashupEditing() ? 'block' : 'none');
+            },
+
+            _preview: function(){
+                this.previewer.preview(this.hiddenPlaceholders.val());
             },
 
             _showPlaceholdersHelp: function(){
@@ -147,7 +163,7 @@
                 var target = $(a.target);
                 target.addClass('selected');
 
-                this.repository.getMashupByName(target.text(), $.proxy(this._onGetMashupSuccess, this), $.proxy(this._onGetMashupFail, this));
+                this.repository.getMashupByName({Value: target.text()}, $.proxy(this._onGetMashupSuccess, this), $.proxy(this._onGetMashupFail, this));
             },
 
             _removeSelectionInMashupList: function() {

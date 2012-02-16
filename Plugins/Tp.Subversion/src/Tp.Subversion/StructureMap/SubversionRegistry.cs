@@ -6,12 +6,15 @@
 using Tp.Integration.Messages.SerializationPatches;
 using Tp.Integration.Plugin.Common;
 using Tp.SourceControl.Commands;
+using Tp.SourceControl.RevisionStorage;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.StructureMap;
 using Tp.SourceControl.VersionControlSystem;
-using Tp.Subversion.SerializationPatches;
+using Tp.SourceControl.Workflow.Workflow;
+using Tp.Subversion.RevisionStorage;
 using Tp.Subversion.SerializationPatches.Xml;
 using Tp.Subversion.Subversion;
+using Tp.Subversion.Workflow;
 
 namespace Tp.Subversion.StructureMap
 {
@@ -41,6 +44,16 @@ namespace Tp.Subversion.StructureMap
 		protected override void ConfigureVersionControlSystem()
 		{
 			For<IVersionControlSystem>().Use<Subversion.Subversion>();
+		}
+
+		protected override void ConfigureRevisionStorage()
+		{
+			For<IRevisionStorageRepository>().HybridHttpOrThreadLocalScoped().Use<SubversionRevisionStorageRepository>();
+		}
+
+		protected override void ConfigureUserMapper()
+		{
+			For<UserMapper>().Use<SubversionUserMapper>();
 		}
 	}
 }

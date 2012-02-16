@@ -48,8 +48,9 @@
     <Reference Include="NBehave.Narrator.Framework">
       <HintPath>..\..\..\..\Libs\NBehave\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Net35">
-      <HintPath>..\..\..\..\Libs\jsonNet\Newtonsoft.Json.Net35.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.4.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -153,6 +154,10 @@
       <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
       <Name>Tp.Plugin.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.BugTracking\Tp.BugTracking.csproj">
+      <Project>{A554F2D6-810C-4A67-B71D-D77FCDBBCF7B}</Project>
+      <Name>Tp.BugTracking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
       <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
       <Name>Tp.Integration.Plugin.UninstallUtil</Name>
@@ -171,6 +176,7 @@
       <Link>languages.yml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

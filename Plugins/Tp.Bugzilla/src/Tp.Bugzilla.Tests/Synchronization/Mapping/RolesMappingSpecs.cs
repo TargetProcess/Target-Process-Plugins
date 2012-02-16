@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
+using Tp.BugTracking.Commands.Dtos;
 using Tp.Bugzilla.CustomCommand.Dtos;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;

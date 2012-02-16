@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 //
 
+using System;
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
@@ -83,10 +84,11 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters
 		{
 			using (var context = CreateContext())
 			{
-				var sqlNames = string.Join(",", storageNames.Select(s => string.Format("'{0}'", s.Value)).ToArray());
-				
-				string cmd = "delete dbo.ProfileStorage where dbo.ProfileStorage.ProfileId = {0} AND dbo.ProfileStorage.ValueKey = {1} AND dbo.ProfileStorage.Name IN ("+ sqlNames +")";
-				context.ExecuteCommand(cmd, profileId.Value, key.Value);
+				var inClausePlaceholders = string.Join(",", storageNames.Select((x, i) => "{{{0}}}".Fmt(i + 2)));
+				var parameters = new object[] { profileId.Value, key.Value }.Concat(storageNames.Select(x => x.Value));
+
+				var cmd = "delete dbo.ProfileStorage where dbo.ProfileStorage.ProfileId = {0} AND dbo.ProfileStorage.ValueKey = {1} AND dbo.ProfileStorage.Name IN (" + inClausePlaceholders + ")";
+				context.ExecuteCommand(cmd, parameters.ToArray());
 			}
 		}
 

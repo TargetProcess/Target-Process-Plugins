@@ -4,8 +4,6 @@
 // 
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using Tp.Git.VersionControlSystem;
 using Tp.SourceControl.VersionControlSystem;
@@ -20,19 +18,19 @@ namespace Tp.Git.Tests.VersionControlSystem
 		public void ShouldHandlePosixTime()
 		{
 			var initialTime = DateTime.Today.AddHours(6);
-			GitRevisionId revisionId = initialTime;
+			GitRevisionId revisionId = new RevisionId {Time = initialTime, Value = Guid.NewGuid().ToString()};
 
 			RevisionId revisionIdDto = revisionId;
 			GitRevisionId restoredRevisionId = revisionIdDto;
 
-			restoredRevisionId.Value.Should(Be.EqualTo(initialTime));
+			restoredRevisionId.Time.Should(Be.EqualTo(initialTime));
 		}
 
 		[Test]
 		public void ShouldSupportMinTime()
 		{
-			GitRevisionId revisionId = DateTime.MinValue;
-			revisionId.Value.Should(Be.EqualTo(GitRevisionId.UtcTimeMin));
+			GitRevisionId revisionId = new RevisionId { Time = DateTime.MinValue, Value = Guid.NewGuid().ToString() };
+			revisionId.Time.Should(Be.EqualTo(GitRevisionId.UtcTimeMin));
 		}
 	}
 }

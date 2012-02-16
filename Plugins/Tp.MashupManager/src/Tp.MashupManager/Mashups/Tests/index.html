@@ -4,14 +4,22 @@
     <meta charset="UTF-8"/>
     <title>jQuery UI User List Test Suite</title>
 
-    <link rel="stylesheet" href="Libs/qunit.css" type="text/css"/>
-    <script type="text/javascript" src="Libs/qunit.js"></script>
-    <script type="text/javascript" src="Libs/require.js"></script>
-	<script type="text/javascript" src="Libs/ExtJS/ext-base.js"></script>
-	<script type="text/javascript" src="Libs/ExtJS/Extensions.js"></script>
-	<script type="text/javascript" src="Libs/ExtJS/url.js"></script>
-    <script type="text/javascript" src="Libs/Mashups.js"></script>
+	<link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
+	<script type="text/javascript" src="../../tau/scripts/require.js"></script>
+
+	<script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
+	<script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
+	<script type="text/javascript" src="../../ExtJS/url.js"></script>
+
+	<script type="text/javascript" src="../../tau/scripts/tp/Mashups.js"></script>
     <script type="text/javascript">
+        window.jsErrors = [];
+		window.onerror = function(errorMessage) {
+			window.jsErrors[window.jsErrors.length] = errorMessage;
+		};
+
         Sys = {
             WebForms: {
                 PageRequestManager: {
@@ -24,20 +32,32 @@
 
         appHostAndPath = '';
 
-//        require.config({
-//            baseUrl: ".."
-//        });
+        require.config({
+        	baseUrl: "../../tau/scripts",
+        	paths: { "MashupManager": "../../Mashups/Mashup Manager ProfileEditor" },
+        	waitSeconds: 20
+		});
 
-        require([
-                "../ProfileEditor/MashupsManagerEditor.js",
-                "../ProfileEditor/EditorTemplate.js"
-                ],
-                function () {
-                    require([
-                            "mashupManagerEditor.tests.js"
-                        ]);
-                });
+        require.onError = function(e){
+            try{
+                var vals = [];
+                var requireContext = require.prototype.constructor.s.contexts._;
+                var scripts = requireContext.loaded;
+                for (var t in scripts)
+                {
+                    var loaded = scripts[t];
+                    if(!loaded){
+                       vals.push('Script ' + t + ' couldn\'t be not loaded by url ' + requireContext.urlMap[t]);
+                    }
+                }
+                window.onerror(vals.join('\n'));
+            }
+            catch(err){
+                window.onerror('Unhandled requirejs error was thrown: ' + err);
+            }
+        };
 
+        require(["Previewer.tests.js","PlaceholderUtils.tests.js"]);
     </script>
 </head>
 <body>

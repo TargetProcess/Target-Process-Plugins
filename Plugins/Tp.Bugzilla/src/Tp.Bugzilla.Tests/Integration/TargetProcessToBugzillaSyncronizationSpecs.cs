@@ -103,7 +103,7 @@ namespace Tp.Bugzilla.Tests.Integration
 			                                             		Url = "http://new-bugzilla/bugzilla363",
 			                                             		Login = "bugzilla@targetprocess.com",
 			                                             		Password = "bugzillaadmin",
-			                                             		Queries = "New",
+			                                             		SavedSearches = "New",
 			                                             		Project = 1
 			                                             	});
 		}

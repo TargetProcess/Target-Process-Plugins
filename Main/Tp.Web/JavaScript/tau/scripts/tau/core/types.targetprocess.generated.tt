@@ -1,6 +1,7 @@
 ﻿<#@ template hostSpecific="true" #>
 <#@ output extension=".js" #>
 <#@ include file="TpModel.ttinclude"  #>
+//TargetProcess types generated. File should not be modified
 define(["tau/core/types"], function(tauTypes) {
 	return [
 		{ name:"context" }
@@ -94,14 +95,38 @@ void _processRefs(XElement entity) {
 	
 	foreach(var el in fields) {
 		index ++;
-		_writeRef(el, fields.Count, index);
+		var attribute = el.Attribute("Relationship");
+		var relationName = attribute != null ? attribute.Value : "";
+		var relationNode = entity.Document.Element(xmlns+"Model").Element(xmlns+"Relationships")
+			.Elements().FirstOrDefault(x=>x.Attribute("Name").Value==relationName);
+		
+		_writeRef(el, relationNode, fields.Count, index);
 	}
 }
 
-void _writeRef(XElement el, int length, int index) {
+void _writeRef(XElement el, XElement relationNode, int length, int index) {
 	var isList = el.Attribute("Multiplicity").Value == "Many";
+	var relationName = relationNode != null ? relationNode.Attribute("Name").Value : "";
+	var relationProperty = "";
+	var multiplicity = "";
+	if (relationNode != null) {
+		if (isList) {
+			var end = relationNode.Element(xmlns+"Ends").Elements()
+				.FirstOrDefault(x=>x.Attribute("Multiplicity").Value=="One" || x.Attribute("Multiplicity").Value=="ZeroOrOne");
+			if (end != null) {
+				relationProperty = this.Normalize(this.FirstToLower(end.Attribute("Name").Value));
+				multiplicity = this.Normalize(this.FirstToLower(end.Attribute("Multiplicity").Value));
+			}
+		} else {
+			var end = relationNode.Element(xmlns+"Ends").Elements().FirstOrDefault(x=>x.Attribute("Multiplicity").Value=="Many");
+			if (end != null) {
+				relationProperty = this.Normalize(this.FirstToLower(end.Attribute("Name").Value));
+			}
+		}
+		
+	}
 	#>
-		"<#= this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) #>" : { <#= isList ? "list: true," : "" #> name: "<#= this.FirstToLower(Normalize(el.Attribute("Type"))) #>" } <#= index != length ? "," : "" #> 
+		"<#= this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) #>" : { <#= isList ? "list: true," : "" #> name: "<#= this.FirstToLower(Normalize(el.Attribute("Type"))) #>", multiplicity: '<#= multiplicity #>',  relationProperty: '<#= relationProperty #>' } <#= index != length ? "," : "" #> 
 	<#+
 }
 

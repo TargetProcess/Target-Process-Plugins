@@ -3,9 +3,12 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using Tp.BugTracking;
+using Tp.BugTracking.BugFieldConverters;
+
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class OwnerConverter : IBugConverter
+	public class OwnerConverter : IBugConverter<BugzillaBug>
 	{
 		private readonly IUserMapper _userMapper;
 

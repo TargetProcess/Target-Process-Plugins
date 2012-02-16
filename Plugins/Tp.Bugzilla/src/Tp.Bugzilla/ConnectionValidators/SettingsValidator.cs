@@ -4,6 +4,8 @@
 // 
 
 using System.Linq;
+using Tp.BugTracking.ConnectionValidators;
+using Tp.BugTracking.Settings;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Validation;
 
@@ -13,7 +15,8 @@ namespace Tp.Bugzilla.ConnectionValidators
 	{
 		private readonly DeserializeValidator _deserializeValidator;
 
-		public SettingsValidator(BugzillaProfile profile, DeserializeValidator deserializeValidator) : base(profile)
+		public SettingsValidator(IBugTrackingConnectionSettingsSource connectionSettings, DeserializeValidator deserializeValidator)
+			: base(connectionSettings)
 		{
 			_deserializeValidator = deserializeValidator;
 		}

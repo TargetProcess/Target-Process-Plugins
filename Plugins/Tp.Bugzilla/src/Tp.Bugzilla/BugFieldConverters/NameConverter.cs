@@ -5,12 +5,13 @@
 
 using System;
 using System.Web;
+using Tp.BugTracking.BugFieldConverters;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class NameConverter : IBugConverter
+	public class NameConverter : IBugConverter<BugzillaBug>
 	{
 		private readonly IActivityLogger _logger;
 

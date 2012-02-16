@@ -1,0 +1,1 @@
+define(["Underscore"],function(a){var b=function(a,b){var c=this,d=a.data,e={store:c.store,data:d};b.action(e)};return{"auto-action-after-save":function(a){var c=this,d=function(d){b.call(c,d,a)},e={eventName:"afterSave",type:a.type,listener:c};a.hasOwnProperty("changes")&&a.changes.length&&(e.hasChanges=[a.changes.join("|")]),c.store.on(e,d)}}})

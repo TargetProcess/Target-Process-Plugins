@@ -46,11 +46,11 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 			_bus.Send(message);
 		}
 
-		private PluginAccountMessage CreatePluginInfoChangedMessage(AccountName accountName,
+		private PluginAccountMessageSerialized CreatePluginInfoChangedMessage(AccountName accountName,
 		                                                            params PluginProfile[] profiles)
 		{
 			var pluginAccount = PluginInfoSender.CreatePluginAccount(PluginContext.PluginName, accountName, profiles);
-			return new PluginAccountMessage {PluginAccount = pluginAccount};
+			return new PluginAccountMessageSerialized {SerializedMessage = new[]{pluginAccount}.Serialize()};
 		}
 
 		protected void SendProfileChangedLocalMessage(ProfileName profileName, ITargetProcessMessage profileMessage)

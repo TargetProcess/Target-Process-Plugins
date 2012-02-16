@@ -65,7 +65,10 @@
     <Reference Include="NServiceBus.Core">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL" />
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -324,6 +327,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationAttribute.cs" />
     <Compile Include="RelationNameAttribute.cs" />
+    <Compile Include="SerializationExtensions.cs" />
     <Compile Include="SerializationPatches\IPatch.cs" />
     <Compile Include="SerializationPatches\IPatchCollection.cs" />
     <Compile Include="ServiceBus\BusExtensions.cs" />
@@ -377,6 +381,7 @@
     <Compile Include="Ticker\CheckIntervalElapsedMessage.cs" />
     <Compile Include="Ticker\ISynchronizableProfile.cs" />
     <Compile Include="Ticker\LastSyncDate.cs" />
+    <Compile Include="Ticker\SyncNowMessage.cs" />
     <Compile Include="Ticker\TickMessage.cs" />
   </ItemGroup>
   <ItemGroup>

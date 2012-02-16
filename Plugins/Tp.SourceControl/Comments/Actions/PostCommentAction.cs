@@ -5,6 +5,7 @@
 
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.SourceControl.Comments.Actions
 {
@@ -25,6 +26,11 @@ namespace Tp.SourceControl.Comments.Actions
 		{
 			var dto = new CommentDTO {GeneralID = EntityId, Description = Comment, OwnerID = UserId};
 			return new CreateCommand {Dto = dto};
+		}
+
+		protected override void Log(IActivityLogger logger)
+		{
+			logger.InfoFormat("Posting comment. Entity ID: {0}; Comment: {1}; Author: {2}", EntityId, Comment, UserId);
 		}
 
 		protected override void Visit(IActionVisitor visitor)

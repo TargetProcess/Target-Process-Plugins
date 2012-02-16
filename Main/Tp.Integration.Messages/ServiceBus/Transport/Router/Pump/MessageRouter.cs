@@ -26,7 +26,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		protected MessageRouter(IMessageSource<TMessage> messageSource,
 		                        IProducerConsumerFactory<TMessage> producerConsumerFactory,
 		                        Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
-			: base(messageSource, scheduler)
+			: base(messageSource, scheduler, log)
 		{
 			_log = log;
 			_producerConsumerFactory = producerConsumerFactory;
@@ -66,6 +66,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			{
 				consumer.Dispose();
 			}
+			_log.Info(LoggerContext.New(Name), "disposed.");
 		}
 
 		private void Process(TMessage message)

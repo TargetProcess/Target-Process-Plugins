@@ -25,6 +25,9 @@ namespace Tp.SourceControl.VersionControlSystem
 			return Value;
 		}
 
+		[DataMember]
+		public DateTime? Time { get; set; }
+
 		public bool Equals(RevisionId other)
 		{
 			if (ReferenceEquals(null, other))

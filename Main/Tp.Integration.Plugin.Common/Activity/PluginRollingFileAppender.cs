@@ -16,7 +16,7 @@ using log4net.Util;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class PluginRollingFileAppender : FileAppender
+	internal class PluginRollingFileAppender : FileAppender
 	{
 		#region Fields
 

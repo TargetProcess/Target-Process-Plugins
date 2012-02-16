@@ -18,6 +18,7 @@ using Tp.Core;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
+using Tp.SourceControl.Diff;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -25,14 +26,16 @@ namespace Tp.Subversion.Subversion
 {
 	public class Subversion : VersionControlSystem
 	{
+		private readonly IDiffProcessor _diffProcessor;
 		private SvnClient _client;
 
 		private string _root;
 		private string _projectPath;
 
-		public Subversion(ISourceControlConnectionSettingsSource settings, ICheckConnectionErrorResolver errorResolver, IActivityLogger logger)
+		public Subversion(ISourceControlConnectionSettingsSource settings, ICheckConnectionErrorResolver errorResolver, IActivityLogger logger, IDiffProcessor diffProcessor)
 			: base(settings, errorResolver, logger)
 		{
+			_diffProcessor = diffProcessor;
 			Connect();
 		}
 
@@ -269,6 +272,8 @@ namespace Tp.Subversion.Subversion
 			}
 		}
 
+		private const int Timeout = 20;
+
 		private SvnInfoEventArgs GetRepositoryInfo()
 		{
 			SvnInfoEventArgs info = null;
@@ -287,12 +292,12 @@ namespace Tp.Subversion.Subversion
 			                        	}
 			                        });
 			thread.Start();
-			var timeoutAcquired = !thread.Join(TimeSpan.FromSeconds(5));
+			var timeoutAcquired = !thread.Join(TimeSpan.FromSeconds(Timeout));
 
 			if (timeoutAcquired)
 			{
 				thread.Abort();
-				thread.Join();
+//				thread.Join();
 			}
 
 			if (!timeoutAcquired && exception != null)
@@ -389,5 +394,58 @@ namespace Tp.Subversion.Subversion
 			SvnRevisionId lastRevision = ((SvnRevisionId) to).Value - 1;
 			return GetFromTo(@from, lastRevision, pageSize);
 		}
+
+		public override DiffResult GetDiff(RevisionId changeset, string path)
+		{
+			var revisionId = new SvnRevisionId(changeset);
+			var previousRevisionId = ((revisionId).Value - 1).ToString();
+			try
+			{
+				var fileContent = GetTextFileContentSafe(changeset.Value, path);
+				var previousRevisionFileContent = GetTextFileContentSafe(previousRevisionId, path);
+
+				return _diffProcessor.GetDiff(previousRevisionFileContent, fileContent);
+			}
+			catch (SvnFileSystemException ex)
+			{
+				throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
+			}
+		}
+
+		private string GetTextFileContentSafe(string revision, string path)
+		{
+			try
+			{
+				return GetTextFileContent(revision, path);
+			}
+			catch
+			{
+				return string.Empty;
+			}
+		}
+
+//		private Stream GetDiffFileStream(SvnRevisionId changeset, string path)
+//		{
+//			var memoryStream = new MemoryStream();
+//			SvnTarget target;
+//			//If you use Uri you should encode '#' as %23, as Uri's define the # as Fragment separator.
+//			//And in this case the fragment is not send to the server.
+//			path = path.Replace("#", "%23");
+//			if (SvnTarget.TryParse(GetPath(path).AbsolutePath, out target))
+//			{
+//				if (FileWasDeleted(path, changeset))
+//				{
+//					return new MemoryStream();
+//				}
+//
+//				var from = new SvnUriTarget(_root + path, changeset.Value);
+//				var to = new SvnUriTarget(_root + path, changeset.Value - 1);
+////				var svnWriteArgs = new SvnWriteArgs { Revision = changeset.Value };
+//
+//				Client.Diff(from, to, memoryStream);
+//				return memoryStream;
+//			}
+//			return new MemoryStream();
+//		}
 	}
 }

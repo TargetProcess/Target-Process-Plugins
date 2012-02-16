@@ -11,9 +11,12 @@ using Rhino.Mocks;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using StructureMap.Pipeline;
+using Tp.BugTracking.BugFieldConverters;
+using Tp.BugTracking.Commands.Dtos;
+using Tp.BugTracking.ImportToTp;
+using Tp.BugTracking.Settings;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Bugzilla.BugzillaQueries;
-using Tp.Bugzilla.CustomCommand.Dtos;
 using Tp.Bugzilla.ImportToTp;
 using Tp.Bugzilla.Tests.Mocks;
 using Tp.Core;
@@ -109,8 +112,7 @@ namespace Tp.Bugzilla.Tests
 				x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (BugzillaProfile).Assembly,
 				                                                                             new List<Assembly>
 				                                                                             	{
-				                                                                             		typeof (ExceptionThrownLocalMessage).
-				                                                                             			Assembly,
+				                                                                             		typeof (ExceptionThrownLocalMessage).Assembly,
 				                                                                             		typeof (BugzillaProfile).Assembly
 				                                                                             	},
 				                                                                             new Assembly[] {})));
@@ -118,7 +120,8 @@ namespace Tp.Bugzilla.Tests
 			                        	{
 			                        		x.For<IBugzillaService>().HybridHttpOrThreadLocalScoped().Use<BugzillaServiceMock>();
 			                        		x.Forward<IBugzillaService, BugzillaServiceMock>();
-			                        		x.For<IBugConverter>().HybridHttpOrThreadLocalScoped().Use<ConverterComposite>();
+			                        		x.For<IBugConverter<BugzillaBug>>().HybridHttpOrThreadLocalScoped().Use<ConverterComposite>
+			                        			();
 			                        		var bugChunkSize = MockRepository.GenerateStub<IBugChunkSize>();
 			                        		bugChunkSize.Stub(y => y.Value).Return(1);
 			                        		x.For<IBugChunkSize>().HybridHttpOrThreadLocalScoped().Use(bugChunkSize);
@@ -257,7 +260,7 @@ namespace Tp.Bugzilla.Tests
 			       		Project = projectId,
 			       		Login = "login",
 			       		Password = "password",
-			       		Queries = "query123",
+			       		SavedSearches = "query123",
 			       		Url = "http://test/com"
 			       	};
 		}

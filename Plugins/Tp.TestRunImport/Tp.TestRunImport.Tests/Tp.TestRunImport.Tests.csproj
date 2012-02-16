@@ -54,9 +54,6 @@
     <Reference Include="NBehave.Narrator.Framework">
       <HintPath>..\..\..\Libs\NBehave\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\Libs\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
     </Reference>

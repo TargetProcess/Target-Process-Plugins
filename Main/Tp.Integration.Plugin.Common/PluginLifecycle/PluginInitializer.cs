@@ -14,6 +14,7 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 		public void Init()
 		{
 			SendInfoMessages();
+			SendPluginScriptMessages();
 			SendPluginStartedLocalMessage();
 		}
 

@@ -37,8 +37,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 					And profile 'Profile2_1' for account 'Account2' created
 				When plugin started up
 				Then PluginInfoMessage should be published
-					And 2 PluginAccountMessage messages should be published
-					And PluginAccountMessage should be published with account 'Account1' and profiles: Profile1_1, Profile1_2	 
+					And 1 PluginAccountMessage messages should be published
+					And PluginAccountMessage should be published with account 'Account1' and profiles: Profile1_1, Profile1_2
 					And PluginAccountMessage should be published with account 'Account2' and profiles: Profile2_1"
 				.Execute(In.Context<PluginLifecycleActionSteps>().And<ProfileStorageSpecs>());
 		}
@@ -49,8 +49,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			@"
 				Given plugin started up
 				When plugin receives TargetProcessStartedMessage
-				Then PluginInfoMessage should be published 
-					And 0 PluginAccountMessage messages should be published"
+				Then PluginInfoMessage should be published
+					And empty PluginAccountMessage message should be published"
 				.Execute(In.Context<PluginLifecycleActionSteps>().And<ProfileStorageSpecs>());
 		}
 

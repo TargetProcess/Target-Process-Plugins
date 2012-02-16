@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){return b.propertyName="program",b.showUrl=!1,b.alignElementSelector=".property-text",b.editorComponentConfig={type:"state-list",listType:"program",expandable:!0,filter:!0,showEmptyDataMessage:!0,defaultValueLabel:"current",fullModeLabel:"show old",clearValueLabel:"reset"},a.create(b)}}})

@@ -13,16 +13,23 @@ namespace Tp.SourceControl.VersionControlSystem
 	{
 		public RevisionInfo()
 		{
-			Entries = new RevisionEntryInfo[]{};
+			Entries = new RevisionEntryInfo[] {};
 			Time = DateTime.Now;
 			Comment = string.Empty;
 		}
 
 		public RevisionId Id { get; set; }
+
 		public string Comment { get; set; }
+
 		public string Author { get; set; }
 
+		public string Email { get; set; }
+
 		public DateTime Time { get; set; }
+
+		public DateTime? TimeCreated { get; set; }
+
 		public RevisionEntryInfo[] Entries { get; set; }
 	}
 

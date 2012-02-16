@@ -5,8 +5,10 @@
 
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
+using Tp.Integration.Messages;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.MashupManager.CustomCommands;
+using Tp.MashupManager.Dtos;
 using Tp.Testing.Common.NBehave;
 using Tp.Testing.Common.NUnit;
 
@@ -21,7 +23,7 @@ namespace Tp.MashupManager.Tests.Mashups
 			@"
 				Given profile created
 					And profile mashups are: mashup1, mashup2
-				When handle GetMashupInfoCommand command with args 'mashup2'
+				When handle GetMashupInfoCommand command with args '{""Value"":""mashup2""}'
 				Then default mashup 'mashup2' should be returned
 			"
 				.Execute();
@@ -33,7 +35,7 @@ namespace Tp.MashupManager.Tests.Mashups
 			@"
 				Given profile created
 					And profile mashups are: mashup1, mashup2
-				When handle GetMashupInfoCommand command with args 'mashup3'
+				When handle GetMashupInfoCommand command with args '{""Value"":""mashup3""}'
 				Then command should return validation error for 'Name' field 'Mashup with name ""mashup3"" doesn't exist'
 			".Execute();
 		}

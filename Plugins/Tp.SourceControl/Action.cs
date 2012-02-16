@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.SourceControl.Comments;
 
 namespace Tp.SourceControl
@@ -19,12 +20,14 @@ namespace Tp.SourceControl
 
 		protected abstract void Visit(IActionVisitor visitor);
 
-		public void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor)
+		public void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger)
 		{
 			Visit(visitor);
 
 			if (CanBeExecuted)
 			{
+				Log(logger);
+
 				executor(CreateCommand());
 			}
 		}
@@ -34,5 +37,7 @@ namespace Tp.SourceControl
 		protected abstract bool CanBeExecuted { get; }
 
 		protected abstract ITargetProcessCommand CreateCommand();
+
+		protected abstract void Log(IActivityLogger logger);
 	}
 }

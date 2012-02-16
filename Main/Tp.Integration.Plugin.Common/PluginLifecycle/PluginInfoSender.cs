@@ -12,6 +12,7 @@ using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Mashup;
+using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
@@ -51,11 +52,10 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 			get { return _context; }
 		}
 
-		protected void SendInfoMessages()
+		public void SendInfoMessages()
 		{
 			SendPluginInfoMessage();
 			SendPluginAccountMessages();
-			SendPluginScriptMessages();
 		}
 
 		private void SendPluginInfoMessage()
@@ -77,19 +77,18 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 		private void SendPluginAccountMessages()
 		{
 			var pluginAccounts = AccountCollection.Select(a => new PluginAccount
-				             	{
-									PluginName = Context.PluginName,
-				             		Name = a.Name,
-				             		PluginProfiles = a.Profiles.Select(profile => new PluginProfile(profile.Name)).ToArray()
-				             	});
+			                                                   	{
+			                                                   		PluginName = Context.PluginName,
+			                                                   		Name = a.Name,
+			                                                   		PluginProfiles =
+			                                                   			a.Profiles.Select(profile => new PluginProfile(profile.Name)).
+			                                                   			ToArray()
+			                                                   	});
 
-			foreach (var pluginAccount in pluginAccounts)
-			{
-				Bus.Send(new PluginAccountMessage {PluginAccount = pluginAccount});
-			}
+			Bus.Send(new PluginAccountMessageSerialized {SerializedMessage = pluginAccounts.Serialize()});
 		}
 
-		public static PluginAccount CreatePluginAccount(PluginName pluginName, AccountName accountName,
+		internal static PluginAccount CreatePluginAccount(PluginName pluginName, AccountName accountName,
 		                                                PluginProfile[] pluginProfiles)
 		{
 			return new PluginAccount
@@ -100,7 +99,7 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 			       	};
 		}
 
-		private void SendPluginScriptMessages()
+		protected void SendPluginScriptMessages()
 		{
 			var pluginMashupRepository = ObjectFactory.TryGetInstance<IPluginMashupRepository>() ??
 			                             new DefaultPluginMashupRepository();

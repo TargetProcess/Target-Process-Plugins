@@ -10,11 +10,14 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using StructureMap;
+using Tp.BugTracking.ConnectionValidators;
 using Tp.Bugzilla.BugzillaQueries;
 using Tp.Bugzilla.ConnectionValidators;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Validation;
+using log4net;
 
 namespace Tp.Bugzilla
 {
@@ -96,8 +99,9 @@ namespace Tp.Bugzilla
 		public int[] GetChangedBugIds(DateTime date)
 		{
 			var offset = GetTimeOffset();
+			var bugzillaDateTime = date.ToUniversalTime().Add(offset);
 
-			return ObjectFactory.GetInstance<BugzillaUrl>().GetChangedBugsIds(date.ToUniversalTime().Add(offset));
+			return ObjectFactory.GetInstance<BugzillaUrl>().GetChangedBugsIds(bugzillaDateTime);
 		}
 
 		public bugCollection GetBugs(int[] bugIDs)

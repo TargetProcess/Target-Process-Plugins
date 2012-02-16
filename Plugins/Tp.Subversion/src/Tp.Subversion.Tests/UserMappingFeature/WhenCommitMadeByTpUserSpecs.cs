@@ -1,4 +1,4 @@
-//  
+// 
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
@@ -21,7 +21,11 @@ namespace Tp.Subversion.UserMappingFeature
 		public void Init()
 		{
 			ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly, new List<Assembly> {typeof(Command).Assembly})));
+			ObjectFactory.Configure(
+				x =>
+				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly,
+				                                                                        new List<Assembly>
+				                                                                        	{typeof (Command).Assembly})));
 		}
 
 		[Test]
@@ -62,7 +66,7 @@ namespace Tp.Subversion.UserMappingFeature
 					|vcsuser	|tpuser	|
 					|John		|John   |
 			When plugin started up
-			Then log should contain message: Can't map vcs user 'Bob' - no mapping."
+			Then log should contain message: Revision author doesn't match any TP User name. There is no valid mapping for Git user Bob"
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
 		}
 
@@ -80,6 +84,5 @@ namespace Tp.Subversion.UserMappingFeature
 			Then revision 1 in TP should have author 'John'"
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
 		}
-
 	}
 }

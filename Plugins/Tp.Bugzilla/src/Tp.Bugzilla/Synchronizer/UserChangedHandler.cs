@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
+using Tp.BugTracking;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Plugin.Common.Domain;

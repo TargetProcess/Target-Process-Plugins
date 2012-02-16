@@ -23,7 +23,8 @@ tau.mashups
                     Caption: config.Caption,
                     Description: config.Description,
                     KeyName: config.KeyName,
-                    ValueName: config.ValueName
+                    ValueName: config.ValueName,
+                    HowTo: config.HowTo
                 };
                 this.onAutomap = config.onAutomap;
             },

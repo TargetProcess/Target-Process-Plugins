@@ -407,7 +407,8 @@ Tp.controls.kanbanboard.KanbanBoardPanel = Ext.extend(Ext.Panel, {
 			type: {
 				'feature': true,
 				'userstory': true,
-				'bug': true
+				'bug': true,
+				'task': true
 			},
 			/**
 			* Sort by value.

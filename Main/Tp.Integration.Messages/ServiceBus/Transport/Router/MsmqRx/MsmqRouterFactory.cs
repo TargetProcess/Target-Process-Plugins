@@ -51,7 +51,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 				FormatName = queue.FormatName,
 				Name = queue.QueueName
 			};
-			Func<IObservable<Message>> recieveObservableFactory = Observable.FromAsyncPattern((callback, obj) => queue.BeginPeek(_waitMessageTimeout, obj, callback), asyncResult => EndPeekAndReceive(sourceName + "~source", queue, asyncResult));
+
+			Func<IObservable<Message>> recieveObservableFactory = Observable.FromAsyncPattern(
+				(callback, obj) => 
+							//Wait infinite time here. Otherwise memory leak occurs.
+							queue.BeginPeek(TimeSpan.FromMilliseconds(UInt32.MaxValue), obj, callback),
+				asyncResult => EndPeekAndReceive(sourceName + "~source", queue, asyncResult));
 			while(true)
 			{
 				var messagesStream = recieveObservableFactory().Select(m => new MessageEx{
@@ -123,7 +128,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 				_stopwatch.Start();
 			}
 			Interlocked.Increment(ref _childrenCount);
-			var consumer = new MessageConsumer<MessageEx>(messageSource, Scheduler.ThreadPool);
+			var consumer = new MessageConsumer<MessageEx>(messageSource, Scheduler.ThreadPool, _log);
 			consumer.AddObserver(new StopwatchObserver<MessageEx>(_stopwatch, s => _log.Debug(LoggerContext.New(consumer.Name), s), e => _log.Error(LoggerContext.New(consumer.Name), string.Empty, e), null, () => Interlocked.Decrement(ref _childrenCount) == 0));
 			return consumer;
 		}

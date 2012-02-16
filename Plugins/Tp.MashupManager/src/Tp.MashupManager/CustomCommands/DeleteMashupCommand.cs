@@ -4,6 +4,7 @@
 // 
 
 using Tp.Integration.Plugin.Common.Validation;
+using Tp.MashupManager.Dtos;
 
 namespace Tp.MashupManager.CustomCommands
 {

@@ -878,8 +878,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// <summary>
 		/// Tells the transport to dispose.
 		/// </summary>
-		public virtual void Dispose()
+		public void Dispose()
 		{
+			Log.Info("Bus disposing");
 			transport.Dispose();
 		}
 

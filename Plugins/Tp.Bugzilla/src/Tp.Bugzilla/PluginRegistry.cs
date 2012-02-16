@@ -6,10 +6,12 @@
 using NServiceBus;
 using NServiceBus.Sagas.Impl;
 using StructureMap.Configuration.DSL;
+using Tp.BugTracking;
+using Tp.BugTracking.BugFieldConverters;
+using Tp.BugTracking.ImportToTp;
+using Tp.BugTracking.Mappers;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Bugzilla.BugzillaQueries;
-using Tp.Bugzilla.ImportToTp;
-using Tp.Bugzilla.Mappers;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Plugin.Core.Attachments;
@@ -24,11 +26,11 @@ namespace Tp.Bugzilla
 			For<IBugzillaService>().Use<BugzillaService>();
 			For<IBugChunkSize>().Singleton().Use<BugChunkSize>();
 			For<IBufferSize>().Singleton().Use<BufferSize>();
-			For<IBugConverter>().Singleton().Use<ConverterComposite>();
+			For<IBugConverter<BugzillaBug>>().Singleton().Use<ConverterComposite>();
 			For<IBugzillaInfoStorageRepository>().Use<BugzillaInfoStorageRepository>();
 			For<IBugzillaActionFactory>().Use<BugzillaActionFactory>();
 			For<IUserMapper>().Use<UserMapper>();
-			For<IBugzillaFieldsMapper>().Use<BugzillaFieldsMapper>();
+			For<IThirdPartyFieldsMapper>().Use<ThirdPartyFieldsMapper>();
 		}
 	}
 

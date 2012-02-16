@@ -5,11 +5,13 @@
 
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace System
 {
 	public static class StringExtensions
 	{
+		[StringFormatMethod("format")]
 		public static string Fmt(this string format, params object[] args)
 		{
 			return String.Format(format, args);

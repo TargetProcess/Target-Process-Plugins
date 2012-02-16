@@ -14,9 +14,21 @@ namespace Tp.SourceControl.Settings
 		public const string UriField = "Uri";
 		public const string LoginField = "Login";
 		public const string PasswordField = "Password";
-		
+
+		private string _uri;
+
 		[DataMember]
-		public string Uri { get; set; }
+		public string Uri
+		{
+			get { return _uri; }
+			set
+			{
+				if (value != null)
+				{
+					_uri = value.Trim();
+				}
+			}
+		}
 
 		[DataMember]
 		public string Login { get; set; }

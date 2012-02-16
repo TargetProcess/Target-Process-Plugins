@@ -8,7 +8,7 @@ using Tp.Integration.Messages;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class ActivityLogPathProvider : IActivityLogPathProvider
+	internal class ActivityLogPathProvider : IActivityLogPathProvider
 	{
 		public const string CommonLogFolderName = "common";
 

@@ -129,7 +129,7 @@ namespace Tp.Bugzilla.Tests.Integration
 		[Given("query set to '$query'")]
 		public void SetBugzillaQuery(string query)
 		{
-			Profile.GetProfile<BugzillaProfile>().Queries = query;
+			Profile.GetProfile<BugzillaProfile>().SavedSearches = query;
 		}
 
 		[When("check connection to Bugzilla")]
@@ -185,7 +185,7 @@ namespace Tp.Bugzilla.Tests.Integration
 				                                                                   		Login = "login",
 				                                                                   		Password = "password",
 				                                                                   		Project = 2,
-				                                                                   		Queries = "query123",
+				                                                                   		SavedSearches = "query123",
 				                                                                   		Url = "http://test/com",
 				                                                                   	}).GetProfile<BugzillaProfile>();
 		}

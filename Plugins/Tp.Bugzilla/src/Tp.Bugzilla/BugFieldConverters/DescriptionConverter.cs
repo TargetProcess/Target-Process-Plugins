@@ -6,16 +6,16 @@
 using System;
 using System.Linq;
 using System.Text;
+using Tp.BugTracking.BugFieldConverters;
 using Tp.Integration.Common;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class DescriptionConverter : IBugConverter
+	public class DescriptionConverter : IBugConverter<BugzillaBug>
 	{
-		public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
+		public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
 		{
-			if (bugzillaBug.long_descCollection.Count <= 0) return;
-			var description = bugzillaBug.long_descCollection[0].thetext;
+			var description = thirdPartyBug.description;
 
 			if (String.IsNullOrEmpty(description)) return;
 
@@ -40,7 +40,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 				return content;
 
 			var builder = new StringBuilder();
-			var allowedSymbols = new []{10,13};
+			var allowedSymbols = new[] {10, 13};
 
 			foreach (var symbol in content)
 			{

@@ -4,6 +4,7 @@
 // 
 
 using System.IO;
+using System.Linq;
 using System.Text;
 using NGit;
 using StructureMap;
@@ -35,7 +36,6 @@ namespace Tp.SourceControl.Testing.Repository.Git
 			BatchingProgressMonitor.ShutdownNow();
 		}
 
-
 		protected override string Name
 		{
 			get { return "TestRepository"; }
@@ -53,16 +53,49 @@ namespace Tp.SourceControl.Testing.Repository.Git
 
 		public override void Commit(string commitComment)
 		{
-			using (var file = File.OpenWrite(Path.Combine(ClonedRepoFolder, "secondFile.txt")))
+			Commit("secondFile.txt", "my changed content", commitComment);
+		}
+
+		public override string Commit(string filePath, string changedContent, string commitComment)
+		{
+			using (var file = File.OpenWrite(Path.Combine(ClonedRepoFolder, filePath)))
 			{
-				var changes = new UTF8Encoding(true).GetBytes("my changed content");
+				var changes = new UTF8Encoding(true).GetBytes(changedContent);
 				file.Write(changes, 0, changes.Length);
 			}
 
-			_git.Commit().SetMessage(commitComment).SetAuthor(Login, "admin@admin.com").Call();
+			_git.Add().AddFilepattern(filePath).Call();
+			var commit = _git.Commit().SetMessage(commitComment).SetAuthor(Login, "admin@admin.com").Call();
 			_git.Push().Call();
 
 			BatchingProgressMonitor.ShutdownNow();
+
+			return commit.Id.Name;
+		}
+
+		public override void CheckoutBranch(string branch)
+		{
+			var fullBranchName = "refs/heads/" + branch;
+			var list = _git.BranchList().Call();
+			var branchExists = list.Any(x => x.GetName() == fullBranchName);
+			if (!branchExists)
+			{
+				var remoteBranchName = "refs/remotes/origin/" + branch;
+				_git.BranchCreate().SetStartPoint(remoteBranchName).SetName(branch).Call();
+			}
+			_git.Checkout().SetName(branch).Call();
+
+			BatchingProgressMonitor.ShutdownNow();
+		}
+
+		public override string CherryPick(string revisionId)
+		{
+			var result = _git.CherryPick().Include(ObjectId.FromString(revisionId)).Call();
+			_git.Push().Call();
+
+			BatchingProgressMonitor.ShutdownNow();
+
+			return result.GetCherryPickedRefs().Select(x => x.GetName()).First();
 		}
 	}
 }

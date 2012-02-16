@@ -42,7 +42,7 @@ namespace Tp.Integration.Common
         /// Gets or sets the Source Control ID. Source control identifier. 1 for Subversion
         /// </summary>
         /// <value>The Source Control ID.</value>
-		public Int64? SourceControlID { get; set; }
+		public string SourceControlID { get; set; }
 
 		/// <summary>
         /// Gets or sets the Commit Date. Date when revision has been commited into repository.

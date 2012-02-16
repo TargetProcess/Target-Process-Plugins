@@ -6,18 +6,19 @@
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Tp.BugTracking.BugFieldConverters;
 using Tp.Core;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class CreateDateConverter : IBugConverter
+	public class CreateDateConverter : IBugConverter<BugzillaBug>
 	{
 		private static readonly Regex DateRegex = new Regex(@"(?<dateTime>.*?)(?<offset>([+-]\d\d\d\d)|[a-z]+)\s*$",
 		                                                    RegexOptions.IgnoreCase);
 
-		public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
+		public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
 		{
-			convertedBug.BugDto.CreateDate = ParseFromBugzillaLocalTime(bugzillaBug.creation_ts);
+			convertedBug.BugDto.CreateDate = ParseFromBugzillaLocalTime(thirdPartyBug.creation_ts);
 		}
 
 		public static DateTime Parse(string input)

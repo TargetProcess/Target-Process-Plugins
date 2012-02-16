@@ -6,6 +6,7 @@
 using System;
 using Tp.Core;
 using Tp.Integration.Plugin.Common.Validation;
+using Tp.SourceControl.Diff;
 
 namespace Tp.SourceControl.VersionControlSystem
 {
@@ -56,5 +57,6 @@ namespace Tp.SourceControl.VersionControlSystem
 		RevisionRange[] GetFromTillHead(RevisionId from, int pageSize);
 		RevisionRange[] GetAfterTillHead(RevisionId from, int pageSize);
 		RevisionRange[] GetFromAndBefore(RevisionId from, RevisionId to, int pageSize);
+		DiffResult GetDiff(RevisionId changeset, string path);
 	}
 }

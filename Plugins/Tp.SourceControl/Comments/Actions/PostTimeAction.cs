@@ -5,6 +5,7 @@
 
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.SourceControl.Comments.Actions
 {
@@ -36,6 +37,11 @@ namespace Tp.SourceControl.Comments.Actions
 				UserID = UserId.GetValueOrDefault(),
 				Left = TimeLeft
 			};
+		}
+
+		protected override void Log(IActivityLogger logger)
+		{
+			logger.InfoFormat("Posting time. Entity ID: {0}; User ID: {3}; Time spent: {1:0.00}; Time left: {2:0.00}", EntityId, TimeSpent, TimeLeft, UserId);
 		}
 	}
 }

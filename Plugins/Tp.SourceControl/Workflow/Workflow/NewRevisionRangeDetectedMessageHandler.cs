@@ -9,6 +9,7 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.SourceControl.Comments;
 using Tp.SourceControl.Messages;
 using Tp.SourceControl.VersionControlSystem;
@@ -19,19 +20,25 @@ namespace Tp.SourceControl.Workflow.Workflow
 	{
 		private readonly IVersionControlSystem _versionControlSystem;
 		private readonly ILocalBus _bus;
+		private readonly IActivityLogger _logger;
 		private readonly CommentParser _parser;
 
-		public NewRevisionRangeDetectedMessageHandler(IVersionControlSystem versionControlSystem, ILocalBus bus)
+		public NewRevisionRangeDetectedMessageHandler(IVersionControlSystem versionControlSystem, ILocalBus bus, IActivityLogger logger)
 		{
 			_versionControlSystem = versionControlSystem;
 			_bus = bus;
+			_logger = logger;
 			_parser = new CommentParser();
 		}
 
 		public void Handle(NewRevisionRangeDetectedLocalMessage message)
 		{
+			_logger.Info("Retrieving new revisions");
 			var revisions = _versionControlSystem.GetRevisions(message.Range);
+			_logger.Info("Filtering out non-assignable revisions");
 			revisions = revisions.Where(ContainsEntityId).ToArray();
+
+			_logger.InfoFormat("Revisions retrieved. Revision IDs: {0}", string.Join(", ", revisions.Select(x => x.Id.Value).ToArray()));
 
 			SendLocal(revisions);
 		}

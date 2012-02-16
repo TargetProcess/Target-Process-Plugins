@@ -19,9 +19,13 @@ Tp.controls.kanbanboard.sections.Backlog = Ext.extend(Tp.controls.kanbanboard.Co
 
 	tryFireReloadEvent: function () {
 		if (this._isReloadPossible) {
-			this._isReloadPossible = false;
-			this.fireEvent("reload");
+			this.fireReloadEvent();
 		}
+	},
+
+	fireReloadEvent: function () {
+		this._isReloadPossible = false;
+		this.fireEvent("reload");
 	},
 
 	allowFireReloadEvent: function () {
@@ -193,6 +197,9 @@ Tp.controls.kanbanboard.sections.Backlog = Ext.extend(Tp.controls.kanbanboard.Co
 		}
 		if (item.entity.entityType == this.controller.process.bugEntityType) {
 			return this.filter.type['bug'];
+		}
+		if (item.entity.entityType == this.controller.process.taskEntityType) {
+			return this.filter.type['task'];
 		}
 		return true; // unknown type is visible anyway
 	},

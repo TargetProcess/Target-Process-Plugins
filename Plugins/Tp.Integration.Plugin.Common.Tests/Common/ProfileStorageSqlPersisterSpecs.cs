@@ -103,6 +103,18 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 				Be.False);
 		}
 
+		[Test]
+		public void ShouldDeleteByNameWhenNameContainsSpecialCharacters()
+		{
+			var profileStorage = new ProfileStorage { ProfileId = _profile.Id, ValueKey = "value key", Name = "'test" };
+			profileStorage.SetValue("my value");
+			_persister.Insert(profileStorage);
+
+			_persister.Delete(_profile.Id, profileStorage.ValueKey, profileStorage.Name);
+			_persister.Contains(profileStorage.Name, _profile.Id, profileStorage.ValueKey, profileStorage.GetValue()).Should(
+				Be.False);
+		}
+
 		private ProfileStorage[] CreateProfileStorages()
 		{
 			var profileStorage = new ProfileStorage {ProfileId = _profile.Id, ValueKey = "value key", Name = "Name"};

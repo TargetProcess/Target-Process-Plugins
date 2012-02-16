@@ -1,7 +1,9 @@
 using NServiceBus;
+using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Queries;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.SourceControl
 {
@@ -15,6 +17,8 @@ namespace Tp.SourceControl
 
 		protected override void OnStartInitialization()
 		{
+			ObjectFactory.GetInstance<IActivityLogger>().Info("Initializing profile");
+
 			Data.AllUsersCount = int.MinValue;
 			Send(new RetrieveAllUsersQuery());
 		}

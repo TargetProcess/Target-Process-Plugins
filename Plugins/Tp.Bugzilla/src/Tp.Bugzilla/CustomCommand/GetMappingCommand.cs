@@ -3,19 +3,19 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using Tp.Bugzilla.CustomCommand.Dtos;
-using Tp.Bugzilla.Mappers;
+using Tp.BugTracking.Commands.Dtos;
+using Tp.BugTracking.Mappers;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.Bugzilla.CustomCommand
 {
 	public class GetMappingCommand : IPluginCommand
 	{
-		private readonly IBugzillaFieldsMapper _mapper;
+		private readonly IThirdPartyFieldsMapper _mapper;
 
-		public GetMappingCommand(IBugzillaFieldsMapper mapper)
+		public GetMappingCommand(IThirdPartyFieldsMapper mapper)
 		{
 			_mapper = mapper;
 		}
@@ -26,10 +26,9 @@ namespace Tp.Bugzilla.CustomCommand
 
 			return new PluginCommandResponseMessage
 			       	{
-			       		PluginCommandStatus = PluginCommandStatus.Succeed, 
-						ResponseData = _mapper.Map(source).Serialize()
+			       		PluginCommandStatus = PluginCommandStatus.Succeed,
+			       		ResponseData = _mapper.Map(source).Serialize()
 			       	};
-			
 		}
 
 		public string Name

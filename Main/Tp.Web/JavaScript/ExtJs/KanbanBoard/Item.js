@@ -14,6 +14,10 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 				'<div class="kanban-item-title">',
 					'<div class="kanban-id-count">',
 						'<a class="kanban-item-id" href="' + appHostAndPath + '/View.aspx?id={id}">{id}</a>',
+						'<tpl if="userStoryId">',
+							'&nbsp;for&nbsp#',
+							'<a class="kanban-item-id" href="' + appHostAndPath + '/View.aspx?id={userStoryId}">{userStoryId}</a>',
+						'</tpl>',
 					'</div>',
 					'<tpl if="tags.length &gt; 0">',
 						'<tpl for="tags">',
@@ -70,7 +74,12 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 				'&nbsp;',
 				'<span class="kanban-item-name">{name}</span>',
 			'</div>',
-			'<div class="pt-5"><strong id="bv">BV:</strong>{priorityName}</div>',
+			'<tpl if="!userStoryId">',
+				'<div class="pt-5"><strong id="bv">BV:</strong>{priorityName}</div>',
+			'</tpl>',
+			'<tpl if="userStoryId">',
+				'<div class="pt-5"><strong id="bv">US </strong>#{userStoryId} {userStoryName}</div>',
+			'</tpl>',
 			'<tpl if="bugCount &gt; 0 || taskCount &gt; 0 || impedimentCount &gt; 0">',
 				'<div class="pt-5">',
 					'<tpl if="taskCount &gt; 0" >',
@@ -205,10 +214,6 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 	},
 
 	onRenderHandler: function () {
-		this.addClass('kanban-item-entitytype-' + this.entity.entityType.name.toLowerCase());
-		this.addClass('kanban-item-priority-' + this.entity.priorityImportance);
-		this.addClass('kanban-item-name');
-
 		var tags = this.entity.tags || [];
 		var roles = this.entity.roles || [];
 		var model = {
@@ -231,8 +236,20 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 				first: tags.length > 0 ? tags[0] : "",
 				list: tags.join(", ")
 			},
-			rolesCount: this.getRoleCount(roles, this.entity.entityState.roleId)
+			rolesCount: this.getRoleCount(roles, this.entity.entityState.roleId),
+			userStoryId: this.entity.userStoryId || false,
+			userStoryName : this.entity.userStoryName
 		};
+		var entityType = this.entity.entityType.name.toLowerCase();
+		this.addClass('kanban-item-entitytype-' + entityType);
+		if (entityType == 'task') {
+
+		}
+		else {
+			this.addClass('kanban-item-priority-' + this.entity.priorityImportance);
+		}
+		this.addClass('kanban-item-name');
+
 
 		this.kanbanCardTemplate.overwrite(this.el, model);
 

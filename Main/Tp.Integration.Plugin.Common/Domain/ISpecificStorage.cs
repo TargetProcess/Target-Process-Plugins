@@ -14,6 +14,8 @@ namespace Tp.Integration.Plugin.Common.Domain
 {
 	/// <summary>
 	/// Provides access to stored objects of provided type as a collection of items.
+	/// All actions will work only with objects of provided type.
+	/// For example you may think about IStorage&lt;int&gt; and IStorage&lt;string&gt; like about two separated tables in database.
 	/// </summary>
 	/// <typeparam name="T">The type of stored objects.</typeparam>
 	public interface IStorage<T> : INullable, IEnumerable<T>
@@ -24,6 +26,11 @@ namespace Tp.Integration.Plugin.Common.Domain
 		/// <param name="value">The new array of objects to be stored.</param>
 		void ReplaceWith(params T[] value);
 
+		/// <summary>
+		/// Updates single object which satisfies the given condition.
+		/// </summary>
+		/// <param name="value">New value.</param>
+		/// <param name="condition">Condition to match</param>
 		void Update(T value, Predicate<T> condition);
 
 		/// <summary>
@@ -32,10 +39,21 @@ namespace Tp.Integration.Plugin.Common.Domain
 		/// <param name="items">Items to add to the storage.</param>
 		void AddRange(IEnumerable<T> items);
 
+		/// <summary>
+		/// Removes stored objects by condition.
+		/// </summary>
+		/// <param name="condition">Condition to match.</param>
 		void Remove(Predicate<T> condition);
 
+		/// <summary>
+		/// Adds item to storage
+		/// </summary>
+		/// <param name="item">Item to add</param>
 		void Add(T item);
 
+		/// <summary>
+		/// Removes all items from storage.
+		/// </summary>
 		void Clear();
 	}
 

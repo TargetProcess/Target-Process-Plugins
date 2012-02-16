@@ -4,7 +4,9 @@
 // 
 
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NBehave.Narrator.Framework;
 using NServiceBus.Saga;
 using Newtonsoft.Json;
@@ -16,7 +18,6 @@ using Tp.Integration.Messages.TargetProcessLifecycle;
 using Tp.Integration.Testing.Common;
 using Tp.Integration.Testing.Common.Persisters;
 using Tp.SourceControl.VersionControlSystem;
-using Tp.SourceControl.Workflow;
 using Tp.SourceControl.Workflow.Workflow;
 using Tp.Subversion.Context;
 using Tp.Testing.Common.NUnit;
@@ -28,7 +29,7 @@ namespace Tp.Subversion
 	{
 		public class TargetProcessRevision
 		{
-			public int SourceControlID { get; set; }
+			public string SourceControlID { get; set; }
 			public string Description { get; set; }
 			public DateTime CommitDate { get; set; }
 			public RevisionFile[] RevisionFiles { get; set; }
@@ -53,6 +54,12 @@ namespace Tp.Subversion
 			var revisionInfo = JsonConvert.DeserializeObject<RevisionInfo>(commit, new RevisionIdConverter());
 			revisionInfo.Comment = revisionInfo.Comment.Replace("\r", Environment.NewLine);
 			Context.Revisions.Add(revisionInfo);
+		}
+
+		[Given("culture is set to '$culture'")]
+		public void SetCulture(string culture)
+		{
+			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(culture);
 		}
 
 		public class RevisionIdConverter : CustomCreationConverter<RevisionId>

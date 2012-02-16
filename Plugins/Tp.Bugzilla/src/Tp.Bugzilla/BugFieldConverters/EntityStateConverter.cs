@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Tp.BugTracking.BugFieldConverters;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
@@ -12,7 +13,7 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class EntityStateConverter : GuessConverter<EntityStateDTO>
+	public class EntityStateConverter : GuessConverterBase<BugzillaBug, EntityStateDTO>
 	{
 		private readonly IBugzillaService _bugzillaService;
 
@@ -29,17 +30,17 @@ namespace Tp.Bugzilla.BugFieldConverters
 
 		protected override EntityStateDTO GetFromStorage(string value)
 		{
-			return GetStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+			return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
 		}
 
-		protected override string GetBugzillaValue(BugzillaBug bugzillaBug)
+		protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
 		{
-			return bugzillaBug.bug_status;
+			return thirdPartyBug.bug_status;
 		}
 
 		protected override MappingContainer Map
 		{
-			get { return Profile.StatesMapping; }
+			get { return StorageRepository.GetProfile<BugzillaProfile>().StatesMapping; }
 		}
 
 		protected override BugField BugField
@@ -64,7 +65,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 			}
 
 			var mappedValue = mappedStates.SingleOrDefault();
-			var bugStatus = mappedValue ?? GetStorage().Single(s => s.EntityStateID == stateId).Name;
+			var bugStatus = mappedValue ?? GetDtoStorage().Single(s => s.EntityStateID == stateId).Name;
 			var statuses = _bugzillaService.GetStatuses();
 			return statuses.Find(s => s.Equals(bugStatus, StringComparison.InvariantCultureIgnoreCase));
 		}

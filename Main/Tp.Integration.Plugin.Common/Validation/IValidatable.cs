@@ -3,10 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Tp.Integration.Plugin.Common.Validation
 {
 	/// <summary>

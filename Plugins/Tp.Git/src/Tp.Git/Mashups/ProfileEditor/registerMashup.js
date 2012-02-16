@@ -1,6 +1,5 @@
 tau.mashups
-	.addDependency("tp/plugins/userRepository")
-	.addDependency("tp/plugins/restService")
+
 	.addDependency("tp/plugins/vcs/tpUsersPopoverWidget")
 	.addDependency("Git/ProfileEditor")
 	.addDependency("tp/plugins/commandGateway")
@@ -9,9 +8,7 @@ tau.mashups
 	.addDependency("tp/plugins/vcs/ui.widgets")
 	.addModule("Git/registerMashup",
 
-	function (userRepository,
-		restService,
-		tpUsersPopoverWidget,
+	function (tpUsersPopoverWidget,
 		SubversionProfileEditor,
 		commandGateway,
 		SubversionProfileEditorDefaultController,
@@ -33,7 +30,7 @@ tau.mashups
 
 				function profileLoaded(data) {
 					// TODO: repository should return default profile?
-                    var currentDate = new Date();
+					var currentDate = new Date();
 					var defaultProfile = {
 						Name: '',
 						Settings: {
@@ -64,39 +61,9 @@ tau.mashups
 				_profileRepository.getCurrentProfile($.proxy(profileLoaded, this));
 			},
 
-			renderUserAutocomplete: function () {
-				var that = this;
-				function bindToUserMapping(handler) {
-					var selector = 'input.tpuser';
-
-					handler(that.placeholder.find(selector));
-
-					$(selector).live('mappingadded', function () {
-						handler($(this));
-					});
-				}
-
-				function usersLoaded(data) {
-					bindToUserMapping(function (elements) {
-						new tpUsersPopoverWidget({ elements: elements, source: data });
-					});
-
-					bindToUserMapping(function (elements) {
-						elements.synchronizeUser({ source: data });
-					});
-				};
-				usersLoaded(this.tpUsers);
-			},
-
 			renderAll: function () {
-				new userRepository({ restService: new restService() }).getUsers($.proxy(function (usersLoaded) {
-					this.tpUsers = usersLoaded;
-					this.renderEditor();
-					this.renderUserAutocomplete();
-
-					globalAnimation.prototype.turnedOn = true;
-
-				}, this));
+				this.renderEditor();
+				globalAnimation.prototype.turnedOn = true;
 			}
 		};
 		return SubversionRenderer;

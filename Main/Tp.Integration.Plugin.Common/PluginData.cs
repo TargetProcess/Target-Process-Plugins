@@ -5,6 +5,9 @@
 
 namespace Tp.Integration.Plugin.Common
 {
+	/// <summary>
+	/// Provides information from <see cref="PluginAssemblyAttribute"/>.
+	/// </summary>
 	public class PluginData
 	{
 		internal PluginData(string name, string description, string category, string iconFilePath)

@@ -3,42 +3,12 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
+using System.ComponentModel;
 using StructureMap;
 using IContext = Tp.Core.Interfaces.IContext;
 
 namespace Tp.Core
 {
-	public interface ITimeKeeper
-	{
-		DateTime Now { get; }
-	}
-
-	public class CurrentTimeKeeper : ITimeKeeper
-	{
-		public DateTime Now
-		{
-			get { return DateTime.Now; }
-		}
-
-		public static readonly ITimeKeeper Instance = new CurrentTimeKeeper();
-	}
-
-	class DefiniteTimeKeeper : ITimeKeeper
-	{
-		private readonly Func<DateTime> _time;
-
-		public DefiniteTimeKeeper(Func<DateTime> time)
-		{
-			_time = time;
-		}
-
-		public DateTime Now
-		{
-			get { return _time(); }
-		}
-	}
-
-
 	/// <summary>
 	/// Current date strategy holder.
 	/// </summary>
@@ -57,7 +27,7 @@ namespace Tp.Core
 				return timeKeeper.Now;
 			}
 		}
-
+		
 		static private ITimeKeeper _timeKeeper = CurrentTimeKeeper.Instance;
 
 		private static ITimeKeeper TimeKeeper
@@ -105,5 +75,38 @@ namespace Tp.Core
 			TimeKeeper = getter == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(getter);
 			return Disposable.Create(()=>TimeKeeper=oldKeeper);
 		}
+
+		private interface ITimeKeeper
+		{
+			DateTime Now { get; }
+		}
+
+		private class CurrentTimeKeeper : ITimeKeeper
+		{
+			private CurrentTimeKeeper() { }
+
+			public DateTime Now
+			{
+				get { return DateTime.Now; }
+			}
+
+			public static readonly ITimeKeeper Instance = new CurrentTimeKeeper();
+		}
+
+		private class DefiniteTimeKeeper : ITimeKeeper
+		{
+			private readonly Func<DateTime> _time;
+
+			public DefiniteTimeKeeper(Func<DateTime> time)
+			{
+				_time = time;
+			}
+
+			public DateTime Now
+			{
+				get { return _time(); }
+			}
+		}
+
 	}
 }

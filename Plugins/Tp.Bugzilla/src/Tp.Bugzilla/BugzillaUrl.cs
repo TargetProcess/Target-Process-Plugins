@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using StructureMap;
+using Tp.BugTracking.Settings;
 using Tp.Bugzilla.BugzillaQueries;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Activity;
@@ -19,10 +20,11 @@ namespace Tp.Bugzilla
 {
 	public class BugzillaUrl
 	{
-		private readonly BugzillaProfile _profile;
+		private readonly IBugTrackingConnectionSettingsSource _profile;
 		private readonly IActivityLogger _log;
 
-		public BugzillaUrl(BugzillaProfile profile) : this(profile, ObjectFactory.GetInstance<IActivityLogger>())
+		public BugzillaUrl(IBugTrackingConnectionSettingsSource profile)
+			: this(profile, ObjectFactory.GetInstance<IActivityLogger>())
 		{
 		}
 
@@ -31,7 +33,7 @@ namespace Tp.Bugzilla
 		{
 		}
 
-		private BugzillaUrl(BugzillaProfile profile, IActivityLogger logger)
+		private BugzillaUrl(IBugTrackingConnectionSettingsSource profile, IActivityLogger logger)
 		{
 			_log = logger;
 			_profile = profile;
@@ -66,8 +68,8 @@ namespace Tp.Bugzilla
 		{
 			var myDtfi = new CultureInfo("en-US", false).DateTimeFormat;
 			var url = String.Format("cmd=get_bug_ids&name={0}&date={1}",
-			                        HttpUtility.UrlEncode(_profile.Queries),
-			                        date.ToString("dd-MMM-yyyy HH:mm", myDtfi));
+			                        HttpUtility.UrlEncode(_profile.SavedSearches),
+			                        date.ToString("dd-MMM-yyyy HH:mm:ss", myDtfi));
 
 			var content = UploadDataToBugzilla(url);
 			var ids = content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);

@@ -5,10 +5,12 @@
 
 using System.Linq;
 using NServiceBus;
+using StructureMap;
 using Tp.Core;
 using Tp.Integration.Messages.ServiceBus;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Logging;
 
 namespace Tp.Integration.Plugin.Common.Ticker
 {
@@ -45,6 +47,9 @@ namespace Tp.Integration.Plugin.Common.Ticker
 					_bus.SendLocal(lastSyncDate != null
 					               	? new TickMessage(lastSyncDate.Value)
 					               	: new TickMessage(null));
+
+					ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType()).Info("TickMesage sent");
+
 					profile.Get<LastSyncDate>().ReplaceWith(new LastSyncDate(CurrentDate.Value));
 				}
 			}

@@ -20,9 +20,10 @@ tau.mashups
                     mappingTemplate: 'batched',
                     key: 'StatesMapping',
                     Caption: 'States Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess states mapping by name (Ex: Resolved <span class="mapping-notes-chain">&nbsp;</span> Fixed)<br/><a href="http://help.targetprocess.com/workflow/work_by_role" target="_blank">Learn how to change States in TargetProcess</a>',
+                    Description: 'Example: Resolved <span class="mapping-notes-chain">&nbsp;</span> Fixed',
                     KeyName: 'Bugzilla Status',
                     ValueName: 'TargetProcess State',
+                    HowTo: '<a href="http://help.targetprocess.com/workflow/work_by_role" target="_blank">How to change States in TargetProcess</a>',
                     onAutomap: $.proxy(this.automap, this)
                 });
 
@@ -31,9 +32,10 @@ tau.mashups
                     mappingTemplate: 'batched',
                     key: 'SeveritiesMapping',
                     Caption: 'Severities Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess severities mapping by name (Ex: Critical <span class="mapping-notes-chain">&nbsp;</span> Major)<br/><a href="http://help.targetprocess.com/settings/severity" target="_blank">Learn how to change Severities for Bugs in TargetProcess</a>',
+                    Description: 'Example: Critical <span class="mapping-notes-chain">&nbsp;</span> Major',
                     KeyName: 'Bugzilla Severity',
                     ValueName: 'TargetProcess Severity',
+                    HowTo: '<a href="http://help.targetprocess.com/settings/severity" target="_blank">How to change Severities for Bugs in TargetProcess</a>',
                     onAutomap: $.proxy(this.automap, this)
                 });
 
@@ -42,9 +44,10 @@ tau.mashups
                     mappingTemplate: 'batched',
                     key: 'PrioritiesMapping',
                     Caption: 'Priorities Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess priorities mapping by name (Ex: Good <span class="mapping-notes-chain">&nbsp;</span> Must Have)<br/><a href="http://help.targetprocess.com/settings/bv" target="_blank">Learn how to change Priorities for Bugs in TargetProcess</a>',
+                    Description: 'Example: Good <span class="mapping-notes-chain">&nbsp;</span> Must Have',
                     KeyName: 'Bugzilla Priority',
                     ValueName: 'TargetProcess Priority',
+                    HowTo: '<a href="http://help.targetprocess.com/settings/bv" target="_blank">How to change Priorities for Bugs in TargetProcess</a>',
                     onAutomap: $.proxy(this.automap, this)
                 });
 
@@ -52,8 +55,8 @@ tau.mashups
                     placeholder: this.placeholder,
                     mappingTemplate: 'standalone',
                     key: 'RolesMapping',
-                    Caption: 'Roles Mapping',
-                    Description: 'Specify Bugzilla-to-TargetProcess roles mapping by name (Ex: Assignee <span class="mapping-notes-chain">&nbsp;</span> Developer)',
+                    Caption: 'Map Roles',
+                    Description: 'Example: Assignee <span class="mapping-notes-chain">&nbsp;</span> Developer',
                     KeyName: 'Bugzilla Role',
                     ValueName: 'TargetProcess Role'
                 });

@@ -13,8 +13,57 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 		this.order = new Tp.controls.kanbanboard.board.Order({ controller: config.controller });
 		this.limits = new Tp.controls.kanbanboard.board.Limits({ controller: config.controller });
 		this.reFresh = new Tp.controls.kanbanboard.board.ReFresh({ controller: config.controller });
+		this.showTasks = new Tp.controls.kanbanboard.board.ShowTasks({ controller: config.controller });
 
-		Ext.apply(config, {
+		var items = [{
+			autoHeight: true,
+			title: 'Order',
+			items: [{
+				border: false,
+				style: {
+					'padding': '10px 10px 0 10px'
+				},
+				html: 'Use drag and drop to define columns order.'
+			},
+				this.order
+			]
+		}, {
+			autoHeight: true,
+			title: 'Limits',
+			items: [{
+				border: false,
+				style: {
+					'padding': '10px 10px 0 10px'
+				},
+				html: 'Set limits on states. Limit shows how many items may be in a particular state.'
+			},
+				this.limits
+			]
+		}, {
+			autoHeight: true,
+			title: 'Refresh',
+			items: [{
+				border: false,
+				style: {
+					'padding': '10px 10px 0 10px'
+				},
+				html: 'Set refresh interval for Kanban board.'
+			},
+				this.reFresh
+			]
+		}
+		];
+
+		if (config.controller.preferences.showTasksAsCardsAvailable)
+			items.push({
+				autoHeight: true,
+				title: 'Tasks',
+				items: [
+					this.showTasks
+				]
+			});
+
+		var configValues = {
 			//width: 400,
 			//height: 300,
 			autoHeight: true,
@@ -24,46 +73,13 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 				activeTab: 0,
 				deferredRender: false,
 				border: false,
-				items: [{
-					autoHeight: true,
-					title: 'Order',
-					items: [{
-						border: false,
-						style: {
-							'padding': '10px 10px 0 10px'
-						},
-						html: 'Use drag and drop to define columns order.'
-					},
-						this.order
-					]
-				}, {
-					autoHeight: true,
-					title: 'Limits',
-					items: [{
-						border: false,
-						style: {
-							'padding': '10px 10px 0 10px'
-						},
-						html: 'Set limits on states. Limit shows how many items may be in a particular state.'
-					},
-						this.limits
-					]
-				}, {
-					autoHeight: true,
-					title: 'Refresh',
-					items: [{
-						border: false,
-						style: {
-							'padding': '10px 10px 0 10px'
-						},
-						html: 'Set refresh interval for Kanban board.'
-					},
-							this.reFresh
-						]
-				}
-				]
+				items: items
 			})
-		});
+		};
+
+
+
+		Ext.apply(config, configValues);
 
 		Tp.controls.kanbanboard.board.Customizer.superclass.constructor.call(this, config);
 		this.on('afterlayout', this.onAfterLayout, this);
@@ -81,5 +97,6 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 		this.order.applyCustomization();
 		this.limits.applyCustomization();
 		this.reFresh.applyCustomization();
+		this.showTasks.applyCustomization();
 	}
 });

@@ -8,6 +8,7 @@ using Tp.Git.VersionControlSystem;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
+using System.Linq;
 
 namespace Tp.Git
 {
@@ -22,18 +23,23 @@ namespace Tp.Git
 
 		protected override void OnCheckConnection(PluginProfileErrorCollection errors, GitPluginProfile settings)
 		{
-			_folder = GitRepositoryFolder.Create(settings.Uri);
-			var nativeGit = NGit.Api.Git.Init().SetDirectory(_folder.Value).Call();
-			var transport = Transport.Open(nativeGit.GetRepository(), settings.Uri);
-			try
+			settings.ValidateUri(errors);
+
+			if (!errors.Any())
 			{
-				transport.SetCredentialsProvider(new UsernamePasswordCredentialsProvider(settings.Login, settings.Password));
-				transport.OpenFetch();
-			}
-			catch
-			{
-				transport.Close();
-				throw;
+				_folder = GitRepositoryFolder.Create(settings.Uri);
+				var nativeGit = NGit.Api.Git.Init().SetDirectory(_folder.Value).Call();
+				var transport = Transport.Open(nativeGit.GetRepository(), settings.Uri);
+				try
+				{
+					transport.SetCredentialsProvider(new UsernamePasswordCredentialsProvider(settings.Login, settings.Password));
+					transport.OpenFetch();
+				}
+				catch
+				{
+					transport.Close();
+					throw;
+				}
 			}
 		}
 
@@ -41,7 +47,10 @@ namespace Tp.Git
 		{
 			base.OnExecuted(profile);
 
-			_folder.Delete();
+			if (_folder != null && _folder.Exists())
+			{
+				_folder.Delete();
+			}
 		}
 	}
 }

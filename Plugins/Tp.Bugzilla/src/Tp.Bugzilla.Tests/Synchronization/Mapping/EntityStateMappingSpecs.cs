@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
-using Tp.Bugzilla.CustomCommand.Dtos;
+using Tp.BugTracking.Commands.Dtos;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Plugin.Common.Mapping;

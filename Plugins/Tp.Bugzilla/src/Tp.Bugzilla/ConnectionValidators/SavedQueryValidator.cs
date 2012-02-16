@@ -4,6 +4,8 @@
 // 
 
 using System;
+using Tp.BugTracking.ConnectionValidators;
+using Tp.BugTracking.Settings;
 using Tp.Core;
 using Tp.Integration.Plugin.Common.Validation;
 
@@ -11,7 +13,8 @@ namespace Tp.Bugzilla.ConnectionValidators
 {
 	public class SavedQueryValidator : Validator, IDataHolder<int[]>
 	{
-		public SavedQueryValidator(BugzillaProfile profile) : base(profile)
+		public SavedQueryValidator(IBugTrackingConnectionSettingsSource connectionSettings)
+			: base(connectionSettings)
 		{
 		}
 
@@ -19,7 +22,7 @@ namespace Tp.Bugzilla.ConnectionValidators
 		{
 			try
 			{
-				Data = new BugzillaUrl(_profile).GetChangedBugsIds(CurrentDate.Value);
+				Data = new BugzillaUrl(ConnectionSettings).GetChangedBugsIds(CurrentDate.Value);
 			}
 			catch (Exception)
 			{

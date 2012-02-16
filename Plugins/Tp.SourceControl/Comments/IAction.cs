@@ -7,12 +7,13 @@ using System;
 using System.Collections.Generic;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.PluginLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.SourceControl.Comments
 {
 	public interface IAction : IPluginLocalMessage
 	{
-		void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor);
+		void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger);
 
 		List<IAction> Children { get; }
 	}

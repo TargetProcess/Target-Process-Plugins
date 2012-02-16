@@ -3,7 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using System.Linq;
 using StructureMap;
 using Tp.Integration.Messages.PluginLifecycle;
@@ -12,6 +11,7 @@ using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
+using Tp.MashupManager.Dtos;
 using Tp.MashupManager.MashupStorage;
 using log4net;
 
@@ -35,12 +35,8 @@ namespace Tp.MashupManager
 
 		public PluginProfileErrorCollection Add(MashupDto dto)
 		{
-			var errors = new PluginProfileErrorCollection();
-
 			NormalizeMashup(dto);
-			ValidateNameNotEmpty(dto, errors);
-			ValidateNameContainsOnlyValidChars(dto, errors);
-			ValidateNameUniqueness(dto, errors);
+			var errors = dto.ValidateAdd(ManagerProfile);
 
 			if (!errors.Any())
 			{
@@ -81,8 +77,8 @@ namespace Tp.MashupManager
 			DeleteMashupNameToPlugin(name);
 
 			_scriptStorage.DeleteMashup(name);
-			
-			var dto = MashupDto.CreateEmptyMashup(name);
+
+			var dto = new MashupDto {Name = name};
 
 			_bus.Send(dto.CreatePluginMashupMessage());
 
@@ -125,61 +121,18 @@ namespace Tp.MashupManager
 
 		private PluginProfileErrorCollection UpdateInternal(UpdateMashupDto dto)
 		{
-			var errors = new PluginProfileErrorCollection();
-			ValidateNameNotEmpty(dto, errors);
-			ValidateNameContainsOnlyValidChars(dto, errors);
+			var errors = dto.ValidateUpdate(ManagerProfile);
 
 			if (!errors.Any())
 			{
 				_scriptStorage.SaveMashup(dto);
-
 				_bus.Send(dto.CreatePluginMashupMessage());
 
 				_log.InfoFormat("Update mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name,
-				                   _context.AccountName.Value);
-
-				return new PluginProfileErrorCollection();
+				                _context.AccountName.Value);
 			}
+
 			return errors;
-		}
-
-		private void ValidateNameNotEmpty(MashupDto dto, PluginProfileErrorCollection errors)
-		{
-			if (string.IsNullOrEmpty(dto.Name))
-				errors.Add(new PluginProfileError
-				           	{
-				           		FieldName = MashupDto.NameField,
-				           		Message = "Mashup name should be specified"
-				           	});
-		}
-
-		private void ValidateNameContainsOnlyValidChars(MashupDto dto, PluginProfileErrorCollection errors)
-		{
-			if (!ProfileDtoValidator.IsValid(dto.Name))
-				errors.Add(new PluginProfileError
-				           	{
-				           		FieldName = MashupDto.NameField,
-				           		Message = "You can only use letters, numbers, space and underscore symbol in Mashup name"
-				           	});
-		}
-
-		private void ValidateNameUniqueness(MashupDto dto, PluginProfileErrorCollection errors)
-		{
-			if (errors.Any())
-				return;
-
-			var existsSuchName = ManagerProfile != null && ManagerProfile.MashupNames
-			                                               	.Any(
-			                                               		m => m.Equals(dto.Name, StringComparison.InvariantCultureIgnoreCase));
-
-			if (existsSuchName)
-			{
-				errors.Add(new PluginProfileError
-				           	{
-				           		FieldName = MashupDto.NameField,
-				           		Message = "Mashup with the same name already exists"
-				           	});
-			}
 		}
 
 		private void CreateOrUpdateProfile(MashupNames names)

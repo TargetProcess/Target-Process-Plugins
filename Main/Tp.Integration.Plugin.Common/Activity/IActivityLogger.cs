@@ -7,6 +7,10 @@ using System;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
+	/// <summary>
+	/// Provides ability to log messages to profile log. In case there is no profile in <see cref="Tp.Integration.Plugin.Common.Domain.PluginContext"/>, messages will be logged to global plugin log file.
+	/// Injected into StructureMap container.
+	/// </summary>
 	public interface IActivityLogger
 	{
 		void Debug(string message);

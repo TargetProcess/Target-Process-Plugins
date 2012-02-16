@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Tp.BugTracking;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Domain;
 
@@ -48,7 +49,7 @@ namespace Tp.Bugzilla.BugzillaQueries
 
 		private string GetOwner(CommentDTO comment)
 		{
-			var owner = _userMapper.GetBugzillaEmailBy(comment.OwnerID);
+			var owner = _userMapper.GetThirdPartyIdBy(comment.OwnerID);
 			return !string.IsNullOrEmpty(owner)
 			       	? owner
 			       	: _repository.Get<UserDTO>(comment.OwnerID.ToString())

@@ -51,7 +51,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
 
 		private static IEnumerable<string> GetMashupsDirectories(string mashupsPhysicalPath)
 		{
-			return Directory.GetDirectories(mashupsPhysicalPath).Except(new[] {Path.Combine(mashupsPhysicalPath, "Tests")});
+			return Directory.GetDirectories(mashupsPhysicalPath);
 		} 
 
 		private static string MakePathRelative(string path, string basePath)

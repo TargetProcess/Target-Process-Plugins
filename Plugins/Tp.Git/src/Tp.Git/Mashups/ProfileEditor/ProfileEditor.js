@@ -20,11 +20,12 @@ tau.mashups
 				'		<h2 class="h2">' +
 					'			Git Integration</h2>' +
 					'		<p class="note">' +
-					'			Exports revisions from Git and bind source code to user stories, bugs and' +
+					'			Exports revisions from Git and binds source code to TargetProcess user stories, bugs and' +
 					'			tasks.</p>' +
 					'		<div class="svn-settings">' +
 					'   <div class="pad-box">' +
 					'       <p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span></p>' +
+					'       <p class="note"><span class="small">Should be unique. Can\'t be changed later.</span></p>' +
 					'       <input type="text" id="name" name="Name" value="${Name}" class="input" style="width: 275px;" />' +
 					'   </div>' +
 					'			<div class="separator">' +
@@ -35,7 +36,7 @@ tau.mashups
 					'				<p class="label">' +
 					'					Enter a full path to the repository&nbsp;<a id="uriExamplesLink" class="small" href="javascript:void(0);">Examples</a>' +
                     '               <span class="error" name="UriErrorLabel"></span></p>' +
-                    '               <div id="uriExamplesContent" style="display:none" class="small pt-10 pb-10"><p class="label pb-5">URL examples</p><p class="rules-actions">git://github.com/Company/Project.git</p><p class="rules-actions">https://github.com/Company/Project.git</p><p class="rules-actions">file:///c:/Repository</p><p class="rules-actions">//keeper/trunk</p></div><p/> ' +
+                    '               <div id="uriExamplesContent" style="display:none" class="small pt-10 pb-10"><p class="label pb-5">URL examples:</p><p class="rules-actions">git://github.com/Company/Project.git</p><p class="rules-actions">https://github.com/Company/Project.git</p><p class="rules-actions">file:///c:/Repository</p><p class="rules-actions">//localserver/trunk</p></div><p/> ' +
 					'				<input type="text" class="input" name="Uri" id="uri" value="${Settings.Uri}" style="width: 100%;" /><br />' +
 					'				<p class="label">' +
 					'				<p class="label pt-10">' +
@@ -45,7 +46,7 @@ tau.mashups
 					'					Password&nbsp;<span class="error" name="PasswordErrorLabel"></span></p>' +
 					'				<input type="password" class="input" id="password" name="Password" value="${Settings.Password}" style="width: 275px;" />' +
 					'				<p class="label pt-20">' +
-					'					Export all revisions started from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
+					'					Export all the revisions starting from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
 					'						style="width: 97px;" /><span class="error" name="StartRevisionErrorLabel"></span></p>' +
 					'			</div>' +
 					'			<div class="check-block">' +

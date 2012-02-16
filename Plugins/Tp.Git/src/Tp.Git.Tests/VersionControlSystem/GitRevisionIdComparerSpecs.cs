@@ -23,25 +23,27 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			_comparer = new GitRevisionIdComparer();
 			_revisionRanges = new[]
-			{
-				CreateRevisionRange(Date("1.10.2001"), Date("2.10.2001")),
-				CreateRevisionRange(Date("1.15.2001"), Date("4.12.2001")),
-				CreateRevisionRange(Date("1.16.2001"), Date("7.11.2001")),
-				CreateRevisionRange(Date("1.01.2001"), Date("3.10.2001")),
-				CreateRevisionRange(Date("1.13.2001"), Date("6.14.2001"))
-			};
+			                  	{
+			                  		CreateRevisionRange(Date("1.10.2001"), Date("2.10.2001")),
+			                  		CreateRevisionRange(Date("1.15.2001"), Date("4.12.2001")),
+			                  		CreateRevisionRange(Date("1.16.2001"), Date("7.11.2001")),
+			                  		CreateRevisionRange(Date("1.01.2001"), Date("3.10.2001")),
+			                  		CreateRevisionRange(Date("1.13.2001"), Date("6.14.2001"))
+			                  	};
 		}
 
 		[Test]
 		public void ShouldFindMinFromRevision()
 		{
-			((GitRevisionId) _comparer.FindMinFromRevision(_revisionRanges)).Value.Should(Be.EqualTo(((GitRevisionId) _revisionRanges[3].FromChangeset).Value));
+			((GitRevisionId) _comparer.FindMinFromRevision(_revisionRanges)).Time.Should(
+				Be.EqualTo(((GitRevisionId) _revisionRanges[3].FromChangeset).Time));
 		}
 
 		[Test]
 		public void ShouldFindMaxToRevision()
 		{
-			((GitRevisionId)_comparer.FindMaxToRevision(_revisionRanges)).Value.Should(Be.EqualTo(((GitRevisionId)_revisionRanges[2].ToChangeset).Value));
+			((GitRevisionId) _comparer.FindMaxToRevision(_revisionRanges)).Time.Should(
+				Be.EqualTo(((GitRevisionId) _revisionRanges[2].ToChangeset).Time));
 		}
 
 		[Test]
@@ -81,9 +83,9 @@ namespace Tp.Git.Tests.VersionControlSystem
 			return DateTime.Parse(date, CultureInfo.InvariantCulture.DateTimeFormat);
 		}
 
-		private RevisionRange CreateRevisionRange(DateTime from, DateTime to)
+		private static RevisionRange CreateRevisionRange(DateTime from, DateTime to)
 		{
-			return new RevisionRange((GitRevisionId) from, (GitRevisionId) to);
+			return new RevisionRange(new GitRevisionId {Time = from}, new GitRevisionId {Time = to});
 		}
 
 		#endregion

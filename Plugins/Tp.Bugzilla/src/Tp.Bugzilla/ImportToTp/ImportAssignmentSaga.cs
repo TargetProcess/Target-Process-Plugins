@@ -3,14 +3,14 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using System.Linq;
 using NServiceBus;
 using NServiceBus.Saga;
+using Tp.BugTracking;
+using Tp.BugTracking.ImportToTp;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
@@ -19,8 +19,8 @@ using Tp.Integration.Plugin.Common.Mapping;
 namespace Tp.Bugzilla.ImportToTp
 {
 	public class ImportAssignmentSaga : TpSaga<ImportAssignmentSagaData>,
-	                                    IAmStartedByMessages<NewBugImportedToTargetProcessMessage>,
-	                                    IAmStartedByMessages<ExistingBugImportedToTargetProcessMessage>,
+	                                    IAmStartedByMessages<NewBugImportedToTargetProcessMessage<BugzillaBug>>,
+	                                    IAmStartedByMessages<ExistingBugImportedToTargetProcessMessage<BugzillaBug>>,
 	                                    IHandleMessages<TeamCreatedMessage>,
 	                                    IHandleMessages<TeamDeletedMessage>
 	{
@@ -45,20 +45,20 @@ namespace Tp.Bugzilla.ImportToTp
 			ConfigureMapping<TeamDeletedMessage>(saga => saga.Id, message => message.SagaId);
 		}
 
-		public void Handle(NewBugImportedToTargetProcessMessage message)
+		public void Handle(NewBugImportedToTargetProcessMessage<BugzillaBug> message)
 		{
-			AssignDeveloperToBug(message.TpBugId, message.BugzillaBug);
-			AssignQAToBug(message.TpBugId, message.BugzillaBug);
+			AssignDeveloperToBug(message.TpBugId, message.ThirdPartyBug);
+			AssignQAToBug(message.TpBugId, message.ThirdPartyBug);
 
 			CompleteIfNecessary();
 		}
 
-		public void Handle(ExistingBugImportedToTargetProcessMessage message)
+		public void Handle(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message)
 		{
 			var role = _storageRepository.GetProfile<BugzillaProfile>().GetAssigneeRole();
 
 			UnassignUsersInTargetProcess(role.Name, message.TpBugId);
-			AssignDeveloperToBug(message.TpBugId, message.BugzillaBug);
+			AssignDeveloperToBug(message.TpBugId, message.ThirdPartyBug);
 
 			CompleteIfNecessary();
 		}
@@ -141,25 +141,5 @@ namespace Tp.Bugzilla.ImportToTp
 		{
 			return _storageRepository.Get<RoleDTO>().SingleOrDefault(r => r.Name == roleName);
 		}
-	}
-
-	public class ExistingBugImportedToTargetProcessMessage : IPluginLocalMessage
-	{
-		public int? TpBugId { get; set; }
-		public BugzillaBug BugzillaBug { get; set; }
-	}
-
-	public class NewBugImportedToTargetProcessMessage : IPluginLocalMessage
-	{
-		public int? TpBugId { get; set; }
-		public BugzillaBug BugzillaBug { get; set; }
-	}
-
-	public class ImportAssignmentSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
-		public int ActionsInProgress { get; set; }
 	}
 }

@@ -16,7 +16,7 @@ using log4net.Repository.Hierarchy;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class Log4NetFileRepository : ILog4NetFileRepository
+	internal class Log4NetFileRepository : ILog4NetFileRepository
 	{
 		private readonly ILogManager _logManager;
 
@@ -138,7 +138,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 		{
 			return new ActivityLogRecord
 			       	{
-			       		DateTime = DateTime.ParseExact(csvReader[0], CsvLayout.DATE_TIME_FORMAT, CultureInfo.CurrentCulture),
+			       		DateTime = DateTime.ParseExact(csvReader[0], CsvLayout.DATE_TIME_FORMAT, CultureInfo.InvariantCulture),
 			       		Level = csvReader[1],
 			       		Message = csvReader[2],
 			       		Details = csvReader[3]

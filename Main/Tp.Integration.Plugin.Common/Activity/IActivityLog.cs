@@ -7,6 +7,9 @@ using Tp.Core;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
+	/// <summary>
+	/// Provides access to current profile log.
+	/// </summary>
 	public interface IActivityLog
 	{
 		ActivityDto GetBy(ActivityFilter filter);
@@ -18,7 +21,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 		bool CheckForErrors();
 	}
 
-	public class ActivityLogSafeNull : SafeNull<ActivityLogSafeNull, IActivityLog>, IActivityLog, INullable
+	internal class ActivityLogSafeNull : SafeNull<ActivityLogSafeNull, IActivityLog>, IActivityLog, INullable
 	{
 		private readonly ActivityDto _activityDto = new ActivityDto();
 

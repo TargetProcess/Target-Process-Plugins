@@ -37,7 +37,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 
 		public IMessageConsumer<TestMessage> CreateConsumer(IMessageSource<TestMessage> messageSource)
 		{
-			var consumer = new MessageConsumer<TestMessage>(messageSource, Scheduler.ThreadPool)
+			var consumer = new MessageConsumer<TestMessage>(messageSource, Scheduler.ThreadPool, new LoggerContextSensitive())
 			       	{
 			       		While = m => TestMessage.IsNotStopMessage(messageSource.Name, m)
 			       	};

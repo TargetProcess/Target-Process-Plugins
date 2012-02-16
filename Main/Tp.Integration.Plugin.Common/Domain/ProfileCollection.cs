@@ -78,12 +78,12 @@ namespace Tp.Integration.Plugin.Common.Domain
 
 		public IEnumerator<IProfile> GetEnumerator()
 		{
-			return Profiles.Values.StaticCast(TypeOf<IProfile>.Self).GetEnumerator();
+			return Profiles.Values.GetEnumerator();
 		}
 
 		IEnumerator<IProfileReadonly> IEnumerable<IProfileReadonly>.GetEnumerator()
 		{
-			return Profiles.Values.StaticCast(TypeOf<IProfileReadonly>.Self).GetEnumerator();
+			return Profiles.Values.GetEnumerator();
 		}
 
 		public IEventAggregator EventAggregator

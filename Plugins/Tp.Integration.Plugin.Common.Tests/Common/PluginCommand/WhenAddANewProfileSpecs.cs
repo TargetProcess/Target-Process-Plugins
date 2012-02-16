@@ -9,6 +9,7 @@ using NBehave.Narrator.Framework;
 using NServiceBus.Unicast.Transport;
 using NUnit.Framework;
 using StructureMap;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.ServiceBus;

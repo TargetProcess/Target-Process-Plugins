@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using NServiceBus;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
@@ -50,6 +51,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
 				}
 
 				_tpBus.Reply(replyMessage);
+				_log.Info("plugin command executed: {0}".Fmt(message.CommandName));
 			}
 			catch (PluginProfileValidationException validationException)
 			{

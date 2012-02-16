@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.release.progressBar","tau/ui/templates/progressBar/ui.template.iteration.progressBar"],function(a,b,c){return{create:function(d){var e={extensions:[b],template:c};return a.create(e,d)}}})

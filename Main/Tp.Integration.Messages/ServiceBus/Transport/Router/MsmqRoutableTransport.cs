@@ -189,6 +189,15 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		/// </summary>
 		public void Start()
 		{
+			if (RoutableTransportMode == RoutableTransportMode.OnDemand)
+			{
+				int workersThreads;
+				int ioThreads;
+				ThreadPool.GetMaxThreads(out workersThreads, out ioThreads);
+				ThreadPool.SetMaxThreads(100 * Environment.ProcessorCount, ioThreads);
+				ThreadPool.SetMinThreads(50, 50);
+			}
+			
 			CheckConfiguration();
 			CreateQueuesIfNecessary();
 			if (ErrorQueue != null)

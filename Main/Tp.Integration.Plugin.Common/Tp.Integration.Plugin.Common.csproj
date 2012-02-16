@@ -137,6 +137,7 @@
     <Compile Include="Domain\ISpecificStorage.cs" />
     <Compile Include="Domain\IStorageRepository.cs" />
     <Compile Include="Domain\PluginContext.cs" />
+    <Compile Include="Handlers\SyncNowMessageHandler.cs" />
     <Compile Include="PluginDataFolder.cs" />
     <Compile Include="PluginRuntime.cs" />
     <Compile Include="Domain\ProfileCollection.cs" />

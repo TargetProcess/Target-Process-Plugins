@@ -3,6 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using Tp.BugTracking.ConnectionValidators;
+using Tp.BugTracking.Settings;
 using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
@@ -11,7 +13,8 @@ namespace Tp.Bugzilla.ConnectionValidators
 	{
 		private readonly IDataHolder<string> _dataHolder;
 
-		public ResponseValidator(BugzillaProfile profile, IDataHolder<string> dataHolder) : base(profile)
+		public ResponseValidator(IBugTrackingConnectionSettingsSource connectionSettings, IDataHolder<string> dataHolder)
+			: base(connectionSettings)
 		{
 			_dataHolder = dataHolder;
 		}

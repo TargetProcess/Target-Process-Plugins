@@ -100,7 +100,7 @@ namespace Tp.Subversion.Context
 
 		private IProfileReadonly ProfileStorage
 		{
-			get { return _profileStorage ?? (_profileStorage = _transport.AddProfile("Test profile", new SubversionPluginProfile {StartRevision = "1"})); }
+			get { return _profileStorage ?? (_profileStorage = _transport.AddProfile("Test profile", new SubversionPluginProfile {StartRevision = "1", Uri = "http://localhost"})); }
 		}
 
 		private IVersionControlSystem VersionControlSystem
@@ -110,7 +110,9 @@ namespace Tp.Subversion.Context
 
 		private static ISagaMessage CreateRevisionFileCreatedMessage(CreateCommand createCommand)
 		{
-			return new RevisionFileCreatedMessage {Dto = (RevisionFileDTO) createCommand.Dto};
+			var revisionFile = (RevisionFileDTO) createCommand.Dto;
+			revisionFile.ID = EntityId.Next();
+			return new RevisionFileCreatedMessage { Dto = revisionFile };
 		}
 
 		private static ISagaMessage CreateRevisionCreatedMessage(CreateCommand command)

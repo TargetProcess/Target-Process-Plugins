@@ -13,6 +13,7 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 		public void Handle(TargetProcessStartedMessage message)
 		{
 			SendInfoMessages();
+			SendPluginScriptMessages();
 		}
 	}
 }

@@ -13,6 +13,7 @@ using Tp.Core;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Testing.Common;
 using Tp.SourceControl.Commands;
+using Tp.SourceControl.Diff;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 using Tp.Subversion.StructureMap;
@@ -60,7 +61,7 @@ namespace Tp.Subversion.Subversion
 		{
 			var settings = GetLocalRepositorySettings();
 			settings.Uri = new Uri("http://unknowhost:8080/trunk").ToString();
-			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>());
+			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
 		}
 
 		[Test]
@@ -69,7 +70,7 @@ namespace Tp.Subversion.Subversion
 		{
 			var settings = GetLocalRepositorySettings();
 			settings.Uri = new Uri("http://localhost:8080/unknown").ToString();
-			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>());
+			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
 		}
 
 		[Test, Explicit("temp test to reproduce a bug")]
@@ -77,7 +78,7 @@ namespace Tp.Subversion.Subversion
 		{
 			var settings = GetLocalRepositorySettings();
 			settings.Uri = new Uri("http://svn.apache.org/repos/asf/spamassassin/trunk").ToString();
-			var vcs = new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>());
+			var vcs = new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
 			var svnRevisionId = new SvnRevisionId(1000000);
 			var endRevision = vcs.GetFromTillHead(svnRevisionId, 50);
 			var result = vcs.GetRevisions(endRevision.Last());
@@ -99,7 +100,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void ShouldRetrieveLastRevision()
 		{
-			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var revisions = subversion.GetAfterTillHead(new SvnRevisionId(8), 50).ToArray();
 				revisions.Single().FromChangeset.Value.Should(Be.EqualTo(9.ToString()));
@@ -110,7 +111,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void ShouldRetrieveAuthors()
 		{
-			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var revisions = subversion.GetRevisions(subversion.GetFromTillHead(new SvnRevisionId(0), 100).Single()).OrderBy(x => x.Time);
 
@@ -122,7 +123,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetRevisionRanges()
 		{
-			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var revisionRanges = subversion.GetFromTillHead(new SvnRevisionId(2), 3);
 				revisionRanges.Count().Should(Be.EqualTo(3));
@@ -139,7 +140,7 @@ namespace Tp.Subversion.Subversion
 
 		private static void TestSubversionRepository(string firstFolder, params long[] revisionIds)
 		{
-			using (var sourceControlService = new Subversion(GetLocalRepositorySettings(firstFolder), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var sourceControlService = new Subversion(GetLocalRepositorySettings(firstFolder), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = sourceControlService.GetFromTillHead(0.ToString(), 100).Single();
 				var revisionsFromRepo = sourceControlService.GetRevisions(range).Select(x => long.Parse(x.Id.Value)).ToArray();
@@ -153,7 +154,7 @@ namespace Tp.Subversion.Subversion
 			var settings = GetLocalRepositorySettings();
 			settings.Login = string.Empty;
 			settings.Password = string.Empty;
-			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>());
+			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
 		}
 
 		[Test, Ignore("Turned off as we dont need to test SharpSvn functionality")]
@@ -163,13 +164,13 @@ namespace Tp.Subversion.Subversion
 			settings.Uri = new Uri("https://srv2.office.targetprocess.com:8443/svn/func_test").ToString();
 			settings.Login = "office\\testuser";
 			settings.Password = "testuser";
-			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>());
+			new Subversion(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
 		}
 
 		[Test]
 		public void ConnectToLocalRepository()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = s.GetFromTillHead(0.ToString(), 100).Single();
 				s.GetRevisions(range).Should(Be.Not.Empty);
@@ -179,7 +180,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetLastRevisionInfo()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = s.GetFromTillHead(0.ToString(), 100).Single();
 				s.GetRevisions(range).Should(Be.Not.Empty);
@@ -189,7 +190,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetLastRevisionInfoOnEmptyLocalRepository()
 		{
-			using (var s = new Subversion(GetEmptyRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetEmptyRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = s.GetFromTillHead(0.ToString(), 100).Single();
 				s.GetRevisions(range).Should(Be.Empty);
@@ -199,7 +200,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetRevisionInfos()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				IEnumerable<RevisionInfo> revisionInfos = s.GetRevisions(new RevisionRange(new SvnRevisionId(8), new SvnRevisionId(8)));
 
@@ -216,7 +217,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetRevisionInfosForPath()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				IEnumerable<RevisionInfo> revisionInfos = s.GetRevisions(new RevisionRange(new SvnRevisionId(1), new SvnRevisionId(5)), "readme.txt");
 
@@ -227,7 +228,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetTextFileContent()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				string content = s.GetTextFileContent(3.ToString(), "/readme.txt");
 
@@ -240,7 +241,7 @@ namespace Tp.Subversion.Subversion
 		[ExpectedException(typeof (VersionControlException))]
 		public void GetTextFileContentUnknownPath()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				s.GetTextFileContent(6066.ToString(), "/thisfiledoesnotexist.txt");
 			}
@@ -250,7 +251,7 @@ namespace Tp.Subversion.Subversion
 		[ExpectedException(typeof (VersionControlException))]
 		public void GetTextFileContentUnknownRevision()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				s.GetTextFileContent(99999.ToString(), "/TempSubversionTest/readme.txt");
 			}
@@ -259,7 +260,7 @@ namespace Tp.Subversion.Subversion
 		[Test]
 		public void GetBinaryFileContent()
 		{
-			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>()))
+			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				byte[] content = s.GetBinaryFileContent(3.ToString(), "readme.txt");
 

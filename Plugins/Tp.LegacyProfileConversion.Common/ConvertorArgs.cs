@@ -4,20 +4,20 @@
 // 
 
 using System.Collections.Generic;
-using System.Text;
-using System;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.LegacyProfileConvertsion.Common
 {
 	public class ConvertorArgs : IConvertorArgs
 	{
+		private readonly string[] _args;
 		public string AccountName { get; private set; }
 		public string TpConnectionString { get; private set; }
 		public string PluginConnectionString { get; private set; }
 
 		public ConvertorArgs(string[] args)
 		{
+			_args = args;
 			var accountName = new CmdLineString("acc", false,
 			                                    "Target Process Account Name. Converted Profile will be created for this account.");
 
@@ -40,6 +40,11 @@ namespace Tp.LegacyProfileConvertsion.Common
 		string IDatabaseConfiguration.ConnectionString
 		{
 			get { return PluginConnectionString; }
+		}
+
+		public IEnumerable<string> Args
+		{
+			get { return _args; }
 		}
 	}
 }

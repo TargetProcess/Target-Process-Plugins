@@ -11,7 +11,7 @@ using log4net.Repository.Hierarchy;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class Log4NetActivityLog : IActivityLog
+	internal class Log4NetActivityLog : IActivityLog
 	{
 		private readonly string _accountName;
 		private readonly string _profileName;

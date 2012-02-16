@@ -7,6 +7,7 @@ using System.Linq;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using StructureMap;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;

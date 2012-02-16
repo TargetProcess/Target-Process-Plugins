@@ -7,23 +7,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NGit.Diff;
-using NGit.Treewalk;
 using NUnit.Framework;
 using StructureMap;
 using Tp.Core;
 using Tp.Git.StructureMap;
 using Tp.Git.VersionControlSystem;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Messages.EntityLifecycle.Messages;
+using Tp.Integration.Messages.TargetProcessLifecycle;
 using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.Integration.Testing.Common;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.Comments;
+using Tp.SourceControl.RevisionStorage;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.Testing.Repository.Git;
 using Tp.SourceControl.VersionControlSystem;
+using Tp.SourceControl.Workflow.Workflow;
 using Tp.Testing.Common.NUnit;
 
 namespace Tp.Git.Tests.VersionControlSystem
@@ -33,6 +37,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 	{
 		private GitTestRepository _testRepository;
 		private string _gitRepoUri;
+		private IProfile _profile;
 
 		#region SetUp/TearDown
 
@@ -42,13 +47,20 @@ namespace Tp.Git.Tests.VersionControlSystem
 			ObjectFactory.Initialize(x => x.AddRegistry<GitRegistry>());
 			ObjectFactory.Configure(
 				x =>
-				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (GitPluginProfile).Assembly, new List<Assembly> {typeof (Command).Assembly})));
+				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (GitPluginProfile).Assembly,
+				                                                                        new List<Assembly>
+				                                                                        	{typeof (Command).Assembly})));
 
 			_testRepository = new GitTestRepository();
-
-			ObjectFactory.GetInstance<TransportMock>().AddProfile("Profile");
-
 			_gitRepoUri = _testRepository.Uri.ToString();
+
+			_profile = ObjectFactory.GetInstance<TransportMock>().AddProfile("Profile", new GitPluginProfile
+			                                                                            	{
+			                                                                            		Uri = _gitRepoUri,
+			                                                                            		Login = _testRepository.Login,
+			                                                                            		Password = _testRepository.Password,
+			                                                                            		StartRevision = "1/1/1980"
+			                                                                            	});
 		}
 
 		string ISourceControlConnectionSettingsSource.Uri
@@ -79,17 +91,18 @@ namespace Tp.Git.Tests.VersionControlSystem
 		}
 
 		#endregion
+
 		[Test]
 		public void ShouldRetrieveRevisionRangeFromBeginningTillHead()
 		{
 			using (var git = CreateGit())
 			{
-				var revisionRange = git.GetFromTillHead(GitRevisionId.MinValue, 100).Single();
+				var revisionRange = git.GetFromTillHead(CreateGitRevisionId(GitRevisionId.UtcTimeMin), 100).Single();
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Value.Should(Be.EqualTo(DateTime.Parse("2011-11-02 1:57:19 PM")));
+				fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-02 1:57:19 PM")));
 
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")));
+				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")));
 			}
 		}
 
@@ -101,11 +114,10 @@ namespace Tp.Git.Tests.VersionControlSystem
 			{
 				using (CreateGit())
 				{
-
 				}
 				Assert.Fail("invalid uri did not cause any exceptions");
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				ex.Message.Should(Be.EqualTo("invalid uri or insufficient access rights"));
 			}
@@ -116,13 +128,13 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = DateTime.Parse("2011-11-04 8:42:11 AM");
+				GitRevisionId startRevisionId = CreateGitRevisionId(DateTime.Parse(("2011-11-04 8:42:11 AM")));
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Value.Should(Be.EqualTo(startRevisionId.Value));
+				fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time));
 
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")));
+				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")));
 			}
 		}
 
@@ -131,16 +143,21 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				var startRevisionId = (GitRevisionId) DateTime.Parse("2011-11-04 8:42:11");
+				var startRevisionId = CreateGitRevisionId(DateTime.Parse("2011-11-04 8:42:11"));
 				var revisionRange = git.GetAfterTillHead(startRevisionId, 100).Single();
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
 
-				GitRevisionId fromExpected = DateTime.Parse("2011-11-04 11:30:19");
-				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value));
+				GitRevisionId fromExpected = CreateGitRevisionId(DateTime.Parse("2011-11-04 11:30:19"));
+				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
 
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04")));
+				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04")));
 			}
+		}
+
+		private static GitRevisionId CreateGitRevisionId(DateTime dateTime)
+		{
+			return new GitRevisionId {Time = dateTime};
 		}
 
 		[Test]
@@ -149,17 +166,17 @@ namespace Tp.Git.Tests.VersionControlSystem
 			using (var git = CreateGit())
 			{
 				var revisionRange =
-					git.GetFromAndBefore((GitRevisionId) DateTime.Parse("2011-11-02 1:57:19 PM"),
-					                     (GitRevisionId) DateTime.Parse("2011-11-04 11:32:04 AM"), 100).Single();
+					git.GetFromAndBefore(CreateGitRevisionId(DateTime.Parse("2011-11-02 1:57:19 PM")),
+					                     CreateGitRevisionId(DateTime.Parse("2011-11-04 11:32:04 AM")), 100).Single();
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
 
-				GitRevisionId fromExpected = DateTime.Parse("2011-11-04 8:41:11 AM");
-				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value));
+				GitRevisionId fromExpected = CreateGitRevisionId(DateTime.Parse("2011-11-04 8:41:11 AM"));
+				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
 
 
-				GitRevisionId toExpected = DateTime.Parse("2011-11-04 11:31:19 AM");
+				GitRevisionId toExpected = CreateGitRevisionId(DateTime.Parse("2011-11-04 11:31:19 AM"));
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(toExpected.Value));
+				toChangeSet.Time.Should(Be.EqualTo(toExpected.Time));
 			}
 		}
 
@@ -177,7 +194,8 @@ namespace Tp.Git.Tests.VersionControlSystem
 		[Test]
 		public void ShouldGetRevisions()
 		{
-			AssertCommits("first commit", "second commit to master", "Second Branch", "second commit to second branch", "First Branch Commit", "second commit");
+			AssertCommits("first commit", "second commit to master", "Second Branch", "second commit to second branch",
+			              "First Branch Commit", "second commit");
 		}
 
 		[Test]
@@ -185,18 +203,20 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = DateTime.Parse("2011-11-04 11:30:19 AM");
+				GitRevisionId startRevisionId = CreateGitRevisionId(DateTime.Parse("2011-11-04 11:30:19 AM"));
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 
 				var revision = git.GetRevisions(revisionRange).OrderBy(x => x.Time).First();
 
 				AssertEqual(revision.Entries, new[]
-				{
-					new RevisionEntryInfo{Path = @"FirstFolder/firstFolderFile.txt", Action = FileActionEnum.Modify}, 
-					new RevisionEntryInfo{Path = @"SecondFolder/secondFolderFile.txt", Action = FileActionEnum.Modify}, 
-					new RevisionEntryInfo{Path = "firstFile.txt", Action = FileActionEnum.Modify}, 
-					new RevisionEntryInfo{Path = "secondFile.txt", Action = FileActionEnum.Modify}, 
-				});
+				                              	{
+				                              		new RevisionEntryInfo
+				                              			{Path = @"FirstFolder/firstFolderFile.txt", Action = FileActionEnum.Modify},
+				                              		new RevisionEntryInfo
+				                              			{Path = @"SecondFolder/secondFolderFile.txt", Action = FileActionEnum.Modify},
+				                              		new RevisionEntryInfo {Path = "firstFile.txt", Action = FileActionEnum.Modify},
+				                              		new RevisionEntryInfo {Path = "secondFile.txt", Action = FileActionEnum.Modify}
+				                              	});
 			}
 		}
 
@@ -206,18 +226,20 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = DateTime.Parse("2011-11-02 1:57:19 PM");
+				GitRevisionId startRevisionId = CreateGitRevisionId(DateTime.Parse("2011-11-02 1:57:19 PM"));
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 
 				var revision = git.GetRevisions(revisionRange).OrderBy(x => x.Time).First();
 
 				AssertEqual(revision.Entries, new[]
-				{
-					new RevisionEntryInfo{Path = @"FirstFolder/firstFolderFile.txt", Action = FileActionEnum.Add}, 
-					new RevisionEntryInfo{Path = @"SecondFolder/secondFolderFile.txt", Action = FileActionEnum.Add}, 
-					new RevisionEntryInfo{Path = "firstFile.txt", Action = FileActionEnum.Add}, 
-					new RevisionEntryInfo{Path = "secondFile.txt", Action = FileActionEnum.Add}, 
-				});
+				                              	{
+				                              		new RevisionEntryInfo
+				                              			{Path = @"FirstFolder/firstFolderFile.txt", Action = FileActionEnum.Add},
+				                              		new RevisionEntryInfo
+				                              			{Path = @"SecondFolder/secondFolderFile.txt", Action = FileActionEnum.Add},
+				                              		new RevisionEntryInfo {Path = "firstFile.txt", Action = FileActionEnum.Add},
+				                              		new RevisionEntryInfo {Path = "secondFile.txt", Action = FileActionEnum.Add}
+				                              	});
 			}
 		}
 
@@ -228,12 +250,12 @@ namespace Tp.Git.Tests.VersionControlSystem
 			_gitRepoUri = testRepo.Uri.ToString();
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = GitRevisionId.MinValue;
+				GitRevisionId startRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMin);
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 
 				var revision = git.GetRevisions(revisionRange).OrderByDescending(x => x.Time).First();
 
-				AssertEqual(revision.Entries, new []{new RevisionEntryInfo{Path = "firstFile.txt", Action = FileActionEnum.Delete}});
+				AssertEqual(revision.Entries, new[] {new RevisionEntryInfo {Path = "firstFile.txt", Action = FileActionEnum.Delete}});
 			}
 		}
 
@@ -255,7 +277,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = DateTime.Parse("2011-11-02 1:57:19 PM");
+				GitRevisionId startRevisionId = CreateGitRevisionId(DateTime.Parse("2011-11-02 1:57:19 PM"));
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 
 				var revisions = git.GetRevisions(revisionRange);
@@ -269,7 +291,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId correctRevisionId = GitRevisionId.MinValue;
+				GitRevisionId correctRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMin);
 				var errors = new PluginProfileErrorCollection();
 				git.CheckRevision(correctRevisionId, errors);
 				errors.Should(Be.Empty);
@@ -281,7 +303,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId correctRevisionId = GitRevisionId.MaxValue.Value.AddYears(1);
+				GitRevisionId correctRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMax.AddYears(1));
 				var errors = new PluginProfileErrorCollection();
 				git.CheckRevision(correctRevisionId, errors);
 				errors.Single().ToString().Should(Be.EqualTo("Revision: should be between 1/1/1970 and 1/19/2038"));
@@ -291,20 +313,101 @@ namespace Tp.Git.Tests.VersionControlSystem
 		[Test]
 		public void ShouldReCreateRepositoryWhenUriChanged()
 		{
-			using (CreateGit()) {}
+			using (CreateGit())
+			{
+			}
 
 			var testRepo = new GitTestRepositoryWithMergeCommit();
 			_gitRepoUri = testRepo.Uri.ToString();
 
-			AssertCommits("first commit", "second commit to master", "Second Branch", "second commit to second branch", "First Branch Commit", "second commit",
+			AssertCommits("first commit", "second commit to master", "Second Branch", "second commit to second branch",
+			              "First Branch Commit", "second commit",
 			              "thirdth commit to second branch");
+		}
+
+		[Test]
+		public void ShouldNotImportDuplicateCommits()
+		{
+			var repo = new GitTestRepositoryWithCherryPickedCommit();
+			var transportMock = ObjectFactory.GetInstance<TransportMock>();
+			var gitPluginProfile = new GitPluginProfile
+			                       	{
+			                       		Uri = repo.Uri.ToString(),
+			                       		Login = repo.Login,
+			                       		Password = repo.Password,
+			                       		StartRevision = "1/1/1980"
+			                       	};
+			var profile = transportMock.AddProfile("CherryPick", gitPluginProfile);
+
+			using (var git = CreateGit(gitPluginProfile))
+			{
+				var startRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMin);
+				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
+
+				transportMock.HandleLocalMessage(profile, new NewRevisionRangeDetectedLocalMessage {Range = revisionRange});
+
+				transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1));
+			}
+		}
+
+		[Test]
+		public void ShouldSaveRevisionIdTpIdRelation()
+		{
+			var revisionId = _testRepository.Commit("third.txt", "Sample content", "#124");
+			var transportMock = ObjectFactory.GetInstance<TransportMock>();
+			const int tpId = 200;
+			transportMock.On<CreateCommand>(x => x.Dto is RevisionDTO).Reply(x => new RevisionCreatedMessage
+			{
+				Dto = new RevisionDTO
+				{
+					SourceControlID = revisionId,
+					ID = tpId
+				}
+			});
+
+			using (var git = CreateGit())
+			{
+				var startRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMin);
+				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
+
+				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
+
+				ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null);
+			}
+		}
+
+		[Test]
+		public void ShouldRemoveRevisionInfoIfRevisionCreationFailed()
+		{
+			var transportMock = ObjectFactory.GetInstance<TransportMock>();
+
+			transportMock.On<CreateCommand>(x => x.Dto is RevisionDTO).Reply(x => new TargetProcessExceptionThrownMessage
+			{
+				ExceptionString = "Error"
+			});
+
+			using (var git = CreateGit())
+			{
+				var startRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMin);
+				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
+
+				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
+
+				ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False);
+			}
 		}
 
 		#region Helpers
 
 		private GitVersionControlSystem CreateGit()
 		{
-			return new GitVersionControlSystem(this, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>());
+			return CreateGit(this);
+		}
+
+		private GitVersionControlSystem CreateGit(ISourceControlConnectionSettingsSource settings)
+		{
+			return new GitVersionControlSystem(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
+											   ObjectFactory.GetInstance<IActivityLogger>());
 		}
 
 		#endregion

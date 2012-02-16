@@ -107,7 +107,6 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Execute(
 					In.Context<BugSyncActionSteps>()
 					.And<BugSyncSpecs>()
-					.And<BugzillaBugInfoStorageSpecs>()
 					.And<BugzillaBugInfoStorageSpecs>());
 		}
 
@@ -130,7 +129,6 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Execute(
 					In.Context<BugSyncActionSteps>()
 					.And<BugSyncSpecs>()
-					.And<BugzillaBugInfoStorageSpecs>()
 					.And<BugzillaBugInfoStorageSpecs>());
 		}
 

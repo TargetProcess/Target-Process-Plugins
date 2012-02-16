@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/core/model-base","tau/models/customField/model.customField.multiselect.editable","tau/ui/extensions/stateList/ui.extension.stateList.editable.multiselect","tau/ui/templates/state/ui.template.state-list.multiselect"],function(a,b,c,d,e){return{create:function(f){var g={ModelType:b,extensions:[c,d],template:e};return a.create(g,f)}}})

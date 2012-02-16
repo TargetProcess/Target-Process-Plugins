@@ -1,5 +1,5 @@
 tau.mashups
-    .addDependency("MashupManager/CommandGateway")
+    .addDependency("tp/plugins/commandGateway")
     .addDependency("libs/jquery/jquery")
     .addModule("MashupManager/ProfileRepository", function (commandGateway) {
         function profileRepository(config) {

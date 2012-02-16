@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"description",markup:['<div class="ui-description">','   <div class="ui-description__inner">',"      {{html html}}","   </div>","</div>"],dependencies:[]};return a.register(b)})
+define(["tau/core/templates-factory"],function(a){var b={name:"description",markup:['<div class="ui-description {{if !html}}ui-field_empty_true{{/if}}">','   <div class="ui-description__inner">',"      {{html html}}","   </div>","</div>"],dependencies:[]};return a.register(b)})

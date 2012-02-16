@@ -45,6 +45,14 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
             };
 
             this._editor = this._createEditor();
+
+            var that = this;
+            this._editor.userRepository = {
+                getUsers: function (callback) {
+                    callback(that._tpUsers);
+                }
+            };
+            
             this._editor.render();
 
             this.convertToUserMapping = function (userBlock) {

@@ -45,5 +45,29 @@ namespace Tp.Subversion.EditProfileFeature
 				.Execute(
 					In.Context<CommandActionSteps>());
 		}
-	}
+
+		[Test]
+		public void ValidationShouldFailOnUriWithSsh()
+		{
+			@"Given unsaved plugin profile
+				And profile repository path is 'svn+ssh://user@ssh.yourdomain.com/path'
+			When saved
+			Then error should occur for Uri: ""Connection via SSH is not supported.""
+			"
+				.Execute(
+					In.Context<CommandActionSteps>());
+		}
+
+		[Test]
+		public void ValidateUriConsistingOfWhitespaces()
+		{
+			@"Given unsaved plugin profile
+				And profile repository path is '   '
+			When saved
+			Then error should occur for Uri: ""Uri should not be empty.""
+			"
+				.Execute(
+					In.Context<CommandActionSteps>());
+		}
+}
 }

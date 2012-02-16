@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.SourceControl.Comments;
 
 namespace Tp.SourceControl.Messages
@@ -37,7 +38,7 @@ namespace Tp.SourceControl.Messages
 			return new CreateCommand {Dto = dto};
 		}
 
-		public void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor)
+		public void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger)
 		{
 			visitor.Accept(this);
 			executor(CreateCommand());

@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/extensions/component.extension.base","tau/configurator","tau/utils/utils.urlBuilder"],function(a,b,c,d){return b.extend({"bus action.add":function(a){var b=a.data.entity;c.getRouting().redirect(d.getAddTestCaseForTestPlanRunUrl(b.id))}})})

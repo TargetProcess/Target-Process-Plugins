@@ -1,5 +1,5 @@
 //Tiny Parser Generator v1.3
-//Copyright © Herre Kuijpers 2008-2012
+//Copyright ï¿½ Herre Kuijpers 2008-2012
 
 <% @TinyPG Language="C#"%>
 
@@ -77,7 +77,7 @@ ActionNode-> ANY_TEXT* (EntityIdClause COMMA*)* (PostTimeClause|PostCommentClaus
 
 EntityIdClause -> ANY_SYMBOL* (IdKeyword1|IdKeyword2) NUMBER ANY_SYMBOL*
 {
-	return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32($NUMBER));
+	return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32($NUMBER, CultureInfo.InvariantCulture));
 };
 
 PostTimeClause -> TimeKeyword DECIMAL (Delimiter DECIMAL)? 
@@ -85,9 +85,9 @@ PostTimeClause -> TimeKeyword DECIMAL (Delimiter DECIMAL)?
 	decimal? timeLeft = null;
 	if ($DECIMAL[1] != null)
 	{
-		timeLeft = Convert.ToDecimal($DECIMAL[1]);
+		timeLeft = Convert.ToDecimal($DECIMAL[1], CultureInfo.InvariantCulture);
 	}
-	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal($DECIMAL), timeLeft);
+	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal($DECIMAL, CultureInfo.InvariantCulture), timeLeft);
 };
 
 ChangeStatusClause -> (StatusKeyword1|StatusKeyword2) ANY_TEXT

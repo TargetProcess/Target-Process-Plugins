@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Git\GitTestRepository.cs" />
+    <Compile Include="Repository\Git\GitTestRepositoryWithCherryPickedCommit.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Repository\Git\GitTestRepositoryWithFileDeleted.cs" />
     <Compile Include="Repository\Git\GitTestRepositoryWithMergeCommit.cs" />
     <Compile Include="Repository\IVcsCredentials.cs" />
@@ -77,6 +80,7 @@
     <EmbeddedResource Include="Repository\Git\TestRepository.zip" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Repository\Git\TestRepositoryWithCherryPickedCommit.zip" />
     <EmbeddedResource Include="Repository\Git\TestRepositoryWithFileDeleted.zip" />
   </ItemGroup>
   <ItemGroup>

@@ -83,7 +83,7 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		}
 
 		[Then("revision (?<sourceControlId>\\d+) should be created in TP")]
-		public void RevisionShouldBeCreatedInTp(int sourceControlId)
+		public void RevisionShouldBeCreatedInTp(string sourceControlId)
 		{
 			var revisionIds =
 				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<RevisionDTO>().Select(x => x.SourceControlID).
@@ -92,7 +92,7 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		}
 
 		[Then("revision (?<sourceControlId>\\d+) with description '$description' should be created in TP")]
-		public void RevisionWithDescriptionShouldBeCreatedInTp(int sourceControlId, string description)
+		public void RevisionWithDescriptionShouldBeCreatedInTp(string sourceControlId, string description)
 		{
 			var revision = ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<RevisionDTO>().Single();
 			revision.SourceControlID.Should(Be.EqualTo(sourceControlId));

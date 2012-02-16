@@ -53,8 +53,6 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 
 		public void Handle(TestRunImportResultDetectedLocalMessage message)
 		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-
 			StorageRepository().Get<TestRunImportResultInfo>().Clear();
 			StorageRepository().Get<TestRunImportResultInfo>().AddRange(message.TestRunImportInfo.TestRunImportResults);
 

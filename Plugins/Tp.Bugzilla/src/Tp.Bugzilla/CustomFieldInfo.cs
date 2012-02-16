@@ -37,7 +37,7 @@ namespace Tp.Bugzilla
 
 		public bool HasValue
 		{
-			get { return Values != null && Values.Where(ValueIsNotEmpty).Count() > 0; }
+			get { return Values != null && Values.Any(ValueIsNotEmpty); }
 		}
 
 		private static IEnumerable<string> GetBugzillaCustomFieldValues(custom_field bugzillaCustomField)

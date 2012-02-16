@@ -6,7 +6,9 @@
 		var tpl = new Ext.XTemplate(
                 'Show',
                 '<tpl for=".">',
-                ' <input id="{id}" type="checkbox" name="{id}" value="{value}"/><label for="{id}">{title}</label>',
+                '<span id="panel-{value}-filter" style="display:{display}">',
+				' <input id="{id}" type="checkbox" name="{id}" value="{value}"/><label for="{id}">{title}</label>',
+				'</span>',
                 '</tpl>');
 		var filterTypes = this.controller.getFilterTypes();
 		if (filterTypes.length > 1) {

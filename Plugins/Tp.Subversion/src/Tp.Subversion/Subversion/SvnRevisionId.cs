@@ -3,8 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Collections.Generic;
-using System.Text;
 using System;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -15,10 +13,14 @@ namespace Tp.Subversion.Subversion
 	{
 		private long _value;
 
-		public SvnRevisionId() {}
+		public SvnRevisionId()
+		{
+		}
 
 		public SvnRevisionId(RevisionId revision)
-			: this(ConvertToRevision(revision)) {}
+			: this(ConvertToRevision(revision))
+		{
+		}
 
 		private static long ConvertToRevision(RevisionId revision)
 		{

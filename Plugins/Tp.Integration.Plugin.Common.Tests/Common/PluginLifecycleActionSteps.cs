@@ -217,9 +217,15 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		}
 
 		[Then("$messageCount PluginAccountMessage messages should be published")]
-		public void AmountOfPluginInfoMessagesShouldBeSent(int messageCount)
+		public void AmountOfPluginAccountMessagesShouldBeSent(int messageCount)
 		{
-			_sentMessages.OfType<PluginAccountMessage>().Count().Should(Is.EqualTo(messageCount));
+			_sentMessages.OfType<PluginAccountMessageSerialized>().Count().Should(Is.EqualTo(messageCount));
+		}
+
+		[Then("empty PluginAccountMessage message should be published")]
+		public void EmptyPluginAccountMessagesShouldBeSent()
+		{
+			_sentMessages.OfType<PluginAccountMessageSerialized>().ForEach(x => x.GetAccounts().Should(Be.Empty));
 		}
 
 		private static IProfileCollection Repository
@@ -233,8 +239,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void ShouldPublishPluginInfoMessageWithProfiles(string accountName, string[] profileNames)
 		{
 			var pluginLifecycleMessage =
-				_sentMessages.OfType<PluginAccountMessage>().Where(x => x.PluginAccount.Name == accountName).Last();
-			pluginLifecycleMessage.PluginAccount.PluginProfiles.Select(x => x.Name.Value).ToArray().Should(
+				_sentMessages.OfType<PluginAccountMessageSerialized>().Where(x => x.GetAccounts().Any(y => y.Name == accountName)).Last();
+			pluginLifecycleMessage.GetAccounts().First(x => x.Name == accountName).PluginProfiles.Select(x => x.Name.Value).ToArray().Should(
 				Is.EquivalentTo(profileNames));
 		}
 
@@ -249,12 +255,12 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Then("PluginAccountMessage should be published with account '$accountName' and profile '$profileName'")]
 		public void ShouldPublishPluginInfoMessage(string accountName, string profileName)
 		{
-			var messages = _sentMessages.OfType<PluginAccountMessage>();
+			var messages = _sentMessages.OfType<PluginAccountMessageSerialized>();
 			var message =
 				messages.First(
-					x => x.PluginAccount.Name == accountName && x.PluginAccount.PluginProfiles.Any(y => y.Name == profileName));
+					x => x.GetAccounts().First().Name == accountName && x.GetAccounts().First().PluginProfiles.Any(y => y.Name == profileName));
 
-			message.PluginAccount.PluginProfiles.SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null);
+			message.GetAccounts().First().PluginProfiles.SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null);
 
 			ObjectFactory.GetInstance<PluginContextMock>().AccountName = accountName;
 			ObjectFactory.GetInstance<IProfileCollection>().SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null);
@@ -263,9 +269,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Then("PluginAccountMessage should be published with account '$accountName' and no profiles")]
 		public void ShouldPublishPluginInfoMessageWithNoProfiles(string accountName)
 		{
-			var message = _sentMessages.OfType<PluginAccountMessage>().Last();
+			var message = _sentMessages.OfType<PluginAccountMessageSerialized>().Last();
 			message.Should(Is.Not.Null);
-			message.PluginAccount.PluginProfiles.Should(Is.Empty);
+			message.GetAccounts().First().PluginProfiles.Should(Is.Empty);
 		}
 
 		[Then(

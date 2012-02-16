@@ -2,13 +2,14 @@
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
+
 using System;
 using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Tp.Core;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
+using Tp.Integration.Messages;
 
 namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 {
@@ -35,20 +36,20 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 
 				ValidateVersion(reader);
 
-				var type = Type.GetType(((TypeNameWithoutVersion)typeValue).Value);
+				var type = Type.GetType(((TypeNameWithoutVersion) typeValue).Value);
 
 				// Check the Type is Found.
 				if (type == null)
 					throw new InvalidCastException("Unable to Read Xml Data for Abstract Type '" + keyType +
 					                               "' because the type specified in the XML was not found.");
-				
+
 				return reader.ReadElementString().Deserialize(type);
 			}
 		}
 
 		public XDocument Serialize(object value)
 		{
-			var formatter = new XmlSerializer(typeof(string));
+			var formatter = new XmlSerializer(typeof (string));
 			var doc = new XDocument();
 			using (var writer = doc.CreateWriter())
 			{

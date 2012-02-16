@@ -4,10 +4,13 @@
 // 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework;
+using NUnit.Framework;
 using StructureMap;
 using Tp.Core;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Mapping;
@@ -158,10 +161,22 @@ namespace Tp.Subversion.EditProfileFeature
 			errors.Should(Be.Empty);
 		}
 
+		[Then(@"error should occur for Uri: ""$errorMessage""")]
+		public void ErrorsShouldOccur(string errorMessage)
+		{
+			IEnumerable<string> messages = _errors.Where(x => x.FieldName == "Uri").Select(x => x.Message).ToList();
+			var errorMessages = errorMessage.Split(new []{"|"}, StringSplitOptions.RemoveEmptyEntries);
+			foreach (var message in messages)
+			{
+				errorMessages.Should(Contains.Item(message));
+			}
+		}
+
 		[Then(@"error should occur for $fieldName: ""$errorMessage""")]
 		public void ErrorShouldOccur(string fieldName, string errorMessage)
 		{
-			new[] {errorMessage}.Should(Be.SubsetOf(_errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList()));
+			IEnumerable<string> messages = _errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList();
+			messages.Should(Contains.Item(errorMessage));
 		}
 
 		[Then("error should occur for $fieldName")]

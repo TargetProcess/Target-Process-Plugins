@@ -4,7 +4,6 @@
 // 
 
 using System;
-using System.Globalization;
 using Mono.Unix.Native;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -15,57 +14,28 @@ namespace Tp.Git.VersionControlSystem
 	{
 		public static readonly DateTime UtcTimeMin = NativeConvert.ToDateTime(0);
 		public static readonly DateTime UtcTimeMax = new DateTime(2038, 01, 19);
-		public static readonly GitRevisionId MinValue = UtcTimeMin;
-		public static readonly GitRevisionId MaxValue = UtcTimeMax;
 
-		public GitRevisionId() {}
-
-		public GitRevisionId(RevisionId revision)
-			: this(ConvertToRevision(revision)) {}
-
-		private static DateTime ConvertToRevision(RevisionId revision)
+		public GitRevisionId()
 		{
-			long seconds;
-
-			if (long.TryParse(revision.Value, out seconds))
-			{
-				return UtcTimeMin.AddSeconds(seconds);
-			}
-
-			DateTime dateTime;
-			if (DateTime.TryParse(revision.Value, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal, out dateTime))
-			{
-				return dateTime;
-			}
-			
-			return UtcTimeMin;
 		}
 
-		public GitRevisionId(DateTime value)
+		public GitRevisionId(RevisionId revisionId)
 		{
-			Value = value < UtcTimeMin ? UtcTimeMin : value;
+			Time = (!revisionId.Time.HasValue || revisionId.Time.Value < UtcTimeMin) ? UtcTimeMin : revisionId.Time.Value;
+			Value = revisionId.Value;
 		}
 
-		public DateTime Value { get; set; }
+		public DateTime Time { get; set; }
+		public string Value { get; set; }
 
 		public static implicit operator GitRevisionId(RevisionId revisionId)
 		{
 			return new GitRevisionId(revisionId);
 		}
 
-		public static implicit operator GitRevisionId(DateTime revisionId)
-		{
-			return new GitRevisionId(revisionId);
-		}
-
-		public static implicit operator GitRevisionId(long commitTime)
-		{
-			return new GitRevisionId(new RevisionId {Value = commitTime.ToString()});
-		}
-
 		public static implicit operator RevisionId(GitRevisionId revisionId)
 		{
-			return new RevisionId {Value = ConvertToUnixTimestamp(revisionId.Value).ToString()};
+			return new RevisionId {Value = revisionId.Value, Time = revisionId.Time};
 		}
 
 		public int CompareTo(object obj)
@@ -73,49 +43,14 @@ namespace Tp.Git.VersionControlSystem
 			if (obj is RevisionId || obj is GitRevisionId)
 			{
 				var thatRevisionId = (GitRevisionId) obj;
-				return Value.CompareTo(thatRevisionId.Value);
+				return Time.CompareTo(thatRevisionId.Time);
 			}
 			return 0;
 		}
 
-		private static double ConvertToUnixTimestamp(DateTime date)
-		{
-			return (date - UtcTimeMin).TotalSeconds;
-		}
-
 		public override string ToString()
 		{
-			return string.Format("RevisionId: {0}, Date: {1}", Value.GetTime(),  Value) ;
-		}
-	}
-
-	internal static class DateTimeExtensions
-	{
-		private static readonly long EPOCH_TICKS;
-
-		static DateTimeExtensions()
-		{
-			var time = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			EPOCH_TICKS = time.Ticks;
-		}
-
-		public static long GetTime(this DateTime dateTime)
-		{
-			return new DateTimeOffset(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc), TimeSpan.Zero).ToMillisecondsSinceEpoch();
-		}
-
-		public static long ToMillisecondsSinceEpoch(this DateTime dateTime)
-		{
-			if (dateTime.Kind != DateTimeKind.Utc)
-			{
-				throw new ArgumentException("dateTime is expected to be expressed as a UTC DateTime", "dateTime");
-			}
-			return new DateTimeOffset(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc), TimeSpan.Zero).ToMillisecondsSinceEpoch();
-		}
-
-		public static long ToMillisecondsSinceEpoch(this DateTimeOffset dateTimeOffset)
-		{
-			return (((dateTimeOffset.Ticks - dateTimeOffset.Offset.Ticks) - EPOCH_TICKS)/TimeSpan.TicksPerMillisecond);
+			return string.Format("RevisionId: {0}, Date: {1}", Value, Time);
 		}
 	}
 }

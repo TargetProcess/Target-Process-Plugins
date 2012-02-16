@@ -10,6 +10,8 @@
     <script type="text/javascript" src="../require.js"></script>
     <script type="text/javascript" src="mocks/jquery.iframeMock.js"></script>
     <script type="text/javascript" src="mocks/restServiceMock.js"></script>
+    <script type="text/javascript" src="plugins/activitylogging/mocks/activityNameSourceMock.js"></script>
+    <script type="text/javascript" src="plugins/activitylogging/mocks/activityRepositoryMock.js"></script>
 
     <script type="text/javascript" src="../../../ExtJs/Libs/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../../../ExtJs/Libs/ext-all.js"></script>
@@ -18,7 +20,7 @@
 
     <script type="text/javascript">
         window.jsErrors = [];
-        window.onerror = function(errorMessage) {
+        window.onerror = function (errorMessage) {
             window.jsErrors[window.jsErrors.length] = errorMessage;
         };
 
@@ -42,9 +44,10 @@
                     'tp/plugins/pluginsRepository',
                     'tp/plugins/profileRepository',
                     'tp/plugins/bugzilla/bugsRepository',
-                    'tp/plugins/userRepository'
+                    'tp/plugins/userRepository',
+                    'tp/plugins/activitylogging/activityViewer'
                 ],
-                function() {
+                function () {
                     require([
                         "tp.tests/bus.tests",
                         "tp.tests/tp.jquery.utils.tests",
@@ -60,7 +63,11 @@
                         "tp.tests/plugins/bugzilla/bugsRepository.tests",
                         "tp.tests/plugins/userRepository.tests",
                         "tp.tests/plugins/vcs/tpUserAutocomplete.widget.tests",
-                        "tp.tests/plugins/vcs/synchronizeUser.widget.tests"
+                        "tp.tests/plugins/vcs/synchronizeUser.widget.tests",
+                        "tp.tests/plugins/vcs/viewDiff/sourcePopup.tests",
+                        "tp.tests/plugins/vcs/viewDiff/diffPopup.tests",
+                        "tp.tests/plugins/vcs/viewDiff/viewDiffController.tests",
+                        "tp.tests/plugins/activitylogging/activityLogMashup.tests"
                     ]);
                 });
     </script>

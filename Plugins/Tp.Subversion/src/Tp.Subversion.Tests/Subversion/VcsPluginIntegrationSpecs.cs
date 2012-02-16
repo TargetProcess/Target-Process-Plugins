@@ -38,7 +38,7 @@ namespace Tp.Subversion.Subversion
 		{
 			@"Given plugin profile
 					And local repository is 'TestRepository' 
-					And Start Revision is 2					
+					And Start Revision is 2
 				When plugin started up
 				Then revisions should be created in TP"
 				.Execute(In.Context<VcsPluginIntegrationSpecs>().And<VcsPluginActionSteps>());

@@ -4,13 +4,16 @@
 // 
 
 using System;
+using Tp.BugTracking.ConnectionValidators;
+using Tp.BugTracking.Settings;
 using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
 	public class ScriptValidator : Validator, IDataHolder<string>
 	{
-		public ScriptValidator(BugzillaProfile profile) : base(profile)
+		public ScriptValidator(IBugTrackingConnectionSettingsSource connectionSettings)
+			: base(connectionSettings)
 		{
 		}
 
@@ -18,7 +21,7 @@ namespace Tp.Bugzilla.ConnectionValidators
 		{
 			try
 			{
-				Data = new BugzillaUrl(_profile).CheckConnection();
+				Data = new BugzillaUrl(ConnectionSettings).CheckConnection();
 			}
 			catch (Exception)
 			{

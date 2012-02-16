@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Tp.BugTracking.BugFieldConverters;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
@@ -12,7 +13,7 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class SeverityConverter : GuessConverter<SeverityDTO>
+	public class SeverityConverter : GuessConverterBase<BugzillaBug, SeverityDTO>
 	{
 		public SeverityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
 		{
@@ -25,17 +26,17 @@ namespace Tp.Bugzilla.BugFieldConverters
 
 		protected override SeverityDTO GetFromStorage(string value)
 		{
-			return GetStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+			return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
 		}
 
-		protected override string GetBugzillaValue(BugzillaBug bugzillaBug)
+		protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
 		{
-			return bugzillaBug.bug_severity;
+			return thirdPartyBug.bug_severity;
 		}
 
 		protected override MappingContainer Map
 		{
-			get { return Profile.SeveritiesMapping; }
+			get { return StorageRepository.GetProfile<BugzillaProfile>().SeveritiesMapping; }
 		}
 
 		protected override BugField BugField

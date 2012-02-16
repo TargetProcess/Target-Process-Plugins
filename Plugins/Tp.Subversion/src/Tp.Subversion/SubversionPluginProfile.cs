@@ -83,6 +83,29 @@ namespace Tp.Subversion
 		{
 			ValidateStartRevision(errors);
 			ValidateUserMapping(errors);
+			ValidateUri(errors);
+		}
+
+		public void ValidateUri(PluginProfileErrorCollection errors)
+		{
+			ValidateUriIsNotEmpty(errors);
+			ValidateUriIsNotSsh(errors);
+		}
+
+		private void ValidateUriIsNotEmpty(PluginProfileErrorCollection errors)
+		{
+			if (string.IsNullOrEmpty(Uri))
+			{
+				errors.Add(new PluginProfileError {FieldName = UriField, Message = "Uri should not be empty."});
+			}
+		}
+
+		private void ValidateUriIsNotSsh(PluginProfileErrorCollection errors)
+		{
+			if (!string.IsNullOrEmpty(Uri) && Uri.StartsWith("svn+ssh://", StringComparison.OrdinalIgnoreCase))
+			{
+				errors.Add(new PluginProfileError {FieldName = UriField, Message = "Connection via SSH is not supported."});
+			}
 		}
 
 		private void ValidateUserMapping(PluginProfileErrorCollection errors)

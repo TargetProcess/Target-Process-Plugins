@@ -2,238 +2,281 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 using StructureMap;
+using Tp.SourceControl.Comments;
+using Tp.SourceControl.Comments.DSL;
 using Tp.SourceControl.Messages;
 
-namespace Tp.SourceControl.Comments.DSL
+namespace TinyPG
 {
-    #region ParseTree
-    [Serializable]
-    public class ParseErrors : List<ParseError>
-    {
-    }
+	#region ParseTree
+	[Serializable]
+	public class ParseErrors : List<ParseError>
+	{
+	}
 
-    [Serializable]
-    public class ParseError
-    {
-        private string message;
-        private int code;
-        private int line;
-        private int col;
-        private int pos;
-        private int length;
+	[Serializable]
+	public class ParseError
+	{
+		private string message;
+		private int code;
+		private int line;
+		private int col;
+		private int pos;
+		private int length;
 
-        public int Code { get { return code; } }
-        public int Line { get { return line; } }
-        public int Column { get { return col; } }
-        public int Position { get { return pos; } }
-        public int Length { get { return length; } }
-        public string Message { get { return message; } }
+		public int Code { get { return code; } }
+		public int Line { get { return line; } }
+		public int Column { get { return col; } }
+		public int Position { get { return pos; } }
+		public int Length { get { return length; } }
+		public string Message { get { return message; } }
 
-        // just for the sake of serialization
-        public ParseError()
-        {
-        }
+		// just for the sake of serialization
+		public ParseError()
+		{
+		}
 
-        public ParseError(string message, int code, ParseNode node) : this(message, code,  0, node.Token.StartPos, node.Token.StartPos, node.Token.Length)
-        {
-        }
+		public ParseError(string message, int code, ParseNode node) : this(message, code,  0, node.Token.StartPos, node.Token.StartPos, node.Token.Length)
+		{
+		}
 
-        public ParseError(string message, int code, int line, int col, int pos, int length)
-        {
-            this.message = message;
-            this.code = code;
-            this.line = line;
-            this.col = col;
-            this.pos = pos;
-            this.length = length;
-        }
-    }
+		public ParseError(string message, int code, int line, int col, int pos, int length)
+		{
+			this.message = message;
+			this.code = code;
+			this.line = line;
+			this.col = col;
+			this.pos = pos;
+			this.length = length;
+		}
+	}
 
-    // rootlevel of the node tree
-    [Serializable]
-    public partial class ParseTree : ParseNode
-    {
-        public ParseErrors Errors;
+	// rootlevel of the node tree
+	[Serializable]
+	public partial class ParseTree : ParseNode
+	{
+		public ParseErrors Errors;
 
-        public List<Token> Skipped;
+		public List<Token> Skipped;
 
-        public ParseTree() : base(new Token(), "ParseTree")
-        {
-            Token.Type = TokenType.Start;
-            Token.Text = "Root";
-            Errors = new ParseErrors();
-        }
+		public ParseTree() : base(new Token(), "ParseTree")
+		{
+			Token.Type = TokenType.Start;
+			Token.Text = "Root";
+			Errors = new ParseErrors();
+		}
 
-        public string PrintTree()
-        {
-            StringBuilder sb = new StringBuilder();
-            int indent = 0;
-            PrintNode(sb, this, indent);
-            return sb.ToString();
-        }
+		public string PrintTree()
+		{
+			StringBuilder sb = new StringBuilder();
+			int indent = 0;
+			PrintNode(sb, this, indent);
+			return sb.ToString();
+		}
 
-        private void PrintNode(StringBuilder sb, ParseNode node, int indent)
-        {
-            
-            string space = "".PadLeft(indent, ' ');
+		private void PrintNode(StringBuilder sb, ParseNode node, int indent)
+		{
+			
+			string space = "".PadLeft(indent, ' ');
 
-            sb.Append(space);
-            sb.AppendLine(node.Text);
+			sb.Append(space);
+			sb.AppendLine(node.Text);
 
-            foreach (ParseNode n in node.Nodes)
-                PrintNode(sb, n, indent + 2);
-        }
-        
-        /// <summary>
-        /// this is the entry point for executing and evaluating the parse tree.
-        /// </summary>
-        /// <param name="paramlist">additional optional input parameters</param>
-        /// <returns>the output of the evaluation function</returns>
-        public object Eval(params object[] paramlist)
-        {
-            return Nodes[0].Eval(this, paramlist);
-        }
-    }
+			foreach (ParseNode n in node.Nodes)
+				PrintNode(sb, n, indent + 2);
+		}
 
-    [Serializable]
-    [XmlInclude(typeof(ParseTree))]
-    public partial class ParseNode
-    {
-        protected string text;
-        protected List<ParseNode> nodes;
-        
-        public List<ParseNode> Nodes { get {return nodes;} }
-        
-        [XmlIgnore] // avoid circular references when serializing
-        public ParseNode Parent;
-        public Token Token; // the token/rule
+		public object Eval(params object[] array)
+		{
+			return Eval(new Evaluator());
+		}
+		
 
-        [XmlIgnore] // skip redundant text (is part of Token)
-        public string Text { // text to display in parse tree 
-            get { return text;} 
-            set { text = value; }
-        } 
+		public object Eval(Evaluator evaluator)
+		{
+			Nodes[0].Evaluator = evaluator;
+			return Nodes[0].Eval();
+		}
+	}
 
-        public virtual ParseNode CreateNode(Token token, string text)
-        {
-            ParseNode node = new ParseNode(token, text);
-            node.Parent = this;
-            return node;
-        }
+	[Serializable]
+	[XmlInclude(typeof(ParseTree))]
+	public partial class ParseNode
+	{
+		protected string text;
+		protected List<ParseNode> nodes;
+		
+		public List<ParseNode> Nodes { get {return nodes;} }
+		
+		[XmlIgnore] // avoid circular references when serializing
+		public ParseNode Parent;
+		public Token Token; // the token/rule
 
-        protected ParseNode(Token token, string text)
-        {
-            this.Token = token;
-            this.text = text;
-            this.nodes = new List<ParseNode>();
-        }
+		[XmlIgnore] // skip redundant text (is part of Token)
+		public string Text { // text to display in parse tree 
+			get { return text;} 
+			set { text = value; }
+		} 
 
-        protected object GetValue(ParseTree tree, TokenType type, int index)
-        {
-            return GetValue(tree, type, ref index);
-        }
+		Evaluator _evaluator;
+		public Evaluator Evaluator
+		{
+			get { return _evaluator; }
+			set { _evaluator = value; }
+		}
 
-        protected object GetValue(ParseTree tree, TokenType type, ref int index)
-        {
-            object o = null;
-            if (index < 0) return o;
+		public virtual ParseNode CreateNode(Token token, string text)
+		{
+			ParseNode node = new ParseNode(token, text);
+			node.Parent = this;
+			return node;
+		}
 
-            // left to right
-            foreach (ParseNode node in nodes)
-            {
-                if (node.Token.Type == type)
-                {
-                    index--;
-                    if (index < 0)
-                    {
-                        o = node.Eval(tree);
-                        break;
-                    }
-                }
-            }
-            return o;
-        }
+		protected ParseNode(Token token, string text)
+		{
+			this.Token = token;
+			this.text = text;
+			this.nodes = new List<ParseNode>();
+		}
 
-        /// <summary>
-        /// this implements the evaluation functionality, cannot be used directly
-        /// </summary>
-        /// <param name="tree">the parsetree itself</param>
-        /// <param name="paramlist">optional input parameters</param>
-        /// <returns>a partial result of the evaluation</returns>
-        internal object Eval(ParseTree tree, params object[] paramlist)
-        {
-            object Value = null;
+		public object this[TokenType type]
+		{
+			get
+			{
+				return GetValue(type, 0);
+			}
+		}
+		
+		public object this[TokenType type, int index]
+		{
+			get
+			{
+				return GetValue(type, index);
+			}
+		}
+		
+		protected object GetValue(TokenType type, int index)
+		{
+			return GetValue(type, ref index);
+		}
 
-            switch (Token.Type)
-            {
-                case TokenType.Start:
-                    Value = EvalStart(tree, paramlist);
-                    break;
-                case TokenType.ActionNode:
-                    Value = EvalActionNode(tree, paramlist);
-                    break;
-                case TokenType.EntityIdClause:
-                    Value = EvalEntityIdClause(tree, paramlist);
-                    break;
-                case TokenType.PostTimeClause:
-                    Value = EvalPostTimeClause(tree, paramlist);
-                    break;
-                case TokenType.ChangeStatusClause:
-                    Value = EvalChangeStatusClause(tree, paramlist);
-                    break;
-                case TokenType.PostCommentClause:
-                    Value = EvalPostCommentClause(tree, paramlist);
-                    break;
+		protected object GetValue(TokenType type, ref int index)
+		{
+			object o = null;
+			if (index < 0) return o;
 
-                default:
-                    Value = Token.Text;
-                    break;
-            }
-            return Value;
-        }
+			// left to right
+			foreach (ParseNode node in nodes)
+			{
+				if (node.Token.Type == type)
+				{
+					index--;
+					if (index < 0)
+					{
+						node.Evaluator = _evaluator;
+						o = node.Eval();
+						break;
+					}
+				}
+			}
+			return o;
+		}
 
-        protected virtual object EvalStart(ParseTree tree, params object[] paramlist)
-        {
-            var result = new List<AssignRevisionToEntityAction>();
+		/// <summary>
+		/// this implements the evaluation functionality, cannot be used directly
+		/// </summary>
+		/// <param name="tree">the parsetree itself</param>
+		/// <param name="paramlist">optional input parameters</param>
+		/// <returns>a partial result of the evaluation</returns>
+		internal object Eval()
+		{
+			object Value = null;
+
+			switch (Token.Type)
+			{
+
+	case TokenType.Start:
+		Value = _evaluator.EvalStart(this);
+	break;
+
+	case TokenType.ActionNode:
+		Value = _evaluator.EvalActionNode(this);
+	break;
+
+	case TokenType.EntityIdClause:
+		Value = _evaluator.EvalEntityIdClause(this);
+	break;
+
+	case TokenType.PostTimeClause:
+		Value = _evaluator.EvalPostTimeClause(this);
+	break;
+
+	case TokenType.ChangeStatusClause:
+		Value = _evaluator.EvalChangeStatusClause(this);
+	break;
+
+	case TokenType.PostCommentClause:
+		Value = _evaluator.EvalPostCommentClause(this);
+	break;
+
+				default:
+					Value = Token.Text;
+					break;
+			}
+			return Value;
+		}
+
+	}
+	
+	#endregion ParseTree
+	
+	
+	public class Evaluator 
+	{
+
+		public virtual object EvalStart(ParseNode node)
+		{
+			            var result = new List<AssignRevisionToEntityAction>();
         	int i = 0;
-        	while(this.GetValue(tree, TokenType.ActionNode, i) != null)
+        	while(node[TokenType.ActionNode, i] != null)
         	{
-        		result.AddRange(this.GetValue(tree, TokenType.ActionNode, i) as List<AssignRevisionToEntityAction>);
+        		result.AddRange(node[TokenType.ActionNode, i] as List<AssignRevisionToEntityAction>);
         		i++;
         	}
         
         	return result;
-        }
+		}
 
-        protected virtual object EvalActionNode(ParseTree tree, params object[] paramlist)
-        {
-            var result = new List<AssignRevisionToEntityAction>();
+		public virtual object EvalActionNode(ParseNode node)
+		{
+			            var result = new List<AssignRevisionToEntityAction>();
         	int i = 0;
-        	while (this.GetValue(tree, TokenType.EntityIdClause, i) != null)
+        	while (node[TokenType.EntityIdClause, i] != null)
         	{
-        		result.Add(this.GetValue(tree, TokenType.EntityIdClause, i) as AssignRevisionToEntityAction);
+        		result.Add(node[TokenType.EntityIdClause, i] as AssignRevisionToEntityAction);
         		i++;
         	}
         	var childActions = new List<IAction>();
         	i = 0;
-        	while (this.GetValue(tree, TokenType.PostTimeClause, i) != null)
+        	while (node[TokenType.PostTimeClause, i] != null)
         	{
-        		childActions.Add(this.GetValue(tree, TokenType.PostTimeClause, 0) as IAction);
+        		childActions.Add(node[TokenType.PostTimeClause, 0] as IAction);
         		i++;
         	}
         	i = 0;
-        	while (this.GetValue(tree, TokenType.PostCommentClause, i) != null)
+        	while (node[TokenType.PostCommentClause, i] != null)
         	{
-        		childActions.Add(this.GetValue(tree, TokenType.PostCommentClause, i) as IAction);
+        		childActions.Add(node[TokenType.PostCommentClause, i] as IAction);
         		i++;
         	}
         	i = 0;
-        	while (this.GetValue(tree, TokenType.ChangeStatusClause, i) != null)
+        	while (node[TokenType.ChangeStatusClause, i] != null)
         	{
-        		childActions.Add(this.GetValue(tree, TokenType.ChangeStatusClause, i) as IAction);
+        		childActions.Add(node[TokenType.ChangeStatusClause, i] as IAction);
         		i++;
         	}
         
@@ -243,35 +286,35 @@ namespace Tp.SourceControl.Comments.DSL
         	}
         
         	return result;
-        }
+		}
 
-        protected virtual object EvalEntityIdClause(ParseTree tree, params object[] paramlist)
-        {
-            return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32(this.GetValue(tree, TokenType.NUMBER, 0)));
-        }
+		public virtual object EvalEntityIdClause(ParseNode node)
+		{
+			            return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32(node[TokenType.NUMBER, 0], CultureInfo.InvariantCulture));
+		}
 
-        protected virtual object EvalPostTimeClause(ParseTree tree, params object[] paramlist)
-        {
-            decimal? timeLeft = null;
-        	if (this.GetValue(tree, TokenType.DECIMAL, 1) != null)
+		public virtual object EvalPostTimeClause(ParseNode node)
+		{
+			            decimal? timeLeft = null;
+        	if (node[TokenType.DECIMAL, 1] != null)
         	{
-        		timeLeft = Convert.ToDecimal(this.GetValue(tree, TokenType.DECIMAL, 1));
+        		timeLeft = Convert.ToDecimal(node[TokenType.DECIMAL, 1], CultureInfo.InvariantCulture);
         	}
-        	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal(this.GetValue(tree, TokenType.DECIMAL, 0)), timeLeft);
-        }
+        	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal(node[TokenType.DECIMAL, 0], CultureInfo.InvariantCulture), timeLeft);
+		}
 
-        protected virtual object EvalChangeStatusClause(ParseTree tree, params object[] paramlist)
-        {
-            return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(Convert.ToString(this.GetValue(tree, TokenType.ANY_TEXT, 0)).Trim().Trim(','));
-        }
+		public virtual object EvalChangeStatusClause(ParseNode node)
+		{
+			            return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(Convert.ToString(node[TokenType.ANY_TEXT, 0]).Trim().Trim(','));
+		}
 
-        protected virtual object EvalPostCommentClause(ParseTree tree, params object[] paramlist)
-        {
-            int i = 0;
+		public virtual object EvalPostCommentClause(ParseNode node)
+		{
+			            int i = 0;
         	StringBuilder result = new StringBuilder();
-        	while (this.GetValue(tree, TokenType.ANY_TEXT, i) != null)
+        	while (node[TokenType.ANY_TEXT, i] != null)
         	{
-        		result.AppendLine(Convert.ToString(this.GetValue(tree, TokenType.ANY_TEXT, i)).Trim());
+        		result.AppendLine(Convert.ToString(node[TokenType.ANY_TEXT, i]).Trim());
         		i++;
         	}
         	if(result.Length > Environment.NewLine.Length)
@@ -280,10 +323,29 @@ namespace Tp.SourceControl.Comments.DSL
         	}
         	
         	return ObjectFactory.GetInstance<IActionFactory>().CreatePostCommentAction(result.ToString());
-        }
+		}
 
-
-    }
-    
-    #endregion ParseTree
+	}
 }
+
+
+
+
+/* 
+<%Symbol%>
+	case TokenType.<%Name%>:
+		Value = _evaluator.Eval<%Name%>(this);
+	break;
+<%Symbol%>
+
+<%Method%>
+		public virtual object Eval<%Name%>(ParseNode node)
+		{
+			<%Code%>
+		}
+<%Method%>
+
+<%DefaultMethodBody%>			return null;<%DefaultMethodBody%>
+
+<%TokenAccessor%>node[TokenType.<%Name%>, <%Index%>]<%TokenAccessor%>
+*/

@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -22,6 +23,16 @@ namespace Tp.SourceControl.Testing.Repository.Svn
 		protected override string Name
 		{
 			get { return "TestRepository"; }
+		}
+
+		public override void CheckoutBranch(string branch)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override string CherryPick(string revisionId)
+		{
+			throw new NotImplementedException();
 		}
 
 		protected override void OnTestRepositoryDeployed()
@@ -78,15 +89,24 @@ namespace Tp.SourceControl.Testing.Repository.Svn
 
 		public override void Commit(string commitComment)
 		{
-			string changedFilePath = Path.Combine(LocalRepositoryCheckedOutPath, "readme.txt");
+			Commit("readme.txt", "my changed content", commitComment);
+		}
+
+		public override string Commit(string filePath, string changedContent, string commitComment)
+		{
+			string changedFilePath = Path.Combine(LocalRepositoryCheckedOutPath, filePath);
 			using (var changedFile = File.OpenWrite(changedFilePath))
 			{
-				var changes = new UTF8Encoding(true).GetBytes("my changed content");
+				var changes = new UTF8Encoding(true).GetBytes(changedContent);
 				changedFile.Write(changes, 0, changes.Length);
 			}
 
-			var commit = new SvnCommitArgs {LogMessage = commitComment};
-			_client.Commit(LocalRepositoryCheckedOutPath, commit);
+			var commit = new SvnCommitArgs { LogMessage = commitComment };
+			SvnCommitResult result;
+
+			_client.Commit(LocalRepositoryCheckedOutPath, commit, out result);
+
+			return result.Revision.ToString();
 		}
 	}
 }

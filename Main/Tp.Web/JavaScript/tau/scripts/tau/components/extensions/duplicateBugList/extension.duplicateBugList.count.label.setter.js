@@ -1,0 +1,1 @@
+define(["jQuery","tau/components/extensions/component.extension.base"],function(a,b){return b.extend({"bus afterRender+duplicateBugCountRetrieved":function(a){var b=a.duplicateBugCountRetrieved.data.count;b>0&&this.fire("setBadgeText",{text:b})}})})

@@ -71,27 +71,16 @@
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BugFieldConverters\ConvertedBug.cs" />
+    <Compile Include="BugzillaComment.cs" />
     <Compile Include="ConnectionValidators\ValidationErrorType.cs" />
-    <Compile Include="CustomCommand\Dtos\BugzillaMapping.cs" />
     <Compile Include="CustomCommand\Dtos\BugzillaProperties.cs" />
-    <Compile Include="CustomCommand\Dtos\MappingSource.cs" />
-    <Compile Include="CustomCommand\Dtos\MappingSourceEntry.cs" />
-    <Compile Include="CustomCommand\Dtos\TargetProcessInfo.cs" />
     <Compile Include="CustomCommand\GetMappingCommand.cs" />
     <Compile Include="CustomCommand\GetSupportedVersionsCommand.cs" />
-    <Compile Include="ImportToTp\FailedChunk.cs" />
-    <Compile Include="ImportToTp\FailedSyncDate.cs" />
+    <Compile Include="DefaultRoles.cs" />
     <Compile Include="ImportToTp\ImportBugsChunkHandler.cs" />
-    <Compile Include="IUserMapper.cs" />
     <Compile Include="BugFieldConverters\OwnerConverter.cs" />
-    <Compile Include="Mappers\BugzillaFieldsMapper.cs" />
-    <Compile Include="Mappers\IBugzillaFieldsMapper.cs" />
-    <Compile Include="Mappers\MappingExtensions.cs" />
     <Compile Include="BugzillaInfo.cs" />
     <Compile Include="Synchronizer\RoleChangedHandler.cs" />
-    <Compile Include="UserExtension.cs" />
-    <Compile Include="UserMapper.cs" />
     <Compile Include="BugzillaBug.cs" />
     <Compile Include="BugzillaBugInfo.cs" />
     <Compile Include="PluginRegistry.cs" />
@@ -103,10 +92,8 @@
     <Compile Include="BugzillaInfoStorageRepository.cs" />
     <Compile Include="CustomCommand\GetBugzillaBugsCommand.cs" />
     <Compile Include="CustomFieldInfo.cs" />
-    <Compile Include="ImportToTp\BugChunkSize.cs" />
     <Compile Include="BugzillaPluginProfileException.cs" />
     <Compile Include="ConnectionValidators\SettingsValidator.cs" />
-    <Compile Include="ImportToTp\DefaultRoles.cs" />
     <Compile Include="Synchronizer\AttachmentChangedHandler.cs" />
     <Compile Include="ImportToBugzilla\BugUpdatedHandler.cs" />
     <Compile Include="BugzillaQueries\BugzillaChangeStatusAction.cs" />
@@ -115,9 +102,7 @@
     <Compile Include="BugFieldConverters\CreateDateConverter.cs" />
     <Compile Include="BugFieldConverters\DescriptionConverter.cs" />
     <Compile Include="BugFieldConverters\ConverterComposite.cs" />
-    <Compile Include="BugFieldConverters\GuessConverter.cs" />
     <Compile Include="BugFieldConverters\NameConverter.cs" />
-    <Compile Include="BugFieldConverters\IBugConverter.cs" />
     <Compile Include="BugFieldConverters\EntityStateConverter.cs" />
     <Compile Include="BugFieldConverters\PriorityConverter.cs" />
     <Compile Include="BugFieldConverters\SeverityConverter.cs" />
@@ -131,12 +116,9 @@
     <Compile Include="BugzillaUrl.cs" />
     <Compile Include="ConnectionValidators\ConnectionValidator.cs" />
     <Compile Include="ConnectionValidators\DeserializeValidator.cs" />
-    <Compile Include="ConnectionValidators\IDataHolder.cs" />
-    <Compile Include="ConnectionValidators\IValidator.cs" />
     <Compile Include="ConnectionValidators\ResponseValidator.cs" />
     <Compile Include="ConnectionValidators\SavedQueryValidator.cs" />
     <Compile Include="ConnectionValidators\ScriptValidator.cs" />
-    <Compile Include="ConnectionValidators\Validator.cs" />
     <Compile Include="CustomCommand\CheckConnectionCommand.cs" />
     <Compile Include="ImportToBugzilla\CommentCreatedHandler.cs" />
     <Compile Include="Synchronizer\EntityChangedHandler.cs" />
@@ -232,22 +214,54 @@
     <Content Include="Mashups\ProfileEditor\UsersPopoverWidget.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mashups\Tests\Bugzilla List Details\iconViewer.tests.js" />
-    <Content Include="Mashups\Tests\Bugzilla List Details\index.html" />
-    <Content Include="Mashups\Tests\Bugzilla View Details\bugInfoViewer.tests.js" />
-    <Content Include="Mashups\Tests\Bugzilla View Details\index.html" />
-    <Content Include="Mashups\Tests\Mocks\BugsRepositoryMock.js" />
-    <Content Include="Mashups\Tests\Mocks\PluginsRepositoryMock.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\BugzillaInitializer.tests.js" />
-    <Content Include="Mashups\Tests\Mocks\ErrorMessageContainerMock.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\BugzillaProfileController.tests.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\BugzillaProfileView.tests.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\ConnectionChecker.tests.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\DownloadScriptBlock.tests.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\index.html" />
-    <Content Include="Mashups\Tests\ProfileEditor\MappingController.tests.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\MappingView.tests.js" />
-    <Content Include="Mashups\Tests\ProfileEditor\RestService.tests.js" />
+    <Content Include="Mashups\Tests\bugInfoViewer.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\BugzillaInitializer.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\BugzillaListDetails.tests.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\BugzillaProfileController.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\BugzillaProfileView.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\BugzillaViewDetails.tests.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\ConnectionChecker.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\DownloadScriptBlock.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\iconViewer.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\MappingController.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\MappingView.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\Mocks\BugsRepositoryMock.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\Mocks\PluginsRepositoryMock.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\Mocks\ErrorMessageContainerMock.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\ProfileEditor.tests.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Tests\restService.tests.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
@@ -298,6 +312,10 @@
       <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
       <Name>Tp.Plugin.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.BugTracking\Tp.BugTracking.csproj">
+      <Project>{A554F2D6-810C-4A67-B71D-D77FCDBBCF7B}</Project>
+      <Name>Tp.BugTracking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
       <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
       <Name>Tp.Integration.Plugin.UninstallUtil</Name>
@@ -306,15 +324,14 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy $(ProjectDir)Scripts\*.*  $(TargetDir)Mashups\ProfileEditor\Scripts\*.* /Y /E
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Scripts\*.*  $(TargetDir)Mashups\ProfileEditor\Scripts\*.* /Y /E /D
 
-FOR /D %25%25d IN ($(TargetDir)Mashups\ProfileEditor\Scripts\*) DO pushd %25%25d &amp; (FOR %25%25z IN (*.*) DO "$(ProjectDir)..\..\..\..\..\Utilities\7zip\7z.exe" u -tzip "tp2.cgi.zip" "%25%25z" &amp; del %25%25z) &amp; popd 
+FOR /D %25%25d IN ($(TargetDir)Mashups\ProfileEditor\Scripts\*) DO pushd %25%25d &amp; (FOR %25%25z IN (*.*) DO "$(ProjectDir)..\..\lib\7zip\7z.exe" u -tzip "tp2.cgi.zip" "%25%25z" &amp; del %25%25z) &amp; popd 
 
 echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>rd /S /Q $(TargetDir)Mashups\tests\scripts
-echo F | xcopy $(ProjectDir)..\..\..\..\Main\Tp.Web\JavaScript\tau\scripts\*.*  $(ProjectDir)Mashups\tests\scripts\*.* /Y /E
-echo F | xcopy $(ProjectDir)..\..\..\..\Main\Tp.Web\JavaScript\ExtJs\*.*  $(ProjectDir)Mashups\tests\scripts\ExtJs\*.*  /Y /E</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

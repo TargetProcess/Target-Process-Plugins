@@ -11,6 +11,7 @@ using NGit.Revwalk;
 using NGit.Revwalk.Filter;
 using NGit.Transport;
 using StructureMap;
+using Tp.Core;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
@@ -26,18 +27,18 @@ namespace Tp.Git.VersionControlSystem
 			_git = git;
 		}
 
-		public IEnumerable<RevisionRange> GetFromTillHead(RevisionId @from, int pageSize)
+		public IEnumerable<RevisionRange> GetFromTillHead(DateTime from, int pageSize)
 		{
 			var revWalk = CreateRevWalker();
 
 			try
 			{
-				var filter = ApplyNoMergesFilter(CommitTimeRevFilter.After(((GitRevisionId) @from).Value));
+				var filter = ApplyNoMergesFilter(CommitTimeRevFilter.After(from));
 				revWalk.SetRevFilter(filter);
 
-				var commits = (from revision in revWalk orderby revision.CommitTime ascending select revision).ToArray().Split(pageSize);
+				var commits = (from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
 
-				var fromTillHead = commits.Select(x => new RevisionRange(x.First().CommitTime.ToString(), x.Last().CommitTime.ToString())).ToArray();
+				var fromTillHead = commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
 				return fromTillHead;
 			}
 			finally
@@ -53,7 +54,7 @@ namespace Tp.Git.VersionControlSystem
 
 		public IEnumerable<RevisionRange> GetAfterTillHead(RevisionId revisionId, int pageSize)
 		{
-			GitRevisionId addSeconds = ((GitRevisionId) revisionId).Value.AddSeconds(1);
+			var addSeconds = revisionId.Time.Value.AddSeconds(1);
 			return GetFromTillHead(addSeconds, pageSize);
 		}
 
@@ -76,10 +77,10 @@ namespace Tp.Git.VersionControlSystem
 			}
 		}
 
-		public string[] RetrieveAuthors(GitRevisionId @from, GitRevisionId to)
+		public string[] RetrieveAuthors(DateRange dateRange)
 		{
 			var revWalk = CreateRevWalker();
-			revWalk.SetRevFilter(CommitTimeRevFilter.Between(from.Value.GetTime(), to.Value.GetTime()));
+			revWalk.SetRevFilter(CommitTimeRevFilter.Between(dateRange.StartDate.GetValueOrDefault(), dateRange.EndDate.GetValueOrDefault()));
 
 			var commits = revWalk.ToArray();
 
@@ -91,13 +92,26 @@ namespace Tp.Git.VersionControlSystem
 			var revWalk = CreateRevWalker();
 			try
 			{
-				RevFilter betweenFilter = CommitTimeRevFilter.Between(((GitRevisionId) fromChangeset).Value, ((GitRevisionId) toChangeset).Value);
+				RevFilter betweenFilter = CommitTimeRevFilter.Between(((GitRevisionId) fromChangeset).Time, ((GitRevisionId) toChangeset).Time);
 
 				revWalk.SetRevFilter(ApplyNoMergesFilter(betweenFilter));
 				var commits = revWalk.ToArray();
 				return commits.Select(commit => commit.ConvertToRevisionInfo(_git.GetRepository())).ToArray();
 			}
 			finally
+			{
+				revWalk.Dispose();
+			}
+		}
+
+		public RevCommit GetCommit(RevisionId id)
+		{
+			var revWalk = CreateRevWalker();
+			try
+			{
+				return revWalk.ParseCommit(ObjectId.FromString(id.Value));
+			}
+			finally 
 			{
 				revWalk.Dispose();
 			}
@@ -113,11 +127,11 @@ namespace Tp.Git.VersionControlSystem
 			var revWalk = CreateRevWalker();
 			try
 			{
-				var filter = CommitTimeRevFilter.Between(((GitRevisionId) from).Value.AddSeconds(1), ((GitRevisionId) to).Value.AddSeconds(-1));
+				var filter = CommitTimeRevFilter.Between(((GitRevisionId) from).Time.AddSeconds(1), ((GitRevisionId) to).Time.AddSeconds(-1));
 				revWalk.SetRevFilter(ApplyNoMergesFilter(filter));
 
-				var commits = (from revision in revWalk orderby revision.CommitTime ascending select revision).ToArray().Split(pageSize);
-				var fromTillHead = commits.Select(x => new RevisionRange(x.First().CommitTime.ToString(), x.Last().CommitTime.ToString())).ToArray();
+				var commits = (from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
+				var fromTillHead = commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
 				return fromTillHead;
 			}
 			finally
@@ -170,7 +184,7 @@ namespace Tp.Git.VersionControlSystem
 
 		private static IStorageRepository Repository
 		{
-				get { return ObjectFactory.GetInstance<IStorageRepository>(); }
+			get { return ObjectFactory.GetInstance<IStorageRepository>(); }
 		}
 
 		private static GitRepositoryFolder GetLocalRepository(ISourceControlConnectionSettingsSource settings)

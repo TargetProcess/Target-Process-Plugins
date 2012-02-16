@@ -79,8 +79,8 @@ tau.mashups.addDependency("libs/jquery/jquery")
 
                 this._requestsInProgress = 3;
 
-                $.getJSON(this._getUrl('Projects.asmx/' + projectId + '?include=[process[EntityStates[Id,Name,EntityType]]]&take=1000'),
-                    $.proxy(this._onEntityStatesRecieved(success), this));
+                $.getJSON(this._getUrl('Projects.asmx/' + projectId + '?include=[process[id]]'),
+                    $.proxy(this._onProcessRecieved(success), this));
 
                 $.getJSON(this._getUrl('Priorities.asmx?take=1000'),
                     $.proxy(this._onPrioritiesRecieved(success), this));
@@ -89,11 +89,18 @@ tau.mashups.addDependency("libs/jquery/jquery")
                     $.proxy(this._onSeveritiesRecieved(success), this));
             },
 
+            _onProcessRecieved: function(success){
+                return function(process){
+                    $.getJSON(this._getUrl('Processes.asmx/' + process.Process.Id + '/EntityStates/?include=[Id,Name,EntityType[Id,Name]]&take=1000'),
+                    $.proxy(this._onEntityStatesRecieved(success), this));
+                }
+            },
+
             _onEntityStatesRecieved:function(onSuccess) {
                 var that = this;
                 return function(states) {
                     that._requestsInProgress--;
-                    var source = $(states.Process.EntityStates)
+                    var source = $(states.Items)
                         .filter(
                         function(index, element) {
                             return element.EntityType.Name == 'Bug';
@@ -151,15 +158,15 @@ tau.mashups.addDependency("libs/jquery/jquery")
 
             _onGetContext:function(success) {
                 return function(context) {
-                    var processes = $.grep(context.Processes, function(process) {
-                        var bugTrackingPractice = $.grep(process.Practices, function(practice) {
+                    var processes = $.grep(context.Processes.Items, function(process) {
+                        var bugTrackingPractice = $.grep(process.Practices.Items, function(practice) {
                             return practice.Name === 'Bug Tracking';
                         });
 
                         return bugTrackingPractice.length === 1;
                     });
 
-                    var projects = $.grep(context.SelectedProjects, function(project) {
+                    var projects = $.grep(context.SelectedProjects.Items, function(project) {
                         var isValid = false;
                         $.each(processes, function(index, process) {
                             if (project.Process.Id === process.Id) {

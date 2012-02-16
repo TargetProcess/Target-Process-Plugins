@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.menu.testPlanRun","tau/ui/templates/menu.testPlanRun/ui.template.menu.testPlanRun"],function(a,b,c){return{create:function(d){var e={extensions:[b],template:d.template||c};return a.create(e,d)}}})

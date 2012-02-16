@@ -4,11 +4,12 @@
 // 
 using System;
 using NServiceBus;
+using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Integration.Messages.Commands
 {
 	[Serializable]
-	public class ExecutePluginCommandCommand : IMessage
+	public class ExecutePluginCommandCommand : IPluginLocalMessage
 	{
 		public string CommandName { get; set; }
 		public string Arguments { get; set; }

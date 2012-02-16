@@ -18,13 +18,13 @@ tau.mashups
 	        editorTemplate:
 				'<div>' +
 				'		<h2 class="h2">' +
-					'			Subversion Integration</h2>' +
+					'			Subversion Plugin</h2>' +
 					'		<p class="note">' +
-					'			Exports revisions from Subversion and bind source code to user stories, bugs and' +
-					'			tasks.</p>' +
+					'			Exports revisions from Subversion and binds source code to TargetProcess user stories, bugs and tasks.</p>' +
 					'		<div class="svn-settings">' +
 					'   <div class="pad-box">' +
 					'       <p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span></p>' +
+                    '       <p class="note"><span class="small">Should be unique. Can\'t be changed later.</span></p>' +
 					'       <input type="text" id="name" name="Name" value="${Name}" class="input" style="width: 275px;" />' +
 					'   </div>' +
 					'			<div class="separator">' +
@@ -33,10 +33,8 @@ tau.mashups
 					'				<h3 class="h3">' +
 					'					Repository Settings</h3>' +
 					'				<p class="label">' +
-					'					Enter a full path to the repository&nbsp;<span class="error" name="UriErrorLabel"></span></p>' +
+					'					Enter a full path to the repository&nbsp;<span class="small">(example: https://svn.targetprocess.com/svn/public)</span>&nbsp;<span class="error" name="UriErrorLabel"></span></p>' +
 					'				<input type="text" class="input" name="Uri" id="uri" value="${Settings.Uri}" style="width: 100%;" /><br />' +
-					'				<p class="label">' +
-					'					<span class="small">(Ex: svn(http, https)://server/Project/trunk)</span></p>' +
 					'				<p class="label pt-10">' +
 					'					Login&nbsp;<span class="error" name="LoginErrorLabel"></span></p>' +
 					'				<input type="text" class="input" id="login" name="Login" value="${Settings.Login}" style="width: 275px;" />' +
@@ -44,7 +42,7 @@ tau.mashups
 					'					Password&nbsp;<span class="error" name="PasswordErrorLabel"></span></p>' +
 					'				<input type="password" class="input" id="password" name="Password" value="${Settings.Password}" style="width: 275px;" />' +
 					'				<p class="label pt-20">' +
-					'					Export all revisions started from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
+					'					Export all the revisions starting from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
 					'						style="width: 97px;" />&nbsp;&nbsp;revision&nbsp;<span class="error" name="StartRevisionErrorLabel"></span></p>' +
 					'			</div>' +
 					'			<div class="check-block">' +
@@ -122,7 +120,7 @@ tau.mashups
 
 	            this.UserMappingEditor.render();
 
-	            this.placeHolder.find('.collapsable').live('click', this._toggle);
+	            this.placeHolder.find('.collapsable').on('click', this._toggle);
 
 	            new profileControlsBlock({ placeholder: rendered }).render();
 	        },

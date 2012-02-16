@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Tp.Bugzilla.ImportToTp;
+using Tp.BugTracking.ImportToTp;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 

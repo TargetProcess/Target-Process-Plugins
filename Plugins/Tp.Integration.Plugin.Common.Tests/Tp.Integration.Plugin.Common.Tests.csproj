@@ -199,7 +199,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>IF EXIST $(ProjectDir)..\..\Libs\chess echo F | xcopy $(ProjectDir)..\..\Libs\chess\*.*  $(TargetDir)Concurrency\chess\*.* /Y /E</PreBuildEvent>
+    <PreBuildEvent>IF EXIST $(ProjectDir)..\..\Libs\chess echo F | xcopy $(ProjectDir)..\..\Libs\chess\*.*  $(TargetDir)Concurrency\chess\*.* /Y /E /D</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

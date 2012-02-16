@@ -86,7 +86,7 @@
 	                    Password: this._find('#password').val(),
 	                    Url: this._find('#url').val(),
 	                    Project: project,
-	                    Queries: this._find('#queries').val()
+	                    SavedSearches: this._find('#savedSearches').val()
 	                }
 	            };
 	        },
@@ -112,7 +112,7 @@
 	        _setFocus: function () {
 	            var nameInput = this.placeholder.find('#name');
 	            if (this.isEditMode) {
-	                this.placeholder.find('#queries').focus();
+	                this.placeholder.find('#savedSearches').focus();
 	                nameInput.enabled(false);
 	            }
 	            else {

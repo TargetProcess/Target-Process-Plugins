@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\SubversionCheckConnectionCommand.cs" />
+    <Compile Include="RevisionStorage\SubversionRevisionStorageRepository.cs" />
     <Compile Include="SerializationPatches\Xml\AttachToEntitySagaPatch.cs" />
     <Compile Include="SerializationPatches\Xml\CreateRevisionSagaPatch.cs" />
     <Compile Include="SerializationPatches\Xml\NewRevisionDetectedLocalMessagePatch.cs" />
@@ -97,12 +98,16 @@
     <Compile Include="Subversion\SubversionRevisionIdComparer.cs" />
     <Compile Include="Subversion\SubversionUtils.cs" />
     <Compile Include="Subversion\SvnRevisionId.cs" />
+    <Compile Include="Workflow\SubversionUserMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
       <Link>App.config</Link>
     </None>
     <None Include="Install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\ViewDiff\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="PluginSettings.config">
@@ -117,37 +122,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Mashups\Tests\scripts\ExtJS\Extensions.js" />
-    <Content Include="Mashups\Tests\scripts\ExtJS\Libs\adapter\ext\ext-base.js" />
-    <Content Include="Mashups\Tests\scripts\ExtJS\Libs\ext-all.js" />
-    <Content Include="Mashups\Tests\scripts\ExtJS\url.js" />
-    <Content Include="Mashups\Tests\scripts\libs\jquery\jquery.js" />
-    <Content Include="Mashups\Tests\scripts\libs\jquery\jquery.tmpl.js" />
-    <Content Include="Mashups\Tests\scripts\libs\jquery\jquery.ui.js" />
-    <Content Include="Mashups\Tests\scripts\tp\bus.js" />
-    <Content Include="Mashups\Tests\scripts\tp\plugins\commandGateway.js" />
-    <Content Include="Mashups\Tests\scripts\tp\plugins\errorMessageContainer.js" />
-    <Content Include="Mashups\Tests\scripts\tp\jquery.utils.js" />
-    <Content Include="Mashups\Tests\scripts\tp\plugins\navigator.js" />
-    <Content Include="Mashups\Tests\scripts\tp\plugins\profileControlsBlock.js" />
-    <Content Include="Mashups\Tests\scripts\tp\plugins\profileNameSource.js" />
-    <Content Include="Mashups\Tests\scripts\tp\plugins\profileRepository.js" />
-    <Content Include="Mashups\Tests\scripts\tp\status.js" />
+    <Content Include="Mashups\ViewDiff\RegisterMashup.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="subversion-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Mashups\ProfileEditor\registerMashup.js" />
     <Content Include="Mashups\ProfileEditor\SubversionProfileEditor.js" />
-    <Content Include="Mashups\ProfileEditor\userMappingEditor.js" />
+    <Content Include="Mashups\ProfileEditor\UserMappingEditor.js" />
     <Content Include="Mashups\Tests\checkConnection.tests.js" />
     <Content Include="Mashups\Tests\index.html" />
-    <Content Include="Mashups\Tests\scripts\libs.tests\jquery.simulate.js" />
-    <Content Include="Mashups\Tests\scripts\libs.tests\jsmock.js" />
-    <Content Include="Mashups\Tests\scripts\libs.tests\qunit.css" />
-    <Content Include="Mashups\Tests\scripts\libs.tests\qunit.js" />
-    <Content Include="Mashups\Tests\scripts\libs.tests\test-runner.js" />
-    <Content Include="Mashups\Tests\scripts\libs.tests\testsuite.js" />
-    <Content Include="Mashups\Tests\scripts\tp\Mashups.js" />
     <Content Include="Mashups\Tests\Mocks\commandGatewayMock.js" />
     <Content Include="Mashups\Tests\Mocks\navigatorMock.js" />
     <Content Include="Mashups\Tests\Mocks\profilenamesourcemock.js" />
@@ -155,13 +140,9 @@
     <Content Include="Mashups\Tests\Mocks\restServiceMock.js" />
     <Content Include="Mashups\Tests\plugins.css" />
     <Content Include="Mashups\Tests\profileEditor.tests.js" />
-    <Content Include="Mashups\Tests\scripts\require.js" />
-    <Content Include="Mashups\Tests\synchronizeUser.widget.tests.js" />
     <Content Include="Mashups\Tests\testConfiguration.js" />
-    <Content Include="Mashups\Tests\tpUserAutocomplete.widget.tests.js" />
     <Content Include="Mashups\Tests\userMappingEditor.tests.js" />
     <Content Include="Mashups\Tests\userMappingLine.tests.js" />
-    <Content Include="Mashups\Tests\userRepository.tests.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
@@ -192,14 +173,13 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\*.*  $(TargetDir)Mashups\ProfileEditor\*.* /Y /E
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\*.*  $(TargetDir)Mashups\*.* /Y /E /D
 
 echo F | move /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>rd /S /Q $(TargetDir)Mashups\tests\scripts
-echo F | xcopy $(ProjectDir)..\..\..\..\Main\Tp.Web\JavaScript\tau\scripts\*.*  $(ProjectDir)Mashups\tests\scripts\*.* /Y /E
-echo F | xcopy $(ProjectDir)..\..\..\..\Main\Tp.Web\JavaScript\ExtJs\*.*  $(ProjectDir)Mashups\tests\scripts\ExtJs\*.*  /Y /E</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

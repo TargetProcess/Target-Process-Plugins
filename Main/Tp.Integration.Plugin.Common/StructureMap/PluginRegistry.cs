@@ -75,8 +75,6 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<IPluginContext>().Singleton().Use<PluginContext>();
 			For<IProfileGatewayFactory>().Singleton().Use<ProfileGatewayFactory>();
 
-			For<ILogManager>().Singleton().Use<TpLogManager>();
-
 			For<IPluginCurrentObjectContext>().Singleton().Use<PluginCurrentObjectContext>();
 			For<IAccountCollection>().Singleton().Use<AccountCollection>();
 			For<IProfileCollectionReadonly>().Use<CurrentProfileCollection>();
@@ -113,6 +111,7 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<IActivityLogPathProvider>().Singleton().Use<ActivityLogPathProvider>();
 			For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
 			For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
+			For<ILogManager>().Singleton().Use<TpLogManager>();
 		}
 
 		protected virtual ITpBus CreateTpBus()

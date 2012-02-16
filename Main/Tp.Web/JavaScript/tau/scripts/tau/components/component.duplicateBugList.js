@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.list.baseInfo","tau/models/model.duplicateBugList","tau/models/model.duplicateBugRetriever"],function(a,b,c,d){return{create:function(a){return a.ModelType=c,a.typeName="bug",b.create(a,{extensions:[d]})}}})

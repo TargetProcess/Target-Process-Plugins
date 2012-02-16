@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base","tau/configurator"],function(a,b,c){var d=b.extend({"bus dataBind.special+dataBind.common":function(b){var c=b["dataBind.special"].data.additionalActions,d=[];a.forEach(c,function(a,b){a.show==1&&d.push({label:a.label||b,url:a.url})}),d=d.concat(b["dataBind.common"].data.items),this.fire("dataBind",{items:d})}});return d})

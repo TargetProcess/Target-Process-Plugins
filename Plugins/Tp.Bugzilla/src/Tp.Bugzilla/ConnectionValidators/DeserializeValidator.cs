@@ -4,6 +4,8 @@
 // 
 
 using System;
+using Tp.BugTracking.ConnectionValidators;
+using Tp.BugTracking.Settings;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Validation;
 
@@ -13,8 +15,8 @@ namespace Tp.Bugzilla.ConnectionValidators
 	{
 		private readonly IDataHolder<string> _dataHolder;
 
-		public DeserializeValidator(BugzillaProfile profile, IDataHolder<string> dataHolder)
-			: base(profile)
+		public DeserializeValidator(IBugTrackingConnectionSettingsSource connectionSettings, IDataHolder<string> dataHolder)
+			: base(connectionSettings)
 		{
 			_dataHolder = dataHolder;
 		}

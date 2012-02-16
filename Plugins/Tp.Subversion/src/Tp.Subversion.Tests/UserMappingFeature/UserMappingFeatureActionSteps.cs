@@ -3,10 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System;
 using NBehave.Narrator.Framework;
 using StructureMap;
 using Tp.Integration.Common;
@@ -38,7 +35,7 @@ namespace Tp.Subversion.UserMappingFeature
 		}
 
 		[Then("revision $revisionId in TP should have author '$tpUserName'")]
-		public void RevisionAuthorShouldBe(int revisionId, string tpUserName)
+		public void RevisionAuthorShouldBe(string revisionId, string tpUserName)
 		{
 			var user = Context.GetTpUserByName(tpUserName);
 			var revision = Context.Transport.TpQueue.GetCreatedDtos<RevisionDTO>().Single(x => x.SourceControlID == revisionId);

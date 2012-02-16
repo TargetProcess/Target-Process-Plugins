@@ -96,7 +96,7 @@ namespace Tp.Integration.Plugin.Common
 
 		private static string[] AssembliesToSkip()
 		{
-			return new[] { "PluginUninstallUtil.exe", "Tp.LegacyProfileConversion.Common.dll" };
+			return new[] { "Tp.Integration.Plugin.UninstallUtil.exe", "Tp.LegacyProfileConversion.Common.dll" };
 		}
 
 		private static First<PluginGateway> GetHandlersOrder()

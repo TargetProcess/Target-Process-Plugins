@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tp.Core
 {
@@ -19,29 +20,21 @@ namespace Tp.Core
 
 		private Maybe(){}
 
+		public static T ChooseFirst<T>(params Maybe<T>[] items)
+		{
+			return Choose(items).First();
+		}
+
+		public static IEnumerable<T> Choose<T>(IEnumerable<Maybe<T>> items)
+		{
+			return items.Where(i => i.HasValue).Select(i => i.Value).ToList();
+		}
+
 		public static Maybe<T> Just<T>(T value)
 		{
 			return new Maybe<T>(value);
 		}
-
-		public static Maybe<TTo> Convert<TTo, TFrom>(Maybe<TFrom> m, Func<TFrom, Maybe<TTo>> converter)
-		{
-			return m.HasValue ? converter(m.Value) : Nothing;
-		}
-
-		public static Maybe<T> RunUntilFirstSuccess<T>(IEnumerable<Func<Maybe<T>>> fs)
-		{
-			foreach (Func<Maybe<T>> f in fs)
-			{
-				Maybe<T> maybe = f();
-				if (maybe.HasValue)
-				{
-					return maybe;
-				}
-			}
-			return Nothing;
-		}
-
+		
 		public bool Equals(Maybe other)
 		{
 			return !ReferenceEquals(null, other);
@@ -143,4 +136,24 @@ namespace Tp.Core
 		
 	}
 
+	public static class MaybeExtensions
+	{
+		public static Maybe<TTo> Convert<TTo, TFrom>(this Maybe<TFrom> m, Func<TFrom, Maybe<TTo>> converter)
+		{
+			return m.HasValue ? converter(m.Value) : Maybe.Nothing;
+		}
+
+		public static Maybe<T> RunUntilFirstSuccess<T>(this IEnumerable<Func<Maybe<T>>> fs)
+		{
+			foreach (Func<Maybe<T>> f in fs)
+			{
+				Maybe<T> maybe = f();
+				if (maybe.HasValue)
+				{
+					return maybe;
+				}
+			}
+			return Maybe.Nothing;
+		}
+	}
 }

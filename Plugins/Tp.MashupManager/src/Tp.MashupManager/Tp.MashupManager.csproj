@@ -72,17 +72,18 @@
     <Compile Include="CustomCommands\GetProfileInfoCommand.cs" />
     <Compile Include="CustomCommands\AddMashupCommand.cs" />
     <Compile Include="DeleteProfileCommandHandler.cs" />
+    <Compile Include="Dtos\UpdateMashupDto.cs" />
     <Compile Include="IMashupInfoRepository.cs" />
     <Compile Include="MashupStorage\IMashupLocalFolder.cs" />
     <Compile Include="MashupStorage\IMashupScriptStorage.cs" />
     <Compile Include="MashupStorage\MashupLocalFolder.cs" />
     <Compile Include="MashupStorage\MashupScriptStorage.cs" />
     <Compile Include="SingleProfile.cs" />
-    <Compile Include="MashupDto.cs" />
+    <Compile Include="Dtos\MashupDto.cs" />
     <Compile Include="CustomCommands\UpdateMashupCommand.cs" />
     <Compile Include="MashupInfoRepository.cs" />
     <Compile Include="MashupManagerProfile.cs" />
-    <Compile Include="MashupsOnPluginStartSender.cs" />
+    <Compile Include="MashupsOnTargetProcessStartSender.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -129,40 +130,35 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Mashups\ProfileEditor\Libs\jquery.fieldSelection.js" />
     <Content Include="Mashups\PluginUiLayout\PluginLayout.js" />
     <Content Include="Mashups\ProfileEditor\CodeEditor.js" />
-    <Content Include="Mashups\ProfileEditor\CommandGateway.js" />
     <Content Include="Mashups\ProfileEditor\EditorTemplate.js" />
     <Content Include="Mashups\ProfileEditor\MashupsManagerEditor.js" />
-    <Content Include="Mashups\ProfileEditor\ProfileNameSource.js" />
+    <Content Include="Mashups\ProfileEditor\PlaceholderParser.js" />
+    <Content Include="Mashups\ProfileEditor\PlaceholderUtils.js" />
+    <Content Include="Mashups\ProfileEditor\Previewer.js" />
     <Content Include="Mashups\ProfileEditor\ProfileRepository.js" />
     <Content Include="Mashups\ProfileEditor\RegisterMashup.js" />
     <Content Include="Mashups\SettingsLink\LinkRenderer.js" />
     <Content Include="Mashups\Tests\mashupManagerEditor.tests.js" />
     <Content Include="Mashups\Tests\index.html" />
-    <Content Include="Mashups\Tests\Libs\ExtJS\ext-base.js" />
-    <Content Include="Mashups\Tests\Libs\ExtJS\Extensions.js" />
-    <Content Include="Mashups\Tests\Libs\ExtJS\url.js" />
-    <Content Include="Mashups\Tests\Libs\jquery.simulate.js" />
-    <Content Include="Mashups\Tests\Libs\jquery\jquery.js" />
-    <Content Include="Mashups\Tests\Libs\jquery\jquery.tmpl.js" />
-    <Content Include="Mashups\Tests\Libs\jquery\jquery.ui.js" />
-    <Content Include="Mashups\Tests\Libs\jsmock.js" />
-    <Content Include="Mashups\Tests\Libs\Mashups.js" />
-    <Content Include="Mashups\Tests\Libs\qunit.css" />
-    <Content Include="Mashups\Tests\Libs\qunit.js" />
-    <Content Include="Mashups\Tests\Libs\require.js" />
-    <Content Include="Mashups\Tests\Libs\test-runner.js" />
-    <Content Include="Mashups\Tests\Libs\testsuite.js" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\*.*  $(TargetDir)Mashups\ProfileEditor\*.* /Y
-echo F | xcopy $(ProjectDir)Mashups\SettingsLink\*.*  $(TargetDir)Mashups\SettingsLink\*.* /Y
-echo F | xcopy $(ProjectDir)Mashups\PluginUiLayout\*.*  $(TargetDir)Mashups\PluginUiLayout\*.* /Y
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\*.*  $(TargetDir)Mashups\ProfileEditor\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\Libs\*.*  $(TargetDir)Mashups\ProfileEditor\Libs\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\SettingsLink\*.*  $(TargetDir)Mashups\SettingsLink\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\PluginUiLayout\*.*  $(TargetDir)Mashups\PluginUiLayout\*.* /D
+echo F | xcopy $(ProjectDir)Mashups\Tests\*.*  $(TargetDir)Mashups\Tests\*.* /Y /D
+
 
 echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

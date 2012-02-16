@@ -4,13 +4,13 @@
 // 
 
 using System;
-using System.Linq;
-using Tp.Core;
+using StructureMap;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Logging;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
@@ -40,10 +40,9 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 				                                             _pluginContext.ProfileName.Value));
 			}
 
-			var lastSyncDates = _profileCollection[_pluginContext.ProfileName].Get<LastSyncDate>();
-			_localBus.SendLocal(new TickMessage(lastSyncDates.Select(d => d.Value).FirstOrDefault()));
+			_localBus.SendLocal(new SyncNowMessage());
 
-			lastSyncDates.ReplaceWith(new LastSyncDate(CurrentDate.Value));
+			ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType()).Info("SyncNowMessage sent");
 
 			return new PluginCommandResponseMessage {PluginCommandStatus = PluginCommandStatus.Succeed};
 		}

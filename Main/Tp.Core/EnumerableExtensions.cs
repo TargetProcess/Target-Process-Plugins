@@ -4,25 +4,17 @@
 // 
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using JetBrains.Annotations;
 using Tp.Core;
 
 namespace System.Linq
 {
-	public static class TypeOf<T>
-	{
-		public readonly static T Self;
-	}
-
 	public static class EnumerableExtensions
 	{
-		public static IEnumerable<TTo> StaticCast<TFrom, TTo>(this IEnumerable<TFrom> from, TTo _) where TFrom : TTo
-		{
-			return from.Select<TFrom, TTo>(x => x);
-		}
-
 		// for generic interface IEnumerable<T>
-		public static string ToString<T>(this IEnumerable<T> source, string separator)
+		public static string ToString<T>(this IEnumerable<T> source,[NotNull] Func<T, string> selector, string separator)
 		{
 			if (source == null)
 				return String.Empty;
@@ -31,8 +23,13 @@ namespace System.Linq
 				throw new ArgumentException("Parameter separator can not be null or empty.");
 
 			return source.Where(x => !Equals(x, null)).Aggregate(new StringBuilder(),
-																	 (sb, x) => sb.Append(separator).Append(x),
+																	 (sb, x) => sb.Append(separator).Append(selector(x)),
 																	 x => (x.Length > 0 ? x.Remove(0, separator.Length) : x).ToString());
+		}
+
+		public static string ToString<T>(this IEnumerable<T> source, string separator)
+		{
+			return source.ToString(x => x.ToString(), separator);
 		}
 
 		// for interface IEnumerable
@@ -192,6 +189,17 @@ namespace System.Linq
 		public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int chunkSize)
 		{
 			return source.Where((x, i) => i % chunkSize == 0).Select((x, i) => source.Skip(i * chunkSize).Take(chunkSize));
+		}
+
+		public static IEnumerable<Tuple<string,object>> GetObjectValues(this object values)
+		{
+			if (values == null) 
+				yield break;
+			foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(values))
+			{
+				object obj2 = descriptor.GetValue(values);
+				yield return Tuple.Create(descriptor.Name, obj2);
+			}
 		}
 	}
 }

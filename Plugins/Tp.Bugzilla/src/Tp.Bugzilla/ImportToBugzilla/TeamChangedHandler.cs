@@ -5,6 +5,7 @@
 
 using System.Linq;
 using NServiceBus;
+using Tp.BugTracking;
 using Tp.Bugzilla.BugzillaQueries;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
@@ -56,7 +57,7 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			_storage.Get<TeamDTO>(message.Dto.ID.ToString()).Add(message.Dto);
 
 			AssignUser(message.Dto,
-			           _userMapper.GetBugzillaEmailBy(_storage.Get<UserDTO>(message.Dto.UserID.ToString()).Single().ID));
+			           _userMapper.GetThirdPartyIdBy(_storage.Get<UserDTO>(message.Dto.UserID.ToString()).Single().ID));
 		}
 
 		public void Handle(TeamDeletedMessage message)

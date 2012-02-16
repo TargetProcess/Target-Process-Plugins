@@ -9,8 +9,9 @@ using System.Linq;
 using NServiceBus;
 using NServiceBus.Saga;
 using StructureMap;
+using Tp.BugTracking;
+using Tp.BugTracking.ImportToTp;
 using Tp.Bugzilla.BugFieldConverters;
-using Tp.Bugzilla.Schemas;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
@@ -21,8 +22,8 @@ using Tp.Integration.Plugin.Common.Activity;
 namespace Tp.Bugzilla.ImportToTp
 {
 	public class CommentImportSaga : TpSaga<BugCommentImportSagaData>,
-	                                 IAmStartedByMessages<NewBugImportedToTargetProcessMessage>,
-	                                 IAmStartedByMessages<ExistingBugImportedToTargetProcessMessage>,
+	                                 IAmStartedByMessages<NewBugImportedToTargetProcessMessage<BugzillaBug>>,
+	                                 IAmStartedByMessages<ExistingBugImportedToTargetProcessMessage<BugzillaBug>>,
 	                                 IHandleMessages<CommentCreatedMessage>,
 	                                 IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
@@ -43,37 +44,34 @@ namespace Tp.Bugzilla.ImportToTp
 			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
 		}
 
-		public void Handle(NewBugImportedToTargetProcessMessage message)
+		public void Handle(NewBugImportedToTargetProcessMessage<BugzillaBug> message)
 		{
-			var comments = GetComments(message.BugzillaBug);
-
-			CreateComments(comments.Cast<long_desc>(), message.TpBugId);
+			CreateComments(message.ThirdPartyBug.comments, message.TpBugId);
 		}
 
-		public void Handle(ExistingBugImportedToTargetProcessMessage message)
+		public void Handle(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message)
 		{
 			var newComments =
-				GetComments(message.BugzillaBug).Cast<long_desc>()
+				message.ThirdPartyBug.comments
 					.Where(comment => !CommentExists(message, comment))
 					.Reverse()
 					.ToList();
 
 			if (newComments.Any())
 			{
-				_logger.InfoFormat("Importing {1} comment(s) for bug. {0}", message.BugzillaBug.ToString(), newComments.Count);
+				_logger.InfoFormat("Importing {1} comment(s) for bug. {0}", message.ThirdPartyBug.ToString(), newComments.Count);
 			}
 
 			CreateComments(newComments, message.TpBugId);
 		}
 
-		private bool CommentExists(ExistingBugImportedToTargetProcessMessage message, long_desc comment)
+		private bool CommentExists(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message, BugzillaComment comment)
 		{
 			return StorageRepository().Get<CommentDTO>(message.TpBugId.ToString())
-				.Where(c => c.CreateDate.Value.ToUniversalTime() == CreateDateConverter.ParseToUniversalTime(comment.bug_when))
-				.Any();
+				.Any(c => c.CreateDate.Value.ToUniversalTime() == CreateDateConverter.ParseToUniversalTime(comment.DateAdded));
 		}
 
-		private void CreateComments(IEnumerable<long_desc> comments, int? tpBugId)
+		private void CreateComments(IEnumerable<BugzillaComment> comments, int? tpBugId)
 		{
 			foreach (var comment in comments)
 			{
@@ -83,29 +81,19 @@ namespace Tp.Bugzilla.ImportToTp
 			CompleteSagaIfNecessary();
 		}
 
-		private long_descCollection GetComments(BugzillaBug bugzillaBug)
+		private void CreateComment(int? tpBugId, BugzillaComment bugzillaComment)
 		{
-			var comments = new long_descCollection();
-
-			if (bugzillaBug.long_descCollection.Count >= 2)
-				comments.AddRange(bugzillaBug.long_descCollection.Cast<long_desc>().Skip(1).ToList());
-			
-			return comments;
-		}
-
-		private void CreateComment(int? tpBugId, long_desc bugzillaComment)
-		{
-			if (string.IsNullOrEmpty(bugzillaComment.thetext))
+			if (string.IsNullOrEmpty(bugzillaComment.Body))
 				return;
 
-			var userId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(bugzillaComment.who);
+			var userId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(bugzillaComment.Author);
 
 			var comment = new CommentDTO
 			              	{
-			              		Description = DescriptionConverter.FormatDescription(bugzillaComment.thetext),
+			              		Description = DescriptionConverter.FormatDescription(bugzillaComment.Body),
 			              		GeneralID = tpBugId,
-			              		CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(bugzillaComment.bug_when),
-								OwnerID = userId
+			              		CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(bugzillaComment.DateAdded),
+			              		OwnerID = userId
 			              	};
 
 			Send(new CreateCommentCommand(comment));
@@ -132,15 +120,5 @@ namespace Tp.Bugzilla.ImportToTp
 			_logger.Error("Comment import failed", new Exception(message.ExceptionString));
 			MarkAsComplete();
 		}
-	}
-
-	public class BugCommentImportSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
-
-		public int CommentsToCreateCount { get; set; }
-		public int CreatedCommentsCount { get; set; }
 	}
 }

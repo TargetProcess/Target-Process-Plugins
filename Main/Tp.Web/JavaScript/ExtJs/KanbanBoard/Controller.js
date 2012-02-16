@@ -18,6 +18,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	itemsCountPerRendering: 20,
 	userStoryEntityPopup: null,
 	refreshInterval: null,
+	showTasksAsCards: false,
 	refreshTask: null,
 	constructor: function (project, process, preferences) {
 		if (!project) {
@@ -41,6 +42,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 
 		this.swimlanes = this.applyPreferences(this.initSwimlanes(), preferences || { reFresh: 0, order: [], limits: {} });
 		this.refreshInterval = isNaN(preferences.reFresh) || preferences.reFresh < 0 ? 0 : preferences.reFresh;
+		this.showTasksAsCards = !preferences.doNotShowTasksAsCards;
 		this.preferences = preferences;
 
 		this.refreshTask = new Ext.util.DelayedTask(function (task, delay) {
@@ -53,6 +55,12 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 
 	load: function () {
 		this.clearSwimlanes();
+
+		var span = Ext.fly("panel-task-filter");
+		if (span) {
+			span.setVisible(this.showTasksAsCards);
+		}
+
 		this.service.loadEntities(this.project.id, this.safe(this.project.releaseIds), this.safe(this.project.iterationIds),
 				this.loadEntities_onSuccess.createDelegate(this),
 				this.loadEntities_onFailure.createDelegate(this));
@@ -61,6 +69,8 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	clearSwimlanes: function () {
 		Ext.each(this.uxswimlanes, function (swimlane) {
 			swimlane.removeAll();
+			if (swimlane.swimlane.entities)
+				swimlane.swimlane.entities = [];
 			this.entityHashmap[swimlane.swimlane.name] = [];
 		}, this);
 		if (this.uxKanbanBoardPanel) {
@@ -100,7 +110,8 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 			reFresh: 0,
 			order: [],
 			limits: {},
-			isCollapsed: null
+			isCollapsed: null,
+			showTasksAsCards: false
 		};
 		var plannedSwimlane = this.swimlanes.plannedSwimlane;
 		if (plannedSwimlane.limit > 0) {
@@ -114,7 +125,8 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 			}
 		}
 		preferences.reFresh = this.refreshInterval;
-		this.service.savePreferences(this.project.id, preferences);
+		preferences.doNotshowTasksAsCards = !this.showTasksAsCards;
+		this.service.savePreferences(this.project.id, preferences, this.load.createDelegate(this));
 	},
 
 	setBacklog: function (backlog) {
@@ -395,13 +407,15 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 				swimlanes.addEntityState(entityState, this.process);
 				wipStatesOnBoard = true;
 			}
-			else if (this.isWIP_OR_PlannedState(entityState) && entityState.entityType == this.process.userStoryEntityType) {
+			else if (this.isWIP_OR_PlannedState(entityState) && (entityState.entityType == this.process.userStoryEntityType ||
+			entityState.entityType == this.process.taskEntityType)) {
 				swimlanes.addEntityState(entityState, this.process);
 				wipStatesOnBoard = true;
 			}
 			else if (!this.isWIP_OR_PlannedState(entityState)) {
 				if (entityState.entityType == this.process.userStoryEntityType
-						|| entityState.entityType == this.process.bugEntityType) {
+						|| entityState.entityType == this.process.bugEntityType
+						|| entityState.entityType == this.process.taskEntityType) {
 					swimlanes.addEntityState(entityState, this.process);
 				}
 			}
@@ -445,13 +459,29 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 			array.splice(index, 0, item);
 		}
 
+		function comparePreferences(first, second){			
+			var firstIds = first.split('-');		
+			var secondIds = second.split('-');
+			var counter = 0;
+			
+			for (var i=0; i< firstIds.length; i++){
+				if(secondIds.indexOf(firstIds[i]) >= 0){
+					counter++;
+				}
+			}
+			
+			return counter == firstIds.length || counter == secondIds.length;
+		}				
+		
 		// Reorder swimlanes according to preferences.
 		var offset = 0;
 		for (var n = 0; n < preferences.order.length; n++) {
-			if (preferences.order[n] in swimlanes) {
-				var swimlane = swimlanes[preferences.order[n]];
-				moveTo(swimlanes, swimlane, offset);
-				offset++;
+			for(var m = 0; m < swimlanes.length; m++){
+				if (comparePreferences(preferences.order[n], swimlanes[m].id)) {
+					var swimlane = swimlanes[m];
+					moveTo(swimlanes, swimlane, offset);
+					offset++;
+				}
 			}
 		}
 		return swimlanes;
@@ -594,9 +624,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	loadEntities_onSuccess: function (entities) {
 		this.uxbacklog.allowFireReloadEvent();
 
-		if (!this.uxbacklog.getIsCollapsed()) {
-			this.uxbacklog.tryFireReloadEvent();
-		}
+		this.reload();
 
 		this.collectEntitiesByState(entities);
 
@@ -605,6 +633,12 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 		}
 
 		this.uxKanbanBoardPanel.fireEvent("loadItemsSuccess");
+	},
+
+	reload: function () {
+		if (!this.uxbacklog.getIsCollapsed()) {
+			this.uxbacklog.fireReloadEvent();
+		}
 	},
 
 	loadEntities_onFailure: function (x) {
@@ -688,6 +722,13 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 				title: this.process.bugEntityType.titlePlural
 			});
 		};
+
+		types.push({
+			id: 'x-kanban-show-tasks' + this.project.id,
+			value: 'task',
+			title: this.process.taskEntityType.titlePlural,
+			display: this.showTasksAsCards ? "" : "none"
+		});
 
 		return types;
 	},

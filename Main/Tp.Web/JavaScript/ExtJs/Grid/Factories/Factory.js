@@ -24,7 +24,6 @@ Tp.controls.grid.ConfigurableFactory = Ext.extend(Object, {
         return this._getConfigurationFactoryEvaluated(configurationFactory, initialConfig);
     },
 
-
     getInnerListConfigurationFactory: function(initialConfig) {
         return this._getConfigurationFactoryEvaluated(innerListConfigurationFactory, initialConfig);
     },

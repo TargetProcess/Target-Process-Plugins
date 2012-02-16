@@ -12,7 +12,7 @@ using log4net;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class TpLogManager : ILogManager
+	internal class TpLogManager : ILogManager
 	{
 		private readonly IActivityLogPathProvider _path;
 		private readonly IPluginContext _context;

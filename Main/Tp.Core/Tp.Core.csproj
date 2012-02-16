@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotations\Resharper.cs" />
     <Compile Include="Csv\CsvExtensions.cs" />
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="INullable.cs" />
+    <Compile Include="Lazy.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="InvalidDateRangeException.cs" />
     <Compile Include="PathExtensions.cs" />
@@ -135,7 +137,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y</PostBuildEvent>
+    <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y /d</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

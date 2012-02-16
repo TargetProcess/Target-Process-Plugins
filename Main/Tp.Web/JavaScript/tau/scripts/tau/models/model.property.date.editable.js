@@ -1,1 +1,1 @@
-define(["tau/core/model.editable.base"],function(a){return a.extend({"bus dataBind":function(){this.bus.fire("permissionsReady",{editable:this.config.editable})}})})
+define(["tau/core/model.editable.base","tau/utils/utils.date"],function(a,b){return a.extend({"bus dataBind":function(){this.bus.fire("permissionsReady",{editable:this.config.editable})},"bus afterValidate":function(a){var b=a.data.cmd.$set[this.config.propertyName];b&&(a.data.cmd.$set[this.config.propertyName]=b)}})})

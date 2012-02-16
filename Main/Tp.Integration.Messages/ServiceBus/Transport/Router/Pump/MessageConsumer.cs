@@ -6,6 +6,7 @@ using System.Transactions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Exceptions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Extensions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
+using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 {
@@ -13,16 +14,18 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 	{
 		private readonly IMessageSource<TMessage> _messageSource;
 		private readonly IScheduler _scheduler;
+		private readonly ILoggerContextSensitive _log;
 		private IObservable<TMessage> _observable;
 		private IDisposable _subscription;
 		private volatile bool _isRunning;
 		private Predicate<TMessage> _while;
 		private readonly List<IObserver<TMessage>> _observers;
 
-		public MessageConsumer(IMessageSource<TMessage> messageSource, IScheduler scheduler)
+		public MessageConsumer(IMessageSource<TMessage> messageSource, IScheduler scheduler, ILoggerContextSensitive log)
 		{
 			_messageSource = messageSource;
 			_scheduler = scheduler;
+			_log = log;
 			_observers = new List<IObserver<TMessage>>();
 		}
 
@@ -63,6 +66,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			}
 			OnDispose();
 			_isRunning = false;
+			_log.Info(LoggerContext.New(Name), "disposed.");
 		}
 
 		public Predicate<TMessage> While

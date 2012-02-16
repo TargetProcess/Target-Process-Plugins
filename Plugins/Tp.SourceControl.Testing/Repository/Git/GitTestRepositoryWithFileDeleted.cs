@@ -26,5 +26,20 @@ namespace Tp.SourceControl.Testing.Repository.Git
 		{
 			throw new System.NotImplementedException();
 		}
+
+		public override string Commit(string filePath, string changedContent, string commitComment)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public override void CheckoutBranch(string branch)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public override string CherryPick(string revisionId)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

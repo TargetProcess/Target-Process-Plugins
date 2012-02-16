@@ -6,13 +6,16 @@
 using System;
 using System.Net;
 using System.Text;
+using Tp.BugTracking.ConnectionValidators;
+using Tp.BugTracking.Settings;
 using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
 	public class ConnectionValidator : Validator
 	{
-		public ConnectionValidator(BugzillaProfile profile) : base(profile)
+		public ConnectionValidator(IBugTrackingConnectionSettingsSource connectionSettings)
+			: base(connectionSettings)
 		{
 		}
 
@@ -20,13 +23,13 @@ namespace Tp.Bugzilla.ConnectionValidators
 		{
 			try
 			{
-				var url = new BugzillaUrl(_profile);
+				var url = new BugzillaUrl(ConnectionSettings);
 				var webClient = new WebClient {Encoding = Encoding.UTF8};
 				webClient.DownloadString(url.Url);
 			}
-			catch (Exception bugzillaException)
+			catch (Exception exception)
 			{
-				errors.Add(new PluginProfileError {FieldName = BugzillaProfile.UrlField, Message = bugzillaException.Message, AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString()});
+				errors.Add(new PluginProfileError {FieldName = BugzillaProfile.UrlField, Message = exception.Message, AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString()});
 			}
 		}
 	}

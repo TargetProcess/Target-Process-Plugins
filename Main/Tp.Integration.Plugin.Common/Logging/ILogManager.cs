@@ -9,7 +9,7 @@ using log4net;
 namespace Tp.Integration.Plugin.Common.Logging
 {
 	/// <summary>
-	/// provides access to default logger.
+	/// Provides access to default logger. Injected into StructureMap container.
 	/// </summary>
 	public interface ILogManager
 	{

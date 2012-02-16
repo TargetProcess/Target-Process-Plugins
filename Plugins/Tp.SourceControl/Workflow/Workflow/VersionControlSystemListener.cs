@@ -8,6 +8,7 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
@@ -20,22 +21,31 @@ namespace Tp.SourceControl.Workflow.Workflow
 		private readonly IRevisionIdComparer _revisionComparer;
 		private readonly ILocalBus _bus;
 		private readonly IStorageRepository _storage;
+		private readonly IActivityLogger _logger;
 		private readonly RevisionId _startRevision;
 
 		public VersionControlSystemListener(IVersionControlSystem versionControlSystem, IRevisionIdComparer revisionComparer, ILocalBus bus,
-		                                    IStorageRepository storage, ISourceControlConnectionSettingsSource settingsSource)
+		                                    IStorageRepository storage, ISourceControlConnectionSettingsSource settingsSource, IActivityLogger logger)
 		{
 			_versionControlSystem = versionControlSystem;
 			_revisionComparer = revisionComparer;
 			_bus = bus;
 			_storage = storage;
+			_logger = logger;
 
 			_startRevision = revisionComparer.ConvertToRevisionId(settingsSource.StartRevision);
 		}
 
 		public void Handle(TickMessage message)
 		{
+			_logger.Info("Checking changes");
+
 			var revisionRanges = RetrieveRevisionRanges();
+
+			if (revisionRanges.Any())
+			{
+				_logger.Info("New revisions found");
+			}
 
 			revisionRanges.ForEach(x => _bus.SendLocal(new NewRevisionRangeDetectedLocalMessage {Range = x}));
 			SetStartRevisionBy(revisionRanges);
