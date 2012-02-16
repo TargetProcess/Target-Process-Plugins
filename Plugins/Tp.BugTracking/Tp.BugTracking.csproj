@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A554F2D6-810C-4A67-B71D-D77FCDBBCF7B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.BugTracking</RootNamespace>
+    <AssemblyName>Tp.BugTracking</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BugFieldConverters\ConvertedBug.cs" />
+    <Compile Include="BugFieldConverters\ConverterCompositeBase.cs" />
+    <Compile Include="BugFieldConverters\GuessConverterBase.cs" />
+    <Compile Include="BugFieldConverters\IBugConverter.cs" />
+    <Compile Include="Commands\Dtos\MappingSource.cs" />
+    <Compile Include="Commands\Dtos\MappingSourceEntry.cs" />
+    <Compile Include="ConnectionValidators\IDataHolder.cs" />
+    <Compile Include="ConnectionValidators\IValidator.cs" />
+    <Compile Include="ConnectionValidators\Validator.cs" />
+    <Compile Include="ImportToTp\BugChunkSize.cs" />
+    <Compile Include="ImportToTp\BugCommentImportSagaData.cs" />
+    <Compile Include="ImportToTp\BugImportSagaData.cs" />
+    <Compile Include="ImportToTp\ExistingBugImportedToTargetProcessMessage.cs" />
+    <Compile Include="ImportToTp\FailedChunk.cs" />
+    <Compile Include="ImportToTp\FailedSyncDate.cs" />
+    <Compile Include="ImportToTp\ImportAssignmentSagaData.cs" />
+    <Compile Include="ImportToTp\ImportBugsChunk.cs" />
+    <Compile Include="ImportToTp\ImportBugToTargetProcessCommand.cs" />
+    <Compile Include="ImportToTp\NewBugImportedToTargetProcessMessage.cs" />
+    <Compile Include="ImportToTp\TargetProcessBugId.cs" />
+    <Compile Include="IUserMapper.cs" />
+    <Compile Include="Mappers\ThirdPartyFieldsMapper.cs" />
+    <Compile Include="Mappers\IThirdPartyFieldsMapper.cs" />
+    <Compile Include="Mappers\MappingExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\IBugTrackingConnectionSettingsSource.cs" />
+    <Compile Include="Settings\IBugTrackingMappingSource.cs" />
+    <Compile Include="Synchronizer\BugTrackingProfileInitializationSagaData.cs" />
+    <Compile Include="UserExtensions.cs" />
+    <Compile Include="UserMapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
