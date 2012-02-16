@@ -326,7 +326,7 @@
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(ProjectDir)Scripts\*.*  $(TargetDir)Mashups\ProfileEditor\Scripts\*.* /Y /E /D
 
-FOR /D %25%25d IN ($(TargetDir)Mashups\ProfileEditor\Scripts\*) DO pushd %25%25d &amp; (FOR %25%25z IN (*.*) DO "$(ProjectDir)..\..\lib\7zip\7z.exe" u -tzip "tp2.cgi.zip" "%25%25z" &amp; del %25%25z) &amp; popd 
+FOR /D %25%25d IN ($(TargetDir)Mashups\ProfileEditor\Scripts\*) DO pushd %25%25d &amp; (FOR %25%25z IN (*.*) DO "$(ProjectDir)lib\7zip\7z.exe" u -tzip "tp2.cgi.zip" "%25%25z" &amp; del %25%25z) &amp; popd 
 
 echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
   </PropertyGroup>
