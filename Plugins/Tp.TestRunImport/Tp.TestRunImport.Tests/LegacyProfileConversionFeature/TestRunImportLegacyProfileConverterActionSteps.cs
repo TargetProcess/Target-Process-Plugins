@@ -18,16 +18,6 @@ namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 	[ActionSteps]
 	public abstract class TestRunImportLegacyProfileConverterActionSteps<T> : LegacyProfileConverterActionStepsBase<T, TestRunImportLegacyProfileConversionUnitTestRegistry> where T : TestRunImportLegacyProfileConvertor
 	{
-		protected override string PluginConnectionString
-		{
-			get { return "Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa"; }
-		}
-
-		protected override string TpConnectionString
-		{
-			get { return "Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa"; }
-		}
-
 		[Given("sync interval is $syncInterval")]
 		public void SetSyncInterval(int syncInterval)
 		{

@@ -59,6 +59,17 @@ namespace Tp.Bugzilla.Schemas
 			set { __version = value; }
 		}
 
+		[XmlElement(ElementName = "supported_bugzilla_version", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public string __supported_bugzilla_version;
+
+		[XmlIgnore]
+		public string supported_bugzilla_version
+		{
+			get { return __supported_bugzilla_version; }
+			set { __supported_bugzilla_version = value; }
+		}
+
 		[XmlElement(ElementName="script_version",IsNullable=false,Form=XmlSchemaForm.Qualified,DataType="string")]
 		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public string __script_version;

@@ -1,8 +1,9 @@
-﻿// 
+// 
 // Copyright (c) 2005-2010 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
+using System.Xml.Serialization;
 
 namespace Tp.Integration.Common
 {
@@ -34,20 +35,20 @@ namespace Tp.Integration.Common
 		/// </summary>
 		/// <value>The Attachment File ID.</value>
 		[PrimaryKey]
-		public int? AttachmentFileID { get; set; }
+		[XmlElement(Order = 3)]public int? AttachmentFileID { get; set; }
 
 
 		/// <summary>
 		/// Gets or sets the Unique File Name. The path to file in the system
 		/// </summary>
 		/// <value>The Unique File Name.</value>
-		public String UniqueFileName { get; set; }
+		[XmlElement(Order = 4)]public String UniqueFileName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Buffer. The content of the file if the attachment is stored in database
 		/// </summary>
 		/// <value>The Buffer.</value>
-		public Byte[] Buffer { get; set; }
+		[XmlElement(Order = 5)]public Byte[] Buffer { get; set; }
 	}
 
 

@@ -35,8 +35,7 @@ namespace Tp.Subversion.Subversion
 					And profile Start Revision is 110
 				When plugin started up
 				Then 141 revisions should be created in TP".
-				Execute(
-					In.GlobalContext());
+				Execute(In.Context<VcsPluginActionSteps>().And<ProcessNewRevisionOnlyFeature>());
 		}
 
 		[Test]
@@ -48,7 +47,7 @@ namespace Tp.Subversion.Subversion
 				When another 75 revisions committed to vcs
 					And plugin synchronized
 				Then 75 revisions should be created in TP"
-				.Execute(In.GlobalContext());
+				.Execute(In.Context<VcsPluginActionSteps>().And<ProcessNewRevisionOnlyFeature>());
 		}
 
 		[Test]

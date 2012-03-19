@@ -15,10 +15,16 @@ namespace Tp.SourceControl.Diff
 		private readonly List<DiffLineData> _rightPan = new List<DiffLineData>();
 
 		[DataMember]
+		public string LeftPanRevisionId { get; set; }
+
+		[DataMember]
 		public List<DiffLineData> LeftPan
 		{
 			get { return _leftPan; }
 		}
+
+		[DataMember]
+		public string RightPanRevisionId { get; set; }
 
 		[DataMember]
 		public List<DiffLineData> RightPan

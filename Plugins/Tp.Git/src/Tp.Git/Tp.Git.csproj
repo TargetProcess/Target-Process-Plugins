@@ -107,7 +107,6 @@
     <Compile Include="VersionControlSystem\GitCheckConnectionErrorResolver.cs" />
     <Compile Include="VersionControlSystem\GitRevisionId.cs" />
     <Compile Include="VersionControlSystem\GitRevisionIdComparer.cs" />
-    <Compile Include="VersionControlSystem\IGitVersionControlSystem.cs" />
     <Compile Include="VersionControlSystem\InvalidRevisionException.cs" />
     <Compile Include="VersionControlSystem\MockSystemReader.cs" />
     <Compile Include="VersionControlSystem\RevCommitExtensions.cs" />
@@ -154,12 +153,18 @@
     <Content Include="Mashups\Tests\testConfiguration.js" />
     <Content Include="Mashups\Tests\userMappingEditor.tests.js" />
     <Content Include="Mashups\Tests\userMappingLine.tests.js" />
+    <Content Include="Mashups\ViewDiff\RegisterMashup.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
       <Link>App.config</Link>
     </None>
     <None Include="Install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\ViewDiff\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="PluginSettings.config">

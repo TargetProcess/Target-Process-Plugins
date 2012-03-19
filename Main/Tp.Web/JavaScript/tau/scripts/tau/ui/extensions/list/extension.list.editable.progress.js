@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(a){return a.extend({name:"extension.list.editable.progress",category:"edit","bus afterRender":function(a){var b=a.data.element;b.addClass("tau-list-editable")}})})

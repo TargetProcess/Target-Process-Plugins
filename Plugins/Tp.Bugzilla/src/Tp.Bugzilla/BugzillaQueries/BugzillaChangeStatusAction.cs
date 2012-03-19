@@ -27,7 +27,7 @@ namespace Tp.Bugzilla.BugzillaQueries
 			_bugzillaService = ObjectFactory.GetInstance<IBugzillaService>();
 			_bugzillaInfoStorageRepository = ObjectFactory.GetInstance<IBugzillaInfoStorageRepository>();
 		}
-		
+
 		public string Value()
 		{
 			var resolution = GetResolution();
@@ -73,7 +73,9 @@ namespace Tp.Bugzilla.BugzillaQueries
 
 			return _bugzillaService.GetResolutions()
 				.SingleOrDefault(
-					resolution => _commentOnChangingState.IndexOf(resolution, StringComparison.InvariantCultureIgnoreCase) != -1);
+					resolution =>
+					_commentOnChangingState.IndexOf(resolution, StringComparison.InvariantCultureIgnoreCase) != -1
+					&& !string.IsNullOrEmpty(resolution));
 		}
 	}
 }

@@ -1,0 +1,1 @@
+define(["tau/store/typesClass"],function(a){return new a})

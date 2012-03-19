@@ -1,8 +1,9 @@
-﻿// 
+// 
 // Copyright (c) 2005-2010 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
+using System.Xml.Serialization;
 
 namespace Tp.Integration.Common
 {
@@ -34,26 +35,26 @@ namespace Tp.Integration.Common
 		/// </summary>
 		/// <value>The Message Uid ID.</value>
 		[PrimaryKey]
-		public int? MessageUidID { get; set; }
+		[XmlElement(Order = 3)]public int? MessageUidID { get; set; }
 
 
 		/// <summary>
 		/// Gets or sets the UID. The identity of the message
 		/// </summary>
 		/// <value>The UID.</value>
-		public String UID { get; set; }
+		[XmlElement(Order = 4)]public String UID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Mail Server. Mail server name
 		/// </summary>
 		/// <value>The Mail Server.</value>
-		public String MailServer { get; set; }
+		[XmlElement(Order = 5)]public String MailServer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Mail Login. Mail login
 		/// </summary>
 		/// <value>The Mail Login.</value>
-		public String MailLogin { get; set; }
+		[XmlElement(Order = 6)]public String MailLogin { get; set; }
 	}
 
 

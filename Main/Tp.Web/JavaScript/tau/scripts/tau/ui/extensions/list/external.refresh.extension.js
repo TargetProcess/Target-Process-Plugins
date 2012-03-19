@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base","tau/core/global.bus"],function(a,b){return a.extend({"bus afterInit":function(){var a=this;if(a.signedUp)return;a.signedUp=!0;var c=function(){a.bus.fire("refresh")};_.each(a.config.externalRefreshEvents,function(d){b.get().on(d,c,a)})},"bus destroy":function(){b.get().removeAllListeners(this)}})})

@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
+using System.Xml.Serialization;
 
 namespace Tp.Integration.Common
 {
@@ -16,6 +17,7 @@ namespace Tp.Integration.Common
 		/// Gets or sets the ID.
 		/// </summary>
 		/// <value>The ID.</value>
+		[XmlElement(Order = 0)]
 		public virtual int? ID { get; set; }
 
 		public override string ToString()

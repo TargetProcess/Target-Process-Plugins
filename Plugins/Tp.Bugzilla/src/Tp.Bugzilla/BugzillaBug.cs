@@ -11,6 +11,7 @@ using StructureMap;
 using Tp.BugTracking;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Bugzilla.Schemas;
+using Tp.Integration.Plugin.Common.Activity;
 using Tp.Plugin.Core.Attachments;
 
 namespace Tp.Bugzilla
@@ -102,27 +103,50 @@ namespace Tp.Bugzilla
 			return bug.long_descCollection;
 		}
 
-		private static List<LocalStoredAttachment> CreateAttachments(IEnumerable<attachment> attachments)
+		private List<LocalStoredAttachment> CreateAttachments(IEnumerable<attachment> attachments)
 		{
 			var storedAttachments = new List<LocalStoredAttachment>();
 
 			foreach (var attachment in attachments)
 			{
 				var attachmentFileName = GetAttachmentFileName(attachment);
-				byte[] data = Convert.FromBase64String(attachment.data.Value);
+				FileId fileId = null;
 
-				var fileId = AttachmentFolder.Save(new MemoryStream(data));
-				storedAttachments.Add(new LocalStoredAttachment
-				                      	{
-				                      		FileId = fileId,
-				                      		FileName = attachmentFileName,
-				                      		Description = attachment.desc,
-				                      		OwnerId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(attachment.attacher),
-				                      		CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(attachment.date)
-				                      	});
+				try
+				{
+					fileId = SaveAttachmentFile(attachment);
+
+					var localAttachment = new LocalStoredAttachment
+					{
+						FileId = fileId,
+						FileName = attachmentFileName,
+						Description = attachment.desc,
+						OwnerId = ObjectFactory.GetInstance<IUserMapper>().GetTpIdBy(attachment.attacher),
+						CreateDate = CreateDateConverter.ParseFromBugzillaLocalTime(attachment.date)
+					};
+
+					storedAttachments.Add(localAttachment);
+				}
+				catch (Exception ex)
+				{
+					ObjectFactory.GetInstance<IActivityLogger>().Error(
+						string.Format("Cannot import attachment. Bugzilla Bug ID: {1}; File name: {0}", attachmentFileName, bug_id), ex);
+
+					if (fileId != null && File.Exists(AttachmentFolder.GetAttachmentFileFullPath(fileId)))
+					{
+						AttachmentFolder.Delete(new[] {fileId});
+					}
+				}
 			}
 
 			return storedAttachments;
+		}
+
+		private static FileId SaveAttachmentFile(attachment attachment)
+		{
+			byte[] data = Convert.FromBase64String(attachment.data.Value);
+
+			return AttachmentFolder.Save(new MemoryStream(data));
 		}
 
 		private static string GetAttachmentFileName(attachment attachment)

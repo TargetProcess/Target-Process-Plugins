@@ -27,7 +27,7 @@ namespace Tp.TestRunImport.LegacyProfileConversion
 		protected abstract string SettingsXmlNode { get; }
 		protected abstract string PluginName { get; }
 
-		protected override void OnProfileMigrated(IStorageRepository storageRepository)
+		protected override void OnProfileMigrated(IStorageRepository storageRepository, PluginProfile legacyProfile)
 		{
 			if (TestResultFileLastModifyTimeUtc != DateTime.MinValue)
 			{

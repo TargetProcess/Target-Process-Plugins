@@ -67,6 +67,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
@@ -81,6 +84,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -96,12 +101,22 @@
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="DirectoryExtensions.cs" />
+    <Compile Include="IAuthentication.cs" />
+    <Compile Include="ITpLogManager.cs" />
+    <Compile Include="Linq\ClassFactory.cs" />
+    <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="EntityValidationException.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="INullable.cs" />
     <Compile Include="Lazy.cs" />
+    <Compile Include="Linq\DynamicClass.cs" />
+    <Compile Include="Linq\DynamicExpression.cs" />
+    <Compile Include="Linq\DynamicOrdering.cs" />
+    <Compile Include="Linq\DynamicProperty.cs" />
+    <Compile Include="Linq\DynamicQueryable.cs" />
+    <Compile Include="Linq\Signature.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="InvalidDateRangeException.cs" />
     <Compile Include="PathExtensions.cs" />

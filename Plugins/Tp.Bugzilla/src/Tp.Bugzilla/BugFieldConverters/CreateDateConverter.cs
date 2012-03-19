@@ -18,7 +18,16 @@ namespace Tp.Bugzilla.BugFieldConverters
 
 		public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
 		{
-			convertedBug.BugDto.CreateDate = ParseFromBugzillaLocalTime(thirdPartyBug.creation_ts);
+			//<= CurrentDate.Value ? dateTime : CurrentDate.Value;
+			var dateTime = ParseFromBugzillaLocalTime(thirdPartyBug.creation_ts);
+			var now = CurrentDate.Value;
+
+			if  (dateTime > now)
+			{
+				dateTime = now;
+			}
+
+			convertedBug.BugDto.CreateDate = dateTime;
 		}
 
 		public static DateTime Parse(string input)
@@ -263,6 +272,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 
 		public static DateTime ParseFromBugzillaLocalTime(string input)
 		{
+			//note: here we assume that mysql and server (where Bugzilla is installed) time are the same.
 			if (input == null)
 				throw new ArgumentNullException("input");
 
@@ -270,7 +280,7 @@ namespace Tp.Bugzilla.BugFieldConverters
 			var offset = GetOffset(input);
 			var dateTime = time.Subtract(offset).ToLocalTime();
 
-			return dateTime <= CurrentDate.Value ? dateTime : CurrentDate.Value;
+			return dateTime;
 		}
 
 		private static readonly string[] _formats =

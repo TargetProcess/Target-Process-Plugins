@@ -34,6 +34,62 @@ Ext.apply(Ext.form.NumberField.prototype, {
 	decimalSeparator: Sys.CultureInfo.CurrentCulture.numberFormat.CurrencyDecimalSeparator
 });
 
+if (Sys.Browser.agent == Sys.Browser.Safari) {
+	Sys.UI.DomElement.getLocation = function (element) {
+		/// <summary locid="M:J#Sys.UI.DomElement.getLocation" />
+		/// <param name="element" domElement="true"></param>
+		/// <returns type="Sys.UI.Point"></returns>
+		var e = Function._validateParams(arguments, [
+					{ name: "element", domElement: true }
+				]);
+		if (e) throw e;
+		if ((element.window && (element.window === element)) || element.nodeType === 9) return new Sys.UI.Point(0, 0);
+		var offsetX = 0;
+		var offsetY = 0;
+		var previous = null;
+		var previousStyle = null;
+		var currentStyle = null;
+		for (var parent = element; parent; previous = parent, previousStyle = currentStyle, parent = parent.offsetParent) {
+			var tagName = parent.tagName ? parent.tagName.toUpperCase() : null;
+			currentStyle = Sys.UI.DomElement._getCurrentStyle(parent);
+			if ((parent.offsetLeft || parent.offsetTop) &&
+						!((tagName === "BODY") &&
+							(!previousStyle || previousStyle.position !== "absolute"))) {
+				offsetX += parent.offsetLeft;
+				offsetY += parent.offsetTop;
+			}
+			if (previous !== null && currentStyle) {
+				if ((tagName !== "TABLE") && (tagName !== "TD") && (tagName !== "HTML")) {
+					offsetX += parseInt(currentStyle.borderLeftWidth) || 0;
+					offsetY += parseInt(currentStyle.borderTopWidth) || 0;
+				}
+				if (tagName === "TABLE" &&
+							(currentStyle.position === "relative" || currentStyle.position === "absolute")) {
+					offsetX += parseInt(currentStyle.marginLeft) || 0;
+					offsetY += parseInt(currentStyle.marginTop) || 0;
+				}
+			}
+		}
+		currentStyle = Sys.UI.DomElement._getCurrentStyle(element);
+		var elementPosition = currentStyle ? currentStyle.position : null;
+		if (!elementPosition || (elementPosition !== "absolute")) {
+			for (var parent = element.parentNode; parent; parent = parent.parentNode) {
+				tagName = parent.tagName ? parent.tagName.toUpperCase() : null;
+				if ((tagName !== "BODY") && (tagName !== "HTML") && (parent.scrollLeft || parent.scrollTop)) {
+					offsetX -= (parent.scrollLeft || 0);
+					offsetY -= (parent.scrollTop || 0);
+					currentStyle = Sys.UI.DomElement._getCurrentStyle(parent);
+					if (currentStyle) {
+						offsetX += parseInt(currentStyle.borderLeftWidth) || 0;
+						offsetY += parseInt(currentStyle.borderTopWidth) || 0;
+					}
+				}
+			}
+		}
+		return new Sys.UI.Point(offsetX, offsetY);
+	};
+}
+
 var Application = function () {
 	var type = new Ext.extend(Object, {
 		menuBootstrap: null,

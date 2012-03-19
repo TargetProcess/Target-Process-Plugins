@@ -131,9 +131,8 @@ namespace Tp.Bugzilla.ImportToTp
 			}
 			catch (Exception e)
 			{
-				_logger.ErrorFormat("Retrieving changed bugs failed", e);
+				_logger.Error("Retrieving changed bugs failed", e);
 				ids = new int[] {};
-
 				return false;
 			}
 		}

@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\..\..\Libs\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
     </Reference>
@@ -62,6 +65,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,6 +77,7 @@
   <ItemGroup>
     <Compile Include="BugzillaComment.cs" />
     <Compile Include="ConnectionValidators\ValidationErrorType.cs" />
+    <Compile Include="CustomCommand\ConvertProfileCommand.cs" />
     <Compile Include="CustomCommand\Dtos\BugzillaProperties.cs" />
     <Compile Include="CustomCommand\GetMappingCommand.cs" />
     <Compile Include="CustomCommand\GetSupportedVersionsCommand.cs" />
@@ -80,6 +85,11 @@
     <Compile Include="ImportToTp\ImportBugsChunkHandler.cs" />
     <Compile Include="BugFieldConverters\OwnerConverter.cs" />
     <Compile Include="BugzillaInfo.cs" />
+    <Compile Include="LegacyProfileConversion\ConvertLegacyProfileLocalCommand.cs" />
+    <Compile Include="LegacyProfileConversion\LegacyBugzillaProfileFields.cs" />
+    <Compile Include="LegacyProfileConversion\LegacyExternalDataConvertor.cs" />
+    <Compile Include="LegacyProfileConversion\LegacyMappingParser.cs" />
+    <Compile Include="LegacyProfileConversion\LegacyProfileConvertor.cs" />
     <Compile Include="Synchronizer\RoleChangedHandler.cs" />
     <Compile Include="BugzillaBug.cs" />
     <Compile Include="BugzillaBugInfo.cs" />
@@ -164,6 +174,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Mashups\Bugzilla View Details\BugzillaInfo.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\Legacy Profile Converter\Converter.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Mashups\ProfileEditor\BugzillaInitializer.js">
@@ -276,6 +289,9 @@
     <None Include="Mashups\Bugzilla View Details\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Mashups\Legacy Profile Converter\placeholders.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="PluginSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -319,6 +335,10 @@
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
       <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
       <Name>Tp.Integration.Plugin.UninstallUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
+      <Name>Tp.LegacyProfileConversion.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -60,7 +60,7 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			}
 			catch (Exception e)
 			{
-				_log.Error(e);
+				_log.Error(e.Message, e);
 			}
 		}
 	}

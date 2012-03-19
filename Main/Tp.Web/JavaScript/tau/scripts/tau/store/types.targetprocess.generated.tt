@@ -1,0 +1,187 @@
+﻿<#@ template hostSpecific="true" #>
+<#@ output extension=".js" #>
+<#@ include file="TpModel.ttinclude"  #>
+//TargetProcess types generated. File should not be modified
+define(["tau/store/types"], function(tauTypes) {
+	return [
+		{ name:"context" }
+<#
+	ProcessEntities(registerType);
+#>
+	];
+});
+<#+
+  	void registerType(XElement entity, string className, string baseClassName) {
+#>
+	,
+	{
+		name: '<#= this.FirstToLower(className) #>',
+		parent: <#=  string.IsNullOrEmpty(baseClassName) ? "null" : "'" + this.FirstToLower(baseClassName) + "'" #>,
+		resource: '<#= this.FirstToLower(this.Pluralize(className)) #>',
+		aliases: ['<#= className #>', '<#= this.FirstToLower(this.Pluralize(className)) #>', '<#= this.Pluralize(className) #>' ],
+		fields: [<#= this.getDefaultFields(entity) #>],
+		simpleFields: [<#= this.getFieldsSimple(entity) #>],
+		refs: {
+				<#+ _processRefs(entity); #>
+				}
+		
+	}
+	
+<#+
+	}
+
+string getDefaultFields(XElement entity) {
+	var list = this.getFieldsSimpleList(entity);
+	var defaultList = new List<string>();
+	
+	foreach(string field in list) {
+		if (field.IndexOf("name", 0, StringComparison.InvariantCultureIgnoreCase) >= 0) {
+			defaultList.Add(field);
+		}
+	}
+
+	if (!defaultList.Contains("'id'")) {
+		defaultList.Insert(0, "'id'");
+	}
+	
+	return string.Join(",", defaultList.ToArray());
+}
+
+	
+string getFieldsSimple(XElement entity) {
+	var list = this.getFieldsSimpleList(entity);
+	
+	if (!list.Contains("'id'")) {
+		list.Insert(0, "'id'");
+	}
+	
+	return string.Join(",", list.ToArray());
+}
+
+List<string> getFieldsSimpleList(XElement entity) {
+	List<string> fields = new List<string>();
+	
+	processElements(entity, "Attribute", delegate(XElement el) { 
+		fields.Add("'" + this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) + "'");
+	});
+
+	
+	processElements(entity, "NavigationAttribute", delegate(XElement el) { 
+		if (el.Attribute("Name").Value == "Changes" || el.Attribute("Name").Value == "Histories") 
+			return;
+			
+		if (el.Attribute("Multiplicity").Value != "Many") {
+			return;
+		}
+		
+		fields.Add("'" + this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) + "-count'");
+	});
+
+	return fields;
+}
+
+void _processRefs(XElement entity) {
+	List<XElement> fields = new List<XElement>();
+	List<string> dictionary = new List<string>();
+	
+	processElements(entity, "NavigationAttribute", delegate(XElement el) { 
+		var name = el.Attribute("Name").Value;
+		if (name != "Changes" && name != "Histories" && !dictionary.Contains(name)) {
+			dictionary.Add(name);
+			fields.Add(el);
+		}
+	});
+	
+	var index = 0;
+	
+	foreach(var el in fields) {
+		index ++;
+		var attribute = el.Attribute("Relationship");
+		var relationName = attribute != null ? attribute.Value : "";
+		var relationNode = entity.Document.Element(xmlns+"Model").Element(xmlns+"Relationships")
+			.Elements().FirstOrDefault(x=>x.Attribute("Name").Value==relationName);
+		
+		_writeRef(el, relationNode, fields.Count, index);
+	}
+}
+
+void _writeRef(XElement el, XElement relationNode, int length, int index) {
+	var isList = el.Attribute("Multiplicity").Value == "Many";
+	var relationName = relationNode != null ? relationNode.Attribute("Name").Value : "";
+	var relationProperty = "";
+	var multiplicity = "";
+	if (relationNode != null) {
+		if (isList) {
+			var end = relationNode.Element(xmlns+"Ends").Elements()
+				.FirstOrDefault(x=>x.Attribute("Multiplicity").Value=="One" || x.Attribute("Multiplicity").Value=="ZeroOrOne");
+			if (end != null) {
+				relationProperty = this.Normalize(this.FirstToLower(end.Attribute("Name").Value));
+				multiplicity = this.Normalize(this.FirstToLower(end.Attribute("Multiplicity").Value));
+			}
+		} else {
+			var end = relationNode.Element(xmlns+"Ends").Elements().FirstOrDefault(x=>x.Attribute("Multiplicity").Value=="Many");
+			if (end != null) {
+				relationProperty = this.Normalize(this.FirstToLower(end.Attribute("Name").Value));
+			}
+		}
+		
+	}
+	#>
+		"<#= this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) #>" : { <#= isList ? "list: true," : "" #> name: "<#= this.FirstToLower(Normalize(el.Attribute("Type"))) #>", multiplicity: '<#= multiplicity #>',  relationProperty: '<#= relationProperty #>' } <#= index != length ? "," : "" #> 
+	<#+
+}
+
+List<XElement> GetAttributesSet(XElement entity, string name) 
+{
+	List<XElement> list = new List<XElement>();
+	if (entity == null)
+		return list;
+	
+	var attributes = entity.Element(xmlns + "Attributes");
+	var attributeSet = attributes.Elements(xmlns + name);
+		
+	foreach(var attribute in attributeSet) 
+	{ 
+		if(IsIgnoredElement(attribute))
+			continue;
+		
+		list.Add(attribute);
+		
+	}
+
+	return list;
+
+}
+
+void processElements(XElement entity, string name, Action<XElement> action) {
+	
+	List<XElement> elements = this.GetAttributesSet(entity, name);
+
+	foreach(var element in elements) {
+		if (IsIgnoredElement(element)) {
+			continue;
+		}
+		action(element);
+	}
+
+	if (entity==null)
+		return;
+	var attribute = entity.Attribute("Base");
+	
+	
+	if (attribute != null){
+		var classNodes = entity.Parent.Elements();
+		var baseClassNode = classNodes.SingleOrDefault(x=>x.Attribute("Name").Value == attribute.Value);
+		this.processElements(baseClassNode, name, action);
+	}
+}	
+	
+
+void CreateNavigationProperty(XElement entity, string propertyName, string propertyType, bool isCollection)
+{
+	propertyType = GetFormattedClassName(propertyType, isCollection);
+	#>	"<#= this.FirstToLower(propertyName) #>": { name: "<#= propertyType #>" },
+	<#+
+}
+	
+#>

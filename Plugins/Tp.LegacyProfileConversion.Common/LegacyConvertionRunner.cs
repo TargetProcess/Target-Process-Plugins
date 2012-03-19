@@ -5,10 +5,9 @@
 
 using System;
 using System.Data.SqlClient;
-using System.Linq;
 using StructureMap;
+using StructureMap.Configuration.DSL;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
-using Tp.Integration.Plugin.Common.StructureMap;
 using Tp.LegacyProfileConvertsion.Common.StructureMap;
 
 namespace Tp.LegacyProfileConvertsion.Common
@@ -18,21 +17,25 @@ namespace Tp.LegacyProfileConvertsion.Common
 	{
 		public void Execute(string[] args)
 		{
+			InitRunner(new LegacyProfileConversionRegistry(), args);
+
+			ObjectFactory.GetInstance<TLegacyProfileConvertor>().Execute();
+		}
+
+		public void InitRunner(Registry registry, string[] args)
+		{
 			var options = new ConvertorArgs(args);
 			TestDBConnection(options.PluginConnectionString);
 			TestDBConnection(options.TpConnectionString);
 
-
 			ObjectFactory.Configure(x =>
 			                        	{
-			                        		x.AddRegistry<LegacyProfileConversionRegistry>();
+			                        		x.AddRegistry(registry);
 			                        		x.For<IConvertorArgs>().Use(options);
 			                        	});
 
 			ObjectFactory.EjectAllInstancesOf<IDatabaseConfiguration>();
 			ObjectFactory.Configure(x => x.For<IDatabaseConfiguration>().Use(options));
-
-			ObjectFactory.GetInstance<TLegacyProfileConvertor>().Execute();
 		}
 
 

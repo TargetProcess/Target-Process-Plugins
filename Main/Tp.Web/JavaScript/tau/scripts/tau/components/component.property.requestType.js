@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(a){return{create:function(b){return b.propertyName="requestType",b.editorType="",b.alignElementSelector=".property-text",b.showEmptyDataMessage=!0,b.editorComponentConfig={type:"state-list",listType:"requestType",maxHeight:200,showReset:!1},a.create(b)}}})

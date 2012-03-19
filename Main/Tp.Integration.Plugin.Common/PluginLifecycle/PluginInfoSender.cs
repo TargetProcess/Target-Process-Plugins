@@ -12,7 +12,6 @@ using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Mashup;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
@@ -52,7 +51,7 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 			get { return _context; }
 		}
 
-		public void SendInfoMessages()
+		public virtual void SendInfoMessages()
 		{
 			SendPluginInfoMessage();
 			SendPluginAccountMessages();

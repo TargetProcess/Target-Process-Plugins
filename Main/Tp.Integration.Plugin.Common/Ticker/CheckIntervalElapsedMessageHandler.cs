@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Linq;
 using NServiceBus;
 using StructureMap;
@@ -11,6 +12,7 @@ using Tp.Integration.Messages.ServiceBus;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
+using log4net;
 
 namespace Tp.Integration.Plugin.Common.Ticker
 {
@@ -31,26 +33,35 @@ namespace Tp.Integration.Plugin.Common.Ticker
 		public void Handle(CheckIntervalElapsedMessage message)
 		{
 			var accountProfiles = _collection.SelectMany(acc => acc.Profiles, (acc, profile) => new
-			                                                                              	{
-			                                                                              		Account = acc, 
-																								Profile = profile
-			                                                                              	});
+			                                                                                    	{
+			                                                                                    		Account = acc,
+			                                                                                    		Profile = profile
+			                                                                                    	});
 			foreach (var accountProfile in accountProfiles)
 			{
-				var lastSyncDate = accountProfile.Profile.Get<LastSyncDate>().FirstOrDefault();
-				if (IsTimeToSyncronize(accountProfile.Profile, lastSyncDate) && accountProfile.Profile.Initialized)
+				try
 				{
-					var profile = accountProfile.Profile;
-					_bus.SetOut(profile.ConvertToPluginProfile().Name);
-					_bus.SetOut(accountProfile.Account.Name);
-					
-					_bus.SendLocal(lastSyncDate != null
-					               	? new TickMessage(lastSyncDate.Value)
-					               	: new TickMessage(null));
+					var lastSyncDate = accountProfile.Profile.Get<LastSyncDate>().FirstOrDefault();
+					if (IsTimeToSyncronize(accountProfile.Profile, lastSyncDate) && accountProfile.Profile.Initialized)
+					{
+						var profile = accountProfile.Profile;
+						_bus.SetOut(profile.ConvertToPluginProfile().Name);
+						_bus.SetOut(accountProfile.Account.Name);
 
-					ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType()).Info("TickMesage sent");
+						_bus.SendLocal(lastSyncDate != null
+						               	? new TickMessage(lastSyncDate.Value)
+						               	: new TickMessage(null));
 
-					profile.Get<LastSyncDate>().ReplaceWith(new LastSyncDate(CurrentDate.Value));
+						ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType()).Info("TickMesage sent");
+
+						profile.Get<LastSyncDate>().ReplaceWith(new LastSyncDate(CurrentDate.Value));
+					}
+				}
+				catch (Exception e)
+				{
+					LogManager.GetLogger(GetType()).ErrorFormat(
+						"Failed to send tick message for account '{0}' profile '{1}'. Reason : '{2}'", accountProfile.Account.Name,
+						accountProfile.Profile.Name, e);
 				}
 			}
 		}

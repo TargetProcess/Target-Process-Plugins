@@ -39,7 +39,6 @@ namespace Tp.Git.StructureMap
 			SystemReader.SetInstance(mockSystemReader);
 
 			For<IVersionControlSystem>().Use<GitVersionControlSystem>();
-			Forward<IVersionControlSystem, IGitVersionControlSystem>();
 		}
 
 		protected override void ConfigureRevisionStorage()

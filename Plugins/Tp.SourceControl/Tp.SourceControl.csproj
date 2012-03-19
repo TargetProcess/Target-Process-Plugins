@@ -58,6 +58,7 @@
     <Compile Include="Commands\FileViewDiffArgs.cs" />
     <Compile Include="Commands\GetImportedRevisionsCommand.cs" />
     <Compile Include="Commands\ICheckConnectionErrorResolver.cs" />
+    <Compile Include="Comments\DSL\NodeParser.cs" />
     <Compile Include="VersionControlSystem\VersionControlSystemFactory.cs" />
     <Compile Include="VersionControlSystem\IVersionControlSystemFactory.cs" />
     <Compile Include="Commands\ViewDiffCommand.cs" />

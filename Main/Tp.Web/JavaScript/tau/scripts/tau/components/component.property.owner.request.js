@@ -1,0 +1,1 @@
+define(["tau/components/component.property.owner.project"],function(a){return a})

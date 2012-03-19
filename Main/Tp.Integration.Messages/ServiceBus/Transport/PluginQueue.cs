@@ -4,6 +4,7 @@
 // 
 
 using System;
+using System.Diagnostics;
 using System.Messaging;
 using NServiceBus.Utils;
 
@@ -63,6 +64,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 			get { return _queue.FormatName; }
 		}
 
+		[DebuggerNonUserCode] // so that exceptions don't interfere with debugging.
 		public void Peek(TimeSpan fromSeconds)
 		{
 			_queue.Peek(fromSeconds);

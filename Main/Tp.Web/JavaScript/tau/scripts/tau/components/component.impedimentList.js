@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.list.baseInfo","tau/models/baseInfoList/extension.model.additionalInfoImpedimentFilter"],function(a,b,c){return{create:function(a){return a.typeName="impediment",a.propertyName="impediments",b.create(a,{extensions:[c]})}}})
+define(["Underscore","tau/components/component.list.baseInfo","tau/models/baseInfoList/extension.model.additionalInfoImpedimentFilter"],function(_,a,b){return{create:function(c){return c.typeName="impediment",c.propertyName="impediments",a.create(c,{extensions:[b]})}}})

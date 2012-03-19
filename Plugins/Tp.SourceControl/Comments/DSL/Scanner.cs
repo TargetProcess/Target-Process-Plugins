@@ -95,7 +95,7 @@ namespace TinyPG
             Patterns.Add(TokenType.NUMBER, regex);
             Tokens.Add(TokenType.NUMBER);
 
-            regex = new Regex(@"\d+(\.\d+)?", RegexOptions.Compiled);
+            regex = new Regex(@"\d+([\.,]\d+)?", RegexOptions.Compiled);
             Patterns.Add(TokenType.DECIMAL, regex);
             Tokens.Add(TokenType.DECIMAL);
 

@@ -1,0 +1,1 @@
+define(["Underscore"],function(_){var a=function(a,b){var c=this,d=a.data.obj;for(var e=0;e<b.fields.length;e++){var f=b.fields[e];_.mergeFields(a.data.cmd.config.fields,[f])}};return{"auto-include-before-remove":function(b){var c=this;if(b.fields.length===0)return;var d=function(d){a.call(c,d,b)};c.store.on({eventName:"beforeRemove",type:b.type,listener:c},d)}}})

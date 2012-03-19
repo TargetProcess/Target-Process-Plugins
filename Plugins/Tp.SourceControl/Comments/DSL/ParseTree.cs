@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 using StructureMap;
@@ -264,7 +263,7 @@ namespace TinyPG
         	i = 0;
         	while (node[TokenType.PostTimeClause, i] != null)
         	{
-        		childActions.Add(node[TokenType.PostTimeClause, 0] as IAction);
+        		childActions.Add(node[TokenType.PostTimeClause, i] as IAction);
         		i++;
         	}
         	i = 0;
@@ -290,7 +289,7 @@ namespace TinyPG
 
 		public virtual object EvalEntityIdClause(ParseNode node)
 		{
-			            return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32(node[TokenType.NUMBER, 0], CultureInfo.InvariantCulture));
+			            return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(NodeParser.GetEntityId(node[TokenType.NUMBER, 0]));
 		}
 
 		public virtual object EvalPostTimeClause(ParseNode node)
@@ -298,14 +297,14 @@ namespace TinyPG
 			            decimal? timeLeft = null;
         	if (node[TokenType.DECIMAL, 1] != null)
         	{
-        		timeLeft = Convert.ToDecimal(node[TokenType.DECIMAL, 1], CultureInfo.InvariantCulture);
+        		timeLeft = NodeParser.GetTime(node[TokenType.DECIMAL, 1]);
         	}
-        	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal(node[TokenType.DECIMAL, 0], CultureInfo.InvariantCulture), timeLeft);
+        	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(NodeParser.GetTime(node[TokenType.DECIMAL, 0]), timeLeft);
 		}
 
 		public virtual object EvalChangeStatusClause(ParseNode node)
 		{
-			            return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(Convert.ToString(node[TokenType.ANY_TEXT, 0]).Trim().Trim(','));
+			            return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(NodeParser.GetStatus(node[TokenType.ANY_TEXT, 0]));
 		}
 
 		public virtual object EvalPostCommentClause(ParseNode node)
@@ -314,7 +313,7 @@ namespace TinyPG
         	StringBuilder result = new StringBuilder();
         	while (node[TokenType.ANY_TEXT, i] != null)
         	{
-        		result.AppendLine(Convert.ToString(node[TokenType.ANY_TEXT, i]).Trim());
+        		result.AppendLine(NodeParser.GetCommentSegment(node[TokenType.ANY_TEXT, i]));
         		i++;
         	}
         	if(result.Length > Environment.NewLine.Length)

@@ -1,1 +1,1 @@
-define(["Underscore","tests/components/description/component.description.tests","tau/components/component.success","tests/common/testData"],function(a,b,c,d){return{run:function(){var e=a.clone(d.description),f="success";e[f]=e.description,b.generateRichTextFieldTest(f,e,c)}}})
+define(["Underscore","tests/components/description/component.description.tests","tau/components/component.success","tests/common/testData"],function(_,a,b,c){return{run:function(){var d=_.clone(c.description),e="success";d[e]=d.description,a.generateRichTextFieldTest(e,d,b)}}})

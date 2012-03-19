@@ -24,7 +24,7 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		{
 		}
 
-		protected override void OnProfileMigrated(IStorageRepository storageRepository)
+		protected override void OnProfileMigrated(IStorageRepository storageRepository, Project[] legacyProfile)
 		{
 			MigrateUsers(storageRepository);
 			MigrateUids(storageRepository);

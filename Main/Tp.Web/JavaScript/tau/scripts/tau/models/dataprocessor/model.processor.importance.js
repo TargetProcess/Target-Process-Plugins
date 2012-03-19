@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/class"],function(a,b){var c=b.extend({init:function(a,b){this.min=a,this.max=b},getKind:function(a){var b="medium";return a==this.min?b="high":a==this.max&&(b="low"),b}});return c})
+define(["Underscore","tau/core/class"],function(_,a){var b=a.extend({init:function(a,b){this.min=a,this.max=b},getKind:function(a){var b="medium";return a==this.min?b="high":a==this.max&&(b="low"),b}});return b})

@@ -28,7 +28,7 @@ namespace Tp.Bugzilla.Tests.Integration
 					TransportMock.CreateWithoutStructureMapClear(typeof (BugzillaProfile).Assembly)));
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldChangeAssignment()
 		{
 			@"
@@ -61,7 +61,7 @@ namespace Tp.Bugzilla.Tests.Integration
 				.Execute();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldCreateComment()
 		{
 			@"
@@ -83,7 +83,7 @@ namespace Tp.Bugzilla.Tests.Integration
 				.Execute();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldCreateCommentForInvalidOwner()
 		{
 			@"
@@ -100,10 +100,10 @@ namespace Tp.Bugzilla.Tests.Integration
 			Context.CreateDefaultRolesIfNecessary();
 			Context.AddProfileWithDefaultRolesMapping(1, new BugzillaProfile
 			                                             	{
-			                                             		Url = "http://new-bugzilla/bugzilla363",
-			                                             		Login = "bugzilla@targetprocess.com",
-			                                             		Password = "bugzillaadmin",
-			                                             		SavedSearches = "New",
+																Url = BugzillaTestConstants.Url,
+																Login = BugzillaTestConstants.Login,
+																Password = BugzillaTestConstants.Password,
+																SavedSearches = BugzillaTestConstants.Queries,
 			                                             		Project = 1
 			                                             	});
 		}

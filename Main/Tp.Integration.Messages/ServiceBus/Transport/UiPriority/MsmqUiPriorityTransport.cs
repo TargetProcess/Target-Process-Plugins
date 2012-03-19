@@ -626,7 +626,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			}
 		}
 
-		//[DebuggerNonUserCode] // so that exceptions don't interfere with debugging.
+		[DebuggerNonUserCode] // so that exceptions don't interfere with debugging.
 		private bool MessageInQueueInternal(IPluginQueue queue, int waitInterval)
 		{
 			try

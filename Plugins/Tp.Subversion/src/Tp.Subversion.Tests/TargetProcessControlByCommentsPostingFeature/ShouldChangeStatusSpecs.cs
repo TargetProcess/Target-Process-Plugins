@@ -59,7 +59,21 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		}
 
 		[Test]
-		public void ShouldChangeStatusWhenExplicitCommentSpecifiedAndNoExplicitCommentProvided()
+		public void ShouldChangeStatusWhenExplicitCommentSpecifiedAndCommentProvided1()
+		{
+			@"Given tp user 'tpuser' with id 5
+					And vcs user 'svnuser' mapped as 'tpuser'
+					And vcs commit is: {Id:1, Comment:""#123 status:fixed, comment:bla-bla comment"", Author:""svnuser""}
+				When plugin started up
+				Then entity 123 status should be changed to 'fixed' with comment 'bla-bla comment' by the 'tpuser'
+					And no additional comments should be posted"
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldChangeStatusSpecs>().And
+						<ShouldPostCommentSpecs>().And<UserMappingFeatureActionSteps>());
+		}
+
+		[Test]
+		public void ShouldChangeStatusWhenImplicitCommentSpecifiedAndNoExplicitCommentProvided()
 		{
 			@"Given tp user 'tpuser' with id 5
 					And vcs user 'svnuser' mapped as 'tpuser'

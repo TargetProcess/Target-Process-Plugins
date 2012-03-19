@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
@@ -35,7 +36,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
 		}
-
+		
 		[Test]
 		public void ShouldUpdateBugzillaBugStateByMapping()
 		{
@@ -207,7 +208,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Given(@"bugzilla contains bug resolutions : (?<resolutions>([^,]+,?\s*)+)")]
 		public void InitBugzillaResolutions(string[] resolutions)
 		{
-			ObjectFactory.GetInstance<BugzillaServiceMock>().Resolutions.AddRange(resolutions);
+			ObjectFactory.GetInstance<BugzillaServiceMock>().Resolutions.AddRange(new List<string>(resolutions){""});
 		}
 
 		[Given("bug '$bugName' description was updated in TargetProcess to '$bugDescription'")]

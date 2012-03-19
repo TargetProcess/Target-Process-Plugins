@@ -1,4 +1,4 @@
-#!perl
+#!/usr/bin/perl
 
 use CGI::Carp qw(fatalsToBrowser);
 use lib qw(.);
@@ -21,174 +21,189 @@ my $user = Bugzilla->login(LOGIN_REQUIRED);
 my $cgi = Bugzilla->cgi;
 my $bugsListXmlTemplate = 'tp_bugsListXml';
 my $scriptVersionXmlTemplate = 'tp_scriptVersionXml';
-my $scriptVersion = "2.0.0";
+my $scriptVersion = "2.1.0";
+my $supportedBugzillaVersion = "3.4";
 
 # get_bugs
 # get_bug_ids
 
 my $cmd = $cgi->param("cmd");
 
-if ($cmd eq 'get_bugs')
+if ($cmd eq 'check')
 {
-	get_bugs();
+    check();
 }
-elsif ($cmd eq 'get_bug_ids')
+elsif (substr($constants.BUGZILLA_VERSION, 0, 3) eq $supportedBugzillaVersion)
 {
-	get_bug_ids();
-}
-elsif ($cmd eq 'check')
-{
-	check();
-}
-elsif ($cmd eq 'change_status')
-{
-	my $error_mode_cache = Bugzilla->error_mode;
-        Bugzilla->error_mode(ERROR_MODE_DIE);
-        eval {
-		change_status();
-             };
-	Bugzilla->error_mode($error_mode_cache);
-        if ($@) {
-        	print $@;
-                exit;
-	}
-}
-elsif($cmd eq 'add_comment')
-{
-	add_comment();
-}
-elsif($cmd eq 'assign_user')
-{
-	assign_user();
-}
-elsif($cmd eq 'get_timezone')
-{
-	get_timezone();
+    print $cgi->header('text');
+    print "BUGZILLA VERSION: " . $constants.BUGZILLA_VERSION . "\n";
+    print "SUPPORTED BUGZILLA VERSION: " . $supportedBugzillaVersion . "\n";
+    print "SCRIPT VERSION: " . $scriptVersion . "\n";
+
+    if ($cmd eq 'get_bugs')
+    {
+        get_bugs();
+    }
+    elsif ($cmd eq 'get_timezone')
+    {
+        get_timezone();
+    }
+    elsif ($cmd eq 'get_bug_ids')
+    {
+        get_bug_ids();
+    }
+    elsif ($cmd eq 'change_status')
+    {
+        my $error_mode_cache = Bugzilla->error_mode;
+            Bugzilla->error_mode(ERROR_MODE_DIE);
+            eval {
+            change_status();
+                 };
+        Bugzilla->error_mode($error_mode_cache);
+            if ($@) {
+                print $@;
+                    exit;
+        }
+    }
+    elsif($cmd eq 'add_comment')
+    {
+        add_comment();
+    }
+    elsif($cmd eq 'assign_user')
+    {
+        assign_user();
+    }
+    else
+    {
+        print $cgi->header('text');
+        print "ERROR: Ivalid command '".$cmd."'";
+    }
 }
 else
 {
-	print $cgi->header('text');
-	print "Ivalid command '".$cmd."'";
+    print $cgi->header('text');
+    print "ERROR: Bugzilla version '" . $constants.BUGZILLA_VERSION . "' is not supported by 'tp2.cgi'. Please update 'tp2.cgi' and try again.";
 }
+
 
 sub get_timezone
 {
-	print $cgi->header('text');
-	
-	my $dbh = Bugzilla->dbh;
-	my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(TIMESTAMP(NOW()),  UTC_TIMESTAMP())', undef);
-	
-	print $hours;
+    print $cgi->header('text');
+    
+    my $dbh = Bugzilla->dbh;
+    my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(TIMESTAMP(NOW()),  UTC_TIMESTAMP())', undef);
+    
+    print $hours;
 }
 
 sub add_comment
 {
-	print $cgi->header('text');
-	
-	my $bugId = $cgi->param("bugid");
-		
-	my $bug = new Bugzilla::Bug($bugId);
-	if ( ! defined($bug) || $bug->bug_id ne $bugId)
-	{
-		print "Bug ID=".$bugId." not found";
-		exit;
-	}		
-	
-	my $comment_text = decode_base64($cgi->param("comment_text"));
-	
-	my $owner = $cgi->param('owner');
-	my $date = $cgi->param('date') =~ m/^([Z0-9\- :]+)$/ ? $1 : die "Invalid date: ".$cgi->param('date');	
-	
-	my $ownerid = 0;
-	my $dbh = Bugzilla->dbh;
-	
-	if ($owner eq '')
-	{
-		$ownerid = $user->id;		
-		$comment_text = $comment_text."\n\rThis comment was added from TargetProcess";
-	}
-	else
-	{
-		$owner = $owner =~ m/^([a-zA-Z0-9\._@]+)$/ ? $1 : die "Invalid owner: ".$cgi->param('owner');		
-	
-		my $userids = $dbh->selectcol_arrayref("SELECT userid FROM profiles WHERE login_name = ?", undef, $owner);
-		
-		if(@$userids < 1)
-		{		
-			$ownerid = $user->id;
-			$comment_text = $comment_text."\n\rThis comment was added from TargetProcess by ".$owner;
-		}
-		else
-		{
-			$ownerid = @$userids[0];		
-		}
-	}
-	
-	$dbh->do("INSERT INTO longdescs (bug_id, who, thetext, bug_when)
+    print $cgi->header('text');
+    
+    my $bugId = $cgi->param("bugid");
+        
+    my $bug = new Bugzilla::Bug($bugId);
+    if ( ! defined($bug) || $bug->bug_id ne $bugId)
+    {
+        print "Bug ID=".$bugId." not found";
+        exit;
+    }		
+    
+    my $comment_text = decode_base64($cgi->param("comment_text"));
+    
+    my $owner = $cgi->param('owner');
+    my $date = $cgi->param('date') =~ m/^([Z0-9\- :]+)$/ ? $1 : die "Invalid date: ".$cgi->param('date');	
+    
+    my $ownerid = 0;
+    my $dbh = Bugzilla->dbh;
+    
+    if ($owner eq '')
+    {
+        $ownerid = $user->id;		
+        $comment_text = $comment_text."\n\rThis comment was added from TargetProcess";
+    }
+    else
+    {
+        $owner = $owner =~ m/^([a-zA-Z0-9\._@]+)$/ ? $1 : die "Invalid owner: ".$cgi->param('owner');		
+    
+        my $userids = $dbh->selectcol_arrayref("SELECT userid FROM profiles WHERE login_name = ?", undef, $owner);
+        
+        if(@$userids < 1)
+        {		
+            $ownerid = $user->id;
+            $comment_text = $comment_text."\n\rThis comment was added from TargetProcess by ".$owner;
+        }
+        else
+        {
+            $ownerid = @$userids[0];		
+        }
+    }
+    
+    $dbh->do("INSERT INTO longdescs (bug_id, who, thetext, bug_when)
                        VALUES (?,?,?,?)", undef,
                  $bug->id, $ownerid, $comment_text, $date);
-				 
-	$bug->{added_comments} = [];
-	$bug->update();
-	
-	print 'OK';
+                 
+    $bug->{added_comments} = [];
+    $bug->update();
+    
+    print 'OK';
 }
 
 sub assign_user
 {
-	print $cgi->header('text');
-	
-	my $bugId = $cgi->param("bugid");	
-	my $localUser = $cgi->param("user");
-	
-	my $bug = new Bugzilla::Bug($bugId);
-	if ( ! defined($bug) || $bug->bug_id ne $bugId)
-	{
-		print "Bug ID=".$bugId." not found";
-		exit;
-	}
-	
-	if ($localUser eq '')
-	{
-		$localUser = $user;
-	}
-	
-	$bug->set_assigned_to($localUser);
-	$bug->update();
-	
-	print 'OK';
+    print $cgi->header('text');
+    
+    my $bugId = $cgi->param("bugid");	
+    my $localUser = $cgi->param("user");
+    
+    my $bug = new Bugzilla::Bug($bugId);
+    if ( ! defined($bug) || $bug->bug_id ne $bugId)
+    {
+        print "Bug ID=".$bugId." not found";
+        exit;
+    }
+    
+    if ($localUser eq '')
+    {
+        $localUser = $user;
+    }
+    
+    $bug->set_assigned_to($localUser);
+    $bug->update();
+    
+    print 'OK';
 }
 
 
 sub change_status
 {
 
-	print $cgi->header('text');
+    print $cgi->header('text');
 
-	my $id = $cgi->param('id');
+    my $id = $cgi->param('id');
 
-	#ValidateBugID($id);
+    #ValidateBugID($id);
 
-	my $bug = new Bugzilla::Bug($id);
-	if ( ! defined($bug) || $bug->bug_id ne $id)
-	{
-		print "Bug ID=".$id." not found";
-		exit;
-	}
+    my $bug = new Bugzilla::Bug($id);
+    if ( ! defined($bug) || $bug->bug_id ne $id)
+    {
+        print "Bug ID=".$id." not found";
+        exit;
+    }
 
-	$cgi->param('resolution') || $cgi->param('resolution', 'FIXED');
-	#$cgi->param('resolution', uc($cgi->param('resolution')));
+    $cgi->param('resolution') || $cgi->param('resolution', 'FIXED');
+    #$cgi->param('resolution', uc($cgi->param('resolution')));
 
-	check_resolution();
+    check_resolution();
 
-	$bug->set_status(scalar $cgi->param('status'),{
-				resolution => scalar $cgi->param('resolution'),
-				dupe_of => scalar $cgi->param('dup_id')
-				}
-			);
-	$bug->update();
+    $bug->set_status(scalar $cgi->param('status'),{
+                resolution => scalar $cgi->param('resolution'),
+                dupe_of => scalar $cgi->param('dup_id')
+                }
+            );
+    $bug->update();
 
-	print 'OK';
+    print 'OK';
 }
 
 sub check_resolution
@@ -207,8 +222,8 @@ sub check_resolution
     }
     if (!$found)
     {
-		print "Resolution '".$resolution."' not found";
-		exit;
+        print "Resolution '".$resolution."' not found";
+        exit;
     }
     #check_field('resolution', scalar $cgi->param('resolution'),
     #            Bugzilla::Bug->settable_resolutions);
@@ -224,12 +239,12 @@ sub check_resolution
                 $dependenciesCount = $dependencies[0]->{'dependencies'};
                 print "Can't set resolution to '$resolution'. Bugzilla Bug#$bugId still has $dependenciesCount ";
                 if ($dependenciesCount == 1)     {
-			print "dependency.";
+            print "dependency.";
                 }
                 else{
-  			print "dependencies.";
+            print "dependencies.";
                 }
-		exit;
+        exit;
         }
     }
 }
@@ -237,24 +252,24 @@ sub check_resolution
 sub check
 {
 
-	if ($user && $user->login())
-	{
+    if ($user && $user->login())
+    {
              print $cgi->header('xml');
              my $template = Bugzilla->template;
              addScriptVersionTemplate($template);
 
 
-	     my $vars = {};
-	     foreach my $id ($cgi->param('id')) {
-		my @ids = split(/,/, $id);
-		foreach (@ids) {
-		    my $bug = new Bugzilla::Bug($_);
-		    if (!$bug->{error} && !$user->can_see_bug($bug->bug_id)) {
-		        $bug->{error} = 'NotPermitted';
-		    }
-		    push(@bugs, $bug);
-		}
-	     }
+         my $vars = {};
+         foreach my $id ($cgi->param('id')) {
+        my @ids = split(/,/, $id);
+        foreach (@ids) {
+            my $bug = new Bugzilla::Bug($_);
+            if (!$bug->{error} && !$user->can_see_bug($bug->bug_id)) {
+                $bug->{error} = 'NotPermitted';
+            }
+            push(@bugs, $bug);
+        }
+         }
 
              eval {
                my @customFields = get_custom_field_names();
@@ -263,6 +278,10 @@ sub check
 
              eval {
                $vars->{'scriptVersion'}  = $scriptVersion;
+             };
+
+             eval {
+               $vars->{'supportedBugzillaVersion'} = $supportedBugzillaVersion;
              };
 
              eval {
@@ -281,13 +300,13 @@ sub check
                my $fieldvalues = Bugzilla->dbh->selectall_arrayref("SELECT value AS name"
                                       . "  FROM resolution ORDER BY sortkey",
                                         {Slice =>{}});
-	       $vars->{'resolutions'} = $fieldvalues;
+           $vars->{'resolutions'} = $fieldvalues;
              };
 
-	     $vars->{'timezone'} = $user->timezone->name;
+         $vars->{'timezone'} = $user->timezone->name;
 
              $template->process($scriptVersionXmlTemplate , $vars) || die $template->error();
-	}
+    }
 }
 
 sub get_custom_field_names {
@@ -300,7 +319,7 @@ sub get_custom_field_names {
         my $field = $customField->{'name'};
         if ($customField->{'type'} == FIELD_TYPE_SINGLE_SELECT ||
            $customField->{'type'} == FIELD_TYPE_MULTI_SELECT){
-           	my $fieldvalues = Bugzilla->dbh->selectall_arrayref("SELECT value AS name, sortkey"
+            my $fieldvalues = Bugzilla->dbh->selectall_arrayref("SELECT value AS name, sortkey"
                                       . "  FROM $field ORDER BY sortkey, value",
                                         {Slice =>{}});
            $customField->{'legals'} = $fieldvalues;
@@ -311,73 +330,73 @@ sub get_custom_field_names {
 
 sub get_bugs
 {
-	my $template = Bugzilla->template;
-	addXmlTemplate($template);
+    my $template = Bugzilla->template;
+    addXmlTemplate($template);
 
-	print $cgi->header('xml');
+    print $cgi->header('xml');
 
-	my $vars = {};
-	foreach my $id ($cgi->param('id')) {
-		my @ids = split(/,/, $id);
-		foreach (@ids) {
-		    my $bug = new Bugzilla::Bug($_);
-		    if (!$bug->{error} && !$user->can_see_bug($bug->bug_id)) {
-		        $bug->{error} = 'NotPermitted';
-		    }
-		    push(@bugs, $bug);
-		}
-	}
-	$vars->{'bugs'} = \@bugs;
-	my @bugids = map {$_->bug_id} @bugs;
-	$vars->{'bugids'} = join(", ", @bugids);
+    my $vars = {};
+    foreach my $id ($cgi->param('id')) {
+        my @ids = split(/,/, $id);
+        foreach (@ids) {
+            my $bug = new Bugzilla::Bug($_);
+            if (!$bug->{error} && !$user->can_see_bug($bug->bug_id)) {
+                $bug->{error} = 'NotPermitted';
+            }
+            push(@bugs, $bug);
+        }
+    }
+    $vars->{'bugs'} = \@bugs;
+    my @bugids = map {$_->bug_id} @bugs;
+    $vars->{'bugids'} = join(", ", @bugids);
 
-	my @fieldlist = (Bugzilla::Bug->fields, 'group', 'long_desc', 'attachment', 'attachmentdata');
-	foreach (@fieldlist) {
-	    $displayfields{$_} = 1;
-	}
+    my @fieldlist = (Bugzilla::Bug->fields, 'group', 'long_desc', 'attachment', 'attachmentdata');
+    foreach (@fieldlist) {
+        $displayfields{$_} = 1;
+    }
 
-	$vars->{'displayfields'} = \%displayfields;
+    $vars->{'displayfields'} = \%displayfields;
         my @customFields = get_custom_field_names();
 #        print Dumper(@customFields);
 #        my $field = $vars->{'field'}->name;
 
-	$vars->{'custom_field_names'} = \@customFields;
-	$template->process($bugsListXmlTemplate, $vars) || die $template->error();
+    $vars->{'custom_field_names'} = \@customFields;
+    $template->process($bugsListXmlTemplate, $vars) || die $template->error();
 }
 
 sub get_bug_ids
 {
-	print $cgi->header('text');
+    print $cgi->header('text');
 
-	my $name = $cgi->param("name");
-	my $date = $cgi->param("date");
+    my $name = $cgi->param("name");
+    my $date = $cgi->param("date");
 
-	my @missingQueries = ();
-	my @bugIds = ();
-	my @subqueries = split(/,/, $name);
+    my @missingQueries = ();
+    my @bugIds = ();
+    my @subqueries = split(/,/, $name);
         my @args = ($cgi->param("name"));
         my $dbh = Bugzilla->dbh;
-	foreach my $queryName (@subqueries) {
-		my $query = findQuery($queryName);
+    foreach my $queryName (@subqueries) {
+        my $query = findQuery($queryName);
 
-		if ($query)
-		{
+        if ($query)
+        {
                         my $params =  new Bugzilla::CGI($query->url);
-			if ($date) {
-				my $fromdate = $params->param("chfieldfrom");
-				if($fromdate){
-					my $t1 = str2time($fromdate);
-					my $t2 = str2time($date);
-					if($t1 > $t2){
-						$date = $fromdate;
-					}
-				}
-				$params->param("chfieldfrom", $date);
-				$params->param("chfieldto", "Now");
-			}
+            if ($date) {
+                my $fromdate = $params->param("chfieldfrom");
+                if($fromdate){
+                    my $t1 = str2time($fromdate);
+                    my $t2 = str2time($date);
+                    if($t1 > $t2){
+                        $date = $fromdate;
+                    }
+                }
+                $params->param("chfieldfrom", $date);
+                $params->param("chfieldto", "Now");
+            }
 
-		        my $search = new Bugzilla::Search('fields' => ['bug_id'], 'params' => $params);
-			my $sql = $search->getSQL();
+                my $search = new Bugzilla::Search('fields' => ['bug_id'], 'params' => $params);
+            my $sql = $search->getSQL();
                         my $dbh = Bugzilla->dbh;
                         my $sth = $dbh->prepare($sql);
 
@@ -386,32 +405,32 @@ sub get_bug_ids
                         while (my @row = $sth->fetchrow_array()) {
                             unshift @bugIds, $row[0];
                         }
-		}
-		else
-		{
-			push(@missingQueries, $queryName);
-		}
-	}
-	if (@missingQueries > 0)
-	{
-		print "ERROR: query not found: " . join(',', @missingQueries);
-	}
-	else
-	{
-		print join(',', @bugIds);
-	}
+        }
+        else
+        {
+            push(@missingQueries, $queryName);
+        }
+    }
+    if (@missingQueries > 0)
+    {
+        print "ERROR: query not found: " . join(',', @missingQueries);
+    }
+    else
+    {
+        print join(',', @bugIds);
+    }
 }
 
 sub findQuery {
-	my $queryName = shift;
-	$queryName =~ s/^\s+//;
+    my $queryName = shift;
+    $queryName =~ s/^\s+//;
     $queryName =~ s/\s+$//;
 
-	my $list = Bugzilla->user->queries();
+    my $list = Bugzilla->user->queries();
 
-	foreach my $query (@$list) {
+    foreach my $query (@$list) {
         return $query if ($query->name eq $queryName);
-	}
+    }
 }
 sub addScriptVersionTemplate{
    my $template = shift;
@@ -427,6 +446,7 @@ sub addScriptVersionTemplate{
 [% END %]
 >
   <script_version>[% scriptVersion %]</script_version>
+  <supported_bugzilla_version>[% supportedBugzillaVersion %]</supported_bugzilla_version>
   <timezone>valid</timezone>
   <custom_fields>
   [% FOREACH cf = custom_field_names %]
@@ -459,7 +479,7 @@ SCRIPTVERSION
 }
 
 sub addXmlTemplate {
-	my $template = shift;
+    my $template = shift;
 my $bugsListXmlTemplate_text = <<'BUGSLIST';
 [% PROCESS bug/time.html.tmpl %]
 [% PROCESS "global/field-descs.none.tmpl" %]
@@ -557,7 +577,7 @@ my $bugsListXmlTemplate_text = <<'BUGSLIST';
           </attachment>
         [% END %]
       [% END %]
-	  [%+ PROCESS bug_custom_field %]
+      [%+ PROCESS bug_custom_field %]
 
     </bug>
   [% END %]
@@ -584,25 +604,25 @@ my $bugsListXmlTemplate_text = <<'BUGSLIST';
 
 [% BLOCK bug_custom_field %]
   [% FOREACH cf = custom_field_names %]
-		<custom_field>
-			<cf_name>[% cf.name %]</cf_name>
+        <custom_field>
+            <cf_name>[% cf.name %]</cf_name>
                         <cf_value>[% bug.${cf.name} FILTER xml %]</cf_value>
                         <cf_type>[% field_types.${cf.type} FILTER xml %]</cf_type>
-						<cf_description>[% cf.description %]</cf_description>
-	                <cf_values>
-	                  [% FOREACH value = bug.${cf.name}  %]
-	                    <cf_value>[% value FILTER xml %]</cf_value>
-	                  [% END %]
+                        <cf_description>[% cf.description %]</cf_description>
+                    <cf_values>
+                      [% FOREACH value = bug.${cf.name}  %]
+                        <cf_value>[% value FILTER xml %]</cf_value>
+                      [% END %]
                         </cf_values>
-	                <cf_legal_values>
+                    <cf_legal_values>
                           [% FOREACH  legal_value = cf.${'legals'}  %]
                             <cf_value>[% legal_value.${'name'} FILTER xml%]</cf_value>
                           [% END %]
                         </cf_legal_values>
-		</custom_field>
+        </custom_field>
   [% END %]
 [% END %]
 BUGSLIST
 
-	$template->context->define_block($bugsListXmlTemplate, $bugsListXmlTemplate_text) || die "Can't add template block";
+    $template->context->define_block($bugsListXmlTemplate, $bugsListXmlTemplate_text) || die "Can't add template block";
 }

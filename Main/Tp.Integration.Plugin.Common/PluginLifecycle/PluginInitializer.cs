@@ -9,7 +9,7 @@ using Tp.Integration.Messages.EntityLifecycle;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
-	internal class PluginInitializer : PluginInfoSender, IWantCustomInitialization
+	public class PluginInitializer : PluginInfoSender, IWantCustomInitialization
 	{
 		public void Init()
 		{

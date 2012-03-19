@@ -297,7 +297,6 @@ namespace Tp.Subversion.Subversion
 			if (timeoutAcquired)
 			{
 				thread.Abort();
-//				thread.Join();
 			}
 
 			if (!timeoutAcquired && exception != null)
@@ -401,15 +400,24 @@ namespace Tp.Subversion.Subversion
 			var previousRevisionId = ((revisionId).Value - 1).ToString();
 			try
 			{
-				var fileContent = GetTextFileContentSafe(changeset.Value, path);
-				var previousRevisionFileContent = GetTextFileContentSafe(previousRevisionId, path);
-
-				return _diffProcessor.GetDiff(previousRevisionFileContent, fileContent);
+				return GetDiff(changeset, path, previousRevisionId);
 			}
 			catch (SvnFileSystemException ex)
 			{
 				throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
 			}
+		}
+
+		private DiffResult GetDiff(RevisionId changeset, string path, string previousRevisionId)
+		{
+			var fileContent = GetTextFileContentSafe(changeset.Value, path);
+			var previousRevisionFileContent = GetTextFileContentSafe(previousRevisionId, path);
+			var diff = _diffProcessor.GetDiff(previousRevisionFileContent, fileContent);
+
+			diff.LeftPanRevisionId = previousRevisionId;
+			diff.RightPanRevisionId = changeset.Value;
+
+			return diff;
 		}
 
 		private string GetTextFileContentSafe(string revision, string path)

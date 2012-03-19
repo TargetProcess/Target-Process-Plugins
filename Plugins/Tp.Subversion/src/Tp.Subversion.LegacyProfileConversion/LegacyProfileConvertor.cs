@@ -23,7 +23,7 @@ namespace Tp.Subversion.LegacyProfileConversion
 		{
 		}
 
-		protected override void OnProfileMigrated(IStorageRepository storageRepository)
+		protected override void OnProfileMigrated(IStorageRepository storageRepository, PluginProfile legacyProfile)
 		{
 			MigrateUsers(storageRepository);
 		}

@@ -340,7 +340,6 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 		{
 			Profile.UserMapping.Count.Should(Be.EqualTo(userCount));
 		}
-		
 
 		[Then("plugin profile names should be unique")]
 		public void PluginProfileNamesShouldBeUnique()

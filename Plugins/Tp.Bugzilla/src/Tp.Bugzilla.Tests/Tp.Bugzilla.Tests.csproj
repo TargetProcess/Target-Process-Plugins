@@ -93,6 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Handlers\UserChangedHandlerSpecs.cs" />
+    <Compile Include="Integration\BugzillaTestConstants.cs" />
+    <Compile Include="LegacyProfileConversion\BugzillaLegacyProfileConversionUnitTestRegistry.cs" />
+    <Compile Include="LegacyProfileConversion\LegacyProfileConverterActionSteps.cs" />
+    <Compile Include="LegacyProfileConversion\ConvertProfileSpecs.cs" />
     <Compile Include="Mocks\BugzillaServiceWithTransportErrorOnGetIdsMock.cs" />
     <Compile Include="Mocks\BugzillaServiceWithTransportErrorOnGetBugsMock.cs" />
     <Compile Include="Mocks\IBugzillaServiceFailMock.cs" />
@@ -165,6 +169,14 @@
     <ProjectReference Include="..\..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
       <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
       <Name>Tp.Integration.Testing.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.LegacyProfileConversion.Common.Testing\Tp.LegacyProfileConversion.Common.Testing.csproj">
+      <Project>{05A1F4C0-E8E5-4310-A655-20F98DFD2921}</Project>
+      <Name>Tp.LegacyProfileConversion.Common.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
+      <Name>Tp.LegacyProfileConversion.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.Bugzilla\Tp.Bugzilla.csproj">
       <Name>Tp.Bugzilla</Name>

@@ -23,6 +23,7 @@ using Tp.Integration.Plugin.Common.Validation;
 using Tp.Integration.Testing.Common;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.Comments;
+using Tp.SourceControl.Diff;
 using Tp.SourceControl.RevisionStorage;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.Testing.Repository.Git;
@@ -407,7 +408,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 		private GitVersionControlSystem CreateGit(ISourceControlConnectionSettingsSource settings)
 		{
 			return new GitVersionControlSystem(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
-											   ObjectFactory.GetInstance<IActivityLogger>());
+											   ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
 		}
 
 		#endregion

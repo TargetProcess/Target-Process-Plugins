@@ -8,26 +8,14 @@ tau.mashups
         }
 
         DownloadScriptBlock.prototype = {
-            template: '<div class="downloadScript info-message" style="display:none;">\n    <p class="pb-5">tp2.cgi scripts for Bugzilla:&nbsp;<a href="#" class="close"></a></p>\n    {{each versions}}\n        <a class="scriptUrl ml-5" href="${url}">v.${version}</a><br>\n    {{/each}}\n    <p class="pt-5">Note: Download and extract tp2.cgi file to Bugzilla root folder</p>\n</div>',
+            template: '<div class="downloadScript">\n    {{each versions}}\n        <a class="scriptUrl" href="${url}">v.${version}</a><br>\n    {{/each}}\n    <p class="note pt-5"><span class="small">Note: Download and extract tp2.cgi file to Bugzilla root folder</span></p>\n</div>',
             block: null,
 
             _ctor:function (config) {
                 this.placeholder = config.placeholder;
                 this.mashupPath = config.mashupPath;
                 this.commandGateway = new CommandGateway();
-            },
-
-            open: function(){
                 this.getSupportedVersions($.proxy(this.render, this));
-            },
-
-            close: function(){
-                var that = this;
-                if (this.block){
-                    this.block.hide('fast', function(){
-                        $(that.block).remove();
-                    })
-                }
             },
 
             render: function(versions){
@@ -42,11 +30,6 @@ tau.mashups
                     e.preventDefault();
                     window.open($(this).attr('href'));
                 });
-                this.block.find('a.close').click(function(e){
-                    e.preventDefault();
-                    that.close();
-                });
-                this.block.slideDown('fast');
             },
 
             getSupportedVersions:function (success) {

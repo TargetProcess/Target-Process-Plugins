@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Linq;
 using NServiceBus;
 using Tp.BugTracking;
@@ -83,7 +84,15 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			var bugzillaBug = _bugzillaInfoStorageRepository.GetBugzillaBug(team.AssignableID);
 			_logger.InfoFormat("Changing bug assignment in Bugzilla. TargetProcess Bug ID: {0}; Email: {1}", bugzillaBug.TpId, userEmail);
 
-			_service.Execute(_actionFactory.GetAssigneeAction(bugzillaBug.Id, userEmail));
+			try
+			{
+				_service.Execute(_actionFactory.GetAssigneeAction(bugzillaBug.Id, userEmail));
+			}
+			catch (Exception ex)
+			{
+				_logger.Error(ex.Message, ex);
+			}
+
 			_logger.InfoFormat("Bug assignment changed in Bugzilla. TargetProcess Bug ID: {0}; Email: {1}", bugzillaBug.TpId, userEmail);
 		}
 	}

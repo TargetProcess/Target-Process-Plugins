@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.property.text"],function(a,b){return{create:function(c){return c=a.clone(c||{}),c.propertyName="lastFailureComment",c.defaultText="N/A",b.create(c)}}})
+define(["Underscore","tau/components/component.property.text"],function(_,a){return{create:function(b){return b=_.clone(b||{}),b.propertyName="lastFailureComment",b.defaultText="N/A",a.create(b)}}})

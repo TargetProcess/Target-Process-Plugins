@@ -1,0 +1,1 @@
+require(["jQuery","tau/slice/component.slice"],function($,a){var b=a.create({});b.on("afterRender",function(a){$(".slice").append(a.data.element)}),b.initialize({}),require.onError=function(a){console.log("File wasn't loaded:"+a.message)}})

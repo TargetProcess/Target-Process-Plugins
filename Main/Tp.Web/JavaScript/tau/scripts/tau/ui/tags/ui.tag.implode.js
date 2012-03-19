@@ -1,1 +1,1 @@
-define(["Underscore"],function(a){return{register:function(b,c){c.$tau=c.$tau||{},c.$tau.text_implode=function(b){var c=new String(b);if(a.isString(b))c=b;else if(a.isArray(b)){var d=a.clone(b),e=d.pop();c=a.filter([d.join(", "),e],function(a){return a!=0}).join(" &amp; ")}return c}}}})
+define(["Underscore"],function(_){return{register:function(a,b){b.$tau=b.$tau||{},b.$tau.text_implode=function(a){var b=new String(a);if(_.isString(a))b=a;else if(_.isArray(a)){var c=_.clone(a),d=c.pop();b=_.filter([c.join(", "),d],function(a){return a!=0}).join(" &amp; ")}return b}}}})

@@ -68,6 +68,11 @@
     <Compile Include="LegacyProfileConverterActionStepsBase.cs" />
     <Compile Include="LegacyProfileConverterUnitTestRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Main\Tp.Core\Tp.Core.csproj">
@@ -81,6 +86,10 @@
     <ProjectReference Include="..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
       <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
       <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Integration.Plugin.Common.Tests\Tp.Integration.Plugin.Common.Tests.csproj">
+      <Project>{187F5B55-6AFD-4838-B107-F7E7AD641BBF}</Project>
+      <Name>Tp.Integration.Plugin.Common.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
       <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
@@ -96,7 +105,15 @@
       <Link>languages.yml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="TpPublic.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

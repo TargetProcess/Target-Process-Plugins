@@ -5,16 +5,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using StructureMap;
-using StructureMap.Pipeline;
 using Tp.Core;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
-using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Commands
@@ -22,25 +18,24 @@ namespace Tp.SourceControl.Commands
 	public class AutomapVcsToTpUsersCommand : IPluginCommand
 	{
 		private readonly IPluginMetadata _pluginMetadata;
+		private readonly IVersionControlSystemFactory _vcsFactory;
 
-		public AutomapVcsToTpUsersCommand(IPluginMetadata pluginMetadata)
+		public AutomapVcsToTpUsersCommand(IPluginMetadata pluginMetadata, IVersionControlSystemFactory vcsFactory)
 		{
 			_pluginMetadata = pluginMetadata;
+			_vcsFactory = vcsFactory;
 		}
 
 		public PluginCommandResponseMessage Execute(string args)
 		{
 			var mappingArgs = args.Deserialize<AutomapVcsToTpUsersCommandArgs>();
 			var alreadyMappedAuthors = mappingArgs.Connection.UserMapping.Select(x => x.Key);
-
-			var vcsArgs = new ExplicitArguments();
-			vcsArgs.Set<ISourceControlConnectionSettingsSource>(mappingArgs.Connection);
-			var vcs = ObjectFactory.GetInstance<IVersionControlSystem>(vcsArgs);
-
+			var vcs = _vcsFactory.Get(mappingArgs.Connection);
 			var authors = vcs.RetrieveAuthors(new DateRange(CurrentDate.Value.AddMonths(-1), CurrentDate.Value));
-			authors =
-				authors.Where(x => alreadyMappedAuthors.FirstOrDefault(y => y.Trim().ToLower() == x.Trim().ToLower()) == null).
-					ToArray();
+
+			authors = authors
+				.Where(x => alreadyMappedAuthors.FirstOrDefault(y => y.Trim().ToLower() == x.Trim().ToLower()) == null)
+				.ToArray();
 
 			var userLookups = new Dictionary<string, MappingLookup>();
 			foreach (var author in authors)

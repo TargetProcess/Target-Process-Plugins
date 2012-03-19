@@ -26,16 +26,6 @@ namespace Tp.LegacyProfileConvertsion.Common.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=TargetProcessTest;User ID=sa;Password=sa")]
-        public string TpConnectionString {
-            get {
-                return ((string)(this["TpConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=TargetProcess;user id=sa;password=sa")]
         public string PluginConnectionString {
             get {
@@ -46,10 +36,30 @@ namespace Tp.LegacyProfileConvertsion.Common.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=TargetProcess;User ID=sa;Password=sa")]
+        public string TpConnectionString {
+            get {
+                return ((string)(this["TpConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=True")]
         public string TargetProcessTestConnectionString {
             get {
                 return ((string)(this["TargetProcessTestConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=True")]
+        public string TargetProcessTestConnectionString1 {
+            get {
+                return ((string)(this["TargetProcessTestConnectionString1"]));
             }
         }
     }

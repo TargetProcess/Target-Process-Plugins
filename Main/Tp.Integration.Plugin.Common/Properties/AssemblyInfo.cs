@@ -31,9 +31,9 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("2.23.0.21486")]
-[assembly: AssemblyVersion("2.23.0.21486")]
-[assembly: AssemblyFileVersion("2.23.0.21486")]
+// [assembly: AssemblyVersion("2.23.1.21660")]
+[assembly: AssemblyVersion("2.23.1.21660")]
+[assembly: AssemblyFileVersion("2.23.1.21660")]
 [assembly: InternalsVisibleTo(@"Tp.Integration.Plugin.Common.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100411095fe796631e1d69e989cdeab7443d522d126096e395455b6625a9a3dd317301f7d176c547ce45bc601aeab9b82bb6b85a32b62b1e9a04e614b867ab5463cd8ab32067a657b48d2adec987a5bbec619c31984c1d4e3ef32def44cb9c139ab6d93ef6bad1c1ee01cd67cf639428ae695451d9059e5f92a49289598c2e80cb2")]
 [assembly: InternalsVisibleTo(@"Tp.Integration.Testing.Common, PublicKey=0024000004800000940000000602000000240000525341310004000001000100411095fe796631e1d69e989cdeab7443d522d126096e395455b6625a9a3dd317301f7d176c547ce45bc601aeab9b82bb6b85a32b62b1e9a04e614b867ab5463cd8ab32067a657b48d2adec987a5bbec619c31984c1d4e3ef32def44cb9c139ab6d93ef6bad1c1ee01cd67cf639428ae695451d9059e5f92a49289598c2e80cb2")]
 [assembly: InternalsVisibleTo(@"Tp.LegacyProfileConversion.Common.Testing, PublicKey=0024000004800000940000000602000000240000525341310004000001000100411095fe796631e1d69e989cdeab7443d522d126096e395455b6625a9a3dd317301f7d176c547ce45bc601aeab9b82bb6b85a32b62b1e9a04e614b867ab5463cd8ab32067a657b48d2adec987a5bbec619c31984c1d4e3ef32def44cb9c139ab6d93ef6bad1c1ee01cd67cf639428ae695451d9059e5f92a49289598c2e80cb2")]

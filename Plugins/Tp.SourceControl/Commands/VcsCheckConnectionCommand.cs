@@ -4,9 +4,7 @@
 // 
 
 using System;
-using System.Threading;
 using StructureMap;
-using StructureMap.Pipeline;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -23,7 +21,7 @@ namespace Tp.SourceControl.Commands
 		public PluginCommandResponseMessage Execute(string args)
 		{
 			return new PluginCommandResponseMessage
-			{ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed};
+			       	{ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed};
 		}
 
 		private string OnExecute(string args)
@@ -32,14 +30,13 @@ namespace Tp.SourceControl.Commands
 			var errors = new PluginProfileErrorCollection();
 			try
 			{
-				OnCheckConnection(errors, (TVcsPluginProfile)profile.Settings);
-				
+				OnCheckConnection(errors, (TVcsPluginProfile) profile.Settings);
 			}
 			catch (StructureMapException e)
 			{
 				ObjectFactory.GetInstance<ICheckConnectionErrorResolver>().HandleConnectionError(e.InnerException, errors);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				ObjectFactory.GetInstance<ICheckConnectionErrorResolver>().HandleConnectionError(e, errors);
 			}
@@ -48,7 +45,9 @@ namespace Tp.SourceControl.Commands
 			return errors.Serialize();
 		}
 
-		protected virtual void OnExecuted(TVcsPluginProfile profile) {}
+		protected virtual void OnExecuted(TVcsPluginProfile profile)
+		{
+		}
 
 		protected virtual void OnCheckConnection(PluginProfileErrorCollection errors, TVcsPluginProfile settings)
 		{
@@ -58,12 +57,11 @@ namespace Tp.SourceControl.Commands
 
 		protected virtual IVersionControlSystem CreateVcs(TVcsPluginProfile settings)
 		{
-			var vcsArgs = new ExplicitArguments();
-			vcsArgs.Set<ISourceControlConnectionSettingsSource>(settings);
-			return ObjectFactory.GetInstance<IVersionControlSystem>(vcsArgs);
+			return ObjectFactory.GetInstance<IVersionControlSystemFactory>().Get(settings);
 		}
 
-		protected abstract void CheckStartRevision(TVcsPluginProfile settings, IVersionControlSystem versionControlSystem, PluginProfileErrorCollection errors);
+		protected abstract void CheckStartRevision(TVcsPluginProfile settings, IVersionControlSystem versionControlSystem,
+		                                           PluginProfileErrorCollection errors);
 
 		public string Name
 		{

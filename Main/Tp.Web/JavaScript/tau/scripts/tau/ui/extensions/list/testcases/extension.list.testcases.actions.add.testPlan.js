@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/extensions/component.extension.base","tau/configurator","tau/utils/utils.urlBuilder"],function(a,b,c,d){return b.extend({"bus action.add":function(a){var b=a.data.entity;c.getRouting().redirect(d.getAddTestCaseForTestPlanRunUrl(b.id))}})})
+define(["Underscore","tau/components/extensions/component.extension.base","tau/configurator","tau/utils/utils.urlBuilder"],function(_,a,b,c){return a.extend({"bus action.add":function(a){var d=a.data.entity;b.getRouting().redirect(c.getAddTestCaseForTestPlanRunUrl(d.id))}})})

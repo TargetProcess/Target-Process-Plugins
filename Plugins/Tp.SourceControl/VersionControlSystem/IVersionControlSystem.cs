@@ -39,18 +39,6 @@ namespace Tp.SourceControl.VersionControlSystem
 		/// <exception cref="VersionControlException">If a file cannot be found in a specified changeset.</exception>
 		byte[] GetBinaryFileContent(RevisionId changeset, string path);
 
-		///// <summary>
-		///// Compare file content at the specified and previous revision.
-		///// </summary>
-		///// <param name="path">Path to file.</param>
-		///// <param name="changeset">The specific changeset number.</param>
-		///// <param name="original">Text file content at the specified changeset number.</param>
-		///// <param name="previous">Text file content at the previous changeset number.</param>
-		///// <returns></returns>
-		///// <exception cref="ArgumentNullException">If <paramref name="path"/> is <c>null</c>.</exception>
-		///// <exception cref="VersionControlException">If a file cannot be found in a specified changeset.</exception>
-		//long GetComparedFiles(string path, IRevisionId changeset, out string original, out string previous);
-
 		void CheckRevision(RevisionId revision, PluginProfileErrorCollection errors);
 		string[] RetrieveAuthors(DateRange dateRange);
 

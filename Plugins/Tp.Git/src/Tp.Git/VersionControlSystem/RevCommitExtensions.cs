@@ -4,9 +4,12 @@
 // 
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NGit;
 using NGit.Diff;
+using NGit.Dircache;
 using NGit.Revwalk;
 using NGit.Treewalk;
 using NGit.Treewalk.Filter;
@@ -52,13 +55,42 @@ namespace Tp.Git.VersionControlSystem
 			return new RevisionId{Time = commit.GetCommitTime(), Value = commit.Id.Name};
 		}
 
-		private static RevisionEntryInfo[] GetEntriesEnc(this RevCommit commit, Repository repository)
+		public static string GetFileContent(this RevCommit commit, string path, Repository repository)
 		{
-			var tw = new TreeWalk(repository) {Recursive = true};
+			var treeWalk = new TreeWalk(repository) {Recursive = true, Filter = PathFilter.Create(path)};
+			treeWalk.AddTree(commit.Tree);
+
+			if (!treeWalk.Next())
+			{
+				return string.Empty;
+			}
+
+			var objectId = treeWalk.GetObjectId(0);
+			var loader = repository.Open(objectId);
+  
+			using (var stream = loader.OpenStream())
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					return reader.ReadToEnd();
+				}
+			}
+		}
+
+		private static IEnumerable<DiffEntry> GetDiffEntries(this RevCommit commit, Repository repository)
+		{
+			var tw = new TreeWalk(repository) { Recursive = true };
 
 			if (commit.ParentCount > 0)
 			{
-				tw.AddTree(commit.Parents.First().Tree);
+				if (commit.Parents.First().Tree != null)
+				{
+					tw.AddTree(commit.Parents.First().Tree);
+				}
+				else
+				{
+					tw.AddTree(new EmptyTreeIterator());
+				}
 			}
 			else
 			{
@@ -66,12 +98,14 @@ namespace Tp.Git.VersionControlSystem
 			}
 
 			tw.Filter = TreeFilter.ANY_DIFF;
-
 			tw.AddTree(commit.Tree);
 
-			var differences = DiffEntry.Scan(tw);
+			return DiffEntry.Scan(tw);
+		}
 
-			return differences.Select(ConvertToRevisionEntryInfo).ToArray();
+		private static RevisionEntryInfo[] GetEntriesEnc(this RevCommit commit, Repository repository)
+		{
+			return commit.GetDiffEntries(repository).Select(ConvertToRevisionEntryInfo).ToArray();
 		}
 
 		private static RevisionEntryInfo ConvertToRevisionEntryInfo(DiffEntry difference)

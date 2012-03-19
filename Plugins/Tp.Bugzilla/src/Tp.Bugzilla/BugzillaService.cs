@@ -62,11 +62,11 @@ namespace Tp.Bugzilla
 				var deserializeValidator = new DeserializeValidator(profile, responseValidator);
 				validators.Enqueue(deserializeValidator);
 
-				var savedQueryValidator = new SavedQueryValidator(profile);
-				validators.Enqueue(savedQueryValidator);
-
 				var settingsValidator = new SettingsValidator(profile, deserializeValidator);
 				validators.Enqueue(settingsValidator);
+
+				var savedQueryValidator = new SavedQueryValidator(profile);
+				validators.Enqueue(savedQueryValidator);
 
 				while (validators.Count > 0)
 				{

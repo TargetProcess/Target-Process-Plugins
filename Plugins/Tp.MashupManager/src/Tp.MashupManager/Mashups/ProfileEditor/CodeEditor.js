@@ -25,6 +25,13 @@ tau.mashups
                 this._getCodeMirrorBlock().addClass('mashup-code-block');
                 this._getCodeGutterBlock().addClass('mashup-code-gutter');
 
+                if (navigator.appName == "Microsoft Internet Explorer") {
+                	this._getCodeMirrorBlock().height(500);
+                	
+                	this._getCodeEditorBlock().height(500);
+                	this._getCodeEditorBlock().css('overflow-y', 'auto');
+                }
+
                 $(window).resize($.proxy(this._setCodeBlockWidth, this));
                 this._setCodeBlockWidth();
 

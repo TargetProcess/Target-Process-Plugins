@@ -14,7 +14,6 @@ using Tp.Integration.Messages.Commands;
 using Tp.Integration.Testing.Common;
 using Tp.SourceControl.Comments;
 using Tp.Subversion.Context;
-using Tp.Subversion.EditProfileFeature;
 using Tp.Subversion.StructureMap;
 using Tp.Subversion.UserMappingFeature;
 using Tp.Testing.Common.NBehave;
@@ -29,7 +28,11 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		public void Init()
 		{
 			ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly, new List<Assembly> { typeof(Command).Assembly })));
+			ObjectFactory.Configure(
+				x =>
+				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly,
+																						new List<Assembly>
+																							{typeof (Command).Assembly})));
 		}
 
 		[Test]
@@ -40,7 +43,9 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {Id:1, Comment:""#123 time:1"", Author:""svnuser""}
 				When plugin started up
 				Then time 1 should be posted on entity 123 by the 'tpuser'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
 		}
 
 		[Test]
@@ -52,7 +57,9 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {Id:1, Comment:""#123 time:1.5"", Author:""svnuser""}
 				When plugin started up
 				Then time 1.5 should be posted on entity 123 by the 'tpuser'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
 		}
 
 		[Test]
@@ -64,7 +71,67 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 				When plugin started up
 				Then time 1 should be posted on entity 123 by the 'tpuser'
 					And time spent 2 and time left 3.4 should be posted on entity 66 by the 'tpuser'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
+		}
+
+		[Test]
+		public void ShouldPostTimeMultipleTimes()
+		{
+			@"Given tp user 'tpuser' with id 5
+					And vcs user 'svnuser' mapped as 'tpuser'
+					And vcs commit is: {Id:1, Comment:""#123 time:1 time:2"", Author:""svnuser""}
+				When plugin started up
+				Then time 1 should be posted on entity 123 by the 'tpuser'
+					And time 2 should be posted on entity 123 by the 'tpuser'"
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
+		}
+
+		[Test]
+		public void ShouldUserCommaAsDecimalDelimiterForTimeSpent()
+		{
+			@"Given tp user 'tpuser' with id 5
+					 And vcs user 'svnuser' mapped as 'tpuser'
+					 And vcs commit is: {Id:1, Comment:""#123 time:0,5"", Author:""svnuser""}
+				When plugin started up
+				Then time 0.5 should be posted on entity 123 by the 'tpuser'"
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
+		}
+
+		[Test]
+		public void ShouldUseCommaAsDecimalDelimiterForTimeLeft()
+		{
+			@"Given tp user 'tpuser' with id 5
+					And vcs user 'svnuser' mapped as 'tpuser'
+					And vcs commit is: {Id:1, Comment:""#123 time:1,0:2,5"", Author:""svnuser""}
+				When plugin started up
+				Then time spent 1 and time left 2.5 should be posted on entity 123 by the 'tpuser'"
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
+		}
+
+		[Test]
+		public void ShouldUseCommaAsDecimalDelimiterAndNotMixWithCommaAsText()
+		{
+			@"Given tp user 'tpuser' with id 5
+					 And vcs user 'svnuser' mapped as 'tpuser'
+					 And vcs commit is: {Id:1, Comment:""#123 time:0,5, comment:test"", Author:""svnuser""}
+				When plugin started up
+				Then time 0.5 should be posted on entity 123 by the 'tpuser'
+					And comment 'test' should be posted on entity 123 by the 'tpuser'"
+				.Execute(
+					In.Context<VcsPluginActionSteps>()
+					.And<WhenCommitMadeByTpUserSpecs>()
+					.And<ShouldPostTimeSpecs>()
+					.And<ShouldPostCommentSpecs>()
+					.And<UserMappingFeatureActionSteps>());
+
 		}
 
 		[Test]
@@ -73,7 +140,9 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			@"Given vcs commit is: {Id:1, Comment:""#123 comment:bla-bla my comment time:3"", Author:""svnuser""}
 				When plugin started up
 				Then time should not be posted"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
 		}
 
 		[Test]
@@ -84,7 +153,9 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {Id:1, Comment:""#123 time:1:6"", Author:""svnuser""}
 				When plugin started up
 				Then time spent 1 and time left 6 should be posted on entity 123 by the 'tpuser'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
 		}
 
 		[Test]
@@ -95,7 +166,9 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {Id:1, Comment:""#123 time:1.5:6.0"", Author:""svnuser""}
 				When plugin started up
 				Then time spent 1.5 and time left 6.0 should be posted on entity 123 by the 'tpuser'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
 		}
 
 		[Test]
@@ -106,16 +179,19 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {Id:1, Comment:""#123 timee:1"", Author:""svnuser""}
 				When plugin started up
 				Then time should not be posted"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+				.Execute(
+					In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<ShouldPostTimeSpecs>().And
+						<UserMappingFeatureActionSteps>());
 		}
 
 		[Then(@"time (?<time>[\d]*\.?[\d]*) should be posted on entity $entityId by the '$tpUserName'")]
 		public void TimeShouldBePosted(string timePosted, int entityId, string userName)
 		{
-			var time = double.Parse(timePosted, CultureInfo.InvariantCulture);
+			var time = decimal.Parse(timePosted, CultureInfo.InvariantCulture);
 			var postTimeCmd =
-				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PostTimeCommand>().Where(x => x.EntityId == entityId)
-					.Single();
+				ObjectFactory.GetInstance<TransportMock>().TpQueue
+					.GetMessages<PostTimeCommand>()
+					.Single(x => x.EntityId == entityId && x.Spent == time);
 			postTimeCmd.Spent.Should(Be.EqualTo(time));
 			postTimeCmd.Left.Should(Be.Null);
 
@@ -138,9 +214,9 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		{
 			var spent = decimal.Parse(timeSpent, CultureInfo.InvariantCulture);
 			var left = decimal.Parse(timeLeft, CultureInfo.InvariantCulture);
-			var postTimeCmd =
-				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PostTimeCommand>().Where(x => x.EntityId == entityId)
-					.Single();
+			var postTimeCmd = ObjectFactory.GetInstance<TransportMock>().TpQueue
+				.GetMessages<PostTimeCommand>()
+				.Single(x => x.EntityId == entityId);
 			postTimeCmd.Spent.Should(Be.EqualTo(spent));
 			postTimeCmd.Left.Should(Be.EqualTo(left));
 

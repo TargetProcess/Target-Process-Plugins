@@ -1,1 +1,1 @@
-define(["Underscore"],function(a){return{getRoles:function(){return[{id:1,name:"Developer",isPair:!0,__type:"role"},{id:2,name:"Project Manager",__type:"role"},{id:3,name:"Top Manager",__type:"role"},{id:4,name:"QA Engineer",__type:"role",isPair:!1}]}}})
+define(["Underscore"],function(_){return{getRoles:function(){return[{id:1,name:"Developer",isPair:!0,__type:"role"},{id:2,name:"Project Manager",__type:"role"},{id:3,name:"Top Manager",__type:"role"},{id:4,name:"QA Engineer",__type:"role",isPair:!1}]}}})

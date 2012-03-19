@@ -12,5 +12,5 @@ tau.mashups
             }
         );
 
-        menu.addItemAfter('Plugins');
+        menu.addItemAfter('License');
     })

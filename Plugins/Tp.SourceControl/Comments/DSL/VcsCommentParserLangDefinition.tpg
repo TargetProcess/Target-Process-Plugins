@@ -20,7 +20,7 @@ Delimiter -> @":";
 PUNCTUATIONMARK -> @"[,\.\?!;]+";
 COMMA -> @",";
 NUMBER -> @"[0-9]+";
-DECIMAL -> @"\d+(\.\d+)?";
+DECIMAL -> @"\d+([\.,]\d+)?";
 //list all the registered keywords inside
 ANY_TEXT -> @"(.(?<!#)(?<!(id|time|status|state|comment|comm|comments|cmt):))+\s";
 ANY_SYMBOL -> @"((?!#)(?!(id|time|status|state|comment|comm|comments|cmt):).)";
@@ -51,7 +51,7 @@ ActionNode-> ANY_TEXT* (EntityIdClause COMMA*)* (PostTimeClause|PostCommentClaus
 	i = 0;
 	while ($PostTimeClause[i] != null)
 	{
-		childActions.Add($PostTimeClause as IAction);
+		childActions.Add($PostTimeClause[i] as IAction);
 		i++;
 	}
 	i = 0;
@@ -77,7 +77,7 @@ ActionNode-> ANY_TEXT* (EntityIdClause COMMA*)* (PostTimeClause|PostCommentClaus
 
 EntityIdClause -> ANY_SYMBOL* (IdKeyword1|IdKeyword2) NUMBER ANY_SYMBOL*
 {
-	return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(Convert.ToInt32($NUMBER, CultureInfo.InvariantCulture));
+	return ObjectFactory.GetInstance<IActionFactory>().CreateAssignRevisionToEntityAction(NodeParser.GetEntityId($NUMBER));
 };
 
 PostTimeClause -> TimeKeyword DECIMAL (Delimiter DECIMAL)? 
@@ -85,14 +85,14 @@ PostTimeClause -> TimeKeyword DECIMAL (Delimiter DECIMAL)?
 	decimal? timeLeft = null;
 	if ($DECIMAL[1] != null)
 	{
-		timeLeft = Convert.ToDecimal($DECIMAL[1], CultureInfo.InvariantCulture);
+		timeLeft = NodeParser.GetTime($DECIMAL[1]);
 	}
-	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(Convert.ToDecimal($DECIMAL, CultureInfo.InvariantCulture), timeLeft);
+	return ObjectFactory.GetInstance<IActionFactory>().CreatePostTimeAction(NodeParser.GetTime($DECIMAL), timeLeft);
 };
 
 ChangeStatusClause -> (StatusKeyword1|StatusKeyword2) ANY_TEXT
 {
-	return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(Convert.ToString($ANY_TEXT).Trim().Trim(','));
+	return ObjectFactory.GetInstance<IActionFactory>().CreateChangeStatusAction(NodeParser.GetStatus($ANY_TEXT));
 };
 
 PostCommentClause -> (CommentKeyword1|CommentKeyword2|CommentKeyword3|CommentKeyword4) ANY_TEXT*
@@ -101,7 +101,7 @@ PostCommentClause -> (CommentKeyword1|CommentKeyword2|CommentKeyword3|CommentKey
 	StringBuilder result = new StringBuilder();
 	while ($ANY_TEXT[i] != null)
 	{
-		result.AppendLine(Convert.ToString($ANY_TEXT[i]).Trim());
+		result.AppendLine(NodeParser.GetCommentSegment($ANY_TEXT[i]));
 		i++;
 	}
 	if(result.Length > Environment.NewLine.Length)
@@ -111,5 +111,4 @@ PostCommentClause -> (CommentKeyword1|CommentKeyword2|CommentKeyword3|CommentKey
 	
 	return ObjectFactory.GetInstance<IActionFactory>().CreatePostCommentAction(result.ToString());
 };
-
 

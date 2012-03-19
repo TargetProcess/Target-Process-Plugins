@@ -38,6 +38,7 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 					And user mapping should be:
 					|subversion|targetprocess|
 					|svnuser1|tpuser1|
+					|svnuser2|tpuser2|
 					And profile should have tp users: tpuser1, tpuser2
 					And profile should be initialized"
 				.Execute(In.Context<LegacyProfileConverterActionSteps>());

@@ -1,1 +1,1 @@
-define(["Underscore"],function(a){return{"auto include beforeSave":function(b,c){var d=this,e=b.data.obj;for(var f=0;f<c.fields.length;f++){var g=c.fields[f];(d.store.isPropertyInitialized(e.id,e.type,a.getFieldName(g))||c.force)&&a.mergeFields(b.data.cmd.config.fields,[g])}}}})
+define(["Underscore"],function(_){return{"auto include beforeSave":function(a,b){var c=this,d=a.data.obj;for(var e=0;e<b.fields.length;e++){var f=b.fields[e];(c.store.isPropertyInitialized(d.id,d.type,_.getFieldName(f))||b.force)&&_.mergeFields(a.data.cmd.config.fields,[f])}}}})

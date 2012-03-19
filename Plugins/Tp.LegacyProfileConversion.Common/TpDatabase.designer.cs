@@ -22,7 +22,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TargetProcessTest")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TargetProcess")]
 	public partial class TpDatabaseDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -57,6 +57,33 @@ namespace Tp.LegacyProfileConvertsion.Common
     partial void InsertTestCaseTestPlan(TestCaseTestPlan instance);
     partial void UpdateTestCaseTestPlan(TestCaseTestPlan instance);
     partial void DeleteTestCaseTestPlan(TestCaseTestPlan instance);
+    partial void InsertSeverity(Severity instance);
+    partial void UpdateSeverity(Severity instance);
+    partial void DeleteSeverity(Severity instance);
+    partial void InsertRole(Role instance);
+    partial void UpdateRole(Role instance);
+    partial void DeleteRole(Role instance);
+    partial void InsertPriority(Priority instance);
+    partial void UpdatePriority(Priority instance);
+    partial void DeletePriority(Priority instance);
+    partial void InsertEntityState(EntityState instance);
+    partial void UpdateEntityState(EntityState instance);
+    partial void DeleteEntityState(EntityState instance);
+    partial void InsertProcess(Process instance);
+    partial void UpdateProcess(Process instance);
+    partial void DeleteProcess(Process instance);
+    partial void InsertExternalReference(ExternalReference instance);
+    partial void UpdateExternalReference(ExternalReference instance);
+    partial void DeleteExternalReference(ExternalReference instance);
+    partial void InsertComment(Comment instance);
+    partial void UpdateComment(Comment instance);
+    partial void DeleteComment(Comment instance);
+    partial void InsertBug(Bug instance);
+    partial void UpdateBug(Bug instance);
+    partial void DeleteBug(Bug instance);
+    partial void InsertAttachment(Attachment instance);
+    partial void UpdateAttachment(Attachment instance);
+    partial void DeleteAttachment(Attachment instance);
     #endregion
 		
 		public TpDatabaseDataContext() : 
@@ -160,6 +187,78 @@ namespace Tp.LegacyProfileConvertsion.Common
 				return this.GetTable<TestCaseTestPlan>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Severity> Severities
+		{
+			get
+			{
+				return this.GetTable<Severity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Role> Roles
+		{
+			get
+			{
+				return this.GetTable<Role>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Priority> Priorities
+		{
+			get
+			{
+				return this.GetTable<Priority>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EntityState> EntityStates
+		{
+			get
+			{
+				return this.GetTable<EntityState>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Process> Processes
+		{
+			get
+			{
+				return this.GetTable<Process>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ExternalReference> ExternalReferences
+		{
+			get
+			{
+				return this.GetTable<ExternalReference>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Comment> Comments
+		{
+			get
+			{
+				return this.GetTable<Comment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Bug> Bugs
+		{
+			get
+			{
+				return this.GetTable<Bug>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Attachment> Attachments
+		{
+			get
+			{
+				return this.GetTable<Attachment>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Project")]
@@ -222,6 +321,8 @@ namespace Tp.LegacyProfileConvertsion.Common
 		
 		private EntityRef<General> _General;
 		
+		private EntityRef<Process> _Process;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -281,6 +382,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 			this._Generals = new EntitySet<General>(new Action<General>(this.attach_Generals), new Action<General>(this.detach_Generals));
 			this._TestPlans = new EntitySet<TestPlan>(new Action<TestPlan>(this.attach_TestPlans), new Action<TestPlan>(this.detach_TestPlans));
 			this._General = default(EntityRef<General>);
+			this._Process = default(EntityRef<Process>);
 			OnCreated();
 		}
 		
@@ -379,6 +481,10 @@ namespace Tp.LegacyProfileConvertsion.Common
 			{
 				if ((this._ProcessID != value))
 				{
+					if (this._Process.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnProcessIDChanging(value);
 					this.SendPropertyChanging();
 					this._ProcessID = value;
@@ -828,6 +934,40 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Process_Project", Storage="_Process", ThisKey="ProcessID", OtherKey="ProcessID", IsForeignKey=true)]
+		public Process Process
+		{
+			get
+			{
+				return this._Process.Entity;
+			}
+			set
+			{
+				Process previousValue = this._Process.Entity;
+				if (((previousValue != value) 
+							|| (this._Process.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Process.Entity = null;
+						previousValue.Projects.Remove(this);
+					}
+					this._Process.Entity = value;
+					if ((value != null))
+					{
+						value.Projects.Add(this);
+						this._ProcessID = value.ProcessID;
+					}
+					else
+					{
+						this._ProcessID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Process");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -941,7 +1081,13 @@ namespace Tp.LegacyProfileConvertsion.Common
 		
 		private EntitySet<General> _Generals2;
 		
+		private EntitySet<Comment> _Comments;
+		
+		private EntitySet<Attachment> _Attachments;
+		
 		private EntityRef<TpUser> _TpUser1;
+		
+		private EntityRef<Role> _Role;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1009,7 +1155,10 @@ namespace Tp.LegacyProfileConvertsion.Common
 			this._Generals = new EntitySet<General>(new Action<General>(this.attach_Generals), new Action<General>(this.detach_Generals));
 			this._Generals1 = new EntitySet<General>(new Action<General>(this.attach_Generals1), new Action<General>(this.detach_Generals1));
 			this._Generals2 = new EntitySet<General>(new Action<General>(this.attach_Generals2), new Action<General>(this.detach_Generals2));
+			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._Attachments = new EntitySet<Attachment>(new Action<Attachment>(this.attach_Attachments), new Action<Attachment>(this.detach_Attachments));
 			this._TpUser1 = default(EntityRef<TpUser>);
+			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
 		
@@ -1244,6 +1393,10 @@ namespace Tp.LegacyProfileConvertsion.Common
 			{
 				if ((this._RoleID != value))
 				{
+					if (this._Role.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnRoleIDChanging(value);
 					this.SendPropertyChanging();
 					this._RoleID = value;
@@ -1609,6 +1762,32 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_Comment", Storage="_Comments", ThisKey="UserID", OtherKey="OwnerID")]
+		public EntitySet<Comment> Comments
+		{
+			get
+			{
+				return this._Comments;
+			}
+			set
+			{
+				this._Comments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_Attachment", Storage="_Attachments", ThisKey="UserID", OtherKey="OwnerID")]
+		public EntitySet<Attachment> Attachments
+		{
+			get
+			{
+				return this._Attachments;
+			}
+			set
+			{
+				this._Attachments.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_TpUser", Storage="_TpUser1", ThisKey="ContactOwnerID", OtherKey="UserID", IsForeignKey=true)]
 		public TpUser TpUser1
 		{
@@ -1639,6 +1818,40 @@ namespace Tp.LegacyProfileConvertsion.Common
 						this._ContactOwnerID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TpUser1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_TpUser", Storage="_Role", ThisKey="RoleID", OtherKey="RoleID", IsForeignKey=true)]
+		public Role Role
+		{
+			get
+			{
+				return this._Role.Entity;
+			}
+			set
+			{
+				Role previousValue = this._Role.Entity;
+				if (((previousValue != value) 
+							|| (this._Role.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Role.Entity = null;
+						previousValue.TpUsers.Remove(this);
+					}
+					this._Role.Entity = value;
+					if ((value != null))
+					{
+						value.TpUsers.Add(this);
+						this._RoleID = value.RoleID;
+					}
+					else
+					{
+						this._RoleID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Role");
 				}
 			}
 		}
@@ -1709,6 +1922,30 @@ namespace Tp.LegacyProfileConvertsion.Common
 		{
 			this.SendPropertyChanging();
 			entity.TpUser2 = null;
+		}
+		
+		private void attach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.TpUser = this;
+		}
+		
+		private void detach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.TpUser = null;
+		}
+		
+		private void attach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.TpUser = this;
+		}
+		
+		private void detach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.TpUser = null;
 		}
 	}
 	
@@ -1914,6 +2151,10 @@ namespace Tp.LegacyProfileConvertsion.Common
 		
 		private EntityRef<TestPlan> _TestPlan;
 		
+		private EntitySet<Comment> _Comments;
+		
+		private EntitySet<Attachment> _Attachments;
+		
 		private EntityRef<Project> _Project1;
 		
 		private EntityRef<TpUser> _TpUser;
@@ -1990,6 +2231,8 @@ namespace Tp.LegacyProfileConvertsion.Common
 		{
 			this._Project = default(EntityRef<Project>);
 			this._TestPlan = default(EntityRef<TestPlan>);
+			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._Attachments = new EntitySet<Attachment>(new Action<Attachment>(this.attach_Attachments), new Action<Attachment>(this.detach_Attachments));
 			this._Project1 = default(EntityRef<Project>);
 			this._TpUser = default(EntityRef<TpUser>);
 			this._TpUser1 = default(EntityRef<TpUser>);
@@ -2651,6 +2894,32 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="General_Comment", Storage="_Comments", ThisKey="GeneralID", OtherKey="GeneralID")]
+		public EntitySet<Comment> Comments
+		{
+			get
+			{
+				return this._Comments;
+			}
+			set
+			{
+				this._Comments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="General_Attachment", Storage="_Attachments", ThisKey="GeneralID", OtherKey="GeneralID")]
+		public EntitySet<Attachment> Attachments
+		{
+			get
+			{
+				return this._Attachments;
+			}
+			set
+			{
+				this._Attachments.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_General", Storage="_Project1", ThisKey="ParentProjectID", OtherKey="ProjectID", IsForeignKey=true)]
 		public Project Project1
 		{
@@ -2806,6 +3075,30 @@ namespace Tp.LegacyProfileConvertsion.Common
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+		
+		private void attach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.General = this;
+		}
+		
+		private void detach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.General = null;
+		}
+		
+		private void attach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.General = this;
+		}
+		
+		private void detach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.General = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PluginProfile")]
@@ -2825,6 +3118,8 @@ namespace Tp.LegacyProfileConvertsion.Common
 		private System.Nullable<bool> _Active;
 		
 		private string _Settings;
+		
+		private EntitySet<ExternalReference> _ExternalReferences;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2846,6 +3141,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 		
 		public PluginProfile()
 		{
+			this._ExternalReferences = new EntitySet<ExternalReference>(new Action<ExternalReference>(this.attach_ExternalReferences), new Action<ExternalReference>(this.detach_ExternalReferences));
 			OnCreated();
 		}
 		
@@ -2969,6 +3265,19 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PluginProfile_ExternalReference", Storage="_ExternalReferences", ThisKey="PluginProfileID", OtherKey="PluginProfileID")]
+		public EntitySet<ExternalReference> ExternalReferences
+		{
+			get
+			{
+				return this._ExternalReferences;
+			}
+			set
+			{
+				this._ExternalReferences.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2987,6 +3296,18 @@ namespace Tp.LegacyProfileConvertsion.Common
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_ExternalReferences(ExternalReference entity)
+		{
+			this.SendPropertyChanging();
+			entity.PluginProfile = this;
+		}
+		
+		private void detach_ExternalReferences(ExternalReference entity)
+		{
+			this.SendPropertyChanging();
+			entity.PluginProfile = null;
 		}
 	}
 	
@@ -3964,6 +4285,2253 @@ namespace Tp.LegacyProfileConvertsion.Common
 						this._TestPlanID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TestPlan");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Severity")]
+	public partial class Severity : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SeverityID;
+		
+		private string _Name;
+		
+		private int _Importance;
+		
+		private System.Nullable<bool> _IsDefault;
+		
+		private EntitySet<Bug> _Bugs;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSeverityIDChanging(int value);
+    partial void OnSeverityIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnImportanceChanging(int value);
+    partial void OnImportanceChanged();
+    partial void OnIsDefaultChanging(System.Nullable<bool> value);
+    partial void OnIsDefaultChanged();
+    #endregion
+		
+		public Severity()
+		{
+			this._Bugs = new EntitySet<Bug>(new Action<Bug>(this.attach_Bugs), new Action<Bug>(this.detach_Bugs));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeverityID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int SeverityID
+		{
+			get
+			{
+				return this._SeverityID;
+			}
+			set
+			{
+				if ((this._SeverityID != value))
+				{
+					this.OnSeverityIDChanging(value);
+					this.SendPropertyChanging();
+					this._SeverityID = value;
+					this.SendPropertyChanged("SeverityID");
+					this.OnSeverityIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Importance", DbType="Int NOT NULL")]
+		public int Importance
+		{
+			get
+			{
+				return this._Importance;
+			}
+			set
+			{
+				if ((this._Importance != value))
+				{
+					this.OnImportanceChanging(value);
+					this.SendPropertyChanging();
+					this._Importance = value;
+					this.SendPropertyChanged("Importance");
+					this.OnImportanceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDefault", DbType="Bit")]
+		public System.Nullable<bool> IsDefault
+		{
+			get
+			{
+				return this._IsDefault;
+			}
+			set
+			{
+				if ((this._IsDefault != value))
+				{
+					this.OnIsDefaultChanging(value);
+					this.SendPropertyChanging();
+					this._IsDefault = value;
+					this.SendPropertyChanged("IsDefault");
+					this.OnIsDefaultChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Severity_Bug", Storage="_Bugs", ThisKey="SeverityID", OtherKey="SeverityID")]
+		public EntitySet<Bug> Bugs
+		{
+			get
+			{
+				return this._Bugs;
+			}
+			set
+			{
+				this._Bugs.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Bugs(Bug entity)
+		{
+			this.SendPropertyChanging();
+			entity.Severity = this;
+		}
+		
+		private void detach_Bugs(Bug entity)
+		{
+			this.SendPropertyChanging();
+			entity.Severity = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Role")]
+	public partial class Role : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RoleID;
+		
+		private string _Name;
+		
+		private System.Nullable<bool> _Pair;
+		
+		private System.Nullable<bool> _HaveEffort;
+		
+		private string _Description;
+		
+		private System.Nullable<bool> _TimeSheetAccess;
+		
+		private System.Nullable<bool> _PeopleAccess;
+		
+		private System.Nullable<bool> _PersonalEmailAccess;
+		
+		private EntitySet<TpUser> _TpUsers;
+		
+		private EntitySet<EntityState> _EntityStates;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRoleIDChanging(int value);
+    partial void OnRoleIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnPairChanging(System.Nullable<bool> value);
+    partial void OnPairChanged();
+    partial void OnHaveEffortChanging(System.Nullable<bool> value);
+    partial void OnHaveEffortChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnTimeSheetAccessChanging(System.Nullable<bool> value);
+    partial void OnTimeSheetAccessChanged();
+    partial void OnPeopleAccessChanging(System.Nullable<bool> value);
+    partial void OnPeopleAccessChanged();
+    partial void OnPersonalEmailAccessChanging(System.Nullable<bool> value);
+    partial void OnPersonalEmailAccessChanged();
+    #endregion
+		
+		public Role()
+		{
+			this._TpUsers = new EntitySet<TpUser>(new Action<TpUser>(this.attach_TpUsers), new Action<TpUser>(this.detach_TpUsers));
+			this._EntityStates = new EntitySet<EntityState>(new Action<EntityState>(this.attach_EntityStates), new Action<EntityState>(this.detach_EntityStates));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int RoleID
+		{
+			get
+			{
+				return this._RoleID;
+			}
+			set
+			{
+				if ((this._RoleID != value))
+				{
+					this.OnRoleIDChanging(value);
+					this.SendPropertyChanging();
+					this._RoleID = value;
+					this.SendPropertyChanged("RoleID");
+					this.OnRoleIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Pair", DbType="Bit")]
+		public System.Nullable<bool> Pair
+		{
+			get
+			{
+				return this._Pair;
+			}
+			set
+			{
+				if ((this._Pair != value))
+				{
+					this.OnPairChanging(value);
+					this.SendPropertyChanging();
+					this._Pair = value;
+					this.SendPropertyChanged("Pair");
+					this.OnPairChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HaveEffort", DbType="Bit")]
+		public System.Nullable<bool> HaveEffort
+		{
+			get
+			{
+				return this._HaveEffort;
+			}
+			set
+			{
+				if ((this._HaveEffort != value))
+				{
+					this.OnHaveEffortChanging(value);
+					this.SendPropertyChanging();
+					this._HaveEffort = value;
+					this.SendPropertyChanged("HaveEffort");
+					this.OnHaveEffortChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeSheetAccess", DbType="Bit")]
+		public System.Nullable<bool> TimeSheetAccess
+		{
+			get
+			{
+				return this._TimeSheetAccess;
+			}
+			set
+			{
+				if ((this._TimeSheetAccess != value))
+				{
+					this.OnTimeSheetAccessChanging(value);
+					this.SendPropertyChanging();
+					this._TimeSheetAccess = value;
+					this.SendPropertyChanged("TimeSheetAccess");
+					this.OnTimeSheetAccessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PeopleAccess", DbType="Bit")]
+		public System.Nullable<bool> PeopleAccess
+		{
+			get
+			{
+				return this._PeopleAccess;
+			}
+			set
+			{
+				if ((this._PeopleAccess != value))
+				{
+					this.OnPeopleAccessChanging(value);
+					this.SendPropertyChanging();
+					this._PeopleAccess = value;
+					this.SendPropertyChanged("PeopleAccess");
+					this.OnPeopleAccessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PersonalEmailAccess", DbType="Bit")]
+		public System.Nullable<bool> PersonalEmailAccess
+		{
+			get
+			{
+				return this._PersonalEmailAccess;
+			}
+			set
+			{
+				if ((this._PersonalEmailAccess != value))
+				{
+					this.OnPersonalEmailAccessChanging(value);
+					this.SendPropertyChanging();
+					this._PersonalEmailAccess = value;
+					this.SendPropertyChanged("PersonalEmailAccess");
+					this.OnPersonalEmailAccessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_TpUser", Storage="_TpUsers", ThisKey="RoleID", OtherKey="RoleID")]
+		public EntitySet<TpUser> TpUsers
+		{
+			get
+			{
+				return this._TpUsers;
+			}
+			set
+			{
+				this._TpUsers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_EntityState", Storage="_EntityStates", ThisKey="RoleID", OtherKey="RoleID")]
+		public EntitySet<EntityState> EntityStates
+		{
+			get
+			{
+				return this._EntityStates;
+			}
+			set
+			{
+				this._EntityStates.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_TpUsers(TpUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = this;
+		}
+		
+		private void detach_TpUsers(TpUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = null;
+		}
+		
+		private void attach_EntityStates(EntityState entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = this;
+		}
+		
+		private void detach_EntityStates(EntityState entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Priority")]
+	public partial class Priority : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _PriorityID;
+		
+		private string _Name;
+		
+		private int _Importance;
+		
+		private System.Nullable<bool> _IsDefault;
+		
+		private System.Nullable<int> _EntityTypeID;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPriorityIDChanging(int value);
+    partial void OnPriorityIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnImportanceChanging(int value);
+    partial void OnImportanceChanged();
+    partial void OnIsDefaultChanging(System.Nullable<bool> value);
+    partial void OnIsDefaultChanged();
+    partial void OnEntityTypeIDChanging(System.Nullable<int> value);
+    partial void OnEntityTypeIDChanged();
+    #endregion
+		
+		public Priority()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriorityID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int PriorityID
+		{
+			get
+			{
+				return this._PriorityID;
+			}
+			set
+			{
+				if ((this._PriorityID != value))
+				{
+					this.OnPriorityIDChanging(value);
+					this.SendPropertyChanging();
+					this._PriorityID = value;
+					this.SendPropertyChanged("PriorityID");
+					this.OnPriorityIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Importance", DbType="Int NOT NULL")]
+		public int Importance
+		{
+			get
+			{
+				return this._Importance;
+			}
+			set
+			{
+				if ((this._Importance != value))
+				{
+					this.OnImportanceChanging(value);
+					this.SendPropertyChanging();
+					this._Importance = value;
+					this.SendPropertyChanged("Importance");
+					this.OnImportanceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDefault", DbType="Bit")]
+		public System.Nullable<bool> IsDefault
+		{
+			get
+			{
+				return this._IsDefault;
+			}
+			set
+			{
+				if ((this._IsDefault != value))
+				{
+					this.OnIsDefaultChanging(value);
+					this.SendPropertyChanging();
+					this._IsDefault = value;
+					this.SendPropertyChanged("IsDefault");
+					this.OnIsDefaultChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityTypeID", DbType="Int")]
+		public System.Nullable<int> EntityTypeID
+		{
+			get
+			{
+				return this._EntityTypeID;
+			}
+			set
+			{
+				if ((this._EntityTypeID != value))
+				{
+					this.OnEntityTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._EntityTypeID = value;
+					this.SendPropertyChanged("EntityTypeID");
+					this.OnEntityTypeIDChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EntityState")]
+	public partial class EntityState : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _EntityStateID;
+		
+		private string _Name;
+		
+		private string _NextStates;
+		
+		private System.Nullable<bool> _Initial;
+		
+		private System.Nullable<bool> _Final;
+		
+		private System.Nullable<int> _EntityTypeID;
+		
+		private System.Nullable<int> _RoleID;
+		
+		private int _ProcessID;
+		
+		private System.Nullable<bool> _RequiredComment;
+		
+		private System.Nullable<bool> _Planned;
+		
+		private System.Nullable<double> _NumericPriority;
+		
+		private EntityRef<Role> _Role;
+		
+		private EntityRef<Process> _Process;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnEntityStateIDChanging(int value);
+    partial void OnEntityStateIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnNextStatesChanging(string value);
+    partial void OnNextStatesChanged();
+    partial void OnInitialChanging(System.Nullable<bool> value);
+    partial void OnInitialChanged();
+    partial void OnFinalChanging(System.Nullable<bool> value);
+    partial void OnFinalChanged();
+    partial void OnEntityTypeIDChanging(System.Nullable<int> value);
+    partial void OnEntityTypeIDChanged();
+    partial void OnRoleIDChanging(System.Nullable<int> value);
+    partial void OnRoleIDChanged();
+    partial void OnProcessIDChanging(int value);
+    partial void OnProcessIDChanged();
+    partial void OnRequiredCommentChanging(System.Nullable<bool> value);
+    partial void OnRequiredCommentChanged();
+    partial void OnPlannedChanging(System.Nullable<bool> value);
+    partial void OnPlannedChanged();
+    partial void OnNumericPriorityChanging(System.Nullable<double> value);
+    partial void OnNumericPriorityChanged();
+    #endregion
+		
+		public EntityState()
+		{
+			this._Role = default(EntityRef<Role>);
+			this._Process = default(EntityRef<Process>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityStateID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int EntityStateID
+		{
+			get
+			{
+				return this._EntityStateID;
+			}
+			set
+			{
+				if ((this._EntityStateID != value))
+				{
+					this.OnEntityStateIDChanging(value);
+					this.SendPropertyChanging();
+					this._EntityStateID = value;
+					this.SendPropertyChanged("EntityStateID");
+					this.OnEntityStateIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NextStates", DbType="NVarChar(100)")]
+		public string NextStates
+		{
+			get
+			{
+				return this._NextStates;
+			}
+			set
+			{
+				if ((this._NextStates != value))
+				{
+					this.OnNextStatesChanging(value);
+					this.SendPropertyChanging();
+					this._NextStates = value;
+					this.SendPropertyChanged("NextStates");
+					this.OnNextStatesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Initial", DbType="Bit")]
+		public System.Nullable<bool> Initial
+		{
+			get
+			{
+				return this._Initial;
+			}
+			set
+			{
+				if ((this._Initial != value))
+				{
+					this.OnInitialChanging(value);
+					this.SendPropertyChanging();
+					this._Initial = value;
+					this.SendPropertyChanged("Initial");
+					this.OnInitialChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Final", DbType="Bit")]
+		public System.Nullable<bool> Final
+		{
+			get
+			{
+				return this._Final;
+			}
+			set
+			{
+				if ((this._Final != value))
+				{
+					this.OnFinalChanging(value);
+					this.SendPropertyChanging();
+					this._Final = value;
+					this.SendPropertyChanged("Final");
+					this.OnFinalChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityTypeID", DbType="Int")]
+		public System.Nullable<int> EntityTypeID
+		{
+			get
+			{
+				return this._EntityTypeID;
+			}
+			set
+			{
+				if ((this._EntityTypeID != value))
+				{
+					this.OnEntityTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._EntityTypeID = value;
+					this.SendPropertyChanged("EntityTypeID");
+					this.OnEntityTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleID", DbType="Int")]
+		public System.Nullable<int> RoleID
+		{
+			get
+			{
+				return this._RoleID;
+			}
+			set
+			{
+				if ((this._RoleID != value))
+				{
+					if (this._Role.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleIDChanging(value);
+					this.SendPropertyChanging();
+					this._RoleID = value;
+					this.SendPropertyChanged("RoleID");
+					this.OnRoleIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProcessID", DbType="Int NOT NULL")]
+		public int ProcessID
+		{
+			get
+			{
+				return this._ProcessID;
+			}
+			set
+			{
+				if ((this._ProcessID != value))
+				{
+					if (this._Process.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProcessIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProcessID = value;
+					this.SendPropertyChanged("ProcessID");
+					this.OnProcessIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequiredComment", DbType="Bit")]
+		public System.Nullable<bool> RequiredComment
+		{
+			get
+			{
+				return this._RequiredComment;
+			}
+			set
+			{
+				if ((this._RequiredComment != value))
+				{
+					this.OnRequiredCommentChanging(value);
+					this.SendPropertyChanging();
+					this._RequiredComment = value;
+					this.SendPropertyChanged("RequiredComment");
+					this.OnRequiredCommentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Planned", DbType="Bit")]
+		public System.Nullable<bool> Planned
+		{
+			get
+			{
+				return this._Planned;
+			}
+			set
+			{
+				if ((this._Planned != value))
+				{
+					this.OnPlannedChanging(value);
+					this.SendPropertyChanging();
+					this._Planned = value;
+					this.SendPropertyChanged("Planned");
+					this.OnPlannedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumericPriority", DbType="Float")]
+		public System.Nullable<double> NumericPriority
+		{
+			get
+			{
+				return this._NumericPriority;
+			}
+			set
+			{
+				if ((this._NumericPriority != value))
+				{
+					this.OnNumericPriorityChanging(value);
+					this.SendPropertyChanging();
+					this._NumericPriority = value;
+					this.SendPropertyChanged("NumericPriority");
+					this.OnNumericPriorityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_EntityState", Storage="_Role", ThisKey="RoleID", OtherKey="RoleID", IsForeignKey=true)]
+		public Role Role
+		{
+			get
+			{
+				return this._Role.Entity;
+			}
+			set
+			{
+				Role previousValue = this._Role.Entity;
+				if (((previousValue != value) 
+							|| (this._Role.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Role.Entity = null;
+						previousValue.EntityStates.Remove(this);
+					}
+					this._Role.Entity = value;
+					if ((value != null))
+					{
+						value.EntityStates.Add(this);
+						this._RoleID = value.RoleID;
+					}
+					else
+					{
+						this._RoleID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Role");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Process_EntityState", Storage="_Process", ThisKey="ProcessID", OtherKey="ProcessID", IsForeignKey=true)]
+		public Process Process
+		{
+			get
+			{
+				return this._Process.Entity;
+			}
+			set
+			{
+				Process previousValue = this._Process.Entity;
+				if (((previousValue != value) 
+							|| (this._Process.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Process.Entity = null;
+						previousValue.EntityStates.Remove(this);
+					}
+					this._Process.Entity = value;
+					if ((value != null))
+					{
+						value.EntityStates.Add(this);
+						this._ProcessID = value.ProcessID;
+					}
+					else
+					{
+						this._ProcessID = default(int);
+					}
+					this.SendPropertyChanged("Process");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Process")]
+	public partial class Process : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ProcessID;
+		
+		private string _Name;
+		
+		private System.Nullable<bool> _IsDefault;
+		
+		private string _Description;
+		
+		private EntitySet<Project> _Projects;
+		
+		private EntitySet<EntityState> _EntityStates;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnProcessIDChanging(int value);
+    partial void OnProcessIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnIsDefaultChanging(System.Nullable<bool> value);
+    partial void OnIsDefaultChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    #endregion
+		
+		public Process()
+		{
+			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
+			this._EntityStates = new EntitySet<EntityState>(new Action<EntityState>(this.attach_EntityStates), new Action<EntityState>(this.detach_EntityStates));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProcessID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ProcessID
+		{
+			get
+			{
+				return this._ProcessID;
+			}
+			set
+			{
+				if ((this._ProcessID != value))
+				{
+					this.OnProcessIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProcessID = value;
+					this.SendPropertyChanged("ProcessID");
+					this.OnProcessIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDefault", DbType="Bit")]
+		public System.Nullable<bool> IsDefault
+		{
+			get
+			{
+				return this._IsDefault;
+			}
+			set
+			{
+				if ((this._IsDefault != value))
+				{
+					this.OnIsDefaultChanging(value);
+					this.SendPropertyChanging();
+					this._IsDefault = value;
+					this.SendPropertyChanged("IsDefault");
+					this.OnIsDefaultChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Process_Project", Storage="_Projects", ThisKey="ProcessID", OtherKey="ProcessID")]
+		public EntitySet<Project> Projects
+		{
+			get
+			{
+				return this._Projects;
+			}
+			set
+			{
+				this._Projects.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Process_EntityState", Storage="_EntityStates", ThisKey="ProcessID", OtherKey="ProcessID")]
+		public EntitySet<EntityState> EntityStates
+		{
+			get
+			{
+				return this._EntityStates;
+			}
+			set
+			{
+				this._EntityStates.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Projects(Project entity)
+		{
+			this.SendPropertyChanging();
+			entity.Process = this;
+		}
+		
+		private void detach_Projects(Project entity)
+		{
+			this.SendPropertyChanging();
+			entity.Process = null;
+		}
+		
+		private void attach_EntityStates(EntityState entity)
+		{
+			this.SendPropertyChanging();
+			entity.Process = this;
+		}
+		
+		private void detach_EntityStates(EntityState entity)
+		{
+			this.SendPropertyChanging();
+			entity.Process = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ExternalReference")]
+	public partial class ExternalReference : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ExternalReferenceID;
+		
+		private int _TpID;
+		
+		private string _ExternalID;
+		
+		private System.DateTime _CreateDate;
+		
+		private System.Nullable<int> _EntityTypeID;
+		
+		private System.Nullable<int> _PluginProfileID;
+		
+		private EntityRef<PluginProfile> _PluginProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnExternalReferenceIDChanging(int value);
+    partial void OnExternalReferenceIDChanged();
+    partial void OnTpIDChanging(int value);
+    partial void OnTpIDChanged();
+    partial void OnExternalIDChanging(string value);
+    partial void OnExternalIDChanged();
+    partial void OnCreateDateChanging(System.DateTime value);
+    partial void OnCreateDateChanged();
+    partial void OnEntityTypeIDChanging(System.Nullable<int> value);
+    partial void OnEntityTypeIDChanged();
+    partial void OnPluginProfileIDChanging(System.Nullable<int> value);
+    partial void OnPluginProfileIDChanged();
+    #endregion
+		
+		public ExternalReference()
+		{
+			this._PluginProfile = default(EntityRef<PluginProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExternalReferenceID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ExternalReferenceID
+		{
+			get
+			{
+				return this._ExternalReferenceID;
+			}
+			set
+			{
+				if ((this._ExternalReferenceID != value))
+				{
+					this.OnExternalReferenceIDChanging(value);
+					this.SendPropertyChanging();
+					this._ExternalReferenceID = value;
+					this.SendPropertyChanged("ExternalReferenceID");
+					this.OnExternalReferenceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TpID", DbType="Int NOT NULL")]
+		public int TpID
+		{
+			get
+			{
+				return this._TpID;
+			}
+			set
+			{
+				if ((this._TpID != value))
+				{
+					this.OnTpIDChanging(value);
+					this.SendPropertyChanging();
+					this._TpID = value;
+					this.SendPropertyChanged("TpID");
+					this.OnTpIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExternalID", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ExternalID
+		{
+			get
+			{
+				return this._ExternalID;
+			}
+			set
+			{
+				if ((this._ExternalID != value))
+				{
+					this.OnExternalIDChanging(value);
+					this.SendPropertyChanging();
+					this._ExternalID = value;
+					this.SendPropertyChanged("ExternalID");
+					this.OnExternalIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityTypeID", DbType="Int")]
+		public System.Nullable<int> EntityTypeID
+		{
+			get
+			{
+				return this._EntityTypeID;
+			}
+			set
+			{
+				if ((this._EntityTypeID != value))
+				{
+					this.OnEntityTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._EntityTypeID = value;
+					this.SendPropertyChanged("EntityTypeID");
+					this.OnEntityTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PluginProfileID", DbType="Int")]
+		public System.Nullable<int> PluginProfileID
+		{
+			get
+			{
+				return this._PluginProfileID;
+			}
+			set
+			{
+				if ((this._PluginProfileID != value))
+				{
+					if (this._PluginProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPluginProfileIDChanging(value);
+					this.SendPropertyChanging();
+					this._PluginProfileID = value;
+					this.SendPropertyChanged("PluginProfileID");
+					this.OnPluginProfileIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PluginProfile_ExternalReference", Storage="_PluginProfile", ThisKey="PluginProfileID", OtherKey="PluginProfileID", IsForeignKey=true)]
+		public PluginProfile PluginProfile
+		{
+			get
+			{
+				return this._PluginProfile.Entity;
+			}
+			set
+			{
+				PluginProfile previousValue = this._PluginProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._PluginProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._PluginProfile.Entity = null;
+						previousValue.ExternalReferences.Remove(this);
+					}
+					this._PluginProfile.Entity = value;
+					if ((value != null))
+					{
+						value.ExternalReferences.Add(this);
+						this._PluginProfileID = value.PluginProfileID;
+					}
+					else
+					{
+						this._PluginProfileID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("PluginProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Comment")]
+	public partial class Comment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CommentID;
+		
+		private string _Description;
+		
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private System.Nullable<int> _GeneralID;
+		
+		private System.Nullable<int> _OwnerID;
+		
+		private System.Nullable<int> _ParentID;
+		
+		private EntitySet<Comment> _Comments;
+		
+		private EntityRef<Comment> _Comment1;
+		
+		private EntityRef<General> _General;
+		
+		private EntityRef<TpUser> _TpUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCommentIDChanging(int value);
+    partial void OnCommentIDChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
+    partial void OnGeneralIDChanging(System.Nullable<int> value);
+    partial void OnGeneralIDChanged();
+    partial void OnOwnerIDChanging(System.Nullable<int> value);
+    partial void OnOwnerIDChanged();
+    partial void OnParentIDChanging(System.Nullable<int> value);
+    partial void OnParentIDChanged();
+    #endregion
+		
+		public Comment()
+		{
+			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._Comment1 = default(EntityRef<Comment>);
+			this._General = default(EntityRef<General>);
+			this._TpUser = default(EntityRef<TpUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CommentID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int CommentID
+		{
+			get
+			{
+				return this._CommentID;
+			}
+			set
+			{
+				if ((this._CommentID != value))
+				{
+					this.OnCommentIDChanging(value);
+					this.SendPropertyChanging();
+					this._CommentID = value;
+					this.SendPropertyChanged("CommentID");
+					this.OnCommentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GeneralID", DbType="Int")]
+		public System.Nullable<int> GeneralID
+		{
+			get
+			{
+				return this._GeneralID;
+			}
+			set
+			{
+				if ((this._GeneralID != value))
+				{
+					if (this._General.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnGeneralIDChanging(value);
+					this.SendPropertyChanging();
+					this._GeneralID = value;
+					this.SendPropertyChanged("GeneralID");
+					this.OnGeneralIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OwnerID", DbType="Int")]
+		public System.Nullable<int> OwnerID
+		{
+			get
+			{
+				return this._OwnerID;
+			}
+			set
+			{
+				if ((this._OwnerID != value))
+				{
+					if (this._TpUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOwnerIDChanging(value);
+					this.SendPropertyChanging();
+					this._OwnerID = value;
+					this.SendPropertyChanged("OwnerID");
+					this.OnOwnerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ParentID", DbType="Int")]
+		public System.Nullable<int> ParentID
+		{
+			get
+			{
+				return this._ParentID;
+			}
+			set
+			{
+				if ((this._ParentID != value))
+				{
+					if (this._Comment1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnParentIDChanging(value);
+					this.SendPropertyChanging();
+					this._ParentID = value;
+					this.SendPropertyChanged("ParentID");
+					this.OnParentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Comment_Comment", Storage="_Comments", ThisKey="CommentID", OtherKey="ParentID")]
+		public EntitySet<Comment> Comments
+		{
+			get
+			{
+				return this._Comments;
+			}
+			set
+			{
+				this._Comments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Comment_Comment", Storage="_Comment1", ThisKey="ParentID", OtherKey="CommentID", IsForeignKey=true)]
+		public Comment Comment1
+		{
+			get
+			{
+				return this._Comment1.Entity;
+			}
+			set
+			{
+				Comment previousValue = this._Comment1.Entity;
+				if (((previousValue != value) 
+							|| (this._Comment1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Comment1.Entity = null;
+						previousValue.Comments.Remove(this);
+					}
+					this._Comment1.Entity = value;
+					if ((value != null))
+					{
+						value.Comments.Add(this);
+						this._ParentID = value.CommentID;
+					}
+					else
+					{
+						this._ParentID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Comment1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="General_Comment", Storage="_General", ThisKey="GeneralID", OtherKey="GeneralID", IsForeignKey=true)]
+		public General General
+		{
+			get
+			{
+				return this._General.Entity;
+			}
+			set
+			{
+				General previousValue = this._General.Entity;
+				if (((previousValue != value) 
+							|| (this._General.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._General.Entity = null;
+						previousValue.Comments.Remove(this);
+					}
+					this._General.Entity = value;
+					if ((value != null))
+					{
+						value.Comments.Add(this);
+						this._GeneralID = value.GeneralID;
+					}
+					else
+					{
+						this._GeneralID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("General");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_Comment", Storage="_TpUser", ThisKey="OwnerID", OtherKey="UserID", IsForeignKey=true)]
+		public TpUser TpUser
+		{
+			get
+			{
+				return this._TpUser.Entity;
+			}
+			set
+			{
+				TpUser previousValue = this._TpUser.Entity;
+				if (((previousValue != value) 
+							|| (this._TpUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TpUser.Entity = null;
+						previousValue.Comments.Remove(this);
+					}
+					this._TpUser.Entity = value;
+					if ((value != null))
+					{
+						value.Comments.Add(this);
+						this._OwnerID = value.UserID;
+					}
+					else
+					{
+						this._OwnerID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("TpUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Comment1 = this;
+		}
+		
+		private void detach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Comment1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Bug")]
+	public partial class Bug : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _BugID;
+		
+		private System.Nullable<int> _SeverityID;
+		
+		private System.Nullable<int> _UserStoryID;
+		
+		private System.Nullable<int> _BuildID;
+		
+		private EntityRef<Severity> _Severity;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnBugIDChanging(int value);
+    partial void OnBugIDChanged();
+    partial void OnSeverityIDChanging(System.Nullable<int> value);
+    partial void OnSeverityIDChanged();
+    partial void OnUserStoryIDChanging(System.Nullable<int> value);
+    partial void OnUserStoryIDChanged();
+    partial void OnBuildIDChanging(System.Nullable<int> value);
+    partial void OnBuildIDChanged();
+    #endregion
+		
+		public Bug()
+		{
+			this._Severity = default(EntityRef<Severity>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BugID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int BugID
+		{
+			get
+			{
+				return this._BugID;
+			}
+			set
+			{
+				if ((this._BugID != value))
+				{
+					this.OnBugIDChanging(value);
+					this.SendPropertyChanging();
+					this._BugID = value;
+					this.SendPropertyChanged("BugID");
+					this.OnBugIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeverityID", DbType="Int")]
+		public System.Nullable<int> SeverityID
+		{
+			get
+			{
+				return this._SeverityID;
+			}
+			set
+			{
+				if ((this._SeverityID != value))
+				{
+					if (this._Severity.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSeverityIDChanging(value);
+					this.SendPropertyChanging();
+					this._SeverityID = value;
+					this.SendPropertyChanged("SeverityID");
+					this.OnSeverityIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserStoryID", DbType="Int")]
+		public System.Nullable<int> UserStoryID
+		{
+			get
+			{
+				return this._UserStoryID;
+			}
+			set
+			{
+				if ((this._UserStoryID != value))
+				{
+					this.OnUserStoryIDChanging(value);
+					this.SendPropertyChanging();
+					this._UserStoryID = value;
+					this.SendPropertyChanged("UserStoryID");
+					this.OnUserStoryIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BuildID", DbType="Int")]
+		public System.Nullable<int> BuildID
+		{
+			get
+			{
+				return this._BuildID;
+			}
+			set
+			{
+				if ((this._BuildID != value))
+				{
+					this.OnBuildIDChanging(value);
+					this.SendPropertyChanging();
+					this._BuildID = value;
+					this.SendPropertyChanged("BuildID");
+					this.OnBuildIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Severity_Bug", Storage="_Severity", ThisKey="SeverityID", OtherKey="SeverityID", IsForeignKey=true)]
+		public Severity Severity
+		{
+			get
+			{
+				return this._Severity.Entity;
+			}
+			set
+			{
+				Severity previousValue = this._Severity.Entity;
+				if (((previousValue != value) 
+							|| (this._Severity.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Severity.Entity = null;
+						previousValue.Bugs.Remove(this);
+					}
+					this._Severity.Entity = value;
+					if ((value != null))
+					{
+						value.Bugs.Add(this);
+						this._SeverityID = value.SeverityID;
+					}
+					else
+					{
+						this._SeverityID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Severity");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Attachment")]
+	public partial class Attachment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _AttachmentID;
+		
+		private string _OriginalFileName;
+		
+		private string _UniqueFileName;
+		
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private string _Description;
+		
+		private System.Nullable<int> _GeneralID;
+		
+		private System.Nullable<int> _MessageID;
+		
+		private System.Nullable<int> _OwnerID;
+		
+		private System.Nullable<int> _AttachmentFileID;
+		
+		private EntityRef<General> _General;
+		
+		private EntityRef<TpUser> _TpUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAttachmentIDChanging(int value);
+    partial void OnAttachmentIDChanged();
+    partial void OnOriginalFileNameChanging(string value);
+    partial void OnOriginalFileNameChanged();
+    partial void OnUniqueFileNameChanging(string value);
+    partial void OnUniqueFileNameChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnGeneralIDChanging(System.Nullable<int> value);
+    partial void OnGeneralIDChanged();
+    partial void OnMessageIDChanging(System.Nullable<int> value);
+    partial void OnMessageIDChanged();
+    partial void OnOwnerIDChanging(System.Nullable<int> value);
+    partial void OnOwnerIDChanged();
+    partial void OnAttachmentFileIDChanging(System.Nullable<int> value);
+    partial void OnAttachmentFileIDChanged();
+    #endregion
+		
+		public Attachment()
+		{
+			this._General = default(EntityRef<General>);
+			this._TpUser = default(EntityRef<TpUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttachmentID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int AttachmentID
+		{
+			get
+			{
+				return this._AttachmentID;
+			}
+			set
+			{
+				if ((this._AttachmentID != value))
+				{
+					this.OnAttachmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._AttachmentID = value;
+					this.SendPropertyChanged("AttachmentID");
+					this.OnAttachmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OriginalFileName", DbType="NVarChar(255)")]
+		public string OriginalFileName
+		{
+			get
+			{
+				return this._OriginalFileName;
+			}
+			set
+			{
+				if ((this._OriginalFileName != value))
+				{
+					this.OnOriginalFileNameChanging(value);
+					this.SendPropertyChanging();
+					this._OriginalFileName = value;
+					this.SendPropertyChanged("OriginalFileName");
+					this.OnOriginalFileNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UniqueFileName", DbType="NVarChar(255)")]
+		public string UniqueFileName
+		{
+			get
+			{
+				return this._UniqueFileName;
+			}
+			set
+			{
+				if ((this._UniqueFileName != value))
+				{
+					this.OnUniqueFileNameChanging(value);
+					this.SendPropertyChanging();
+					this._UniqueFileName = value;
+					this.SendPropertyChanged("UniqueFileName");
+					this.OnUniqueFileNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GeneralID", DbType="Int")]
+		public System.Nullable<int> GeneralID
+		{
+			get
+			{
+				return this._GeneralID;
+			}
+			set
+			{
+				if ((this._GeneralID != value))
+				{
+					if (this._General.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnGeneralIDChanging(value);
+					this.SendPropertyChanging();
+					this._GeneralID = value;
+					this.SendPropertyChanged("GeneralID");
+					this.OnGeneralIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MessageID", DbType="Int")]
+		public System.Nullable<int> MessageID
+		{
+			get
+			{
+				return this._MessageID;
+			}
+			set
+			{
+				if ((this._MessageID != value))
+				{
+					this.OnMessageIDChanging(value);
+					this.SendPropertyChanging();
+					this._MessageID = value;
+					this.SendPropertyChanged("MessageID");
+					this.OnMessageIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OwnerID", DbType="Int")]
+		public System.Nullable<int> OwnerID
+		{
+			get
+			{
+				return this._OwnerID;
+			}
+			set
+			{
+				if ((this._OwnerID != value))
+				{
+					if (this._TpUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOwnerIDChanging(value);
+					this.SendPropertyChanging();
+					this._OwnerID = value;
+					this.SendPropertyChanged("OwnerID");
+					this.OnOwnerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttachmentFileID", DbType="Int")]
+		public System.Nullable<int> AttachmentFileID
+		{
+			get
+			{
+				return this._AttachmentFileID;
+			}
+			set
+			{
+				if ((this._AttachmentFileID != value))
+				{
+					this.OnAttachmentFileIDChanging(value);
+					this.SendPropertyChanging();
+					this._AttachmentFileID = value;
+					this.SendPropertyChanged("AttachmentFileID");
+					this.OnAttachmentFileIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="General_Attachment", Storage="_General", ThisKey="GeneralID", OtherKey="GeneralID", IsForeignKey=true)]
+		public General General
+		{
+			get
+			{
+				return this._General.Entity;
+			}
+			set
+			{
+				General previousValue = this._General.Entity;
+				if (((previousValue != value) 
+							|| (this._General.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._General.Entity = null;
+						previousValue.Attachments.Remove(this);
+					}
+					this._General.Entity = value;
+					if ((value != null))
+					{
+						value.Attachments.Add(this);
+						this._GeneralID = value.GeneralID;
+					}
+					else
+					{
+						this._GeneralID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("General");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_Attachment", Storage="_TpUser", ThisKey="OwnerID", OtherKey="UserID", IsForeignKey=true)]
+		public TpUser TpUser
+		{
+			get
+			{
+				return this._TpUser.Entity;
+			}
+			set
+			{
+				TpUser previousValue = this._TpUser.Entity;
+				if (((previousValue != value) 
+							|| (this._TpUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TpUser.Entity = null;
+						previousValue.Attachments.Remove(this);
+					}
+					this._TpUser.Entity = value;
+					if ((value != null))
+					{
+						value.Attachments.Add(this);
+						this._OwnerID = value.UserID;
+					}
+					else
+					{
+						this._OwnerID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("TpUser");
 				}
 			}
 		}

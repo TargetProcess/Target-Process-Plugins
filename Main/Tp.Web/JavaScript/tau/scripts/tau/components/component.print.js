@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/component-base","tau/views/view.container","tau/ui/templates/print/ui.template.print","tau/ui/extensions/print/ui.extension.print"],function(a,b,c,d,e){return{create:function(f){return f=f||{},a.defaults(f,{template:d}),(new b(f)).attach(e).attach(c).bus}}})
+define(["Underscore","tau/core/component-base","tau/views/view.container","tau/ui/templates/print/ui.template.print","tau/ui/extensions/print/ui.extension.print"],function(_,a,b,c,d){return{create:function(e){return e=e||{},_.defaults(e,{template:c}),(new a(e)).attach(d).attach(b).bus}}})

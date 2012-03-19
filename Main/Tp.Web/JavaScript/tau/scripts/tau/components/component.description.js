@@ -1,1 +1,1 @@
-define(["tau/components/component.field.richText"],function(a){return{create:function(b){return b=b||{},b.shortcutProcessorTarget=".ui-description__inner",b.fieldName="description",a.create(b)}}})
+define(["tau/components/component.field.richText"],function(a){return{create:function(b){return b=b||{},b.fieldName="description",a.create(b)}}})

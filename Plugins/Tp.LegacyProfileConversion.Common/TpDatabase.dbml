@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TargetProcessTest" Class="TpDatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=True" SettingsObjectName="Tp.LegacyProfileConvertsion.Common.Properties.Settings" SettingsPropertyName="TargetProcessTestConnectionString" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TargetProcess" Class="TpDatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=True" SettingsObjectName="Tp.LegacyProfileConvertsion.Common.Properties.Settings" SettingsPropertyName="TargetProcessTestConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Project" Member="Projects">
     <Type Name="Project">
       <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -29,6 +29,7 @@
       <Association Name="Project_General" Member="Generals" ThisKey="ProjectID" OtherKey="ParentProjectID" Type="General" />
       <Association Name="Project_TestPlan" Member="TestPlans" ThisKey="ProjectID" OtherKey="ProjectID" Type="TestPlan" />
       <Association Name="General_Project" Member="General" ThisKey="ProjectID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+      <Association Name="Process_Project" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TpUser" Member="TpUsers">
@@ -64,7 +65,10 @@
       <Association Name="TpUser_General" Member="Generals" ThisKey="UserID" OtherKey="LastCommentUserID" Type="General" />
       <Association Name="TpUser_General1" Member="Generals1" ThisKey="UserID" OtherKey="LastEditorID" Type="General" />
       <Association Name="TpUser_General2" Member="Generals2" ThisKey="UserID" OtherKey="OwnerID" Type="General" />
+      <Association Name="TpUser_Comment" Member="Comments" ThisKey="UserID" OtherKey="OwnerID" Type="Comment" />
+      <Association Name="TpUser_Attachment" Member="Attachments" ThisKey="UserID" OtherKey="OwnerID" Type="Attachment" />
       <Association Name="TpUser_TpUser" Member="TpUser1" ThisKey="ContactOwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+      <Association Name="Role_TpUser" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MessageUid" Member="MessageUids">
@@ -108,6 +112,8 @@
       <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="General_Project" Member="Project" ThisKey="GeneralID" OtherKey="ProjectID" Type="Project" Cardinality="One" />
       <Association Name="General_TestPlan" Member="TestPlan" ThisKey="GeneralID" OtherKey="TestPlanID" Type="TestPlan" Cardinality="One" />
+      <Association Name="General_Comment" Member="Comments" ThisKey="GeneralID" OtherKey="GeneralID" Type="Comment" />
+      <Association Name="General_Attachment" Member="Attachments" ThisKey="GeneralID" OtherKey="GeneralID" Type="Attachment" />
       <Association Name="Project_General" Member="Project1" ThisKey="ParentProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
       <Association Name="TpUser_General" Member="TpUser" ThisKey="LastCommentUserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="TpUser_General1" Member="TpUser1" ThisKey="LastEditorID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
@@ -122,6 +128,7 @@
       <Column Name="SyncDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Settings" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="PluginProfile_ExternalReference" Member="ExternalReferences" ThisKey="PluginProfileID" OtherKey="PluginProfileID" Type="ExternalReference" />
     </Type>
   </Table>
   <Table Name="dbo.GlobalSetting" Member="GlobalSettings">
@@ -171,6 +178,114 @@
       <Column Name="TestPlanID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TestCaseID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="TestPlan_TestCaseTestPlan" Member="TestPlan" ThisKey="TestPlanID" OtherKey="TestPlanID" Type="TestPlan" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Severity" Member="Severities">
+    <Type Name="Severity">
+      <Column Name="SeverityID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Importance" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsDefault" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Severity_Bug" Member="Bugs" ThisKey="SeverityID" OtherKey="SeverityID" Type="Bug" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Role" Member="Roles">
+    <Type Name="Role">
+      <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Pair" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="HaveEffort" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="TimeSheetAccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="PeopleAccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="PersonalEmailAccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Role_TpUser" Member="TpUsers" ThisKey="RoleID" OtherKey="RoleID" Type="TpUser" />
+      <Association Name="Role_EntityState" Member="EntityStates" ThisKey="RoleID" OtherKey="RoleID" Type="EntityState" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Priority" Member="Priorities">
+    <Type Name="Priority">
+      <Column Name="PriorityID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Importance" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsDefault" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EntityState" Member="EntityStates">
+    <Type Name="EntityState">
+      <Column Name="EntityStateID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="NextStates" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Initial" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Final" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProcessID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RequiredComment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Planned" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="NumericPriority" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="Role_EntityState" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
+      <Association Name="Process_EntityState" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Process" Member="Processes">
+    <Type Name="Process">
+      <Column Name="ProcessID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="IsDefault" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Process_Project" Member="Projects" ThisKey="ProcessID" OtherKey="ProcessID" Type="Project" />
+      <Association Name="Process_EntityState" Member="EntityStates" ThisKey="ProcessID" OtherKey="ProcessID" Type="EntityState" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExternalReference" Member="ExternalReferences">
+    <Type Name="ExternalReference">
+      <Column Name="ExternalReferenceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TpID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ExternalID" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PluginProfileID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="PluginProfile_ExternalReference" Member="PluginProfile" ThisKey="PluginProfileID" OtherKey="PluginProfileID" Type="PluginProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Comment" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="CommentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="GeneralID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OwnerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ParentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Comment_Comment" Member="Comments" ThisKey="CommentID" OtherKey="ParentID" Type="Comment" />
+      <Association Name="Comment_Comment" Member="Comment1" ThisKey="ParentID" OtherKey="CommentID" Type="Comment" IsForeignKey="true" />
+      <Association Name="General_Comment" Member="General" ThisKey="GeneralID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+      <Association Name="TpUser_Comment" Member="TpUser" ThisKey="OwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Bug" Member="Bugs">
+    <Type Name="Bug">
+      <Column Name="BugID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SeverityID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserStoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BuildID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Severity_Bug" Member="Severity" ThisKey="SeverityID" OtherKey="SeverityID" Type="Severity" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Attachment" Member="Attachments">
+    <Type Name="Attachment">
+      <Column Name="AttachmentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OriginalFileName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="UniqueFileName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="GeneralID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MessageID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OwnerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AttachmentFileID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="General_Attachment" Member="General" ThisKey="GeneralID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+      <Association Name="TpUser_Attachment" Member="TpUser" ThisKey="OwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

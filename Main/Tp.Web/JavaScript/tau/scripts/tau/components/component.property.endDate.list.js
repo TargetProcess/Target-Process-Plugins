@@ -1,0 +1,1 @@
+define(["tau/components/component.property.date","tau/ui/extensions/ui.extension.tooltip","tau/ui/templates/property/ui.template.property.endDate.list"],function(a,b,c){return{create:function(d){return d=d||{},d.propertyName="endDate",d.template=c,d.extensions=[b],a.create(d)}}})

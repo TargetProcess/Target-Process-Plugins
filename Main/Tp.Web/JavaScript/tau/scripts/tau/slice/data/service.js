@@ -1,0 +1,1 @@
+define(["jQuery"],function($){var a=window.location.href.split("?")[1],b="../slice/v1",c=b+"?"+a;return{getData:function(a){$.ajax({url:c,dataType:"json"}).success(a)},move:function(c,d,e){var f=b+"/move?"+a+"&x="+c.x+"&y="+c.y+"&itemId="+c.id;$.ajax({url:f,dataType:"json"}).success(d).error(e)}}})

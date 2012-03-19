@@ -26,7 +26,10 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 				html: 'Use drag and drop to define columns order.'
 			},
 				this.order
-			]
+			],
+			listeners: {
+				activate: this.resizeOwnerPanels
+			}
 		}, {
 			autoHeight: true,
 			title: 'Limits',
@@ -38,7 +41,10 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 				html: 'Set limits on states. Limit shows how many items may be in a particular state.'
 			},
 				this.limits
-			]
+			],
+			listeners: {
+				activate: this.resizeOwnerPanels
+			}
 		}, {
 			autoHeight: true,
 			title: 'Refresh',
@@ -50,7 +56,10 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 				html: 'Set refresh interval for Kanban board.'
 			},
 				this.reFresh
-			]
+			],
+			listeners: {
+				activate: this.resizeOwnerPanels
+			}
 		}
 		];
 
@@ -60,7 +69,10 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 				title: 'Tasks',
 				items: [
 					this.showTasks
-				]
+				],
+				listeners: {
+					activate: this.resizeOwnerPanels
+				}
 			});
 
 		var configValues = {
@@ -98,5 +110,10 @@ Tp.controls.kanbanboard.board.Customizer = Ext.extend(Ext.Panel, {
 		this.limits.applyCustomization();
 		this.reFresh.applyCustomization();
 		this.showTasks.applyCustomization();
+	},
+
+	resizeOwnerPanels: function (panel) {
+		panel.ownerCt.ownerCt.setHeight(panel.ownerCt.getHeight());
+		panel.ownerCt.ownerCt.ownerCt.setHeight(panel.ownerCt.getHeight());
 	}
 });

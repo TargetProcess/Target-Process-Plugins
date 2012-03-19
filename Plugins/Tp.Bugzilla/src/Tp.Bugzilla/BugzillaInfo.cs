@@ -23,7 +23,7 @@ namespace Tp.Bugzilla
 
 		public static string SupportedCgiScriptVersion
 		{
-			get { return "2.0"; }
+			get { return "2.1"; }
 		}
 	}
 }

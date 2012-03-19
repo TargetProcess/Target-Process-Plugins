@@ -1,1 +1,1 @@
-define(["Underscore","tau/models/dataProviders/model.provider.groups.base"],function(a,b){return b.extend({fetch:function(b,c,d){var e=[];if(!b){d(!1);return}a.forEach(c,function(c){var d=a.complexKey(c,b),f=a(e).any(function(a){return a.key===d});f||e.push({key:d,items:[]})}),d(e)}})})
+define(["Underscore","tau/models/dataProviders/model.provider.groups.base"],function(_,a){return a.extend({fetch:function(a,b,c){var d=[];if(!a){c(!1);return}_.forEach(b,function(b){var c=_.complexKey(b,a),e=_(d).any(function(a){return a.key===c});e||d.push({key:c,items:[]})}),c(d)}})})

@@ -21,14 +21,18 @@ namespace Tp.Git.VersionControlSystem
 	public class GitClient
 	{
 		private readonly NGit.Api.Git _git;
+		private readonly ISourceControlConnectionSettingsSource _settings;
 
-		public GitClient(NGit.Api.Git git)
+		public GitClient(ISourceControlConnectionSettingsSource settings)
 		{
-			_git = git;
+			_settings = settings;
+			_git = GetClient(settings);
 		}
 
 		public IEnumerable<RevisionRange> GetFromTillHead(DateTime from, int pageSize)
 		{
+			Fetch();
+
 			var revWalk = CreateRevWalker();
 
 			try
@@ -36,9 +40,11 @@ namespace Tp.Git.VersionControlSystem
 				var filter = ApplyNoMergesFilter(CommitTimeRevFilter.After(from));
 				revWalk.SetRevFilter(filter);
 
-				var commits = (from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
+				var commits =
+					(from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
 
-				var fromTillHead = commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
+				var fromTillHead =
+					commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
 				return fromTillHead;
 			}
 			finally
@@ -80,7 +86,8 @@ namespace Tp.Git.VersionControlSystem
 		public string[] RetrieveAuthors(DateRange dateRange)
 		{
 			var revWalk = CreateRevWalker();
-			revWalk.SetRevFilter(CommitTimeRevFilter.Between(dateRange.StartDate.GetValueOrDefault(), dateRange.EndDate.GetValueOrDefault()));
+			revWalk.SetRevFilter(CommitTimeRevFilter.Between(dateRange.StartDate.GetValueOrDefault(),
+			                                                 dateRange.EndDate.GetValueOrDefault()));
 
 			var commits = revWalk.ToArray();
 
@@ -92,7 +99,8 @@ namespace Tp.Git.VersionControlSystem
 			var revWalk = CreateRevWalker();
 			try
 			{
-				RevFilter betweenFilter = CommitTimeRevFilter.Between(((GitRevisionId) fromChangeset).Time, ((GitRevisionId) toChangeset).Time);
+				RevFilter betweenFilter = CommitTimeRevFilter.Between(((GitRevisionId) fromChangeset).Time,
+				                                                      ((GitRevisionId) toChangeset).Time);
 
 				revWalk.SetRevFilter(ApplyNoMergesFilter(betweenFilter));
 				var commits = revWalk.ToArray();
@@ -111,7 +119,7 @@ namespace Tp.Git.VersionControlSystem
 			{
 				return revWalk.ParseCommit(ObjectId.FromString(id.Value));
 			}
-			finally 
+			finally
 			{
 				revWalk.Dispose();
 			}
@@ -124,14 +132,19 @@ namespace Tp.Git.VersionControlSystem
 
 		public IEnumerable<RevisionRange> GetFromAndBefore(RevisionId @from, RevisionId to, int pageSize)
 		{
+			Fetch();
+
 			var revWalk = CreateRevWalker();
 			try
 			{
-				var filter = CommitTimeRevFilter.Between(((GitRevisionId) from).Time.AddSeconds(1), ((GitRevisionId) to).Time.AddSeconds(-1));
+				var filter = CommitTimeRevFilter.Between(((GitRevisionId) from).Time.AddSeconds(1),
+				                                         ((GitRevisionId) to).Time.AddSeconds(-1));
 				revWalk.SetRevFilter(ApplyNoMergesFilter(filter));
 
-				var commits = (from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
-				var fromTillHead = commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
+				var commits =
+					(from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
+				var fromTillHead =
+					commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
 				return fromTillHead;
 			}
 			finally
@@ -140,7 +153,7 @@ namespace Tp.Git.VersionControlSystem
 			}
 		}
 
-		public static GitClient Connect(ISourceControlConnectionSettingsSource settings)
+		private static NGit.Api.Git GetClient(ISourceControlConnectionSettingsSource settings)
 		{
 			var repositoryFolder = GetLocalRepository(settings);
 			if (IsRepositoryUriChanged(repositoryFolder, settings))
@@ -152,14 +165,13 @@ namespace Tp.Git.VersionControlSystem
 			}
 
 			NGit.Api.Git nativeGit;
+
 			try
 			{
 				var credentialsProvider = new UsernamePasswordCredentialsProvider(settings.Login, settings.Password);
 				if (repositoryFolder.Exists())
 				{
 					nativeGit = NGit.Api.Git.Open(repositoryFolder.Value);
-					nativeGit.Clean().Call();
-					nativeGit.Fetch().SetCredentialsProvider(credentialsProvider).SetRemoveDeletedRefs(true).Call();
 				}
 				else
 				{
@@ -172,12 +184,23 @@ namespace Tp.Git.VersionControlSystem
 			}
 			catch (ArgumentNullException exception)
 			{
-				throw new ArgumentException(GitCheckConnectionErrorResolver.INVALID_URI_OR_INSUFFICIENT_ACCESS_RIGHTS_ERROR_MESSAGE, exception);
+				throw new ArgumentException(
+					GitCheckConnectionErrorResolver.INVALID_URI_OR_INSUFFICIENT_ACCESS_RIGHTS_ERROR_MESSAGE, exception);
 			}
-			return new GitClient(nativeGit);
+
+			return nativeGit;
 		}
 
-		private static bool IsRepositoryUriChanged(GitRepositoryFolder repositoryFolder, ISourceControlConnectionSettingsSource settings)
+		private void Fetch()
+		{
+			var credentialsProvider = new UsernamePasswordCredentialsProvider(_settings.Login, _settings.Password);
+
+			_git.Clean().Call();
+			_git.Fetch().SetCredentialsProvider(credentialsProvider).SetRemoveDeletedRefs(true).Call();
+		}
+
+		private static bool IsRepositoryUriChanged(GitRepositoryFolder repositoryFolder,
+		                                           ISourceControlConnectionSettingsSource settings)
 		{
 			return (settings.Uri.ToLower() != repositoryFolder.RepoUri.ToLower()) && repositoryFolder.Exists();
 		}
@@ -189,15 +212,20 @@ namespace Tp.Git.VersionControlSystem
 
 		private static GitRepositoryFolder GetLocalRepository(ISourceControlConnectionSettingsSource settings)
 		{
-				var repoFolderStorage = Repository.Get<GitRepositoryFolder>();
-				if (repoFolderStorage.Empty())
-				{
-						var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
-						repoFolderStorage.ReplaceWith(repositoryFolder);
-						return repositoryFolder;
-				}
+			var repoFolderStorage = Repository.Get<GitRepositoryFolder>();
+			if (repoFolderStorage.Empty())
+			{
+				var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
+				repoFolderStorage.ReplaceWith(repositoryFolder);
+				return repositoryFolder;
+			}
 
-				return repoFolderStorage.Single();
+			return repoFolderStorage.Single();
+		}
+
+		public string GetFileContent(RevCommit commit, string path)
+		{
+			return commit.GetFileContent(path, _git.GetRepository());
 		}
 	}
 }

@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.property.time"],function(a,b){return{create:function(c){return c=a.clone(c||{}),c.propertyName="initialEstimate",b.create(c)}}})
+define(["Underscore","tau/components/component.property.time"],function(_,a){return{create:function(b){return b=_.clone(b||{}),b.propertyName="initialEstimate",a.create(b)}}})

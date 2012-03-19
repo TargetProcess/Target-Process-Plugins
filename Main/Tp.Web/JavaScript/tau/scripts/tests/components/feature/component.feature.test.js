@@ -1,1 +1,1 @@
-define(["jQuery","tau/components/component.property.feature","tests/components/component.specs","tests/common/testData.Generator","tests/common/service.mock","tau/configurator","tests/components/common/common.setup"],function(a,b,c,d,e,f,g){var h=function(){};return{run:h}})
+define(["jQuery","tau/components/component.property.feature","tests/components/component.specs","tests/common/testData.Generator","tests/common/service.mock","tau/configurator","tests/components/common/common.setup"],function($,a,b,c,d,e,f){var g=function(){};return{run:g}})

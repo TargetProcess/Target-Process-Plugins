@@ -243,13 +243,11 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 		var entityType = this.entity.entityType.name.toLowerCase();
 		this.addClass('kanban-item-entitytype-' + entityType);
 		if (entityType == 'task') {
-
 		}
 		else {
 			this.addClass('kanban-item-priority-' + this.entity.priorityImportance);
 		}
 		this.addClass('kanban-item-name');
-
 
 		this.kanbanCardTemplate.overwrite(this.el, model);
 

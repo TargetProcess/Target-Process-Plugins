@@ -3,6 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
+using System.Xml.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -35,85 +36,85 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Message ID.</value>
 		[PrimaryKey]
-		public int? MessageID { get; set; }
+		[XmlElement(Order = 3)]public int? MessageID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Subject. Subject of the Message
         /// </summary>
         /// <value>The Subject.</value>
-		public String Subject { get; set; }
+		[XmlElement(Order = 4)]public String Subject { get; set; }
 
 		/// <summary>
         /// Gets or sets the Recipients. Recipients
         /// </summary>
         /// <value>The Recipients.</value>
-		public String Recipients { get; set; }
+		[XmlElement(Order = 5)]public String Recipients { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Read. Is Read
         /// </summary>
         /// <value>The Is Read.</value>
-		public Boolean? IsRead { get; set; }
+		[XmlElement(Order = 6)]public Boolean? IsRead { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Processed. Is Processed
         /// </summary>
         /// <value>The Is Processed.</value>
-		public Boolean? IsProcessed { get; set; }
+		[XmlElement(Order = 7)]public Boolean? IsProcessed { get; set; }
 
 		/// <summary>
         /// Gets or sets the Body. Body of the Message
         /// </summary>
         /// <value>The Body.</value>
-		public String Body { get; set; }
+		[XmlElement(Order = 8)]public String Body { get; set; }
 
 		/// <summary>
         /// Gets or sets the Create Date. Date when Message has been created
         /// </summary>
         /// <value>The Create Date.</value>
-		public DateTime? CreateDate { get; set; }
+		[XmlElement(Order = 9)]public DateTime? CreateDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Send Date. Send Date
         /// </summary>
         /// <value>The Send Date.</value>
-		public DateTime? SendDate { get; set; }
+		[XmlElement(Order = 10)]public DateTime? SendDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Message Type. Message Type
         /// </summary>
         /// <value>The Message Type.</value>
-		public MessageTypeEnum? MessageType { get; set; }
+		[XmlElement(Order = 11)]public MessageTypeEnum? MessageType { get; set; }
 
 		/// <summary>
         /// Gets or sets the Content Type. Content Type
         /// </summary>
         /// <value>The Content Type.</value>
-		public ContentTypeEnum? ContentType { get; set; }
+		[XmlElement(Order = 12)]public ContentTypeEnum? ContentType { get; set; }
 		
 		/// <summary>
         /// Gets or sets the From ID. From
         /// </summary>
         /// <value>The From ID.</value>
 		[ForeignKey]
-		public Int32? FromID { get; set; }
+		[XmlElement(Order = 13)]public Int32? FromID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the To ID. To
         /// </summary>
         /// <value>The To ID.</value>
 		[ForeignKey]
-		public Int32? ToID { get; set; }
+		[XmlElement(Order = 14)]public Int32? ToID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Message Uid ID. Message Uid
         /// </summary>
         /// <value>The Message Uid ID.</value>
 		[ForeignKey]
-		public Int32? MessageUidID { get; set; }
+		[XmlElement(Order = 15)]public Int32? MessageUidID { get; set; }
 
-		public MessageUidDTO MessageUidDto { get; set; }
+		[XmlElement(Order = 16)]public MessageUidDTO MessageUidDto { get; set; }
 	}
 
 

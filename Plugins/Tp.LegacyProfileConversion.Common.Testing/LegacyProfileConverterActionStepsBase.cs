@@ -10,6 +10,7 @@ using System.Xml;
 using NBehave.Narrator.Framework;
 using Rhino.Mocks;
 using StructureMap;
+using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
@@ -24,7 +25,8 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		where TRegistry : LegacyProfileConverterUnitTestRegistry, new()
 	{
 		protected TpDatabaseDataContext Context { get; private set; }
-		private PluginProfile _legacyProfile;
+		protected PluginProfile _legacyProfile;
+		protected int DefaultProcessId { get; set; }
 
 		private static void ClearPluginDb(string pluginConnectionString)
 		{
@@ -59,6 +61,7 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			ClearTpDb(new TpDatabaseDataContext(TpConnectionString));
 
 			Context = new TpDatabaseDataContext(TpConnectionString);
+			DefaultProcessId = Context.Processes.First(p => p.IsDefault == true).ProcessID;
 		}
 
 		[AfterScenario]
@@ -72,9 +75,15 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		private static void ClearTpDb(DataContext tpDatabaseDataContext)
 		{
 			tpDatabaseDataContext.ExecuteCommand("delete from TestPlan");
+			tpDatabaseDataContext.ExecuteCommand("delete from Comment");
+			tpDatabaseDataContext.ExecuteCommand("delete from Attachment");
+			tpDatabaseDataContext.ExecuteCommand("delete from Bug");
+			tpDatabaseDataContext.ExecuteCommand("update General set ParentProjectId=null");
 			tpDatabaseDataContext.ExecuteCommand("delete from Project");
 			tpDatabaseDataContext.ExecuteCommand("delete from CustomReport");
 			tpDatabaseDataContext.ExecuteCommand("delete from TpUser");
+			tpDatabaseDataContext.ExecuteCommand("delete from ExternalReference");
+			tpDatabaseDataContext.ExecuteCommand("delete from Assignable");
 			tpDatabaseDataContext.ExecuteCommand("delete from General");
 			tpDatabaseDataContext.ExecuteCommand("delete from MessageUid");
 			tpDatabaseDataContext.ExecuteCommand("delete from PluginProfile");
@@ -90,6 +99,12 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		[Given("project '$projectAbbr' created")]
 		public void CreateProject(string projectAbbr)
 		{
+			CreateProjectForProcess(projectAbbr);
+		}
+
+		[Given("project '$projectAbbr' for the first process created")]
+		public void CreateProjectForProcess(string projectAbbr)
+		{
 			Context.Generals.InsertOnSubmit(new General { Name = projectAbbr });
 			Context.SubmitChanges();
 
@@ -97,7 +112,8 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			{
 				Abbreviation = projectAbbr,
 				ProjectID = Context.Generals.First(x => x.Name == projectAbbr).GeneralID,
-				IsActive = true
+				IsActive = true,
+				ProcessID = DefaultProcessId
 			};
 			Context.Projects.InsertOnSubmit(project);
 			Context.SubmitChanges();
@@ -216,6 +232,12 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames));
 		}
 
+		[Then("sync interval should be predefined $minutes")]
+		public void SyncIntervalShouldBeSpecified(int minutes)
+		{
+			Account.Profiles.Cast<ISynchronizableProfile>().Single().SynchronizationInterval.Should(Be.EqualTo(minutes));
+		}
+
 		protected static IAccount Account
 		{
 			get
@@ -229,8 +251,16 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			get { return ObjectFactory.GetInstance<IAccountRepository>(); }
 		}
 
-		protected abstract string PluginConnectionString { get; }
-		protected abstract string TpConnectionString { get; }
+		protected virtual string PluginConnectionString
+		{
+			get { return "Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa"; }
+		}
+
+		protected virtual string TpConnectionString
+		{
+			get { return "Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa"; }
+		}
+
 		protected abstract string SettingsXmlNode { get; }
 		protected abstract string PluginName { get; }
 	}

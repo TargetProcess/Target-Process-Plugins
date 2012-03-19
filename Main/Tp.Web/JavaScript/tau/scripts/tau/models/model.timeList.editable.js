@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/extensions/component.extension.base"],function(_,a){var b=a.extend({category:"edit","bus beforeInit":function(){this.fire("permissionsReady",{editable:!0})}});return b})

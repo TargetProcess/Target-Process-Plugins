@@ -38,11 +38,17 @@ namespace Tp.Bugzilla.ImportToBugzilla
 
 			_logger.InfoFormat("Importing comment to Bugzilla. TargetProcess Bug ID: {0}", message.Dto.GeneralID);
 
-			var offset = _bugzillaService.GetTimeOffset();
+			try
+			{
+				var offset = _bugzillaService.GetTimeOffset();
 
-			_bugzillaService.Execute(_actionFactory.GetCommentAction(message.Dto, offset));
-
-			_storage.Get<CommentDTO>(message.Dto.GeneralID.ToString()).Add(message.Dto);
+				_bugzillaService.Execute(_actionFactory.GetCommentAction(message.Dto, offset));
+				_storage.Get<CommentDTO>(message.Dto.GeneralID.ToString()).Add(message.Dto);
+			}
+			catch (Exception ex)
+			{
+				_logger.Error(ex.Message, ex);
+			}
 
 			_logger.InfoFormat("Comment imported to Bugzilla. TargetProcess Bug ID: {0}", message.Dto.GeneralID);
 		}
