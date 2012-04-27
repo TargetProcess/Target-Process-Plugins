@@ -12,7 +12,7 @@ namespace Tp.Bugzilla
 {
 	public interface IBugzillaService
 	{
-		int[] GetChangedBugIds(DateTime date);
+		int[] GetChangedBugIds(DateTime? date);
 
 		bugzilla_properties CheckConnection();
 

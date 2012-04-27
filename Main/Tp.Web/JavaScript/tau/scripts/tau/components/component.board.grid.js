@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.board.grid","tau/ui/templates/board.grid/ui.template.board.grid"],function(a,b,c){return{create:function(d){var e={extensions:[b],template:c};return a.create(e,d)}}})

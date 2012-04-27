@@ -1,0 +1,1 @@
+define(["jQuery","tau/components/extensions/component.extension.base"],function($,a){return a.extend({"bus afterRender":function(a){var b=this.config.stylesheets;$("link.testrunnercss").remove(),_.forEach(b,function(a){$("<link />").attr({type:"text/css",rel:"stylesheet",href:require.toUrl(a),name:"testrunnercss"}).appendTo("head")})}})})

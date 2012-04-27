@@ -23,6 +23,7 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 					And subversion login is 'login'
 					And subversion password is 'password'
 					And subversion starting revision is 25
+					And subversion revision 25 is imported
 					And user mapping is:
 					|subversion|targetprocess|
 					|svnuser1|tpuser1|
@@ -40,6 +41,30 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 					|svnuser1|tpuser1|
 					|svnuser2|tpuser2|
 					And profile should have tp users: tpuser1, tpuser2
+					And profile should have revisions: 25
+					And profile should be initialized"
+				.Execute(In.Context<LegacyProfileConverterActionSteps>());
+		}
+
+		[Test]
+		public void ShouldMigrateRevisionsToExistingConvertedProfile()
+		{
+			@"Given account name is 'Account'
+					And profile name is 'ProfileName'
+					And user 'tpuser1' created
+					And subversion repository is 'http://host/subversionrepo'
+					And sync interval is 15
+					And subversion login is 'login'
+					And subversion password is 'password'
+					And subversion starting revision is 25
+					And user mapping is:
+					|subversion|targetprocess|
+					|svnuser1|tpuser1|
+					|svnuser2|tpuser2|
+					And legacy subversion plugin profile from Target Process converted to new subversion plugin profile
+					And subversion revision 25 is imported
+				When revisions migrated from old profile to the new one
+				Then profile should have revisions: 25
 					And profile should be initialized"
 				.Execute(In.Context<LegacyProfileConverterActionSteps>());
 		}

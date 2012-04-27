@@ -1,0 +1,1 @@
+d3.csv=function(a,b){d3.text(a,"text/csv",function(a){b(a&&d3.csv.parse(a))})}

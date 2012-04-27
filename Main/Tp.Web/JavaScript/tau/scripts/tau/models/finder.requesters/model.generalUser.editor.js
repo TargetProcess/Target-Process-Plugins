@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base"],function(_,a){var b=a.extend({"bus entitySelected":function(a){var b=a.data.entity,c=this.config.store,d=this,e=this.config.context.entity;c.save(e.entityType.name,{id:e.id,$set:{requesters:[{id:b.id}]},fields:["id"]}).done({success:function(a){}})}});return b})

@@ -104,6 +104,7 @@
     <Compile Include="IAuthentication.cs" />
     <Compile Include="ITpLogManager.cs" />
     <Compile Include="Linq\ClassFactory.cs" />
+    <Compile Include="Linq\DynamicDictionary.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="EntityValidationException.cs" />
     <Compile Include="EnumerableExtensions.cs" />
@@ -119,9 +120,13 @@
     <Compile Include="Linq\Signature.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="InvalidDateRangeException.cs" />
+    <Compile Include="MaybeExtensions.cs" />
+    <Compile Include="netfx\System\Guard.cs" />
+    <Compile Include="netfx\System\Reflection\GetCustomAttribute.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafeNull.cs" />
+    <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringBuilderExtensions.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="StringExtensions.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="TpPolicy.cs" />
     <Compile Include="TypeNameExtensions.cs" />
     <Compile Include="TypeNameWithoutVersion.cs" />
+    <Compile Include="RootUri.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -148,6 +154,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="TpPublic.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

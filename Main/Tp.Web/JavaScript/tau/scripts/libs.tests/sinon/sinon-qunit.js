@@ -1,0 +1,1 @@
+sinon.assert.fail=function(a){QUnit.ok(!1,a)},sinon.assert.pass=function(a){QUnit.ok(!0,a)},sinon.config={injectIntoThis:!0,injectInto:null,properties:["spy","stub","mock","clock","sandbox"],useFakeTimers:!0,useFakeServer:!1},function(a){var b=QUnit.test;QUnit.test=a.test=function(a,c,d,e){return arguments.length===2&&(d=c,c=null),b(a,c,sinon.test(d),e)}}(this)

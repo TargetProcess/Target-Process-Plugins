@@ -1,0 +1,1 @@
+d3_transitionPrototype.text=function(a){return this.tween("text",function(b,c){this.textContent=typeof a=="function"?a.call(this,b,c):a})}

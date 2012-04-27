@@ -10,10 +10,12 @@ namespace Tp.LegacyProfileConvertsion.Common
 {
 	public class ConvertorArgs : IConvertorArgs
 	{
+		public const string DefaultAction = "default";
 		private readonly string[] _args;
 		public string AccountName { get; private set; }
 		public string TpConnectionString { get; private set; }
 		public string PluginConnectionString { get; private set; }
+		public string Action { get; private set; }
 
 		public ConvertorArgs(string[] args)
 		{
@@ -29,12 +31,18 @@ namespace Tp.LegacyProfileConvertsion.Common
 
 			var pluginConnection = new CmdLineString("plugindb", false, "Target Process database connection string.");
 			cmdLine.RegisterParameter(pluginConnection);
+
+			var action = new CmdLineString("action", false, "Migration action");
+			cmdLine.RegisterParameter(action);
+
 			cmdLine.Parse(args);
 
 			TpConnectionString = tpConnection;
 			AccountName = string.IsNullOrEmpty(accountName) ? Integration.Messages.AccountName.Empty.Value : accountName;
 
 			PluginConnectionString = string.IsNullOrEmpty(pluginConnection) ? TpConnectionString : pluginConnection;
+
+			Action = string.IsNullOrEmpty(action) ? DefaultAction : action;
 		}
 
 		string IDatabaseConfiguration.ConnectionString

@@ -1,0 +1,1 @@
+d3_selectionPrototype.call=function(a){return a.apply(this,(arguments[0]=this,arguments)),this}

@@ -4,6 +4,7 @@
 // 
 
 using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.FileStorage;
 
 namespace Tp.Integration.Plugin.Common.Domain
 {
@@ -23,6 +24,11 @@ namespace Tp.Integration.Plugin.Common.Domain
 		/// Log of current profile.
 		/// </summary>
 		IActivityLog Log { get; }
+
+		/// <summary>
+		/// Profile-specific file storage.
+		/// </summary>
+		IProfileFileStorage FileStorage { get; }
 
 		/// <summary>
 		/// Saves changes made to current profile. You can change Settings and Initialized values.

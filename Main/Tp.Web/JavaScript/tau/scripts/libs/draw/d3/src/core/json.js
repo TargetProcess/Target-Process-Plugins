@@ -1,0 +1,1 @@
+d3.json=function(a,b){d3.text(a,"application/json",function(a){b(a?JSON.parse(a):null)})}

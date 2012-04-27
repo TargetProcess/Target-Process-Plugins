@@ -86,15 +86,14 @@ UseCaseHelp.ToolTipItem = Ext.extend(Ext.Component, {
 
 	getHelpContext: function() {
 		var element = this.findElement(this.helpElementSelector);
+		var htmlDescription = Ext.util.Format.htmlDecode(this.description);
+
 		var helpElement;
-		var htmlDescription;
 		if (element) {
 			helpElement = element;
-			htmlDescription = Ext.util.Format.htmlDecode(this.description);
 		}
 		else {
 			helpElement = this.target;
-			htmlDescription = Ext.util.Format.htmlDecode(this.alternativeDescription);
 		}
 
 		htmlDescription += this.getNextPrevHtml();
@@ -127,12 +126,20 @@ UseCaseHelp.ToolTipItem = Ext.extend(Ext.Component, {
 
 	findElement: function(selector) {
 		var result = Ext.query(selector);
-		if (result.length == 0)
+
+		var visible = [];
+
+		for (var i = 0; i < result.length; i++) {
+			var e = Ext.get(result[i]);
+
+			if (e.isVisible() && e.findParent("div{display=none}") == null) {
+				visible.push(e);
+			}
+		}
+
+		if (visible.length == 0)
 			return null;
 
-		if (!Ext.get(result[0]).isVisible)
-			return null;
-
-		return Ext.get(result[0]);
+		return visible[0];
 	}
 })

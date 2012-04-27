@@ -1,0 +1,1 @@
+define([],function(){var a={name:"sample.test"};return a["should be correct"]=function(a){a.equals(1,1,"Yep"),a.ok(!0,"Yem"),a.done()},a})

@@ -84,10 +84,13 @@ namespace Tp.LegacyProfileConvertsion.Common
     partial void InsertAttachment(Attachment instance);
     partial void UpdateAttachment(Attachment instance);
     partial void DeleteAttachment(Attachment instance);
+    partial void InsertProjectMember(ProjectMember instance);
+    partial void UpdateProjectMember(ProjectMember instance);
+    partial void DeleteProjectMember(ProjectMember instance);
     #endregion
 		
 		public TpDatabaseDataContext() : 
-				base(global::Tp.LegacyProfileConvertsion.Common.Properties.Settings.Default.TargetProcessTestConnectionString, mappingSource)
+				base(global::Tp.LegacyProfileConvertsion.Common.Properties.Settings.Default.TargetProcessTestConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -259,6 +262,14 @@ namespace Tp.LegacyProfileConvertsion.Common
 				return this.GetTable<Attachment>();
 			}
 		}
+		
+		public System.Data.Linq.Table<ProjectMember> ProjectMembers
+		{
+			get
+			{
+				return this.GetTable<ProjectMember>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Project")]
@@ -318,6 +329,8 @@ namespace Tp.LegacyProfileConvertsion.Common
 		private EntitySet<General> _Generals;
 		
 		private EntitySet<TestPlan> _TestPlans;
+		
+		private EntitySet<ProjectMember> _ProjectMembers;
 		
 		private EntityRef<General> _General;
 		
@@ -381,6 +394,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 		{
 			this._Generals = new EntitySet<General>(new Action<General>(this.attach_Generals), new Action<General>(this.detach_Generals));
 			this._TestPlans = new EntitySet<TestPlan>(new Action<TestPlan>(this.attach_TestPlans), new Action<TestPlan>(this.detach_TestPlans));
+			this._ProjectMembers = new EntitySet<ProjectMember>(new Action<ProjectMember>(this.attach_ProjectMembers), new Action<ProjectMember>(this.detach_ProjectMembers));
 			this._General = default(EntityRef<General>);
 			this._Process = default(EntityRef<Process>);
 			OnCreated();
@@ -900,6 +914,19 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_ProjectMember", Storage="_ProjectMembers", ThisKey="ProjectID", OtherKey="ProjectID")]
+		public EntitySet<ProjectMember> ProjectMembers
+		{
+			get
+			{
+				return this._ProjectMembers;
+			}
+			set
+			{
+				this._ProjectMembers.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="General_Project", Storage="_General", ThisKey="ProjectID", OtherKey="GeneralID", IsForeignKey=true)]
 		public General General
 		{
@@ -1011,6 +1038,18 @@ namespace Tp.LegacyProfileConvertsion.Common
 			this.SendPropertyChanging();
 			entity.Project = null;
 		}
+		
+		private void attach_ProjectMembers(ProjectMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_ProjectMembers(ProjectMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TpUser")]
@@ -1085,6 +1124,8 @@ namespace Tp.LegacyProfileConvertsion.Common
 		
 		private EntitySet<Attachment> _Attachments;
 		
+		private EntitySet<ProjectMember> _ProjectMembers;
+		
 		private EntityRef<TpUser> _TpUser1;
 		
 		private EntityRef<Role> _Role;
@@ -1157,6 +1198,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 			this._Generals2 = new EntitySet<General>(new Action<General>(this.attach_Generals2), new Action<General>(this.detach_Generals2));
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
 			this._Attachments = new EntitySet<Attachment>(new Action<Attachment>(this.attach_Attachments), new Action<Attachment>(this.detach_Attachments));
+			this._ProjectMembers = new EntitySet<ProjectMember>(new Action<ProjectMember>(this.attach_ProjectMembers), new Action<ProjectMember>(this.detach_ProjectMembers));
 			this._TpUser1 = default(EntityRef<TpUser>);
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
@@ -1788,6 +1830,19 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_ProjectMember", Storage="_ProjectMembers", ThisKey="UserID", OtherKey="UserID")]
+		public EntitySet<ProjectMember> ProjectMembers
+		{
+			get
+			{
+				return this._ProjectMembers;
+			}
+			set
+			{
+				this._ProjectMembers.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_TpUser", Storage="_TpUser1", ThisKey="ContactOwnerID", OtherKey="UserID", IsForeignKey=true)]
 		public TpUser TpUser1
 		{
@@ -1943,6 +1998,18 @@ namespace Tp.LegacyProfileConvertsion.Common
 		}
 		
 		private void detach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.TpUser = null;
+		}
+		
+		private void attach_ProjectMembers(ProjectMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.TpUser = this;
+		}
+		
+		private void detach_ProjectMembers(ProjectMember entity)
 		{
 			this.SendPropertyChanging();
 			entity.TpUser = null;
@@ -4498,6 +4565,8 @@ namespace Tp.LegacyProfileConvertsion.Common
 		
 		private EntitySet<EntityState> _EntityStates;
 		
+		private EntitySet<ProjectMember> _ProjectMembers;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4524,6 +4593,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 		{
 			this._TpUsers = new EntitySet<TpUser>(new Action<TpUser>(this.attach_TpUsers), new Action<TpUser>(this.detach_TpUsers));
 			this._EntityStates = new EntitySet<EntityState>(new Action<EntityState>(this.attach_EntityStates), new Action<EntityState>(this.detach_EntityStates));
+			this._ProjectMembers = new EntitySet<ProjectMember>(new Action<ProjectMember>(this.attach_ProjectMembers), new Action<ProjectMember>(this.detach_ProjectMembers));
 			OnCreated();
 		}
 		
@@ -4713,6 +4783,19 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_ProjectMember", Storage="_ProjectMembers", ThisKey="RoleID", OtherKey="RoleID")]
+		public EntitySet<ProjectMember> ProjectMembers
+		{
+			get
+			{
+				return this._ProjectMembers;
+			}
+			set
+			{
+				this._ProjectMembers.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4752,6 +4835,18 @@ namespace Tp.LegacyProfileConvertsion.Common
 		}
 		
 		private void detach_EntityStates(EntityState entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = null;
+		}
+		
+		private void attach_ProjectMembers(ProjectMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = this;
+		}
+		
+		private void detach_ProjectMembers(ProjectMember entity)
 		{
 			this.SendPropertyChanging();
 			entity.Role = null;
@@ -6530,6 +6625,359 @@ namespace Tp.LegacyProfileConvertsion.Common
 					else
 					{
 						this._OwnerID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("TpUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ProjectMember")]
+	public partial class ProjectMember : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ProjectMemberID;
+		
+		private System.Nullable<int> _ProjectID;
+		
+		private System.Nullable<int> _UserID;
+		
+		private System.Nullable<int> _RoleID;
+		
+		private System.Nullable<decimal> _WeeklyAvailableHours;
+		
+		private System.Nullable<System.DateTime> _MembershipEndDate;
+		
+		private System.Nullable<int> _Allocation;
+		
+		private System.Nullable<System.DateTime> _MembershipStartDate;
+		
+		private EntityRef<Project> _Project;
+		
+		private EntityRef<Role> _Role;
+		
+		private EntityRef<TpUser> _TpUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnProjectMemberIDChanging(int value);
+    partial void OnProjectMemberIDChanged();
+    partial void OnProjectIDChanging(System.Nullable<int> value);
+    partial void OnProjectIDChanged();
+    partial void OnUserIDChanging(System.Nullable<int> value);
+    partial void OnUserIDChanged();
+    partial void OnRoleIDChanging(System.Nullable<int> value);
+    partial void OnRoleIDChanged();
+    partial void OnWeeklyAvailableHoursChanging(System.Nullable<decimal> value);
+    partial void OnWeeklyAvailableHoursChanged();
+    partial void OnMembershipEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnMembershipEndDateChanged();
+    partial void OnAllocationChanging(System.Nullable<int> value);
+    partial void OnAllocationChanged();
+    partial void OnMembershipStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnMembershipStartDateChanged();
+    #endregion
+		
+		public ProjectMember()
+		{
+			this._Project = default(EntityRef<Project>);
+			this._Role = default(EntityRef<Role>);
+			this._TpUser = default(EntityRef<TpUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectMemberID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ProjectMemberID
+		{
+			get
+			{
+				return this._ProjectMemberID;
+			}
+			set
+			{
+				if ((this._ProjectMemberID != value))
+				{
+					this.OnProjectMemberIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectMemberID = value;
+					this.SendPropertyChanged("ProjectMemberID");
+					this.OnProjectMemberIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectID", DbType="Int")]
+		public System.Nullable<int> ProjectID
+		{
+			get
+			{
+				return this._ProjectID;
+			}
+			set
+			{
+				if ((this._ProjectID != value))
+				{
+					if (this._Project.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectID = value;
+					this.SendPropertyChanged("ProjectID");
+					this.OnProjectIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Int")]
+		public System.Nullable<int> UserID
+		{
+			get
+			{
+				return this._UserID;
+			}
+			set
+			{
+				if ((this._UserID != value))
+				{
+					if (this._TpUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._UserID = value;
+					this.SendPropertyChanged("UserID");
+					this.OnUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleID", DbType="Int")]
+		public System.Nullable<int> RoleID
+		{
+			get
+			{
+				return this._RoleID;
+			}
+			set
+			{
+				if ((this._RoleID != value))
+				{
+					if (this._Role.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleIDChanging(value);
+					this.SendPropertyChanging();
+					this._RoleID = value;
+					this.SendPropertyChanged("RoleID");
+					this.OnRoleIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WeeklyAvailableHours", DbType="Decimal(18,4)")]
+		public System.Nullable<decimal> WeeklyAvailableHours
+		{
+			get
+			{
+				return this._WeeklyAvailableHours;
+			}
+			set
+			{
+				if ((this._WeeklyAvailableHours != value))
+				{
+					this.OnWeeklyAvailableHoursChanging(value);
+					this.SendPropertyChanging();
+					this._WeeklyAvailableHours = value;
+					this.SendPropertyChanged("WeeklyAvailableHours");
+					this.OnWeeklyAvailableHoursChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MembershipEndDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> MembershipEndDate
+		{
+			get
+			{
+				return this._MembershipEndDate;
+			}
+			set
+			{
+				if ((this._MembershipEndDate != value))
+				{
+					this.OnMembershipEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._MembershipEndDate = value;
+					this.SendPropertyChanged("MembershipEndDate");
+					this.OnMembershipEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Allocation", DbType="Int")]
+		public System.Nullable<int> Allocation
+		{
+			get
+			{
+				return this._Allocation;
+			}
+			set
+			{
+				if ((this._Allocation != value))
+				{
+					this.OnAllocationChanging(value);
+					this.SendPropertyChanging();
+					this._Allocation = value;
+					this.SendPropertyChanged("Allocation");
+					this.OnAllocationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MembershipStartDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> MembershipStartDate
+		{
+			get
+			{
+				return this._MembershipStartDate;
+			}
+			set
+			{
+				if ((this._MembershipStartDate != value))
+				{
+					this.OnMembershipStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._MembershipStartDate = value;
+					this.SendPropertyChanged("MembershipStartDate");
+					this.OnMembershipStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_ProjectMember", Storage="_Project", ThisKey="ProjectID", OtherKey="ProjectID", IsForeignKey=true)]
+		public Project Project
+		{
+			get
+			{
+				return this._Project.Entity;
+			}
+			set
+			{
+				Project previousValue = this._Project.Entity;
+				if (((previousValue != value) 
+							|| (this._Project.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Project.Entity = null;
+						previousValue.ProjectMembers.Remove(this);
+					}
+					this._Project.Entity = value;
+					if ((value != null))
+					{
+						value.ProjectMembers.Add(this);
+						this._ProjectID = value.ProjectID;
+					}
+					else
+					{
+						this._ProjectID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Project");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_ProjectMember", Storage="_Role", ThisKey="RoleID", OtherKey="RoleID", IsForeignKey=true)]
+		public Role Role
+		{
+			get
+			{
+				return this._Role.Entity;
+			}
+			set
+			{
+				Role previousValue = this._Role.Entity;
+				if (((previousValue != value) 
+							|| (this._Role.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Role.Entity = null;
+						previousValue.ProjectMembers.Remove(this);
+					}
+					this._Role.Entity = value;
+					if ((value != null))
+					{
+						value.ProjectMembers.Add(this);
+						this._RoleID = value.RoleID;
+					}
+					else
+					{
+						this._RoleID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Role");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TpUser_ProjectMember", Storage="_TpUser", ThisKey="UserID", OtherKey="UserID", IsForeignKey=true)]
+		public TpUser TpUser
+		{
+			get
+			{
+				return this._TpUser.Entity;
+			}
+			set
+			{
+				TpUser previousValue = this._TpUser.Entity;
+				if (((previousValue != value) 
+							|| (this._TpUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TpUser.Entity = null;
+						previousValue.ProjectMembers.Remove(this);
+					}
+					this._TpUser.Entity = value;
+					if ((value != null))
+					{
+						value.ProjectMembers.Add(this);
+						this._UserID = value.UserID;
+					}
+					else
+					{
+						this._UserID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TpUser");
 				}

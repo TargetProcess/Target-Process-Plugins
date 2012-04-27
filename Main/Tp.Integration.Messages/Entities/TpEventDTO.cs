@@ -50,7 +50,7 @@ namespace Tp.Integration.Common
         /// Gets or sets the Entity Type. Reference to issued entity type. For example Bug
         /// </summary>
         /// <value>The Entity Type.</value>
-		[XmlElement(Order = 5)]public String EntityType { get; set; }
+		[XmlElement(Order = 5)]public String EntityTypeName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the State ID. Reference to issued state
@@ -58,9 +58,7 @@ namespace Tp.Integration.Common
         /// <value>The State ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 6)]public Int32? EntityStateID { get; set; }
-		
 
-		
 		/// <summary>
         /// Gets or sets the State Name. Reference to issued state
         /// </summary>
@@ -69,8 +67,7 @@ namespace Tp.Integration.Common
 		[XmlElement(Order = 7)]public virtual string StateName { get; set; }
 		
 	}
-	
-	
+
 	/// <summary>
     /// Tp Event fields
     /// </summary>
@@ -78,19 +75,23 @@ namespace Tp.Integration.Common
 	{
         /// <summary>
         /// Action Type
-        /// </summary>		
+        /// </summary>
 		ActionType,
         /// <summary>
         /// Entity Type
-        /// </summary>		
+        /// </summary>
 		EntityType,
         /// <summary>
         /// Entity State ID
-        /// </summary>		
+        /// </summary>
 		EntityStateID,
         /// <summary>
+        /// Process ID
+        /// </summary>
+		ProcessID,
+        /// <summary>
         /// State Name
-        /// </summary>		
+        /// </summary>
 		StateName,
 	}
 }

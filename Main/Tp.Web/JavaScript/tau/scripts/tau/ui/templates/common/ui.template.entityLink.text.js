@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"entity-link-text",markup:['<a href="#${__type.toLowerCase()}/${id}" class="tau-linkentity tau-linkentity_type_text">','<span class="tau-linkentity__inner">',"{{if text}}","${text}","{{else}}","${name}","{{/if}}","</span>","</a>"],dependencies:[]};return a.register(b)})

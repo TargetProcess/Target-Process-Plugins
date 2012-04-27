@@ -1,0 +1,1 @@
+function d3_scale_nice(a,b){var c=0,d=a.length-1,e=a[c],f=a[d],g;f<e&&(g=c,c=d,d=g,g=e,e=f,f=g);if(g=f-e)b=b(g),a[c]=b.floor(e),a[d]=b.ceil(f);return a}function d3_scale_niceDefault(){return Math}

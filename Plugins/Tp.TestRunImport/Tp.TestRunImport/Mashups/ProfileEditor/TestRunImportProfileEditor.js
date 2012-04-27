@@ -316,7 +316,7 @@ tau.mashups
 					var testCasesUrl = new Tp.WebServiceURL('/api/v1/TestPlans.asmx/{TestPlanId}/?include=[TestCases]&Take=1000'.replace(/{TestPlanId}/g, profile.Settings.TestPlan)).url;
 					$.getJSON(testCasesUrl, $.proxy(function (data) {
 						this.placeHolder.find('#failedMappingCheck').hide().find('span').text('');
-						var onError = $.proxy(function(d) {
+						var onError = $.proxy(function (d) {
 							if (d.Errors.length > 0) {
 								this.errorMessageContainer.clearErrors();
 								this.errorMessageContainer.addRange(d.Errors);
@@ -329,7 +329,7 @@ tau.mashups
 									var table = mappingsBlock.find('#checkMappingTable');
 									table.find("tr:gt(0)").remove();
 									mappingsBlock.find('div.check-mapping-block').next('p').html('');
-									$.each(d.NamesMappers, function(i, o) {
+									$.each(d.NamesMappers, function (i, o) {
 										table.append(((!o.Case || o.Case.length == 0 || !o.Test || o.Test.length == 0) ? $('<tr></tr>').css('color', '#999') : $('<tr></tr>'))
 												.append($('<td></td>').text(i + 1))
 												.append($('<td></td>').text(o.Case))
@@ -338,19 +338,18 @@ tau.mashups
 									});
 									mappingsBlock.find('div.check-mapping-block').next('p')
 										.html('<span class="mapped">{Mapped}</span>&nbsp;mapped,&nbsp;<span class="not-mapped">{NotMappedTestCases} test cases</span>&nbsp;<span class="not-mapped">{NotMappedUnitTests}&nbsp;unit tests</span>&nbsp;unmatched&nbsp;<span style="display:{ShowWarning}" class="warning-message">{OverMappedUnitTests}&nbsp;test case(s)</span>&nbsp;<span style="display:{ShowWarning}">mapped more than once</span>'
-												.replace( /{Mapped}/g , d.Mapped)
-												.replace( /{NotMappedTestCases}/g , d.NotMappedTestCases)
-												.replace( /{NotMappedUnitTests}/g , d.NotMappedUnitTests)
-												.replace( /{OverMappedUnitTests}/g , d.OverMappedUnitTests)
-												.replace( /{ShowWarning}/g , d.OverMappedUnitTests == 0 ? 'none' : ''));
+												.replace(/{Mapped}/g, d.Mapped)
+												.replace(/{NotMappedTestCases}/g, d.NotMappedTestCases)
+												.replace(/{NotMappedUnitTests}/g, d.NotMappedUnitTests)
+												.replace(/{OverMappedUnitTests}/g, d.OverMappedUnitTests)
+												.replace(/{ShowWarning}/g, d.OverMappedUnitTests == 0 ? 'none' : ''));
 									mappingsBlock.animate({ height: 'show', opacity: 'show' }, 'slow');
 								}
 							}
 							this.preloader.hide();
 							btn.enabled(true);
 						}, this);
-						
-						this.commandGateway.execute('CheckMapping', { Profile: profile, TestCases: data.TestCases || [] }, onError, onError);
+						this.commandGateway.execute('CheckMapping', { Profile: profile, TestCases: data.TestCases.Items || [] }, onError, onError);
 					}, this));
 				}
 			},

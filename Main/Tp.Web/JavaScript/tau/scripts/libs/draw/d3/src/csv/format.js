@@ -1,0 +1,1 @@
+function d3_csv_formatRow(a){return a.map(d3_csv_formatValue).join(",")}function d3_csv_formatValue(a){return/[",\n]/.test(a)?'"'+a.replace(/\"/g,'""')+'"':a}d3.csv.format=function(a){return a.map(d3_csv_formatRow).join("\n")}

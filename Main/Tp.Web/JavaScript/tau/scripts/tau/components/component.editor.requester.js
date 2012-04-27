@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.requester","tau/ui/extensions/editor.requester/ui.extension.editor.requester.form","tau/ui/templates/editor.requester/ui.template.editor.requester"],function(a,b,c,d){return{create:function(e){var f={name:"finder",extensions:[b,c],template:d};return a.create(f,e)}}})

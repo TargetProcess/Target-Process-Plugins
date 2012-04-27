@@ -12,6 +12,9 @@
     <script type="text/javascript" src="mocks/restServiceMock.js"></script>
     <script type="text/javascript" src="plugins/activitylogging/mocks/activityNameSourceMock.js"></script>
     <script type="text/javascript" src="plugins/activitylogging/mocks/activityRepositoryMock.js"></script>
+    <script type="text/javascript" src="reports/mocks/dataRepositoryMock.js"></script>
+    <script type="text/javascript" src="reports/mocks/chartMock.js"></script>
+    <script type="text/javascript" src="reports/mocks/contextMock.js"></script>
 
     <script type="text/javascript" src="../../../ExtJs/Libs/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../../../ExtJs/Libs/ext-all.js"></script>
@@ -44,7 +47,8 @@
                     'tp/plugins/profileRepository',
                     'tp/plugins/bugzilla/bugsRepository',
                     'tp/plugins/userRepository',
-                    'tp/plugins/activitylogging/activityViewer'
+                    'tp/plugins/activitylogging/activityViewer',
+                    'libs/d3/d3'
                 ],
                 function () {
                     require([
@@ -66,7 +70,12 @@
                         "tp.tests/plugins/vcs/viewDiff/sourcePopup.tests",
                         "tp.tests/plugins/vcs/viewDiff/diffPopup.tests",
                         "tp.tests/plugins/vcs/viewDiff/viewDiffController.tests",
-                        "tp.tests/plugins/activitylogging/activityLogMashup.tests"
+                        "tp.tests/plugins/activitylogging/activityLogMashup.tests",
+                        "tp.tests/date.utils.tests",
+                        "tp.tests/reports/iterationburndown/dataProvider.tests",
+                        "tp.tests/reports/iterationburndown/idealLine.tests",
+                        "tp.tests/reports/iterationburndown/lineChart.tests",
+                        "tp.tests/reports/iterationburndown/filter.tests"
                     ]);
                 });
     </script>

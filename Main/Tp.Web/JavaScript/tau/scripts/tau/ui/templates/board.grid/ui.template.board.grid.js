@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"board.grid",markup:["<div>BOAAARRDD</div>"],dependencies:[]};return a.register(b)})

@@ -1,0 +1,1 @@
+function d3_scale_identity(a){function b(a){return+a}return b.invert=b,b.domain=b.range=function(c){return arguments.length?(a=c.map(b),b):a},b.ticks=function(b){return d3_scale_linearTicks(a,b)},b.tickFormat=function(b){return d3_scale_linearTickFormat(a,b)},b.copy=function(){return d3_scale_identity(a)},b}d3.scale.identity=function(){return d3_scale_identity([0,1])}

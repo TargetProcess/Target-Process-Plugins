@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -34,7 +34,7 @@ namespace Tp.LegacyProfileConvertsion.Common
 			}
 		}
 
-		protected void ExecuteForProfile(TLegacyProfile legacyProfile, IAccount account)
+		protected virtual void ExecuteForProfile(TLegacyProfile legacyProfile, IAccount account)
 		{
 			var pluginProfile = ConvertToPluginProfile(legacyProfile);
 			FixName(pluginProfile);
@@ -73,15 +73,29 @@ namespace Tp.LegacyProfileConvertsion.Common
 
 		protected TpUser GetUserBy(string fieldValue, Func<TpUser, string> getUserFieldValueToCompare)
 		{
-			return _context.TpUsers.ToArray().FirstOrDefault(x =>
-			                                                 	{
-			                                                 		var fieldValueToCompare = getUserFieldValueToCompare(x) ??
-			                                                 		                          string.Empty;
+			return _context.TpUsers.Where(u => u.Type == 1).ToArray()
+				.FirstOrDefault(x =>CheckUserField(fieldValue, getUserFieldValueToCompare, x));
+		}
 
-			                                                 		return fieldValueToCompare.ToLower() == fieldValue.ToLower() &&
-			                                                 		       x.DeleteDate == null &&
-			                                                 		       IsUserTypeCorrect(x);
-			                                                 	});
+		protected TpUser GetUserForProjectBy(int projectId, string fieldValue, Func<TpUser, string> getUserFieldValueToCompare)
+		{
+			var projectTeam = _context.ProjectMembers.Where(m => m.ProjectID == projectId).Select(m => m.UserID);
+
+			return _context.TpUsers
+				.Where(u => projectTeam.Contains(u.UserID))
+				.Where(u => u.Type == 1)
+				.ToArray()
+				.FirstOrDefault(x => CheckUserField(fieldValue, getUserFieldValueToCompare, x));
+		}
+
+		private bool CheckUserField(string fieldValue, Func<TpUser, string> getUserFieldValueToCompare, TpUser x)
+		{
+			var fieldValueToCompare = getUserFieldValueToCompare(x) ??
+			                          string.Empty;
+
+			return fieldValueToCompare.ToLower() == fieldValue.ToLower() &&
+			       x.DeleteDate == null &&
+			       IsUserTypeCorrect(x);
 		}
 
 		protected Priority GetPriorityBy(string fieldValue, Func<Priority, string> getFieldToCompare)
@@ -94,9 +108,12 @@ namespace Tp.LegacyProfileConvertsion.Common
 			return _context.Severities.ToArray().FirstOrDefault(x => CompareEntities(fieldValue, getFieldToCompare, x));
 		}
 
-		protected EntityState GetEntityStateBy(Process process, int entityTypeId, string fieldValue, Func<EntityState, string> getFieldToCompare)
+		protected EntityState GetEntityStateBy(Process process, int entityTypeId, string fieldValue,
+		                                       Func<EntityState, string> getFieldToCompare)
 		{
-			return _context.EntityStates.Where(s => s.ProcessID == process.ProcessID && s.EntityTypeID == entityTypeId).ToArray().FirstOrDefault(x => CompareEntities(fieldValue, getFieldToCompare, x));
+			return
+				_context.EntityStates.Where(s => s.ProcessID == process.ProcessID && s.EntityTypeID == entityTypeId).ToArray().
+					FirstOrDefault(x => CompareEntities(fieldValue, getFieldToCompare, x));
 		}
 
 		protected Role GetRoleBy(string fieldValue, Func<Role, string> getFieldToCompare)

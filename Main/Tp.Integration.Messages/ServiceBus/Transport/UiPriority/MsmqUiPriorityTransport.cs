@@ -86,6 +86,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			}
 		}
 
+		public string GetQueueName(string accountName)
+		{
+			return InputQueue;
+		}
+
 		private int maxRetries = 5;
 
 		/// <summary>

@@ -263,13 +263,13 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		[Given("message has attachment '$fileName'")]
 		public void AddAttachmentToMessage(string fileName)
 		{
-			Context.Attachments.Add(new AttachmentDTO {OriginalFileName = fileName});
+			Context.Attachments.Add(new AttachmentDTO {OriginalFileName = fileName, AttachmentFileID = fileName.GetHashCode()});
 		}
 
 		[Given("saga is in message body updating state")]
 		public void SetSagaState()
 		{
-			var fromId = Context.Storage.Get<UserLite>().Where(x => x.Email == Context.EmailMessage.FromAddress).First().Id;
+			var fromId = Context.Storage.Get<UserLite>().First(x => x.Email == Context.EmailMessage.FromAddress).Id;
 			var sagaData = new EmailProcessingSagaData
 			               	{
 			               		Id = Context.SagaId,
@@ -484,10 +484,10 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		[Then("general $generalId should have attachment '$fileName'")]
 		public void GeneralShouldHaveAttachment(int generalId, string fileName)
 		{
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(
-				x =>
-				x.Dto is AttachmentDTO && ((AttachmentDTO) x.Dto).GeneralID == generalId &&
-				((AttachmentDTO) x.Dto).OriginalFileName == fileName).FirstOrDefault().Should(Be.Not.Null);
+			Context.Transport.TpQueue.GetMessages<CreateCommand>().FirstOrDefault(
+				x => x.Dto is AttachmentDTO && ((AttachmentDTO) x.Dto).GeneralID == generalId &&
+				     ((AttachmentDTO) x.Dto).OriginalFileName == fileName &&
+				     ((AttachmentDTO) x.Dto).AttachmentFileID == fileName.GetHashCode()).Should(Be.Not.Null);
 		}
 
 		private static CommentDTO CreatedComment()

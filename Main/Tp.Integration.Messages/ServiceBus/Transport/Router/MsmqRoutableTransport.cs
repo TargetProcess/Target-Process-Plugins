@@ -226,7 +226,18 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		private string GetQueueNameToRouteMessageIn(MessageEx m)
 		{
 			string name = MessageAccountParser.Instance.Parse(m.Message).Name;
-			return string.IsNullOrEmpty(name) ? null : InputQueue + "." + name;
+			return string.IsNullOrEmpty(name) ? null : GetQueueName(name);
+		}
+
+		public string GetQueueName(string name)
+		{
+			var result = InputQueue;
+			if (RoutableTransportMode == RoutableTransportMode.OnDemand)
+			{
+				result += name == AccountName.Empty ? string.Empty : ("." + name);
+			}
+
+			return result;
 		}
 
 		private IMessageConsumer<MessageEx> CreateAndStartMessageConsumer(IPluginQueue queue, Func<MessageEx, string> routeBy)

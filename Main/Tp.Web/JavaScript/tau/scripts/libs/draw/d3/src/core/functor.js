@@ -1,0 +1,1 @@
+d3.functor=function(a){return typeof a=="function"?a:function(){return a}}

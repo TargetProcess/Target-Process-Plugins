@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/model.timeInterval","tau/ui/templates/property/ui.template.property.time"],function(_,a,b,c){return{create:function(d){d=d||{};var e={ModelType:b,template:c,extensions:_.concat([d.extensions])};return a.create(e,d)}}})

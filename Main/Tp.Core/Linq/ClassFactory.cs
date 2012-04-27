@@ -3,7 +3,9 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 
+// ReSharper disable CheckNamespace
 namespace System.Linq.Dynamic
+// ReSharper restore CheckNamespace
 {
 	internal class ClassFactory
 	{
@@ -20,21 +22,21 @@ namespace System.Linq.Dynamic
 
 		private ClassFactory()
 		{
-			AssemblyName name = new AssemblyName("DynamicClasses");
+			var name = new AssemblyName("DynamicClasses");
 			AssemblyBuilder assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
 #if ENABLE_LINQ_PARTIAL_TRUST
 			new ReflectionPermission(PermissionState.Unrestricted).Assert();
-#endif
 			try
 			{
+#endif
 				_module = assembly.DefineDynamicModule("Module");
+#if ENABLE_LINQ_PARTIAL_TRUST
 			}
 			finally
 			{
-#if ENABLE_LINQ_PARTIAL_TRUST
 				PermissionSet.RevertAssert();
-#endif
 			}
+#endif
 			_classes = new Dictionary<Signature, Type>();
 			_rwLock = new ReaderWriterLock();
 		}
@@ -67,24 +69,24 @@ namespace System.Linq.Dynamic
 				string typeName = "DynamicClass" + (_classCount + 1);
 #if ENABLE_LINQ_PARTIAL_TRUST
 				new ReflectionPermission(PermissionState.Unrestricted).Assert();
-#endif
 				try
 				{
+#endif
 					TypeBuilder tb = _module.DefineType(typeName, TypeAttributes.Class |
 					                                              TypeAttributes.Public, typeof (DynamicClass));
-					FieldInfo[] fields = GenerateProperties(tb, properties);
+					FieldBuilder[] fields = GenerateProperties(tb, properties);
 					GenerateEquals(tb, fields);
 					GenerateGetHashCode(tb, fields);
 					Type result = tb.CreateType();
 					_classCount++;
 					return result;
+#if ENABLE_LINQ_PARTIAL_TRUST
 				}
 				finally
 				{
-#if ENABLE_LINQ_PARTIAL_TRUST
 					PermissionSet.RevertAssert();
-#endif
 				}
+#endif
 			}
 			finally
 			{
@@ -92,9 +94,9 @@ namespace System.Linq.Dynamic
 			}
 		}
 
-		private FieldInfo[] GenerateProperties(TypeBuilder tb, DynamicProperty[] properties)
+		private FieldBuilder[] GenerateProperties(TypeBuilder tb, DynamicProperty[] properties)
 		{
-			FieldInfo[] fields = new FieldBuilder[properties.Length];
+			var fields = new FieldBuilder[properties.Length];
 			for (int i = 0; i < properties.Length; i++)
 			{
 				DynamicProperty dp = properties[i];
@@ -161,7 +163,7 @@ namespace System.Linq.Dynamic
 			gen.Emit(OpCodes.Ret);
 		}
 
-		private void GenerateGetHashCode(TypeBuilder tb, FieldInfo[] fields)
+		private void GenerateGetHashCode(TypeBuilder tb, IEnumerable<FieldInfo> fields)
 		{
 			MethodBuilder mb = tb.DefineMethod("GetHashCode",
 			                                   MethodAttributes.Public | MethodAttributes.ReuseSlot |

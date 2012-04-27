@@ -149,7 +149,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Given("Current Time is '$currentTime'")]
 		public void SetCurrentTime(string currentTime)
 		{
-			CurrentDate.SetCurrentDateStrategy(() => DateTime.Parse(currentTime));
+			CurrentDate.Setup(() => DateTime.Parse(currentTime));
 		}
 
 		[When("Check Interval Elapsed")]

@@ -1,0 +1,1 @@
+d3.mean=function(a,b){var c=a.length,d,e=0,f=-1,g=0;if(arguments.length===1)while(++f<c)d3_number(d=a[f])&&(e+=(d-e)/++g);else while(++f<c)d3_number(d=b.call(a,a[f],f))&&(e+=(d-e)/++g);return g?e:undefined}

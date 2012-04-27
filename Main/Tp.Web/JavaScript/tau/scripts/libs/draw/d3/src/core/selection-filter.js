@@ -1,0 +1,1 @@
+function d3_selection_filter(a){return function(){return d3_selectMatches(this,a)}}d3_selectionPrototype.filter=function(a){var b=[],c,d,e;typeof a!="function"&&(a=d3_selection_filter(a));for(var f=0,g=this.length;f<g;f++){b.push(c=[]),c.parentNode=(d=this[f]).parentNode;for(var h=0,i=d.length;h<i;h++)(e=d[h])&&a.call(e,e.__data__,h)&&c.push(e)}return d3_selection(b)}

@@ -1,0 +1,1 @@
+d3.time.day=d3_time_interval(function(a){return new d3_time(a.getFullYear(),a.getMonth(),a.getDate())},function(a,b){a.setDate(a.getDate()+b)},function(a){return a.getDate()-1}),d3.time.days=d3.time.day.range,d3.time.days.utc=d3.time.day.utc.range,d3.time.dayOfYear=function(a){var b=d3.time.year(a);return Math.floor((a-b)/864e5-(a.getTimezoneOffset()-b.getTimezoneOffset())/1440)}

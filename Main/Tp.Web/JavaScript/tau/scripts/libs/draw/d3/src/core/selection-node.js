@@ -1,0 +1,1 @@
+d3_selectionPrototype.node=function(a){for(var b=0,c=this.length;b<c;b++)for(var d=this[b],e=0,f=d.length;e<f;e++){var g=d[e];if(g)return g}return null}

@@ -1,0 +1,1 @@
+define(["tp/gateway"],function(a){function b(b){this.url=b.url,this.gateway=a}return b.prototype={get:function(a,b){this.gateway.postJSON(this._getUrl(this.url),a,b)},getDetails:function(a,b){this.gateway.postJSON(this._getDetailsUrl(this.url),a,b)},_getDetailsUrl:function(a){return this._getUrl(a+"/details")},_getUrl:function(a){return(new Tp.WebServiceURL(a)).url}},b})

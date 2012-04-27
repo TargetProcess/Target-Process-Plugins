@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(a){return a.extend({"bus afterRender":function(a){var b=this.$el=a.data.element;setTimeout(function(){b.find(":input[data-autofocus]:visible").focus()},10)},"bus tabs.switched":function(){var a=this;setTimeout(function(){a.$el.find(":input[data-autofocus]:visible").focus()},10)}})})

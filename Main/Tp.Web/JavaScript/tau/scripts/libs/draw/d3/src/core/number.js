@@ -1,0 +1,1 @@
+function d3_number(a){return a!=null&&!isNaN(a)}

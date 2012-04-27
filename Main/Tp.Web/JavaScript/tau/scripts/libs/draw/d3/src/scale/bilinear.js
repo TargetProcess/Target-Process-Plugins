@@ -1,0 +1,1 @@
+function d3_scale_bilinear(a,b,c,d){var e=c(a[0],a[1]),f=d(b[0],b[1]);return function(a){return f(e(a))}}

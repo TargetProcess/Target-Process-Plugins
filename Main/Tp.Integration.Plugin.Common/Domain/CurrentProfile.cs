@@ -1,5 +1,6 @@
 ﻿using Tp.Integration.Messages;
 using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.FileStorage;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.Integration.Plugin.Common.Domain
@@ -47,6 +48,11 @@ namespace Tp.Integration.Plugin.Common.Domain
 		public IActivityLog Log
 		{
 			get { return _currentObjectContext.Profile.Log; }
+		}
+
+		public IProfileFileStorage FileStorage
+		{
+			get { return _currentObjectContext.Profile.FileStorage; }
 		}
 
 		public void Save()

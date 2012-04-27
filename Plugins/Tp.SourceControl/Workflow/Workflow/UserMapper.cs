@@ -54,7 +54,7 @@ namespace Tp.SourceControl.Workflow.Workflow
 				return user.ConvertToUserLookup();
 			}
 
-			_logger().Warn(string.Format("Revision author doesn't match any TP User name. There is no valid mapping for Git user {0}", revision.Author));
+			_logger().Warn(string.Format("Revision author doesn't match any TP User name. There is no valid mapping for user {0}", revision.Author));
 			return DefaultUser;
 		}
 

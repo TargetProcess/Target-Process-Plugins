@@ -96,10 +96,14 @@ namespace Tp.Bugzilla
 			}
 		}
 
-		public int[] GetChangedBugIds(DateTime date)
+		public int[] GetChangedBugIds(DateTime? date)
 		{
 			var offset = GetTimeOffset();
-			var bugzillaDateTime = date.ToUniversalTime().Add(offset);
+			DateTime? bugzillaDateTime = null;
+			if (date.HasValue)
+			{
+				bugzillaDateTime = date.Value.ToUniversalTime().Add(offset);
+			}
 
 			return ObjectFactory.GetInstance<BugzillaUrl>().GetChangedBugsIds(bugzillaDateTime);
 		}

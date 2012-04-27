@@ -1,0 +1,1 @@
+function d3_rebind(a,b,c){return function(){var d=c.apply(b,arguments);return arguments.length?a:d}}d3.rebind=function(a,b){var c=1,d=arguments.length,e;while(++c<d)a[e=arguments[c]]=d3_rebind(a,b,b[e]);return a}

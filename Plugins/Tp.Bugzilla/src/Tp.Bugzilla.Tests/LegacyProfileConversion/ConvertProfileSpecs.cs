@@ -131,6 +131,33 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		}
 
 		[Test]
+		public void ShouldNotMapUsersNotInTeam()
+		{
+			@"Given create account 'TargetProcessTest.tpondemand.com'
+					And profile name is 'ProfileName'
+					And project 'p1' for the first process created
+					And bugzilla url is 'http://host/bugzilla363'
+					And sync interval is 15
+					And bugzilla login is 'login'
+					And bugzilla password is 'password'
+					And bugzilla project is 'p1'
+					And bugzilla queries are 'bz query'
+					And user 'tpuser1' created
+					And user 'tpuser2' created
+					And user 'tpuser2' removed from project team
+					And user mapping is:
+						|bugzilla|targetprocess|
+						|bzuser1|tpuser1|
+						|bzuser2|tpuser2|
+				When convert bugzilla legacy profile 'ProfileName'
+				Then user mapping should be:
+					|bugzilla|targetprocess|
+					|bzuser1|tpuser1|
+					And mapped users count shoud be 1"
+				.Execute(In.Context<LegacyProfileConverterActionSteps>());
+		}
+
+		[Test]
 		public void StoreExternalDataWhenConvertProfile()
 		{
 			@"

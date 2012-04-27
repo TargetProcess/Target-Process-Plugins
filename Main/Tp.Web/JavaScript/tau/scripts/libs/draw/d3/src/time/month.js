@@ -1,0 +1,1 @@
+d3.time.month=d3_time_interval(function(a){return new d3_time(a.getFullYear(),a.getMonth(),1)},function(a,b){a.setMonth(a.getMonth()+b)},function(a){return a.getMonth()}),d3.time.months=d3.time.month.range,d3.time.months.utc=d3.time.month.utc.range

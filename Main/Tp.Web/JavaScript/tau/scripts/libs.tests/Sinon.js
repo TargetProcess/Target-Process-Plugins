@@ -1,0 +1,1 @@
+define(["libs.tests/sinon/sinon"],function(){return sinon})

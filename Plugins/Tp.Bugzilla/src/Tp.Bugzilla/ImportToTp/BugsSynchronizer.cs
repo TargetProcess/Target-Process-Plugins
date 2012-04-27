@@ -6,14 +6,11 @@
 using System;
 using System.Linq;
 using NServiceBus;
-using StructureMap;
 using Tp.BugTracking.ImportToTp;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
-using Tp.Integration.Plugin.Common.Logging;
-using log4net;
 
 namespace Tp.Bugzilla.ImportToTp
 {
@@ -105,24 +102,14 @@ namespace Tp.Bugzilla.ImportToTp
 			FailedChunks.Clear();
 		}
 
-		private DateTime GetSyncDate(DateTime? lastSyncDate)
+		private DateTime? GetSyncDate(DateTime? lastSyncDate)
 		{
 			var lastFailedDate = FailedSyncDates.FirstOrDefault();
 
-			DateTime dateValue;
-
-			if (lastFailedDate != null)
-			{
-				dateValue = lastFailedDate.GetValue();
-			}
-			else
-			{
-				dateValue = lastSyncDate.HasValue ? lastSyncDate.Value : DateTime.MinValue;
-			}
-			return dateValue;
+			return lastFailedDate != null ? lastFailedDate.GetValue() : lastSyncDate;
 		}
 
-		private bool TryGetChangedIds(DateTime dateValue, out int[] ids)
+		private bool TryGetChangedIds(DateTime? dateValue, out int[] ids)
 		{
 			try
 			{
@@ -131,8 +118,9 @@ namespace Tp.Bugzilla.ImportToTp
 			}
 			catch (Exception e)
 			{
-				_logger.Error("Retrieving changed bugs failed", e);
+				_logger.Error(string.Format("Retrieving changed bugs failed: {0}", e.Message), e);
 				ids = new int[] {};
+
 				return false;
 			}
 		}

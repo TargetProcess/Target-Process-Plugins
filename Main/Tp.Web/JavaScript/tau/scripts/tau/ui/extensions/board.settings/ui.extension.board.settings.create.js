@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(_,$,a){return a.extend({"bus afterRender":function(a){var b=a.data.element,c=this;b.delegate("[role=action-add]","click",function(){var a=window.prompt("WHAT?");if(!a)return;c.fire("board.dataProvided",{name:a,slug:a})})}})})

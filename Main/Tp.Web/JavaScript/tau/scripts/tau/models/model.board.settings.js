@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base","tau/models/orm/board"],function(_,a,b){var c=a.extend({"bus board.dataProvided":function(a){var c=a.data,d=this;b.create({_id:c.name,"userData.name":c.name,"userData.slug":c.slug},function(a,b){})},"bus afterInit":function(a){this.fire("dataBind")}});return c})

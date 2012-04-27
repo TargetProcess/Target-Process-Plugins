@@ -1,0 +1,1 @@
+define(["tau/storage/api"],function(a){return new a})

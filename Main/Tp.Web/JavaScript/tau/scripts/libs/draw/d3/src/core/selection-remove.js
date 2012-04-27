@@ -1,0 +1,1 @@
+d3_selectionPrototype.remove=function(){return this.each(function(){var a=this.parentNode;a&&a.removeChild(this)})}

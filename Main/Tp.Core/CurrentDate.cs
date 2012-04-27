@@ -69,7 +69,7 @@ namespace Tp.Core
 		/// Use the specified delegate to get the current date.
 		/// </summary>
 		/// <param name="getter">New delegate, or <c>null</c> to reset to the <see cref="DateTime.Now"/>.</param>
-		public static IDisposable SetCurrentDateStrategy(Func<DateTime> getter)
+		public static IDisposable Setup(Func<DateTime> getter = null)
 		{
 			var oldKeeper = TimeKeeper;
 			TimeKeeper = getter == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(getter);

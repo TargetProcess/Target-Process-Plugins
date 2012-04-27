@@ -31,19 +31,10 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 					'</tpl>',
 				'</div>',
 				'<div class="name">{name}</div>',
-				'<tpl if="rolesCount &gt; 0">',
+				'<tpl if="cardUsers.length &gt; 0">',
 					'<div class="kanban-avatars">',
-						'<tpl for="roles">',
-							'<tpl if="parent.entityState.roleId==id">',
-								'<tpl for="first">',
-									'<div class="kanban-avatar"><img src="../../../avatar.ashx?size=22&UserId={id}&mode=raw"/></div>',
-								'</tpl>',
-								'<tpl if="second">',
-									'<tpl for="second">',
-										'<div class="kanban-avatar"><img src="../../../avatar.ashx?size=22&UserId={id}&mode=raw"/></div>',
-									'</tpl>',
-								'</tpl>',
-							'</tpl>',
+						'<tpl for="cardUsers">',
+							'<div class="kanban-avatar{active}"><img src="../../../avatar.ashx?size=22&UserId={id}&mode=raw"/></div>',
 						'</tpl>',
 					'</div>',
 				'</tpl>',
@@ -216,6 +207,7 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 	onRenderHandler: function () {
 		var tags = this.entity.tags || [];
 		var roles = this.entity.roles || [];
+		var cardUsers = this.prepareCardUsers();
 		var model = {
 			id: this.entity.id,
 			name: Ext.util.Format.htmlEncode(this.entity.name),
@@ -231,6 +223,7 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 			taskCount: this.entity.taskCount,
 			impedimentCount: this.entity.impedimentCount,
 			roles: roles,
+			cardUsers: cardUsers,
 			tags: {
 				length: tags.length,
 				first: tags.length > 0 ? tags[0] : "",
@@ -238,7 +231,7 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 			},
 			rolesCount: this.getRoleCount(roles, this.entity.entityState.roleId),
 			userStoryId: this.entity.userStoryId || false,
-			userStoryName : this.entity.userStoryName
+			userStoryName: this.entity.userStoryName
 		};
 		var entityType = this.entity.entityType.name.toLowerCase();
 		this.addClass('kanban-item-entitytype-' + entityType);
@@ -314,5 +307,30 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 
 	showImpedimentPopup: function () {
 		this.fireEvent('onImpedimentsPopupShow', this);
+	},
+
+	prepareCardUsers: function () {
+		if (this.entity.entityState.final) {
+			return [];
+		}
+		var roles = this.entity.roles || [];
+		var cardRole = this.entity.entityState.roleId;
+		var cardUsers = [];
+		var props = ['first', 'second'];
+		Ext.each(roles.slice().sort(function (a, b) {
+			return cardRole == a.id ? -1 : 1;
+		}), function (role) {
+			for (var key in props) {
+				var prop = props[key];
+				if (role[prop] && cardUsers.length < 4) {
+					var user = role[prop];
+					if (!Array.findOne(cardUsers, function (u) { return u.id == user.id; })) {
+						user.active = cardRole == role.id ? '' : ' inactive';
+						cardUsers.push(user);
+					}
+				}
+			}
+		});
+		return cardUsers;
 	}
 });

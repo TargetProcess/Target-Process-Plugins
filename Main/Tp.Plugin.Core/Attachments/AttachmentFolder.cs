@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using StructureMap;
 using Tp.Integration.Plugin.Common;
+using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Plugin.Core.Attachments
 {
@@ -71,16 +72,28 @@ namespace Tp.Plugin.Core.Attachments
 			}
 		}
 
+		private static string GetProfileAwareFileFullPath(FileId fileId)
+		{
+			return Path.Combine(ObjectFactory.GetInstance<IProfile>().FileStorage.GetFolder(), fileId.Value.ToString());
+		}
+
 		public static string GetAttachmentFileFullPath(FileId fileId)
 		{
-			return Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, fileId.Value.ToString());
+			var path = GetProfileAwareFileFullPath(fileId);
+
+			if (!File.Exists(path))
+			{
+				path = Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, fileId.Value.ToString());
+			}
+
+			return path;
 		}
 
 		public static FileId Save(Stream contentStream)
 		{
 			var fileId = Guid.NewGuid();
 
-			using (var fileStream = new FileStream(GetAttachmentFileFullPath(fileId), FileMode.CreateNew,
+			using (var fileStream = new FileStream(GetProfileAwareFileFullPath(fileId), FileMode.CreateNew,
 			                                       FileAccess.Write, FileShare.None))
 			{
 				CopyStream(contentStream, fileStream);

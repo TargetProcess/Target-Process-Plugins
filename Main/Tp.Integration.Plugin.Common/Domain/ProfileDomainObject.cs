@@ -9,6 +9,7 @@ using Tp.Integration.Messages;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Events;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
+using Tp.Integration.Plugin.Common.FileStorage;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
 
 namespace Tp.Integration.Plugin.Common.Domain
@@ -80,6 +81,11 @@ namespace Tp.Integration.Plugin.Common.Domain
 		public IActivityLog Log
 		{
 			get { return new Log4NetActivityLog(_accountName.Value, _profileName.Value); }
+		}
+
+		public IProfileFileStorage FileStorage
+		{
+			get { return new ProfileFileStorage(_accountName.Value, _profileName.Value); }
 		}
 
 		public IEventAggregator EventAggregator

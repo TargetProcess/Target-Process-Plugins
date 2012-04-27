@@ -108,7 +108,29 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 					And plugin started up
 				When plugin receives 'DeleteProfile' command and account 'Account' with profile 'Profile2'
 				Then PluginAccountMessage should be published with account 'Account' and profile 'Profile1'
+						And file storage for account 'Account' and profile 'Profile1' should be deleted
 						And account 'Account' should have profiles: Profile1"
+				.Execute(In.Context<PluginLifecycleActionSteps>().And<ProfileStorageSpecs>());
+		}
+
+		[Test]
+		public void ShouldRemoveFileStorageWhenRemovingPluginProfile()
+		{
+			@"Given profile 'Profile1' for account 'Account' created
+					And plugin started up
+					And file added to account 'Account' profile 'Profile1' file storage
+				When plugin receives 'DeleteProfile' command and account 'Account' with profile 'Profile1'
+				Then file storage for account 'Account' and profile 'Profile1' should be deleted"
+				.Execute(In.Context<PluginLifecycleActionSteps>().And<ProfileStorageSpecs>());
+		}
+
+		[Test]
+		public void ShouldBeAbleToRetriveFileStorageInTheOldWay()
+		{
+			@"Given profile 'Profile1' for account 'Account' created
+					And plugin started up
+				When file '21EC2020-3AEA-1069-A2DD-08002B30309D' added to account 'Account' profile 'Profile1' file storage in the old way
+				Then file storage for account 'Account' and profile 'Profile1' should return file '21EC2020-3AEA-1069-A2DD-08002B30309D'"
 				.Execute(In.Context<PluginLifecycleActionSteps>().And<ProfileStorageSpecs>());
 		}
 

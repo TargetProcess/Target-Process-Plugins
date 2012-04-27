@@ -1,0 +1,1 @@
+d3.touches=function(a,b){return arguments.length<2&&(b=d3_eventSource().touches),b?d3_array(b).map(function(b){var c=d3_mousePoint(a,b);return c.identifier=b.identifier,c}):[]}

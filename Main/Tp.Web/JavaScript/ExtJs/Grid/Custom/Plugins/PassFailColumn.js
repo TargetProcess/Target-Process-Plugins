@@ -1,26 +1,26 @@
 Ext.ns('Tp.custom.plugins');
 
 Tp.custom.plugins.PassFailColumn = Ext.extend(Ext.Component, {
-	header: "Run",
-	width: 100,
+	enableCaching: true,
+	menuDisabled: true,
+	lazyRender: true,
 	sortable: false,
 	fixed: true,
-	menuDisabled: true,
-	dataIndex: '',
 	id: 'expander',
-	lazyRender: true,
-	enableCaching: true,
+	header: 'Run',
+	dataIndex: '',
+	width: 100,
 	_grid: null,
 
 	init: function(grid) {
 		this._grid = grid;
 		this._grid.on('afterrender', function() {
-			this._grid.getView().mainBody.on("click", this.onClick, this);
+			grid.getView().mainBody.on('click', this.onClick, this);
 		}, this);
 	},
 
 	_isPassed: function(eventObj) {
-		return eventObj.getTarget(".x-btn-passed") == null ? false : true;
+		return eventObj.getTarget('.success') == null ? false : true;
 	},
 
 	getRecord: function(eventObj) {
@@ -28,19 +28,19 @@ Tp.custom.plugins.PassFailColumn = Ext.extend(Ext.Component, {
 		return this._grid.store.getAt(row.rowIndex);
 	},
 
-	onClick: function(eventObj, target) {
-		if (!eventObj.getTarget('.x-btn-passed-failed'))
+	onClick: function(eventObj) {
+		if (!eventObj.getTarget('.button'))
 			return;
 
 		if (this._isPassed(eventObj)) {
-			this.fireEvent("pass", this._grid, this.getRecord(eventObj));
+			this.fireEvent('pass', this._grid, this.getRecord(eventObj));
 			return;
 		}
-		this.fireEvent("fail", this._grid, this.getRecord(eventObj));
+		this.fireEvent('fail', this._grid, this.getRecord(eventObj));
 	},
 
-	renderer: function(v, p, record) {
-		return "<button  style='width:45px'  class='x-btn-passed-failed x-btn-passed' type='button'>Pass</button>" +
-               "&nbsp; <button style='width:45px' class='x-btn-passed-failed x-btn-failed' type='button'>Fail</button>"
+	renderer: function() {
+		return "<div class='button-group'><button class='button success' type='button'>Pass</button>" +
+			"<button class='button danger' type='button'>Fail</button></div>";
 	}
 });

@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.container","tau/components/extensions/board.container/extension.board.container"],function(_,a,b){return{create:function(c){return c=_.extend(c,{extensions:[b]}),a.create(c)}}})

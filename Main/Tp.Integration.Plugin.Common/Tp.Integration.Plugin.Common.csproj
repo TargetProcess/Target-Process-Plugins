@@ -55,6 +55,11 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.MSMQ, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Libs\NServiceBus\src\external-bin\Interop.MSMQ.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\log4net.dll</HintPath>
@@ -137,6 +142,9 @@
     <Compile Include="Domain\ISpecificStorage.cs" />
     <Compile Include="Domain\IStorageRepository.cs" />
     <Compile Include="Domain\PluginContext.cs" />
+    <Compile Include="FileStorage\IProfileFileStorage.cs" />
+    <Compile Include="FileStorage\ProfileFileStorage.cs" />
+    <Compile Include="FileStorage\ProfileFileStorageSafeNull.cs" />
     <Compile Include="Handlers\SyncNowMessageHandler.cs" />
     <Compile Include="PluginDataFolder.cs" />
     <Compile Include="PluginRuntime.cs" />

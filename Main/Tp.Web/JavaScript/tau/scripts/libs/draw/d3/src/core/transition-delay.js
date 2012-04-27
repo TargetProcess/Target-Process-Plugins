@@ -1,0 +1,1 @@
+d3_transitionPrototype.delay=function(a){var b=this;return b.each(typeof a=="function"?function(c,d,e){b[e][d].delay=a.apply(this,arguments)|0}:(a|=0,function(c,d,e){b[e][d].delay=a}))}

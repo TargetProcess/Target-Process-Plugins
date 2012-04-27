@@ -503,6 +503,11 @@ namespace Tp.Integration.Testing.Common
 		public void ReceiveMessageLater(TransportMessage m, string address)
 		{
 		}
+
+		public string GetQueueName(string accountName)
+		{
+			return InputQueue;
+		}
 	}
 
 	internal static class ConfigureInMemorySagaPersister

@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){return a.register({name:"user-name",markup:"<span class='user-name'>${name}</span><br/>"})})
+define(["tau/core/templates-factory"],function(a){return a.register({name:"user-name",markup:"<span class='user-name' role='username'>${name}</span><br/>"})})

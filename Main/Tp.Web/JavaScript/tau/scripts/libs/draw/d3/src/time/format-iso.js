@@ -1,0 +1,1 @@
+function d3_time_formatIsoNative(a){return a.toISOString()}var d3_time_formatIso=d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");d3.time.format.iso=Date.prototype.toISOString?d3_time_formatIsoNative:d3_time_formatIso,d3_time_formatIsoNative.parse=function(a){return new Date(a)},d3_time_formatIsoNative.toString=d3_time_formatIso.toString

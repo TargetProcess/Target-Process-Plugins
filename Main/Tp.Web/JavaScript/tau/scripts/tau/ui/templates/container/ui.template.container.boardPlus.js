@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"container.boardPlus",engine:"jqote2",markup:['<header role="header" class="tau-app-header">',"</header>",'<div class="tau-app-body">','<div role="main" class="tau-app-main-pane">',"</div>",'<aside role="aside" class="tau-app-secondary-pane">',"</aside>","</div>"],dependencies:[]};return a.register(b)})

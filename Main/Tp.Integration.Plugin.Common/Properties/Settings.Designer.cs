@@ -97,7 +97,7 @@ namespace Tp.Integration.Plugin.Common.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("Routable")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Routable")]
         public string Transport {
             get {
                 return ((string)(this["Transport"]));
@@ -120,6 +120,15 @@ namespace Tp.Integration.Plugin.Common.Properties {
         public string TargetProcess_PluginsConnectionString {
             get {
                 return ((string)(this["TargetProcess_PluginsConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("150000")]
+        public int MessagesInQueueCountThreshold {
+            get {
+                return ((int)(this["MessagesInQueueCountThreshold"]));
             }
         }
     }

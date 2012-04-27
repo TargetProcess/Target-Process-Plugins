@@ -1,0 +1,11 @@
+/*!
+     * Nodeunit
+     * Copyright (c) 2010 Caolan McMahon
+     * MIT Licensed
+     *
+     * THIS FILE SHOULD BE BROWSER-COMPATIBLE JS!
+     * You can use @REMOVE_LINE_FOR_BROWSER to remove code from the browser build.
+     * Only code on that line will be removed, it's mostly to avoid requiring code
+     * that is node specific
+     */
+define(["libs/async/async","./assert"],function(a,b){var exports={};exports.assertion=function(a){return{method:a.method||"",message:a.message||a.error&&a.error.message||"",error:a.error,passed:function(){return!this.error},failed:function(){return Boolean(this.error)}}},exports.assertionList=function(a,b){var c=a||[];return c.failures=function(){var a=0;for(var b=0;b<this.length;b+=1)this[b].failed()&&(a+=1);return a},c.passes=function(){return c.length-c.failures()},c.duration=b||0,c};var c=function(a){return function(c,d,e){return function(){var f=arguments[e-1],g=exports.assertion({method:c,message:f});try{b[d].apply(null,arguments)}catch(h){g.error=h}a(g)}}};return exports.test=function(d,e,f,g){var h,i=[],j=c(function(b){i.push(b),f.log&&a.nextTick(function(){f.log(b)})}),k={done:function(b){if(h!==undefined&&h!==i.length){var c=new Error("Expected "+h+" assertions, "+i.length+" ran"),j=exports.assertion({method:"expect",error:c});i.push(j),f.log&&a.nextTick(function(){f.log(j)})}if(b){var k=exports.assertion({error:b});i.push(k),f.log&&a.nextTick(function(){f.log(k)})}var l=(new Date).getTime();a.nextTick(function(){var a=exports.assertionList(i,l-e);f.testDone(d,a,f.moduleId),g(null,i)})},ok:j("ok","ok",2),same:j("same","deepEqual",3),equals:j("equals","equal",3),expect:function(a){h=a},_assertion_list:i,_data:{},set:function(a,b){this._data[a]=b},get:function(a,b){return _.isUndefined(this._data[a])?b:this._data[a]},has:function(a){return!_.isUndefined(this._data[a])}};for(var l in b)b.hasOwnProperty(l)&&(k[l]=j(l,l,b[l].length));return k},exports.options=function(a){var b=function(b){a[b]=a[b]||function(){}};return b("moduleStart"),b("moduleDone"),b("testStart"),b("testDone"),a},exports})

@@ -70,7 +70,7 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		{
 			tpDatabaseDataContext.ExecuteCommand("delete from Project");
 			tpDatabaseDataContext.ExecuteCommand("delete from CustomReport");
-			tpDatabaseDataContext.ExecuteCommand("delete from TpUSer");
+			tpDatabaseDataContext.ExecuteCommand("delete from TpUser");
 			tpDatabaseDataContext.ExecuteCommand("delete from General");
 			tpDatabaseDataContext.ExecuteCommand("delete from MessageUid");
 			tpDatabaseDataContext.ExecuteCommand("delete from PluginProfile");

@@ -1,0 +1,1 @@
+function normal(){var a=0,b=0,c,d;do a=Math.random()*2-1,b=Math.random()*2-1,c=a*a+b*b;while(c==0||c>1);return d=Math.sqrt(-2*Math.log(c)/c),a*d}function normal1(a,b){return function(){return a+b*normal()}}function normal3(a){return function(){var b=Math.random(),c=b<a[0][2]?0:b<a[0][2]+a[1][2]?1:2,d=a[c];return d[0]+Math.sqrt(d[1])*normal()}}

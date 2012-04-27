@@ -1,0 +1,1 @@
+define(["jQuery","Underscore","app.path","tau/core/query"],function($,_,a,b){var c=a.get(),d=c+"/storage/v1/";return{resolve:function(a){a=_.clone(a||{});var c=d+a.$group||"common";a.$key&&(c+="/"+a.$key),c+="?";var e=b.render(a.$where||{});return e&&(c+="&where="+e),a.$fields&&a.$fields.length&&(c+="&select=new("+a.$fields.join(",")+")"),encodeURI(c)}}})

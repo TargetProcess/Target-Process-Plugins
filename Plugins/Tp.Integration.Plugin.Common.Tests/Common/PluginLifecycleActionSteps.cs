@@ -2,8 +2,8 @@
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
-using System;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,6 +24,7 @@ using Tp.Integration.Plugin.Common.PluginCommand;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
+using Tp.Plugin.Core.Attachments;
 using Tp.Testing.Common.NUnit;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common
@@ -58,12 +59,12 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void AccountShouldHaveProfiles(string accountName, string[] profileNames)
 		{
 			var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(accountName);
-				account.Profiles.Select(x => x.Name.Value)
-					.ToArray().Should(Is.EquivalentTo(profileNames));
-				account.Profiles.Where(x => x.GetProfile<SampleJiraProfile>( /*Profile.CreateDefaultProfile().GetType()*/) == null).
-					ToArray().Should(Is.Empty,
-					                 "Profile property should not be null");
-			}
+			account.Profiles.Select(x => x.Name.Value)
+				.ToArray().Should(Is.EquivalentTo(profileNames));
+			account.Profiles.Where(x => x.GetProfile<SampleJiraProfile>( /*Profile.CreateDefaultProfile().GetType()*/) == null).
+				ToArray().Should(Is.Empty,
+				                 "Profile property should not be null");
+		}
 
 		[Then(@"account '$accountName' should have no profiles")]
 		public void AccountShouldHaveNoProfiles(string accountName)
@@ -209,11 +210,39 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			ObjectFactory.GetInstance<IBus>().SetIn((ProfileName) profileName);
 			ObjectFactory.GetInstance<IBus>().SetIn(account.Name);
 
-			var profile = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(context.AccountName).Profiles[context.ProfileName].GetProfile<SampleJiraProfile>();
+			var profile =
+				ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(context.AccountName).Profiles[context.ProfileName].
+					GetProfile<SampleJiraProfile>();
 			profile.JiraUrl = jiraUrl;
 
 			var updatedProfileDto = new PluginProfileDto {Name = context.ProfileName.Value, Settings = profile};
 			ObjectFactory.GetInstance<AddOrUpdateProfileCommand>().Execute(updatedProfileDto.Serialize());
+		}
+
+		[Given("file added to account '$accountName' profile '$profileName' file storage")]
+		public void AddFileToProfileFileStorage(string accountName, string profileName)
+		{
+			var profile =
+				ObjectFactory.GetInstance<IAccountRepository>().GetAll().First(x => x.Name == accountName).Profiles[profileName];
+
+			var folder = profile.FileStorage.GetFolder();
+			using (var fileStream = File.Create(Path.Combine(folder, "1.txt")))
+			using (var fileWriter = new StreamWriter(fileStream))
+			{
+				fileWriter.Write("sample content");
+			}
+		}
+
+		[When("file '$fileName' added to account '$accountName' profile '$profileName' file storage in the old way")]
+		public void AddFileToProfileFileStorageInTheOldWay(string fileName, string accountName, string profileName)
+		{
+			var folder = ObjectFactory.GetInstance<PluginDataFolder>().Path;
+
+			using (var fileStream = File.Create(Path.Combine(folder, fileName)))
+			using (var fileWriter = new StreamWriter(fileStream))
+			{
+				fileWriter.Write("sample content");
+			}
 		}
 
 		[Then("$messageCount PluginAccountMessage messages should be published")]
@@ -239,9 +268,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void ShouldPublishPluginInfoMessageWithProfiles(string accountName, string[] profileNames)
 		{
 			var pluginLifecycleMessage =
-				_sentMessages.OfType<PluginAccountMessageSerialized>().Where(x => x.GetAccounts().Any(y => y.Name == accountName)).Last();
-			pluginLifecycleMessage.GetAccounts().First(x => x.Name == accountName).PluginProfiles.Select(x => x.Name.Value).ToArray().Should(
-				Is.EquivalentTo(profileNames));
+				_sentMessages.OfType<PluginAccountMessageSerialized>().Where(x => x.GetAccounts().Any(y => y.Name == accountName)).
+					Last();
+			pluginLifecycleMessage.GetAccounts().First(x => x.Name == accountName).PluginProfiles.Select(x => x.Name.Value).
+				ToArray().Should(
+					Is.EquivalentTo(profileNames));
 		}
 
 		[Then("PluginInfoMessage should be published ")]
@@ -258,7 +289,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var messages = _sentMessages.OfType<PluginAccountMessageSerialized>();
 			var message =
 				messages.First(
-					x => x.GetAccounts().First().Name == accountName && x.GetAccounts().First().PluginProfiles.Any(y => y.Name == profileName));
+					x =>
+					x.GetAccounts().First().Name == accountName &&
+					x.GetAccounts().First().PluginProfiles.Any(y => y.Name == profileName));
 
 			message.GetAccounts().First().PluginProfiles.SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null);
 
@@ -275,15 +308,16 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		}
 
 		[Then(
-            "mashup '$mashupName' with script '$scriptFile' with content '$scriptContent' should be sent to TargetProcess"
+			"mashup '$mashupName' with script '$scriptFile' with content '$scriptContent' should be sent to TargetProcess"
 			)]
-        public void ScriptFileShouldBeSentToTargetProcess(string mashupName, string scriptFile, string scriptContent)
+		public void ScriptFileShouldBeSentToTargetProcess(string mashupName, string scriptFile, string scriptContent)
 		{
 			var bus = ObjectFactory.GetInstance<IBus>();
 			var sentScripts = bus.GetCallsMadeOn<IBus, PluginMashupMessage>(x => x.SendToUi()).ToArray();
 			var sentMashup = sentScripts.First().First(x => x.MashupName == mashupName);
-			sentMashup.PluginMashupScripts.Select(x => x.ScriptContent).ToArray().Contains(Convert.ToBase64String(Encoding.ASCII.GetBytes(scriptContent)) );
-            sentMashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Contains(scriptFile);
+			sentMashup.PluginMashupScripts.Select(x => x.ScriptContent).ToArray().Contains(
+				Convert.ToBase64String(Encoding.ASCII.GetBytes(scriptContent)));
+			sentMashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Contains(scriptFile);
 			sentMashup.PluginName.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName));
 		}
 
@@ -314,6 +348,19 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		{
 			var message = _sentMessages.OfType<PluginInfoMessage>().Single();
 			message.Info.PluginInputQueue.Should(Is.EqualTo(pluginInputQueue));
+		}
+
+		[Then("file storage for account '$account' and profile '$profile' should be deleted")]
+		public void FileStorageShouldBeRemoved(string account, string profile)
+		{
+			var folder = Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, account, profile);
+			Directory.Exists(folder).Should(Be.False);
+		}
+
+		[Then("file storage for account '$accountName' and profile '$profileName' should return file '$fileName'")]
+		public void FileStorageShouldReturnFile(string accountName, string profileName, string fileName)
+		{
+			File.Exists(AttachmentFolder.GetAttachmentFileFullPath(new FileId(Guid.Parse(fileName)))).Should(Be.True);
 		}
 	}
 

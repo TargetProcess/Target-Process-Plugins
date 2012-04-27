@@ -120,7 +120,7 @@ namespace Tp.Subversion.EditProfileFeature
 		[Given("current date is $currentDate")]
 		public void SetCurrentDate(DateTime currentDate)
 		{
-			CurrentDate.SetCurrentDateStrategy(() => currentDate);
+			CurrentDate.Setup(() => currentDate);
 		}
 
 		[When("saved")]

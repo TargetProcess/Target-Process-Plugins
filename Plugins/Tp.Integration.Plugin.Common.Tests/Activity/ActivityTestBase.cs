@@ -27,7 +27,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		[TestFixtureTearDown]
 		public void FixtureTearDown()
 		{
-			CurrentDate.SetCurrentDateStrategy(() => DateTime.Now);
+			CurrentDate.Setup(() => DateTime.Now);
 		}
 
 		[TearDown]

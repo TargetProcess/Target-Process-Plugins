@@ -31,8 +31,8 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("2.23.1.21660")]
-[assembly: AssemblyVersion("2.23.1.21660")]
-[assembly: AssemblyFileVersion("2.23.1.21660")]
+// [assembly: AssemblyVersion("2.23.3.21882")]
+[assembly: AssemblyVersion("2.23.3.21882")]
+[assembly: AssemblyFileVersion("2.23.3.21882")]
 
 [assembly: PluginAssembly("Test Run Import", "Imports automatic test run results to TargetProcess from Test Run Framework", "Acceptance Testing", "n-j-s-icon.png")]

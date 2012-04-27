@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"boardplus.card.id",engine:"jqote2",customFunctions:{generateCardRef:function(a){return["#",a.type.toLowerCase(),"/",a.id].join("")}},markup:['<a class="tau-id" href="<%= fn.generateCardRef(this) %>"><%= this.id %></a>'].join("")};return a.register(b)})

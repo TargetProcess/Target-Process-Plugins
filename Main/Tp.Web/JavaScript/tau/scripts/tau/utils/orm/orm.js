@@ -1,0 +1,1 @@
+define([],function(a,b){var c=function(){this.collections={},this.schemas={}},d=Loader.prototype;return d.registerSchema=function(){},d.load=function(b){_.forEach(b,function(b,c){collections[b].add(new a(collection.schema,c))})},d.loadAndSave=function(a){_.forEach(this.collections,function(a){a.save(next)})},c})

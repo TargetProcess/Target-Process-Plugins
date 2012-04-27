@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base","tau/storage/api"],function(_,a,b){var c=a.extend({"bus afterInit":function(a){var c=this,d=new b;d.select("boards",{$fields:["key","userData.id","userData.name"]}).done(function(a){var b=_.map(a.data,function(a){return{id:a.id||a.key,slug:a.id||a.key,name:a.name||a.id||a.key}});c.fire("dataBind",{boards:b})})}});return c})

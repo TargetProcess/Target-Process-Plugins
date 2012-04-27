@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/model.leadCycleTime","tau/components/extensions/leadCycleTime/extension.ui.leadCycleTime","tau/ui/templates/leadCycleTime/ui.template.leadCycleTime"],function(_,a,b,c,d){return{create:function(e){var f={ModelType:b,template:d,extensions:_.union(e.extensions||[],[c])};return a.create(f,e)}}})

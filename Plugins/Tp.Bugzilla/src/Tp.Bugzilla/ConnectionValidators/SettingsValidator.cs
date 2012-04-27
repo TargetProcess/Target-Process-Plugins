@@ -79,7 +79,7 @@ namespace Tp.Bugzilla.ConnectionValidators
 
 		public static bool ScriptSupportsProvidedBugzillaVersion(string bugzillaVersion, string supportedBugzillaVersion)
 		{
-			return !string.IsNullOrEmpty(supportedBugzillaVersion) && bugzillaVersion.StartsWith(supportedBugzillaVersion);
+			return string.IsNullOrEmpty(supportedBugzillaVersion) || bugzillaVersion.StartsWith(supportedBugzillaVersion);
 		}
 	}
 }

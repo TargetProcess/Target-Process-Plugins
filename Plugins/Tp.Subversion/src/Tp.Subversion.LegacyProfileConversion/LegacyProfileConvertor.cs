@@ -10,22 +10,36 @@ using System.Xml;
 using AutoMapper;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.PluginLifecycle;
-using Tp.Integration.Plugin.Common.Mapping;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Mapping;
 using Tp.LegacyProfileConvertsion.Common;
+using Tp.SourceControl.RevisionStorage;
 using PluginProfile = Tp.LegacyProfileConvertsion.Common.PluginProfile;
 
 namespace Tp.Subversion.LegacyProfileConversion
 {
 	public class LegacyProfileConvertor : LegacyProfileConvertorBase<PluginProfile>
 	{
-		public LegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection) : base(args, accountCollection)
+		public LegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection)
+			: base(args, accountCollection)
 		{
 		}
 
 		protected override void OnProfileMigrated(IStorageRepository storageRepository, PluginProfile legacyProfile)
 		{
 			MigrateUsers(storageRepository);
+			MigrateRevisions(legacyProfile, storageRepository);
+		}
+
+		public void MigrateRevisions(PluginProfile legacyProfile, IStorageRepository storageRepository)
+		{
+			var alreadyImportedRevisions = _context.Revisions.Where(x => x.PluginProfileID == legacyProfile.PluginProfileID);
+
+			foreach (var revision in alreadyImportedRevisions)
+			{
+				storageRepository.Get<RevisionIdRelation>(revision.RevisionID.ToString())
+					.ReplaceWith(new RevisionIdRelation {RevisionId = revision.SourceControlID.ToString(), TpId = revision.RevisionID});
+			}
 		}
 
 		private void MigrateUsers(IStorageRepository storageRepository)
@@ -121,7 +135,6 @@ namespace Tp.Subversion.LegacyProfileConversion
 		{
 			return _context.TpUsers.FirstOrDefault(x => x.Email.ToLower() == userMail.ToLower() && x.DeleteDate == null);
 		}
-
 
 		private string GetStartRevision(PluginProfile legacyProfile, XmlNode root)
 		{

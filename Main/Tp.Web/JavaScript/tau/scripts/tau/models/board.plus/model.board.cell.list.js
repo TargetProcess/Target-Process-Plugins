@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/board.plus/model.board.cell"],function(_,a){return a.extend({onGetCellContent:function(a,b){var c=this;a.cell({x:{$ne:null},y:{$ne:null}}).done(function(a){var d={dynamic:{items:[]},fixed:{items:[]},x:b.x,y:b.y};d.dynamic.items=_.reduce(a.data.items,function(a,b){return a.concat(b.dynamic.items)},[]),c.fireCellBasicInfoRetrieved(d)})}})})

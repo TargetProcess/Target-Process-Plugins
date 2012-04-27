@@ -1,0 +1,1 @@
+function d3_collapse(a){return a.replace(/(^\s+)|(\s+$)/g,"").replace(/\s+/g," ")}

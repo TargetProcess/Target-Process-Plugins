@@ -13,7 +13,7 @@ namespace System.Linq.Dynamic
 
 		public static LambdaExpression ParseLambda(Type itType, Type resultType, string expression, params object[] values)
 		{
-			return ParseLambda(new[] {Expression.Parameter(itType, "")}, resultType, expression, values);
+			return ParseLambda(new[] {Expression.Parameter(itType, null)}, resultType, expression, values);
 		}
 
 		public static LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression,

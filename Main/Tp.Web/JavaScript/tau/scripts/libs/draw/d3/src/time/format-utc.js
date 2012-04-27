@@ -1,0 +1,1 @@
+d3.time.format.utc=function(a){function c(a){try{d3_time=d3_time_utc;var c=new d3_time;return c._=a,b(c)}finally{d3_time=Date}}var b=d3.time.format(a);return c.parse=function(a){try{d3_time=d3_time_utc;var c=b.parse(a);return c&&c._}finally{d3_time=Date}},c.toString=b.toString,c}

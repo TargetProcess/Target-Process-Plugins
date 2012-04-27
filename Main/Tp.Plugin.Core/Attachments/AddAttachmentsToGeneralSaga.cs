@@ -60,7 +60,8 @@ namespace Tp.Plugin.Core.Attachments
 			       		UniqueFileName = attachmentDto.UniqueFileName,
 			       		CreateDate = attachmentDto.CreateDate,
 			       		Description = attachmentDto.Description,
-			       		OwnerID = attachmentDto.OwnerID
+			       		OwnerID = attachmentDto.OwnerID,
+						AttachmentFileID = attachmentDto.AttachmentFileID,
 			       	};
 		}
 

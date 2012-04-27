@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base"],function(_,a){var b=a.extend({"bus afterInit":function(a){this.fire("dataBind",{})}});return b})

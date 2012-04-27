@@ -69,5 +69,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 		RoutableTransportMode RoutableTransportMode { get; set; }
 
 		void ReceiveMessageLater(TransportMessage m, string address);
+
+		string GetQueueName(string accountName);
 	}
 }

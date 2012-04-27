@@ -16,11 +16,11 @@ Tp.controls.grid.TestCaseConfigurationFactory = Ext.extend(Tp.controls.grid.Conf
 		var passFail = new Tp.custom.plugins.PassFailColumn();
 
 		var passFailController = new Tp.controls.grid.custom.TestCasePassFailController();
-		passFail.on("pass", function (grid, record) {
-			passFailController.changeState(grid, record, true)
+		passFail.on('pass', function (grid, record) {
+			passFailController.changeState(grid, record, true);
 		});
-		passFail.on("fail", function (grid, record) {
-			passFailController.changeState(grid, record, false)
+		passFail.on('fail', function (grid, record) {
+			passFailController.changeState(grid, record, false);
 		});
 
 		config.columns.unshift(expander);
@@ -36,7 +36,7 @@ Tp.controls.grid.TestCaseConfigurationFactory = Ext.extend(Tp.controls.grid.Conf
 		config.cm = this.createColumnModel(config.columns);
 		config.bbar = this.createPagingToolBar(config.store);
 
-		expander.on('onCompleteLoading', function () { this.onExpandedAndLoaded() });
+		expander.on('onCompleteLoading', function () { this.onExpandedAndLoaded(); });
 
 		return config;
 	},

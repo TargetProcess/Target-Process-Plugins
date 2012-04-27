@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"application.board",markup:['<div class="tau-app">',"</div>"]};return a.register(b)})

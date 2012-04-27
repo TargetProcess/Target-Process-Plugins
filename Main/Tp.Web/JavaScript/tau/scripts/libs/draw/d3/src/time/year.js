@@ -1,0 +1,1 @@
+d3.time.year=d3_time_interval(function(a){return new d3_time(a.getFullYear(),0,1)},function(a,b){a.setFullYear(a.getFullYear()+b)},function(a){return a.getFullYear()}),d3.time.years=d3.time.year.range,d3.time.years.utc=d3.time.year.utc.range

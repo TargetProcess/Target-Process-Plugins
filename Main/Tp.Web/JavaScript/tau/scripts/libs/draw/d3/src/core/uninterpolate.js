@@ -1,0 +1,1 @@
+function d3_uninterpolateNumber(a,b){return b=b-(a=+a)?1/(b-a):0,function(c){return(c-a)*b}}function d3_uninterpolateClamp(a,b){return b=b-(a=+a)?1/(b-a):0,function(c){return Math.max(0,Math.min(1,(c-a)*b))}}

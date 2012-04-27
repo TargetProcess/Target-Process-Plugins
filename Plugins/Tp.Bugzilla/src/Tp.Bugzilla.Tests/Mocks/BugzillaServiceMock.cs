@@ -62,9 +62,9 @@ namespace Tp.Bugzilla.Tests.Mocks
 			get { return _bugUpdateCalls; }
 		}
 
-		public virtual int[] GetChangedBugIds(DateTime lastSyncDate)
+		public virtual int[] GetChangedBugIds(DateTime? lastSyncDate)
 		{
-			return Bugs.Where(x => DateTime.Parse(x.creation_ts) > lastSyncDate).Select(x => int.Parse(x.bug_id)).ToArray();
+			return Bugs.Where(x => DateTime.Parse(x.creation_ts) > (lastSyncDate ?? DateTime.MinValue)).Select(x => int.Parse(x.bug_id)).ToArray();
 		}
 
 		public bugzilla_properties CheckConnection()

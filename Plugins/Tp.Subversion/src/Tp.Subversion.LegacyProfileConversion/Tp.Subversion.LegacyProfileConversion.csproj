@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="LegacyMappingParser.cs" />
     <Compile Include="LegacyProfileConvertor.cs" />
+    <Compile Include="LegacyRevisionsImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

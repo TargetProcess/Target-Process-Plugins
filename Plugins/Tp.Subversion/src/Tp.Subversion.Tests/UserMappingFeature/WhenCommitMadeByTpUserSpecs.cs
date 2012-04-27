@@ -33,13 +33,13 @@ namespace Tp.Subversion.UserMappingFeature
 		{
 			@"Given vcs history is:
 					|commit|
-					|{Id:1, Author:""John"", Comment:""#123""}|
-				And tp user 'John' with id 1
+					|{Id:1, Author:""mich"", Comment:""#123""}|
+				And tp user 'Michael Jackson' with id 1
 				And vcs users mapped to tp users as:
 					|vcsuser	|tpuser	|
-					|John		|John	|
+					|mich		|Michael Jackson	|
 			When plugin started up
-			Then revision 1 in TP should have author 'John'"
+			Then revision 1 in TP should have author 'Michael Jackson'"
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
 		}
 
@@ -66,7 +66,7 @@ namespace Tp.Subversion.UserMappingFeature
 					|vcsuser	|tpuser	|
 					|John		|John   |
 			When plugin started up
-			Then log should contain message: Revision author doesn't match any TP User name. There is no valid mapping for Git user Bob"
+			Then log should contain message: Revision author doesn't match any TP User name. There is no valid mapping for user Bob"
 				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
 		}
 

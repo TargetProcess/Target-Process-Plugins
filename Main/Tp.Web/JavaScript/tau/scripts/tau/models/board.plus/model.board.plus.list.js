@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/board.plus/model.board.plus"],function(_,a){return a.extend({onGetSliceInfo:function(a){var b={marksX:[{x:"-1",dynamic:{items:[{id:"-1",type:null,data:{id:-1,name:"",type:null}}]},fixed:{items:[]}}],marksY:[{y:"-1",dynamic:{items:[{id:"-1",type:null,data:{id:-1,name:"",type:null}}]},fixed:{items:[]}}]};this.onSliceInfoRetrieved(b)}})})

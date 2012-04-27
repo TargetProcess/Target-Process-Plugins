@@ -16,6 +16,7 @@ using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.LegacyProfileConvertsion.Common;
+using Tp.SourceControl.RevisionStorage;
 using Tp.Subversion.LegacyProfileConversion;
 using Tp.Testing.Common.NUnit;
 
@@ -159,6 +160,18 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 			SetLegacyProfileValue("Maps", settings.Maps);
 		}
 
+		[Given("subversion revision $revisionId is imported")]
+		public void ImportRevision(int revisionId)
+		{
+			_context.Revisions.InsertOnSubmit(new Revision
+			                                  	{
+			                                  		SourceControlID = revisionId,
+													CommitDate = CurrentDate.Value,
+													PluginProfileID = _legacyProfile.PluginProfileID
+			                                  	});
+			_context.SubmitChanges();
+		}
+
 		private string GetLegacyProfileValue(string valueName)
 		{
 			var xmlDocument = new XmlDocument();
@@ -195,6 +208,22 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 			ObjectFactory.EjectAllInstancesOf<IDatabaseConfiguration>();
 			ObjectFactory.Configure(x => x.For<IDatabaseConfiguration>().Use(args));
 			ObjectFactory.GetInstance<LegacyProfileConvertor>().Execute();
+		}
+
+		[When(@"revisions migrated from old profile to the new one")]
+		public void MigrateRevisionsFromOldProfileToTheNewOne()
+		{
+			_context.SubmitChanges();
+
+			var args = ObjectFactory.GetInstance<IConvertorArgs>();
+			args.Stub(x => x.TpConnectionString).Return(Properties.Settings.Default.TpConnectionString);
+			args.Stub(x => x.PluginConnectionString).Return(Properties.Settings.Default.PluginConnectionString);
+			args.Stub(x => x.ConnectionString).Return(args.PluginConnectionString);
+			args.Stub(x => x.Action).Return("revisions");
+
+			ObjectFactory.EjectAllInstancesOf<IDatabaseConfiguration>();
+			ObjectFactory.Configure(x => x.For<IDatabaseConfiguration>().Use(args));
+			ObjectFactory.GetInstance<LegacyRevisionsImporter>().Execute();
 		}
 
 		[Then("plugin '$pluginName' should have account '$accountName'")]
@@ -346,6 +375,12 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 		{
 			var profileNames = Account.Profiles.Select(x => x.Name.Value).ToArray();
 			profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames));
+		}
+
+		[Then(@"profile should have revisions: (?<revisionIds>([^,]+,?\s*)+)")]
+		public void PluginProfileShouldContainRevisions(int[] revisionIds)
+		{
+			Storage.Get<RevisionIdRelation>().Count(x => revisionIds.Contains(Int32.Parse(x.RevisionId))).Should(Be.EqualTo(revisionIds.Length));
 		}
 
 		private static SubversionPluginProfile Profile

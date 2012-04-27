@@ -40,5 +40,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=.;Initial Catalog=TargetProcess.Plugins;Integrated Security=True</Value>
     </Setting>
+    <Setting Name="MessagesInQueueCountThreshold" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">150000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

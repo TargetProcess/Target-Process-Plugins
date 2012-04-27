@@ -1,0 +1,1 @@
+d3_selectionPrototype.insert=function(a,b){function c(){return this.insertBefore(document.createElementNS(this.namespaceURI,a),d3_select(b,this))}function d(){return this.insertBefore(document.createElementNS(a.space,a.local),d3_select(b,this))}return a=d3.ns.qualify(a),this.select(a.local?d:c)}

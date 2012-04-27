@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BugzillaComment.cs" />
+    <Compile Include="BugzillaResponseProcessor.cs" />
     <Compile Include="ConnectionValidators\ValidationErrorType.cs" />
     <Compile Include="CustomCommand\ConvertProfileCommand.cs" />
     <Compile Include="CustomCommand\Dtos\BugzillaProperties.cs" />

@@ -12,5 +12,5 @@ tau.mashups
             }
         );
 
-        menu.addItemAfter('License');
+        menu.addItem();
     })

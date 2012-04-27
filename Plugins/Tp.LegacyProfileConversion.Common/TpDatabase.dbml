@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TargetProcess" Class="TpDatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=True" SettingsObjectName="Tp.LegacyProfileConvertsion.Common.Properties.Settings" SettingsPropertyName="TargetProcessTestConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=True" SettingsObjectName="Tp.LegacyProfileConvertsion.Common.Properties.Settings" SettingsPropertyName="TargetProcessTestConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Project" Member="Projects">
     <Type Name="Project">
       <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -28,6 +28,7 @@
       <Column Name="Abbreviation" Type="System.String" DbType="NVarChar(6)" CanBeNull="true" />
       <Association Name="Project_General" Member="Generals" ThisKey="ProjectID" OtherKey="ParentProjectID" Type="General" />
       <Association Name="Project_TestPlan" Member="TestPlans" ThisKey="ProjectID" OtherKey="ProjectID" Type="TestPlan" />
+      <Association Name="Project_ProjectMember" Member="ProjectMembers" ThisKey="ProjectID" OtherKey="ProjectID" Type="ProjectMember" />
       <Association Name="General_Project" Member="General" ThisKey="ProjectID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
       <Association Name="Process_Project" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
     </Type>
@@ -67,6 +68,7 @@
       <Association Name="TpUser_General2" Member="Generals2" ThisKey="UserID" OtherKey="OwnerID" Type="General" />
       <Association Name="TpUser_Comment" Member="Comments" ThisKey="UserID" OtherKey="OwnerID" Type="Comment" />
       <Association Name="TpUser_Attachment" Member="Attachments" ThisKey="UserID" OtherKey="OwnerID" Type="Attachment" />
+      <Association Name="TpUser_ProjectMember" Member="ProjectMembers" ThisKey="UserID" OtherKey="UserID" Type="ProjectMember" />
       <Association Name="TpUser_TpUser" Member="TpUser1" ThisKey="ContactOwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="Role_TpUser" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
     </Type>
@@ -201,6 +203,7 @@
       <Column Name="PersonalEmailAccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="Role_TpUser" Member="TpUsers" ThisKey="RoleID" OtherKey="RoleID" Type="TpUser" />
       <Association Name="Role_EntityState" Member="EntityStates" ThisKey="RoleID" OtherKey="RoleID" Type="EntityState" />
+      <Association Name="Role_ProjectMember" Member="ProjectMembers" ThisKey="RoleID" OtherKey="RoleID" Type="ProjectMember" />
     </Type>
   </Table>
   <Table Name="dbo.Priority" Member="Priorities">
@@ -286,6 +289,21 @@
       <Column Name="AttachmentFileID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="General_Attachment" Member="General" ThisKey="GeneralID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
       <Association Name="TpUser_Attachment" Member="TpUser" ThisKey="OwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProjectMember" Member="ProjectMembers">
+    <Type Name="ProjectMember">
+      <Column Name="ProjectMemberID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WeeklyAvailableHours" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="MembershipEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Allocation" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MembershipStartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Project_ProjectMember" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+      <Association Name="Role_ProjectMember" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
+      <Association Name="TpUser_ProjectMember" Member="TpUser" ThisKey="UserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

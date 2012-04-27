@@ -5,13 +5,17 @@
 
 using System;
 using System.Linq;
+using MSMQ;
 using NServiceBus;
 using StructureMap;
 using Tp.Core;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.ServiceBus;
+using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
+using Tp.Integration.Plugin.Common.Properties;
 using log4net;
 
 namespace Tp.Integration.Plugin.Common.Ticker
@@ -42,7 +46,7 @@ namespace Tp.Integration.Plugin.Common.Ticker
 				try
 				{
 					var lastSyncDate = accountProfile.Profile.Get<LastSyncDate>().FirstOrDefault();
-					if (IsTimeToSyncronize(accountProfile.Profile, lastSyncDate) && accountProfile.Profile.Initialized)
+					if (IsTimeToSyncronize(accountProfile.Profile, lastSyncDate) && accountProfile.Profile.Initialized && QueryIsNotOverloaded(accountProfile.Account))
 					{
 						var profile = accountProfile.Profile;
 						_bus.SetOut(profile.ConvertToPluginProfile().Name);
@@ -64,6 +68,19 @@ namespace Tp.Integration.Plugin.Common.Ticker
 						accountProfile.Profile.Name, e);
 				}
 			}
+		}
+
+		private bool QueryIsNotOverloaded(IAccountReadonly account)
+		{
+			var transport = ObjectFactory.GetInstance<IMsmqTransport>();
+			var queue = new PluginQueue(transport.GetQueueName(account.Name.Value));
+			var qMgmt = new MSMQManagement();
+			object machine = Environment.MachineName;
+			var missing = Type.Missing;
+			object formatName = queue.FormatName;
+			
+			qMgmt.Init(ref machine, ref missing, ref formatName);
+			return qMgmt.MessageCount < Settings.Default.MessagesInQueueCountThreshold;
 		}
 
 		private bool IsTimeToSyncronize(IProfileReadonly profile, LastSyncDate lastSyncDate)

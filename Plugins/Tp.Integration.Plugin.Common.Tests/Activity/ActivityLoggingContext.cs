@@ -39,7 +39,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 
 			var now = DateTime.Now;
 
-			CurrentDate.SetCurrentDateStrategy(() => now);
+			CurrentDate.Setup(() => now);
 		}
 
 		public void InitializeActivityLoggingMock()

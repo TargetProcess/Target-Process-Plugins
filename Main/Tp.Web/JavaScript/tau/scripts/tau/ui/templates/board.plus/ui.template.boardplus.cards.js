@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/board.plus/ui.template.boardplus.card.userStory"],function(a){var b={name:"boardplus.cards",engine:"jqote2",markup:[['<%= fn.sub("boardplus.card.userstory", this.items) %>'].join("")]};return a.register(b)})

@@ -1,4 +1,4 @@
-//  
+// 
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
@@ -7,7 +7,6 @@ using System.Linq;
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.SourceControl
@@ -36,7 +35,7 @@ namespace Tp.SourceControl
 
 		public void Handle(UserUpdatedMessage message)
 		{
-			if(_storage.Get<UserDTO>().FirstOrDefault(x => x.ID == message.Dto.ID) != null)
+			if (_storage.Get<UserDTO>().FirstOrDefault(x => x.ID == message.Dto.ID) != null)
 			{
 				_storage.Get<UserDTO>().Update(message.Dto, x => x.ID == message.Dto.ID);
 			}

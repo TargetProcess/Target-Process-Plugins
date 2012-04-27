@@ -43,10 +43,11 @@ UseCaseHelp.ToolTipItemManager = Ext.extend(Object, {
 
 UseCaseHelp.ShowDefaultToolTipItemManager = Ext.extend(UseCaseHelp.ToolTipItemManager, {
 
-	register: function(item) {
-		UseCaseHelp.ShowDefaultToolTipItemManager.superclass.register.call(this, item);
+	register: function (item) {
+		var self = this;
+		UseCaseHelp.ShowDefaultToolTipItemManager.superclass.register.call(self, item);
 		if (this.items.length <= 2)
-			this.items[0].showToolTip();
+			setTimeout(function () { self.items[0].showToolTip(); }, 200);
 	}
 })
 

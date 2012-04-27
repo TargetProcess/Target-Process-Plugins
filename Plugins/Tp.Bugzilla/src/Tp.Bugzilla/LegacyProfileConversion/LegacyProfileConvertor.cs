@@ -342,18 +342,18 @@ namespace Tp.Bugzilla.LegacyProfileConversion
 			}
 		}
 
-		private void MapUsers(IBugTrackingMappingSource result, LegacyMappingParser parser)
+		private void MapUsers(BugzillaProfile result, LegacyMappingParser parser)
 		{
 			foreach (string user in parser.Users.Keys)
 			{
-				var tpUser = GetUserBy(parser.Users[user], x => x.Login);
+				var tpUser = GetUserForProjectBy(result.Project, parser.Users[user], x => x.Login);
 				if (tpUser != null)
 				{
 					result.UserMapping.Add(new MappingElement {Key = user, Value = Create(tpUser)});
 					continue;
 				}
 
-				tpUser = GetUserBy(parser.Users[user], x => x.Email);
+				tpUser = GetUserForProjectBy(result.Project, parser.Users[user], x => x.Email);
 				if (tpUser != null)
 				{
 					result.UserMapping.Add(new MappingElement {Key = user, Value = Create(tpUser)});

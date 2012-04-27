@@ -1,0 +1,1 @@
+define([],function(){return{nextTick:function(a){setTimeout(a,1)}}})

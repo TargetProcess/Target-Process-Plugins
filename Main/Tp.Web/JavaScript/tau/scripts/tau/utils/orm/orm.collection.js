@@ -1,0 +1,1 @@
+define([],function(){var a=function(a){this.owner=null,this.type=null,this.config=a,this._data={}},b=Reference.prototype;b.set=function(a){this._data=a}})

@@ -12,5 +12,6 @@ namespace Tp.LegacyProfileConvertsion.Common
 		string AccountName { get; }
 		string TpConnectionString { get; }
 		string PluginConnectionString { get; }
+		string Action { get; }
 	}
 }

@@ -26,6 +26,7 @@ using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
+using Tp.Integration.Plugin.Common.FileStorage;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand;

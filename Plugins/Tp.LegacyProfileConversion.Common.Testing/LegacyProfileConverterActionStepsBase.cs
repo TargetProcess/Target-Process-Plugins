@@ -78,7 +78,8 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			tpDatabaseDataContext.ExecuteCommand("delete from Comment");
 			tpDatabaseDataContext.ExecuteCommand("delete from Attachment");
 			tpDatabaseDataContext.ExecuteCommand("delete from Bug");
-			tpDatabaseDataContext.ExecuteCommand("update General set ParentProjectId=null");
+			tpDatabaseDataContext.ExecuteCommand("update General set ParentProjectID=null");
+			tpDatabaseDataContext.ExecuteCommand("delete from ProjectMember");
 			tpDatabaseDataContext.ExecuteCommand("delete from Project");
 			tpDatabaseDataContext.ExecuteCommand("delete from CustomReport");
 			tpDatabaseDataContext.ExecuteCommand("delete from TpUser");

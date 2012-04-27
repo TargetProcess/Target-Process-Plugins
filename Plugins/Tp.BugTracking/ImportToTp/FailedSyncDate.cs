@@ -14,23 +14,16 @@ namespace Tp.BugTracking.ImportToTp
 		{
 		}
 
-		public FailedSyncDate(DateTime failedSyncDate)
+		public FailedSyncDate(DateTime? failedSyncDate)
 		{
-			if (failedSyncDate == DateTime.MinValue)
-			{
-				_value = null;
-			}
-			else
-			{
-				_value = failedSyncDate;
-			}
+			_value = failedSyncDate;
 		}
 
-		private DateTime? _value;
+		private readonly DateTime? _value;
 
-		public DateTime GetValue()
+		public DateTime? GetValue()
 		{
-			return _value.HasValue ? _value.Value : DateTime.MinValue;
+			return _value;
 		}
 	}
 }

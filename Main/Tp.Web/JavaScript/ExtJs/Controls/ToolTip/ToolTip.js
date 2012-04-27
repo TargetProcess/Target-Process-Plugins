@@ -8,6 +8,7 @@ UseCaseHelp.ToolTip = Ext.extend(Ext.ToolTip, {
 		this.draggable = false;
 		this.targetXY = [0, 0];
 		this.layoutHandler = null;
+		this.baseCls = 'usecasehelp x-tip';
 	},
 
 	showHelp: function() {

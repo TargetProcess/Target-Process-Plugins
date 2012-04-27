@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(a){var b={name:"boardplus.request.indicator",engine:"jqote2",markup:['<div style="display:none;" role="status" aria-hidden="true">','<div class="loadBar" id="loadDiv">','<img class="icon" src="<%= this.imageSrc %>">&nbsp;<span>Loading</span>',"</div>","</div>"].join("")};return a.register(b)})

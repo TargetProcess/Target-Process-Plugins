@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/model.board.settings","tau/ui/extensions/board.settings/ui.extension.board.settings.create","tau/ui/templates/board.settings/ui.template.board.settings"],function(_,a,b,c,d){return{create:function(e){var f={extensions:[b,c],template:d},g=a.create(f,e);return g}}})

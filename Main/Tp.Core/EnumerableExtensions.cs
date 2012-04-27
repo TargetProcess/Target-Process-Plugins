@@ -4,7 +4,6 @@
 // 
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using JetBrains.Annotations;
 using Tp.Core;
@@ -45,12 +44,25 @@ namespace System.Linq
 		}
 
 		
-		public static string ToSqlString<T>(this IEnumerable<T> ids)
+		public static string ToSqlString<T>(this IEnumerable<T> values)
 		{
-			if (ids == null || !ids.Any())
+			if (values == null || !values.Any())
 				return " ( null )";
 
-			return String.Format(" ({0}) ", String.Join(",", ids.Select(x => x.ToString()).ToArray()));
+			return String.Format(" ({0}) ", String.Join(",", values.Select(ToSimpleSqlString).ToArray()));
+		}
+
+		public static string ToSimpleSqlString<T>(this T x)
+		{
+			if (x is string)
+			{
+				return string.Format("'{0}'", x);
+			}
+			if (x is bool)
+			{
+				return x.Equals(true) ? "1" : "0";
+			}
+			return x.ToString();
 		}
 
 		public static bool IsOrdered<T>(this IEnumerable<T> items)
@@ -186,19 +198,32 @@ namespace System.Linq
 			}
 		}
 
+
+		public static IEnumerable<T> Do<T>(this IEnumerable<T> source, Action<T> action)
+		{
+			if (source != null)
+			{
+				foreach (var elem in source)
+				{
+					action(elem);
+					yield return elem;
+				}
+			}
+		}
+
 		public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int chunkSize)
 		{
 			return source.Where((x, i) => i % chunkSize == 0).Select((x, i) => source.Skip(i * chunkSize).Take(chunkSize));
 		}
 
-		public static IEnumerable<Tuple<string,object>> GetObjectValues(this object values)
+		public static void Do<T>(this IEnumerable<T> source)
 		{
-			if (values == null) 
-				yield break;
-			foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(values))
+			using (var enumerator = source.GetEnumerator())
 			{
-				object obj2 = descriptor.GetValue(values);
-				yield return Tuple.Create(descriptor.Name, obj2);
+				while (enumerator.MoveNext())
+				{
+					
+				}
 			}
 		}
 	}

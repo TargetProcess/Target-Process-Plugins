@@ -11,7 +11,7 @@ namespace Tp.Bugzilla.Tests.Mocks
 	{
 		public bool Fail { get; set; }
 
-		public override int[] GetChangedBugIds(DateTime lastSyncDate)
+		public override int[] GetChangedBugIds(DateTime? lastSyncDate)
 		{
 			if (Fail)
 			{

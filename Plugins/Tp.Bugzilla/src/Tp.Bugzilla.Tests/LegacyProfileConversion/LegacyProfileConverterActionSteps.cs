@@ -77,17 +77,25 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 
 		private void CreateUser(string login, bool isActive, DateTime? deletedDate)
 		{
-			Context.TpUsers.InsertOnSubmit(new TpUser
-			{
-				Login = login,
-				Email = string.Format("{0}@targetprocess.com", login),
-				FirstName = "FirstName",
-				LastName = "LastName",
-				SecretWord = "abc",
-				Type = 1,
-				IsActive = isActive,
-				DeleteDate = deletedDate
-			});
+			var user = new TpUser
+			           	{
+			           		Login = login,
+			           		Email = string.Format("{0}@targetprocess.com", login),
+			           		FirstName = "FirstName",
+			           		LastName = "LastName",
+			           		SecretWord = "abc",
+			           		Type = 1,
+			           		IsActive = isActive,
+			           		DeleteDate = deletedDate
+			           	};
+			Context.TpUsers.InsertOnSubmit(user);
+			Context.SubmitChanges();
+
+			Context.ProjectMembers.InsertOnSubmit(new ProjectMember
+			                                      	{
+			                                      		ProjectID = Context.Projects.First().ProjectID,
+														UserID = user.UserID
+			                                      	});
 			Context.SubmitChanges();
 		}
 
@@ -256,6 +264,13 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		public void DeleteBug(string bugName)
 		{
 			Context.Bugs.DeleteOnSubmit(Context.Bugs.Single(b => b.BugID == GetLastBugIdByName(bugName)));
+			Context.SubmitChanges();
+		}
+
+		[Given("user '$userLogin' removed from project team")]
+		public void RemoveUserFromTeam(string userLogin)
+		{
+			Context.ProjectMembers.DeleteAllOnSubmit(Context.ProjectMembers.Where(m => m.TpUser.Login == userLogin));
 			Context.SubmitChanges();
 		}
 
