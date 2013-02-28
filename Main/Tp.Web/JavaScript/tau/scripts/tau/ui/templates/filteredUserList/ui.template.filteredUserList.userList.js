@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory","tau/ui/templates/common/ui.template.user"],function(a){var b={name:"user-list",markup:'<div class="role-title" role="user-group">${role.name}</div>{{tmpl(users) "user"}}',dependencies:["user"]};return a.register(b)})
+define(["tau/core/templates-factory","tau/ui/templates/common/ui.template.user"],function(templates){var config={name:"user-list",markup:'<div class="role-title" role="user-group">${role.name}</div>{{tmpl(users) "user"}}',dependencies:["user"]};return templates.register(config)})

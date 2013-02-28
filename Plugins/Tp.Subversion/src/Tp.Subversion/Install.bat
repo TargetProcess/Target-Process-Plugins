@@ -1,7 +1,7 @@
 pushd
 cd /d %0\.. 
 
-Tp.Subversion.InstallHelper.exe
+vcredist_x86.exe /q
 
 echo executing SubversionProfileConversionUtil
 set ConnectionString=%1

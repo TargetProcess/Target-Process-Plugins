@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(_,BaseModel){return BaseModel.extend({"bus boardSettings.ready":function(evt){var self=this,boardSettings=evt.data.boardSettings;boardSettings.unbind({listener:this}),boardSettings.bind({fields:["name"],listener:this,callback:_.bind(function(r){this.fire("name.provided",{value:r.name})},this)})}})})

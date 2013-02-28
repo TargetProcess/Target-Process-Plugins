@@ -34,13 +34,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -59,8 +59,8 @@
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn, Version=1.6016.1637.10768, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
-      <HintPath>..\..\libs\SharpSvn\64\SharpSvn.dll</HintPath>
+    <Reference Include="SharpSvn">
+      <HintPath>..\..\libs\SharpSvn\32\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
@@ -110,6 +110,7 @@
     <None Include="Mashups\ViewDiff\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="PluginSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -164,10 +165,6 @@
     <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
       <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
       <Name>Tp.SourceControl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tp.Subversion.InstallHelper\Tp.Subversion.InstallHelper.csproj">
-      <Project>{17D234DF-2359-4503-9051-1A0ABE5028DB}</Project>
-      <Name>Tp.Subversion.InstallHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

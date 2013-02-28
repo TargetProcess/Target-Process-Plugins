@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(_,ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt,renderData){var self=this,$el=renderData.element;this.fire("$el.ready",$el),$el.on("click",".i-role-tag",function(){var $l=$(this);$l.toggleClass("tau-active"),self.fire("tag.toggled",{text:$l.text(),checked:$l.hasClass("tau-active")})})}})})

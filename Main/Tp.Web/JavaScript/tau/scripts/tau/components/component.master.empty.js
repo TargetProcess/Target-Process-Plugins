@@ -1,0 +1,1 @@
+define(["tau/components/component.page.base","tau/views/view.master.empty"],function(BaseCreator,ViewType){return{create:function(componentContext){var componentConfig={name:"empty page component",turnOffErrorEmiter:!0,turnOffLoadingIndicator:!0,extensions:[],ViewType:ViewType};return BaseCreator.create(componentConfig,componentContext)}}})

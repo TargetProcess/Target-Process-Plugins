@@ -15,9 +15,7 @@ using Tp.Bugzilla.BugzillaQueries;
 using Tp.Bugzilla.ConnectionValidators;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Domain;
-using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Validation;
-using log4net;
 
 namespace Tp.Bugzilla
 {

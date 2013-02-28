@@ -1,1 +1,1 @@
-define(["tau/components/component.property"],function(a){return{create:function(b){return b=b||{},b.propertyName="testPlan",b.showUrl=!0,b.editable=!1,a.create(b)}}})
+define(["tau/components/component.property"],function(PropertyComponent){return{create:function(config){return config=config||{},config.propertyName="testPlan",config.showUrl=!0,config.editable=!1,PropertyComponent.create(config)}}})

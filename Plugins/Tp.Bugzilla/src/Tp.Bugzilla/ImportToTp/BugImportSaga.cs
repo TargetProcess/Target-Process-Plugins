@@ -67,8 +67,7 @@ namespace Tp.Bugzilla.ImportToTp
 				// We will not receive BugUpdatedMessage if no fields were changed. So we should process related entities immediately.
 				SendLocal(new ExistingBugImportedToTargetProcessMessage<BugzillaBug> {TpBugId = tpBug.BugDto.ID, ThirdPartyBug = Data.ThirdPartyBug});
 
-				_bugzillaInfoStorageRepository.SaveBugzillaBugInfo(tpBug.BugDto.ID,
-				                                                   new BugzillaBugInfo(message.ThirdPartyBug) {TpId = tpBug.BugDto.ID});
+				_bugzillaInfoStorageRepository.SaveBugzillaBugInfo(tpBug.BugDto.ID, new BugzillaBugInfo(message.ThirdPartyBug) {TpId = tpBug.BugDto.ID});
 			}
 		}
 

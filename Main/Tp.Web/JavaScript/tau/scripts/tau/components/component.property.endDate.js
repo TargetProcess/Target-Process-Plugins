@@ -1,1 +1,1 @@
-define(["tau/components/component.property.date"],function(a,b){return{create:function(b){return b=b||{},b.propertyName="endDate",a.create(b)}}})
+define(["tau/components/component.property.date"],function(creator,ModelValidation){return{create:function(config){return config=config||{},config.propertyName="endDate",creator.create(config)}}})

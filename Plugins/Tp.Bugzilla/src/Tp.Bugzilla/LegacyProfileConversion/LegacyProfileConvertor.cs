@@ -197,7 +197,7 @@ namespace Tp.Bugzilla.LegacyProfileConversion
 			foreach (var tpUser in _context.TpUsers.Where(x => x.Type == 1 || x.Type == 4))
 			{
 				var mapped = Mapper.Map<TpUser, UserDTO>(tpUser);
-				if (mapped.IsActiveNotDeletedUser())
+				if (mapped.IsNotDeletedUser())
 				{
 					storageRepository.Get<UserDTO>(mapped.UserID.ToString()).Add(mapped);
 					storageRepository.Get<UserDTO>(mapped.Email).Add(mapped);

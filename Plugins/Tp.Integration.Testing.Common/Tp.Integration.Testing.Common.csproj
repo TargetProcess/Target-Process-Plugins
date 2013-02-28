@@ -40,13 +40,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\Libs\Common.Logging.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -71,9 +71,6 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Tp.Core">
-      <HintPath>..\..\Libs\Tp.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloneExtensions.cs" />
@@ -96,6 +93,10 @@
     <Compile Include="TransportMockConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
       <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
       <Name>Tp.Integration.Messages</Name>
@@ -106,6 +107,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="TpPublic.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,1 @@
+define(["app.path"],function(appPath){var QUERY_PARAM="tppath";return{load:function(name,req,onLoad,config){req([name],function(mod){onLoad(mod)})},normalize:function(name,norm){return name.indexOf("/")==0&&(name=appPath.get()+name),name+=name.indexOf("?")<0?"?":"&",name+QUERY_PARAM+"=1"}}})

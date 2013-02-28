@@ -3,7 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using Tp.SourceControl.Settings;
+using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.SourceControl.RevisionStorage
 {
@@ -11,7 +11,7 @@ namespace Tp.SourceControl.RevisionStorage
 	{
 		public RevisionIdRelation RevisionId { get; set; }
 
-		public ISourceControlConnectionSettingsSource ConnectionSettings { get; set; }
+		public IStorageRepository Profile { get; set; }
 	}
 
 	public class RevisionIdRelation

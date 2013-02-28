@@ -41,7 +41,7 @@ namespace Tp.Bugzilla
 
 		public string Url
 		{
-			get { return String.IsNullOrEmpty(_profile.Url) ? String.Empty : _profile.Url.TrimEnd('/', '\\'); }
+			get { return string.IsNullOrEmpty(_profile.Url) ? string.Empty : _profile.Url.TrimEnd('/', '\\'); }
 		}
 
 		public string CheckConnection()
@@ -51,7 +51,7 @@ namespace Tp.Bugzilla
 
 		public bugCollection GetBugs(int[] bugIDs)
 		{
-			var content = UploadDataToBugzilla(String.Format("cmd=get_bugs&id={0}", bugIDs.ToString(",")));
+			var content = UploadDataToBugzilla(string.Format("cmd=get_bugs&id={0}", bugIDs.ToString(",")));
 
 			content = ProcessResponse(content);
 
@@ -69,7 +69,7 @@ namespace Tp.Bugzilla
 		public int[] GetChangedBugsIds(DateTime? date)
 		{
 			var myDtfi = new CultureInfo("en-US", false).DateTimeFormat;
-			var url = String.Format("cmd=get_bug_ids&name={0}&date={1}",
+			var url = string.Format("cmd=get_bug_ids&name={0}&date={1}",
 			                        HttpUtility.UrlEncode(_profile.SavedSearches),
 									string.Format(myDtfi, "{0:yyyy-MM-dd HH:mm:ss}", date));
 
@@ -97,17 +97,18 @@ namespace Tp.Bugzilla
 
 		private string UploadDataToBugzilla(string query)
 		{
-			var webClient = new WebClient {Encoding = Encoding.UTF8};
-			webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+			var encoding = Encoding.UTF8;
+			var webClient = new WebClient { Encoding = encoding };
+			webClient.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
 
-			if (!String.IsNullOrEmpty(_profile.Login) && !String.IsNullOrEmpty(_profile.Password))
+			if (!string.IsNullOrEmpty(_profile.Login) && !string.IsNullOrEmpty(_profile.Password))
 			{
-				query += String.Format("&Bugzilla_login={0}&Bugzilla_password={1}", _profile.Login, _profile.Password);
+				query += string.Format("&Bugzilla_login={0}&Bugzilla_password={1}", _profile.Login, _profile.Password);
 			}
 
-			var bret = webClient.UploadData(String.Format("{0}/tp2.cgi", Url), "POST", Encoding.ASCII.GetBytes(query));
+			var bret = webClient.UploadData(string.Format("{0}/tp2.cgi", Url), "POST", encoding.GetBytes(query));
 
-			var content = Encoding.ASCII.GetString(bret);
+			var content = encoding.GetString(bret);
 
 			return content;
 		}

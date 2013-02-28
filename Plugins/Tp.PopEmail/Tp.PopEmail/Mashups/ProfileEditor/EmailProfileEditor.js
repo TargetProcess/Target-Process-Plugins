@@ -18,6 +18,9 @@ tau.mashups
     .addDependency("tp/plugins/profileControlsBlock")
     .addDependency("emailIntegration/editorTemplate")
     .addDependency("tp/plugins/errorMessageContainer")
+    .addDependency("emailIntegration/jquery/numeric")
+    .addDependency("emailIntegration/jquery/iphone-switch")
+    .addDependency("emailIntegration/jquery/defaultvalue.source")
     .addModule("emailIntegration/editor",
 
      function (bus, profileControlsBlock, editorTemplate, errorMessageContainer) {

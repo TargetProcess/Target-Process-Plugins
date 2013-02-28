@@ -130,7 +130,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And synchronizing bugzilla bugs
 				When comment 'comment 1' for bug 'bug1' was created on '2010-10-10 13:13:00' by 'Lansie' in TargetProcess
 				Then bug 1 in bugzilla should have 1 comments
-					And bug 1 in bugzilla should have comment 'comment 1' created on '2010-10-10 14:13:00' by 'Lansie@mail.com'
+					And bug 1 in bugzilla should have comment 'comment 1' created on '2010-10-10 15:13:00' by 'Lansie@mail.com'
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
 							.And<CommentsFromBugzillaSyncSpecs>());

@@ -58,5 +58,10 @@ namespace Tp.Integration.Messages
 		{
 			return !(left == right);
 		}
+
+		public override string ToString()
+		{
+			return Value;
+		}
 	}
 }

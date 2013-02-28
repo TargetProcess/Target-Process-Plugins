@@ -1,0 +1,1 @@
+define(["libs/date.js/build/date"],function(Date){return Date.prototype.getDaysInMonth=function(){return Date.getDaysInMonth(this.getDate(),this.getMonth())},Date})

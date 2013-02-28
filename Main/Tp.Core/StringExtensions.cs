@@ -3,14 +3,39 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Text;
-using JetBrains.Annotations;
+using Tp.Core;
+using Tp.Core.Annotations;
 
 namespace System
 {
 	public static class StringExtensions
 	{
+
+		private static readonly Dictionary<char, char> SpecialCharacters = new Dictionary<char, char>
+			{
+				{'0', '\0'},
+				{'a', '\a'},
+				{'b', '\b'},
+				{'f', '\f'},
+				{'n', '\n'},
+				{'r', '\r'},
+				{'t', '\t'},
+				{'v', '\v'},
+				{'\\', '\\'},
+				{'"', '\"'},
+			};
+
+		private static readonly Dictionary<char, char> SpecialCharactersInverted;
+
+		static StringExtensions()
+		{
+			SpecialCharactersInverted = SpecialCharacters.ToDictionary(x => x.Value, x => x.Key);
+		}
+
 		[StringFormatMethod("format")]
 		public static string Fmt(this string format, params object[] args)
 		{
@@ -24,41 +49,106 @@ namespace System
 
 		public static bool IsNullOrWhitespace(this string value)
 		{
-			return value==null || value.Trim().Length == 0;
+			return value == null || value.Trim().Length == 0;
 		}
 
+		[StringFormatMethod("format")]
 		public static StringBuilder AppendLine(this StringBuilder stringBuilder, string format, params object[] args)
 		{
 			return stringBuilder.AppendFormat(format, args).AppendLine();
 		}
 
-		public static T ParseEnum<T>(this string name)
-			where T : struct
+		public static string ToStringSafe(this object s)
 		{
-			var type = typeof (T);
-			if (!type.IsEnum)
-				throw new ArgumentException("Type argument must be enum");
-			try
-			{
-				return (T)Enum.Parse(type, name, true);
-			}
-			catch (Exception e)
-			{
-				throw new InvalidCastException("Could not parse value '{0}' for enum '{1}'".Fmt(name, typeof(T)), e);
-			}
+			if (s == null)
+				return null;
+			return s.ToString();
 		}
 
-		public static bool TryParseEnum<T>(this string name, out T result)
-			where T : struct
+		public static string TrimSafe(this string s, params char[] chars)
 		{
-			result = default(T);
-			var type = typeof (T);
-			if (!type.IsEnum || !Enum.GetNames(type).Contains(name, StringComparer.OrdinalIgnoreCase))
-				return false;
+			if (s == null)
+				return null;
+			return s.Trim(chars);
+		}
 
-			result = (T) Enum.Parse(type, name, true);
+		public static bool EqualsIgnoreCase(this string a, string b)
+		{
+			return string.Equals(a, b, StringComparison.InvariantCultureIgnoreCase);
+		}
 
-			return true;
+
+		public static string FilterInvalidXmlCharacters(this string value)
+		{
+			if (value.IsNullOrEmpty())
+				return value;
+			var sb = new StringBuilder(value.Length);
+			foreach (var c in value.Where(c => (c == 0x9) ||
+			                                   (c == 0xA) ||
+			                                   (c == 0xD) ||
+			                                   ((c >= 0x20) && (c <= 0xD7FF)) ||
+			                                   ((c >= 0xE000) && (c <= 0xFFFD))))
+			{
+				sb.Append(c);
+			}
+			return sb.ToString();
+		}
+
+
+		public static string Escape(this string s)
+		{
+			var result = new StringBuilder(s.Length);
+			foreach (char c in s)
+			{
+				char converted;
+				if (SpecialCharactersInverted.TryGetValue(c, out converted))
+				{
+					result.Append('\\');
+					result.Append(converted);
+				}
+				else
+				{
+					result.Append(c);
+				}
+			}
+			return result.ToString();
+		}
+
+		public static string Unescape(this string s)
+		{
+			var result = new StringBuilder(s.Length);
+
+			foreach (var c in NormalizeChars(s))
+			{
+				result.Append(c);
+			}
+
+			return result.ToString();
+		}
+
+		private static IEnumerable<char> NormalizeChars(string s)
+		{
+			using (var enumerator = s.GetEnumerator())
+			{
+				while (enumerator.MoveNext())
+				{
+					var current = enumerator.Current;
+
+
+					if (current == '\\')
+					{
+						if (!enumerator.MoveNext())
+						{
+							throw new ArgumentException(Res.InvalidCharacterLiteral);
+						}
+						yield return SpecialCharacters.GetValue(enumerator.Current).FailIfNothing(() => new ArgumentException(Res.InvalidCharacter.Fmt(enumerator.Current)));
+					}
+					else
+					{
+						yield return current;
+					}
+				}
+			}
 		}
 	}
 }

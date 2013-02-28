@@ -1,0 +1,1 @@
+define(["jQuery"],function($){return{create:function(appConfig){var $return=$.Deferred(),req=require;return req(["all.components"],function(){req(["tau/components/component.application.generic"],function(appComponent){var appBus=appComponent.create(appConfig);$return.resolve(appBus)})}),$return}}})

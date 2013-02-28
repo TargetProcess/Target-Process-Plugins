@@ -95,7 +95,7 @@ namespace Tp.Integration.Plugin.Common
 		/// <param name="profileNameName">Current profile name.</param>
 		/// <param name="accountName">Current account name.</param>
 		/// <param name="message">The message to send.</param>
-		void SendLocalWithContext(ProfileName profileNameName, AccountName accountName, ITargetProcessMessage message);
+		void SendLocalWithContext(ProfileName profileNameName, AccountName accountName, IMessage message);
 
 		/// <summary>
 		/// Sends message with plugin info to TargetProcess.
@@ -109,6 +109,6 @@ namespace Tp.Integration.Plugin.Common
 		/// <param name="messages">The messages to send.</param>
 		void Reply(params ITargetProcessMessage[] messages);
 
-		void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message);
+		void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, IMessage message);
 	}
 }

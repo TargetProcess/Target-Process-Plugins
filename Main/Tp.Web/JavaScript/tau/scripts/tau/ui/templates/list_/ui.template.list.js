@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"list",markup:['<div class="tau-list">',"</div>"]};return a.register(b)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"list",markup:['<div class="tau-list">',"</div>"]};return templates.register(config)})

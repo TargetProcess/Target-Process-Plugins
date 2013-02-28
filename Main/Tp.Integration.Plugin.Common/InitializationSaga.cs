@@ -29,6 +29,7 @@ namespace Tp.Integration.Plugin.Common
 
 		protected void StartInitialization()
 		{
+			if (Profile().Initialized) return;
 			OnStartInitialization();
 		}
 

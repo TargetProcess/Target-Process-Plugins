@@ -16,9 +16,7 @@
 
 using System;
 
-// ReSharper disable CheckNamespace
-namespace JetBrains.Annotations
-// ReSharper restore CheckNamespace
+namespace Tp.Core.Annotations
 {
   /// <summary>
   /// Indicates that marked element should be localized or not.

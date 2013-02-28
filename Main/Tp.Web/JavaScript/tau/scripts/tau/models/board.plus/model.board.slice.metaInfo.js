@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/event.emitter"],function(_,Model){return Model.extend({"bus model.cells.content.loaded":function(evt){var metaInfo=evt.data.data.metaInfo||{},self=this;self.fire("model.cells.metaInfo.ready",metaInfo)}})})

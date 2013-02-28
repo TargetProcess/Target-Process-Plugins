@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base"],function($,ExtensionBase){return ExtensionBase.extend({"bus $el.ready":function(ev,$el){$el.tauSelectable({items:".i-role-card",className:"tau-boardclipboard__item_selected_true",ctrl:!0});var self=this;self.fire("$selectable.ready",$el)}})})

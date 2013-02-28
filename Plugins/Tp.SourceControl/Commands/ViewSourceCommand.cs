@@ -3,7 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -34,7 +33,7 @@ namespace Tp.SourceControl.Commands
 
 				if (revision != null)
 				{
-					var vcs = _vcsFactory.Get(revision.ConnectionSettings);
+					var vcs = _vcsFactory.Get(revision.Profile);
 					response.Content = vcs.GetTextFileContent(revision.RevisionId.RevisionId, fileArgs.Path).Replace("\t", "    ");
 				}
 

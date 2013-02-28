@@ -57,7 +57,7 @@ namespace Tp.Bugzilla.Synchronizer
 
 		private void Create(UserDTO dto)
 		{
-			if (!dto.IsActiveNotDeletedUser())
+			if (!dto.IsNotDeletedUser())
 				return;
 
 			UserByIdStorage(dto).Add(dto);

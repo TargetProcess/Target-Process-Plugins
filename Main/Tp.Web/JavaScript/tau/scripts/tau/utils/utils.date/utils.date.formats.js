@@ -1,1 +1,1 @@
-define([],function(){var a={};return a={date:{"short":"d-MMM-yyyy"},time:{"short":"HH:mm"},datetime:{"short":"d-MMM-yyyy HH:mm"}},a})
+define([],function(){var formats={};return formats={date:{"short":"d-MMM-yyyy"},time:{"short":"HH:mm"},datetime:{"short":"d-MMM-yyyy HH:mm"}},formats})

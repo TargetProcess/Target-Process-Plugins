@@ -277,8 +277,6 @@ namespace Tp.Integration.Common
 		[ForeignKey]
 		[XmlElement(Order = 41)]public Int32? ReleaseID { get; set; }
 		
-
-		
 		/// <summary>
         /// Gets or sets the Entity Type Name. Type of the entity. For example, Bug, TestCase, Task
         /// </summary>

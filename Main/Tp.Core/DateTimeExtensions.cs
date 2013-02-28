@@ -3,9 +3,9 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
+using System.Data;
 
-namespace Tp.Core
+namespace System
 {
 	public static class DateTimeExtensions
 	{
@@ -42,6 +42,17 @@ namespace Tp.Core
 		public static string ToJavascriptDate(this DateTime date)
 		{
 			return "new Date({0})".Fmt(date.Subtract(new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds);
+		}
+
+		public static TimeSpan Days(this int days)
+		{
+			return TimeSpan.FromDays(days);
+		}
+
+		[SqlFunction("dbo.f_WeekNumber", DbType.UInt32)]
+		public static int WeekNumber(this DateTime date)
+		{
+			return ((int)Math.Floor((date - new DateTime(1990, 1, 1)).TotalDays)) / 7;
 		}
 	}
 }

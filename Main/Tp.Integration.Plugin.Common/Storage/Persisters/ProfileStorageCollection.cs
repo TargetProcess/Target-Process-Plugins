@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace Tp.Integration.Plugin.Common.Storage.Persisters
 {
+	using Tp.Core;
+
 	internal class ProfileStorageCollection
 	{
 		private readonly ProfileId _profileId;
@@ -42,7 +44,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters
 				}
 				else
 				{
-					valueStorage = new ProfileStorage(value.GetType()) {ProfileId = _profileId.Value};
+					valueStorage = new ProfileStorage(new TypeNameWithoutVersion(value.GetType())) {ProfileId = _profileId.Value};
 					valueStorage.SetValue(value);
 					_persister.Insert(valueStorage);
 				}

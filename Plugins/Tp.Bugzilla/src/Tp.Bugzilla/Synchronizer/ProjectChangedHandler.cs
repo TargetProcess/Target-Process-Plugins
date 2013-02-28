@@ -11,12 +11,18 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
+	using System;
+
+	using log4net;
+
 	public class ProjectChangedHandler : EntityChangedHandler<ProjectDTO>,
 	                                     IHandleMessages<ProjectUpdatedMessage>,
 	                                     IHandleMessages<ProjectDeletedMessage>
 	{
+		private readonly ILog _log;
 		public ProjectChangedHandler(IStorageRepository storage) : base(storage)
 		{
+			_log = LogManager.GetLogger(GetType());
 		}
 
 		public void Handle(ProjectUpdatedMessage message)
@@ -40,6 +46,17 @@ namespace Tp.Bugzilla.Synchronizer
 
 		protected override bool NeedToProcess(ProjectDTO dto)
 		{
+			if (dto == null)
+			{
+				throw new ArgumentNullException("dto");
+			}
+
+			if (Profile == null)
+			{
+				_log.Error("Profile is null");
+				return false;
+			}
+
 			return dto.ProjectID == Profile.Project;
 		}
 	}

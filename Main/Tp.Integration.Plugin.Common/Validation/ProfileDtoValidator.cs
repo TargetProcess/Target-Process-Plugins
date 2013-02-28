@@ -14,7 +14,7 @@ namespace Tp.Integration.Plugin.Common.Validation
 	/// </summary>
 	public class ProfileDtoValidator : IValidatable
 	{
-		public const string ALLOWED_PROFILE_NAME_CHARS = "^[ _0-9a-zA-Z]*$";
+		public const string ALLOWED_PROFILE_NAME_CHARS = "^[ _0-9a-zA-Z-]*$";
 		private readonly PluginProfileDto _dto;
 
 		public ProfileDtoValidator(PluginProfileDto dto)
@@ -55,7 +55,7 @@ namespace Tp.Integration.Plugin.Common.Validation
 				errors.Add(new PluginProfileError
 				           	{
 				           		FieldName = "Name",
-				           		Message = "You can only use letters, numbers, space and underscore symbol in Profile Name"
+				           		Message = "You can only use letters, numbers, space, dash and underscore symbol in Profile Name"
 				           	});
 			}
 		}

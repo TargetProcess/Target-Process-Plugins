@@ -4,6 +4,7 @@
 // 
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -19,19 +20,25 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		private readonly ILoggerContextSensitive _log;
 		private readonly Func<TMessage, string> _tagMessageProvider;
 		private readonly IProducerConsumerFactory<TMessage> _producerConsumerFactory;
-		private readonly Dictionary<string, Child> _routerItems;
+		private readonly ConcurrentDictionary<string, Child> _routerItems;
 		private Action<TMessage> _handleMessage;
 		private int _childrenCount;
 
-		protected MessageRouter(IMessageSource<TMessage> messageSource,
-		                        IProducerConsumerFactory<TMessage> producerConsumerFactory,
-		                        Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
+		protected MessageRouter(IMessageSource<TMessage> messageSource, IProducerConsumerFactory<TMessage> producerConsumerFactory, Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
 			: base(messageSource, scheduler, log)
 		{
 			_log = log;
 			_producerConsumerFactory = producerConsumerFactory;
 			_tagMessageProvider = tagMessageProvider;
-			_routerItems = new Dictionary<string, Child>();
+			_routerItems = new ConcurrentDictionary<string, Child>();
+		}
+
+		private void InitializeChildren(IEnumerable<string> childrenTags)
+		{
+			foreach (var childTag in childrenTags)
+			{
+				GetOrCreateRouterItem(childTag);
+			}
 		}
 
 		public override string Name
@@ -42,6 +49,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		protected override void ConsumeCore(Action<TMessage> handleMessage)
 		{
 			_handleMessage = handleMessage;
+			ThreadPool.QueueUserWorkItem(x => InitializeChildren(GetChildTags()));
 			base.ConsumeCore(m =>
 			                 	{
 			                 		if (IsTransactional)
@@ -55,18 +63,29 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			                 	});
 		}
 
+		protected abstract IEnumerable<string> GetChildTags();
+
 		protected abstract void Receive(TMessage message);
 
 		protected abstract void Preprocess(TMessage message);
 
+		public override void Dispose(string childTag)
+		{
+			Child child;
+			var hasValue = _routerItems.TryGetValue(childTag, out child);
+			if (hasValue)
+			{
+				child.Consumer.Dispose();
+			}
+		}
+
 		protected override void OnDispose()
 		{
 			base.OnDispose();
-			foreach (var consumer in _routerItems.Values.Select(r => r.Consumer))
+			foreach (var consumer in _routerItems)
 			{
-				consumer.Dispose();
+				consumer.Value.Consumer.Dispose();
 			}
-			_log.Info(LoggerContext.New(Name), "disposed.");
 		}
 
 		private void Process(TMessage message)
@@ -80,26 +99,28 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			}
 
 			Receive(message);
+
+			if (!NeedToHandle(message))
+			{
+				return;
+			}
+
 			Preprocess(message);
 			Child child = GetOrCreateRouterItem(messageTag);
 			child.Producer.Produce(message);
 		}
 
+		protected abstract bool NeedToHandle(TMessage messageTag);
+
 		private Child GetOrCreateRouterItem(string tag)
 		{
-			Child child;
-			if (!_routerItems.TryGetValue(tag, out child))
-			{
-				child = Create(tag);
-				_routerItems.Add(tag, child);
-			}
-			return child;
+			return _routerItems.GetOrAdd(tag, t => Create(t));
 		}
 
 		private Child Create(string sourceName)
 		{
 			Interlocked.Increment(ref _childrenCount);
-			IMessageSource<TMessage> source = _producerConsumerFactory.CreateSource(sourceName);
+			IMessageSource<TMessage> source = _producerConsumerFactory.CreateSource(sourceName, true);
 			IMessageConsumer<TMessage> consumer = _producerConsumerFactory.CreateConsumer(source);
 			IMessageProducer<TMessage> producer = _producerConsumerFactory.CreateProducer(source);
 			consumer.AddObserver(new DisposeProducerOnCompleteObserver(producer, _log));

@@ -1,0 +1,1 @@
+define(["libs/modernizr/modernizr"],function(Modernizr){return Modernizr})

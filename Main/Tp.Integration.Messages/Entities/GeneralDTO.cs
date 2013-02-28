@@ -8,7 +8,7 @@ using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
 {
-    /// <summary>
+	/// <summary>
     /// Data Transfer object of General. Base class for almost all entities in TargetProcess.
     /// </summary>
 	[Serializable]
@@ -221,6 +221,12 @@ namespace Tp.Integration.Common
 		[RelationName]
 		[XmlElement(Order = 32)]public virtual string EntityTypeName { get; set; }
 		
+		/// <summary>
+        /// Gets or sets the Entity Type ID. Type of the entity. For example, Bug, TestCase, Task
+        /// </summary>
+        /// <value>The Entity Type ID.</value>
+		[ForeignKey]
+		[XmlElement(Order = 33)]public Int32? EntityTypeID { get; set; }
 	}
 	
 	
@@ -337,6 +343,10 @@ namespace Tp.Integration.Common
         /// Last Editor ID
         /// </summary>		
 		LastEditorID,
+        /// <summary>
+        /// Entity Type ID
+        /// </summary>		
+		EntityTypeID,
         /// <summary>
         /// Parent Project Name
         /// </summary>		

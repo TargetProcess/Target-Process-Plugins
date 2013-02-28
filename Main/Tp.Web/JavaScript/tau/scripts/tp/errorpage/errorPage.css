@@ -78,6 +78,21 @@ p
 	text-shadow: 0 1px 1px #fff;
 	font-size: 16px;
 }
+input {
+	border: 1px solid #9EA4AD;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	padding: 5px 6px 5px 6px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	webkit-box-shadow: inset 0px 1px 1px #ddd;
+	-moz-box-shadow: inset 0px 1px 1px #ddd;
+	box-shadow: inset 0px 1px 1px #ddd;
+	border-image: initial;
+}
 textarea
 {
 	border: 1px solid #9EA4AD;
@@ -292,7 +307,12 @@ input[type="button"], input[type="submit"]
 	text-align: center;
 	background: url('../../../../../img/error/message-bg.png') left top repeat-y;
 }
-		
+.panel-email {
+	padding-bottom: 10px;
+}
+.error-message-email {
+	color: #af1414 !important;	
+}
 .error-message-not-sent p
 {
 	font-size: 18px !important;

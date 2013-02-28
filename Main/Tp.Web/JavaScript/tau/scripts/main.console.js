@@ -1,1 +1,1 @@
-(function(){function b(){window.document.title="TargetProcess REST Console"}var a=["Underscore","jQuery","tau/ui/restConsole"];require({priority:a}),require.onError=function(a){console.log("File wasn't loaded:"+a.message)},require(a,b)})()
+(function(){function callback(){window.document.title="TargetProcess REST Console"}var libs=["Underscore","jQuery","tau/ui/restConsole"];require({priority:libs}),require(libs,callback)})()

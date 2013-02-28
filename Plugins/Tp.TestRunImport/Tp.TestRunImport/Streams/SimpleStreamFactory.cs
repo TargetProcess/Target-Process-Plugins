@@ -1,7 +1,8 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
+
 using System;
 using System.IO;
 using System.Net;
@@ -121,7 +122,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Streams
 							LastModifyResult = new LastModifyResult
 							{
 								ModifyTimeUtcsTicks = response.Headers[HttpResponseHeader.LastModified] == null ? DateTime.MinValue.Ticks : response.LastModified.ToUniversalTime().Ticks,
-								ETagHeader = response.Headers["ETag"] ?? string.Empty
+								ETagHeader = response.Headers[HttpResponseHeader.ETag] ?? string.Empty
 							}
 						};
 					}

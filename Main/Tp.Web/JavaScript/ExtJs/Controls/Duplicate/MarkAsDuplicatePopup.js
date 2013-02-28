@@ -29,8 +29,9 @@ Tp.controls.Duplicate.MarkAsDuplicatePopup = Ext.extend(Ext.BoxComponent, {
 			style: {
 				position: 'fixed',
 				top: '50%',
-				left: '50%'//,
+				left: '50%',
 				//zIndex: Tp.controls.getOverlay().getZIndex() + 1
+                zIndex: 10000000
 			},
 			listeners: {
 				beforeshow: {

@@ -22,7 +22,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 		public string Command { get { return _command; } }
 	}
 
-	class MessageAccountParser
+	internal class MessageAccountParser
 	{
 		public static readonly MessageAccountParser Instance = new MessageAccountParser();
 
@@ -54,7 +54,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 
 		public MessageAccount Parse(Message m)
 		{
-			if (m.Extension.Length == 0)
+			if (m == null || m.Extension.Length == 0)
 			{
 				return MessageAccount.Empty;
 			}

@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory","tau/ui/templates/tags/ui.template.tag.item"],function(a){var b={name:"tags",markup:['<ul class="ui-tags">','   {{tmpl(tags) "tag-item"}}',"</ul>"],dependencies:["tag-item"]};return a.register(b)})
+define(["tau/core/templates-factory","tau/ui/templates/tags/ui.template.tags.item"],function(templates){var config={name:"tags",engine:"jqote2",markup:["<span>",'<ul class="ui-tags i-role-editor">','<%= fn.sub("tags.item", this.tags) %>',"</ul>","</span>"]};return templates.register(config)})

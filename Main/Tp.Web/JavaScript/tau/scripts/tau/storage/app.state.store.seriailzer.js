@@ -1,0 +1,1 @@
+define(["Underscore"],function(_){return{extractSharedState:function(settings){var r=null;return settings.acid&&(r={},r[settings.id]={acid:settings.acid}),r},serialize:function(settings){return settings.acid?settings.id+'={"acid":"'+settings.acid+'"}':null}}})

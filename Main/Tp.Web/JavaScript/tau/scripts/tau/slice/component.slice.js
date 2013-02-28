@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.creator","tau/slice/model/matrix","tau/slice/templates/matrix","tau/slice/ui/dd"],function(_,a,b,c,d){return{create:function(e){var f={ModelType:b,template:c,extensions:[d]};return a.create(f,e)}}})
+define(["Underscore","tau/components/component.creator","tau/slice/model/matrix","tau/slice/templates/matrix","tau/slice/ui/dd"],function(_,creator,ModelType,template,dd){return{create:function(config){var creatorConfig={ModelType:ModelType,template:template,extensions:[]};return creator.create(creatorConfig,config)}}})

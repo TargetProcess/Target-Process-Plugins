@@ -5,11 +5,9 @@
 
 using System;
 using System.Linq;
-using MSMQ;
 using NServiceBus;
 using StructureMap;
 using Tp.Core;
-using Tp.Integration.Messages;
 using Tp.Integration.Messages.ServiceBus;
 using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Messages.Ticker;
@@ -25,13 +23,14 @@ namespace Tp.Integration.Plugin.Common.Ticker
 		private readonly IBus _bus;
 		private readonly IPluginMetadata _pluginMetadata;
 		private readonly IAccountCollection _collection;
+		private readonly IMsmqTransport _transport;
 
-		public CheckIntervalElapsedMessageHandler(IBus bus, IPluginMetadata pluginMetadata,
-		                                          IAccountCollection collection)
+		public CheckIntervalElapsedMessageHandler(IBus bus, IPluginMetadata pluginMetadata, IAccountCollection collection, IMsmqTransport transport)
 		{
 			_bus = bus;
 			_pluginMetadata = pluginMetadata;
 			_collection = collection;
+			_transport = transport;
 		}
 
 		public void Handle(CheckIntervalElapsedMessage message)
@@ -46,7 +45,9 @@ namespace Tp.Integration.Plugin.Common.Ticker
 				try
 				{
 					var lastSyncDate = accountProfile.Profile.Get<LastSyncDate>().FirstOrDefault();
-					if (IsTimeToSyncronize(accountProfile.Profile, lastSyncDate) && accountProfile.Profile.Initialized && QueryIsNotOverloaded(accountProfile.Account))
+					string queueName = _transport.GetQueueName(accountProfile.Account.Name.Value);
+					if (IsTimeToSyncronize(accountProfile.Profile, lastSyncDate) && accountProfile.Profile.Initialized &&
+						MsmqHelper.QueueIsNotOverloaded(queueName, "Failed to count messages in queue for account '{0}'".Fmt(accountProfile.Account.Name.Value), 10))
 					{
 						var profile = accountProfile.Profile;
 						_bus.SetOut(profile.ConvertToPluginProfile().Name);
@@ -63,25 +64,13 @@ namespace Tp.Integration.Plugin.Common.Ticker
 				}
 				catch (Exception e)
 				{
-					LogManager.GetLogger(GetType()).ErrorFormat(
-						"Failed to send tick message for account '{0}' profile '{1}'. Reason : '{2}'", accountProfile.Account.Name,
-						accountProfile.Profile.Name, e);
+					LogManager.GetLogger(GetType()).Error(string.Format("Failed to send tick message for account '{0}' profile '{1}'", accountProfile.Account.Name.Value,
+						accountProfile.Profile.Name.Value), e);
 				}
 			}
 		}
 
-		private bool QueryIsNotOverloaded(IAccountReadonly account)
-		{
-			var transport = ObjectFactory.GetInstance<IMsmqTransport>();
-			var queue = new PluginQueue(transport.GetQueueName(account.Name.Value));
-			var qMgmt = new MSMQManagement();
-			object machine = Environment.MachineName;
-			var missing = Type.Missing;
-			object formatName = queue.FormatName;
-			
-			qMgmt.Init(ref machine, ref missing, ref formatName);
-			return qMgmt.MessageCount < Settings.Default.MessagesInQueueCountThreshold;
-		}
+		
 
 		private bool IsTimeToSyncronize(IProfileReadonly profile, LastSyncDate lastSyncDate)
 		{

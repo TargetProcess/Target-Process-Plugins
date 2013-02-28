@@ -5,11 +5,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using JetBrains.Annotations;
 using Tp.Core;
+using Tp.Core.Annotations;
 
 namespace System.Linq
 {
+	public class GroupWithCount<TKey> : IEquatable<GroupWithCount<TKey>>
+	{
+		public bool Equals(GroupWithCount<TKey> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return EqualityComparer<TKey>.Default.Equals(_key, other._key) && _count == other._count;
+		}
+
+		public static bool operator ==(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
+		{
+			return Equals(left, right);
+		}
+
+		public static bool operator !=(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
+		{
+			return !Equals(left, right);
+		}
+
+		private readonly TKey _key;
+		private readonly int _count;
+
+		public TKey Key
+		{
+			get { return _key; }
+		}
+
+		public int Count
+		{
+			get { return _count; }
+		}
+
+		public GroupWithCount(TKey key, int count)
+		{
+			_key = key;
+			_count = count;
+		}
+
+		public override string ToString()
+		{
+			var builder = new StringBuilder();
+			builder.Append("{ Key = ");
+			builder.Append(Key);
+			builder.Append(", Count = ");
+			builder.Append(Count);
+			builder.Append(" }");
+			return builder.ToString();
+		}
+
+		public override bool Equals(object value)
+		{
+			var type = value as GroupWithCount<TKey>;
+			return (type != null) && EqualityComparer<TKey>.Default.Equals(type.Key, Key) && EqualityComparer<int>.Default.Equals(type.Count, Count);
+		}
+
+		public override int GetHashCode()
+		{
+			int num = 0x7a2f0b42;
+			num = (-1521134295*num) + EqualityComparer<TKey>.Default.GetHashCode(Key);
+			return (-1521134295*num) + EqualityComparer<int>.Default.GetHashCode(Count);
+		}
+	}
+
 	public static class EnumerableExtensions
 	{
 		// for generic interface IEnumerable<T>
@@ -21,9 +84,7 @@ namespace System.Linq
 			if (String.IsNullOrEmpty(separator))
 				throw new ArgumentException("Parameter separator can not be null or empty.");
 
-			return source.Where(x => !Equals(x, null)).Aggregate(new StringBuilder(),
-																	 (sb, x) => sb.Append(separator).Append(selector(x)),
-																	 x => (x.Length > 0 ? x.Remove(0, separator.Length) : x).ToString());
+			return String.Join(separator,source.Where(x => !Equals(x, null)).Select(selector));
 		}
 
 		public static string ToString<T>(this IEnumerable<T> source, string separator)
@@ -49,7 +110,7 @@ namespace System.Linq
 			if (values == null || !values.Any())
 				return " ( null )";
 
-			return String.Format(" ({0}) ", String.Join(",", values.Select(ToSimpleSqlString).ToArray()));
+			return String.Format(" ({0}) ", String.Join(",", values.Select(ToSimpleSqlString)));
 		}
 
 		public static string ToSimpleSqlString<T>(this T x)
@@ -65,34 +126,7 @@ namespace System.Linq
 			return x.ToString();
 		}
 
-		public static bool IsOrdered<T>(this IEnumerable<T> items)
-		{
-			return IsOrdered(items, Comparer<T>.Default);
-		}
 
-		public static bool IsOrdered<T>(this IEnumerable<T> items, Comparer<T> comparer)
-		{
-			return IsOrdered(items, comparer.Compare);
-		}
-		public static bool IsOrdered<T>(this IEnumerable<T> items, Comparison<T> comparison)
-		{
-			using (var enumerator = items.GetEnumerator())
-			{
-				if (!enumerator.MoveNext())
-					return true;
-				var previousItem = enumerator.Current;
-				while (enumerator.MoveNext())
-				{
-					var currentItem = enumerator.Current;
-					if (comparison(previousItem, currentItem) > 0)
-						return false;
-					previousItem = currentItem;
-				}
-			}
-			return true;
-		}
-	
-		
 		public static T FirstOrDefault<T>(this IEnumerable<T> source, T defaultValue)
 		{
 			using (IEnumerator<T> enumerator = source.GetEnumerator())
@@ -147,11 +181,6 @@ namespace System.Linq
 		}
 
 
-		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> items)
-		{
-			return new HashSet<T>(items);
-		}
-
 		public static IEnumerable<T> Concat<T>(this IEnumerable<T> items, params T[] additional)
 		{
 			return Enumerable.Concat(items, additional);
@@ -186,45 +215,81 @@ namespace System.Linq
 			return map.Where(i => i.Value.Count > 1).SelectMany(i => i.Value);
 		}
 
-			
+
 		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
 		{
-			if (source != null)
+			if (source == null)
+				return;
+			foreach (var elem in source)
 			{
-				foreach (var elem in source)
-				{
-					action(elem);
-				}
+				action(elem);
 			}
 		}
 
-
-		public static IEnumerable<T> Do<T>(this IEnumerable<T> source, Action<T> action)
-		{
-			if (source != null)
-			{
-				foreach (var elem in source)
-				{
-					action(elem);
-					yield return elem;
-				}
-			}
-		}
 
 		public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int chunkSize)
 		{
 			return source.Where((x, i) => i % chunkSize == 0).Select((x, i) => source.Skip(i * chunkSize).Take(chunkSize));
 		}
 
-		public static void Do<T>(this IEnumerable<T> source)
+		public static IEnumerable<T> SafeConcat<T>([CanBeNull] this IEnumerable<T> first, [CanBeNull] IEnumerable<T> second  )
 		{
+			if (first == null)
+				first = Enumerable.Empty<T>();
+			if (second == null)
+				second = Enumerable.Empty<T>();
+
+			return first.Concat(second);
+		}
+
+		/// <summary>
+		/// Return first element, if a <param name="source"></param> contains one element, otherwise - default(T)
+		/// </summary>
+		public static T SingleOrDefaultRelax<T>(this IEnumerable<T> source, Func<T, bool> predicate = null)
+		{
+			if (predicate == null)
+				predicate = x => true;
+
 			using (var enumerator = source.GetEnumerator())
 			{
-				while (enumerator.MoveNext())
-				{
-					
-				}
+				if (!enumerator.MoveNext())
+					return default(T);
+
+				T value = enumerator.Current;
+
+				return !enumerator.MoveNext() && predicate(value) ? value : default(T);
 			}
 		}
+
+
+		public static void Times(this int count, Action<int> @do)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				@do(i);
+			}
+		}
+
+		public static IEnumerable<int> Times(this int count)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				yield return i;
+			}
+		}
+
+		public static void Times(this int count, Action @do)
+		{
+			count.Times(_ => @do());
+		}
+
+		public static IEnumerable<int> To(this int from, int uninclusiveTo)
+		{
+			for (int i = from; i < uninclusiveTo; i++)
+			{
+				yield return i;
+			}
+		}
+	
 	}
 }

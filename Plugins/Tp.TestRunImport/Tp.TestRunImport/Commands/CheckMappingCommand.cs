@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -10,7 +10,6 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.Integration.Plugin.TestRunImport.Commands.Data;
 using Tp.Integration.Plugin.TestRunImport.Mappers;

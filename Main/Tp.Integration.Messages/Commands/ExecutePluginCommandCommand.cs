@@ -8,6 +8,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Integration.Messages.Commands
 {
+	using Tp.Integration.Messages.EntityLifecycle;
+
 	[Serializable]
 	public class ExecutePluginCommandCommand : IPluginLocalMessage
 	{

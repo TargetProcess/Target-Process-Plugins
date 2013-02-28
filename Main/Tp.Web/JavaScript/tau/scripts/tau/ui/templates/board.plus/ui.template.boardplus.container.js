@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/templates-factory"],function(_,templates){var config={name:"boardplus.container",engine:"jqote2",markup:['<div class="tau-board tau-board_animate_false">',"</div>"],dependencies:[]};return templates.register(config)})

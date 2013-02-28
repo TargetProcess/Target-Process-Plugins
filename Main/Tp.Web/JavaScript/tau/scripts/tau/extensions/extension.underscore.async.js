@@ -1,1 +1,1 @@
-define(["libs/underscore","libs/async/async"],function(_,a){_.mixin({parallel:a.parallel,series:a.series})})
+define(["libs/underscore","libs/async/async"],function(_,async){_.mixin({parallel:async.parallel,series:async.series,waterfall:async.waterfall})})

@@ -12,15 +12,23 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Commands
 {
+	using System;
+
+	using Tp.Integration.Plugin.Common.Activity;
+
+
 	public class ViewDiffCommand : IPluginCommand
 	{
 		private readonly IRevisionStorageRepository _repository;
 		private readonly IVersionControlSystemFactory _vcsFactory;
 
-		public ViewDiffCommand(IRevisionStorageRepository repository, IVersionControlSystemFactory vcsFactory)
+		private readonly IActivityLogger _logger;
+
+		public ViewDiffCommand(IRevisionStorageRepository repository, IVersionControlSystemFactory vcsFactory, IActivityLogger logger)
 		{
 			_repository = repository;
 			_vcsFactory = vcsFactory;
+			_logger = logger;
 		}
 
 		public PluginCommandResponseMessage Execute(string args)
@@ -34,7 +42,7 @@ namespace Tp.SourceControl.Commands
 
 				if (revision != null)
 				{
-					var vcs = _vcsFactory.Get(revision.ConnectionSettings);
+					var vcs = _vcsFactory.Get(revision.Profile);
 					diff = vcs.GetDiff(revision.RevisionId.RevisionId, fileArgs.Path);
 				}
 
@@ -44,12 +52,13 @@ namespace Tp.SourceControl.Commands
 				       		ResponseData = diff.Serialize()
 				       	};
 			}
-			catch
+			catch(Exception e)
 			{
+				_logger.Error("ViewDiff error", e);
 				return new PluginCommandResponseMessage
 				       	{
 				       		PluginCommandStatus = PluginCommandStatus.Error,
-				       		ResponseData = "Unable to connect to a remote repository."
+							ResponseData = "Unable to connect to a remote repository: {0}.".Fmt(e.Message)
 				       	};
 			}
 		}

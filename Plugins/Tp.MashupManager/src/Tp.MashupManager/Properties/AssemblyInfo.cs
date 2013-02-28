@@ -31,7 +31,7 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("2.23.3.21882")]
-[assembly: AssemblyVersion("2.23.3.21882")]
-[assembly: AssemblyFileVersion("2.23.3.21882")]
+// [assembly: AssemblyVersion("2.23.16.24418")]
+[assembly: AssemblyVersion("2.23.16.24418")]
+[assembly: AssemblyFileVersion("2.23.16.24418")]
 [assembly: PluginAssembly("Mashup Manager", "Allows to manage mashups", "Other", "mashup-manager-icon.png")]

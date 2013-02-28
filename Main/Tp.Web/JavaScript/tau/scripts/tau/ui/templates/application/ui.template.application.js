@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"application",markup:['<div class="ui-application-viewport">',"</div>"]};return a.register(b)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"application",markup:['<div class="ui-application-viewport i-role-application" role="application">',"</div>"]};return templates.register(config)})

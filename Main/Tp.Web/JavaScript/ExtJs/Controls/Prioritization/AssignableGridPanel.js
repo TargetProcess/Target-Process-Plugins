@@ -120,6 +120,12 @@ Tp.controls.Prioritization.AssignableGridPanel = Ext.extend(Ext.grid.GridPanel, 
                 	renderer: ExtJs.tp.util.Format.HtmlEncode
                 },
                 {
+                	dataIndex: 'relations',
+                	header: 'Relations',
+                	renderer: ExtJs.tp.util.Format.Relations,
+                	width: 55
+                },
+                {
                 	dataIndex: 'effort',
                 	header: 'Effort, h'
                 },

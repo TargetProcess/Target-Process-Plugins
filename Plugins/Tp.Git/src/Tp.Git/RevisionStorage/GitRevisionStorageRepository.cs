@@ -17,14 +17,19 @@ namespace Tp.Git.RevisionStorage
 		{
 		}
 
-		private static string GetKey(RevisionInfo revision)
+		public static string GetKey(RevisionInfo revision)
 		{
+			var result = revision.Id.Value;
 			if (revision.TimeCreated.HasValue)
 			{
-				return string.Format("{0}#{1}", revision.TimeCreated.Value.Ticks, revision.Comment);
+				result = string.Format("{0}#{1}", revision.TimeCreated.Value.Ticks, revision.Comment);
+				if (result.Length > 255)
+				{
+					result = result.Substring(0, 255);
+				}
 			}
 
-			return revision.Id.Value;
+			return result;
 		}
 
 		public override bool SaveRevisionInfo(RevisionInfo revision, out string key)

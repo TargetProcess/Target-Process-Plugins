@@ -1,1 +1,1 @@
-define(["Underscore","jQuery"],function(_,$){return{register:function(a,b){b.$tau=b.$tau||{},b.$tau.abbr=function(a,b){var c=a||"",d=c.substr(0,b);return $.trim(d)}}}})
+define(["Underscore","jQuery"],function(_,$){return{register:function(cfg,templateOptionsRef){templateOptionsRef.$tau=templateOptionsRef.$tau||{},templateOptionsRef.$tau.abbr=function(text,length){var processed=text||"",abbreviation=processed.substr(0,length);return $.trim(abbreviation)}}}})

@@ -1,58 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>jQuery UI User List Test Suite</title>
-	<link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
-	<script type="text/javascript" src="../../../javascript/tau/scripts/require.js"></script>
+<head>
+    <meta charset="UTF-8"/>
+    <title>jQuery UI User List Test Suite</title>
+    <link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
+    <script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
+    <script type="text/javascript" src="../../../javascript/tau/scripts/require.js"></script>
 
-	<script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
-	<script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
-	<script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
-	<script type="text/javascript" src="../../ExtJS/url.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
+    <script type="text/javascript" src="../../ExtJS/url.js"></script>
 
-	<script type="text/javascript" src="../../tau/scripts/tp/Mashups.js"></script>
 
-		<script type="text/javascript" src="Mocks/profilerepositorymock.js"> </script>
-		<script type="text/javascript" src="Mocks/profilenamesourcemock.js"> </script>
-		<script type="text/javascript" src="Mocks/navigatorMock.js"> </script>
-		<script type="text/javascript" src="Mocks/commandGatewayMock.js"> </script>
-		<script type="text/javascript" src="../../tau/scripts/tp.tests/mocks/restServiceMock.js"> </script>
-		<script type="text/javascript">
-			window.jsErrors = [];
-			window.onerror = function (errorMessage) {
-				window.jsErrors[window.jsErrors.length] = errorMessage;
-			};
+    <script type="text/javascript" src="Mocks/profilerepositorymock.js"></script>
+    <script type="text/javascript" src="Mocks/profilenamesourcemock.js"></script>
+    <script type="text/javascript" src="Mocks/navigatorMock.js"></script>
+    <script type="text/javascript" src="Mocks/commandGatewayMock.js"></script>
+    <script type="text/javascript" src="../../tau/scripts/tp.tests/mocks/restServiceMock.js"></script>
+    <script type="text/javascript">
+        window.jsErrors = [];
+        window.onerror = function (errorMessage) {
+            window.jsErrors[window.jsErrors.length] = errorMessage;
+        };
 
-			appHostAndPath = document.location.href.replace('/JavaScript/Mashups/Git%20Tests/index.html', '');
+        appHostAndPath = document.location.href.replace('/JavaScript/Mashups/Git%20Tests/index.html', '');
 
-			require.config({
-				baseUrl: "../../tau/scripts",
-				paths: {
-					"Git": "../../Mashups/Git ProfileEditor",
-					"Subversion": "../../Mashups/Git ProfileEditor",
-					"testConfiguration": "../../Mashups/Git Tests/testConfiguration"
-				},
-				waitSeconds: 10
-			});
+        require.config({
+            baseUrl:"../../tau/scripts",
+            paths:{
+                "Git":"../../Mashups/Git ProfileEditor",
+                "Subversion":"../../Mashups/Git ProfileEditor",
+                "testConfiguration":"../../Mashups/Git Tests/testConfiguration"
+            },
+            waitSeconds:10
+        });
 
-			require([
-				"testConfiguration",
-				"profileEditor.tests.js",
-				"userMappingEditor.tests.js",
-				"checkConnection.tests.js",
-				"userMappingLine.tests.js"
-			]);
+        require(['tp/mashups'], function (Mashups) {
+            window['tau'] = { mashups: new Mashups()  };
+            require([
+                "testConfiguration",
+                "profileEditor.tests.js",
+                "userMappingEditor.tests.js",
+                "checkConnection.tests.js",
+                "userMappingLine.tests.js"
+            ]);
+        });
 
-	</script>
-	</head>
-	<body>
-		<h1 id="qunit-header">
-			jQuery UI User List Test Suite</h1>
-		<h2 id="qunit-banner">
-		</h2>
-		<ol id="qunit-tests">
-		</ol>
-	</body>
+    </script>
+</head>
+<body>
+<h1 id="qunit-header">
+    jQuery UI User List Test Suite</h1>
+
+<h2 id="qunit-banner">
+</h2>
+<ol id="qunit-tests">
+</ol>
+</body>
 </html>

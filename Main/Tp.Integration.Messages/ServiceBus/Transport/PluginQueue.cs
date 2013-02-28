@@ -7,6 +7,8 @@ using System;
 using System.Diagnostics;
 using System.Messaging;
 using NServiceBus.Utils;
+using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
+using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport
 {
@@ -16,7 +18,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 
 		public PluginQueue(string queueName)
 		{
-			var q = new MessageQueue(MsmqUtilities.GetFullPath(queueName));
+			var q = new MessageQueue(MsmqUtilities.GetFullPath(queueName), false, true);
 			_queue = InitializeQueue(q);
 			_queueName = queueName;
 		}
@@ -59,6 +61,26 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 			_queue.Purge();
 		}
 
+		public void Delete()
+		{
+			MessageQueue.Delete(_queue.Path);
+		}
+
+		public static bool TryDeleteQueue(string queueName, ILoggerContextSensitive log)
+		{
+			try
+			{
+				var queue = new PluginQueue(queueName);
+				queue.Delete();
+				return true;
+			}
+			catch(Exception e)
+			{
+				log.Warn(LoggerContext.New(queueName), "Failed to delete queue {0}. Queue does not exist or no permissions".Fmt(queueName), e);
+				return false;
+			}
+		}
+
 		public string FormatName
 		{
 			get { return _queue.FormatName; }
@@ -70,6 +92,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 			_queue.Peek(fromSeconds);
 		}
 
+		[DebuggerNonUserCode] // so that exceptions don't interfere with debugging.
 		public Message Receive(TimeSpan fromSeconds, MessageQueueTransactionType transactionTypeForReceive)
 		{
 			return _queue.Receive(fromSeconds, transactionTypeForReceive);

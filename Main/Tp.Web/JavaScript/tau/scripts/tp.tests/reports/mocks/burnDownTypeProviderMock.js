@@ -1,0 +1,1 @@
+function BurnDownTypeProviderMock(filterProvider,iteration){this.filterProvider=filterProvider,this.iteration=iteration}BurnDownTypeProviderMock.prototype={initialize:function(){},getType:function(){return"iteration"},getPlannableId:function(){return this.iteration.id},render:function(){this.filterProvider.processFilterOptionsVisibility(this.iteration)}}

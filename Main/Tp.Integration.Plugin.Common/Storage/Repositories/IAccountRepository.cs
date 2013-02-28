@@ -14,5 +14,6 @@ namespace Tp.Integration.Plugin.Common.Storage.Repositories
 		IList<AccountDomainObject> GetAll();
 		AccountDomainObject Add(AccountName accountName);
 		AccountDomainObject GetBy(AccountName accountName);
+		void Remove(AccountName accountName);
 	}
 }

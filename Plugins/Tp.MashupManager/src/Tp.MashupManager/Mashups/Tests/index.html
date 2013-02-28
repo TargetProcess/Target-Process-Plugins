@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
 	<script type="text/javascript" src="../../ExtJS/url.js"></script>
 
-	<script type="text/javascript" src="../../tau/scripts/tp/Mashups.js"></script>
+
     <script type="text/javascript">
         window.jsErrors = [];
 		window.onerror = function(errorMessage) {
@@ -39,6 +39,7 @@
 		});
 
         require.onError = function(e){
+            throw e.message;
             try{
                 var vals = [];
                 var requireContext = require.prototype.constructor.s.contexts._;
@@ -57,7 +58,12 @@
             }
         };
 
-        require(["Previewer.tests.js","PlaceholderUtils.tests.js"]);
+        require(['tp/mashups'], function(Mashups) {
+            window['tau'] = { mashups: new Mashups()  };
+            require(["Previewer.tests.js","PlaceholderUtils.tests.js"], function() {
+            });
+        });
+
     </script>
 </head>
 <body>

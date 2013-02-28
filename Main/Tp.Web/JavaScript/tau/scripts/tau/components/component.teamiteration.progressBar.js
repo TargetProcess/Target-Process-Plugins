@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.iteration.progressBar","tau/ui/templates/progressBar/ui.template.iteration.progressBar"],function(creator,ModelTeamIterationProgressBar,template){return{create:function(config){var creatorConfig={extensions:[ModelTeamIterationProgressBar],template:template};return creator.create(creatorConfig,config)}}})

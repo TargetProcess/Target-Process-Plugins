@@ -188,65 +188,69 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Duration.</value>
 		[XmlElement(Order = 28)]public Int32? Duration { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Comment User ID. User who added last comment
         /// </summary>
         /// <value>The Last Comment User ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 29)]public Int32? LastCommentUserID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Parent Project ID. Project which entity belongs to
         /// </summary>
         /// <value>The Parent Project ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 30)]public Int32? ParentProjectID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Owner ID. Person who added the entity
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 31)]public Int32? OwnerID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Editor ID. Person who edited entity last time
         /// </summary>
         /// <value>The Last Editor ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 32)]public Int32? LastEditorID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Release ID. Release association. Iteration must belong to release
         /// </summary>
         /// <value>The Release ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 33)]public Int32? ReleaseID { get; set; }
-		
 
-		
 		/// <summary>
         /// Gets or sets the Parent Project Name. Project which entity belongs to
         /// </summary>
         /// <value>The Parent Project Name.</value>
 		[RelationName]
 		[XmlElement(Order = 34)]public virtual string ParentProjectName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Entity Type Name. Type of the entity. For example, Bug, TestCase, Task
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
 		[XmlElement(Order = 35)]public virtual string EntityTypeName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Release Name. Release association. Iteration must belong to release
         /// </summary>
         /// <value>The Release Name.</value>
 		[RelationName]
 		[XmlElement(Order = 36)]public virtual string ReleaseName { get; set; }
-		
+
+		/// <summary>
+        /// Gets or sets the Entity Type ID. Type of the entity. For example, Bug, TestCase, Task
+        /// </summary>
+        /// <value>The Entity Type ID.</value>
+		[ForeignKey]
+		[XmlElement(Order = 37)]public Int32? EntityTypeID { get; set; }
 	}
 	
 	
@@ -371,6 +375,10 @@ namespace Tp.Integration.Common
         /// Last Editor ID
         /// </summary>		
 		LastEditorID,
+        /// <summary>
+        /// Entity Type ID
+        /// </summary>		
+		EntityTypeID,
         /// <summary>
         /// Release ID
         /// </summary>		

@@ -1,1 +1,1 @@
-define(["tau/components/component.property.bool"],function(a){return{create:function(b){return b=b||{},b.propertyName="isActive",a.create(b)}}})
+define(["tau/components/component.property.bool"],function(creator){return{create:function(config){return config=config||{},config.propertyName="isActive",creator.create(config)}}})

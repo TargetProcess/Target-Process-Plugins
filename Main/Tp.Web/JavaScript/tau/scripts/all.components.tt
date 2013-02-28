@@ -9,6 +9,7 @@
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #> 
 require([
+    'tracking/tauspy',
 <#
 
 var currentPath = Host.ResolvePath("tau\\components");
@@ -16,10 +17,12 @@ var files = Directory.GetFiles(currentPath, "*.js");
 
 foreach(var file in files) {	
 	var name = new FileInfo(file).Name.Replace(".js", string.Empty);
-	
+    //if (name.IndexOf(".board.") == -1) {
 #>
     'tau/components/<#= name #>',
-<#}#>
+<#
+    //}
+}#>
     'tau/components/extensions/print.convert.extension'
 ],
 function() {

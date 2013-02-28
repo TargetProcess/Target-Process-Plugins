@@ -1,1 +1,1 @@
-define([],function(){var a={name:"sample.test"};return a["should be correct"]=function(a){a.equals(1,1,"Yep"),a.ok(!0,"Yem"),a.done()},a})
+define([],function(){var testcase={name:"sample.test"};return testcase["should be correct"]=function(test){test.equals(1,1,"Yep"),test.ok(!0,"Yem"),test.done()},testcase})

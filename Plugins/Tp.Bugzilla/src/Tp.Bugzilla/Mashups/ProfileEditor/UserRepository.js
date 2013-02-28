@@ -14,9 +14,7 @@ tau.mashups
 			var service = this._restService;
 
 			var handle = function (data) {
-				var activeUsers = $.grep(data.Items, function (user) {
-					return user.IsActive;
-				});
+				var activeUsers = data.Items;
 				var mappingUsers = $(activeUsers).map(function () {
 					return {
 						Id: this.Id,

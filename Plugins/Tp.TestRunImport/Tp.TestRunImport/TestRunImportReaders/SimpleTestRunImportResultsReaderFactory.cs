@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -35,6 +35,8 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 					return new JUnitResultsXmlReader(_log, reader);
 				case FrameworkTypes.FrameworkTypes.Selenium:
 					return new SeleniumResultsHtmlReader(_log, reader);
+				case FrameworkTypes.FrameworkTypes.JenkinsHudson:
+					return new JenkinsHudsonResultsXmlReader(_log, reader);
 				default:
 					throw new ApplicationException(string.Format("Failed to get resolver for FrameworkType: {0}", settings.FrameworkType));
 			}

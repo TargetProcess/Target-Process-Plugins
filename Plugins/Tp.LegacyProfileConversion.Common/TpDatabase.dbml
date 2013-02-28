@@ -1,38 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TargetProcess" Class="TpDatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=True" SettingsObjectName="Tp.LegacyProfileConvertsion.Common.Properties.Settings" SettingsPropertyName="TargetProcessTestConnectionString1" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Project" Member="Projects">
-    <Type Name="Project">
-      <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="DeleteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ProgramOfProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ProcessID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SourceControlType" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SCConnectionString" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="SCUser" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="SCPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="SCStartingRevision" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="IsProduct" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="IsInboundMailEnabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="InboundMailServer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
-      <Column Name="InboundMailPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="InboundMailUseSSL" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="InboundMailLogin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="InboundMailPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="InboundMailProtocol" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="InboundMailCreateRequests" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="InboundMailAutomaticalEmailCheckTime" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="InboundMailAutoCheck" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="CompanyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="InboundMailReplyAddress" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="Abbreviation" Type="System.String" DbType="NVarChar(6)" CanBeNull="true" />
-      <Association Name="Project_General" Member="Generals" ThisKey="ProjectID" OtherKey="ParentProjectID" Type="General" />
-      <Association Name="Project_TestPlan" Member="TestPlans" ThisKey="ProjectID" OtherKey="ProjectID" Type="TestPlan" />
-      <Association Name="Project_ProjectMember" Member="ProjectMembers" ThisKey="ProjectID" OtherKey="ProjectID" Type="ProjectMember" />
-      <Association Name="General_Project" Member="General" ThisKey="ProjectID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
-      <Association Name="Process_Project" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.TpUser" Member="TpUsers">
     <Type Name="TpUser">
       <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -69,6 +36,7 @@
       <Association Name="TpUser_Comment" Member="Comments" ThisKey="UserID" OtherKey="OwnerID" Type="Comment" />
       <Association Name="TpUser_Attachment" Member="Attachments" ThisKey="UserID" OtherKey="OwnerID" Type="Attachment" />
       <Association Name="TpUser_ProjectMember" Member="ProjectMembers" ThisKey="UserID" OtherKey="UserID" Type="ProjectMember" />
+      <Association Name="TpUser_Team" Member="Teams" ThisKey="UserID" OtherKey="UserID" Type="Team" />
       <Association Name="TpUser_TpUser" Member="TpUser1" ThisKey="ContactOwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="Role_TpUser" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
     </Type>
@@ -112,14 +80,14 @@
       <Column Name="OwnerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="LastEditorID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="General_Project" Member="Project" ThisKey="GeneralID" OtherKey="ProjectID" Type="Project" Cardinality="One" />
       <Association Name="General_TestPlan" Member="TestPlan" ThisKey="GeneralID" OtherKey="TestPlanID" Type="TestPlan" Cardinality="One" />
       <Association Name="General_Comment" Member="Comments" ThisKey="GeneralID" OtherKey="GeneralID" Type="Comment" />
       <Association Name="General_Attachment" Member="Attachments" ThisKey="GeneralID" OtherKey="GeneralID" Type="Attachment" />
-      <Association Name="Project_General" Member="Project1" ThisKey="ParentProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+      <Association Name="General_Project" Member="Project1" ThisKey="GeneralID" OtherKey="ProjectID" Type="Project" Cardinality="One" />
       <Association Name="TpUser_General" Member="TpUser" ThisKey="LastCommentUserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="TpUser_General1" Member="TpUser1" ThisKey="LastEditorID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="TpUser_General2" Member="TpUser2" ThisKey="OwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+      <Association Name="Project_General" Member="Project" ThisKey="ParentProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PluginProfile" Member="PluginProfiles">
@@ -162,6 +130,7 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="ProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="AuthorID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Project_Revision" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TestPlan" Member="TestPlans">
@@ -204,6 +173,7 @@
       <Association Name="Role_TpUser" Member="TpUsers" ThisKey="RoleID" OtherKey="RoleID" Type="TpUser" />
       <Association Name="Role_EntityState" Member="EntityStates" ThisKey="RoleID" OtherKey="RoleID" Type="EntityState" />
       <Association Name="Role_ProjectMember" Member="ProjectMembers" ThisKey="RoleID" OtherKey="RoleID" Type="ProjectMember" />
+      <Association Name="Role_Team" Member="Teams" ThisKey="RoleID" OtherKey="RoleID" Type="Team" />
     </Type>
   </Table>
   <Table Name="dbo.Priority" Member="Priorities">
@@ -238,8 +208,8 @@
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="IsDefault" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="Process_Project" Member="Projects" ThisKey="ProcessID" OtherKey="ProcessID" Type="Project" />
       <Association Name="Process_EntityState" Member="EntityStates" ThisKey="ProcessID" OtherKey="ProcessID" Type="EntityState" />
+      <Association Name="Process_Project" Member="Projects" ThisKey="ProcessID" OtherKey="ProcessID" Type="Project" />
     </Type>
   </Table>
   <Table Name="dbo.ExternalReference" Member="ExternalReferences">
@@ -301,9 +271,54 @@
       <Column Name="MembershipEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="Allocation" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MembershipStartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Project_ProjectMember" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
       <Association Name="Role_ProjectMember" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
       <Association Name="TpUser_ProjectMember" Member="TpUser" ThisKey="UserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+      <Association Name="Project_ProjectMember" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Team" Member="Teams">
+    <Type Name="Team">
+      <Column Name="TeamID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AssignableID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Role_Team" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
+      <Association Name="TpUser_Team" Member="TpUser" ThisKey="UserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Project" Member="Projects">
+    <Type Name="Project">
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ProgramOfProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProcessID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SourceControlType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SCConnectionString" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SCUser" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SCPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SCStartingRevision" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsProduct" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsInboundMailEnabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InboundMailServer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="InboundMailPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InboundMailUseSSL" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InboundMailLogin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InboundMailPassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="InboundMailProtocol" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="InboundMailCreateRequests" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="InboundMailAutomaticalEmailCheckTime" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InboundMailAutoCheck" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InboundMailReplyAddress" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Abbreviation" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="Color" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Association Name="Project_General" Member="Generals" ThisKey="ProjectID" OtherKey="ParentProjectID" Type="General" />
+      <Association Name="Project_Revision" Member="Revisions" ThisKey="ProjectID" OtherKey="ProjectID" Type="Revision" />
+      <Association Name="Project_TestPlan" Member="TestPlans" ThisKey="ProjectID" OtherKey="ProjectID" Type="TestPlan" />
+      <Association Name="Project_ProjectMember" Member="ProjectMembers" ThisKey="ProjectID" OtherKey="ProjectID" Type="ProjectMember" />
+      <Association Name="General_Project" Member="General" ThisKey="ProjectID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+      <Association Name="Process_Project" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

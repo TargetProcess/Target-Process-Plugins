@@ -28,7 +28,7 @@ Tp.controls.kanbanboard.KanbanboardManager = Ext.extend(Ext.util.Observable, {
 
 			var config = {
 				renderTo: 'kanban-board',
-				controller: new Tp.controls.kanbanboard.Controller(kanbanBoardData.kanbanBoardScope,
+				controller: new Tp.controls.kanbanboard.Controller(this.clientId, kanbanBoardData.kanbanBoardScope,
 				kanbanBoardData.kanbanBoardProcess,
 				kanbanBoardData.kanbanBoardPreferences)
 			};

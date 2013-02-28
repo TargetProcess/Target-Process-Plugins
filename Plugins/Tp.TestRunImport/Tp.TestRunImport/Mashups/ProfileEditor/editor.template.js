@@ -12,7 +12,7 @@ tau.mashups
 			'	<div class="pad-box">' +
 			'		<p class="label">Select Framework&nbsp;<span class="error" name="FrameworkTypeErrorLabel"></span></p>' +
 			'		<p class="note"><span class="small">Testing framework results to be binded to the test plan.</span></p>' +
-			'		<select class="select" id="frameworkDropDown" name="FrameworkType"><option value="0">- Select Framework -</option><option value="1">NUnit</option><option value="2">JUnit</option><option value="3">Selenium</option></select>' +
+			'		<select class="select" id="frameworkDropDown" name="FrameworkType"><option value="0">- Select Framework -</option><option value="1">NUnit</option><option value="2">JUnit</option><option value="3">Selenium</option><option value="4">JenkinsHudson</option></select>' +
 			'	</div>' +
 			'	<div class="separator"></div>' +
 			'	<div class="pad-box">' +

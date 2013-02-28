@@ -145,6 +145,6 @@ Tp.controls.kanbanboard.sections.Swimlane = Ext.extend(Tp.controls.kanbanboard.C
 	},
 
 	isCommentRequired: function (data) {
-		return this.swimlane.findEntityState(data.entity).requiredComment;
+		return !this.swimlane.matchEntity(data.entity) && this.swimlane.findEntityState(data.entity).requiredComment;
 	}
 });

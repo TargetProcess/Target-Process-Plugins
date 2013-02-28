@@ -71,14 +71,14 @@ namespace Tp.Integration.Plugin.Common
 			_bus.SetOutSagaId(id);
 		}
 
-		public void SendLocalWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message)
+		public void SendLocalWithContext(ProfileName profileName, AccountName accountName, IMessage message)
 		{
 			_bus.SetOut(profileName);
 			_bus.SetOut(accountName);
 			_bus.SendLocal(message);
 		}
 
-		public void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message)
+		public void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, IMessage message)
 		{
 			_bus.SetOut(profileName);
 			_bus.SetOut(accountName);

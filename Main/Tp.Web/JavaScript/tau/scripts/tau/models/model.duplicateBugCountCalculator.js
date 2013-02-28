@@ -1,1 +1,1 @@
-define(["tau/models/model.duplicateBugList"],function(a){var b=a.extend({"bus duplicateBugRetrieved":function(a){var b=a.data.items;this.fire("duplicateBugCountRetrieved",{count:b.length})}});return b})
+define(["tau/models/model.duplicateBugList"],function(ModelBase){var ImpedimentCountCalculator=ModelBase.extend({"bus duplicateBugRetrieved":function(evtArgs){var result=evtArgs.data.items;this.fire("duplicateBugCountRetrieved",{count:result.length})}});return ImpedimentCountCalculator})

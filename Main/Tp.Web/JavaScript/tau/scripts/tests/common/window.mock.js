@@ -1,1 +1,1 @@
-define([],function(){var a={location:{hash:""}}})
+define([],function(){var window={location:{hash:""}}})

@@ -61,7 +61,7 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		[AfterScenario]
 		public void OnAfterScenario()
 		{
-			ClearTpDB(_context);
+			ClearTpDB(new TpDatabaseDataContext(Settings.Default.TpConnectionString));
 			var context = new PluginDatabaseModelDataContext(Settings.Default.PluginConnectionString);
 			ClearDatabase(context);
 		}
@@ -86,7 +86,8 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 			              	{
 			              		Abbreviation = projectAbbr,
 			              		ProjectID = _context.Generals.First(x => x.Name == projectAbbr).GeneralID,
-			              		IsActive = true
+			              		IsActive = true,
+								Color = "#FFFFFF"
 			              	};
 			_context.Projects.InsertOnSubmit(project);
 			_context.SubmitChanges();

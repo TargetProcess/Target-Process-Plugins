@@ -206,79 +206,83 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Last Run Date.</value>
 		[XmlElement(Order = 31)]public DateTime? LastRunDate { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Comment User ID. User who added last comment
         /// </summary>
         /// <value>The Last Comment User ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 32)]public Int32? LastCommentUserID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Owner ID. Person who added the entity
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 33)]public Int32? OwnerID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Editor ID. Person who edited entity last time
         /// </summary>
         /// <value>The Last Editor ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 34)]public Int32? LastEditorID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the User Story ID. User story to which test case belongs
         /// </summary>
         /// <value>The User Story ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 35)]public Int32? UserStoryID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Project ID. Project to which test case belongs
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 36)]public Int32? ProjectID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Priority ID. 
         /// </summary>
         /// <value>The Priority ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 37)]public Int32? PriorityID { get; set; }
-		
 
-		
 		/// <summary>
         /// Gets or sets the Entity Type Name. Type of the entity. For example, Bug, TestCase, Task
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
 		[XmlElement(Order = 38)]public virtual string EntityTypeName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the User Story Name. User story to which test case belongs
         /// </summary>
         /// <value>The User Story Name.</value>
 		[RelationName]
 		[XmlElement(Order = 39)]public virtual string UserStoryName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Project Name. Project to which test case belongs
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
 		[XmlElement(Order = 40)]public virtual string ProjectName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Priority Name. 
         /// </summary>
         /// <value>The Priority Name.</value>
 		[RelationName]
 		[XmlElement(Order = 41)]public virtual string PriorityName { get; set; }
-		
+
+		/// <summary>
+        /// Gets or sets the Entity Type ID. Type of the entity. For example, Bug, TestCase, Task
+        /// </summary>
+        /// <value>The Entity Type ID.</value>
+		[ForeignKey]
+		[XmlElement(Order = 42)]public Int32? EntityTypeID { get; set; }
 	}
 	
 	
@@ -411,6 +415,10 @@ namespace Tp.Integration.Common
         /// Last Editor ID
         /// </summary>		
 		LastEditorID,
+        /// <summary>
+        /// Entity Type ID
+        /// </summary>		
+		EntityTypeID,
         /// <summary>
         /// User Story ID
         /// </summary>		

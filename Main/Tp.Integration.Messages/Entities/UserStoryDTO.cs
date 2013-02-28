@@ -283,8 +283,6 @@ namespace Tp.Integration.Common
 		[ForeignKey]
 		[XmlElement(Order = 42)]public Int32? FeatureID { get; set; }
 		
-
-		
 		/// <summary>
         /// Gets or sets the Entity Type Name. Type of the entity. For example, Bug, TestCase, Task
         /// </summary>
@@ -341,6 +339,12 @@ namespace Tp.Integration.Common
 		[RelationName]
 		[XmlElement(Order = 50)]public virtual string FeatureName { get; set; }
 		
+		/// <summary>
+        /// Gets or sets the Entity Type ID. Type of the entity. For example, Bug, TestCase, Task
+        /// </summary>
+        /// <value>The Entity Type ID.</value>
+		[ForeignKey]
+		[XmlElement(Order = 51)]public Int32? EntityTypeID { get; set; }
 	}
 	
 	
@@ -477,6 +481,10 @@ namespace Tp.Integration.Common
         /// Last Editor ID
         /// </summary>		
 		LastEditorID,
+        /// <summary>
+        /// Entity Type ID
+        /// </summary>		
+		EntityTypeID,
         /// <summary>
         /// Entity State ID
         /// </summary>		

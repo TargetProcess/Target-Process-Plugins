@@ -38,17 +38,21 @@ namespace Tp.LegacyProfileConvertsion.Common
 		{
 			var pluginProfile = ConvertToPluginProfile(legacyProfile);
 			FixName(pluginProfile);
-
-			while (account.Profiles.Any(x => x.Name == pluginProfile.Name))
-			{
-				pluginProfile.Name = String.Format("{0} _re-converted_", pluginProfile.Name);
-			}
-
+		    CreateNewProfileName(pluginProfile, account);
+			
 			var profile = account.Profiles.Add(new ProfileCreationArgs(pluginProfile.Name, pluginProfile.Settings));
 			OnProfileMigrated(profile, legacyProfile);
 			profile.MarkAsInitialized();
 			profile.Save();
 		}
+
+        protected virtual void CreateNewProfileName(PluginProfileDto pluginProfile, IAccount account)
+        {
+            while (account.Profiles.Any(x => x.Name == pluginProfile.Name))
+            {
+                pluginProfile.Name = String.Format("{0} _re-converted_", pluginProfile.Name);
+            }
+        }
 
 		private static void FixName(PluginProfileDto pluginProfile)
 		{

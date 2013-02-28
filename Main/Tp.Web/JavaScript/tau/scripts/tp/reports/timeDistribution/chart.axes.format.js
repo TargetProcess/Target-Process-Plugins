@@ -1,0 +1,1 @@
+define(["libs/d3/d3"],function(d3){return{y:d3.format(".1p")}})

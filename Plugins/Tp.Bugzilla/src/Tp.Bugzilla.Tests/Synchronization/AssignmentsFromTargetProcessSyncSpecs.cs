@@ -130,6 +130,32 @@ namespace Tp.Bugzilla.Tests.Synchronization
 						());
 		}
 
+		[Test]
+		public void ShouldRemoveAssignee()
+		{
+			@"
+				Given Role 'Developer' created in TargetProcess
+					And Role 'QA Engineer' created in TargetProcess
+					And Role 'Team Lead' created in TargetProcess
+					And user 'Johnson' with email 'Johnson@mail.com' created in TargetProcess
+					And user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
+					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
+
+					And bugzilla profile with default roles mapping created
+					And bugzilla contains bug with id 1
+					And bug 1 has name 'bug1'
+					And bug 1 has reporter 'Dowson@mail.com'
+					And bug 1 has assignee 'Lansie@mail.com'
+					And synchronizing bugzilla bugs
+
+				When user reassign Developer from bug 'bug1' in TargetProcess
+				Then bug 1 in bugzilla should have default assignee 
+			"
+				.Execute(
+					In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
+						());
+		}
+
 		[When("user '$userLogin' assigned to bug '$bugName' as Developer in TargetProcess")]
 		public void AssignDeveloper(string userLogin, string bugName)
 		{
@@ -141,9 +167,6 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Context.TpTeams.Where(t => t.AssignableID == bug.ID)
 					.Where(t => t.RoleID == developerRole.ID)
 					.Single();
-
-
-			TransportMock.HandleMessageFromTp(new TeamDeletedMessage {Dto = existingDeveloperTeam});
 
 			TransportMock.HandleMessageFromTp(new TeamCreatedMessage
 			                                  	{
@@ -157,6 +180,24 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			                                  					UserID = user.ID
 			                                  				}
 			                                  	});
+
+			existingDeveloperTeam.RoleName = developerRole.Name;
+			TransportMock.HandleMessageFromTp(new TeamDeletedMessage { Dto = existingDeveloperTeam });
+		}
+
+		[When("user reassign Developer from bug '$bugName' in TargetProcess")]
+		public void ReassignDeveloper(string bugName)
+		{
+			BugDTO bug = Context.TpBugs.Single(b => b.Name == bugName);
+			RoleDTO developerRole = Context.Roles.Single(r => r.Name == "Developer");
+			
+			var existingDeveloperTeam =
+				Context.TpTeams.Where(t => t.AssignableID == bug.ID)
+					.Where(t => t.RoleID == developerRole.ID)
+					.Single();
+
+			existingDeveloperTeam.RoleName = developerRole.Name;
+			TransportMock.HandleMessageFromTp(new TeamDeletedMessage { Dto = existingDeveloperTeam });
 		}
 
 		[Then("bug $bugId in bugzilla should have reporter '$email'")]

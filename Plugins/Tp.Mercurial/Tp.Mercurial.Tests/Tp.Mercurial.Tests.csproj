@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0C824542-BA65-4CD2-94FF-7BA5F8BBE342}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Mercurial.Tests</RootNamespace>
+    <AssemblyName>Tp.Mercurial.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3">
+      <HintPath>..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\Tp.Mercurial\libs\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sharpen">
+      <HintPath>..\Tp.Mercurial\libs\Sharpen.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Tp.Service.Proxies, Version=2.15.0.15001, Culture=neutral, PublicKeyToken=ee2a1130677e5334, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Context\ContextExpectations.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Context\CreateCommandExpectations.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Context\VcsPluginContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MercurialPluginProfileTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructureMap\VcsEnvironmentRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StructureMap\VcsMockEnvironmentRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StructureMap\VersionControlSystemMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserMapperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VersionControlSystem\MercurialRevisionIdComparerSpecs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VersionControlSystem\MercurialRevisionIdSpecs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VersionControlSystem\MercurialSpecs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NUnit\Tp.Testing.Common.NUnit.csproj">
+      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project>
+      <Name>Tp.Testing.Common.NUnit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
+      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
+      <Name>Tp.Integration.Testing.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tp.SourceControl.Testing\Tp.SourceControl.Testing.csproj">
+      <Project>{35D5084D-F8CD-49F1-A3A7-FB1F4A0F538E}</Project>
+      <Name>Tp.SourceControl.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tp.SourceControl\Tp.SourceControl.csproj">
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mercurial.Net\Mercurial.Net.csproj">
+      <Project>{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}</Project>
+      <Name>Mercurial.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Mercurial\Tp.Mercurial.csproj">
+      <Project>{19379162-1B1D-402E-9025-F01ED76598C9}</Project>
+      <Name>Tp.Mercurial</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

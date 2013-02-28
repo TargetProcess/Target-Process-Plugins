@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using System.Threading;
+using StructureMap.TypeRules;
 
 // ReSharper disable CheckNamespace
 namespace System.Linq.Dynamic
@@ -11,9 +14,8 @@ namespace System.Linq.Dynamic
 	{
 		public static readonly ClassFactory Instance = new ClassFactory();
 
-		private readonly Dictionary<Signature, Type> _classes;
+		private readonly Cache<Signature, Type> _classes;
 		private readonly ModuleBuilder _module;
-		private readonly ReaderWriterLock _rwLock;
 		private int _classCount;
 
 		static ClassFactory()
@@ -37,49 +39,34 @@ namespace System.Linq.Dynamic
 				PermissionSet.RevertAssert();
 			}
 #endif
-			_classes = new Dictionary<Signature, Type>();
-			_rwLock = new ReaderWriterLock();
+			_classes = new Cache<Signature, Type>(x => CreateDynamicClass(x));
+			new ReaderWriterLock();
 		}
 
-		public Type GetDynamicClass(IEnumerable<DynamicProperty> properties)
+		public Type GetDynamicClass(IEnumerable<DynamicProperty> properties, Type baseType=null)
 		{
-			_rwLock.AcquireReaderLock(Timeout.Infinite);
-			try
-			{
-				var signature = new Signature(properties);
-				Type type;
-				if (!_classes.TryGetValue(signature, out type))
-				{
-					type = CreateDynamicClass(signature._properties);
-					_classes.Add(signature, type);
-				}
-				return type;
-			}
-			finally
-			{
-				_rwLock.ReleaseReaderLock();
-			}
+			return _classes[new Signature(properties,baseType)];
 		}
 
-		private Type CreateDynamicClass(DynamicProperty[] properties)
+		private Type CreateDynamicClass(Signature signature)
 		{
-			LockCookie cookie = _rwLock.UpgradeToWriterLock(Timeout.Infinite);
-			try
-			{
-				string typeName = "DynamicClass" + (_classCount + 1);
+			string typeName = "DynamicClass" + (_classCount + 1);
 #if ENABLE_LINQ_PARTIAL_TRUST
 				new ReflectionPermission(PermissionState.Unrestricted).Assert();
 				try
 				{
 #endif
-					TypeBuilder tb = _module.DefineType(typeName, TypeAttributes.Class |
-					                                              TypeAttributes.Public, typeof (DynamicClass));
-					FieldBuilder[] fields = GenerateProperties(tb, properties);
-					GenerateEquals(tb, fields);
-					GenerateGetHashCode(tb, fields);
-					Type result = tb.CreateType();
-					_classCount++;
-					return result;
+			TypeBuilder tb = _module.DefineType(typeName, TypeAttributes.Class |
+			                                              TypeAttributes.Public, signature._baseType);
+			FieldBuilder[] fields = GenerateProperties(tb, signature._properties);
+			GenerateEquals(tb, fields);
+			GenerateGetHashCode(tb, fields);
+//			GenerateToString(tb, fields);
+
+			Type result = tb.CreateType();
+			_classCount++;
+			Type type = result;
+			return type;
 #if ENABLE_LINQ_PARTIAL_TRUST
 				}
 				finally
@@ -87,11 +74,6 @@ namespace System.Linq.Dynamic
 					PermissionSet.RevertAssert();
 				}
 #endif
-			}
-			finally
-			{
-				_rwLock.DowngradeFromWriterLock(ref cookie);
-			}
 		}
 
 		private FieldBuilder[] GenerateProperties(TypeBuilder tb, DynamicProperty[] properties)
@@ -182,6 +164,86 @@ namespace System.Linq.Dynamic
 				gen.Emit(OpCodes.Xor);
 			}
 			gen.Emit(OpCodes.Ret);
+		}
+
+		private void GenerateToString(TypeBuilder tb, IEnumerable<FieldInfo> fields)
+		{
+			MethodBuilder mb = tb.DefineMethod("ToString",
+			                                   MethodAttributes.Public | MethodAttributes.ReuseSlot |
+			                                   MethodAttributes.Virtual | MethodAttributes.HideBySig,
+			                                   typeof (string), Type.EmptyTypes);
+
+
+			ILGenerator gen = mb.GetILGenerator();
+			var appendObject = typeof (StringBuilder).GetMethod("Append", new[] {typeof (object)});
+
+			gen.Emit(OpCodes.Newobj, typeof (StringBuilder).GetConstructor(Type.EmptyTypes));
+			gen.Emit(OpCodes.Stloc_0); // sb
+			GenerateAppend(gen, "{ ");
+			var fieldInfos = fields.ToList();
+			for (int index = 0; index < fieldInfos.Count; index++)
+			{
+				if (index > 0)
+					GenerateAppend(gen, ", ");
+
+				FieldInfo field = fieldInfos[index];
+
+				GenerateAppend(gen, field.Name);
+				GenerateAppend(gen, "=");
+
+				gen.Emit(OpCodes.Ldloc_0); // sb
+				gen.Emit(OpCodes.Ldarg_0);
+				gen.Emit(OpCodes.Ldfld, field);
+
+				var methodInfo = appendObject;
+				if (field.FieldType.IsValueType)
+					gen.Emit(OpCodes.Box, field.FieldType);
+				gen.Emit(OpCodes.Callvirt, methodInfo);
+				gen.Emit(OpCodes.Pop);
+
+
+			}
+
+			GenerateAppend(gen, " }");
+
+			gen.Emit(OpCodes.Ldloc_0); // sb
+			gen.Emit(OpCodes.Callvirt, typeof (object).GetMethod("ToString"));
+			gen.Emit(OpCodes.Stloc_1);
+			gen.Emit(OpCodes.Ldloc_1);
+			gen.Emit(OpCodes.Ret);
+		}
+
+		readonly static MethodInfo AppendString = typeof(StringBuilder).GetMethod("Append", new[] { typeof(string) });
+		private void GenerateAppend(ILGenerator gen, string value)
+		{
+			gen.Emit(OpCodes.Ldloc_0); // sb
+			gen.Emit(OpCodes.Ldstr, value);
+			gen.Emit(OpCodes.Callvirt, AppendString);
+			gen.Emit(OpCodes.Pop);
+		}
+	}
+
+	public class Cache<TKey, TValue>
+	{
+		private readonly Dictionary<TKey, TValue> _cache;
+		private readonly object _gate;
+		private readonly Func<TKey, TValue> _statefulValueProvider;
+		public Cache(Func<TKey, TValue> statefulValueProvider)
+		{
+			_cache = new Dictionary<TKey, TValue>();
+			_gate = new object();
+			_statefulValueProvider = statefulValueProvider;
+		}
+		
+		public TValue this[TKey key]
+		{
+			get
+			{
+				lock (_gate)
+				{
+					return _cache.GetOrAdd(key, x => _statefulValueProvider(x));
+				}
+			}
 		}
 	}
 }

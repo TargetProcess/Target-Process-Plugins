@@ -688,14 +688,14 @@ namespace Tp.Integration.Plugin.Common.Activity
 					--_curSizeRollBackups;
 				}
 
-				for (var index = _curSizeRollBackups - 1; index >= 0; --index)
+				for (var index = _curSizeRollBackups; index > 0; --index)
 				{
 					var file = logFiles[index];
 					string newFileName;
 
 					using (SecurityContext.Impersonate(this))
 					{
-						newFileName = file.Name.GetFileNameWithoutExtension() + '.' + (index + 2);
+						newFileName = file.Name.GetFileNameWithoutExtension() + '.' + (index + 1);
 					}
 
 					RollFile(file.FullName, directoryName.Combine(newFileName));

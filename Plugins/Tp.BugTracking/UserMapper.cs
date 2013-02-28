@@ -110,7 +110,7 @@ namespace Tp.BugTracking
 			{
 				var user = _storageRepository.Get<UserDTO>(result.Id.ToString()).SingleOrDefault();
 
-				if (user != null && user.IsActiveNotDeletedUser())
+				if (user != null && user.IsNotDeletedUser())
 					return result.Id;
 			}
 

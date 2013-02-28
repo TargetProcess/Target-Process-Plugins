@@ -131,7 +131,7 @@ Tp.controls.Prioritization.ChangeStateColumnPlugin = Ext.extend(Object, {
 		var entityId = r.data['id'];
 		var context = { record: r, data: record.data };
 		Tp.util.validateForNulls([context]);
-		Tp.Web.PageServices.KanbanBoard.KanbanBoardService.changeEntityState(entityId, record.data.id, 'State was changed from {0} to {1} using Kanban Board.', -1, -1,
+		Tp.Web.PageServices.KanbanBoard.KanbanBoardService.changeEntityState('', entityId, record.data.id, 'State was changed from {0} to {1} using Kanban Board.', -1, -1,
                 this.changeEntityState_onSuccess.createDelegate(this),
                 this.changeEntityState_onFailure.createDelegate(this),
                 context);

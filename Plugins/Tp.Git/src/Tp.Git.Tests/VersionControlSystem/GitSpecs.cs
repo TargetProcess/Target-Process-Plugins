@@ -408,7 +408,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 		private GitVersionControlSystem CreateGit(ISourceControlConnectionSettingsSource settings)
 		{
 			return new GitVersionControlSystem(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
-											   ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>());
+											   ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>(), ObjectFactory.GetInstance<IStorageRepository>());
 		}
 
 		#endregion

@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"jqote2.custom.template.sub.deep",engine:"jqote2",markup:['<div class="sub-sub">Deep:<%= this.deep %></div>']};return a.register(b)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"jqote2.custom.template.sub.deep",engine:"jqote2",markup:['<div class="sub-sub">Deep:<%= this.deep %></div>']};return templates.register(config)})

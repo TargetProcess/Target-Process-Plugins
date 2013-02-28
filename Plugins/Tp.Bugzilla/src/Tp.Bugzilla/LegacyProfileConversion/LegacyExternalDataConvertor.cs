@@ -54,6 +54,20 @@ namespace Tp.Bugzilla.LegacyProfileConversion
 					     		TpId = tpId
 					     	});
 
+				foreach (var team in _context.Teams.Where(t => t.AssignableID == tpId))
+				{
+					storageRepository.Get<TeamDTO>(team.TeamID.ToString(CultureInfo.InvariantCulture)).Clear();
+					storageRepository.Get<TeamDTO>(team.TeamID.ToString(CultureInfo.InvariantCulture)).Add(
+						new TeamDTO
+						{
+							AssignableID = team.AssignableID,
+							ID = team.TeamID,
+							RoleID = team.RoleID,
+							TeamID = team.TeamID,
+							UserID = team.UserID
+						});
+				}
+
 				tpBugs.Add(tpId);
 			}
 

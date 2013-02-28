@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Messaging;
 using System.Security.Principal;
 using System.Threading;
@@ -89,6 +90,16 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		public string GetQueueName(string accountName)
 		{
 			return InputQueue;
+		}
+
+		public bool TryDeleteQueue(string accountName)
+		{
+			throw new NotSupportedException();
+		}
+
+		public bool TryDeleteUiQueue(string accountName)
+		{
+			throw new NotSupportedException();
 		}
 
 		private int maxRetries = 5;
@@ -327,7 +338,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		{
 			var address = MsmqUtilities.GetFullPath(destination);
 
-			using (var q = new MessageQueue(address, QueueAccessMode.Send))
+			using (var q = new MessageQueue(address, false, true, QueueAccessMode.Send))
 			{
 				var toSend = new Message();
 
@@ -349,7 +360,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 
 				if (!string.IsNullOrEmpty(m.ReturnAddress))
 				{
-					toSend.ResponseQueue = new MessageQueue(MsmqUtilities.GetFullPath(m.ReturnAddress));
+					toSend.ResponseQueue = new MessageQueue(MsmqUtilities.GetFullPath(m.ReturnAddress), false, true);
 				}
 
 				FillLabel(toSend, m);
@@ -361,6 +372,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 
 				if (m.Headers != null && m.Headers.Count > 0)
 				{
+					var sourceOutputheader = m.Headers.FirstOrDefault(h => h.Key == TpUnicastBus.SourceQueue);
+					if (sourceOutputheader != null)
+					{
+						m.Headers.Remove(sourceOutputheader);
+					}
+
 					using (var stream = new MemoryStream())
 					{
 						headerSerializer.Serialize(stream, m.Headers);
@@ -372,16 +389,35 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 
 				try
 				{
-					q.Send(toSend, GetTransactionTypeForSend());
+					int attempt = 0;
+					while (true)
+					{
+						try
+						{
+							q.Send(toSend, GetTransactionTypeForSend());
+							break;
+						}
+						catch (MessageQueueException sendingEx)
+						{
+							if (sendingEx.MessageQueueErrorCode == MessageQueueErrorCode.InsufficientResources
+								&& attempt < SendAttemptCount)
+							{
+								Thread.Sleep(SendAttemptSleepIfFault);
+								attempt++;
+								continue;
+							}
+
+							throw;
+						}
+					}
 				}
 				catch (MessageQueueException ex)
 				{
+					
 					if (ex.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					{
 						throw new ConfigurationErrorsException("The destination queue '" + destination +
-						                                       "' could not be found. You may have misconfigured the destination for this kind of message (" +
-						                                       m.Body[0].GetType().FullName +
-						                                       ") in the MessageEndpointMappings of the UnicastBusConfig section in your configuration file." +
+						                                       "' could not be found. " +
 						                                       "It may also be the case that the given queue just hasn't been created yet, or has been deleted."
 						                                       , ex);
 					}
@@ -516,9 +552,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			{
 				return;
 			}
-
 			_messageId = m.Id;
-
 			if (IsTransactional)
 			{
 				if (HandledMaxRetries(m.Id))
@@ -536,6 +570,19 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			}
 
 			var result = Convert(m);
+			var sourceHeader = result.Headers.FirstOrDefault(h => h.Key == TpUnicastBus.SourceQueue);
+			if (sourceHeader == null)
+			{
+				result.Headers.Add(new HeaderInfo
+						{
+							Key = TpUnicastBus.SourceQueue,
+							Value = queue.FormatName
+						});
+			}
+			else
+			{
+				sourceHeader.Value = queue.FormatName;
+			}
 
 			if (SkipDeserialization)
 			{
@@ -1012,5 +1059,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		}
 
 		#endregion
+
+		const int SendAttemptCount = 5;
+		const int SendAttemptSleepIfFault = 500;
 	}
-}
+
+	}

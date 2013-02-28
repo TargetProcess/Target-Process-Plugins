@@ -13,5 +13,6 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces
 		TimeSpan TransactionTimeout { get; set; }
 		void AddObserver(IObserver<TMessage> observer);
 		void Consume(Action<TMessage> handleMessage);
+		void Dispose(string childTag);
 	}
 }

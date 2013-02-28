@@ -76,7 +76,7 @@ elsif (substr($constants.BUGZILLA_VERSION, 0, 3) eq $supportedBugzillaVersion)
     else
     {
         print $cgi->header('text');
-        print "ERROR: Ivalid command '".$cmd."'";
+        print "ERROR: Invalid command '".$cmd."'";
     }
 }
 else

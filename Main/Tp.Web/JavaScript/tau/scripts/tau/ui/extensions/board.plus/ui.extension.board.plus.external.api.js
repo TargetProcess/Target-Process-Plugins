@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(_,$,BaseExtension){return BaseExtension.extend({"bus slice.ready:last + external.api.get.slice":function(evt,slice){this.fire("external.api.slice.ready",slice)}})})

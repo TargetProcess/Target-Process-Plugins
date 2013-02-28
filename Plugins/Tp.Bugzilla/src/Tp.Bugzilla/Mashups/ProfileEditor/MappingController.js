@@ -82,7 +82,7 @@ tau.mashups
 
             automap: function () {
                 var profile = this.profileRetriever();
-                this.connectionChecker.checkConnection($.proxy(this._getAutomapping(profile), this), true);
+                this.connectionChecker.checkConnection($.proxy(this._getAutomapping(profile), this));
             },
 
             _getAutomapping: function (profile) {

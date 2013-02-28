@@ -4,63 +4,59 @@
 // 
 
 using System;
+using System.Diagnostics;
 
 namespace Tp.Core
 {
 	public interface IMaybe
 	{
 		bool HasValue { get; }
+		object Value { get; }
 	}
 
-	public class Maybe : IMaybe
+	public struct Maybe : IMaybe, IEquatable<Maybe>
 	{
-		public static readonly Maybe Nothing = new Maybe();
+		public static readonly Maybe Nothing=default(Maybe);
 
-		private Maybe(){}
-
+		[DebuggerStepThrough]
 		public static Maybe<T> Just<T>(T value)
 		{
 			return new Maybe<T>(value);
 		}
 
+		[DebuggerStepThrough]
 		public static Maybe<T> Return<T>(T v)
 		{
 			return Just(v);
 		}
 
-		public static Maybe<T> Return<T>(T v, bool nullMeansNothing)
+		[DebuggerStepThrough]
+		public static Maybe<T> ReturnIfNotNull<T>(T v)
 			where T : class
 		{
-			return nullMeansNothing ? (v != null ? Just(v) : Nothing) : Return(v);
+			return v == null ? Nothing : Just(v);
 		}
 
+
+		[DebuggerStepThrough]
 		public static Maybe<TTo> Bind<TTo, TFrom>(Maybe<TFrom> m, Func<TFrom, Maybe<TTo>> f)
 		{
 			return m.HasValue ? f(m.Value) : Nothing;
 		}
 
-		public bool Equals(Maybe other)
-		{
-			return !ReferenceEquals(null, other);
-		}
-
-		public override bool Equals(object obj)
-		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			return obj is Maybe;
-		}
-
+		[DebuggerStepThrough]
 		public override int GetHashCode()
 		{
 			return 0;
 		}
 
+		[DebuggerStepThrough]
 		public static bool operator ==(Maybe left, Maybe right)
 		{
 			return Equals(left, right);
 		}
 
+		[DebuggerStepThrough]
 		public static bool operator !=(Maybe left, Maybe right)
 		{
 			return !Equals(left, right);
@@ -68,31 +64,84 @@ namespace Tp.Core
 
 		public bool HasValue
 		{
+			[DebuggerStepThrough]
 			get { return false; }
+		}
+		[DebuggerStepThrough]
+		public static Maybe<TTo> Cast<T, TTo>(T o) where TTo : T
+		{
+			return o is TTo ? Just((TTo)o) : Nothing;
+		}
+
+		public object Value
+		{
+			get { throw new NotSupportedException(); }
+		}
+
+		[DebuggerStepThrough]
+		public bool Equals(Maybe other)
+		{
+			return true;
+		}
+
+		[DebuggerStepThrough]
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (obj.GetType() != typeof (Maybe)) return false;
+			return Equals((Maybe) obj);
+		}
+
+		[DebuggerStepThrough]
+		public static Maybe<T> Try<T>(Func<T> action)
+		{
+			return Either.Try(action).Switch(Return, _ => Nothing);
+		}
+
+		[DebuggerStepThrough]
+		public override string ToString()
+		{
+			return "Nothing";
 		}
 	}
 
-	public class Maybe<T> : IMaybe
+	public struct Maybe<T> : IMaybe
 	{
-		internal Maybe(T value)
+		private readonly bool _hasValue;
+		private readonly T _value;
+
+		public bool HasValue
 		{
-			HasValue = true;
-			Value = value;
+			[DebuggerStepThrough]
+			get { return _hasValue; }
 		}
 
-		public Maybe()
+		object IMaybe.Value
 		{
-			HasValue = false;
+			[DebuggerStepThrough]
+			get
+			{
+				if(!HasValue)
+				{
+					throw new InvalidOperationException("Cannot get value from Nothing");
+				}
+				return _value;
+			}
 		}
 
-		public bool HasValue { get; private set; }
-		public T Value { get; private set; }
+		public T Value
+		{
+			[DebuggerStepThrough]
+			get { return _value; }
+		}
 
+		[DebuggerStepThrough]
 		public static implicit operator Maybe<T>(Maybe nothing)
 		{
 			return Nothing;
 		}
 
+		[DebuggerStepThrough]
 		public static implicit operator Maybe<T>(T value)
 		{
 			var maybe = value as IMaybe;
@@ -100,19 +149,17 @@ namespace Tp.Core
 				return Nothing;
 			return new Maybe<T>(value);
 		}
-	
+
+		[DebuggerStepThrough]
 		public bool Equals(Maybe<T> other)
 		{
-			if (ReferenceEquals(null, other))
-				return false;
-
-			return !HasValue ? !other.HasValue : other.HasValue && Equals(other.Value, Value);
+			return (!HasValue && !other.HasValue) || (other.HasValue && Equals(other.Value, Value));
 		}
 
+		[DebuggerStepThrough]
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
 			if (obj is Maybe<T>)
 				return Equals((Maybe<T>) obj);
 			var maybe = obj as IMaybe;
@@ -121,26 +168,38 @@ namespace Tp.Core
 			return false;
 		}
 
+		[DebuggerStepThrough]
 		public override int GetHashCode()
 		{
 			return HasValue ? Value.GetHashCode() : 0;
 		}
 
+		[DebuggerStepThrough]
 		public static bool operator ==(Maybe<T> left, Maybe<T> right)
 		{
 			return Equals(left, right);
 		}
 
+		[DebuggerStepThrough]
 		public static bool operator !=(Maybe<T> left, Maybe<T> right)
 		{
 			return !Equals(left, right);
 		}
 
-		private static readonly Maybe<T> Nothing = new Maybe<T>();
+		public static readonly Maybe<T> Nothing=Maybe.Nothing;
 
-		public static Maybe<T> Just<TU>(TU value) where TU : T
+		[DebuggerStepThrough]
+		internal Maybe(T value)
 		{
-			return new Maybe<T>(value);
+			_value = value;
+			_hasValue = true;
 		}
+
+		[DebuggerStepThrough]
+		public override string ToString()
+		{
+			return HasValue? "Just<{0}>( {1} )".Fmt(typeof(T).Name,Value):"Nothing";
+		}
+
 	}
 }

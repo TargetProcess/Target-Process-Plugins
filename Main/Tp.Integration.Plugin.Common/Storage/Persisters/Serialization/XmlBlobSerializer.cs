@@ -29,7 +29,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 					throw new ArgumentNullException("Unable to Read Xml Data for Abstract Type '" + keyType +
 					                                "' because no 'type' attribute was specified in the XML.");
 
-				var type = Type.GetType(((TypeNameWithoutVersion) typeValue).Value);
+				var type = Type.GetType((new TypeNameWithoutVersion(typeValue)).Value);
 
 				// Check the Type is Found.
 				if (type == null)
@@ -51,7 +51,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 				writer.WriteAttributeString("xmlns", "xsd", null, "http://www.w3.org/2001/XMLSchema");
 
 				writer.WriteStartElement("Type");
-				writer.WriteString(((TypeNameWithoutVersion) value.GetType()).Value);
+				writer.WriteString((new TypeNameWithoutVersion(value.GetType())).Value);
 				writer.WriteEndElement();
 
 				formatter.Serialize(writer, value);

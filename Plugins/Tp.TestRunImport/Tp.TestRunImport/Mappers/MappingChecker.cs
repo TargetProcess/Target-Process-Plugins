@@ -34,7 +34,9 @@ namespace Tp.Integration.Plugin.TestRunImport.Mappers
 		{
 			try
 			{
-				var uri = new Uri(settings.ResultsFilePath);
+				var uri = settings.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson
+						? new Uri(string.Format("{0}/lastCompletedBuild/testReport/api/xml", settings.ResultsFilePath.TrimEnd(new[] { '/', '\\' })))
+						: new Uri(settings.ResultsFilePath);
 				var factoryResult = _streamFactory.OpenStream(uri, settings.PassiveMode);
 
 				if (factoryResult != null)

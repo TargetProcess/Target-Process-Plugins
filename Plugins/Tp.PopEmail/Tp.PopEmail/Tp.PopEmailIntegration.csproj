@@ -60,16 +60,17 @@
       <HintPath>..\..\..\Libs\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\..\Libs\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\..\..\Libs\NServiceBus\src\external-bin\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Libs\Yahoo\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MailBee.NET">
       <HintPath>..\..\..\Libs\MailBee.NET.dll</HintPath>
@@ -191,6 +192,7 @@
     <None Include="Install.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="PluginSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

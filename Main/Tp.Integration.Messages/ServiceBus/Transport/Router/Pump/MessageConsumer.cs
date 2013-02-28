@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Transactions;
+using Tp.Core;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Exceptions;
-using Tp.Integration.Messages.ServiceBus.Transport.Router.Extensions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
-
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 {
 	public class MessageConsumer<TMessage> : IMessageConsumer<TMessage> where TMessage : class
@@ -51,10 +50,15 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			_isRunning = true;
 		}
 
+		public virtual void Dispose(string childTag)
+		{
+		}
+
 		protected virtual void ConsumeCore(Action<TMessage> handleMessage)
 		{
 			var @while = While ?? (_ => true);
-			_observable = _messageSource.Iterate(handleMessage, _scheduler).TakeWhile(m => @while(m));
+			Func<IObservable<TMessage>> takeWhile = () => _messageSource.Iterate(handleMessage, _scheduler, s => _log.Info(LoggerContext.New(Name), s)).TakeWhile(m => @while(m));
+			_observable = takeWhile.ToSelfRepairingHotObservable(_ => { }, e => { });
 			_subscription = _observable.Subscribe(new CompositeObserver(_observers));
 		}
 

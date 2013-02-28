@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(templates){var config={name:"tagsCloud.item",engine:"jqote2",markup:['<span class="tau-tags-cloud__item tau-tag-rank-<%= this.size %> <% if (this.hidden){ %> tau-tags-cloud__item_hidden_true<% } %> i-role-tag">',"<%! this.name %>","</span>"]};return templates.register(config)})

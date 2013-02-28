@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
@@ -15,6 +16,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 
 		public int ReceiveCallCount { get; private set; }
 
+		protected override IEnumerable<string> GetChildTags()
+		{
+			return new string[]{};
+		}
+
 		protected override void Receive(TestMessage message)
 		{
 			ReceiveCallCount++;
@@ -22,6 +28,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 
 		protected override void Preprocess(TestMessage message)
 		{
+		}
+
+		protected override bool NeedToHandle(TestMessage messageTag)
+		{
+			return true;
 		}
 	}
 }

@@ -66,7 +66,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		{
 			@"Given profile with name 'ProfileName 1' for account 'Account'
 				When adding a profile with name 'ProfileName_2' for account 'Account'
-				Then account 'Account' should contain profiles:ProfileName 1,ProfileName_2"
+				And adding a profile with name 'ProfileName-3' for account 'Account'
+				And adding a profile with name 'Prof-ile - Name_4 _' for account 'Account'
+				Then account 'Account' should contain profiles:ProfileName 1,ProfileName_2,ProfileName-3,Prof-ile - Name_4 _"
 				.Execute();
 		}
 
@@ -74,8 +76,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		public void ProfileNameShouldNotContainInvalidSymbols()
 		{
 			@"Given going to add profile
-				When trying to add a profile with name 'invalid-profile-name' for account 'Account'
-				Then validation errors for field 'Name' should be 'You can only use letters, numbers, space and underscore symbol in Profile Name'"
+				When trying to add a profile with name 'invalid*profile_name' for account 'Account'
+				Then validation errors for field 'Name' should be 'You can only use letters, numbers, space, dash and underscore symbol in Profile Name'"
 				.Execute();
 		}
 		

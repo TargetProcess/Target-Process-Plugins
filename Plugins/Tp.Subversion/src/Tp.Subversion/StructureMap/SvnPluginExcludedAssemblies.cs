@@ -14,7 +14,7 @@ namespace Tp.Subversion.StructureMap
 	{
 		public SvnPluginExcludedAssemblies()
 		{
-			AddRange(new[] { "SharpSvn.dll", "SharpSvn-DB44-20-x64.dll", "SharpSvn-Sasl21-23-x64.dll", "SharpSvn-DB44-20-Win32.dll", "SharpSvn-SASL21-23-Win32.dll", "Tp.Subversion.InstallHelper.exe", "vcredist_x64.exe", "vcredist_x86.exe" });
+			AddRange(new[] { "SharpSvn.dll", "SharpSvn-DB44-20-Win32.dll", "SharpSvn-SASL21-23-Win32.dll", "vcredist_x86.exe" });
 		}
 	}
 }

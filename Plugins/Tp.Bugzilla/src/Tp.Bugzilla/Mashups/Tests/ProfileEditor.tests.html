@@ -1,44 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8"/>
-	<title>jQuery UI User List Test Suite</title>
+    <meta charset="UTF-8"/>
+    <title>jQuery UI User List Test Suite</title>
 
-	<link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
-	<script type="text/javascript" src="../../../javascript/tau/scripts/require.js"></script>
+    <link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
+    <script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
+    <script type="text/javascript" src="../../../javascript/tau/scripts/require.js"></script>
 
-	<script type="text/javascript" src="../../tau/scripts/tp/Mashups.js"></script>
-	<script type="text/javascript" src="Mocks/ErrorMessageContainerMock.js"></script>
 
-	<script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
-	<script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
-	<script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
-	<script type="text/javascript" src="../../ExtJS/url.js"></script>
+    <script type="text/javascript" src="Mocks/ErrorMessageContainerMock.js"></script>
 
-	<script type="text/javascript">
-	    window.jsErrors = [];
-	    window.onerror = function (errorMessage) {
-	        window.jsErrors[window.jsErrors.length] = errorMessage;
-	    };
+    <script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
+    <script type="text/javascript" src="../../ExtJS/url.js"></script>
 
-		appHostAndPath = '';
-		
+    <script type="text/javascript">
+        window.jsErrors = [];
+        window.onerror = function (errorMessage) {
+            window.jsErrors[window.jsErrors.length] = errorMessage;
+        };
+
+        appHostAndPath = '';
+
         require.config({
-        	baseUrl: "../../tau/scripts",
-        	paths: { "Bugzilla": "../../Mashups/Bugzilla ProfileEditor" },
-        	waitSeconds: 10
-		});
+            baseUrl:"../../tau/scripts",
+            paths:{ "Bugzilla":"../../Mashups/Bugzilla ProfileEditor" },
+            waitSeconds:10
+        });
 
-        require(["RestService.tests.js",
-                 "MappingController.tests.js",
-                 "MappingView.tests.js",
-                 "ConnectionChecker.tests.js",
-                 "BugzillaProfileView.tests.js",
-                 "BugzillaProfileController.tests.js",
-                 "BugzillaInitializer.tests.js",
-                 "DownloadScriptBlock.tests.js"]);
-	</script>
+        require(['tp/mashups'], function (Mashups) {
+            window['tau'] = { mashups:new Mashups()  };
+
+            require(["RestService.tests.js",
+                "MappingController.tests.js",
+                "MappingView.tests.js",
+                "ConnectionChecker.tests.js",
+                "BugzillaProfileView.tests.js",
+                "BugzillaProfileController.tests.js",
+                "BugzillaInitializer.tests.js",
+                "DownloadScriptBlock.tests.js"]);
+        });
+    </script>
 </head>
 
 <body>

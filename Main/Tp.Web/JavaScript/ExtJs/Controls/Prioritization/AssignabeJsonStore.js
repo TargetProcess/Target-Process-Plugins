@@ -24,7 +24,10 @@ Tp.controls.Prioritization.AssignableJsonStore = Ext.extend(Ext.data.JsonStore, 
 				},
                 {
 					name: 'projectId'
-				},
+                },
+                {
+                	name: 'relations'
+                },
                 {
 					name: 'tags'
 				}

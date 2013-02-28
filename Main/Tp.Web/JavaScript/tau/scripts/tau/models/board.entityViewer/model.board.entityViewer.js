@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base"],function($,ExtensionBase){return ExtensionBase.extend({"bus beforeInit":function(evt,initConfig){var configurator=initConfig.config.context.configurator;this.fire("configurator.ready",configurator),this.fire("dataBind",{})}})})

@@ -55,7 +55,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		public static string GetWildcartPatternFor(string baseFileName)
 		{
-			return baseFileName.GetFileNameWithoutExtension() + ".*" + baseFileName.GetExtension() + "*";
+			return baseFileName.GetFileNameWithoutExtension() + "*" + baseFileName.GetExtension() + "*";
 		}
 	}
 }

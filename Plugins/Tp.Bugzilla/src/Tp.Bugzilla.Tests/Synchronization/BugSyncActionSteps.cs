@@ -15,8 +15,6 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.SagaPersister;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Testing.Common;
 using Tp.Integration.Testing.Common.Persisters;

@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/ui/extensions/stateList/ui.extension.stateList.editable"],function(_,$,ExtensionBase){return ExtensionBase.extend({_updateState:function(value){var isConfirmed=!0;this.config.confirmation&&window.confirm&&(isConfirmed=window.confirm(this.config.confirmation)),isConfirmed&&this.fire("entityState.selected",{id:value})}})})

@@ -148,7 +148,7 @@ namespace Tp.Subversion.SerializationPatches
 </Value>
 ";
 			var result =
-				BlobSerializer.Deserialize(XDocument.Parse(oldXml), typeof (RevisionRange).GetTypeNameWithoutVersion()) as
+				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(RevisionRange)).Value) as
 				RevisionRange;
 			result.FromChangeset.Value.Should(Be.EqualTo("1"));
 			result.ToChangeset.Value.Should(Be.EqualTo("2"));
@@ -603,7 +603,7 @@ namespace Tp.Subversion.SerializationPatches
 </Value>
 ";
 			var result =
-				BlobSerializer.Deserialize(XDocument.Parse(oldXml), typeof(CreateRevisionSagaData).GetTypeNameWithoutVersion()) as
+				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(CreateRevisionSagaData)).Value) as
 				CreateRevisionSagaData;
 			result.Id.ToString().Should(Be.EqualTo("baf1a9ae-b874-44ea-827d-9fb400b48a78"));
 			result.RevisionId.Should(Be.EqualTo(0));
@@ -623,7 +623,7 @@ namespace Tp.Subversion.SerializationPatches
 </Value>
 ";
 			var result =
-				BlobSerializer.Deserialize(XDocument.Parse(oldXml), typeof(AttachToEntitySagaData).GetTypeNameWithoutVersion()) as
+				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(AttachToEntitySagaData)).Value) as
 				AttachToEntitySagaData;
 			result.Id.ToString().Should(Be.EqualTo("c2afc097-6ea3-4a0e-8170-9fb400bb8bbe"));
 			result.RevisionDto.ID.Should(Be.EqualTo(1));

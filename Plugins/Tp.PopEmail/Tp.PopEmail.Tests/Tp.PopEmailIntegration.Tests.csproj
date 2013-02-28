@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -48,20 +50,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\..\Libs\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MailBee.NET, Version=3.1.2.90, Culture=neutral, PublicKeyToken=cd85b70fb26f9fc1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Libs\MailBee.NET.dll</HintPath>
     </Reference>
     <Reference Include="NBehave.Narrator.Framework">
-      <HintPath>..\..\..\Libs\NBehave\NBehave.Narrator.Framework.dll</HintPath>
+      <HintPath>..\..\..\packages\nbehave.0.5.1.263\lib\net40\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -75,9 +77,17 @@
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
       <HintPath>..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Libs\NUnit\framework\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\Libs\Rhino.Mocks.dll</HintPath>
@@ -92,12 +102,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tp.Testing.Common.NBehave">
-      <HintPath>..\..\..\Libs\NBehave\Tp.Testing.Common.NBehave.dll</HintPath>
-    </Reference>
-    <Reference Include="Tp.Testing.Common.NUnit">
-      <HintPath>..\..\..\Libs\NUnit\addins\Tp.Testing.Common.NUnit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessScenarios\HandleEmailsFromRequestersFeature\WhenMailFromDeletedRequesterReceivedSpecs.cs" />
@@ -139,11 +143,8 @@
     <Compile Include="Validation\ValidateProfileFieldsSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Libs\NBehave\languages.yml">
-      <Link>languages.yml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -171,6 +172,14 @@
     <ProjectReference Include="..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
       <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
       <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NBehave\Tp.Testing.Common.NBehave.csproj">
+      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project>
+      <Name>Tp.Testing.Common.NBehave</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NUnit\Tp.Testing.Common.NUnit.csproj">
+      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project>
+      <Name>Tp.Testing.Common.NUnit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
       <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>

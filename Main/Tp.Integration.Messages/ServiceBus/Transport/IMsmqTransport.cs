@@ -71,5 +71,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 		void ReceiveMessageLater(TransportMessage m, string address);
 
 		string GetQueueName(string accountName);
+
+		bool TryDeleteQueue(string accountName);
+		bool TryDeleteUiQueue(string accountName);
 	}
 }

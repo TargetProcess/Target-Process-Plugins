@@ -212,121 +212,125 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Initial Estimate.</value>
 		[XmlElement(Order = 32)]public Decimal? InitialEstimate { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Comment User ID. 
         /// </summary>
         /// <value>The Last Comment User ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 33)]public Int32? LastCommentUserID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Owner ID. 
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 34)]public Int32? OwnerID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Editor ID. 
         /// </summary>
         /// <value>The Last Editor ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 35)]public Int32? LastEditorID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Entity State ID. State of assignable. For example, User Story may be in Open or Done state
         /// </summary>
         /// <value>The Entity State ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 36)]public Int32? EntityStateID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Priority ID. Priority of assignable. For example, User Story may have Must Have or Nice To Have priority
         /// </summary>
         /// <value>The Priority ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 37)]public Int32? PriorityID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Project ID. Feature should belong to project
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 38)]public Int32? ProjectID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Iteration ID. 
         /// </summary>
         /// <value>The Iteration ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 39)]public Int32? IterationID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Parent ID. 
         /// </summary>
         /// <value>The Parent ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 40)]public Int32? ParentID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Release ID. 
         /// </summary>
         /// <value>The Release ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 41)]public Int32? ReleaseID { get; set; }
-		
 
-		
 		/// <summary>
         /// Gets or sets the Entity Type Name. 
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
 		[XmlElement(Order = 42)]public virtual string EntityTypeName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Entity State Name. State of assignable. For example, User Story may be in Open or Done state
         /// </summary>
         /// <value>The Entity State Name.</value>
 		[RelationName]
 		[XmlElement(Order = 43)]public virtual string EntityStateName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Priority Name. Priority of assignable. For example, User Story may have Must Have or Nice To Have priority
         /// </summary>
         /// <value>The Priority Name.</value>
 		[RelationName]
 		[XmlElement(Order = 44)]public virtual string PriorityName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Project Name. Feature should belong to project
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
 		[XmlElement(Order = 45)]public virtual string ProjectName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Iteration Name. 
         /// </summary>
         /// <value>The Iteration Name.</value>
 		[RelationName]
 		[XmlElement(Order = 46)]public virtual string IterationName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Parent Name. 
         /// </summary>
         /// <value>The Parent Name.</value>
 		[RelationName]
 		[XmlElement(Order = 47)]public virtual string ParentName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Release Name. 
         /// </summary>
         /// <value>The Release Name.</value>
 		[RelationName]
 		[XmlElement(Order = 48)]public virtual string ReleaseName { get; set; }
-		
+
+		/// <summary>
+        /// Gets or sets the Entity Type ID. Type of the entity. For example, Bug, TestCase, Task
+        /// </summary>
+        /// <value>The Entity Type ID.</value>
+		[ForeignKey]
+		[XmlElement(Order = 49)]public Int32? EntityTypeID { get; set; }
 	}
 	
 	
@@ -463,6 +467,10 @@ namespace Tp.Integration.Common
         /// Last Editor ID
         /// </summary>		
 		LastEditorID,
+        /// <summary>
+        /// Entity Type ID
+        /// </summary>		
+		EntityTypeID,
         /// <summary>
         /// Entity State ID
         /// </summary>		

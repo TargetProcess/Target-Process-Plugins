@@ -36,7 +36,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 
 				ValidateVersion(reader);
 
-				var type = Type.GetType(((TypeNameWithoutVersion) typeValue).Value);
+				var type = Type.GetType((new TypeNameWithoutVersion(typeValue)).Value);
 
 				// Check the Type is Found.
 				if (type == null)
@@ -57,7 +57,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 				writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
 				writer.WriteAttributeString("xmlns", "xsd", null, "http://www.w3.org/2001/XMLSchema");
 
-				AddStringElement(writer, "Type", ((TypeNameWithoutVersion) value.GetType()).Value);
+				AddStringElement(writer, "Type", (new TypeNameWithoutVersion(value.GetType())).Value);
 				AddStringElement(writer, "Version", VERSION);
 
 				formatter.Serialize(writer, value.Serialize());

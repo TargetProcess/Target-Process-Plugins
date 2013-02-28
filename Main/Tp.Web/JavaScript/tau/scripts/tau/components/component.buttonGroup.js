@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/model.buttonGroup","tau/ui/templates/ui.template.buttonGroup"],function(_,creator,ModelType,template){return{create:function(config){var creatorConfig={ModelType:ModelType,template:template,extensions:_.clone(config.extensions||[])};return creator.create(creatorConfig,config)}}})

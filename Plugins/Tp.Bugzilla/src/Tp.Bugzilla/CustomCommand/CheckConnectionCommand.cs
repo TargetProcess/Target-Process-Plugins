@@ -54,7 +54,7 @@ namespace Tp.Bugzilla.CustomCommand
 				catch (BugzillaPluginProfileException e)
 				{
 					e.ErrorCollection.ForEach(errors.Add);
-					_logger.WarnFormat("Connection failed");
+					_logger.WarnFormat("Connection failed: {0}", e);
 				}
 			}
 

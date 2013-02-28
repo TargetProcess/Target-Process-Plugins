@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(templates){var config={name:"finder-entity-filter",markup:['<input class="tau-in-text" autocomplete="off" placeholder="Enter id or name" type="text" name="name" />'],dependencies:[]};return templates.register(config)})

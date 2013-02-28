@@ -1,1 +1,1 @@
-define(["tau/models/customField/model.customField.url.editable"],function(a,b){var c=a.extend({onInit:function(){var a=this,b=this.config.context,c=b.entity.entityType.name},"bus afterSaveToStore":function(){this.bus.fire("refreshRow",{})}});return c})
+define(["tau/models/customField/model.customField.url.editable"],function(ModelBase,jsonSchema){var model=ModelBase.extend({onInit:function(){var self=this,ctx=this.config.context,entityTypeName=ctx.entity.entityType.name},"bus afterSaveToStore":function(){this.bus.fire("refreshRow",{})}});return model})

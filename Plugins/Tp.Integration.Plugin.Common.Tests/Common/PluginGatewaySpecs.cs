@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -36,8 +36,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			                         		x.For<IProfileGatewayFactory>().HybridHttpOrThreadLocalScoped().Use(MockRepository.GenerateStub<IProfileGatewayFactory>());
 			                         		x.IncludeRegistry<PluginMetadataSourceMockRegistry>();
 			                         		x.For<IPluginContext>().HybridHttpOrThreadLocalScoped().Use<PluginContext>();
-											x.For<IPluginCurrentObjectContext>().HybridHttpOrThreadLocalScoped().Use<PluginCurrentObjectContext>();
-											x.For<IProfileCollection>().Use<CurrentProfileCollection>();
+			                         		x.For<IPluginCurrentObjectContext>().HybridHttpOrThreadLocalScoped().Use<PluginCurrentObjectContext>();
+			                         		x.For<IProfileCollection>().Use<CurrentProfileCollection>();
 			                         	});
 		}
 
@@ -125,7 +125,6 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			{
 				get { return ObjectFactory.GetInstance<IProfileGatewayFactory>(); }
 			}
-
 
 			[When("plugin message received")]
 			public void ReceivePluginMessage()

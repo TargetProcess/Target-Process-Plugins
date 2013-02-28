@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/extensions/component.extension.base"],function(_,a){return a.extend({category:"refresher","bus propertyChanged":function(){this.fire("refresh")}})})
+define(["Underscore","tau/components/extensions/component.extension.base"],function(_,ExtensionBase){return ExtensionBase.extend({category:"refresher","bus propertyChanged":function(){this.fire("refresh")},"bus avatarChanged":function(){this.fire("refresh")}})})

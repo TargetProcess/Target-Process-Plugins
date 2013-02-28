@@ -24,7 +24,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 		{
 			return new PluginCommandResponseMessage
 			       	{
-			       		ResponseData = _pluginCommandRepository.Select(x => x.Name).OrderBy(x => x).ToArray().Serialize(),
+						ResponseData = _pluginCommandRepository.Select(x => x.Name).Where(x => x != DeleteUnusedQueuesCommand.Deleteunusedqueues).OrderBy(x => x).ToArray().Serialize(),
 			       		PluginCommandStatus = PluginCommandStatus.Succeed
 			       	};
 		}

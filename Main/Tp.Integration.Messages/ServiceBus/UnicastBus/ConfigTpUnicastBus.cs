@@ -40,12 +40,13 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 			if (cfg != null)
 			{
-				TypesToScan.Where(t => typeof(IMessage).IsAssignableFrom(t)).ToList().ForEach(
-						t => assembliesToEndpoints[t.Assembly.GetName().Name] = string.Empty
-					);
+				TypesToScan.Where(t => typeof(IMessage).IsAssignableFrom(t)).ToList()
+					.ForEach(t => assembliesToEndpoints[t.Assembly.GetName().Name] = string.Empty);
 
 				foreach (MessageEndpointMapping mapping in cfg.MessageEndpointMappings)
+				{
 					assembliesToEndpoints[mapping.Messages] = mapping.Endpoint;
+				}
 
 				busConfig.ConfigureProperty(b => b.DistributorControlAddress, cfg.DistributorControlAddress);
 				busConfig.ConfigureProperty(b => b.DistributorDataAddress, cfg.DistributorDataAddress);
@@ -56,9 +57,8 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		private void RegisterMessageModules()
 		{
-			TypesToScan.Where(t => typeof(IMessageModule).IsAssignableFrom(t) && !t.IsInterface).ToList().ForEach(
-				type => Configurer.ConfigureComponent(type, ComponentCallModelEnum.Singleton)
-				);
+			TypesToScan.Where(t => typeof(IMessageModule).IsAssignableFrom(t) && !t.IsInterface).ToList()
+				.ForEach(type => Configurer.ConfigureComponent(type, ComponentCallModelEnum.Singleton));
 		}
 
 		private void ConfigureSubscriptionAuthorization()

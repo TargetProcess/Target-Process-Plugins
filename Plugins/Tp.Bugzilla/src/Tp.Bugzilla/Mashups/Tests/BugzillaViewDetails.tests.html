@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8"/>
-	<title>jQuery UI User List Test Suite</title>
+    <meta charset="UTF-8"/>
+    <title>jQuery UI User List Test Suite</title>
 
-	<link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
-	<script type="text/javascript" src="../../../javascript/tau/scripts/require.js"></script>
+    <link rel="stylesheet" href="../../tau/scripts/libs.tests/qunit.css" type="text/css"/>
+    <script type="text/javascript" src="../../tau/scripts/libs.tests/qunit.js"></script>
+    <script type="text/javascript" src="../../../javascript/tau/scripts/require.js"></script>
 
-	<script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
-	<script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
-	<script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
-	<script type="text/javascript" src="../../ExtJS/url.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Libs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Libs/ext-all.js"></script>
+    <script type="text/javascript" src="../../ExtJS/Extensions.js"></script>
+    <script type="text/javascript" src="../../ExtJS/url.js"></script>
 
-	<script type="text/javascript" src="../../tau/scripts/tp/Mashups.js"></script>
-	<script type="text/javascript" src="Mocks/PluginsRepositoryMock.js"></script>
-	<script type="text/javascript" src="Mocks/BugsRepositoryMock.js"></script>
-	<script type="text/javascript">
-		window.jsErrors = [];
-		window.onerror = function (errorMessage) {
-			window.jsErrors[window.jsErrors.length] = errorMessage;
-		};
 
-		Sys = {
-			WebForms: {
-				PageRequestManager: {
-					getInstance: function () {
-						return { add_pageLoaded: function() { } };
-					}
-				}
-			}
-		};
+    <script type="text/javascript" src="Mocks/PluginsRepositoryMock.js"></script>
+    <script type="text/javascript" src="Mocks/BugsRepositoryMock.js"></script>
+    <script type="text/javascript">
+        window.jsErrors = [];
+        window.onerror = function (errorMessage) {
+            window.jsErrors[window.jsErrors.length] = errorMessage;
+        };
 
-		appHostAndPath = '';
+        Sys = {
+            WebForms:{
+                PageRequestManager:{
+                    getInstance:function () {
+                        return { add_pageLoaded:function () {
+                        } };
+                    }
+                }
+            }
+        };
 
-		require.config({
-			baseUrl: "../../tau/scripts",
-			paths: { "BugzillaViewDetails": "../../Mashups/Bugzilla Bugzilla View Details" },
-			waitSeconds: 10
-		});
+        appHostAndPath = '';
 
-		require(["bugInfoViewer.tests.js"]);
-	</script>
+        require.config({
+            baseUrl:"../../tau/scripts",
+            paths:{ "BugzillaViewDetails":"../../Mashups/Bugzilla Bugzilla View Details" },
+            waitSeconds:10
+        });
+
+        require(['tp/mashups'], function (Mashups) {
+            window['tau'] = { mashups:new Mashups()  };
+
+            require(["bugInfoViewer.tests.js"]);
+        });
+    </script>
 </head>
 <body>
 

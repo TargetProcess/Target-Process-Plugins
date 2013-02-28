@@ -67,7 +67,7 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		[AfterScenario]
 		public virtual void OnAfterScenario()
 		{
-			ClearTpDb(Context);
+			ClearTpDb(new TpDatabaseDataContext(TpConnectionString));
 			var context = new PluginDatabaseModelDataContext(PluginConnectionString);
 			ClearDatabase(context);
 		}
@@ -82,6 +82,10 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			tpDatabaseDataContext.ExecuteCommand("delete from ProjectMember");
 			tpDatabaseDataContext.ExecuteCommand("delete from Project");
 			tpDatabaseDataContext.ExecuteCommand("delete from CustomReport");
+			tpDatabaseDataContext.ExecuteCommand("DELETE FROM ClientStorageData");
+			tpDatabaseDataContext.ExecuteCommand("DELETE FROM ClientStorageUserData");
+			tpDatabaseDataContext.ExecuteCommand("DELETE FROM ClientStorage");
+			tpDatabaseDataContext.ExecuteCommand("DELETE FROM ClientStorageGroup");
 			tpDatabaseDataContext.ExecuteCommand("delete from TpUser");
 			tpDatabaseDataContext.ExecuteCommand("delete from ExternalReference");
 			tpDatabaseDataContext.ExecuteCommand("delete from Assignable");
@@ -114,7 +118,8 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 				Abbreviation = projectAbbr,
 				ProjectID = Context.Generals.First(x => x.Name == projectAbbr).GeneralID,
 				IsActive = true,
-				ProcessID = DefaultProcessId
+				ProcessID = DefaultProcessId,
+				Color = "#FFFFFF"
 			};
 			Context.Projects.InsertOnSubmit(project);
 			Context.SubmitChanges();

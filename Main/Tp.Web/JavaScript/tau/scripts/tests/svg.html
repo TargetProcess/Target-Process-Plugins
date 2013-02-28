@@ -1,0 +1,429 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>SVG</title>
+
+
+</head>
+<body>
+    <svg class="sparkline sparkline-bugs i-role-sparkline"></svg>
+
+    <style type="text/css">
+        .sparkline {
+            shape-rendering: crispEdges;
+            background: #f0f8ff;
+            font-size: 8px;
+            width: 90px;
+            height: 45px;
+            }
+
+        .sparkline__openmark,
+        .sparkline__closedmark,
+        .sparkline text {
+            fill: rgb(97,151,218);
+            }
+
+        .sparkline__openbar {
+            fill: rgb(224,235,248);
+            }
+
+        .sparkline__closedbar {
+            fill: transparent;
+            }
+
+        .sparkline__axis {
+            fill: rgb(203,221,242);
+            }
+
+        .sparkline text {
+            font-family: verdana, sans-serif;
+            font-size: 1em;
+            }
+
+
+        .sparkline-bugs .sparkline__openmark,
+        .sparkline-bugs .sparkline__closedmark,
+        .sparkline-bugs text {
+            fill: rgb(218,99,97);
+            }
+
+        .sparkline-bugs .sparkline__closedbar,
+
+
+        .sparkline-bugs .sparkline__openbar {
+            fill: rgb(248,224,224);
+
+            }
+
+        .sparkline-bugs .sparkline__diffmark-closed {
+            fill: rgb(242,201,200);
+
+            }
+
+        .sparkline-bugs .sparkline__diffmark-open {
+            fill: rgb(249,227,227);
+        }
+
+
+
+    </style>
+
+    <script src="http://code.jquery.com/jquery-1.8.2.js"
+            type="text/javascript"></script>
+    <script src="http://d3js.org/d3.v2.js"></script>
+    <script src="http://documentcloud.github.com/underscore/underscore.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        console.time('svg');
+
+        var $sp = $('.i-role-sparkline');
+
+        var width = $sp.width();
+        var height = $sp.height();
+
+//        var padding = parseInt($sp.css('font-size'), 10);
+        var letterWidth = 7.5;
+        var letterHeight = 8;
+        var padding = letterHeight + 1;
+
+        var percent = Math.ceil(height / 100);
+
+
+        var data = [];
+        for (var i = 0; i< 15; i++){
+            data.push({
+                open: Math.round(Math.random() * 100),
+                closed: Math.round(Math.random() * 100)
+            })
+        }
+
+        var dto = dt = _.pluck(data, 'open');
+        var dtc = _.pluck(data, 'closed');
+
+
+        var maxOpen =  Math.max.apply(null, dto);
+        var maxClose = Math.max.apply(null, dtc);
+
+        var max = Math.max.apply(null, [maxOpen, maxClose]);
+        var legendLetters = Math.max.apply(null, [
+                    (''+_.last(dtc)).length,
+                    (''+_.last(dto)).length
+                ]);
+
+        var legendSpace = (legendLetters > 1 ? legendLetters : 2) * letterWidth;
+
+
+        var msvg = d3.select('.sparkline');
+
+        msvg
+                .attr('width', width)
+                .attr('height', height)
+        ;
+
+
+
+        var drawOpened = function(){
+
+            var svg = msvg.append('g')
+                    .attr('transform', "translate(0," + padding + ")")
+                    ;
+
+            var dt =  _.pluck(data, 'open');
+
+            var maxData = _.reduce(dt, function(memo, v, index){
+                return (v > memo.value) ? {
+                    index: index,
+                    value: v
+                } : memo;
+            }, {
+                index: 0,
+                value: dt[0]
+            });
+
+            var currentValue = _.last(dt);
+
+            if (maxData.index == dt.length-1) {
+                maxData = null;
+            }
+
+
+            var diffData = _.reduce(dt, function(memo, v, index){
+                return memo ? memo.concat(
+                        {
+                            diff: v - _.last(memo).to,
+                            to: v,
+                            from: _.last(memo).to
+                        }
+                ) : [{
+                    diff: v,
+                    to: v,
+                    from: 0
+                }];
+            }, null);
+
+            var scaleX = d3.scale.ordinal()
+                            .domain(_.keys(data))
+                            .rangeRoundBands([0, width - legendSpace])
+                    ;
+
+            var scaleWidth = scaleX.rangeBand();
+
+
+            var scaleY = d3.scale.linear()
+                    .domain([0, max])
+                    .range([Math.floor(height/2) - padding, 0]);
+
+            var scaleHeight = d3.scale.linear()
+                    .domain([0, max])
+                    .range([0, Math.floor(height/2) - padding]);
+
+
+            svg.selectAll('.sparkline__openbar')
+                    .data(dt)
+                    .enter()
+                    .append('rect')
+                    .attr("class", "sparkline__openbar")
+                    .attr('x', function(data, i){
+                        return scaleX(i)
+                    })
+                    .attr('y', scaleY)
+                    .attr('height', scaleHeight)
+                    .attr('width', scaleWidth)
+            ;
+
+
+            svg.selectAll('.sparkline__openmark')
+                    .data(dt)
+                    .enter()
+                    .append('rect')
+                    .attr("class", "sparkline__openmark")
+                    .attr('x', function(data, i){
+                        return scaleX(i)
+                    })
+                    .attr('y', scaleY)
+                    .attr('height', 1)
+                    .attr('width', scaleWidth)
+            ;
+
+
+            svg.selectAll('.sparkline__diffmark-open')
+                    .data(diffData)
+                    .enter()
+                    .append('rect')
+                    .attr("class", "sparkline__diffmark-open")
+                    .attr('x', function(data, i){
+                        return scaleX(i) - 1;
+                    })
+                    .attr('y', function(data){
+                        return scaleY(Math.max(data.from, data.to)) + (data.diff > 0 ? 0 : 1)
+                    })
+                    .attr('height', function(data){
+                        return scaleHeight(Math.abs(data.diff))
+                    })
+//
+//                    .attr('height', function(data){
+//                        return scaleHeight(Math.abs(data.diff))
+//                    })
+                    .attr('width', 1)
+            ;
+
+            if (maxData){
+                svg.selectAll('text')
+                        .data([maxData])
+                        .enter()
+                        .append('text')
+                        .text(function(d){
+                            return d.value;
+                        })
+                        .attr('x', function(data, i){
+                            return scaleX(data.index) + (data.index ? scaleWidth/2 : 0);
+                        })
+                        .attr('y', function(data, i){
+                            return scaleY(data.value);
+                        })
+                        .attr("text-anchor", function(data, i){
+                            return (data.index ? ((data.index == dt.length-1)  ? "right" : "middle") : "left")
+                        })
+                        .attr('dy', -2)
+                ;
+            }
+
+
+            svg.selectAll('text.legend')
+                    .data([currentValue])
+                    .enter()
+                    .append('text')
+                    .attr("class", "legend")
+                    .text(function(d){
+                        return d
+                    })
+                    .attr('x', function(data, i){
+                        return width - legendSpace;
+                    })
+                    .attr('y', scaleY)
+                    .attr("text-anchor", "right")
+                    .attr('dx', percent)
+                    .attr('dy', (padding - percent) / 2)
+
+            ;
+
+        };
+
+        var drawClosed = function(){
+
+            var svg = msvg.append('g')
+                    .attr('transform', "translate(0," + ((height ) / 2) + ")")
+
+            var dt =  _.pluck(data, 'closed');
+
+            var maxData = _.reduce(dt, function(memo, v, index){
+                return (v > memo.value) ? {
+                    index: index,
+                    value: v
+                } : memo;
+            }, {
+                index: 0,
+                value: dt[0]
+            });
+
+            var currentValue = _.last(dt);
+
+            if (maxData.index == dt.length-1) {
+                maxData = null;
+            }
+
+            var diffData = _.reduce(dt, function(memo, v, index){
+                return memo ? memo.concat(
+                        {
+                            diff: v - _.last(memo).to,
+                            to: v,
+                            from: _.last(memo).to
+                        }
+                ) : [{
+                    diff: v,
+                    to: v,
+                    from: 0
+                }];
+            }, null);
+
+
+
+            //var legendSpace = 15;
+            var scaleX = d3.scale.ordinal()
+                            .domain(_.keys(data))
+                            .rangeRoundBands([0, width - legendSpace])
+                    ;
+//            debugger;
+            var scaleWidth = scaleX.rangeBand();
+
+
+            var scaleY = d3.scale.linear()
+                    .domain([0, max])
+                    .range([0, height/2 - padding]);
+
+            var scaleHeight = d3.scale.linear()
+                    .domain([0, max])
+                    .range([0, height/2 - padding]);
+
+//            svg.append('rect')
+//                    .attr("class", 'sparkline__axis')
+//                    .attr('y', scaleY(0))
+//                    .attr('x', 0)
+//                    .attr('width', width - legendSpace)
+//                    .attr('height', percent)
+//            ;
+
+            svg.selectAll('.sparkline__closedmark')
+                    .data(dt)
+                    .enter()
+                    .append('rect')
+                    .attr("class", "sparkline__closedmark")
+                    .attr('x', function(data, i){
+                        return scaleX(i)
+                    })
+                    .attr('y', scaleY)
+                    .attr('height', 1)
+                    .attr('width', scaleWidth)
+            ;
+
+            svg.selectAll('.sparkline__diffmark-closed')
+                    .data(diffData)
+                    .enter()
+                    .append('rect')
+                    .attr("class", "sparkline__diffmark-closed")
+                    .attr('x', function(data, i){
+                        return scaleX(i) - 1;
+                    })
+                    .attr('y', function(data){
+//                        return scaleY(Math.min(data.from, data.to)) + 1
+                        return scaleY(Math.min(data.from, data.to)) + (data.diff > 0 ? 1 : 0)
+                    })
+                    .attr('height', function(data){
+                        return scaleHeight(Math.abs(data.diff))
+                    })
+//
+//                    .attr('height', function(data){
+//                        return scaleHeight(Math.abs(data.diff))
+//                    })
+                    .attr('width', 1)
+            ;
+
+            if (maxData){
+                svg.selectAll('text')
+                        .data([maxData])
+                        .enter()
+                        .append('text')
+                        .text(function(d){
+                            return d.value;
+                        })
+                        .attr('x', function(data, i){
+                            return scaleX(data.index) + (data.index ? scaleWidth/2 : 0);
+                        })
+                        .attr('y', function(data, i){
+                            return scaleY(data.value);
+                        })
+                        .attr("text-anchor", function(data, i){
+                            return (data.index ? ((data.index == dt.length-1)  ? "right" : "middle") : "left")
+                        })
+                        .attr('dy', padding)
+
+                ;
+            }
+
+
+            svg.selectAll('text.legend')
+                    .data([currentValue])
+                    .enter()
+                    .append('text')
+                    .attr("class", "legend")
+                    .text(function(d){
+                        return d
+                    })
+                    .attr('x', function(data, i){
+                        return width - legendSpace + 1;
+                    })
+                    .attr('y', scaleY)
+                    .attr("text-anchor", "right")
+//                    .attr('dx', percent)
+                    .attr('dy', (padding - percent) / 2)
+
+            ;
+
+        };
+
+
+        drawOpened();
+        drawClosed();
+
+        console.timeEnd('svg');
+
+
+
+
+
+    </script>
+
+</body>
+</html>

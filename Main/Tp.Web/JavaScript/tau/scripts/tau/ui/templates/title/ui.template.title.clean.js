@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/common/ui.template.entityIcon"],function(templates){var config={name:"title.clean",markup:['<table class="ui-title">',"<tbody>","<tr>","<td>",'<div class="entity-title">',"${name}","</div>","</td>","</tr>","</tbody>","</table>"],dependencies:["entity-icon"]};return templates.register(config)})

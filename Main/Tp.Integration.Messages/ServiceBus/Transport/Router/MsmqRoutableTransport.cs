@@ -13,7 +13,6 @@ using System.Transactions;
 using System.Xml.Serialization;
 using NServiceBus;
 using NServiceBus.Serialization;
-using NServiceBus.Unicast;
 using NServiceBus.Unicast.Transport;
 using NServiceBus.Unicast.Transport.Msmq;
 using NServiceBus.Utils;
@@ -35,7 +34,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		/// </summary>
 		public string InputQueue { get; set; }
 
-		public string UICommandInputQueue
+		public string UiCommandInputQueue
 		{
 			get { return TpUnicastBus.GetUiQueueName(InputQueue); }
 		}
@@ -207,7 +206,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			if (!string.IsNullOrEmpty(InputQueue))
 			{
 				IPluginQueue inputQueue = PluginQueueFactory.Create(InputQueue);
-				IPluginQueue commandQueue = PluginQueueFactory.Create(UICommandInputQueue);
+				IPluginQueue commandQueue = PluginQueueFactory.Create(UiCommandInputQueue);
 				if (PurgeOnStartup)
 				{
 					inputQueue.Purge();
@@ -215,8 +214,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				}
 				Logger.Info(LoggerContext.New(inputQueue.Name), "starting...");
 				Logger.Info(LoggerContext.New(commandQueue.Name), "starting...");
-				_inputQueueRouter = CreateAndStartMessageConsumer(inputQueue, GetQueueNameToRouteMessageIn);
-				_uiQueueRouter = CreateAndStartMessageConsumer(commandQueue, m => TpUnicastBus.GetUiQueueName(GetQueueNameToRouteMessageIn(m)));
+				
+				var factory = new MsmqRouterFactory(Logger, TimeSpan.FromSeconds(SecondsToWaitForMessage), GetTransactionTypeForSend, GetTransactionTypeForReceive());
+				_inputQueueRouter = CreateAndStartMainMessageConsumer(factory);
+				_uiQueueRouter = CreateAndStartUiMessageConsumer(factory);
 				Logger.Info(LoggerContext.New(inputQueue.Name), "started.");
 				Logger.Info(LoggerContext.New(commandQueue.Name), "started.");
 				_queue = inputQueue;
@@ -225,33 +226,43 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 
 		private string GetQueueNameToRouteMessageIn(MessageEx m)
 		{
-			string name = MessageAccountParser.Instance.Parse(m.Message).Name;
-			return string.IsNullOrEmpty(name) ? null : GetQueueName(name);
+			string accountName = m.AccountTag;
+			return string.IsNullOrEmpty(accountName) ? null : GetQueueName(accountName);
 		}
 
-		public string GetQueueName(string name)
+		public string GetQueueName(string accountName)
 		{
-			var result = InputQueue;
-			if (RoutableTransportMode == RoutableTransportMode.OnDemand)
+			if (RoutableTransportMode == RoutableTransportMode.OnSite)
 			{
-				result += name == AccountName.Empty ? string.Empty : ("." + name);
+				return InputQueue;
 			}
 
-			return result;
+			return InputQueue + ("." + accountName);
 		}
 
-		private IMessageConsumer<MessageEx> CreateAndStartMessageConsumer(IPluginQueue queue, Func<MessageEx, string> routeBy)
+		public bool TryDeleteQueue(string accountName)
 		{
-			var factory = new MsmqRouterFactory(Logger, TimeSpan.FromSeconds(SecondsToWaitForMessage), GetTransactionTypeForSend, GetTransactionTypeForReceive());
+			string queueName = GetQueueName(accountName);
+			_inputQueueRouter.Dispose(queueName);
+			return PluginQueue.TryDeleteQueue(queueName, Logger);
+		}
+
+		public bool TryDeleteUiQueue(string accountName)
+		{
+			return PluginQueue.TryDeleteQueue(TpUnicastBus.GetUiQueueName(GetQueueName(accountName)), Logger);
+		}
+
+		private IMessageConsumer<MessageEx> CreateAndStartMainMessageConsumer(MsmqRouterFactory factory)
+		{
 			IMessageConsumer<MessageEx> consumer;
-			IMessageSource<MessageEx> messageSource = factory.CreateSource(queue.Name);
+			IMessageSource<MessageEx> messageSource = factory.CreateSource(InputQueue, false);
 			switch (RoutableTransportMode)
 			{
 				case RoutableTransportMode.OnSite:
 					consumer = factory.CreateConsumer(messageSource);
 					break;
 				case RoutableTransportMode.OnDemand:
-					consumer = factory.CreateRouter(messageSource, factory, routeBy);
+					consumer = factory.CreateRouter(messageSource, factory, GetQueueNameToRouteMessageIn);
 					break;
 				default:
 					throw new ApplicationException(string.Format("{0} plugin hosting mode is not supported", RoutableTransportMode.ToString()));
@@ -262,6 +273,23 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			consumer.TransactionTimeout = TransactionTimeout;
 
 			consumer.Consume(Handle);
+			return consumer;
+		}
+
+		private IMessageConsumer<MessageEx> CreateAndStartUiMessageConsumer(MsmqRouterFactory factory)
+		{
+			IMessageSource<MessageEx> messageSource = factory.CreateSource(UiCommandInputQueue, false);
+			IMessageConsumer<MessageEx> consumer = factory.CreateConsumer(messageSource);
+			switch (RoutableTransportMode)
+			{
+				case RoutableTransportMode.OnSite:
+					consumer.Consume(Handle);
+					break;
+				case RoutableTransportMode.OnDemand:
+					consumer.Consume(HandleAsync);
+					break;
+			}
+			
 			return consumer;
 		}
 
@@ -288,7 +316,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			{
 				MsmqUtilities.CreateQueueIfNecessary(InputQueue);
 				MsmqUtilities.CreateQueueIfNecessary(ErrorQueue);
-				MsmqUtilities.CreateQueueIfNecessary(UICommandInputQueue);
+				MsmqUtilities.CreateQueueIfNecessary(UiCommandInputQueue);
 			}
 		}
 
@@ -322,7 +350,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		{
 			var address = MsmqUtilities.GetFullPath(destination);
 
-			using (var q = new MessageQueue(address, QueueAccessMode.Send))
+			using (var q = new MessageQueue(address, false, true, QueueAccessMode.Send))
 			{
 				var toSend = new Message();
 
@@ -344,7 +372,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 
 				if (!string.IsNullOrEmpty(m.ReturnAddress))
 				{
-					toSend.ResponseQueue = new MessageQueue(MsmqUtilities.GetFullPath(m.ReturnAddress));
+					toSend.ResponseQueue = new MessageQueue(MsmqUtilities.GetFullPath(m.ReturnAddress), false, true);
 				}
 
 				toSend.Label = new MessageLabel(m.WindowsIdentityName, m.IdForCorrelation).ToString();
@@ -367,7 +395,27 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 
 				try
 				{
-					q.Send(toSend, GetTransactionTypeForSend());
+					int attempt = 0;
+					while (true)
+					{
+						try
+						{
+							q.Send(toSend, GetTransactionTypeForSend());
+							break;
+						}
+						catch (MessageQueueException sendingEx)
+						{
+							if (sendingEx.MessageQueueErrorCode == MessageQueueErrorCode.InsufficientResources
+								&& attempt < SendAttemptCount)
+							{
+								Thread.Sleep(SendAttemptSleepIfFault);
+								attempt++;
+								continue;
+							}
+
+							throw;
+						}
+					}
 				}
 				catch (MessageQueueException ex)
 				{
@@ -388,9 +436,27 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			}
 		}
 
+		const int SendAttemptCount = 5;
+		const int SendAttemptSleepIfFault = 500;
 		#endregion
 
 		#region helper methods
+
+		private void HandleAsync(MessageEx message)
+		{
+			_messageId = string.Empty;
+			ReceiveFromQueue(message, m => ThreadPool.QueueUserWorkItem(state =>
+				{
+					try
+					{
+						ProcessMessage(m);
+					}
+					catch
+					{
+						OnFailedMessageProcessing(message);
+					}
+				}));
+		}
 
 		private void Handle(MessageEx message)
 		{
@@ -400,12 +466,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			{
 				if (IsTransactional)
 				{
-					new TransactionWrapper().RunInTransaction(() => ReceiveFromQueue(message), IsolationLevel, TransactionTimeout);
+					new TransactionWrapper().RunInTransaction(() => ReceiveFromQueue(message, ProcessMessage), IsolationLevel, TransactionTimeout);
 					ClearFailuresForMessage(_messageId);
 				}
 				else
 				{
-					ReceiveFromQueue(message);
+					ReceiveFromQueue(message, ProcessMessage);
 				}
 			}
 			catch (AbortHandlingCurrentMessageException)
@@ -423,22 +489,29 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			}
 		}
 
-		private void ReceiveFromQueue(MessageEx message)
+		private void ReceiveFromQueue(MessageEx message, Action<MessageEx> processMessageAction)
 		{
 			var m = message.Message;
 			if (m == null)
 			{
+				Logger.Info(LoggerContext.New(message.MessageOrigin.Name), string.Format("Peek returned null message."));
 				return;
 			}
 
 			message.DoReceive();
+			processMessageAction(message);
+		}
 
+		private void ProcessMessage(MessageEx message)
+		{
+			var m = message.Message;
 			_messageId = m.Id;
 			if (IsTransactional)
 			{
 				if (HandledMaxRetries(m.Id))
 				{
-					Logger.Error(LoggerContext.New(message.MessageOrigin.Name), string.Format("Message has failed the maximum number of times allowed, ID={0}.", m.Id));
+					Logger.Error(LoggerContext.New(message.MessageOrigin.Name),
+					             string.Format("Message has failed the maximum number of times allowed, ID={0}.", m.Id));
 					MoveToErrorQueue(message);
 					return;
 				}
@@ -464,7 +537,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 					Logger.Error(LoggerContext.New(message.MessageOrigin.Name, result), "Could not extract message data.", e);
 					MoveToErrorQueue(message);
 					OnFinishedMessageProcessing(message); // don't care about failures here
-					return; // deserialization failed - no reason to try again, so don't throw
+					return;
 				}
 			}
 			//care about failures here
@@ -545,7 +618,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		protected void MoveToErrorQueue(MessageEx message)
 		{
 			var m = message.Message;
-			m.Label = m.Label + string.Format("<{0}>{1}</{0}><{2}>{3}<{2}>", FAILEDQUEUE, message.MessageOrigin.Address, ORIGINALID, m.Id);
+			m.Label = m.Label + string.Format("<{0}>{1}</{0}><{2}>{3}<{2}>", FAILEDQUEUE, message.MessageOrigin.Name, ORIGINALID, m.Id);
 			if (_errorQueue != null)
 			{
 				_errorQueue.Send(m, MessageQueueTransactionType.Single);

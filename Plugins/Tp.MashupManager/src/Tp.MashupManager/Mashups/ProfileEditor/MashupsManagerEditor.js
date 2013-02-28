@@ -6,10 +6,8 @@
     .addDependency("MashupManager/PlaceholderParser")
     .addDependency("tp/plugins/ErrorMessageContainer")
     .addDependency("tp/status")
-    .addDependency("libs/jquery/jquery")
-    .addDependency("libs/jquery/jquery.tmpl")
-    .addDependency("libs/jquery/jquery.ui.confirmation")
-    .addModule("MashupManager/MashupManagerEditor", function (template, repository, codeEditor, previewer, placeholderParser, errorMessageContainer, status) {
+    .addDependency("jQuery")
+    .addModule("MashupManager/MashupManagerEditor", function (template, repository, codeEditor, previewer, placeholderParser, errorMessageContainer, status, $) {
         function managerEditor(config) {
             this._create(config);
         };

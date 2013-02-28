@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -94,7 +94,7 @@ namespace Tp.Bugzilla.Tests.Handlers
 		}
 
 		[Test]
-		public void ShouldCheckNotCreateInactive()
+		public void ShouldCheckCreateInactive()
 		{
 			@"
 				Given bugzilla profile created
@@ -102,12 +102,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					|id|login|email|
 					|1|user1|user1@mail.com|
 					|2|user2|user2@mail.com|
-				When handled UserCreatedMessage message with inactive user id 3 and email 'user3@mail.com'
-				Then users storage should contain 4 items
+				When handled UserCreatedMessage message with inactive user id 3, login 'user3' and email 'user3@mail.com'
+				Then users storage should contain 6 items
 					And users storage should contain following items:
 					|id|login|email|
 					|1|user1|user1@mail.com|
 					|2|user2|user2@mail.com|
+					|3|user3|user3@mail.com|
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
 		}
@@ -135,10 +136,10 @@ namespace Tp.Bugzilla.Tests.Handlers
 			TransportMock.HandleMessageFromTp(Profile, new UserUpdatedMessage {Dto = user});
 		}
 
-		[When("handled UserCreatedMessage message with inactive user id $id and email '$email'")]
-		public void HandlCreateInactive(int id, string email)
+		[When("handled UserCreatedMessage message with inactive user id $id, login '$login' and email '$email'")]
+		public void HandlCreateInactiveWithLogin(int id, string login, string email)
 		{
-			var user = new UserDTO { ID = id, Email = email, IsActive = false};
+			var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = false };
 			TransportMock.HandleMessageFromTp(Profile, new UserCreatedMessage { Dto = user });
 		}
 

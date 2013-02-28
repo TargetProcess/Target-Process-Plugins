@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(_,ModelBase){var model=ModelBase.extend({"bus beforeInit":function(evt,initData){var context=initData.config.context;this.fire("configurator.ready",context.configurator),this.fire("entity.ready",context.entity)},"bus afterRender":function(evt,renderData){this.fire("$el.ready",renderData.element)}});return model})

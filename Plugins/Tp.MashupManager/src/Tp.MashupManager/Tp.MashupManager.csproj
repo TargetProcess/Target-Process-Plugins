@@ -33,13 +33,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -122,6 +127,7 @@
     <None Include="Mashups\SettingsLink\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="PluginSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -130,6 +136,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="mashup-manager-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Mashups\ProfileEditor\Libs\jquery.fieldSelection.js" />
     <Content Include="Mashups\PluginUiLayout\PluginLayout.js" />
     <Content Include="Mashups\ProfileEditor\CodeEditor.js" />

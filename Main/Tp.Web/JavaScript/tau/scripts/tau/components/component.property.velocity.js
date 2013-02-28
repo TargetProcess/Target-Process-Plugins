@@ -1,1 +1,1 @@
-define(["tau/components/component.property.time"],function(a){return{create:function(b){return b.propertyName="velocity",a.create(b)}}})
+define(["tau/components/component.property.time"],function(PropertyComponent){return{create:function(config){return config.propertyName="velocity",PropertyComponent.create(config)}}})

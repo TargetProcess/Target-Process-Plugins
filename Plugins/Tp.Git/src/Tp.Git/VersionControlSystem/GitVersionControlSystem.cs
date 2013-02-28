@@ -9,6 +9,7 @@ using NGit.Api.Errors;
 using NGit.Revwalk;
 using Tp.Core;
 using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.Diff;
@@ -20,14 +21,15 @@ namespace Tp.Git.VersionControlSystem
 	public class GitVersionControlSystem : SourceControl.VersionControlSystem.VersionControlSystem
 	{
 		private readonly IDiffProcessor _diffProcessor;
-
 		private readonly GitClient _git;
 
-		public GitVersionControlSystem(ISourceControlConnectionSettingsSource settings, ICheckConnectionErrorResolver errorResolver, IActivityLogger logger, IDiffProcessor diffProcessor)
+		public GitVersionControlSystem(ISourceControlConnectionSettingsSource settings,
+		                               ICheckConnectionErrorResolver errorResolver, IActivityLogger logger,
+		                               IDiffProcessor diffProcessor, IStorageRepository profile)
 			: base(settings, errorResolver, logger)
 		{
 			_diffProcessor = diffProcessor;
-			_git = new GitClient(settings);
+			_git = new GitClient(settings, profile.Get<GitRepositoryFolder>());
 		}
 
 		public override RevisionInfo[] GetRevisions(RevisionRange revisionRange)

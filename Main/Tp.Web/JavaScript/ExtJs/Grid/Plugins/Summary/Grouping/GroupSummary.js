@@ -1,11 +1,10 @@
 Ext.ns('Tp.controls.grid.plugins');
 
-Tp.controls.grid.plugins.GroupSummary = function(config) {
-    Ext.apply(this, config);
+Tp.controls.grid.plugins.GroupSummary = function (config) {
+	Ext.apply(this, config);
 };
 
 Ext.extend(Tp.controls.grid.plugins.GroupSummary, Tp.controls.grid.plugins.TotalSummary, {
-
 	groupSummaries: null,
 
 	bindEvents: function () {
@@ -15,7 +14,6 @@ Ext.extend(Tp.controls.grid.plugins.GroupSummary, Tp.controls.grid.plugins.Total
 	},
 
 	findGroupSummary: function (groupValue) {
-
 		if (this.groupSummaries == null)
 			return null;
 

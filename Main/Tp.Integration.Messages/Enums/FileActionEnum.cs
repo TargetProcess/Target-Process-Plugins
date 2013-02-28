@@ -29,5 +29,9 @@ namespace Tp.Integration.Common
         /// The file was renamed
         /// </summary>
 		Rename = 4,
+        /// <summary>
+        /// The file was branched
+        /// </summary>
+        Branch = 5
 	}
 }

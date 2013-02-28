@@ -1,1 +1,1 @@
-define(["tau/components/component.property.date"],function(a){return{create:function(b){return b=_.clone(b||{}),b.propertyName="lastRunDate",b.editable=!1,b.format="datetime",a.create(b)}}})
+define(["tau/components/component.property.date"],function(creator){return{create:function(config){return config=_.clone(config||{}),config.propertyName="lastRunDate",config.editable=!1,config.format="datetime",creator.create(config)}}})

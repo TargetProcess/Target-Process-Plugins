@@ -52,7 +52,7 @@ namespace Tp.Subversion
 		public void AddToSvnHistory(string commit)
 		{
 			var revisionInfo = JsonConvert.DeserializeObject<RevisionInfo>(commit, new RevisionIdConverter());
-			revisionInfo.Comment = revisionInfo.Comment.Replace("\r", Environment.NewLine);
+			revisionInfo.Comment = revisionInfo.Comment;
 			Context.Revisions.Add(revisionInfo);
 		}
 

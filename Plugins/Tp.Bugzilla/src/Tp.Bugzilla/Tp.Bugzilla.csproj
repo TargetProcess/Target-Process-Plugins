@@ -37,16 +37,17 @@
       <HintPath>..\..\..\..\Libs\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\..\..\Libs\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\..\..\..\Libs\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3">
       <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -293,8 +294,10 @@
     <None Include="Mashups\Legacy Profile Converter\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="PluginSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Schemas\bugzilla.xsd">
       <SubType>Designer</SubType>
@@ -308,6 +311,7 @@
     <None Include="Scripts\3.4\tp2.cgi" />
     <None Include="Scripts\3.6\tp2.cgi" />
     <None Include="Scripts\4.0\tp2.cgi" />
+    <None Include="Scripts\4.2\tp2.cgi" />
     <None Include="Uninstall.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

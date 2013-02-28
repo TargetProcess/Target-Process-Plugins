@@ -1,1 +1,1 @@
-define(["tau/components/extensions/component.extension.base"],function(a){return a.extend({"bus preDataBind":function(a){var b=a.data;b.groups.length==0?b.isEmpty=!0:b.isEmpty=!1}})})
+define(["tau/components/extensions/component.extension.base"],function(ExtensionBase){return ExtensionBase.extend({"bus preDataBind":function(evt){var data=evt.data;data.groups.length==0?data.isEmpty=!0:data.isEmpty=!1}})})

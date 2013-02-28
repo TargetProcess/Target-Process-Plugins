@@ -39,37 +39,48 @@ namespace Tp.Bugzilla.ImportToBugzilla
 
 		public void Handle(TeamUpdatedMessage message)
 		{
-			if (!NeedToProcess(message.Dto))
-			{
-				return;
-			}
+			if (!ShouldUpdateTeam(message.Dto)) return;
+			Action success = () => UpdateTeam(message.Dto);
 
-			_storage.Get<TeamDTO>(message.Dto.ID.ToString()).Clear();
-			_storage.Get<TeamDTO>(message.Dto.ID.ToString()).Add(message.Dto);
+			AssignUser(message.Dto,
+			           _userMapper.GetThirdPartyIdBy(_storage.Get<UserDTO>(message.Dto.UserID.ToString()).Single().ID),
+			           success);
+		}
+
+		private void UpdateTeam(TeamDTO dto)
+		{
+			RemoveTeamFromStorageIfExist(dto);
+			_storage.Get<TeamDTO>(dto.ID.ToString()).Add(dto);
+		}
+
+		private void RemoveTeamFromStorageIfExist(TeamDTO dto)
+		{
+			if (_storage.Get<TeamDTO>(dto.ID.ToString()).Any())
+			{
+				_storage.Get<TeamDTO>(dto.ID.ToString()).Clear();
+			}
 		}
 
 		public void Handle(TeamCreatedMessage message)
 		{
-			if (!NeedToProcess(message.Dto))
-			{
-				return;
-			}
-
-			_storage.Get<TeamDTO>(message.Dto.ID.ToString()).Add(message.Dto);
+			Action success = () => UpdateTeam(message.Dto);
 
 			AssignUser(message.Dto,
-			           _userMapper.GetThirdPartyIdBy(_storage.Get<UserDTO>(message.Dto.UserID.ToString()).Single().ID));
+					   _userMapper.GetThirdPartyIdBy(_storage.Get<UserDTO>(message.Dto.UserID.ToString()).Single().ID), 
+					   success);
 		}
 
 		public void Handle(TeamDeletedMessage message)
 		{
-			if (!NeedToProcess(message.Dto))
+			Action success = () => RemoveTeamFromStorageIfExist(message.Dto);
+
+			if(AlreadyReassign(message.Dto))
 			{
+				success();
 				return;
 			}
 
-			_storage.Get<TeamDTO>(message.Dto.ID.ToString()).Clear();
-			AssignUser(message.Dto, null);
+			AssignUser(message.Dto, null, success);
 		}
 
 		private bool NeedToProcess(TeamDTO dto)
@@ -77,9 +88,9 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			return _bugzillaInfoStorageRepository.GetBugzillaBug(dto.AssignableID) != null;
 		}
 
-		private void AssignUser(TeamDTO team, string userEmail)
+		private void AssignUser(TeamDTO team, string userEmail, Action sucess)
 		{
-			if (!NeedToProcess(team) || team.RoleName != _storage.GetProfile<BugzillaProfile>().GetAssigneeRole().Name) return;
+			if (!NeedToProcess(team) || AnotherRole(team)) return;
 
 			var bugzillaBug = _bugzillaInfoStorageRepository.GetBugzillaBug(team.AssignableID);
 			_logger.InfoFormat("Changing bug assignment in Bugzilla. TargetProcess Bug ID: {0}; Email: {1}", bugzillaBug.TpId, userEmail);
@@ -87,6 +98,7 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			try
 			{
 				_service.Execute(_actionFactory.GetAssigneeAction(bugzillaBug.Id, userEmail));
+				sucess();
 			}
 			catch (Exception ex)
 			{
@@ -94,6 +106,38 @@ namespace Tp.Bugzilla.ImportToBugzilla
 			}
 
 			_logger.InfoFormat("Bug assignment changed in Bugzilla. TargetProcess Bug ID: {0}; Email: {1}", bugzillaBug.TpId, userEmail);
+		}
+
+		private bool AnotherRole(TeamDTO team)
+		{
+			return team.RoleName != GetAssigneeRole();
+		}
+
+		private string GetAssigneeRole()
+		{
+			return _storage.GetProfile<BugzillaProfile>().GetAssigneeRole().Name;
+		}
+
+		private bool ShouldUpdateTeam(TeamDTO team)
+		{
+			var teamDto = _storage.Get<TeamDTO>(team.ID.ToString()).FirstOrDefault();
+			return teamDto == null || teamDto.UserID != team.UserID;
+		}
+
+		private bool AlreadyReassign(TeamDTO team)
+		{
+			var teams = _storage.Get<TeamDTO>()
+				.Where(t => t.AssignableID == team.AssignableID)
+				.Where(t=> t.RoleName == GetAssigneeRole())
+				.ToList();
+			
+			if(teams.Any())
+			{
+				var oldTeamId = teams.Max(t => t.TeamID);
+				return oldTeamId > team.ID;
+			}
+
+			return false;
 		}
 	}
 }

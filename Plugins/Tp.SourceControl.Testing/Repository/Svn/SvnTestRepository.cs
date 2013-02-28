@@ -43,7 +43,7 @@ namespace Tp.SourceControl.Testing.Repository.Svn
 
 		private void Checkout()
 		{
-			System.IO.DirectoryExtensions.DeleteDirectory(LocalRepositoryCheckedOutPath);
+			LocalRepositoryCheckedOutPath.DeleteDirectory();
 
 			_client.CheckOut(new SvnUriTarget(LocalRepositoryPath), LocalRepositoryCheckedOutPath);
 			_client.Update(LocalRepositoryCheckedOutPath);

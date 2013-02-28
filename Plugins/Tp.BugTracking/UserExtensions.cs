@@ -9,9 +9,9 @@ namespace Tp.BugTracking
 {
 	public static class UserExtensions
 	{
-		public static bool IsActiveNotDeletedUser(this UserDTO user)
+		public static bool IsNotDeletedUser(this UserDTO user)
 		{
-			return user.IsActive == true && !user.DeleteDate.HasValue;
+			return !user.DeleteDate.HasValue;
 		}
 	}
 }

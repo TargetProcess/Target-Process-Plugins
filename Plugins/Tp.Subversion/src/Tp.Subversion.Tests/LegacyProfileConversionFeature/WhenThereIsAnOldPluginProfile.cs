@@ -93,7 +93,7 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
 		{
 			@"Given account name is 'Account'
 					And profile name is 'ProfileName'
-					And deleted tp user with login 'tp user1' and email 'tpuser1@company.com' 
+					And deleted tp user with login 'tp user1' and email 'tpuser0@company.com' 
 					And tp user with login 'tpuser1_active' and email 'tpuser1@company.com'
 					And user mapping is:
 						|subversion|targetprocess|

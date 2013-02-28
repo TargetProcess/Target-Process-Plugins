@@ -59,5 +59,15 @@ namespace Tp.Integration.Common
 		/// 	The multiple selection list
 		/// </summary>
 		MultipleSelectionList = 8,
+
+		/// <summary>
+		/// 	URL with suffix and postfix parts
+		/// </summary>
+		TemplatedURL = 9,
+
+		/// <summary>
+		/// 	Multiple Target Process Entities
+		/// </summary>
+		MultipleEntities = 10
 	}
 }

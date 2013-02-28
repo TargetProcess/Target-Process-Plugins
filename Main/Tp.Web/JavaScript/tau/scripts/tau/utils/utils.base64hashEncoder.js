@@ -1,0 +1,1 @@
+define(["libs/base64/base64"],function(base64){return{encode:function(value){var v=value;return _.isObject(value)&&(v=base64.encode(JSON.stringify(value))),v},decode:function(str){var v=base64.decode(str);return v.charAt(0)==="{"&&v.charAt(v.length-1)==="}"?v=JSON.parse(v):v=str,v}}})

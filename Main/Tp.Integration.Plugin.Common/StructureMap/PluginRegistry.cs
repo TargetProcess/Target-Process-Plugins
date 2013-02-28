@@ -23,6 +23,7 @@ using Tp.GeneralServiceProxy;
 using Tp.GeneralUserServiceProxy;
 using Tp.ImpedimentServiceProxy;
 using Tp.Integration.Messages.ServiceBus.Transport;
+using Tp.Integration.Messages.ServiceBus.Transport.Router;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
@@ -30,6 +31,7 @@ using Tp.Integration.Plugin.Common.FileStorage;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand;
+using Tp.Integration.Plugin.Common.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
 using Tp.IterationServiceProxy;
@@ -113,6 +115,8 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
 			For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
 			For<ILogManager>().Singleton().Use<TpLogManager>();
+
+			For<IRouterChildTagsSource>().Singleton().Use<RouterChildTagsSource>();
 		}
 
 		protected virtual ITpBus CreateTpBus()

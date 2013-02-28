@@ -15,6 +15,7 @@ Tp.controls.kanbanboard.sections.ProjectSwimlane = Ext.extend(Tp.controls.kanban
 
 Tp.controls.kanbanboard.sections.OrderByEndDateSwimlane = Ext.extend(Tp.controls.kanbanboard.sections.Swimlane, {
 	comparator: function (a, b) {
-		return b.endDate - a.endDate;
+		//return b.endDate - a.endDate;
+        return a.endDate - b.endDate;
 	}
 });

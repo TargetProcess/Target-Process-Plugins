@@ -5,6 +5,8 @@ tau.mashups
 	.addDependency("TestRunImport/editorTemplate")
 	.addDependency("TestRunImport/seleniumButtons")
 	.addDependency("TestRunImport/seleniumUrlEditor")
+	.addDependency("TestRunImport/jquery/iphone-switch")
+	.addDependency("TestRunImport/jquery/numeric")
 	.addDependency("libs/jquery/jquery")
 	.addDependency("libs/jquery/jquery.tmpl")
 	.addDependency("TestRunImport/jquery.utils")
@@ -313,7 +315,7 @@ tau.mashups
 					this.preloader.hide();
 					btn.enabled(true);
 				} else {
-					var testCasesUrl = new Tp.WebServiceURL('/api/v1/TestPlans.asmx/{TestPlanId}/?include=[TestCases]&Take=1000'.replace(/{TestPlanId}/g, profile.Settings.TestPlan)).url;
+					var testCasesUrl = new Tp.WebServiceURL('/api/v1/TestPlans.asmx/{TestPlanId}/TestCases?include=[id,name]&take=1000'.replace(/{TestPlanId}/g, profile.Settings.TestPlan)).url;
 					$.getJSON(testCasesUrl, $.proxy(function (data) {
 						this.placeHolder.find('#failedMappingCheck').hide().find('span').text('');
 						var onError = $.proxy(function (d) {
@@ -349,7 +351,7 @@ tau.mashups
 							this.preloader.hide();
 							btn.enabled(true);
 						}, this);
-						this.commandGateway.execute('CheckMapping', { Profile: profile, TestCases: data.TestCases.Items || [] }, onError, onError);
+						this.commandGateway.execute('CheckMapping', { Profile: profile, TestCases: data.Items || [] }, onError, onError);
 					}, this));
 				}
 			},

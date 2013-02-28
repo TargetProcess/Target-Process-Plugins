@@ -1,1 +1,1 @@
-define(["tau/storage/api"],function(a){return new a})
+define(["tau/storage/api"],function(Storage){return new Storage})

@@ -27,7 +27,7 @@ Tp.controls.menu.AlertView = Ext.extend(Ext.util.Observable, {
 			alertCollection: this.alertCollection
 		});
 
-		Ext.get(this._hideMessageButtonId).on('click', this._onHideClick, this)
+		Ext.get(this._hideMessageButtonId).on('click', this._onHideClick, this);
 	},
 
 	_onHideClick: function () {

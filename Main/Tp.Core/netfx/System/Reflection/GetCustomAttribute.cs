@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using Tp.Core;
 
 /// <summary>
 /// Allows retrieving custom attributes from assemblies, types, methods, properties, etc. using a generic method.
@@ -49,10 +50,10 @@ public static partial class GetCustomAttributeExtension
 	/// property, method, etc.</param>
 	/// <param name="inherit">Optionally, whether the attribute will be looked in base classes.</param>
 	/// <returns>The attribute instance if defined; <see langword="null"/> otherwise.</returns>
-	public static TAttribute GetCustomAttribute<TAttribute>(this ICustomAttributeProvider provider, bool inherit = true)
+	public static Maybe<TAttribute> GetCustomAttribute<TAttribute>(this ICustomAttributeProvider provider, bool inherit = true)
 		where TAttribute : Attribute
 	{
-		return GetCustomAttributes<TAttribute>(provider, inherit).FirstOrDefault();
+		return GetCustomAttributes<TAttribute>(provider, inherit).FirstOrNothing();
 	}
 
 	/// <summary>

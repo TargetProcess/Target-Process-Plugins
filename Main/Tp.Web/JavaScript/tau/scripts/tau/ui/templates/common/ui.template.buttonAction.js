@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"button-action",markup:['<a class="button-box ${id}-button user-action button small ${className}"',' role="button">','   <span class="">${title}</span>',"</a>"].join("")};return a.register(b)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"button-action",markup:['<a class="button-box ${id}-button user-action button small ${className}"',' role="button">','   <span class="">${title}</span>',"</a>"].join("")};return templates.register(config)})

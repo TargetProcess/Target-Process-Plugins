@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(a){var b={name:"breadcrumbs-item",markup:['   <li class="ui-breadcrumbs__item"><a href="${url}">${title}</a></li>'],dependencies:[]};return a.register(b)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"breadcrumbs-item",markup:['   <li class="ui-breadcrumbs__item"><a href="${url}">${title}</a></li>'],dependencies:[]};return templates.register(config)})

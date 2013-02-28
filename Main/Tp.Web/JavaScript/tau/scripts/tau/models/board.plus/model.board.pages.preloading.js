@@ -1,0 +1,1 @@
+define(["Underscore","./model.board.base"],function(_,baseModel){return baseModel.extend({})})

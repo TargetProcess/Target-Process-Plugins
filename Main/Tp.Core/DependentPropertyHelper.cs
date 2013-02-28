@@ -10,17 +10,12 @@ namespace Tp.Core
 		{
 			if (obj == null)
 			{
-				return null;
+				return Maybe.Nothing;
 			}
 			var maybeDependent = obj as TDependency;
 			return maybeDependent != null
 					? Maybe.Just(f(maybeDependent))
 					: Maybe.Nothing;
-		}
-
-		public static bool IsDependendUpon<TDependency>(Type type)
-		{
-			return typeof(TDependency).IsAssignableFrom(type);
 		}
 	}
 }

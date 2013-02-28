@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\..\Libs\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -74,17 +74,22 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountLifecycle\AccountAddedMessage.cs" />
+    <Compile Include="AccountLifecycle\AccountRemovedMessage.cs" />
+    <Compile Include="AccountLifecycle\AccountRemovedLastStepMessage.cs" />
+    <Compile Include="AccountLifecycle\IAccountLifecycleMessage.cs" />
     <Compile Include="AccountName.cs" />
     <Compile Include="AdditionalEntityAttributes.cs" />
     <Compile Include="Commands\ExecutePluginCommandCommand.cs" />
@@ -123,6 +128,8 @@
     <Compile Include="Entities\GeneralFieldExtensionDTO.cs" />
     <Compile Include="Entities\GeneralListItemDTO.cs" />
     <Compile Include="Entities\GeneralNumericPriorityListItemDTO.cs" />
+    <Compile Include="Entities\GeneralRelationDTO.cs" />
+    <Compile Include="Entities\GeneralRelationTypeDto.cs" />
     <Compile Include="Entities\GeneralUserDTO.cs" />
     <Compile Include="Entities\GlobalSettingDTO.cs" />
     <Compile Include="Entities\ImpedimentDTO.cs" />
@@ -146,8 +153,6 @@
     <Compile Include="Entities\ReleaseDTO.cs" />
     <Compile Include="Entities\RequestDTO.cs" />
     <Compile Include="Entities\RequesterDTO.cs" />
-    <Compile Include="Entities\RequestGeneralDTO.cs" />
-    <Compile Include="Entities\RequestGeneralListItemDTO.cs" />
     <Compile Include="Entities\RequestRequesterDTO.cs" />
     <Compile Include="Entities\RequestTypeDTO.cs" />
     <Compile Include="Entities\RevisionAssignableDTO.cs" />
@@ -275,7 +280,11 @@
     <Compile Include="EntityLifecycle\Messages\Time.cs" />
     <Compile Include="EntityLifecycle\Messages\User.cs" />
     <Compile Include="EntityLifecycle\Messages\UserStory.cs" />
+    <Compile Include="EntityLifecycle\Queries\AssignableQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\CommentQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\CustomFieldQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\EntityState.cs" />
+    <Compile Include="EntityLifecycle\Queries\GeneralQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\GlobalSetting.cs" />
     <Compile Include="EntityLifecycle\Queries\MessageUid.cs" />
     <Compile Include="EntityLifecycle\Queries\Priority.cs" />
@@ -284,6 +293,7 @@
     <Compile Include="EntityLifecycle\Queries\Requester.cs" />
     <Compile Include="EntityLifecycle\Queries\Role.cs" />
     <Compile Include="EntityLifecycle\Queries\Severity.cs" />
+    <Compile Include="EntityLifecycle\Queries\TestCaseQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\TestCaseRun.cs" />
     <Compile Include="EntityLifecycle\Queries\TestCaseTestPlan.cs" />
     <Compile Include="EntityLifecycle\Queries\User.cs" />
@@ -301,6 +311,7 @@
     <Compile Include="Enums\RoleExtension.cs" />
     <Compile Include="Enums\SourceControlTypeEnum.cs" />
     <Compile Include="ForeignKeyAttribute.cs" />
+    <Compile Include="IRouterStarter.cs" />
     <Compile Include="PluginLifecycle\EmbeddedPluginCommands.cs" />
     <Compile Include="PluginLifecycle\IPluginLifecycleMessage.cs" />
     <Compile Include="PluginLifecycle\IPluginLocalMessage.cs" />
@@ -346,8 +357,11 @@
     <Compile Include="ServiceBus\Transport\MessageLabelParser.cs" />
     <Compile Include="ServiceBus\Transport\PluginQueue.cs" />
     <Compile Include="ServiceBus\Transport\PluginQueueFactory.cs" />
-    <Compile Include="ServiceBus\Transport\Router\Extensions\ObservableExtensions.cs" />
     <Compile Include="ServiceBus\Transport\Router\Interfaces\IMessageSource.cs" />
+    <Compile Include="ServiceBus\Transport\Router\Interfaces\NotImplementedProducerConsumerFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\MsmqMessageProducerBase.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\ProducerConsumerFactoryBase.cs" />
+    <Compile Include="ServiceBus\Transport\Router\IRouterChildTagsSource.cs" />
     <Compile Include="ServiceBus\Transport\Router\Pump\MessageSource.cs" />
     <Compile Include="ServiceBus\Transport\Router\Log\LoggerContextSensitive.cs" />
     <Compile Include="ServiceBus\Transport\Router\Log\ILoggerContextSensitive.cs" />
@@ -374,6 +388,9 @@
     <Compile Include="ServiceBus\UnicastBus\ConfigTpUnicastBus.cs" />
     <Compile Include="ServiceBus\UnicastBus\ConfigureTpUnicastBus.cs" />
     <Compile Include="ServiceBus\UnicastBus\IBusExtended.cs" />
+    <Compile Include="ServiceBus\UnicastBus\PluginRouterMode.cs" />
+    <Compile Include="ServiceBus\UnicastBus\PluginRouterSection.cs" />
+    <Compile Include="ServiceBus\UnicastBus\RouterSubscriptionStorage.cs" />
     <Compile Include="ServiceBus\UnicastBus\TpUnicastBus.cs" />
     <Compile Include="TargetProcessLifecycle\ITargetProcessLifecycleMessage.cs" />
     <Compile Include="TargetProcessLifecycle\TargetProcessExceptionThrownMessage.cs" />
@@ -394,7 +411,9 @@
       <Name>Tp.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ServiceBus\Transport\Router\Extensions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -321,7 +321,7 @@ namespace Tp.Integration.Testing.Common
 
 		private static Assembly PluginAssembly
 		{
-			get { return ObjectFactory.GetInstance<IAssembliesHost>().GetAssemblies().Single(); }
+			get { return ObjectFactory.GetInstance<IAssembliesHost>().GetAssemblies().First(); }
 		}
 
 		private static Assembly NServiceBusAssembly
@@ -490,7 +490,13 @@ namespace Tp.Integration.Testing.Common
 			return expectations[typeof (TDto)] as TExpectations;
 		}
 
-		public string InputQueue { get; set; }
+		private string _inputQueue = "testQueue";
+		public string InputQueue
+		{
+			get { return _inputQueue; }
+			set { _inputQueue = value; }
+		}
+
 		public string ErrorQueue { get; set; }
 		public int MaxRetries { get; set; }
 		public IPluginQueueFactory PluginQueueFactory { get; set; }
@@ -507,6 +513,16 @@ namespace Tp.Integration.Testing.Common
 		public string GetQueueName(string accountName)
 		{
 			return InputQueue;
+		}
+
+		public bool TryDeleteQueue(string accountName)
+		{
+			return true;
+		}
+
+		public bool TryDeleteUiQueue(string accountName)
+		{
+			return true;
 		}
 	}
 

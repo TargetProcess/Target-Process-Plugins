@@ -20,15 +20,19 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	refreshInterval: null,
 	showTasksAsCards: false,
 	refreshTask: null,
-	constructor: function (project, process, preferences) {
-		if (!project) {
-			throw new Error('Project not specified');
-		}
-		if (!process) {
-			throw new Error('Process not specified');
-		}
+	constructor: function (clientId, project, process, preferences) {
+        if (!clientId){
+            throw new Error('ClientId is not specified');
+        }
+        if (!project) {
+            throw new Error('Project not specified');
+        }
+        if (!process) {
+            throw new Error('Process not specified');
+        }
 
 		Tp.controls.kanbanboard.Controller.superclass.constructor.call(this);
+        this.clientId = clientId;
 		this.service = Tp.Web.PageServices.KanbanBoard.KanbanBoardService;
 		this.project = project;
 		this.process = process;
@@ -223,7 +227,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 		var entityState = swimlane.swimlane.findEntityState(data.entity);
 		// Call remote service to change entity state on the server.
 		var ctx = { dd: dd, e: e, data: data, swimlane: swimlane, entityState: entityState, before: next, after: prev };
-		this.service.changeEntityState(data.entity.id, entityState.id, comment, next != null ? next.entity.id : -1, prev != null ? prev.entity.id : -1,
+		this.service.changeEntityState(this.clientId, data.entity.id, entityState.id, comment, next != null ? next.entity.id : -1, prev != null ? prev.entity.id : -1,
 			this.changeEntityState_onSuccess.createDelegate(this),
 			this.changeEntityState_onFailure.createDelegate(this),
 			ctx);
@@ -487,6 +491,23 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 		return swimlanes;
 	},
 
+    createItem: function(entity){
+        var item = new Tp.controls.kanbanboard.Item({
+            entity: entity,
+            canShowTooltip: function () { return !self.isInDrag; },
+            listeners: {
+                showDetails: {
+                    fn: this.showDetails,
+                    scope: this
+                }
+            }
+        });
+        item.on('onBugsPopupShow', this.bugsPopupShowHandler.createDelegate(this));
+        item.on('onTasksPopupShow', this.tasksPopupShowHandler.createDelegate(this));
+        item.on('onImpedimentsPopupShow', this.impedimentsPopupShowHandler.createDelegate(this));
+        return item;
+    },
+
 	fillItemContainer: function (itemContainer, entities) {
 		var maxItemsPerSwimlane = 100;
 		var self = this;
@@ -496,17 +517,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 				break;
 			if (this.isWIP_OR_PlannedState(entities[i].entityState) && i >= maxItemsPerSwimlane)
 				break;
-			var item = new Tp.controls.kanbanboard.Item({
-				entity: entities[i],
-				canShowTooltip: function () { return !self.isInDrag; },
-				listeners: {
-					showDetails: {
-						fn: this.showDetails,
-						scope: this
-					}
-				}
-			});
-
+            var item = this.createItem(entities[i]);
 			itemContainer.add(item);
 			item.on('onBugsPopupShow', this.bugsPopupShowHandler.createDelegate(this));
 			item.on('onTasksPopupShow', this.tasksPopupShowHandler.createDelegate(this));
@@ -660,12 +671,12 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	changeEntityState_onSuccess: function (x, ctx) {
 		ctx.dd.onValidDrop(ctx.swimlane.dropTarget, ctx.e, ctx.swimlane.dropTarget.id);
 		ctx.swimlane.el.removeClass(ctx.swimlane.dropTarget.overClass);
-		ctx.data.entity.endDate = Number.MAX_VALUE; // to keep entity last in Final swimlane
+		ctx.data.entity.endDate = x.EndDate;
 		if ((ctx.swimlane.swimlane.name == '__final__') && ctx.swimlane.items.length >= 10) {
 			ctx.swimlane.remove(ctx.swimlane.items.items[0]);
 		}
-		if (x != null && x !== -1) {
-			ctx.data.entity.numericPriority = x;
+		if (x.Priority != null && x.Priority !== -1) {
+			ctx.data.entity.numericPriority = x.Priority;
 		}
 		ctx.data.entity.entityState = ctx.entityState;
 		ctx.dd.proxy.repair(ctx.dd.getRepairXY(ctx.e, ctx.dd.dragData), function () {

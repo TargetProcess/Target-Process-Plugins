@@ -23,6 +23,11 @@ namespace Tp.Integration.Messages.Commands
 		/// Success if command was executed successfully. Fail if something was wrong.
 		/// </summary>
 		public PluginCommandStatus PluginCommandStatus { get; set; }
+
+		public override string ToString()
+		{
+			return "Response status {0}: {1}".Fmt(PluginCommandStatus, ResponseData);
+		}
 	}
 
 	public enum PluginCommandStatus

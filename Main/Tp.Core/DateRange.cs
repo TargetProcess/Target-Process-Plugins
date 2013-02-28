@@ -17,6 +17,10 @@ namespace Tp.Core
 		{
 		}
 
+		public DateRange(DateTime? startDate) : this(startDate, startDate)
+		{
+		}
+
 		public DateRange(DateTime? startDate, DateTime? endDate)
 		{
 			AssertStartDateFollowsEndDate(startDate, endDate);
@@ -59,6 +63,7 @@ namespace Tp.Core
 			get { return new DateRange(null, null); }
 		}
 
+		[Annotations.AssertionMethod]
 		private static void AssertStartDateFollowsEndDate(DateTime? startDate,
 		                                                  DateTime? endDate)
 		{
@@ -135,6 +140,11 @@ namespace Tp.Core
 				return ((_startDate.HasValue ? _startDate.Value.GetHashCode() : 0)*397) ^
 				       (_endDate.HasValue ? _endDate.Value.GetHashCode() : 0);
 			}
+		}
+
+		public static DateRange Create(DateTime startDate, int duration)
+		{
+			return new DateRange(startDate, startDate.AddDays(duration - 1));
 		}
 	}
 }

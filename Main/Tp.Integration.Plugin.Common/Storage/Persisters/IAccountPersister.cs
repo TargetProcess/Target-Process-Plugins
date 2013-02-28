@@ -8,5 +8,6 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters
 		IList<Account> GetAll();
 		Account Add(AccountName accountName);
 		Account GetBy(AccountName accountName);
+		void Remove(AccountName accountName);
 	}
 }

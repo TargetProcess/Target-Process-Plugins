@@ -38,6 +38,15 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 			ExecuteConcurrently(ReadAccounts, () => AddAccount("account2"));
 			AccountCollection.Count().Should(Be.EqualTo(2));
 		}
+
+		[Test]
+		public void Write3Remove1()
+		{
+			AddAccount("account1");
+			ExecuteConcurrently(ReadAccounts, () => AddAccount("account2"));
+			ExecuteConcurrently(() => AddAccount("account3"), () => RemoveAccount("account2"));
+			AccountCollection.Count().Should(Be.EqualTo(2));
+		}
 		
 		[Test]
 		public void WriteTwiceReadTwice()
@@ -95,6 +104,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		public void AddAccount(string accountName)
 		{
 			AccountCollection.GetOrCreate(new AccountName(accountName));
+		}
+
+		public void RemoveAccount(string accountName)
+		{
+			AccountCollection.Remove(new AccountName(accountName));
 		}
 	}
 }

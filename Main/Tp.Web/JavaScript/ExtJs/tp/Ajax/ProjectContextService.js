@@ -36,16 +36,6 @@ setCurrent: function(projectIds) {
 		failure: Function.createDelegate(this, this.onAccessServiceFailure),
 		jsonData: { 'projectIds': projectIds }
 	});
-},
-
-getSerializedProjectContextParameter: function(selectedProjectId, acid, onSucceed) {
-	Ext.Ajax.request({
-		url: appHostAndPath + '/Wcf/ProjectContextService.asmx/GetSerializedProjectContextParameter',
-		headers: { 'Content-Type': 'application/json' },
-		success: onSucceed,
-		failure: Function.createDelegate(this, this.onAccessServiceFailure),
-		jsonData: { 'selectedProjectId': selectedProjectId, 'acid': acid }
-	});
 }
 
 });

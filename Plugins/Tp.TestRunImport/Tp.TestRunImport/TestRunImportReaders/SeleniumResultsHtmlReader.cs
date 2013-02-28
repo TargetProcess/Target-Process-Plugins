@@ -33,7 +33,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 						if (htmlReader.ReadToFollowing("tr") && htmlReader.Attributes.Count > 0)
 						{
 							var classAttribute = htmlReader.Attributes["class"];
-							if (!String.IsNullOrEmpty(classAttribute) && classAttribute.Contains("status_"))
+							if (!string.IsNullOrEmpty(classAttribute) && classAttribute.Contains("status_"))
 							{
 								var table = ParseTrTag(htmlReader);
 								if (table != null)

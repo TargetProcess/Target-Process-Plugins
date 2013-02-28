@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.creator","tau/models/model.board.header","tau/ui/templates/board.header/ui.template.board.header"],function(_,a,b,c){return{create:function(d){var e={extensions:[b],template:c},f=a.create(e,d);return f}}})
+define(["Underscore","tau/components/component.board.container"],function(_,ComponentCreator){return{create:function(config){var creatorConfig={extensions:[]},componentBus=ComponentCreator.create(_.extend(creatorConfig,config));return componentBus}}})

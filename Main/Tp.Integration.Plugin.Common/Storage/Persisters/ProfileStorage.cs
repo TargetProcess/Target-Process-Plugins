@@ -76,7 +76,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters
 
 		public static TypeNameWithoutVersion Key(Type type)
 		{
-			return type;
+			return new TypeNameWithoutVersion(type);
 		}
 
 		public static ProfileStorage Create<T>(TypeNameWithoutVersion key, T item)

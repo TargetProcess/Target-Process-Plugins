@@ -76,6 +76,11 @@ namespace Tp.Core
 			return Disposable.Create(()=>TimeKeeper=oldKeeper);
 		}
 
+		public static IDisposable Setup(DateTime date)
+		{
+			return Setup(() => date);
+		}
+
 		private interface ITimeKeeper
 		{
 			DateTime Now { get; }

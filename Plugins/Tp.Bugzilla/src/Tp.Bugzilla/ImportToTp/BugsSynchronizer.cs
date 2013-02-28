@@ -45,6 +45,11 @@ namespace Tp.Bugzilla.ImportToTp
 			get { return _storageRepository.Get<FailedSyncDate>(); }
 		}
 
+		private IStorage<BugTracking.ImportToTp.LastSyncDate> LastSyncDates
+		{
+			get { return _storageRepository.Get<BugTracking.ImportToTp.LastSyncDate>(); }
+		}
+
 		private IStorage<FailedChunk> FailedChunks
 		{
 			get { return _storageRepository.Get<FailedChunk>(); }
@@ -52,22 +57,31 @@ namespace Tp.Bugzilla.ImportToTp
 
 		private void ProcessNewlyChanges(DateTime? lastSyncDate)
 		{
-			var dateValue = GetSyncDate(lastSyncDate);
+			var lastSyncronizationDate = LastSyncDates.FirstOrDefault();
 
-			int[] changedIds;
-
-			if (TryGetChangedIds(dateValue, out changedIds))
+			if (lastSyncDate == null || lastSyncronizationDate == null || !lastSyncronizationDate.GetValue().HasValue ||
+			    lastSyncronizationDate.GetValue().Value.AddMinutes(_storageRepository.GetProfile<BugzillaProfile>().SynchronizationInterval) < DateTime.Now)
 			{
-				if (changedIds.Length > 0)
+				var dateValue = GetSyncDate(lastSyncDate);
+
+				var synchronizationTime = DateTime.Now;
+
+				int[] changedIds;
+
+				if (TryGetChangedIds(dateValue, out changedIds))
 				{
-					_logger.InfoFormat("{0} changed bugs found", changedIds.Length);
-				}
+					if (changedIds.Length > 0)
+					{
+						_logger.InfoFormat("{0} changed bugs found", changedIds.Length);
+					}
 
-				ProcessChangedBugIds(changedIds);
-			}
-			else
-			{
-				FailedSyncDates.ReplaceWith(new FailedSyncDate(dateValue));
+					LastSyncDates.ReplaceWith(new BugTracking.ImportToTp.LastSyncDate(synchronizationTime));
+					ProcessChangedBugIds(changedIds);
+				}
+				else
+				{
+					FailedSyncDates.ReplaceWith(new FailedSyncDate(dateValue));
+				}
 			}
 		}
 
@@ -104,9 +118,12 @@ namespace Tp.Bugzilla.ImportToTp
 
 		private DateTime? GetSyncDate(DateTime? lastSyncDate)
 		{
-			var lastFailedDate = FailedSyncDates.FirstOrDefault();
+			if (lastSyncDate == null) return null;
 
-			return lastFailedDate != null ? lastFailedDate.GetValue() : lastSyncDate;
+			var lastFailedDate = FailedSyncDates.FirstOrDefault();
+			var lastSyncronizationDate = LastSyncDates.FirstOrDefault();
+
+			return lastFailedDate != null ? lastFailedDate.GetValue() : (lastSyncronizationDate != null ? lastSyncronizationDate.GetValue() : lastSyncDate);
 		}
 
 		private bool TryGetChangedIds(DateTime? dateValue, out int[] ids)

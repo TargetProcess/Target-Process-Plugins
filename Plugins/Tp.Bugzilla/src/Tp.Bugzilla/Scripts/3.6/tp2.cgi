@@ -75,7 +75,7 @@ elsif (substr($constants.BUGZILLA_VERSION, 0, 3) eq $supportedBugzillaVersion)
     else
     {
         print $cgi->header('text');
-        print "ERROR: Ivalid command '".$cmd."'";
+        print "ERROR: Invalid command '".$cmd."'";
     }
 }
 else
@@ -105,7 +105,7 @@ sub add_comment
     {
         print "Bug ID=".$bugId." not found";
         exit;
-    }		
+    }
     
     my $comment_text = decode_base64($cgi->param("comment_text"));
     
@@ -117,7 +117,7 @@ sub add_comment
     
     if ($owner eq '')
     {
-        $ownerid = $user->id;		
+        $ownerid = $user->id;
         $comment_text = $comment_text."\n\rThis comment was added from TargetProcess";
     }
     else
@@ -127,54 +127,53 @@ sub add_comment
         my $userids = $dbh->selectcol_arrayref("SELECT userid FROM profiles WHERE login_name = ?", undef, $owner);
         
         if(@$userids < 1)
-        {		
+        {
             $ownerid = $user->id;
             $comment_text = $comment_text."\n\rThis comment was added from TargetProcess by ".$owner;
         }
         else
         {
-            $ownerid = @$userids[0];		
+            $ownerid = @$userids[0];
         }
     }
-    
+
     $dbh->do("INSERT INTO longdescs (bug_id, who, thetext, bug_when)
                        VALUES (?,?,?,?)", undef,
                  $bug->id, $ownerid, $comment_text, $date);
-                 
+
     $bug->{added_comments} = [];
     $bug->update();
-    
+
     print 'OK';
 }
 
 sub assign_user
 {
     print $cgi->header('text');
-    
+
     my $bugId = $cgi->param("bugid");	
     my $localUser = $cgi->param("user");
-    
+
     my $bug = new Bugzilla::Bug($bugId);
     if ( ! defined($bug) || $bug->bug_id ne $bugId)
     {
         print "Bug ID=".$bugId." not found";
         exit;
     }
-    
+
     if ($localUser eq '')
     {
         $localUser = $user;
     }
-    
+
     $bug->set_assigned_to($localUser);
     $bug->update();
-    
+
     print 'OK';
 }
 
 sub change_status
 {
-
     print $cgi->header('text');
 
     my $id = $cgi->param('id');
@@ -213,7 +212,6 @@ sub check_resolution
 
     my $settable_resolutions = $bug->choices->{resolution};
 
-
     foreach my $i (@$settable_resolutions) {
         if ($i->{value} eq $resolution) {
             $found++;
@@ -250,13 +248,11 @@ sub check_resolution
 
 sub check
 {
-
     if ($user && $user->login())
     {
              print $cgi->header('xml');
              my $template = Bugzilla->template;
              addScriptVersionTemplate($template);
-
 
          my $vars = {};
          foreach my $id ($cgi->param('id')) {
@@ -269,7 +265,6 @@ sub check
             push(@bugs, $bug);
         }
          }
-
              eval {
                my @customFields = get_custom_field_names();
                $vars->{'custom_field_names'} = \@customFields;
@@ -303,7 +298,6 @@ sub check
              };
 
          $vars->{'timezone'} = $user->timezone->name;
-
 
              $template->process($scriptVersionXmlTemplate , $vars) || die $template->error();
     }

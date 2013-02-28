@@ -8,7 +8,6 @@ using NServiceBus;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Plugin.Common.Logging;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using log4net;
 
@@ -40,7 +39,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
 					replyMessage.ResponseData = string.Format("There are more than one command with name '{0}'", message.CommandName);
 					replyMessage.PluginCommandStatus = PluginCommandStatus.Error;
 				}
-				else if (commandsToExecute.Count() == 0)
+				else if (!commandsToExecute.Any())
 				{
 					replyMessage.ResponseData = string.Format("No command with name '{0}' was found", message.CommandName);
 					replyMessage.PluginCommandStatus = PluginCommandStatus.Error;

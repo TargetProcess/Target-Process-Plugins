@@ -11,5 +11,6 @@ namespace Tp.Integration.Plugin.Common.Domain
 	public interface IAccountCollection : IEnumerable<IAccountReadonly>
 	{
 		IAccount GetOrCreate(AccountName accountName);
+		void Remove(AccountName accountName);
 	}
 }

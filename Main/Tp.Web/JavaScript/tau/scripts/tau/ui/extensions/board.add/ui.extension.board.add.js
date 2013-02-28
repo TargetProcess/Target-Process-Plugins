@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(_,$,ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt){var $el=evt.data.element,$trigger=$el.is("[role=action-add]")?$el:$el.find("[role=action-add]"),self=this;$trigger.click(function(){self.fire("add.executed")})}})})

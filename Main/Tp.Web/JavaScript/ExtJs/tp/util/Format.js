@@ -25,3 +25,16 @@ ExtJs.tp.util.Format.ProjectAbbr = function (value) {
 	value = String(value).replace("]]", "</span>");
 	return value;
 };
+
+ExtJs.tp.util.Format.Relations = function (value) {
+	var values = value && value.split && value.split(',');
+	if (!values || values.length != 4 || values[0] === '0' && values[2] === '0') return '';
+
+	var result = '<span ';
+	(values[1].toLowerCase() == 'true') && (result += ' class="topPriority" ');
+	result += '>' + values[0] + '</span><span class="relationsMarker"></span><span';
+	(values[3].toLowerCase() == 'true') && (result += ' class="topPriority" ');
+	result += '>' + values[2] + '</span>';
+	
+	return result;
+};

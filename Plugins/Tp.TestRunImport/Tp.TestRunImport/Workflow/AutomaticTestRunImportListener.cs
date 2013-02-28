@@ -1,11 +1,15 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Cache;
+using System.Security;
 using System.Xml;
 using NServiceBus;
 using Tp.Integration.Common;
@@ -55,15 +59,33 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 			{
 				_log.InfoFormat("Started synchronizing at {0}", DateTime.Now);
 
-				var uri = new Uri(profile.ResultsFilePath);
 				var lastModifyResults = _storageRepository.Get<LastModifyResult>();
 				var lastModifyResult = lastModifyResults.Empty() ? new LastModifyResult() : lastModifyResults.Single();
+
+				var jenkinsHudsonLastCompletedBuildNumber = profile.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson ?
+					GetJenkinsHudsonLastCompletedBuildNumber(profile) : null;
+
+				if (profile.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson &&
+						(jenkinsHudsonLastCompletedBuildNumber == null || string.CompareOrdinal(lastModifyResult.ETagHeader, jenkinsHudsonLastCompletedBuildNumber) == 0))
+				{
+					_log.Info("No new modification of results source detected");
+					return;
+				}
+
+				var uri = profile.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson
+										? new Uri(string.Format("{0}/lastCompletedBuild/testReport/api/xml", profile.ResultsFilePath.TrimEnd(new[] { '/', '\\' })))
+										: new Uri(profile.ResultsFilePath);
 				var factoryResult = _streamFactory.OpenStreamIfModified(uri, lastModifyResult, profile.PassiveMode);
 
 				_log.InfoFormat("{0} modification of results source detected", factoryResult == null ? "No new" : "New");
 
 				if (factoryResult != null)
 				{
+					if (profile.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson)
+					{
+						factoryResult.LastModifyResult.ETagHeader = jenkinsHudsonLastCompletedBuildNumber;
+					}
+
 					lastModifyResults.Clear();
 					lastModifyResults.Add(factoryResult.LastModifyResult);
 
@@ -74,7 +96,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 							try
 							{
 								var result = _resultsReaderFactory.GetResolver(profile, reader).GetTestRunImportResults();
-								_log.InfoFormat("{0} items for import detected in resutls source", result.Count == 0 ? "No" : result.Count.ToString());
+								_log.InfoFormat("{0} items for import detected in resutls source", result.Count == 0 ? "No" : result.Count.ToString(CultureInfo.InvariantCulture));
 								if (result.Count > 0)
 								{
 									_localBus.SendLocal(new TestRunImportResultDetectedLocalMessage
@@ -168,6 +190,51 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 					caseTestPlanDto.TestPlanName = message.Dto.Name;
 					_storageRepository.Get<TestCaseTestPlanDTO>(caseTestPlanDto.TestCaseTestPlanID.ToString()).ReplaceWith(caseTestPlanDto);
 				}
+			}
+		}
+
+		private string GetJenkinsHudsonLastCompletedBuildNumber(TestRunImportSettings profile)
+		{
+			if (profile.FrameworkType != FrameworkTypes.FrameworkTypes.JenkinsHudson) return null;
+
+			try
+			{
+				var request = WebRequest.Create(new Uri(string.Format("{0}/lastCompletedBuild/buildNumber", profile.ResultsFilePath.TrimEnd(new[] { '/', '\\' }))));
+
+				if (!(request is HttpWebRequest)) return null;
+
+				request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+				using (var response = (HttpWebResponse)request.GetResponse())
+				{
+					if (response.StatusCode != HttpStatusCode.OK) return null;
+					var responseStream = response.GetResponseStream();
+					if (responseStream == null) return null;
+					using (var reader = new StreamReader(responseStream))
+					{
+						return reader.ReadToEnd().Trim();
+					}
+				}
+			}
+			catch (UriFormatException ex)
+			{
+				_log.ErrorFormat("Specified path has invalid format: {0}", ex.Message);
+				throw new ApplicationException(string.Format("Specified path has invalid format: {0}", ex.Message), ex);
+			}
+			catch (NotSupportedException ex)
+			{
+				_log.ErrorFormat(string.Format("Specified path has invalid format: {0}", ex.Message), ex);
+				throw new ApplicationException(
+					string.Format("The request scheme specified in requestUri is not registered: {0}", ex.Message), ex);
+			}
+			catch (SecurityException ex)
+			{
+				_log.ErrorFormat(
+					"The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {0}",
+					ex.Message);
+				throw new ApplicationException(
+					string.Format(
+						"The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {0}",
+						ex.Message), ex);
 			}
 		}
 	}

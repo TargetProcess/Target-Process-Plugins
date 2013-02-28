@@ -44,7 +44,17 @@ namespace Tp.Integration.Plugin.Common.Storage.Repositories
 		public AccountDomainObject GetBy(AccountName accountName)
 		{
 			var account = _accountPersister.GetBy(accountName);
+			if(account == null)
+			{
+				return null;
+			}
+
 			return CreateAccount(account);
+		}
+
+		public void Remove(AccountName accountName)
+		{
+			_accountPersister.Remove(accountName);
 		}
 
 		private AccountDomainObject CreateAccount(Account account)

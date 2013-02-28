@@ -27,14 +27,13 @@ namespace Tp.Core
 		/// <summary>
 		/// A regular expression to validate email addresses.
 		/// </summary>
-		public static readonly Regex EmailRegex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
-
+		public static readonly Regex EmailRegex = new Regex(@"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$", RegexOptions.IgnoreCase);
 		/// <summary>
 		/// Verify whether string is a valid email address.
 		/// </summary>
 		/// <param name="value">A string.</param>
 		/// <returns><code>true</code> if valid email address, <code>false</code> otherwise.</returns>
-		public static bool IsEmail(string value)
+		public static bool IsEmail(this string value)
 		{
 			return !String.IsNullOrEmpty(value) && EmailRegex.IsMatch(value);
 		}
@@ -156,11 +155,6 @@ namespace Tp.Core
 			return result;
 		}
 
-		public static string[] ToStringArray(this IList<int> ids)
-		{
-			return ids.ToStringList().ToArray();
-		}
-
 		public static string GetLastWord(string name)
 		{
 			if (String.IsNullOrEmpty(name))
@@ -222,61 +216,6 @@ namespace Tp.Core
 				result[off++] = Char.ToLowerInvariant(c);
 			}
 			return off > 0 ? new string(result, 0, off) : null;
-		}
-
-		/// <summary>
-		/// Trim contents of the specified strign builder in place.
-		/// </summary>
-		/// <param name="s">A string builder whose contents to trim.</param>
-		/// <returns>The same instance as <paramref name="s"/> for fluent interface.</returns>
-		public static StringBuilder Trim(this StringBuilder s)
-		{
-			if (s == null)
-			{
-				throw new ArgumentNullException("s");
-			}
-			int length = s.Length;
-			if (length == 0)
-			{
-				return s;
-			}
-			int i;
-			for (i = 0; i < length; i++)
-			{
-				if (!Char.IsWhiteSpace(s[i]))
-				{
-					break;
-				}
-			}
-			int j;
-			for (j = length - 1; j > i; j--)
-			{
-				if (!Char.IsWhiteSpace(s[j]))
-				{
-					break;
-				}
-			}
-			s.Remove(0, i);
-			s.Length = j + 1 - i;
-			return s;
-		}
-
-		public static bool Match(this string value, string pattern)
-		{
-			var regex = new Regex(pattern);
-			return regex.Match(value).Success;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="pattern"></param>
-		/// <returns></returns>
-		public static string GetMatch(this string value, string pattern)
-		{
-			var regex = new Regex(pattern);
-			return regex.Match(value).Value;
 		}
 
 		public static string GetGroupMatch(this string value, string pattern)

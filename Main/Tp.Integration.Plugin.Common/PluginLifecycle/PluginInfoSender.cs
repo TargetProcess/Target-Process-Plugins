@@ -15,6 +15,8 @@ using Tp.Integration.Plugin.Common.Mashup;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
+	using System;
+
 	public abstract class PluginInfoSender
 	{
 		protected PluginInfoSender()
@@ -100,11 +102,14 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 
 		protected void SendPluginScriptMessages()
 		{
+			var log = ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType());
+
+			log.Info("Processing plugin mashups");
+
 			var pluginMashupRepository = ObjectFactory.TryGetInstance<IPluginMashupRepository>() ??
 			                             new DefaultPluginMashupRepository();
 
 			var scriptMessages = new List<PluginMashupMessage>();
-			var log = ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType());
 			foreach (var pluginMashup in pluginMashupRepository.PluginMashups)
 			{
 				if (pluginMashup.IsValid)
@@ -125,7 +130,20 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 
 			if (scriptMessages.Any())
 			{
-				Bus.Send(scriptMessages.ToArray());
+				try
+				{
+					var messages = scriptMessages.ToArray();
+					log.InfoFormat("Mashup script count is {0}", messages.Length);
+					Bus.Send(messages);
+				}
+				catch (Exception e)
+				{
+					log.Fatal("Error sending plugin mashups", e);
+				}
+			}
+			else
+			{
+				log.Info("No mashup scripts found");
 			}
 		}
 	}

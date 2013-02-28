@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/model-base","tau/models/board.editor/board.filter.help"],function(_,BaseModel,Help){return BaseModel.extend({"bus settings.changed":function(evt,settings){var self=this,data={data:{types:_.map(settings.parameters.definition.cells.items,function(item){return item.id})}};(new Help).get(data).done(function(r){self.fire("refresh.help.content",r)})}})})

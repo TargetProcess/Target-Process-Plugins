@@ -1,11 +1,12 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System;
 using System.Linq;
 using NServiceBus;
+using StructureMap;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Plugin.Common.Domain;
 
@@ -28,6 +29,15 @@ namespace Tp.Integration.Plugin.Common.Gateways
 		{
 			if (_pluginContext.ProfileName.IsEmpty)
 			{
+				if (!_profileCollection.Any())
+				{
+					var singleProfileProvider = ObjectFactory.TryGetInstance<ITargetProcessMessageWhenNoProfilesHandler>();
+					if (singleProfileProvider != null)
+					{
+						singleProfileProvider.Handle(message);
+					}
+				}
+
 				DispatchToProfiles(message, (x, y) => x.Send(y));
 			}
 		}

@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/external"],function(_,$,Class){return Class.extend({init:function(config){config=config||{},this._super(config)},setHash:function(hashStr){this._super(hashStr),this.triggerHashChange()}})})

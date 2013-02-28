@@ -2,10 +2,9 @@
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
@@ -24,7 +23,9 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		private static IEnumerable<Mashup> ScanForMashups(string mashupsPhysicalPath)
 		{
 			if (!Directory.Exists(mashupsPhysicalPath))
-				return new Mashup[] {};
+			{
+				return new Mashup[] { };
+			}
 
 			var mashups = new List<Mashup>();
 			var directories = GetMashupsDirectories(mashupsPhysicalPath);
@@ -33,17 +34,17 @@ namespace Tp.Integration.Messages.PluginLifecycle
 			{
 				var baseDir = directory;
 				var configs = Directory.GetFiles(directory, "*.cfg");
-				var mashupConfig = ReadPlaceholdersFromConfig(configs);
+				var mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines));
 
 				var mashupName = new DirectoryInfo(directory).Name;
 				var files = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
 				
 				mashups.Add(new Mashup
-				            	{
-									MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
-				            		MashupName = mashupName,
-				            		MashupConfig = mashupConfig
-				            	});
+					{
+						MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
+						MashupName = mashupName,
+						MashupConfig = mashupConfig
+					});
 			}
 
 			return mashups;
@@ -57,33 +58,6 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		private static string MakePathRelative(string path, string basePath)
 		{
 			return path.Replace(basePath, ".");
-		}
-
-		private static MashupConfig ReadPlaceholdersFromConfig(string[] filePaths)
-		{
-			var accounts = new List<string>();
-			var placeholders = new List<string>();
-			foreach (var path in filePaths)
-			{
-				foreach (var line in File.ReadAllLines(path))
-				{
-					accounts.AddRange(ExtractValues(line, MashupConfig.AccountsConfigPrefix));
-					placeholders.AddRange(ExtractValues(line, MashupConfig.PlaceholderConfigPrefix));
-				}
-			}
-
-			return new MashupConfig(placeholders.Select(x => x.Trim().ToLower()).Distinct().ToArray(),
-			                        accounts.Select(x => x.Trim().ToLower()).Distinct().Select(x => new AccountName(x)).ToArray());
-		}
-
-		private static IEnumerable<string> ExtractValues(string line, string matchString)
-		{
-			if (line.Contains(matchString))
-			{
-				var values = line.Replace(matchString, string.Empty);
-				return string.IsNullOrEmpty(values) ? new string[] {} : values.Split(',');
-			}
-			return new string[] {};
 		}
 
 		public IEnumerator<Mashup> GetEnumerator()

@@ -1,1 +1,1 @@
-define(["libs/d3/d3.v2.min","jQuery"],function(a,$){})
+define(["libs/d3/d3.v2.min","jQuery"],function(d3,$){})

@@ -54,7 +54,25 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters
 				var dataLoadOptions = new DataLoadOptions();
 				dataLoadOptions.LoadWith<Account>(a => a.Profiles);
 				context.LoadOptions = dataLoadOptions;
-				return context.Accounts.Single(x => x.Plugin.Name == _pluginName && x.Name == accountName.Value);
+				return context.Accounts.SingleOrDefault(x => x.Plugin.Name == _pluginName && x.Name == accountName.Value);
+			}
+		}
+
+		public void Remove(AccountName accountName)
+		{
+			using (var context = CreateDataContext())
+			{
+				var dataLoadOptions = new DataLoadOptions();
+				dataLoadOptions.LoadWith<Account>(a => a.Profiles);
+				context.LoadOptions = dataLoadOptions;
+
+				var account = context.Accounts.SingleOrDefault(x => x.Plugin.Name == _pluginName && x.Name == accountName.Value);
+				if(account == null)
+				{
+					return;
+				}
+				context.Accounts.DeleteOnSubmit(account);
+				context.SubmitChanges();
 			}
 		}
 

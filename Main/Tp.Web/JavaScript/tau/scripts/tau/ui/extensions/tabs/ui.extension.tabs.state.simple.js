@@ -1,1 +1,1 @@
-define(["Underscore","tau/ui/extensions/tabs/ui.extension.tabs.state.base"],function(_,a){var b=a.extend({});return b})
+define(["Underscore","tau/ui/extensions/tabs/ui.extension.tabs.state.base"],function(_,ExtensionBase){var extension=ExtensionBase.extend({});return extension})

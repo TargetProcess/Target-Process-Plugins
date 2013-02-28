@@ -128,7 +128,7 @@ namespace Tp.Bugzilla.Synchronizer
 			if (message.Dtos != null)
 			{
 				Data.UsersRetrievedCount += message.Dtos.Length;
-				foreach (var userDto in message.Dtos.Where(u => u.IsActiveNotDeletedUser()))
+				foreach (var userDto in message.Dtos.Where(u => u.IsNotDeletedUser()))
 				{
 					StorageRepository().Get<UserDTO>(userDto.ID.ToString()).Add(userDto);
 					StorageRepository().Get<UserDTO>(userDto.Email).Add(userDto);

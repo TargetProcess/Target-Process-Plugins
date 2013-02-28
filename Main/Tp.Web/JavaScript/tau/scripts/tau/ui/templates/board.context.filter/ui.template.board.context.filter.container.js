@@ -1,0 +1,1 @@
+define(["tau/ui/templates/board.context.filter/ui.template.board.context.filter"],function(){return{name:"board.context.filter.container",engine:"jqote2",markup:['<%= fn.sub("board.context.filter", this) %>']}})

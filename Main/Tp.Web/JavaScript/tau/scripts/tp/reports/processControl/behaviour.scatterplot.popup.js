@@ -1,0 +1,1 @@
+define([],function(){return{create:function(c){var cfg=c.configurator;return{click:function(r){var d=r.data;cfg.service("navigator").to(d.type+"/"+d.id)}}}}})

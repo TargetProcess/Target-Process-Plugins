@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(_,$,ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt){var $element=evt.data.element,self=this;$element.delegate("[role=collapser]","click",function(){$(this).toggleClass("tau-collapsed"),self.fire("collapser.switched",{})})}})})

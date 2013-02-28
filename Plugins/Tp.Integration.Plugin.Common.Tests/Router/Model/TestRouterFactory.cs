@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using Tp.Integration.Messages.ServiceBus.Transport.Router;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Pump;
@@ -21,7 +22,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 			_queues = new Dictionary<string, MessageQueue<TestMessage>>();
 		}
 
-		public IMessageSource<TestMessage> CreateSource(string sourceName)
+		public IMessageSource<TestMessage> CreateSource(string sourceName, bool isChild)
 		{
 			MessageQueue<TestMessage> messageQueue = GetOrCreateMessageQueue(sourceName);
 			return new MessageSource<TestMessage>(sourceName, GetMessageStream(messageQueue));

@@ -1,1 +1,1 @@
-define(["tau/core/model.editable.base"],function(a){return a.extend({name:"Entity state editable","bus dataBind":function(){this.fire("permissionsReady",{editable:!0})}})})
+define(["tau/core/model.editable.base"],function(ModelBase){return ModelBase.extend({name:"Entity state editable","bus dataBind":function(){this.fire("permissionsReady",{editable:!0})}})})

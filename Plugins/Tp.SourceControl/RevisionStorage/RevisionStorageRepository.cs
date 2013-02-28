@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
-using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.RevisionStorage
@@ -15,7 +14,6 @@ namespace Tp.SourceControl.RevisionStorage
 	public abstract class RevisionStorageRepository : IRevisionStorageRepository
 	{
 		private readonly IStorageRepository _repository;
-
 		private readonly IProfileCollectionReadonly _profiles;
 
 		protected RevisionStorageRepository(IStorageRepository repository, IProfileCollectionReadonly profiles)
@@ -72,10 +70,10 @@ namespace Tp.SourceControl.RevisionStorage
 					new
 						{
 							Revisions = profile.Get<RevisionIdRelation>(storageNames),
-							Profile = profile.GetProfile<ISourceControlConnectionSettingsSource>()
+							Profile = profile
 						})
 				.SelectMany(
-					x => x.Revisions.Select(rev => new ImportedRevisionInfo {ConnectionSettings = x.Profile, RevisionId = rev}))
+					x => x.Revisions.Select(rev => new ImportedRevisionInfo {Profile = x.Profile, RevisionId = rev}))
 					.ToList();
 		}
 	}

@@ -1,0 +1,1 @@
+define(["tau/core/extension.base"],function(ExtensionBase){return ExtensionBase.extend({"bus childComponentCreated":function(evt){var childBus=evt.data,bus=this.bus,originalFire=childBus.fire,childName=childBus.name;childBus.fire=function(eventName,data){var params=_.toArray(arguments);originalFire.apply(childBus,params),bus.fire(childName+"."+eventName,data)}}})})

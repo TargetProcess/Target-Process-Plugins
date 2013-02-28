@@ -238,7 +238,9 @@ Tp.controls.kanbanboard.Item = Ext.extend(Ext.BoxComponent, {
 		if (entityType == 'task') {
 		}
 		else {
-			this.addClass('kanban-item-priority-' + this.entity.priorityImportance);
+            this.removeClass(this.currentPriorityImportanceCls);
+            this.currentPriorityImportanceCls = 'kanban-item-priority-' + this.entity.priorityImportance;
+			this.addClass(this.currentPriorityImportanceCls);
 		}
 		this.addClass('kanban-item-name');
 

@@ -37,26 +37,26 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 			_receiveTransactionType = receiveTransactionType;
 		}
 
-		public IMessageSource<MessageEx> CreateSource(string sourceName)
+		public IMessageSource<MessageEx> CreateSource(string sourceName, bool isChild)
 		{
-			return new MessageSource<MessageEx>(sourceName, GetMessageStream(sourceName));
+			return new MessageSource<MessageEx>(sourceName, GetMessageStream(sourceName, isChild));
 		}
 
-		private IEnumerable<IObservable<MessageEx>> GetMessageStream(string sourceName)
+		private IEnumerable<IObservable<MessageEx>> GetMessageStream(string sourceName, bool isChild)
 		{
 			MessageQueue queue = MessageQueueFactory.GetOrCreateMessageQueue(sourceName);
 			var messageOrigin = new MessageOrigin
 			{
-				Address = MsmqUtilities.GetIndependentAddressForQueue(queue),
-				FormatName = queue.FormatName,
-				Name = queue.QueueName
+				Name = sourceName
 			};
 
 			Func<IObservable<Message>> recieveObservableFactory = Observable.FromAsyncPattern(
-				(callback, obj) => 
-							//Wait infinite time here. Otherwise memory leak occurs.
-							queue.BeginPeek(TimeSpan.FromMilliseconds(UInt32.MaxValue), obj, callback),
-				asyncResult => EndPeekAndReceive(sourceName + "~source", queue, asyncResult));
+				(callback, obj) =>
+					{
+						//Wait infinite time here. Otherwise memory leak occurs.
+						return queue.BeginPeek(TimeSpan.FromMilliseconds(UInt32.MaxValue), obj, callback);
+					},
+				asyncResult => EndPeekAndReceive(queue, asyncResult));
 			while(true)
 			{
 				var messagesStream = recieveObservableFactory().Select(m => new MessageEx{
@@ -68,15 +68,24 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 															{
 																if (e.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
 																{
+																	_log.Info(LoggerContext.New(sourceName), "Msmq peek timeout occurs");
 																	return Observable.Return<MessageEx>(null);
 																}
 																if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 																{
 																	WindowsIdentity windowsIdentity = WindowsIdentity.GetCurrent();
-																	string accessDeniedMessage = string.Format("Do not have permission to access queue [{0}]. Make sure that the current user [{1}] has permission to Send, Receive, and Peek  from this queue. NServiceBus will now exit.", queue.QueueName, windowsIdentity != null ? windowsIdentity.Name : "no windows identity");
+
+																	string accessDeniedMessage = string.Format("Do not have permission to access queue [{0}]. Make sure that the current user [{1}] has permission to Send, Receive, and Peek  from this queue.", queue.QueueName, windowsIdentity != null ? windowsIdentity.Name : "no windows identity");
+																	EventLog.WriteEntry("TargetProcess Plugin", accessDeniedMessage, EventLogEntryType.Error);
 																	_log.Fatal(LoggerContext.New(sourceName), accessDeniedMessage, e);
-																	Thread.Sleep(10000); //long enough for someone to notice
-																	Process.GetCurrentProcess().Kill();
+
+																	//kill the process only if we cannot access main queue (in case of OnDemand it is router queue, in case of OnSite it is main queue)
+																	if (!isChild)
+																	{
+																		_log.Fatal(LoggerContext.New(sourceName), "NServiceBus will now exit.", e);
+																		Thread.Sleep(10000); //long enough for someone to notice
+																		Process.GetCurrentProcess().Kill();
+																	}
 																}
 																var message = string.Format("Problem in peeking/receiving a message from queue: {0}", Enum.GetName(typeof(MessageQueueErrorCode), e.MessageQueueErrorCode));
 																if (e.MessageQueueErrorCode == MessageQueueErrorCode.ServiceNotAvailable || e.MessageQueueErrorCode == MessageQueueErrorCode.OperationCanceled)
@@ -108,11 +117,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 		}
 
 		[DebuggerNonUserCode]
-		private Message EndPeekAndReceive(string queueShortName, MessageQueue queue, IAsyncResult asyncResult)
+		private Message EndPeekAndReceive(MessageQueue queue, IAsyncResult asyncResult)
 		{
 			var message = queue.EndPeek(asyncResult);
-			//var message = queue.Receive(TimeSpan.FromSeconds(0), _receiveTransactionType);
-			_log.Debug(LoggerContext.New(queueShortName), "End peek and receive msg.");
 			return message;
 		}
 
@@ -129,14 +136,14 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 			}
 			Interlocked.Increment(ref _childrenCount);
 			var consumer = new MessageConsumer<MessageEx>(messageSource, Scheduler.ThreadPool, _log);
-			consumer.AddObserver(new StopwatchObserver<MessageEx>(_stopwatch, s => _log.Debug(LoggerContext.New(consumer.Name), s), e => _log.Error(LoggerContext.New(consumer.Name), string.Empty, e), null, () => Interlocked.Decrement(ref _childrenCount) == 0));
+			consumer.AddObserver(new StopwatchObserver<MessageEx>(_stopwatch, s => _log.Debug(LoggerContext.New(consumer.Name), s), s => _log.Info(LoggerContext.New(consumer.Name), s), e => _log.Error(LoggerContext.New(consumer.Name), string.Empty, e), null, () => Interlocked.Decrement(ref _childrenCount) == 0));
 			return consumer;
 		}
 
 		public IMessageConsumer<MessageEx> CreateRouter(IMessageSource<MessageEx> messageSource, IProducerConsumerFactory<MessageEx> factory, Func<MessageEx, string> routeBy)
 		{
 			var router = new MsmqMessageRouter(messageSource, factory, routeBy, Scheduler.CurrentThread, _log);
-			router.AddObserver(new StopwatchObserver<MessageEx>(Stopwatch.StartNew(), s => _log.Debug(LoggerContext.New(router.Name), s), e => _log.Error(LoggerContext.New(router.Name), string.Empty, e)));
+			router.AddObserver(new StopwatchObserver<MessageEx>(Stopwatch.StartNew(), s => _log.Debug(LoggerContext.New(router.Name), s), s => _log.Info(LoggerContext.New(router.Name), s), e => _log.Error(LoggerContext.New(router.Name), string.Empty, e)));
 			return router;
 		}
 	}

@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using JetBrains.Annotations;
+using Tp.Core.Annotations;
 
 // ReSharper disable CheckNamespace
 

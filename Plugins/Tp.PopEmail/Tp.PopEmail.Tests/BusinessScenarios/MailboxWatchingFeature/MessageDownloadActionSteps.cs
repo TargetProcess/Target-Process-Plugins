@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Linq;
 using MailBee.Mime;
 using NBehave.Narrator.Framework;

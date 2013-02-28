@@ -176,51 +176,55 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Custom Field15.</value>
 		[XmlElement(Order = 26)]public String CustomField15 { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Comment User ID. User who added last comment
         /// </summary>
         /// <value>The Last Comment User ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 27)]public Int32? LastCommentUserID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Owner ID. Person who added the entity
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 28)]public Int32? OwnerID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Last Editor ID. Person who edited entity last time
         /// </summary>
         /// <value>The Last Editor ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 29)]public Int32? LastEditorID { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Project ID. Project to which release belongs.
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
 		[XmlElement(Order = 30)]public Int32? ProjectID { get; set; }
-		
 
-		
 		/// <summary>
         /// Gets or sets the Entity Type Name. Type of the entity. For example, Bug, TestCase, Task
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
 		[XmlElement(Order = 31)]public virtual string EntityTypeName { get; set; }
-		
+
 		/// <summary>
         /// Gets or sets the Project Name. Project to which release belongs.
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
 		[XmlElement(Order = 32)]public virtual string ProjectName { get; set; }
-		
+
+		/// <summary>
+        /// Gets or sets the Entity Type ID. Type of the entity. For example, Bug, TestCase, Task
+        /// </summary>
+        /// <value>The Entity Type ID.</value>
+		[ForeignKey]
+		[XmlElement(Order = 33)]public Int32? EntityTypeID { get; set; }
 	}
 	
 	
@@ -333,6 +337,10 @@ namespace Tp.Integration.Common
         /// Last Editor ID
         /// </summary>		
 		LastEditorID,
+        /// <summary>
+        /// Entity Type ID
+        /// </summary>		
+		EntityTypeID,
         /// <summary>
         /// Project ID
         /// </summary>		

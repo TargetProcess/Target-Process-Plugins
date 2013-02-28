@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19379162-1B1D-402E-9025-F01ED76598C9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Mercurial</RootNamespace>
+    <AssemblyName>Tp.Mercurial</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>libs\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharpen">
+      <HintPath>libs\Sharpen.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tp.Service.Proxies, Version=2.15.0.15001, Culture=neutral, PublicKeyToken=ee2a1130677e5334, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DeleteProfileCommandHandler.cs" />
+    <Compile Include="MercurialCheckConnectionCommand.cs" />
+    <Compile Include="MercurialCurrentProfileToConnectionSettingsAdapter.cs" />
+    <Compile Include="MercurialPluginProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RevisionStorage\MercurialRevisionStorageRepository.cs" />
+    <Compile Include="StructureMap\MercurialRegistry.cs" />
+    <Compile Include="VersionControlSystem\ChangesetExtensions.cs" />
+    <Compile Include="VersionControlSystem\DateTimeExtensions.cs" />
+    <Compile Include="VersionControlSystem\FileActionExtensions.cs" />
+    <Compile Include="VersionControlSystem\MercurialCheckConnectionErrorResolver.cs" />
+    <Compile Include="VersionControlSystem\MercurialClient.cs" />
+    <Compile Include="VersionControlSystem\MercurialRepositoryFolder.cs" />
+    <Compile Include="VersionControlSystem\MercurialRevisionId.cs" />
+    <Compile Include="VersionControlSystem\MercurialRevisionIdComparer.cs" />
+    <Compile Include="VersionControlSystem\MercurialVersionControlSystem.cs" />
+    <Compile Include="VersionControlSystem\InvalidRevisionException.cs" />
+    <Compile Include="Workflow\MercurialUserMapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
+      <Link>App.config</Link>
+    </None>
+    <None Include="Install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\ViewDiff\placeholders.cfg" />
+    <None Include="packages.config" />
+    <None Include="PluginSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Uninstall.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mashups\ProfileEditor\ProfileEditor.js" />
+    <Content Include="Mashups\ProfileEditor\registerMashup.js" />
+    <Content Include="Mashups\ProfileEditor\userMappingEditor.js" />
+    <Content Include="Mashups\Tests\.gitignore" />
+    <Content Include="Mashups\Tests\checkConnection.tests.js" />
+    <Content Include="Mashups\Tests\index.html" />
+    <Content Include="Mashups\Tests\Mocks\commandGatewayMock.js" />
+    <Content Include="Mashups\Tests\Mocks\navigatorMock.js" />
+    <Content Include="Mashups\Tests\Mocks\profilenamesourcemock.js" />
+    <Content Include="Mashups\Tests\Mocks\profilerepositorymock.js" />
+    <Content Include="Mashups\Tests\plugins.css" />
+    <Content Include="Mashups\Tests\profileEditor.tests.js" />
+    <Content Include="Mashups\Tests\testConfiguration.js" />
+    <Content Include="Mashups\Tests\userMappingEditor.tests.js" />
+    <Content Include="Mashups\Tests\userMappingLine.tests.js" />
+    <Content Include="Mashups\ViewDiff\RegisterMashup.js" />
+    <Content Include="mercurial-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tp.SourceControl\Tp.SourceControl.csproj">
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mercurial.Net\Mercurial.Net.csproj">
+      <Project>{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}</Project>
+      <Name>Mercurial.Net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\*.*  $(TargetDir)Mashups\*.* /Y /E
+
+
+
+echo F | move /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

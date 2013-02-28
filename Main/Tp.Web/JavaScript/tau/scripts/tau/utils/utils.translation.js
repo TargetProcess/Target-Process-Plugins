@@ -1,1 +1,1 @@
-define(["Underscore"],function(_){var a={pluralize:function(a,b){var c=_.isArray(a)?a:a.split("|"),d=function(a){return a===1?0:1},e=d(b);return c[e]?c[e]:c[0]}};return a})
+define(["Underscore"],function(_){var Translation={pluralize:function(source,count){var sourceArr=_.isArray(source)?source:source.split("|"),rule=function(count){return count===1?0:1},key=rule(count);return sourceArr[key]?sourceArr[key]:sourceArr[0]}};return Translation})

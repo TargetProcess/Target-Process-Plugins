@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(templates){var config={name:"container.empty.master",engine:"jqote2",markup:['<div role="app-body" class="tau-app-body">','<div role="main" class="tau-layout tau-layout-board"></div>',"</div>"],dependencies:[]};return templates.register(config)})

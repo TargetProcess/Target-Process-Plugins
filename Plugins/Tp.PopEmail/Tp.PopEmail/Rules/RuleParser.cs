@@ -43,7 +43,7 @@ namespace Tp.PopEmailIntegration.Rules
 					continue;
 				}
 
-				_log.InfoFormat("rule '{0}' parsed successfully and prepeared to process", ruleLine);
+				_log.InfoFormat("rule '{0}' parsed successfully and prepared to process", ruleLine);
 
 				var thenClause = _thenClauseFactory.CreateBy(tree);
 				var whenClauses = new WhenClauseFactory(thenClause);

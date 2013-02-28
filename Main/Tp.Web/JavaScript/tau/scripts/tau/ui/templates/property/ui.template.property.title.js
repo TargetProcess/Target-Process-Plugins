@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(templates){var config={name:"property.title",engine:"jqote2",markup:['<div class="user-title property-text user-title-<%! this.name %>" data-placeholder="<%! this.placeholderText %>">',"<%! _.asString(this.output) %>","</div>"]};return templates.register(config)})

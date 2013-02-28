@@ -6,9 +6,7 @@ tau.mashups
     .addModule("Bugzilla/UserMappingEditor", function (usersPopoverWidget, userRepository) {
         function userMappingEditor(config) {
             this._create(config);
-        }
-
-        ;
+        };
 
         userMappingEditor.prototype = {
             template:null,
@@ -24,7 +22,7 @@ tau.mashups
                 this.userRepository = new userRepository();
             },
 
-            render:function () {
+            render: function () {
                 this.lines = [];
                 this.users = [];
                 this.placeholder.html('');
@@ -69,7 +67,6 @@ tau.mashups
             },
 
             _renderUserMappingLines:function (userMappings) {
-                var that = this;
                 var userMappingLineEditors = $(userMappings).map(function () {
                     return new userMappingLine({ model:this});
                 });

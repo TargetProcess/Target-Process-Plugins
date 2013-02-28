@@ -27,6 +27,15 @@ namespace Tp.Integration.Testing.Common.Persisters
 			account.Profiles.AddRange(ObjectFactory.GetInstance<IProfilePersister>().GetAll(account.Name));
 		}
 
+		private void RemoveProfiles(Account account)
+		{
+			account.Profiles.Clear();
+			foreach (var profile in ObjectFactory.GetInstance<IProfilePersister>().GetAll(account.Name).ToList())
+			{
+				account.Profiles.Remove(profile);
+			}
+		}
+
 		public Account Add(AccountName accountName)
 		{
 			var account = new Account {Name = accountName.Value};
@@ -37,8 +46,24 @@ namespace Tp.Integration.Testing.Common.Persisters
 		public Account GetBy(AccountName accountName)
 		{
 			var account = _accounts.FirstOrDefault(x => x.Name == accountName);
+			if(account == null)
+			{
+				return null;
+			}
+
 			LoadProfiles(account);
 			return account;
+		}
+
+		public void Remove(AccountName accountName)
+		{
+			var account = _accounts.FirstOrDefault(x => x.Name == accountName);
+			if (account == null)
+			{
+				return;
+			}
+
+			RemoveProfiles(account);
 		}
 	}
 }

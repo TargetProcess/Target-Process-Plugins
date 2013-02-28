@@ -13,7 +13,6 @@ using Tp.BugTracking.ImportToTp;
 using Tp.Bugzilla.Tests.Synchronization.Mapping;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
-using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Testing.Common.NBehave;
 using Tp.Testing.Common.NUnit;
@@ -256,8 +255,8 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Given("profile was synchronized last time on '$lastSyncDate'")]
 		public void SetLastSyncDate(string lastSyncDate)
 		{
-			ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().ReplaceWith(
-				new LastSyncDate(DateTime.Parse(lastSyncDate)));
+			ObjectFactory.GetInstance<IStorageRepository>().Get<Tp.Integration.Messages.Ticker.LastSyncDate>().ReplaceWith(
+				new Tp.Integration.Messages.Ticker.LastSyncDate(DateTime.Parse(lastSyncDate)));
 		}
 
 		[Given("bug $bugId has status '$bugStatus'")]

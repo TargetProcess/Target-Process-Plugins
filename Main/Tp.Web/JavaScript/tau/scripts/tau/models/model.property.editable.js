@@ -1,1 +1,1 @@
-define(["tau/core/model.editable.base"],function(a){return a.extend({"bus beforeInit+dataBind":function(a){this.fire("permissionsReady",{editable:this.config.editable!=0})}})})
+define(["tau/core/model.editable.base"],function(ModelBase){return ModelBase.extend({"bus beforeInit+dataBind":function(evt){this.fire("permissionsReady",{editable:this.config.editable!=0})}})})

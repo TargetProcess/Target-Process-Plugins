@@ -8,12 +8,18 @@ Tp.components.LongRunningTask = Ext.extend(Object, {
 	_disposed: false,
 	interval: 600,
 
-	constructor: function (items, itemHandler, finalHandler, itemsPerIteration) {
+
+
+	constructor: function (items, itemHandler, finalHandler, itemsPerIteration,itemPredicate) {
 		Tp.util.validateForNulls([items, itemHandler]);
 		this._items = items;
 		this._itemHandler = itemHandler;
 		this._finalHandler = finalHandler || function () { };
 		this._itemsPerIteration = itemsPerIteration || 50;
+
+        this.itemPredicate = itemPredicate || function(item){
+            return item.rendered;
+        };
 	},
 
 	init: function () {
@@ -45,14 +51,15 @@ Tp.components.LongRunningTask = Ext.extend(Object, {
 
 		if (this._items[this._index + 1].rendered) {
 			while (this._index < this._items.length - 1) {
-				if (!this._items[this._index + 1].rendered) {
+                var item = this._items[this._index + 1];
+                if (!this.itemPredicate(item)) {
 					break;
 				}
 				this._index++;
 			}
 		} else {
 			while (this._index >= 0) {
-				if (this._items[this._index].rendered) {
+				if (this.itemPredicate(this._items[this._index])) {
 					break;
 				}
 				this._index--;

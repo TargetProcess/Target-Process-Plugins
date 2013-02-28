@@ -55,14 +55,12 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.MSMQ, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\Libs\NServiceBus\src\external-bin\Interop.MSMQ.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Interop.MSMQ">
+      <HintPath>..\..\Libs\NServiceBus\binaries\Interop.MSMQ.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3">
       <HintPath>..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
@@ -145,8 +143,13 @@
     <Compile Include="FileStorage\IProfileFileStorage.cs" />
     <Compile Include="FileStorage\ProfileFileStorage.cs" />
     <Compile Include="FileStorage\ProfileFileStorageSafeNull.cs" />
+    <Compile Include="Handlers\AccountHandler.cs" />
     <Compile Include="Handlers\SyncNowMessageHandler.cs" />
+    <Compile Include="ITargetProcessConditionalMessageRouter.cs" />
+    <Compile Include="ITargetProcessMessageWhenNoProfilesHandler.cs" />
+    <Compile Include="PluginCommand\Embedded\DeleteUnusedQueuesCommand.cs" />
     <Compile Include="PluginDataFolder.cs" />
+    <Compile Include="PluginLifecycle\RouterChildTagsSource.cs" />
     <Compile Include="PluginRuntime.cs" />
     <Compile Include="Domain\ProfileCollection.cs" />
     <Compile Include="Domain\ProfileCreationArgs.cs" />
@@ -246,6 +249,7 @@
     <Compile Include="Storage\Persisters\ProfileStorageCollection.cs" />
     <Compile Include="Storage\Persisters\ProfileToStorageAdapter.cs" />
     <Compile Include="Storage\Persisters\StorageName.cs" />
+    <Compile Include="MsmqHelper.cs" />
     <Compile Include="TpBus.cs" />
     <Compile Include="ICustomPluginSpecifyMessageHandlerOrdering.cs" />
     <Compile Include="ITpBus.cs" />
@@ -272,6 +276,7 @@
     <Compile Include="Validation\IValidatable.cs" />
     <Compile Include="Validation\PluginProfileError.cs" />
     <Compile Include="Validation\PluginProfileErrorCollection.cs" />
+    <Compile Include="Validation\PluginProfileErrorStatus.cs" />
     <Compile Include="Validation\PluginProfileValidationException.cs" />
     <Compile Include="Validation\ProfileDtoValidator.cs" />
   </ItemGroup>
@@ -290,6 +295,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

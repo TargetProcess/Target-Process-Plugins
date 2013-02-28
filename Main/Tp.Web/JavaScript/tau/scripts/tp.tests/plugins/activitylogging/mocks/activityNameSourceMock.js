@@ -1,1 +1,1 @@
-function ActivityNameSourceMock(a){this._create(a)}ActivityNameSourceMock.prototype={_create:function(a){this._profile="Profile#1"},setProfileName:function(a){this._profile=a},getProfileName:function(){return this._profile}}
+function ActivityNameSourceMock(config){this._create(config)}ActivityNameSourceMock.prototype={_create:function(config){this._profile="Profile#1"},setProfileName:function(profile){this._profile=profile},getProfileName:function(){return this._profile}}

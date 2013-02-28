@@ -40,6 +40,8 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		private bool autoSubscribe = true;
 
+		public string Proxy { get; set; }
+
 		/// <summary>
 		/// When set, when starting up, the bus performs 
 		/// a subscribe operation for message types for which it has
@@ -486,6 +488,12 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			return queueName.Replace(q, string.Format("{0}UI", q));
 		}
 
+		public static bool IsUiQueue(string queueName)
+		{
+			var q = MsmqUtilities.GetQueueNameFromLogicalName(queueName);
+			return q.EndsWith("UI");
+		}
+
 		void IBus.Reply(params IMessage[] messages)
 		{
 			ReplyInternal(_messageBeingHandled.ReturnAddress, messages);
@@ -595,6 +603,39 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			return ((IBus)this).Send(CreateInstance(messageConstructor));
 		}
 
+		private string ProcessByProxy(string destination)
+		{
+			if (string.IsNullOrWhiteSpace(Proxy) || Proxy.Equals(destination, StringComparison.InvariantCultureIgnoreCase))
+			{
+				return destination;
+			}
+
+			if (((IBusExtended)this).OutgoingHeaders.ContainsKey("ReturnAddress"))
+			{
+				// Proxy is alreadfy initialized.
+				return destination;
+			}
+
+			((IBusExtended)this).OutgoingHeaders.Add("ReturnAddress", destination);
+			((IBusExtended)this).OutgoingHeaders.Add("ReturnAddressWasSetByProxy", null);
+
+			if (IsUiQueue(destination))
+			{
+				return GetUiQueueName(this.Proxy);
+			}
+
+			return this.Proxy;
+		}
+
+		private void CleanUpProxyHeader()
+		{
+			if (((IBusExtended)this).OutgoingHeaders.ContainsKey("ReturnAddressWasSetByProxy"))
+			{
+				((IBusExtended) this).OutgoingHeaders.Remove("ReturnAddressWasSetByProxy");
+				((IBusExtended) this).OutgoingHeaders.Remove("ReturnAddress");
+			}
+		}
+
 		ICallback IBus.Send(params IMessage[] messages)
 		{
 			var destination = GetDestinationForMessageType(messages[0].GetType());
@@ -649,18 +690,28 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				throw new InvalidOperationException(
 					string.Format("No destination specified for message {0}. Message cannot be sent. Check the UnicastBusConfig section in your config file and ensure that a MessageEndpointMapping exists for the message type.", messages[0].GetType().FullName));
 
+			destination = ProcessByProxy(destination);
 			foreach (var id in SendMessage(new List<string> { destination }, correlationId, messageIntent, messages))
 			{
+				if (Log.IsInfoEnabled)
+				{
+					string log = "Sent with ID {0} to {1}. Data: ".Fmt(id, destination);
+					log += string.Join(", ", messages.Select(x => x.ToString()));
+
+					Log.Info(log);
+				}
+
 				var result = new Callback(id);
 				result.Registered += delegate(object sender, BusAsyncResultEventArgs args)
 				{
 					lock (messageIdToAsyncResultLookup)
 						messageIdToAsyncResultLookup[args.MessageId] = args.Result;
 				};
-
+				CleanUpProxyHeader();
 				return result;
 			}
 
+			CleanUpProxyHeader();
 			return null;
 		}
 
@@ -882,6 +933,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		{
 			Log.Info("Bus disposing");
 			transport.Dispose();
+			Log.Info("Bus disposed");
 		}
 
 
@@ -917,6 +969,8 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			}
 		}
 
+		public const string SourceQueue = "SourceQueue";
+
 		#endregion
 
 		#region receiving and handling
@@ -931,9 +985,10 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </remarks>
 		public void HandleMessage(TransportMessage m)
 		{
+			Log.Info("TpUnicastBus : begin calling handlers on message {0}".Fmt(m.Id));
 			Thread.CurrentPrincipal = GetPrincipalToExecuteAs(m.WindowsIdentityName);
 
-			((IBus)this).OutgoingHeaders.Clear();
+			PrepareForHandlingMessage();
 
 			ForwardMessageIfNecessary(m);
 
@@ -956,8 +1011,15 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				if (canDispatch)
 					DispatchMessageToHandlersBasedOnType(toHandle, toHandle.GetType());
 			}
+			Log.Info("TpUnicastBus : end calling handlers on message {0}".Fmt(m.Id));
 
 			ExtensionMethods.CurrentMessageBeingHandled = null;
+		}
+
+		public void PrepareForHandlingMessage()
+		{
+			IBus bus = this;
+			bus.OutgoingHeaders.Clear();
 		}
 
 		/// <summary>
@@ -1108,7 +1170,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				return;
 			}
 
-			Log.Info("Received message " + msg.Body[0].GetType().AssemblyQualifiedName + " with ID " + msg.Id + " from sender " + msg.ReturnAddress);
+			Log.Info("Received message " + msg.Body[0].GetType().Name + " with ID " + msg.Id + " from sender " + msg.ReturnAddress);
 
 			_messageBeingHandled = msg;
 			_handleCurrentMessageLaterWasCalled = false;

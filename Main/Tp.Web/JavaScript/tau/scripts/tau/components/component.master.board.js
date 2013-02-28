@@ -1,0 +1,1 @@
+define(["tau/components/component.page.base","tau/views/view.master.board"],function(BaseCreator,ViewType){return{create:function(componentContext){var componentConfig={name:"board page component",turnOffErrorEmiter:!0,extensions:[],ViewType:ViewType};return BaseCreator.create(componentConfig,componentContext)}}})

@@ -21,7 +21,6 @@ using Tp.Integration.Messages.ServiceBus;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
-using Tp.Integration.Plugin.Common.StructureMap;
 using Tp.Integration.Testing.Common;
 using Tp.Testing.Common.NBehave;
 using Tp.Testing.Common.NUnit;
@@ -61,6 +60,21 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			ObjectFactory.Initialize(x => x.AddRegistry(assemblyScannerRegistry));
 			var profile = new Profile();
 			profile.Initialized.Should(Be.False);
+		}
+
+		[Test]
+		public void DoNotCallInitializationSagaTwice()
+		{
+			var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof(BugInitializationSaga).Assembly,
+																		Assembly.GetExecutingAssembly());
+
+			var profile = transportMock.AddProfile("Profile");
+			profile.MarkAsInitialized();
+			profile.Save();
+
+			new BugInitializationSaga().Handle(new ProfileAddedMessage());
+
+			BugInitializationSaga.CallCount.Should(Be.EqualTo(0));
 		}
 
 		[Test]
@@ -174,6 +188,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public class BugInitializationSaga : NewProfileInitializationSaga<BugInitializationSaga.BugInitializationSagaData>,
 		                                     IHandleMessages<TestBugQueryResult>
 		{
+			public static int CallCount;
 			[Serializable]
 			public class BugInitializationSagaData : ISagaEntity
 			{
@@ -189,6 +204,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			protected override void OnStartInitialization()
 			{
+				CallCount++;
 				MarkAsComplete();
 			}
 

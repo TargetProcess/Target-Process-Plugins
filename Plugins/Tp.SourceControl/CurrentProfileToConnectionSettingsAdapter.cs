@@ -46,7 +46,7 @@ namespace Tp.SourceControl
 			set { Profile.UserMapping = value; }
 		}
 
-		private TProfile Profile
+		protected TProfile Profile
 		{
 			get { return _repository.GetProfile<TProfile>(); }
 		}

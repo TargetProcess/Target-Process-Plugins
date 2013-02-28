@@ -1,1 +1,1 @@
-define(["tau/components/component.page.base","tau/views/view.page.board"],function(a,b){return{create:function(c){var d={name:"board page component",extensions:[],ViewType:b};return a.create(d,c)}}})
+define(["tau/components/component.page.base","tau/views/view.page.board"],function(BaseCreator,ViewType){return{create:function(componentContext){var componentConfig={name:"board page component",turnOffErrorEmiter:!0,turnOffLoadingIndicator:!0,extensions:[],ViewType:ViewType};return BaseCreator.create(componentConfig,componentContext)}}})

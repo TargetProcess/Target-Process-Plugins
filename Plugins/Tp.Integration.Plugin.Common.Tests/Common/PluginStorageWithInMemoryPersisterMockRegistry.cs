@@ -17,6 +17,7 @@ using Tp.Integration.Plugin.Common.PluginCommand;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
 using Tp.Integration.Plugin.Common.Tests.Common.ServiceBus;
+using Tp.Integration.Testing.Common;
 using Tp.Integration.Testing.Common.Persisters;
 using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
@@ -53,6 +54,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			For<IAccountRepository>().HybridHttpOrThreadLocalScoped().Use<AccountRepository>();
 			For<IProfileRepository>().HybridHttpOrThreadLocalScoped().Use<ProfileRepository>();
+			For<IMsmqTransport>().Use<TransportMock>();
 
 			For<PluginRuntime>().Singleton().Use<PluginRuntime>();
 			For<IEventAggregator>().Use(c => c.GetInstance<PluginRuntime>().EventAggregator);

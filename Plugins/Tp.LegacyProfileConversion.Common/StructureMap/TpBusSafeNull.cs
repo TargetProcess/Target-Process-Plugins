@@ -68,12 +68,12 @@ namespace Tp.LegacyProfileConvertsion.Common.StructureMap
 
 		public void SetOutSagaId(Guid id) {}
 
-		public void SendLocalWithContext(ProfileName profileNameName, AccountName accountName, ITargetProcessMessage message) {}
+		public void SendLocalWithContext(ProfileName profileNameName, AccountName accountName, IMessage message) { }
 
 		public void Send(params IPluginLifecycleMessage[] pluginLifecycleMessages) {}
 
 		public void Reply(params ITargetProcessMessage[] messages) {}
-		public void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, ITargetProcessMessage message)
+		public void SendLocalUiWithContext(ProfileName profileName, AccountName accountName, IMessage message)
 		{
 		}
 	}

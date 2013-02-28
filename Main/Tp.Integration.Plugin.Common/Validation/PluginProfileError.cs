@@ -12,6 +12,11 @@ namespace Tp.Integration.Plugin.Common.Validation
 	[DataContract]
 	public class PluginProfileError
 	{
+        public PluginProfileError()
+        {
+            Status = PluginProfileErrorStatus.Error;
+        }
+
 		/// <summary>
 		/// Error message.
 		/// </summary>
@@ -29,6 +34,12 @@ namespace Tp.Integration.Plugin.Common.Validation
 		/// </summary>
 		[DataMember]
 		public string AdditionalInfo { get; set; }
+
+	    /// <summary>
+	    /// Error status. Variants: 'Error', 'Warning'
+	    /// </summary>
+        [DataMember]
+        public PluginProfileErrorStatus Status { get; set; }
 
 		public override string ToString()
 		{

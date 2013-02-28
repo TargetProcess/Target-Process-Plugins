@@ -16,7 +16,7 @@ using Tp.Integration.Plugin.Common.Storage.Repositories;
 namespace Tp.Integration.Plugin.Common.Domain
 {
 	[DebuggerDisplay("AccountsCount = {_accountLatestVersions.Count}")]
-	class AccountCollection : IAccountCollection
+	internal sealed class AccountCollection : IAccountCollection
 	{
 		private readonly IAccountRepository _accountRepository;
 		private readonly object _gate;
@@ -48,13 +48,25 @@ namespace Tp.Integration.Plugin.Common.Domain
 				}
 				else
 				{
-					AccountDomainObject newAccount = _accountRepository.Add(accountName);
-					var newAccountVersion = AccountDomainObjectVersion.Root(newAccount);
-					Accounts.Add(accountName, newAccountVersion);
+					var account = _accountRepository.GetBy(accountName) ??_accountRepository.Add(accountName);
+					var newAccountVersion = AccountDomainObjectVersion.Root(account);
+					Accounts[accountName] =  newAccountVersion;
 					_accountCurrentVersion = newAccountVersion.CreateChildVersion();
 				}
 			}
 			return _accountCurrentVersion.Account;
+		}
+
+		public void Remove(AccountName accountName)
+		{
+			lock(_gate)
+			{
+				if (Accounts.ContainsKey(accountName))
+				{
+					Accounts.Remove(accountName);
+				}
+				_accountRepository.Remove(accountName);
+			}
 		}
 
 		public IEnumerator<IAccountReadonly> GetEnumerator()
@@ -71,8 +83,7 @@ namespace Tp.Integration.Plugin.Common.Domain
 		{
 			lock (_gate)
 			{
-				return Accounts.Values.Select(acc => acc.CreateChildVersion().Account)
-										.ToList();
+				return Accounts.Values.Select(acc => acc.CreateChildVersion().Account).ToList();
 			}
 		}
 

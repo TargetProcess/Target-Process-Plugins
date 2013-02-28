@@ -17,7 +17,6 @@ using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.ServiceBus;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Tests.Common;
@@ -233,8 +232,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 			var logger = Context.Loggers
 				.Select(x => x.Logger)
 				.OfType<Logger>()
-				.Where(x => x.Name.Contains(loggerName) && x.Name.Contains(accountName) && x.Name.Contains(profileName))
-				.FirstOrDefault();
+				.FirstOrDefault(x => x.Name.Contains(loggerName) && x.Name.Contains(accountName) && x.Name.Contains(profileName));
 
 			logger.Should(Be.Not.Null);
 			CheckAppenders(logger, accountName, profileName);

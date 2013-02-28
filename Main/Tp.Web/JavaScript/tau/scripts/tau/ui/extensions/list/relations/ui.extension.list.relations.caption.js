@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt){var $el=evt.data.element;$el.find("[role=relation-type-caption]").text(this.config.dependencyType=="master"?"Inbound":"Outbound")}})})

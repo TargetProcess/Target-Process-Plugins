@@ -65,6 +65,7 @@
     <Compile Include="ImportToTp\ImportAssignmentSagaData.cs" />
     <Compile Include="ImportToTp\ImportBugsChunk.cs" />
     <Compile Include="ImportToTp\ImportBugToTargetProcessCommand.cs" />
+    <Compile Include="ImportToTp\LastSyncDate.cs" />
     <Compile Include="ImportToTp\NewBugImportedToTargetProcessMessage.cs" />
     <Compile Include="ImportToTp\TargetProcessBugId.cs" />
     <Compile Include="IUserMapper.cs" />

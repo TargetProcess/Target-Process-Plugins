@@ -1,0 +1,5 @@
+// Set caret position easily in jQuery
+// Written by and Copyright of Luke Morton, 2011
+// Licensed under MIT
+
+define(["libs/jquery/jquery"],function(jQuery){(function($){$.caretTo=function(el,index){if(!$(el).is(":visible"))return;if(el.createTextRange){var range=el.createTextRange();range.move("character",index),range.select()}else el.selectionStart!=null&&(el.focus(),el.setSelectionRange(index,index))},$.caretPos=function(el){if("selection"in document){var range=el.createTextRange();try{range.setEndPoint("EndToStart",document.selection.createRange())}catch(e){return 0}return range.text.length}if(el.selectionStart!=null)return el.selectionStart},$.fn.caret=function(index,offset){return typeof index=="undefined"?$.caretPos(this.get(0)):this.queue(function(next){if(isNaN(index)){var i=$(this).val().indexOf(index);offset===!0?i+=index.length:typeof offset!="undefined"&&(i+=offset),$.caretTo(this,i)}else $.caretTo(this,index);next()})},$.fn.caretToStart=function(){return this.caret(0)},$.fn.caretToEnd=function(){return this.queue(function(next){$.caretTo(this,$(this).val().length),next()})}})(jQuery)})

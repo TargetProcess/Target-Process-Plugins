@@ -1,0 +1,1 @@
+define(["Underscore","./extension.tracking.base"],function(_,Extension){return Extension.extend({"global slice.error":function(evt,data){data=_.cloneDeep(data),data.place="slice",data.board=this.getBoardContext(data.definition),delete data.definition,this.fire("track.error",data),data.name=data.message||"error",data.tags=["error","slice"],this.fire("track.action",data)}})})

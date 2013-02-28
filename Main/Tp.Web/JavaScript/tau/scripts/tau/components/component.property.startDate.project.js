@@ -1,1 +1,1 @@
-define(["tau/components/component.property.date","tau/models/model.property.date.validation.project"],function(a,b){return{create:function(c){return c=c||{},c.propertyName="startDate",c.validationExtension=b,a.create(c)}}})
+define(["tau/components/component.property.date","tau/models/model.property.date.validation.project"],function(creator,ModelValidation){return{create:function(config){return config=config||{},config.propertyName="startDate",config.validationExtension=ModelValidation,creator.create(config)}}})

@@ -63,8 +63,12 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Buffer.</value>
 		[XmlElement(Order = 7)]public Byte[] Buffer { get; set; }
-		
 
+		/// <summary>
+		/// Gets or sets the ModifyDate. ModifyDate
+		/// </summary>
+		/// <value>The ModifyDate.</value>
+		[XmlElement(Order = 8)]public DateTime? ModifyDate { get; set; }
 		
 	}
 	
@@ -90,5 +94,9 @@ namespace Tp.Integration.Common
         /// Buffer
         /// </summary>		
 		Buffer,
+		/// <summary>
+		/// ModifyDate
+		/// </summary>		
+		ModifyDate,
 	}
 }

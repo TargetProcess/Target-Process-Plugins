@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/extension.base"],function(_,$,ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt,renderData){var $el=renderData.element;this.fire("$el.ready",$el)},"bus $list.ready":function(evt,$list){this.fire("view.component.rendered",{element:$list})}})})

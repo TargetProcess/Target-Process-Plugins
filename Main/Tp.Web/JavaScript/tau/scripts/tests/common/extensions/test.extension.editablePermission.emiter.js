@@ -1,1 +1,1 @@
-define(["tau/components/extensions/component.extension.base"],function(a){return a.extend({category:"test permissionsReady emiter",init:function(){this._super.apply(this,arguments)},"bus afterRender":function(){this.fire("permissionsReady",{editable:!0})}})})
+define(["tau/components/extensions/component.extension.base"],function(ExtensionBase){return ExtensionBase.extend({category:"test permissionsReady emiter",init:function(){this._super.apply(this,arguments)},"bus afterRender":function(){this.fire("permissionsReady",{editable:!0})}})})

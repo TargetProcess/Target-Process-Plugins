@@ -6,17 +6,17 @@ namespace Tp.Integration.Messages.PluginLifecycle
 {
 	public class ProfileEditorMashupName
 	{
-		private readonly PluginName _pluginName;
+		private readonly string _pluginName;
 		public const string ProfileEditorMashupPrefix = "ProfileEditor";
 
-		public ProfileEditorMashupName(PluginName pluginName)
+		public ProfileEditorMashupName(string pluginName)
 		{
-			_pluginName = pluginName;
+			this._pluginName = pluginName;
 		}
 
 		public string Value
 		{
-			get { return string.Format("{0}{1}", ProfileEditorMashupPrefix, _pluginName.Value).Replace(" ", string.Empty).ToLower(); }
+			get { return string.Format("{0}{1}", ProfileEditorMashupPrefix, this._pluginName).Replace(" ", string.Empty).ToLower(); }
 		}
 	}
 }

@@ -52,7 +52,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters
 			{
 				foreach (var profileStorage in profileStorages)
 				{
-					var updatedProfileStorage = new ProfileStorage(profileStorage.ValueKey) { Id = profileStorage.Id, ProfileId = profileStorage.ProfileId, Name = profileStorage.Name};
+					var updatedProfileStorage = new ProfileStorage(new TypeNameWithoutVersion(profileStorage.ValueKey)) { Id = profileStorage.Id, ProfileId = profileStorage.ProfileId, Name = profileStorage.Name};
 					context.ProfileStorages.Attach(updatedProfileStorage);
 					updatedProfileStorage.SetValue(profileStorage.GetValue());
 				}

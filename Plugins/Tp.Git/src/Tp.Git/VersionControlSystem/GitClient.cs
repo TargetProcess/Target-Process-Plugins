@@ -5,12 +5,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NGit;
 using NGit.Revwalk;
 using NGit.Revwalk.Filter;
 using NGit.Transport;
-using StructureMap;
+using Sharpen;
 using Tp.Core;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
@@ -22,11 +23,13 @@ namespace Tp.Git.VersionControlSystem
 	{
 		private readonly NGit.Api.Git _git;
 		private readonly ISourceControlConnectionSettingsSource _settings;
+		private readonly IStorage<GitRepositoryFolder> _folder;
 
-		public GitClient(ISourceControlConnectionSettingsSource settings)
+		public GitClient(ISourceControlConnectionSettingsSource settings, IStorage<GitRepositoryFolder> folder)
 		{
 			_settings = settings;
-			_git = GetClient(settings);
+			_folder = folder;
+			_git = GetClient(_settings);
 		}
 
 		public IEnumerable<RevisionRange> GetFromTillHead(DateTime from, int pageSize)
@@ -153,15 +156,14 @@ namespace Tp.Git.VersionControlSystem
 			}
 		}
 
-		private static NGit.Api.Git GetClient(ISourceControlConnectionSettingsSource settings)
+		private NGit.Api.Git GetClient(ISourceControlConnectionSettingsSource settings)
 		{
 			var repositoryFolder = GetLocalRepository(settings);
 			if (IsRepositoryUriChanged(repositoryFolder, settings))
 			{
 				repositoryFolder.Delete();
 				repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
-				var repoFolderStorage = Repository.Get<GitRepositoryFolder>();
-				repoFolderStorage.ReplaceWith(repositoryFolder);
+				_folder.ReplaceWith(repositoryFolder);
 			}
 
 			NGit.Api.Git nativeGit;
@@ -171,16 +173,22 @@ namespace Tp.Git.VersionControlSystem
 				var credentialsProvider = new UsernamePasswordCredentialsProvider(settings.Login, settings.Password);
 				if (repositoryFolder.Exists())
 				{
-					nativeGit = NGit.Api.Git.Open(repositoryFolder.Value);
+                    string path = repositoryFolder.GetAbsolutePath();
+					nativeGit = NGit.Api.Git.Open(path);
 				}
 				else
 				{
+                    string path = repositoryFolder.GetAbsolutePath();
 					nativeGit = NGit.Api.Git.CloneRepository()
 						.SetURI(settings.Uri)
 						.SetNoCheckout(true)
 						.SetCredentialsProvider(credentialsProvider)
-						.SetDirectory(repositoryFolder.Value).Call();
+						.SetDirectory(path).Call();
 				}
+			}
+			catch (EOFException ex)
+			{
+				throw new InvalidOperationException("Unable to connect to repository. Run 'git fsck' in the repository to check for possible errors.", ex);
 			}
 			catch (ArgumentNullException exception)
 			{
@@ -205,22 +213,24 @@ namespace Tp.Git.VersionControlSystem
 			return (settings.Uri.ToLower() != repositoryFolder.RepoUri.ToLower()) && repositoryFolder.Exists();
 		}
 
-		private static IStorageRepository Repository
+		private GitRepositoryFolder GetLocalRepository(ISourceControlConnectionSettingsSource settings)
 		{
-			get { return ObjectFactory.GetInstance<IStorageRepository>(); }
-		}
-
-		private static GitRepositoryFolder GetLocalRepository(ISourceControlConnectionSettingsSource settings)
-		{
-			var repoFolderStorage = Repository.Get<GitRepositoryFolder>();
-			if (repoFolderStorage.Empty())
+			if (_folder.Empty())
 			{
 				var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
-				repoFolderStorage.ReplaceWith(repositoryFolder);
+				_folder.ReplaceWith(repositoryFolder);
 				return repositoryFolder;
 			}
 
-			return repoFolderStorage.Single();
+            GitRepositoryFolder folder = _folder.Single();
+            if (!folder.CheckFolder(_folder))
+            {
+                var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
+                _folder.ReplaceWith(repositoryFolder);
+                return repositoryFolder;
+            }
+
+            return folder;
 		}
 
 		public string GetFileContent(RevCommit commit, string path)

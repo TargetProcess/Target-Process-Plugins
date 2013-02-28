@@ -11,6 +11,8 @@ Tp.controls.kanbanboard.ItemContainerLayout = Ext.extend(Ext.layout.ContainerLay
 	},
 
 	renderAll: function (ct, target) {
+
+        var that = this;
 		var items = ct.items.items;
 		if (items.length == 0) {
 			this.finalCallback();
@@ -21,7 +23,14 @@ Tp.controls.kanbanboard.ItemContainerLayout = Ext.extend(Ext.layout.ContainerLay
 			this.runningTask.dispose();
 		}
 
-		this.runningTask = new Tp.components.LongRunningTask(items, this.getItemHandler(target), this.finalCallback);
+		this.runningTask = new Tp.components.LongRunningTask(items,
+            this.getItemHandler(target),
+            this.finalCallback,
+            null,
+            function(item){
+                return item && item.rendered && that.isValidParent(item, target);
+            }
+        );
 		this.runningTask.init();
 	}
 });
