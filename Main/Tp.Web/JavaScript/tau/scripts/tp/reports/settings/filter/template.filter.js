@@ -1,0 +1,1 @@
+define(["tau/nls/translator","tau/core/templates-factory","tau/ui/templates/board.editor/ui.template.board.editor.filter","tau/extensions/extension.underscore"],function(T,templates,dummy,_){var config={name:"report.filter",engine:"jqote2",markup:_.flatten(['<%= fn.sub("board.editor.filter", {name: "data", filter: this}) %>']),dependencies:[]};return templates.register(config)})

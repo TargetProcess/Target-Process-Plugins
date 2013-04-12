@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of User. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class UserDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,129 +36,129 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The User ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? UserID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? UserID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the First Name. First Name
         /// </summary>
         /// <value>The First Name.</value>
-		[XmlElement(Order = 4)]public String FirstName { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String FirstName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Last Name. Last Name
         /// </summary>
         /// <value>The Last Name.</value>
-		[XmlElement(Order = 5)]public String LastName { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String LastName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Email. Email
         /// </summary>
         /// <value>The Email.</value>
-		[XmlElement(Order = 6)]public String Email { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String Email { get; set; }
 
 		/// <summary>
         /// Gets or sets the Login. Login
         /// </summary>
         /// <value>The Login.</value>
-		[XmlElement(Order = 7)]public String Login { get; set; }
+		[DataMember][XmlElement(Order = 7)]public String Login { get; set; }
 
 		/// <summary>
         /// Gets or sets the Password. Password
         /// </summary>
         /// <value>The Password.</value>
-		[XmlElement(Order = 8)]public String Password { get; set; }
+		[DataMember][XmlElement(Order = 8)]public String Password { get; set; }
 
 		/// <summary>
         /// Gets or sets the Create Date. Create Date
         /// </summary>
         /// <value>The Create Date.</value>
-		[XmlElement(Order = 9)]public DateTime? CreateDate { get; set; }
+		[DataMember][XmlElement(Order = 9)]public DateTime? CreateDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Modify Date. Modify Date
         /// </summary>
         /// <value>The Modify Date.</value>
-		[XmlElement(Order = 10)]public DateTime? ModifyDate { get; set; }
+		[DataMember][XmlElement(Order = 10)]public DateTime? ModifyDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Delete Date. Delete Date
         /// </summary>
         /// <value>The Delete Date.</value>
-		[XmlElement(Order = 11)]public DateTime? DeleteDate { get; set; }
+		[DataMember][XmlElement(Order = 11)]public DateTime? DeleteDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Active. Is Active
         /// </summary>
         /// <value>The Is Active.</value>
-		[XmlElement(Order = 12)]public Boolean? IsActive { get; set; }
+		[DataMember][XmlElement(Order = 12)]public Boolean? IsActive { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Administrator. Is Administrator
         /// </summary>
         /// <value>The Is Administrator.</value>
-		[XmlElement(Order = 13)]public Boolean? IsAdministrator { get; set; }
+		[DataMember][XmlElement(Order = 13)]public Boolean? IsAdministrator { get; set; }
 
 		/// <summary>
         /// Gets or sets the Skills. 
         /// </summary>
         /// <value>The Skills.</value>
-		[XmlElement(Order = 14)]public String Skills { get; set; }
+		[DataMember][XmlElement(Order = 14)]public String Skills { get; set; }
 
 		/// <summary>
         /// Gets or sets the Active Directory Name. Active Directory Name
         /// </summary>
         /// <value>The Active Directory Name.</value>
-		[XmlElement(Order = 15)]public String ActiveDirectoryName { get; set; }
+		[DataMember][XmlElement(Order = 15)]public String ActiveDirectoryName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Weekly Available Hours. Weekly Available Hours
         /// </summary>
         /// <value>The Weekly Available Hours.</value>
-		[XmlElement(Order = 16)]public Decimal? WeeklyAvailableHours { get; set; }
+		[DataMember][XmlElement(Order = 16)]public Decimal? WeeklyAvailableHours { get; set; }
 
 		/// <summary>
         /// Gets or sets the Current Allocation. Current Allocation
         /// </summary>
         /// <value>The Current Allocation.</value>
-		[XmlElement(Order = 17)]public Int32? CurrentAllocation { get; set; }
+		[DataMember][XmlElement(Order = 17)]public Int32? CurrentAllocation { get; set; }
 
 		/// <summary>
         /// Gets or sets the Current Available Hours. Current Available Hours
         /// </summary>
         /// <value>The Current Available Hours.</value>
-		[XmlElement(Order = 18)]public Decimal? CurrentAvailableHours { get; set; }
+		[DataMember][XmlElement(Order = 18)]public Decimal? CurrentAvailableHours { get; set; }
 
 		/// <summary>
         /// Gets or sets the Available From. Available From
         /// </summary>
         /// <value>The Available From.</value>
-		[XmlElement(Order = 19)]public DateTime? AvailableFrom { get; set; }
+		[DataMember][XmlElement(Order = 19)]public DateTime? AvailableFrom { get; set; }
 
 		/// <summary>
         /// Gets or sets the Available Future Allocation. Available Future Allocation
         /// </summary>
         /// <value>The Available Future Allocation.</value>
-		[XmlElement(Order = 20)]public Int32? AvailableFutureAllocation { get; set; }
+		[DataMember][XmlElement(Order = 20)]public Int32? AvailableFutureAllocation { get; set; }
 
 		/// <summary>
         /// Gets or sets the Available Future Hours. Available Future Hours
         /// </summary>
         /// <value>The Available Future Hours.</value>
-		[XmlElement(Order = 21)]public Decimal? AvailableFutureHours { get; set; }
+		[DataMember][XmlElement(Order = 21)]public Decimal? AvailableFutureHours { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Observer. Is Observer
         /// </summary>
         /// <value>The Is Observer.</value>
-		[XmlElement(Order = 22)]public Boolean? IsObserver { get; set; }
+		[DataMember][XmlElement(Order = 22)]public Boolean? IsObserver { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Default Role ID. Default Role
         /// </summary>
         /// <value>The Default Role ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 23)]public Int32? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 23)]public Int32? RoleID { get; set; }
 		
 
 		
@@ -167,7 +167,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Default Role Name.</value>
 		[RelationName]
-		[XmlElement(Order = 24)]public virtual string DefaultRoleName { get; set; }
+		[DataMember][XmlElement(Order = 24)]public virtual string DefaultRoleName { get; set; }
 		
 	}
 	

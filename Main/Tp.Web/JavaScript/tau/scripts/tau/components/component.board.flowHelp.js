@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/board.flowHelp/model.board.flowHelp","tau/ui/templates/board.flowHelp/ui.template.board.flowHelp"],function(_,ComponentCreator,Model,Template){return{create:function(config){var creatorConfig={extensions:[Model],template:Template};return ComponentCreator.create(creatorConfig,config)}}})

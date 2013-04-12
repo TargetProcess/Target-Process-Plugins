@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of General Numeric Priority List Item. 
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class GeneralNumericPriorityListItemDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,26 +37,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The General ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? GeneralID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? GeneralID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Parent Project ID. 
         /// </summary>
         /// <value>The Parent Project ID.</value>
-		[XmlElement(Order = 4)]public Int32? ParentProjectID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? ParentProjectID { get; set; }
 
 		/// <summary>
         /// Gets or sets the Numeric Priority. 
         /// </summary>
         /// <value>The Numeric Priority.</value>
-		[XmlElement(Order = 5)]public Double? NumericPriority { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Double? NumericPriority { get; set; }
 
 		/// <summary>
         /// Gets or sets the Entity Type ID. 
         /// </summary>
         /// <value>The Entity Type ID.</value>
-		[XmlElement(Order = 6)]public Int32? EntityTypeID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? EntityTypeID { get; set; }
 		
 
 		

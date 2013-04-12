@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Message General. Relation between message and general.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class MessageGeneralDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,7 +37,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Message General ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? MessageGeneralID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? MessageGeneralID { get; set; }
 		
 		
 		/// <summary>
@@ -45,14 +45,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Message ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 4)]public Int32? MessageID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? MessageID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the General ID. Reference to general
         /// </summary>
         /// <value>The General ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 5)]public Int32? GeneralID { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? GeneralID { get; set; }
 		
 
 		
@@ -61,7 +61,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The General Name.</value>
 		[RelationName]
-		[XmlElement(Order = 6)]public virtual string GeneralName { get; set; }
+		[DataMember][XmlElement(Order = 6)]public virtual string GeneralName { get; set; }
 		
 	}
 	

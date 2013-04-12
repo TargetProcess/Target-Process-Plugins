@@ -1,9 +1,9 @@
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 
 namespace Tp.Integration.Common
 {
-	[Serializable]
+	[Serializable][DataContract]
 	public class GeneralRelationTypeDTO : DataTransferObject
 	{
 		[PrimaryKey]
@@ -19,10 +19,10 @@ namespace Tp.Integration.Common
 			}
 		}
 
-		[XmlElement(Order = 2)]
+		[DataMember][XmlElement(Order = 2)]
 		public string Name { get; set; }
 
-		[XmlElement(Order = 1)]
+		[DataMember][XmlElement(Order = 1)]
 		public int? GeneralRelationTypeID { get; set; }
 	}
 

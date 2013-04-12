@@ -1,0 +1,1 @@
+define(["jQuery","Modernizr"],function($,modernizr){$(function(){if(!modernizr.svg||!modernizr.inlinesvg){$("#reports-container").html('<div class="empty _empty">This report works in Safari, Chrome, Firefox or IE 9+.</div>');return}require(["tp/reports/burndown/report"])})})

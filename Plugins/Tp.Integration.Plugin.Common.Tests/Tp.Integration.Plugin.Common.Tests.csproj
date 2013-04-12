@@ -110,6 +110,7 @@
     <Compile Include="Activity\ShouldLogUnhandledExceptions.cs" />
     <Compile Include="Activity\ShouldManipulatePluginProfilesActivityLogsTests.cs" />
     <Compile Include="Activity\ShouldRetrieveActivityLogTests.cs" />
+    <Compile Include="BlobSerializerTests.cs" />
     <Compile Include="Common\CommandBusTests.cs" />
     <Compile Include="Common\InitializationSagaSpecs.cs" />
     <Compile Include="Common\PluginCommand\GetProfilesCommandSpecs.cs" />

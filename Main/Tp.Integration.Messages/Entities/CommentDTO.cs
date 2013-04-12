@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Comment. Represents comment attached to entity. Entity may have many comments.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class CommentDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,41 +36,41 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Comment ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? CommentID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? CommentID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Description. Text of the comment
         /// </summary>
         /// <value>The Description.</value>
-		[XmlElement(Order = 4)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Description { get; set; }
 
 		/// <summary>
         /// Gets or sets the Create Date. Date when comment has been created
         /// </summary>
         /// <value>The Create Date.</value>
-		[XmlElement(Order = 5)]public DateTime? CreateDate { get; set; }
+		[DataMember][XmlElement(Order = 5)]public DateTime? CreateDate { get; set; }
 		
 		/// <summary>
         /// Gets or sets the General ID. Reference to entity
         /// </summary>
         /// <value>The General ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? GeneralID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? GeneralID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Owner ID. Person who added comment
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 7)]public Int32? OwnerID { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Int32? OwnerID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Comment ID. Reference to another comment (may be used to create comments threads)
         /// </summary>
         /// <value>The Comment ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? ParentID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? ParentID { get; set; }
 		
 
 		
@@ -79,7 +79,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The General Name.</value>
 		[RelationName]
-		[XmlElement(Order = 9)]public virtual string GeneralName { get; set; }
+		[DataMember][XmlElement(Order = 9)]public virtual string GeneralName { get; set; }
 		
 	}
 	

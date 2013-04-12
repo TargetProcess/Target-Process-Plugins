@@ -1,12 +1,12 @@
 body {
     overflow-y: scroll;
     }
-#nodeunit-tests, #nodeunit-header, #nodeunit-banner, #nodeunit-testrunner-toolbar, #nodeunit-userAgent, #nodeunit-testresult {
+#nodeunit-tests, #nodeunit-header, #nodeunit-banner, #nodeunit-testrunner-toolbar, #nodeunit-userAgent, #nodeunit-testresult, #nodeunit-href {
 	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 }
-#nodeunit-testrunner-toolbar, #nodeunit-userAgent, #nodeunit-testresult, #nodeunit-tests li { font-size: small; }
+#nodeunit-testrunner-toolbar, #nodeunit-userAgent, #nodeunit-href, #nodeunit-testresult, #nodeunit-tests li { font-size: small; }
 #nodeunit-tests { font-size: smaller; }
-#nodeunit-tests, #nodeunit-tests ol, #nodeunit-header, #nodeunit-banner, #nodeunit-userAgent, #nodeunit-testresult {
+#nodeunit-tests, #nodeunit-tests ol, #nodeunit-header, #nodeunit-banner, #nodeunit-userAgent, #nodeunit-href, #nodeunit-testresult {
 	margin: 0;
 	padding: 0;
 }
@@ -54,7 +54,8 @@ body {
 	color: #5E740B;
 	background-color: #eee;
 }
-#nodeunit-userAgent {
+#nodeunit-userAgent,
+#nodeunit-href {
 	padding: 0.5em 0 0.5em 2.5em;
 	background-color: #2b81af;
 	color: #fff;

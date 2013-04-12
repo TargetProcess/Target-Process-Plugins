@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/templates/board.plus.timeline/ui.template.fake-timeline"],function(Creator,Template){return{create:function(config){var creatorConfig={template:Template},component=Creator.create(creatorConfig,config);return component.fire("dataBind",{}),component}}})

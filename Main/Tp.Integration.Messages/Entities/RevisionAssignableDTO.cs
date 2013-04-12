@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Revision Assignable. Relation between assignable and revision.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RevisionAssignableDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,7 +37,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Revision Assignable ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RevisionAssignableID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RevisionAssignableID { get; set; }
 		
 		
 		/// <summary>
@@ -45,14 +45,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Assignable ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 4)]public Int32? AssignableID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? AssignableID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Revision ID. Reference to revision
         /// </summary>
         /// <value>The Revision ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 5)]public Int32? RevisionID { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? RevisionID { get; set; }
 		
 
 		
@@ -61,7 +61,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Assignable Name.</value>
 		[RelationName]
-		[XmlElement(Order = 6)]public virtual string AssignableName { get; set; }
+		[DataMember][XmlElement(Order = 6)]public virtual string AssignableName { get; set; }
 		
 	}
 	

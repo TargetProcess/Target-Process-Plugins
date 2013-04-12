@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of License. Represents License.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class LicenseDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,26 +37,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The License ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? LicenseID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? LicenseID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the License Key. License Key
         /// </summary>
         /// <value>The License Key.</value>
-		[XmlElement(Order = 4)]public String LicenseKey { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String LicenseKey { get; set; }
 
 		/// <summary>
         /// Gets or sets the Last Update Date. Last Update Date
         /// </summary>
         /// <value>The Last Update Date.</value>
-		[XmlElement(Order = 5)]public DateTime? LastUpdateDate { get; set; }
+		[DataMember][XmlElement(Order = 5)]public DateTime? LastUpdateDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Content. Content
         /// </summary>
         /// <value>The Content.</value>
-		[XmlElement(Order = 6)]public Byte[] Content { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Byte[] Content { get; set; }
 		
 
 		

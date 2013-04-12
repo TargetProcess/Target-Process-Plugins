@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Password Recovery. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class PasswordRecoveryDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,27 +36,27 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Password Recovery ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? PasswordRecoveryID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? PasswordRecoveryID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Activation Key. 
         /// </summary>
         /// <value>The Activation Key.</value>
-		[XmlElement(Order = 4)]public String ActivationKey { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String ActivationKey { get; set; }
 
 		/// <summary>
         /// Gets or sets the Activate Date. 
         /// </summary>
         /// <value>The Activate Date.</value>
-		[XmlElement(Order = 5)]public DateTime? ActivateDate { get; set; }
+		[DataMember][XmlElement(Order = 5)]public DateTime? ActivateDate { get; set; }
 		
 		/// <summary>
         /// Gets or sets the User ID. 
         /// </summary>
         /// <value>The User ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? UserID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? UserID { get; set; }
 		
 
 		

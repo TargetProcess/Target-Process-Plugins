@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Tag Bundle. Category of tags.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TagBundleDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,27 +36,27 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Tag Bundle ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TagBundleID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TagBundleID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. The name of the tag buundle
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Exclusive. Whether tags from this bundle cannot be combined in one entity
         /// </summary>
         /// <value>The Exclusive.</value>
-		[XmlElement(Order = 5)]public Boolean? Exclusive { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Boolean? Exclusive { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Project ID. The project this bundle belongs to
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? ProjectID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? ProjectID { get; set; }
 		
 
 		
@@ -65,7 +65,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string ProjectName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string ProjectName { get; set; }
 		
 	}
 	

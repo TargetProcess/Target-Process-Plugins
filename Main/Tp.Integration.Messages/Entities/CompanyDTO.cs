@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Company. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class CompanyDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,26 +36,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Company ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? CompanyID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? CompanyID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Company Name. Company Name
         /// </summary>
         /// <value>The Company Name.</value>
-		[XmlElement(Order = 4)]public String CompanyName { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String CompanyName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Company Url. Company Url
         /// </summary>
         /// <value>The Company Url.</value>
-		[XmlElement(Order = 5)]public String CompanyUrl { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String CompanyUrl { get; set; }
 
 		/// <summary>
         /// Gets or sets the Description. Company Description
         /// </summary>
         /// <value>The Description.</value>
-		[XmlElement(Order = 6)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String Description { get; set; }
 		
 
 		

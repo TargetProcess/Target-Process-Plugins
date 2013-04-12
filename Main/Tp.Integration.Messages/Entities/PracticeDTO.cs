@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Practice. Represents practice entity. For example: Planning, Bug Tracking, Time Tracking, etc. Process consists of Practices.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class PracticeDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,26 +36,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Practice ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? PracticeID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? PracticeID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Name of the practice. For example, Planning
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Description. Brief description of the practice
         /// </summary>
         /// <value>The Description.</value>
-		[XmlElement(Order = 5)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Description { get; set; }
 
 		/// <summary>
         /// Gets or sets the Always On. Defines whether practice could be disabled. For example, Planning practice includes all core features and could not be disabled
         /// </summary>
         /// <value>The Always On.</value>
-		[XmlElement(Order = 6)]public Boolean? AlwaysOn { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? AlwaysOn { get; set; }
 		
 
 		

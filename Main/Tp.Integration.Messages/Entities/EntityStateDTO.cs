@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Entity State. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class EntityStateDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,64 +36,64 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Entity State ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? EntityStateID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? EntityStateID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Name of the state. For example, Open or Done
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Next States. Comma separated list of states that follows current state
         /// </summary>
         /// <value>The Next States.</value>
-		[XmlElement(Order = 5)]public String NextStates { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String NextStates { get; set; }
 
 		/// <summary>
         /// Gets or sets the Initial. Defines that state initial. Only one initial state allowed.
         /// </summary>
         /// <value>The Initial.</value>
-		[XmlElement(Order = 6)]public Boolean? Initial { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? Initial { get; set; }
 
 		/// <summary>
         /// Gets or sets the Final. Defines that state final. Only one final state allowed.
         /// </summary>
         /// <value>The Final.</value>
-		[XmlElement(Order = 7)]public Boolean? Final { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Boolean? Final { get; set; }
 
 		/// <summary>
         /// Gets or sets the Planned. 
         /// </summary>
         /// <value>The Planned.</value>
-		[XmlElement(Order = 8)]public Boolean? Planned { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Boolean? Planned { get; set; }
 
 		/// <summary>
         /// Gets or sets the Required Comment. 
         /// </summary>
         /// <value>The Required Comment.</value>
-		[XmlElement(Order = 9)]public Boolean? RequiredComment { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Boolean? RequiredComment { get; set; }
 
 		/// <summary>
 		/// Gets or sets Numeric Priority.
 		/// </summary>
 		/// <value>Numeric priority.</value>
-		[XmlElement(Order = 10)]public Double NumericPriority { get; set; }
+		[DataMember][XmlElement(Order = 10)]public Double NumericPriority { get; set; }
 
 		/// <summary>
         /// Gets or sets the Process ID. 
         /// </summary>
         /// <value>The Process ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 11)]public Int32? ProcessID { get; set; }
+		[DataMember][XmlElement(Order = 11)]public Int32? ProcessID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role ID. 
         /// </summary>
         /// <value>The Role ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 12)]public Int32? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 12)]public Int32? RoleID { get; set; }
 		
 
 		
@@ -102,21 +102,21 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Process Name.</value>
 		[RelationName]
-		[XmlElement(Order = 13)]public virtual string ProcessName { get; set; }
+		[DataMember][XmlElement(Order = 13)]public virtual string ProcessName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Entity Type Name. 
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
-		[XmlElement(Order = 14)]public virtual string EntityTypeName { get; set; }
+		[DataMember][XmlElement(Order = 14)]public virtual string EntityTypeName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role Name. 
         /// </summary>
         /// <value>The Role Name.</value>
 		[RelationName]
-		[XmlElement(Order = 15)]public virtual string RoleName { get; set; }
+		[DataMember][XmlElement(Order = 15)]public virtual string RoleName { get; set; }
 		
 	}
 	

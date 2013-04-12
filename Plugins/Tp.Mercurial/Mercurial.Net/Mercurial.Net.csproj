@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mercurial</RootNamespace>
+    <AssemblyName>Mercurial.Net</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\Mercurial.Net.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Lasse V. Karlsen.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseBinaries|AnyCPU'">
+    <OutputPath>bin\ReleaseBinaries\</OutputPath>
+    <DefineConstants>TRACE;USE_RELEASE_KEY</DefineConstants>
+    <DocumentationFile>bin\Release\Mercurial.Net.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Mercurial.Net.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DocumentationFile>bin\Debug\Mercurial.Net.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\Mercurial.Net.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseBinaries|x86'">
+    <OutputPath>bin\x86\ReleaseBinaries\</OutputPath>
+    <DefineConstants>TRACE;USE_RELEASE_KEY</DefineConstants>
+    <DocumentationFile>bin\Release\Mercurial.Net.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Mercurial.Net.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddCommand.cs" />
+    <Compile Include="AddRemoveCommand.cs" />
+    <Compile Include="AnnotateCommand.cs" />
+    <Compile Include="Annotation.cs" />
+    <Compile Include="ArchiveCommand.cs" />
+    <Compile Include="ArchiveType.cs" />
+    <Compile Include="AsyncResult.cs" />
+    <Compile Include="Attributes\ArgumentAttribute.cs" />
+    <Compile Include="Attributes\BooleanArgumentAttribute.cs" />
+    <Compile Include="AutoSwitchingClientFactory.cs" />
+    <Compile Include="BackoutCommand.cs" />
+    <Compile Include="BisectCommand.cs" />
+    <Compile Include="BisectResult.cs" />
+    <Compile Include="BisectState.cs" />
+    <Compile Include="Bookmark.cs" />
+    <Compile Include="BookmarkAction.cs" />
+    <Compile Include="BookmarkCommand.cs" />
+    <Compile Include="BookmarksCommand.cs" />
+    <Compile Include="BranchCommand.cs" />
+    <Compile Include="BranchesCommand.cs" />
+    <Compile Include="BranchHead.cs" />
+    <Compile Include="BundleCommand.cs" />
+    <Compile Include="CatCommand.cs" />
+    <Compile Include="Changeset.cs" />
+    <Compile Include="ChangesetPathAction.cs" />
+    <Compile Include="ChangesetPathActionType.cs" />
+    <Compile Include="ChangesetXmlParser.cs" />
+    <Compile Include="ClientExecutable.cs" />
+    <Compile Include="CloneCommand.cs" />
+    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="CommandBase.cs" />
+    <Compile Include="CommandProcessor.cs" />
+    <Compile Include="CommandServerOutputDecoder.cs" />
+    <Compile Include="CommitCommand.cs" />
+    <Compile Include="Attributes\DateTimeArgumentAttribute.cs" />
+    <Compile Include="ConfigurationEntry.cs" />
+    <Compile Include="Configuration\ClientConfigurationCollection.cs" />
+    <Compile Include="CopyCommand.cs" />
+    <Compile Include="CustomCommand.cs" />
+    <Compile Include="DiffCommand.cs" />
+    <Compile Include="DiffIgnores.cs" />
+    <Compile Include="Extensions\Churn\ChurnGroup.cs" />
+    <Compile Include="Extensions\Churn\ChurnExtension.cs" />
+    <Compile Include="Extensions\Churn\ChurnCommand.cs" />
+    <Compile Include="Extensions\Churn\ChurnUnit.cs" />
+    <Compile Include="Hooks\MercurialCommandHookDataStructureBase.cs" />
+    <Compile Include="Hooks\MercurialCommandHookPatternCollection.cs" />
+    <Compile Include="Hooks\IMercurialControllingHook.cs" />
+    <Compile Include="Hooks\MercurialChangeGroupHook.cs" />
+    <Compile Include="Hooks\MercurialCommandHookArgumentsCollection.cs" />
+    <Compile Include="Hooks\MercurialCommandHookDictionary.cs" />
+    <Compile Include="Hooks\MercurialCommitHook.cs" />
+    <Compile Include="Hooks\MercurialControllingHookBase.cs" />
+    <Compile Include="Hooks\MercurialHookBase.cs" />
+    <Compile Include="Hooks\MercurialIncomingHook.cs" />
+    <Compile Include="Hooks\MercurialListKeysHook.cs" />
+    <Compile Include="Hooks\MercurialOutgoingHook.cs" />
+    <Compile Include="Hooks\MercurialPostCommandHook.cs" />
+    <Compile Include="Hooks\MercurialPreChangegroupHook.cs" />
+    <Compile Include="Hooks\MercurialPreCommandHook.cs" />
+    <Compile Include="Hooks\MercurialPreCommitHook.cs" />
+    <Compile Include="Hooks\MercurialPreListKeysHook.cs" />
+    <Compile Include="Hooks\MercurialPreOutgoingHook.cs" />
+    <Compile Include="Hooks\MercurialPrePushKeyHook.cs" />
+    <Compile Include="Hooks\MercurialPreTagHook.cs" />
+    <Compile Include="Hooks\MercurialPreTransactionChangegroupHook.cs" />
+    <Compile Include="Hooks\MercurialPreTransactionCommitHook.cs" />
+    <Compile Include="Hooks\MercurialPreUpdateHook.cs" />
+    <Compile Include="Hooks\MercurialPushKeyHook.cs" />
+    <Compile Include="Hooks\MercurialTagHook.cs" />
+    <Compile Include="Hooks\MercurialUpdateHook.cs" />
+    <Compile Include="IClient.cs" />
+    <Compile Include="IClientFactory.cs" />
+    <Compile Include="IClientSwitcher.cs" />
+    <Compile Include="ListFile.cs" />
+    <Compile Include="IAsyncResult.cs" />
+    <Compile Include="ICommand.cs" />
+    <Compile Include="IdentifyCommand.cs" />
+    <Compile Include="ManifestCommand.cs" />
+    <Compile Include="MercurialResultParsingException.cs" />
+    <Compile Include="MergeCommand.cs" />
+    <Compile Include="MergeConflict.cs" />
+    <Compile Include="MergeConflictState.cs" />
+    <Compile Include="MergeJob.cs" />
+    <Compile Include="MergeJobConflict.cs" />
+    <Compile Include="MergeJobConflictSubFile.cs" />
+    <Compile Include="MergeJobState.cs" />
+    <Compile Include="MergeStatus.cs" />
+    <Compile Include="MergeTools.cs" />
+    <Compile Include="MoveCommand.cs" />
+    <Compile Include="MoveRenameCommandBase.cs" />
+    <Compile Include="NamedRevision.cs" />
+    <Compile Include="NonPersistentClient.cs" />
+    <Compile Include="NonPersistentClientFactory.cs" />
+    <Compile Include="OutputParsingUtilities.cs" />
+    <Compile Include="ParentsCommand.cs" />
+    <Compile Include="PathEx.cs" />
+    <Compile Include="PersistentClient.cs" />
+    <Compile Include="PersistentClientFactory.cs" />
+    <Compile Include="RecoverCommand.cs" />
+    <Compile Include="RemoteInitCommand.cs" />
+    <Compile Include="RenameCommand.cs" />
+    <Compile Include="RepositorySummary.cs" />
+    <Compile Include="ResolveAction.cs" />
+    <Compile Include="ResolveCommand.cs" />
+    <Compile Include="RevertCommand.cs" />
+    <Compile Include="RollbackCommand.cs" />
+    <Compile Include="SummaryCommand.cs" />
+    <Compile Include="Tag.cs" />
+    <Compile Include="TagsCommand.cs" />
+    <Compile Include="Gui\AboutGuiCommand.cs" />
+    <Compile Include="Gui\AddGuiCommand.cs" />
+    <Compile Include="Gui\AnnotateGuiCommand.cs" />
+    <Compile Include="Gui\ArchiveGuiCommand.cs" />
+    <Compile Include="Gui\BackoutGuiCommand.cs" />
+    <Compile Include="Gui\BisectGuiCommand.cs" />
+    <Compile Include="Gui\BrowserGuiCommandBase.cs" />
+    <Compile Include="Gui\Clients\TortoiseHgClient.cs" />
+    <Compile Include="Gui\Clients\TortoiseHgPyGTKClient.cs" />
+    <Compile Include="Gui\Clients\TortoiseHgPyQTClient.cs" />
+    <Compile Include="Gui\CloneGuiCommand.cs" />
+    <Compile Include="Gui\CommitGuiCommand.cs" />
+    <Compile Include="Gui\CopyGuiCommand.cs" />
+    <Compile Include="Gui\DatamineGuiCommand.cs" />
+    <Compile Include="Gui\DiffGuiCommand.cs" />
+    <Compile Include="Gui\DragCopyGuiCommand.cs" />
+    <Compile Include="Gui\DragCopyMoveGuiCommandBase.cs" />
+    <Compile Include="Gui\DragMoveGuiCommand.cs" />
+    <Compile Include="Gui\EditIgnoreFiltersGuiCommand.cs" />
+    <Compile Include="Gui\EmailGuiCommand.cs" />
+    <Compile Include="Gui\FilesBasedGuiCommandBase.cs" />
+    <Compile Include="Gui\ForgetGuiCommand.cs" />
+    <Compile Include="Gui\GuessGuiCommand.cs" />
+    <Compile Include="Gui\GuiClient.cs" />
+    <Compile Include="Gui\GuiClientRequirementAttribute.cs" />
+    <Compile Include="Gui\GuiClientType.cs" />
+    <Compile Include="Gui\GuiCommandBase.cs" />
+    <Compile Include="Gui\GuiVersionCommand.cs" />
+    <Compile Include="Gui\IGuiCommand.cs" />
+    <Compile Include="Gui\ImportGuiCommand.cs" />
+    <Compile Include="Gui\InitGuiCommand.cs" />
+    <Compile Include="Gui\LogGuiCommand.cs" />
+    <Compile Include="Gui\ManifestGuiCommand.cs" />
+    <Compile Include="Gui\MergeGuiCommand.cs" />
+    <Compile Include="Gui\MoveCopyRenameGuiCommandBase.cs" />
+    <Compile Include="Gui\MoveGuiCommand.cs" />
+    <Compile Include="Gui\MPatchGuiCommand.cs" />
+    <Compile Include="Gui\PurgeGuiCommand.cs" />
+    <Compile Include="Gui\QueueGuiCommand.cs" />
+    <Compile Include="Gui\QueueManagerGuiCommand.cs" />
+    <Compile Include="Gui\QueueReorderGuiCommand.cs" />
+    <Compile Include="Gui\RebaseGuiCommand.cs" />
+    <Compile Include="Gui\RecoveryGuiCommand.cs" />
+    <Compile Include="Gui\RejectsGuiCommand.cs" />
+    <Compile Include="Gui\RemoveGuiCommand.cs" />
+    <Compile Include="Gui\RenameGuiCommand.cs" />
+    <Compile Include="Gui\RepoConfigGuiCommand.cs" />
+    <Compile Include="Gui\ResolveGuiCommand.cs" />
+    <Compile Include="Gui\RevertGuiCommand.cs" />
+    <Compile Include="Gui\SearchGuiCommand.cs" />
+    <Compile Include="Gui\ShellConfigGuiCommand.cs" />
+    <Compile Include="Gui\ShelveGuiCommand.cs" />
+    <Compile Include="Gui\StatusGuiCommand.cs" />
+    <Compile Include="Gui\StripGuiCommand.cs" />
+    <Compile Include="Gui\SynchronizeGuiCommand.cs" />
+    <Compile Include="Gui\TagGuiCommand.cs" />
+    <Compile Include="Gui\UpdateGuiCommand.cs" />
+    <Compile Include="Gui\UserConfigGuiCommand.cs" />
+    <Compile Include="UnresolvedFilesAfterUnbundleMercurialExecutionException.cs" />
+    <Compile Include="NoChangesFoundMercurialExecutionException.cs" />
+    <Compile Include="DebugObserver.cs" />
+    <Compile Include="Attributes\EnumArgumentAttribute.cs" />
+    <Compile Include="Extensions\CaseGuard\CaseGuardAddCommandExtensions.cs" />
+    <Compile Include="Extensions\CaseGuard\CaseGuardAddRemoveCommandExtensions.cs" />
+    <Compile Include="Extensions\CaseGuard\CaseGuardExtension.cs" />
+    <Compile Include="Extensions\Queues\QueueCommandBaseExtensions.cs" />
+    <Compile Include="Extensions\Queues\QueueExtension.cs" />
+    <Compile Include="FileState.cs" />
+    <Compile Include="FileStatus.cs" />
+    <Compile Include="ForgetCommand.cs" />
+    <Compile Include="HeadsCommand.cs" />
+    <Compile Include="HelpCommand.cs" />
+    <Compile Include="IMercurialCommand.cs" />
+    <Compile Include="IMercurialCommandObserver.cs" />
+    <Compile Include="IncludeExcludeCommandBase.cs" />
+    <Compile Include="IncomingCommand.cs" />
+    <Compile Include="InitCommand.cs" />
+    <Compile Include="LogCommand.cs" />
+    <Compile Include="MercurialCompressionType.cs" />
+    <Compile Include="MercurialException.cs" />
+    <Compile Include="MercurialExecutionException.cs" />
+    <Compile Include="MercurialInstallationException.cs" />
+    <Compile Include="MercurialMissingException.cs" />
+    <Compile Include="MercurialTimeoutException.cs" />
+    <Compile Include="Attributes\NullableArgumentAttribute.cs" />
+    <Compile Include="OutgoingCommand.cs" />
+    <Compile Include="PathsCommand.cs" />
+    <Compile Include="PushCommand.cs" />
+    <Compile Include="RemoteRepositoryPath.cs" />
+    <Compile Include="RemoveCommand.cs" />
+    <Compile Include="Attributes\RepeatableArgumentAttribute.cs" />
+    <Compile Include="MercurialCommandBase.cs" />
+    <Compile Include="PullCommand.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShowConfigCommand.cs" />
+    <Compile Include="TagAction.cs" />
+    <Compile Include="TagCommand.cs" />
+    <Compile Include="TipCommand.cs" />
+    <Compile Include="UnbundleCommand.cs" />
+    <Compile Include="VerifyCommand.cs" />
+    <Compile Include="Versions\MercurialVersion16.cs" />
+    <Compile Include="Versions\MercurialVersionPre18.cs" />
+    <Compile Include="Versions\MercurialVersionAttribute.cs" />
+    <Compile Include="Versions\MercurialVersionBase.cs" />
+    <Compile Include="XmlSerializationTypes\LogEntryAuthorNode.cs" />
+    <Compile Include="XmlSerializationTypes\LogEntryCopyNode.cs" />
+    <Compile Include="XmlSerializationTypes\LogEntryNode.cs" />
+    <Compile Include="XmlSerializationTypes\LogEntryParentNode.cs" />
+    <Compile Include="XmlSerializationTypes\LogEntryPathNode.cs" />
+    <Compile Include="XmlSerializationTypes\LogEntryTagNode.cs" />
+    <Compile Include="XmlSerializationTypes\LogNode.cs" />
+    <Compile Include="RevSpec.cs" />
+    <Compile Include="FileStatusIncludes.cs" />
+    <Compile Include="StatusCommand.cs" />
+    <Compile Include="StringEx.cs" />
+    <Compile Include="UpdateCommand.cs" />
+    <Compile Include="VersionCommand.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

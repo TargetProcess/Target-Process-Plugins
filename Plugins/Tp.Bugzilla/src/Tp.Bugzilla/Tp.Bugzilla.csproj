@@ -149,6 +149,9 @@
       <DependentUpon>BugzillaProperties.xsd</DependentUpon>
     </Compile>
     <Compile Include="Synchronizer\UserChangedHandler.cs" />
+    <Compile Include="TpWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="bugzilla-icon.png">

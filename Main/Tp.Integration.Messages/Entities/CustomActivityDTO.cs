@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Custom Activity. Represents the custom activity for user.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class CustomActivityDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,40 +36,40 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Custom Activity ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? CustomActivityID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? CustomActivityID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. The short name of the activity
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Create Date. The creation date
         /// </summary>
         /// <value>The Create Date.</value>
-		[XmlElement(Order = 5)]public DateTime? CreateDate { get; set; }
+		[DataMember][XmlElement(Order = 5)]public DateTime? CreateDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Estimate. Indicates how much time the activity is required
         /// </summary>
         /// <value>The Estimate.</value>
-		[XmlElement(Order = 6)]public Decimal? Estimate { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Decimal? Estimate { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Project ID. Reference to project
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 7)]public Int32? ProjectID { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Int32? ProjectID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the User ID. Reference to user
         /// </summary>
         /// <value>The User ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? UserID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? UserID { get; set; }
 		
 
 		
@@ -78,7 +78,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
-		[XmlElement(Order = 9)]public virtual string ProjectName { get; set; }
+		[DataMember][XmlElement(Order = 9)]public virtual string ProjectName { get; set; }
 		
 	}
 	

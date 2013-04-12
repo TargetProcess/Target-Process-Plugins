@@ -136,10 +136,9 @@
     <Reference Include="NServiceBus.Core">
       <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
     </Reference>
-    <Reference Include="NServiceBus.Host, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+    <Reference Include="NServiceBus.Host, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\x86Host\NServiceBus.Host.exe</HintPath>
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap262, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

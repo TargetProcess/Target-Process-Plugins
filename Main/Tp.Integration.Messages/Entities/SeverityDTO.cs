@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Severity. Represents Severity (measure of injuriousness) of the bug. For example, Blocking, Critical, Small..
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class SeverityDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,26 +36,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Severity ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? SeverityID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? SeverityID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Severity name. For example: Blocking
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Importance. Defines severity importance. Minimal value is highest importance
         /// </summary>
         /// <value>The Importance.</value>
-		[XmlElement(Order = 5)]public Int32? Importance { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? Importance { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Default. Indicates wheather it is default severity
         /// </summary>
         /// <value>The Is Default.</value>
-		[XmlElement(Order = 6)]public Boolean? IsDefault { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? IsDefault { get; set; }
 		
 
 		

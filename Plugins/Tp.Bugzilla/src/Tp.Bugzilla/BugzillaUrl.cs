@@ -98,7 +98,7 @@ namespace Tp.Bugzilla
 		private string UploadDataToBugzilla(string query)
 		{
 			var encoding = Encoding.UTF8;
-			var webClient = new WebClient { Encoding = encoding };
+			var webClient = new TpWebClient { Encoding = encoding };
 			webClient.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
 
 			if (!string.IsNullOrEmpty(_profile.Login) && !string.IsNullOrEmpty(_profile.Password))

@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Custom Field. Represents custom field for entity.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class CustomFieldDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,51 +36,51 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Custom Field ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? CustomFieldID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? CustomFieldID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Relation to custom fields properties defined in General class (CustomField1, CustomField2, etc.)
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Value. Default value of custom field. For DropDown FieldType contains comma separated list of possible values
         /// </summary>
         /// <value>The Value.</value>
-		[XmlElement(Order = 5)]public String Value { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Value { get; set; }
 
 		/// <summary>
         /// Gets or sets the Entity Field Name. Name of the custom field
         /// </summary>
         /// <value>The Entity Field Name.</value>
-		[XmlElement(Order = 6)]public String EntityFieldName { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String EntityFieldName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Required. The custom field is required to be filled
         /// </summary>
         /// <value>The Required.</value>
-		[XmlElement(Order = 7)]public Boolean? Required { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Boolean? Required { get; set; }
 
 		/// <summary>
         /// Gets or sets the Field Type. Type of custom field: Text, DropDown, CheckBox, URL
         /// </summary>
         /// <value>The Field Type.</value>
-		[XmlElement(Order = 8)]public FieldTypeEnum? FieldType { get; set; }
+		[DataMember][XmlElement(Order = 8)]public FieldTypeEnum? FieldType { get; set; }
 
 		/// <summary>
         /// Gets or sets the Enabled For Filter. EnabledForFilter of indicates that filter is enabled for the filters
         /// </summary>
         /// <value>The Enabled For Filter.</value>
-		[XmlElement(Order = 9)]public Boolean? EnabledForFilter { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Boolean? EnabledForFilter { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Process ID. Every custom field belongs to concrete process. It is a reference to process
         /// </summary>
         /// <value>The Process ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 10)]public Int32? ProcessID { get; set; }
+		[DataMember][XmlElement(Order = 10)]public Int32? ProcessID { get; set; }
 		
 
 		
@@ -89,14 +89,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
-		[XmlElement(Order = 11)]public virtual string EntityTypeName { get; set; }
+		[DataMember][XmlElement(Order = 11)]public virtual string EntityTypeName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Process Name. Every custom field belongs to concrete process. It is a reference to process
         /// </summary>
         /// <value>The Process Name.</value>
 		[RelationName]
-		[XmlElement(Order = 12)]public virtual string ProcessName { get; set; }
+		[DataMember][XmlElement(Order = 12)]public virtual string ProcessName { get; set; }
 		
 	}
 	

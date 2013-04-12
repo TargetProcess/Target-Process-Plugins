@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Term. Represents term in specific process..
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TermDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,33 +37,33 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Term ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TermID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TermID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Word Key. Term Key. For example 'User Story'
         /// </summary>
         /// <value>The Word Key.</value>
-		[XmlElement(Order = 4)]public String WordKey { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String WordKey { get; set; }
 
 		/// <summary>
         /// Gets or sets the Value. Value to replace the term key
         /// </summary>
         /// <value>The Value.</value>
-		[XmlElement(Order = 5)]public String Value { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Value { get; set; }
 
 		/// <summary>
         /// Gets or sets the Entity Type ID. The reference to entity type
         /// </summary>
         /// <value>The Entity Type ID.</value>
-		[XmlElement(Order = 6)]public Int32? EntityTypeID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? EntityTypeID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Process ID. Term must belong to Process
         /// </summary>
         /// <value>The Process ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 7)]public Int32? ProcessID { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Int32? ProcessID { get; set; }
 		
 
 		
@@ -72,7 +72,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Process Name.</value>
 		[RelationName]
-		[XmlElement(Order = 8)]public virtual string ProcessName { get; set; }
+		[DataMember][XmlElement(Order = 8)]public virtual string ProcessName { get; set; }
 		
 	}
 	

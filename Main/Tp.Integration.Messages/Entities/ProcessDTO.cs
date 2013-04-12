@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Process. Represents Process. It is possible to create custom processes with defined set of Practices..
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class ProcessDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,26 +36,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Process ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? ProcessID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? ProcessID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Process name. For example: Simplified
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Default. Defined default process for system
         /// </summary>
         /// <value>The Is Default.</value>
-		[XmlElement(Order = 5)]public Boolean? IsDefault { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Boolean? IsDefault { get; set; }
 
 		/// <summary>
         /// Gets or sets the Description. Brief description of the process
         /// </summary>
         /// <value>The Description.</value>
-		[XmlElement(Order = 6)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String Description { get; set; }
 		
 
 		

@@ -142,17 +142,6 @@ namespace Tp.Core
 			return tries.Select(f => f()).Where(m => m.HasValue).FirstOrDefault(Maybe.Nothing);
 		}
 
-		[DebuggerStepThrough]
-		public static T ChooseFirst<T>(this IEnumerable<Maybe<T>> items, T defaultObj)
-		{
-			return items.Choose().FirstOrDefault(defaultObj);
-		}
-
-		[DebuggerStepThrough]
-		public static T ChooseFirst<T>(this IEnumerable<Maybe<T>> items)
-		{
-			return items.Choose().First();
-		}
 
 		[DebuggerStepThrough]
 		public static IEnumerable<T> Choose<T>(this IEnumerable<Maybe<T>> items)

@@ -144,12 +144,12 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 		public void ShouldRetrieveRevisionRangeAfterSpecifiedTillHead()
 		{
             using (var mercurial = CreateMercurial())
-			{
-                var startRevisionId = CreateMercurialRevisionId(DateTime.Parse("2011-11-04 8:42:11"));
+            {
+	            var startRevisionId = new RevisionId() { Value = "94001070fc6a" };
                 var revisionRange = mercurial.GetAfterTillHead(startRevisionId, 100).Single();
                 MercurialRevisionId fromChangeSet = revisionRange.FromChangeset;
 
-                MercurialRevisionId fromExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 11:43:18 AM"));
+				MercurialRevisionId fromExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 11:44:23 AM"));
 				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
 
                 MercurialRevisionId toChangeSet = revisionRange.ToChangeset;
@@ -162,21 +162,24 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
             return new MercurialRevisionId { Time = dateTime };
 		}
 
+		private static MercurialRevisionId CreateMercurialRevisionId(string value)
+		{
+			return new MercurialRevisionId { Value = value};
+		}
+
 		[Test]
 		public void ShouldRetrieveRevisionsFromAndBefore()
 		{
             using (var mercurial = CreateMercurial())
 			{
-				var revisionRange =
-                    mercurial.GetFromAndBefore(CreateMercurialRevisionId(DateTime.Parse("2012-04-08 11:43:18 AM")),
-                                         CreateMercurialRevisionId(DateTime.Parse("2012-04-10 11:44:23 AM")), 100).Single();
+				var revisionRange = mercurial.GetFromAndBefore(CreateMercurialRevisionId("0f07bc12a328"), CreateMercurialRevisionId("d95d67882060"), 100).Single();
                 MercurialRevisionId fromChangeSet = revisionRange.FromChangeset;
 
-                MercurialRevisionId fromExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 11:43:18 AM"));
+				MercurialRevisionId fromExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 11:44:23 AM"));
 				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
 
 
-                MercurialRevisionId toExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 15:08:01 PM"));
+				MercurialRevisionId toExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 15:06:47 PM"));
                 MercurialRevisionId toChangeSet = revisionRange.ToChangeset;
 				toChangeSet.Time.Should(Be.EqualTo(toExpected.Time));
 			}

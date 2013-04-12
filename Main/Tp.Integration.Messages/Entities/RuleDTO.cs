@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Rule. Represents Rule.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RuleDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,40 +37,40 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Rule ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RuleID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RuleID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Additional Info. Additional Info
         /// </summary>
         /// <value>The Additional Info.</value>
-		[XmlElement(Order = 4)]public String AdditionalInfo { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String AdditionalInfo { get; set; }
 
 		/// <summary>
         /// Gets or sets the Rule Class. Rule Class
         /// </summary>
         /// <value>The Rule Class.</value>
-		[XmlElement(Order = 5)]public String RuleClass { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String RuleClass { get; set; }
 
 		/// <summary>
         /// Gets or sets the Role Extension. Role Extension
         /// </summary>
         /// <value>The Role Extension.</value>
-		[XmlElement(Order = 6)]public RoleExtensionEnum? RoleExtension { get; set; }
+		[DataMember][XmlElement(Order = 6)]public RoleExtensionEnum? RoleExtension { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role ID. Role
         /// </summary>
         /// <value>The Role ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 7)]public Int32? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Int32? RoleID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Tp Event ID. Tp Event
         /// </summary>
         /// <value>The Tp Event ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? TpEventID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? TpEventID { get; set; }
 		
 
 		
@@ -79,7 +79,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Role Name.</value>
 		[RelationName]
-		[XmlElement(Order = 9)]public virtual string RoleName { get; set; }
+		[DataMember][XmlElement(Order = 9)]public virtual string RoleName { get; set; }
 		
 	}
 	

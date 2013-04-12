@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Team. Team is Person-Assignable binding in the system. Person assigned to the entity via Team object..
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TeamDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,7 +36,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Team ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TeamID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TeamID { get; set; }
 		
 		
 		/// <summary>
@@ -44,21 +44,21 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Assignable ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 4)]public Int32? AssignableID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? AssignableID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the User ID. Reference to assigned person
         /// </summary>
         /// <value>The User ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 5)]public Int32? UserID { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? UserID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role ID. Role is a 'role' in entity workflow. For example, we may assign Teddy Bear as Developer to user story. Developer is an Role in this case.
         /// </summary>
         /// <value>The Role ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? RoleID { get; set; }
 		
 
 		
@@ -67,14 +67,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Assignable Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string AssignableName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string AssignableName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role Name. Role is a 'role' in entity workflow. For example, we may assign Teddy Bear as Developer to user story. Developer is an Role in this case.
         /// </summary>
         /// <value>The Role Name.</value>
 		[RelationName]
-		[XmlElement(Order = 8)]public virtual string RoleName { get; set; }
+		[DataMember][XmlElement(Order = 8)]public virtual string RoleName { get; set; }
 		
 	}
 	

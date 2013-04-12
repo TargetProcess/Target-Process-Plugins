@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Tag Bundle Tag. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TagBundleTagDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,7 +36,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Tag Bundle Tag ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TagBundleTagID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TagBundleTagID { get; set; }
 		
 		
 		/// <summary>
@@ -44,14 +44,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Tag Bundle ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 4)]public Int32? TagBundleID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? TagBundleID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Tag ID. 
         /// </summary>
         /// <value>The Tag ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 5)]public Int32? TagID { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? TagID { get; set; }
 		
 
 		
@@ -60,14 +60,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Tag Bundle Name.</value>
 		[RelationName]
-		[XmlElement(Order = 6)]public virtual string TagBundleName { get; set; }
+		[DataMember][XmlElement(Order = 6)]public virtual string TagBundleName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Tag Name. 
         /// </summary>
         /// <value>The Tag Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string TagName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string TagName { get; set; }
 		
 	}
 	

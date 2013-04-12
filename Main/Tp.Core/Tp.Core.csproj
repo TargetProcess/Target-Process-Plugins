@@ -116,6 +116,8 @@
     <Compile Include="Either.cs" />
     <Compile Include="ExtensionsProvider.cs" />
     <Compile Include="Func.cs" />
+    <Compile Include="IDetailedException.cs" />
+    <Compile Include="IExecutor.cs" />
     <Compile Include="INameValueDataProvider.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="Linq\IMethodProvider.cs" />
@@ -134,7 +136,7 @@
     </Compile>
     <Compile Include="EmptyObserver.cs" />
     <Compile Include="ExceptionExtensions.cs" />
-    <Compile Include="Expressions\ConstantExtractor.cs" />
+    <Compile Include="Expressions\LambdaExtensions.cs" />
     <Compile Include="Expressions\ExpressionCollection.cs" />
     <Compile Include="Expressions\ExpressionComparison.cs" />
     <Compile Include="Expressions\ExpressionEnumerable.cs" />

@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of General User. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class GeneralUserDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,74 +36,74 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The User ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? UserID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? UserID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the First Name. 
         /// </summary>
         /// <value>The First Name.</value>
-		[XmlElement(Order = 4)]public String FirstName { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String FirstName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Last Name. 
         /// </summary>
         /// <value>The Last Name.</value>
-		[XmlElement(Order = 5)]public String LastName { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String LastName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Email. 
         /// </summary>
         /// <value>The Email.</value>
-		[XmlElement(Order = 6)]public String Email { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String Email { get; set; }
 
 		/// <summary>
         /// Gets or sets the Login. 
         /// </summary>
         /// <value>The Login.</value>
-		[XmlElement(Order = 7)]public String Login { get; set; }
+		[DataMember][XmlElement(Order = 7)]public String Login { get; set; }
 
 		/// <summary>
         /// Gets or sets the Password. 
         /// </summary>
         /// <value>The Password.</value>
-		[XmlElement(Order = 8)]public String Password { get; set; }
+		[DataMember][XmlElement(Order = 8)]public String Password { get; set; }
 
 		/// <summary>
         /// Gets or sets the Create Date. 
         /// </summary>
         /// <value>The Create Date.</value>
-		[XmlElement(Order = 9)]public DateTime? CreateDate { get; set; }
+		[DataMember][XmlElement(Order = 9)]public DateTime? CreateDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Modify Date. 
         /// </summary>
         /// <value>The Modify Date.</value>
-		[XmlElement(Order = 10)]public DateTime? ModifyDate { get; set; }
+		[DataMember][XmlElement(Order = 10)]public DateTime? ModifyDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Delete Date. 
         /// </summary>
         /// <value>The Delete Date.</value>
-		[XmlElement(Order = 11)]public DateTime? DeleteDate { get; set; }
+		[DataMember][XmlElement(Order = 11)]public DateTime? DeleteDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Active. 
         /// </summary>
         /// <value>The Is Active.</value>
-		[XmlElement(Order = 12)]public Boolean? IsActive { get; set; }
+		[DataMember][XmlElement(Order = 12)]public Boolean? IsActive { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Administrator. 
         /// </summary>
         /// <value>The Is Administrator.</value>
-		[XmlElement(Order = 13)]public Boolean? IsAdministrator { get; set; }
+		[DataMember][XmlElement(Order = 13)]public Boolean? IsAdministrator { get; set; }
 
 		/// <summary>
         /// Gets or sets the Skills. 
         /// </summary>
         /// <value>The Skills.</value>
-		[XmlElement(Order = 14)]public String Skills { get; set; }
+		[DataMember][XmlElement(Order = 14)]public String Skills { get; set; }
 		
 
 		

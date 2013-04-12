@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Role Entity Type. Represents Role permission for EntityType in the system..
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RoleEntityTypeDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,27 +37,27 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Role Entity Type ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RoleEntityTypeID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RoleEntityTypeID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Is Delete Enabled. Defined whether entity of that type can be deleted
         /// </summary>
         /// <value>The Is Delete Enabled.</value>
-		[XmlElement(Order = 4)]public Boolean? IsDeleteEnabled { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Boolean? IsDeleteEnabled { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Edit Enabled. Defined whether entity of that type can be added ot modified
         /// </summary>
         /// <value>The Is Edit Enabled.</value>
-		[XmlElement(Order = 5)]public Boolean? IsEditEnabled { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Boolean? IsEditEnabled { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role ID. Reference to role
         /// </summary>
         /// <value>The Role ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? RoleID { get; set; }
 		
 
 		
@@ -66,14 +66,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string EntityTypeName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string EntityTypeName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role Name. Reference to role
         /// </summary>
         /// <value>The Role Name.</value>
 		[RelationName]
-		[XmlElement(Order = 8)]public virtual string RoleName { get; set; }
+		[DataMember][XmlElement(Order = 8)]public virtual string RoleName { get; set; }
 		
 	}
 	

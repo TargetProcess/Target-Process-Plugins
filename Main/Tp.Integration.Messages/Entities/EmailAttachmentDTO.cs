@@ -3,15 +3,15 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 
 namespace Tp.Integration.Messages.Entities
 {
-	[Serializable]
+	[Serializable][DataContract]
 	public class EmailAttachmentDTO
 	{
-		[XmlElement(Order = 3)]public byte[] Buffer { get; set; }
+		[DataMember][XmlElement(Order = 3)]public byte[] Buffer { get; set; }
 
-		[XmlElement(Order = 4)]public string Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public string Name { get; set; }
 	}
 }

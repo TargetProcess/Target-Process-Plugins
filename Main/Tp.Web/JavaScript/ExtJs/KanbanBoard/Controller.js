@@ -653,7 +653,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	},
 
 	loadEntities_onFailure: function (x) {
-		Tp.util.Notifier.error('Error', 'Loading entities failed, please reload this page.\n<hr/>\n' + x.get_message());
+		Tp.util.Notifier.error('Error', 'Please, reload this page.\n<hr/>\n' + x.get_message());
 		this.uxKanbanBoardPanel.fireEvent("loadItemsFailed");
 	},
 
@@ -664,7 +664,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 	},
 
 	loadBacklogEntities_onFailure: function (x) {
-		Tp.util.Notifier.error('Error', 'Loading entities failed, please reload this page.\n<hr/>\n' + x.get_message());
+		Tp.util.Notifier.error('Error', 'Please, reload this page.\n<hr/>\n' + x.get_message());
 		this.uxbacklog.fireEvent("loadItemsFailed");
 	},
 
@@ -711,7 +711,7 @@ Tp.controls.kanbanboard.Controller = Ext.extend(Ext.util.Observable, {
 		ctx.dd.onInvalidDrop(ctx.swimlane.dropTarget, ctx.e, ctx.swimlane.dropTarget.id);
 		ctx.swimlane.el.removeClass(ctx.swimlane.dropTarget.overClass);
 		this.placeItemOnItemContainer(ctx.data.item, true);
-		Tp.util.Notifier.error('Error', 'Changing state failed, please reload this page.\n<hr/>\n' + x.get_message());
+		Tp.util.Notifier.error('Error', 'Please, reload this page.\n<hr/>\n' + x.get_message());
 	},
 
 	safe: function (array) {

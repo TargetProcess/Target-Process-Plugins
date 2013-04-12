@@ -1,1 +1,1 @@
-define(["jQuery","tp/reports/plot","tau/integration"],function($,Plot,integrationModule){function Navigator(){}return Navigator.prototype={navigate:function(to){integrationModule.show(to.id,to.type,$.noop)}},Navigator})
+define(["jQuery","tau/integration"],function($,integrationModule){function Navigator(){}return Navigator.prototype={navigate:function(to){integrationModule.show(to.id,to.type,$.noop)},to:function(to){var parts=to.split("/");this.navigate({id:parts[1],type:parts[0]})}},Navigator})

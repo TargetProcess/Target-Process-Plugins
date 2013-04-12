@@ -35,12 +35,14 @@ namespace Tp.Core.Features
 		FullCounts,
 		CachedCompile,
 		NewPrioritization,
-		ProcessControlChart,
 		BoardTemplates,
-		Tp3BurnDown,
 		ParallelExpanders,
-		CycleTimeDistributionChart,
-		SliceCellFilterPropertiesAutoSet
+		SliceCellFilterPropertiesAutoSet,
+		RelationsNetwork,
+		EntityQuickAdd,
+		ParallelSliceCalls,
+		FlowHelp,
+        BoardEditorPrioritization
 	}
 
 	public interface ITpFeatureList

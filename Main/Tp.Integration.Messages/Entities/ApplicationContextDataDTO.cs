@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Application Context Data. Represents the settings for user.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class ApplicationContextDataDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,20 +37,20 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Application Context Data ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? ApplicationContextDataID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? ApplicationContextDataID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Hash. The hash of application context
         /// </summary>
         /// <value>The Hash.</value>
-		[XmlElement(Order = 4)]public String Hash { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Hash { get; set; }
 
 		/// <summary>
         /// Gets or sets the Data. The data of application context
         /// </summary>
         /// <value>The Data.</value>
-		[XmlElement(Order = 5)]public String Data { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Data { get; set; }
 		
 
 		

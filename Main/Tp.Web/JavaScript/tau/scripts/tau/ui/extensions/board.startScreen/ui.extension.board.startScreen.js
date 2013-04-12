@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base"],function($,ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt,renderData){var $el=renderData.element;$el.on("click",".i-role-trigger",_.bind(function(evt,el){var $t=$(evt.currentTarget);this.fire("boardsSet.selected",$t.data("type"))},this))}})})

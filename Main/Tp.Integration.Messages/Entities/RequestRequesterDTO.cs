@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Request Requester. Represents Request Requester.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RequestRequesterDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,7 +37,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Request Requester ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RequestRequesterID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RequestRequesterID { get; set; }
 		
 		
 		/// <summary>
@@ -45,14 +45,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Request ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 4)]public Int32? RequestID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? RequestID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Requester ID. Reference to requester
         /// </summary>
         /// <value>The Requester ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 5)]public Int32? RequesterID { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? RequesterID { get; set; }
 		
 
 		
@@ -61,7 +61,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Request Name.</value>
 		[RelationName]
-		[XmlElement(Order = 6)]public virtual string RequestName { get; set; }
+		[DataMember][XmlElement(Order = 6)]public virtual string RequestName { get; set; }
 		
 	}
 	

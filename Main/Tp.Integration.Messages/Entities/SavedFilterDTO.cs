@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Saved Filter. Saved filter.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class SavedFilterDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,57 +37,57 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Saved Filter ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? SavedFilterID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? SavedFilterID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. The name of the filter
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Description. The description of the filter
         /// </summary>
         /// <value>The Description.</value>
-		[XmlElement(Order = 5)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Description { get; set; }
 
 		/// <summary>
         /// Gets or sets the Filter Type. The type of the filter
         /// </summary>
         /// <value>The Filter Type.</value>
-		[XmlElement(Order = 6)]public String FilterType { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String FilterType { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Default. Indicates that the filter is default
         /// </summary>
         /// <value>The Is Default.</value>
-		[XmlElement(Order = 7)]public Boolean? IsDefault { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Boolean? IsDefault { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Public. 
         /// </summary>
         /// <value>The Is Public.</value>
-		[XmlElement(Order = 8)]public Boolean? IsPublic { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Boolean? IsPublic { get; set; }
 
 		/// <summary>
         /// Gets or sets the Query Filter. Serialized value
         /// </summary>
         /// <value>The Query Filter.</value>
-		[XmlElement(Order = 9)]public String QueryFilter { get; set; }
+		[DataMember][XmlElement(Order = 9)]public String QueryFilter { get; set; }
 
 		/// <summary>
         /// Gets or sets the Project ID. Reference to project
         /// </summary>
         /// <value>The Project ID.</value>
-		[XmlElement(Order = 10)]public Int32? ProjectID { get; set; }
+		[DataMember][XmlElement(Order = 10)]public Int32? ProjectID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Owner ID. The owner of the filter
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 11)]public Int32? OwnerID { get; set; }
+		[DataMember][XmlElement(Order = 11)]public Int32? OwnerID { get; set; }
 		
 
 		

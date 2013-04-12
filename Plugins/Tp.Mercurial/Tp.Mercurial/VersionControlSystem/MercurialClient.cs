@@ -49,9 +49,9 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public IEnumerable<RevisionRange> GetAfterTillHead(RevisionId revisionId, int pageSize)
         {
-            var command = new LogCommand();
+	        var revSpec = new RevSpec(revisionId.Value);
+			var command = new LogCommand().WithRevision(RevSpec.From(revSpec) && !new RevSpec(revisionId.Value));
             var pages = _repository.Log(command)
-                .Where(ch => ch.Timestamp > revisionId.Time.Value)
                 .OrderBy(ch => ch.Timestamp)
                 .ToArray()
                 .Split(pageSize);
@@ -63,9 +63,10 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public IEnumerable<RevisionRange> GetFromAndBefore(RevisionId fromRevision, RevisionId toRevision, int pageSize)
         {
-            var command = new LogCommand();
+			var from = new RevSpec(fromRevision.Value);
+			var to = new RevSpec(toRevision.Value);
+	        var command = new LogCommand().WithRevision(RevSpec.Range(from, to));
             var pages = _repository.Log(command)
-                .Where(ch => (ch.Timestamp >= fromRevision.Time.Value && ch.Timestamp <= toRevision.Time.Value))
                 .OrderBy(ch => ch.Timestamp)
                 .ToArray()
                 .Split(pageSize);
@@ -77,15 +78,15 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public Changeset GetParentCommit(Changeset commit)
         {
-            var command = new LogCommand().WithIncludePathActions();
-            var changeset = _repository.Log(command)
-                .FirstOrDefault(ch => ch.RevisionNumber == (commit.RevisionNumber > 0 ? commit.RevisionNumber - 1 : commit.RevisionNumber));
+            var command = new LogCommand().WithRevision(new RevSpec("{0}^".Fmt(commit.Hash))).WithIncludePathActions();
+            var changesets = _repository.Log(command);
+			var changeset = changesets.FirstOrDefault();
             return changeset;
         }
 
         public Changeset GetCommit(RevisionId id)
         {
-            var command = new LogCommand().WithIncludePathActions();
+			var command = new LogCommand().WithRevision(RevSpec.ById(id.Value)).WithIncludePathActions();
             var changeset = _repository.Log(command).FirstOrDefault(ch => ch.Hash == id.Value);
             return changeset;
         }
@@ -103,8 +104,10 @@ namespace Tp.Mercurial.VersionControlSystem
         }
 
         public RevisionInfo[] GetRevisions(RevisionId fromChangeset, RevisionId toChangeset)
-        {
-            var command = new LogCommand().WithIncludePathActions();
+		{
+			var from = new RevSpec(fromChangeset.Value);
+			var to = new RevSpec(toChangeset.Value);
+			var command = new LogCommand().WithRevision(RevSpec.Range(from, to)).WithIncludePathActions();
             var revisionInfos = _repository.Log(command)
                 .Where(ch => ch.Timestamp >= fromChangeset.Time.Value && ch.Timestamp <= toChangeset.Time.Value)
                 .Select(ch => ch.ToRevisionInfo())
@@ -115,7 +118,11 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public string GetFileContent(Changeset commit, string path)
 		{
-            var command = new CatCommand().WithAdditionalArgument(string.Format("-r {0}", commit.RevisionNumber)).WithFile(path);
+            var command = new CatCommand().WithFile(path);
+			if (commit != null)
+			{
+				command = command.WithAdditionalArgument(string.Format("-r {0}", commit.RevisionNumber));
+			}
             _repository.Execute(command);
             return command.RawStandardOutput;
 		}

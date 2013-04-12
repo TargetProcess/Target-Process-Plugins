@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Plugin Profile. 
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class PluginProfileDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,38 +36,38 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Plugin Profile ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? PluginProfileID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? PluginProfileID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Plugin Name. 
         /// </summary>
         /// <value>The Plugin Name.</value>
-		[XmlElement(Order = 4)]public String PluginName { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String PluginName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Profile Name. 
         /// </summary>
         /// <value>The Profile Name.</value>
-		[XmlElement(Order = 5)]public String ProfileName { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String ProfileName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Sync Date. 
         /// </summary>
         /// <value>The Sync Date.</value>
-		[XmlElement(Order = 6)]public DateTime? SyncDate { get; set; }
+		[DataMember][XmlElement(Order = 6)]public DateTime? SyncDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Active. 
         /// </summary>
         /// <value>The Active.</value>
-		[XmlElement(Order = 7)]public Boolean? Active { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Boolean? Active { get; set; }
 
 		/// <summary>
         /// Gets or sets the Settings. 
         /// </summary>
         /// <value>The Settings.</value>
-		[XmlElement(Order = 8)]public String Settings { get; set; }
+		[DataMember][XmlElement(Order = 8)]public String Settings { get; set; }
 		
 
 		

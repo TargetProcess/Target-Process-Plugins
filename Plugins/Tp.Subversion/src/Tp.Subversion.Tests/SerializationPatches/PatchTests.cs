@@ -612,7 +612,7 @@ namespace Tp.Subversion.SerializationPatches
 			result.RevisionEntries[0].Path.Should(Be.EqualTo(@"/New/test.txt"));
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void AttachToEntitySaga()
 		{
 			const string oldXml =

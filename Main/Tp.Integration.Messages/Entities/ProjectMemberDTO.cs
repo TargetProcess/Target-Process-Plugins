@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Project Member. Represents Project Member. Project member is a part of project team and has access to the project.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class ProjectMemberDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,48 +36,48 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Project Member ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? ProjectMemberID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? ProjectMemberID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Weekly Available Hours. Indicates how much time the person can spend on project per week
         /// </summary>
         /// <value>The Weekly Available Hours.</value>
-		[XmlElement(Order = 4)]public Decimal? WeeklyAvailableHours { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Decimal? WeeklyAvailableHours { get; set; }
 
 
 		/// <summary>
         /// Gets or sets the Membership End Date. The date when the person is leaving the team
         /// </summary>
         /// <value>The Membership End Date.</value>
-		[XmlElement(Order = 5)]public DateTime? MembershipEndDate { get; set; }
+		[DataMember][XmlElement(Order = 5)]public DateTime? MembershipEndDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Allocation. Indicates how much in % user works for the project
         /// </summary>
         /// <value>The Allocation.</value>
-		[XmlElement(Order = 6)]public Int32? Allocation { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? Allocation { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Project ID. Reference to project
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 7)]public Int32? ProjectID { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Int32? ProjectID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the User ID. Reference to person
         /// </summary>
         /// <value>The User ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? UserID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? UserID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role ID. Person role in the project. For example, Developer or Project Manager
         /// </summary>
         /// <value>The Role ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 9)]public Int32? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Int32? RoleID { get; set; }
 		
 
 		
@@ -86,20 +86,20 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
-		[XmlElement(Order = 10)]public virtual string ProjectName { get; set; }
+		[DataMember][XmlElement(Order = 10)]public virtual string ProjectName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Role Name. Person role in the project. For example, Developer or Project Manager
         /// </summary>
         /// <value>The Role Name.</value>
 		[RelationName]
-		[XmlElement(Order = 11)]public virtual string RoleName { get; set; }
+		[DataMember][XmlElement(Order = 11)]public virtual string RoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Membership Start Date. The date when the person joins the team
 		/// </summary>
 		/// <value>The Membership Start Date.</value>
-		[XmlElement(Order = 12)]
+		[DataMember][XmlElement(Order = 12)]
 		public DateTime? MembershipStartDate { get; set; }
 	}
 	

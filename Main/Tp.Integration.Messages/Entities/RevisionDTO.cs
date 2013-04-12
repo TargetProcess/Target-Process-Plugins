@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Revision. Represents revision from source control repository..
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RevisionDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,46 +36,46 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Revision ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RevisionID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RevisionID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Source Control ID. Source control identifier. 1 for Subversion
         /// </summary>
         /// <value>The Source Control ID.</value>
-		[XmlElement(Order = 4)]public string SourceControlID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public string SourceControlID { get; set; }
 
 		/// <summary>
         /// Gets or sets the Commit Date. Date when revision has been commited into repository.
         /// </summary>
         /// <value>The Commit Date.</value>
-		[XmlElement(Order = 5)]public DateTime? CommitDate { get; set; }
+		[DataMember][XmlElement(Order = 5)]public DateTime? CommitDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Plugin Profile ID. 
         /// </summary>
         /// <value>The Plugin Profile ID.</value>
-		[XmlElement(Order = 6)]public Int32? PluginProfileID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? PluginProfileID { get; set; }
 
 		/// <summary>
         /// Gets or sets the Description. Revision message.
         /// </summary>
         /// <value>The Description.</value>
-		[XmlElement(Order = 7)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 7)]public String Description { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Project ID. Project to which revision belongs.
         /// </summary>
         /// <value>The Project ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? ProjectID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? ProjectID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Author ID. Person who commit revision.
         /// </summary>
         /// <value>The Author ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 9)]public Int32? AuthorID { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Int32? AuthorID { get; set; }
 		
 
 		
@@ -84,7 +84,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Project Name.</value>
 		[RelationName]
-		[XmlElement(Order = 10)]public virtual string ProjectName { get; set; }
+		[DataMember][XmlElement(Order = 10)]public virtual string ProjectName { get; set; }
 		
 	}
 	

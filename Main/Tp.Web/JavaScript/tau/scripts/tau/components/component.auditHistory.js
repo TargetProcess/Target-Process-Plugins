@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/extensions/auditHistory/ui.extension.auditHistory","tau/ui/templates/auditHistory/ui.template.auditHistory"],function(creator,ExtensionMain,Template){return{create:function(config){var creatorConfig={name:"auditHistory",extensions:[ExtensionMain],template:Template};return creator.create(creatorConfig,config)}}})

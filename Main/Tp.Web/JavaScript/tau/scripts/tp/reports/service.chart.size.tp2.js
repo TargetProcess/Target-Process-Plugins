@@ -1,0 +1,1 @@
+define(["tau/core/class","tau/core/event"],function(Class,Event){var Service=Class.extend({init:function(container){this.width=container.width()*.9,this.height=container.height()},size:function(){return{width:this.width,height:this.height}}});return Event.implementOn(Service.prototype),Service})

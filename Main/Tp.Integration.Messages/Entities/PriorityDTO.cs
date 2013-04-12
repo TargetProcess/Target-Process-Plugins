@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Priority. Represents priority of User Story, Bug or Feature.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class PriorityDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,26 +36,26 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Priority ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? PriorityID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? PriorityID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Priority name. For example: Must Have
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Importance. Defines priority importance. Minimal value is highest importance.
         /// </summary>
         /// <value>The Importance.</value>
-		[XmlElement(Order = 5)]public Int32? Importance { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? Importance { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Default. Defined default priority for entity
         /// </summary>
         /// <value>The Is Default.</value>
-		[XmlElement(Order = 6)]public Boolean? IsDefault { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? IsDefault { get; set; }
 		
 
 		
@@ -64,7 +64,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string EntityTypeName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string EntityTypeName { get; set; }
 		
 	}
 	

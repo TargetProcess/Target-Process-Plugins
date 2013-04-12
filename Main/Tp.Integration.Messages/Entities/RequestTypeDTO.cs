@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Request Type. Represents RequestType.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RequestTypeDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,14 +36,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Request Type ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RequestTypeID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RequestTypeID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. RequestType name. For example: Issue
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 		
 
 		

@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Threading;
 using NServiceBus.Utils;
@@ -20,7 +19,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		private readonly ILoggerContextSensitive _log;
 		private readonly Func<TMessage, string> _tagMessageProvider;
 		private readonly IProducerConsumerFactory<TMessage> _producerConsumerFactory;
-		private readonly ConcurrentDictionary<string, Child> _routerItems;
+		private readonly ConcurrentDictionary<string, Lazy<Child>> _routerItems;
 		private Action<TMessage> _handleMessage;
 		private int _childrenCount;
 
@@ -30,7 +29,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			_log = log;
 			_producerConsumerFactory = producerConsumerFactory;
 			_tagMessageProvider = tagMessageProvider;
-			_routerItems = new ConcurrentDictionary<string, Child>();
+			_routerItems = new ConcurrentDictionary<string, Lazy<Child>>();
 		}
 
 		private void InitializeChildren(IEnumerable<string> childrenTags)
@@ -71,11 +70,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 
 		public override void Dispose(string childTag)
 		{
-			Child child;
+			Lazy<Child> child;
 			var hasValue = _routerItems.TryGetValue(childTag, out child);
 			if (hasValue)
 			{
-				child.Consumer.Dispose();
+				child.Value.Consumer.Dispose();
 			}
 		}
 
@@ -84,7 +83,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			base.OnDispose();
 			foreach (var consumer in _routerItems)
 			{
-				consumer.Value.Consumer.Dispose();
+				consumer.Value.Value.Consumer.Dispose();
 			}
 		}
 
@@ -114,7 +113,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 
 		private Child GetOrCreateRouterItem(string tag)
 		{
-			return _routerItems.GetOrAdd(tag, t => Create(t));
+			return _routerItems.GetOrAdd(tag, t => Lazy.Create(() => Create(t))).Value;
 		}
 
 		private Child Create(string sourceName)

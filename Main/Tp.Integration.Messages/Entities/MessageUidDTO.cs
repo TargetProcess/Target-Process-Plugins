@@ -3,14 +3,14 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 
 namespace Tp.Integration.Common
 {
 	/// <summary>
 	/// Data Transfer object of Message Uid. Represents reference to downloaded message.
 	/// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public class MessageUidDTO : DataTransferObject
 	{
 		/// <summary>
@@ -35,26 +35,26 @@ namespace Tp.Integration.Common
 		/// </summary>
 		/// <value>The Message Uid ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? MessageUidID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? MessageUidID { get; set; }
 
 
 		/// <summary>
 		/// Gets or sets the UID. The identity of the message
 		/// </summary>
 		/// <value>The UID.</value>
-		[XmlElement(Order = 4)]public String UID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String UID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Mail Server. Mail server name
 		/// </summary>
 		/// <value>The Mail Server.</value>
-		[XmlElement(Order = 5)]public String MailServer { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String MailServer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Mail Login. Mail login
 		/// </summary>
 		/// <value>The Mail Login.</value>
-		[XmlElement(Order = 6)]public String MailLogin { get; set; }
+		[DataMember][XmlElement(Order = 6)]public String MailLogin { get; set; }
 	}
 
 

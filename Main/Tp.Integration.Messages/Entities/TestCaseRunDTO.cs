@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
     /// <summary>
     /// Data Transfer object of Test Case Run. Represents specific run of test case against test plan.
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TestCaseRunDTO : DataTransferObject
 	{
         /// <summary>
@@ -36,46 +36,46 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Test Case Run ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TestCaseRunID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TestCaseRunID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Run Date. Date when test case was run
         /// </summary>
         /// <value>The Run Date.</value>
-		[XmlElement(Order = 4)]public DateTime? RunDate { get; set; }
+		[DataMember][XmlElement(Order = 4)]public DateTime? RunDate { get; set; }
 
 		/// <summary>
         /// Gets or sets the Passed. Defines whether test case passed or failed. True - passed, False - failed
         /// </summary>
         /// <value>The Passed.</value>
-		[XmlElement(Order = 5)]public Boolean? Passed { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Boolean? Passed { get; set; }
 
 		/// <summary>
         /// Gets or sets the Runned. Defines whether test case was run. True - run, False - not run
         /// </summary>
         /// <value>The Runned.</value>
-		[XmlElement(Order = 6)]public Boolean? Runned { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? Runned { get; set; }
 
 		/// <summary>
         /// Gets or sets the Comment. Comment
         /// </summary>
         /// <value>The Comment.</value>
-		[XmlElement(Order = 7)]public String Comment { get; set; }
+		[DataMember][XmlElement(Order = 7)]public String Comment { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Test Plan Run ID. Reference to test plan run
         /// </summary>
         /// <value>The Test Plan Run ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? TestPlanRunID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? TestPlanRunID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Test Case Test Plan ID. Reference to test plan and test case
         /// </summary>
         /// <value>The Test Case Test Plan ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 9)]public Int32? TestCaseTestPlanID { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Int32? TestCaseTestPlanID { get; set; }
 		
 
 		
@@ -84,7 +84,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Test Plan Run Name.</value>
 		[RelationName]
-		[XmlElement(Order = 10)]public virtual string TestPlanRunName { get; set; }
+		[DataMember][XmlElement(Order = 10)]public virtual string TestPlanRunName { get; set; }
 		
 	}
 	

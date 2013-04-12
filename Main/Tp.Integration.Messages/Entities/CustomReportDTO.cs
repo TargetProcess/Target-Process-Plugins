@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Custom Report. Represents Custom Report.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class CustomReportDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,46 +37,46 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Custom Report ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? CustomReportID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? CustomReportID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Name
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Reporting Entity Name. Reporting Entity Name
         /// </summary>
         /// <value>The Reporting Entity Name.</value>
-		[XmlElement(Order = 5)]public String ReportingEntityName { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String ReportingEntityName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Public. Is Public
         /// </summary>
         /// <value>The Is Public.</value>
-		[XmlElement(Order = 6)]public Boolean? IsPublic { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? IsPublic { get; set; }
 
 		/// <summary>
         /// Gets or sets the Content. Content
         /// </summary>
         /// <value>The Content.</value>
-		[XmlElement(Order = 7)]public String Content { get; set; }
+		[DataMember][XmlElement(Order = 7)]public String Content { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Process ID. 
         /// </summary>
         /// <value>The Process ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 8)]public Int32? ProcessID { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Int32? ProcessID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Owner ID. Owner
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 9)]public Int32? OwnerID { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Int32? OwnerID { get; set; }
 		
 
 		
@@ -85,7 +85,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Process Name.</value>
 		[RelationName]
-		[XmlElement(Order = 10)]public virtual string ProcessName { get; set; }
+		[DataMember][XmlElement(Order = 10)]public virtual string ProcessName { get; set; }
 		
 	}
 	

@@ -208,9 +208,9 @@ namespace Tp.Core
 			{
 			}
 
-			public CaseE<T, TResult> For(Expression<Func<T, bool>> func, Expression<Func<T, TResult>> func1)
+			public CaseE<T, TResult> For(Expression<Func<T, bool>> @case, Expression<Func<T, TResult>> then)
 			{
-				return new CaseE<T, TResult>(this, func, func1);
+				return new CaseE<T, TResult>(this, @case, then);
 			}
 
 

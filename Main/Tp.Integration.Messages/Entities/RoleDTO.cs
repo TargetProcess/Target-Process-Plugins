@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
 	/// <summary>
 	/// Data Transfer object of Role. Represents Role in the system. TargetProcess has role-based permissions. Each user can have specific role in each project, thus having specific access..
 	/// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class RoleDTO : DataTransferObject
 	{
 		/// <summary>
@@ -36,50 +36,50 @@ namespace Tp.Integration.Common
 		/// </summary>
 		/// <value>The Role ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? RoleID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? RoleID { get; set; }
 		
 
 		/// <summary>
 		/// Gets or sets the Name. Role name
 		/// </summary>
 		/// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Description. Brief role description
 		/// </summary>
 		/// <value>The Description.</value>
-		[XmlElement(Order = 5)]public String Description { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Description { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Time Sheet Access. Time Sheet Access
 		/// </summary>
 		/// <value>The Time Sheet Access.</value>
-		[XmlElement(Order = 6)]public Boolean? TimeSheetAccess { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? TimeSheetAccess { get; set; }
 
 		/// <summary>
 		/// Gets or sets the People Access. 
 		/// </summary>
 		/// <value>The People Access.</value>
-		[XmlElement(Order = 7)]public Boolean? PeopleAccess { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Boolean? PeopleAccess { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Personal Email Access. 
 		/// </summary>
 		/// <value>The Personal Email Access.</value>
-		[XmlElement(Order = 8)]public Boolean? PersonalEmailAccess { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Boolean? PersonalEmailAccess { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Pair. 
 		/// </summary>
 		/// <value>The Pair.</value>
-		[XmlElement(Order = 9)]public Boolean? Pair { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Boolean? Pair { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Have Effort. 
 		/// </summary>
 		/// <value>The Have Effort.</value>
-		[XmlElement(Order = 10)]public Boolean? HaveEffort { get; set; }
+		[DataMember][XmlElement(Order = 10)]public Boolean? HaveEffort { get; set; }
 		
 
 		

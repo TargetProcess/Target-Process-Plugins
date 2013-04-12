@@ -341,6 +341,7 @@
     <Compile Include="SerializationExtensions.cs" />
     <Compile Include="SerializationPatches\IPatch.cs" />
     <Compile Include="SerializationPatches\IPatchCollection.cs" />
+    <Compile Include="SerializationPatches\RemoveBackingFieldPatch.cs" />
     <Compile Include="ServiceBus\BusExtensions.cs" />
     <Compile Include="ServiceBus\Serialization\AdvancedXmlSerializer.cs" />
     <Compile Include="ServiceBus\Serialization\BinaryContainer.cs" />

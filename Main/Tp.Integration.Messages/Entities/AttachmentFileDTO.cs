@@ -3,14 +3,14 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 
 namespace Tp.Integration.Common
 {
 	/// <summary>
 	/// Data Transfer object of Attachment File. Represents reference to file or file content.
 	/// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public class AttachmentFileDTO : DataTransferObject
 	{
 		/// <summary>
@@ -35,20 +35,20 @@ namespace Tp.Integration.Common
 		/// </summary>
 		/// <value>The Attachment File ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? AttachmentFileID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? AttachmentFileID { get; set; }
 
 
 		/// <summary>
 		/// Gets or sets the Unique File Name. The path to file in the system
 		/// </summary>
 		/// <value>The Unique File Name.</value>
-		[XmlElement(Order = 4)]public String UniqueFileName { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String UniqueFileName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Buffer. The content of the file if the attachment is stored in database
 		/// </summary>
 		/// <value>The Buffer.</value>
-		[XmlElement(Order = 5)]public Byte[] Buffer { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Byte[] Buffer { get; set; }
 	}
 
 

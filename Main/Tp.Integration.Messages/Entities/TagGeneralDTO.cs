@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Tag General. Represents Tag General relation.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TagGeneralDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,7 +37,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Tag General ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TagGeneralID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TagGeneralID { get; set; }
 		
 		
 		/// <summary>
@@ -45,14 +45,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The General ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 4)]public Int32? GeneralID { get; set; }
+		[DataMember][XmlElement(Order = 4)]public Int32? GeneralID { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Tag ID. Reference to Tag
         /// </summary>
         /// <value>The Tag ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 5)]public Int32? TagID { get; set; }
+		[DataMember][XmlElement(Order = 5)]public Int32? TagID { get; set; }
 		
 
 		
@@ -61,14 +61,14 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The General Name.</value>
 		[RelationName]
-		[XmlElement(Order = 6)]public virtual string GeneralName { get; set; }
+		[DataMember][XmlElement(Order = 6)]public virtual string GeneralName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Tag Name. Reference to Tag
         /// </summary>
         /// <value>The Tag Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string TagName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string TagName { get; set; }
 		
 	}
 	

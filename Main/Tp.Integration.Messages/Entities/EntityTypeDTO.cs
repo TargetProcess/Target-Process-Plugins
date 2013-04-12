@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Entity Type. Represents entity type. For example: Bug, TestCase, Project..
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class EntityTypeDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,93 +37,93 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Entity Type ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? EntityTypeID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? EntityTypeID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Name. Full name of class with namespace. For example: Tp.BusinessObjects.Project
         /// </summary>
         /// <value>The Name.</value>
-		[XmlElement(Order = 4)]public String Name { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String Name { get; set; }
 
 		/// <summary>
         /// Gets or sets the Abbreviation. Short name of class without namespace. For example: Project
         /// </summary>
         /// <value>The Abbreviation.</value>
-		[XmlElement(Order = 5)]public String Abbreviation { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String Abbreviation { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Assignable. Defines whether entity of such type inherited from Assignable class.
         /// </summary>
         /// <value>The Is Assignable.</value>
-		[XmlElement(Order = 6)]public Boolean? IsAssignable { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Boolean? IsAssignable { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Own Effort Available. 
         /// </summary>
         /// <value>The Is Own Effort Available.</value>
-		[XmlElement(Order = 7)]public Boolean? IsOwnEffortAvailable { get; set; }
+		[DataMember][XmlElement(Order = 7)]public Boolean? IsOwnEffortAvailable { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Global Search Available. 
         /// </summary>
         /// <value>The Is Global Search Available.</value>
-		[XmlElement(Order = 8)]public Boolean? IsGlobalSearchAvailable { get; set; }
+		[DataMember][XmlElement(Order = 8)]public Boolean? IsGlobalSearchAvailable { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Release Plannable. 
         /// </summary>
         /// <value>The Is Release Plannable.</value>
-		[XmlElement(Order = 9)]public Boolean? IsReleasePlannable { get; set; }
+		[DataMember][XmlElement(Order = 9)]public Boolean? IsReleasePlannable { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Iteration Plannable. 
         /// </summary>
         /// <value>The Is Iteration Plannable.</value>
-		[XmlElement(Order = 10)]public Boolean? IsIterationPlannable { get; set; }
+		[DataMember][XmlElement(Order = 10)]public Boolean? IsIterationPlannable { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Custom Fields Holder. 
         /// </summary>
         /// <value>The Is Custom Fields Holder.</value>
-		[XmlElement(Order = 11)]public Boolean? IsCustomFieldsHolder { get; set; }
+		[DataMember][XmlElement(Order = 11)]public Boolean? IsCustomFieldsHolder { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Childs Container. 
         /// </summary>
         /// <value>The Is Childs Container.</value>
-		[XmlElement(Order = 12)]public Boolean? IsChildsContainer { get; set; }
+		[DataMember][XmlElement(Order = 12)]public Boolean? IsChildsContainer { get; set; }
 
 		/// <summary>
         /// Gets or sets the Is Prioritizable. 
         /// </summary>
         /// <value>The Is Prioritizable.</value>
-		[XmlElement(Order = 13)]public Boolean? IsPrioritizable { get; set; }
+		[DataMember][XmlElement(Order = 13)]public Boolean? IsPrioritizable { get; set; }
 
 		/// <summary>
         /// Gets or sets the Has Audit History. 
         /// </summary>
         /// <value>The Has Audit History.</value>
-		[XmlElement(Order = 14)]public Boolean? HasAuditHistory { get; set; }
+		[DataMember][XmlElement(Order = 14)]public Boolean? HasAuditHistory { get; set; }
 
 		/// <summary>
         /// Gets or sets the Unit In Hour Only. 
         /// </summary>
         /// <value>The Unit In Hour Only.</value>
-		[XmlElement(Order = 15)]public Boolean? UnitInHourOnly { get; set; }
+		[DataMember][XmlElement(Order = 15)]public Boolean? UnitInHourOnly { get; set; }
 
 		/// <summary>
         /// Gets or sets the Has Initial Estimate. 
         /// </summary>
         /// <value>The Has Initial Estimate.</value>
-		[XmlElement(Order = 16)]public Boolean? HasInitialEstimate { get; set; }
+		[DataMember][XmlElement(Order = 16)]public Boolean? HasInitialEstimate { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Practice ID. Entity may be associated with Practice. For example, User Story associated with Planning practice. Optional
         /// </summary>
         /// <value>The Practice ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 17)]public Int32? PracticeID { get; set; }
+		[DataMember][XmlElement(Order = 17)]public Int32? PracticeID { get; set; }
 		
 
 		
@@ -132,7 +132,7 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Practice Name.</value>
 		[RelationName]
-		[XmlElement(Order = 18)]public virtual string PracticeName { get; set; }
+		[DataMember][XmlElement(Order = 18)]public virtual string PracticeName { get; set; }
 		
 	}
 	

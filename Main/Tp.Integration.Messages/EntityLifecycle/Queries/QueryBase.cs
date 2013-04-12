@@ -11,6 +11,7 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
 	public abstract class QueryBase : ITargetProcessCommand
 	{
 		public abstract DtoType DtoType { get; }
+		public bool IgnoreMessageSizeOverrunFailure { get; set; }
 	}
 
 	[Serializable]

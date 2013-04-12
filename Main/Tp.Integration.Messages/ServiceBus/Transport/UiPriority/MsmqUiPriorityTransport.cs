@@ -576,12 +576,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				result.Headers.Add(new HeaderInfo
 						{
 							Key = TpUnicastBus.SourceQueue,
-							Value = queue.FormatName
+							Value = queue.IndependentAddressForQueue
 						});
 			}
 			else
 			{
-				sourceHeader.Value = queue.FormatName;
+				sourceHeader.Value = queue.IndependentAddressForQueue;
 			}
 
 			if (SkipDeserialization)

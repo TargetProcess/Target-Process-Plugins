@@ -38,8 +38,8 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("2.23.16.24418")]
+// [assembly: AssemblyVersion("2.24.0.23637")]
 
-[assembly: AssemblyVersion("2.23.16.24418")]
-[assembly: AssemblyFileVersion("2.23.16.24418")]
+[assembly: AssemblyVersion("2.24.0.23637")]
+[assembly: AssemblyFileVersion("2.24.0.23637")]
 [assembly: PluginAssembly("Task Creator", "This plugin automatically creates a number of tasks for a user story as it is added.", "Helpers", "task-creator-icon.png")]

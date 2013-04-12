@@ -1,0 +1,1 @@
+define(["tau/core/model-base"],function(ModelBase){return ModelBase.extend({"bus afterInit":function(evt){var self=this;self.store.get("relationTypes",{relationType:["id","name"]}).done({success:function(data){self.fire("dataBind",{relationTypes:data[0].data,relationTypeId:data[0].data[0].id})}})}})})

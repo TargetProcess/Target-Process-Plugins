@@ -48,7 +48,7 @@
                 {
                     var loaded = scripts[t];
                     if(!loaded){
-                       vals.push('Script ' + t + ' couldn\'t be not loaded by url ' + requireContext.urlMap[t]);
+                       vals.push('Script ' + t + ' could not be loaded by url ' + requireContext.urlMap[t]);
                     }
                 }
                 window.onerror(vals.join('\n'));

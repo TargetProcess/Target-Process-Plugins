@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Tp Profile. Represents the settings for user.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TpProfileDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,27 +37,27 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Profile ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? ProfileID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? ProfileID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Property Name. The name of the property
         /// </summary>
         /// <value>The Property Name.</value>
-		[XmlElement(Order = 4)]public String PropertyName { get; set; }
+		[DataMember][XmlElement(Order = 4)]public String PropertyName { get; set; }
 
 		/// <summary>
         /// Gets or sets the Property Value. The value
         /// </summary>
         /// <value>The Property Value.</value>
-		[XmlElement(Order = 5)]public String PropertyValue { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String PropertyValue { get; set; }
 		
 		/// <summary>
         /// Gets or sets the Owner ID. Reference to user
         /// </summary>
         /// <value>The Owner ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? UserID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? UserID { get; set; }
 		
 
 		

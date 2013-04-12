@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"ui.template.title.simple",markup:['<div class="ui-title-simple">','   <div class="entity-title">${name}</div>',"</div>"],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"title.simple",engine:"jqote2",markup:['<div class="ui-title ui-title_type_simple">','<div class="ui-title__title i-role-title"><%! this.name %></div>',"</div>"],dependencies:[]};return templates.register(config)})

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(templates){var config={name:"board.editor.stateSetup",engine:"jqote2",markup:['<button type="button" class="tau-btn tau-board-settings__statesetup i-role-statesetup">Setup States</button>'],dependencies:[]};return templates.register(config)})

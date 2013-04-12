@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"audit-history",markup:['<div class="tau-audit-history-placeholder"><span class="ui-empty-data-msg">loading history...</span></div>'],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(templates){var config={name:"auditHistory",engine:"jqote2",markup:['<div class="tau-audit-history-placeholder">','<span class="ui-empty-data-msg">loading history...</span>',"</div>"]};return templates.register(config)})

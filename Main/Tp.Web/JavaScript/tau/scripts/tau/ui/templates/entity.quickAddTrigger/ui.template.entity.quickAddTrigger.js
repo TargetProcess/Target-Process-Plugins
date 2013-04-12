@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(templates){var config={name:"entity.quickAddTrigger",engine:"jqote2",markup:["<% if (!this.isEmpty){ %>",'<span class="tau-view-quick-add" role="action-quick-add">',"</span>","<% } %>"],dependencies:[]};return templates.register(config)})

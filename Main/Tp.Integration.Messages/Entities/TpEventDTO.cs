@@ -3,7 +3,7 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
-using System.Xml.Serialization;
+using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
     /// Data Transfer object of Tp Event. Represents event defined for some entity type.
 	/// TargetProcess system usage only
     /// </summary>
-	[Serializable]
+	[Serializable][DataContract]
 	public partial class TpEventDTO : DataTransferObject
 	{
         /// <summary>
@@ -37,34 +37,34 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Tp Event ID.</value>
 		[PrimaryKey]
-		[XmlElement(Order = 3)]public int? TpEventID { get; set; }
+		[DataMember][XmlElement(Order = 3)]public int? TpEventID { get; set; }
 		
 
 		/// <summary>
         /// Gets or sets the Action Type. The type of action
         /// </summary>
         /// <value>The Action Type.</value>
-		[XmlElement(Order = 4)]public ActionTypeEnum? ActionType { get; set; }
+		[DataMember][XmlElement(Order = 4)]public ActionTypeEnum? ActionType { get; set; }
 
 		/// <summary>
         /// Gets or sets the Entity Type. Reference to issued entity type. For example Bug
         /// </summary>
         /// <value>The Entity Type.</value>
-		[XmlElement(Order = 5)]public String EntityTypeName { get; set; }
+		[DataMember][XmlElement(Order = 5)]public String EntityTypeName { get; set; }
 		
 		/// <summary>
         /// Gets or sets the State ID. Reference to issued state
         /// </summary>
         /// <value>The State ID.</value>
 		[ForeignKey]
-		[XmlElement(Order = 6)]public Int32? EntityStateID { get; set; }
+		[DataMember][XmlElement(Order = 6)]public Int32? EntityStateID { get; set; }
 
 		/// <summary>
         /// Gets or sets the State Name. Reference to issued state
         /// </summary>
         /// <value>The State Name.</value>
 		[RelationName]
-		[XmlElement(Order = 7)]public virtual string StateName { get; set; }
+		[DataMember][XmlElement(Order = 7)]public virtual string StateName { get; set; }
 		
 	}
 

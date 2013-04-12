@@ -27,7 +27,7 @@ namespace Tp.Integration.Plugin.Common.Storage.Persisters.Serialization
 			{
 				var reader = stateData.CreateReader();
 				reader.MoveToContent();
-				var patchedText = SerializationPatcher.Apply(reader.ReadOuterXml());
+				var patchedText = SerializationPatcher.Apply(reader.ReadOuterXml(), new RemoveBackingFieldPatch(keyType));
 
 				return DeserializeInternal(XDocument.Parse(patchedText), keyType);
 			}

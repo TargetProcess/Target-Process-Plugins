@@ -24,7 +24,7 @@ namespace Tp.Bugzilla.ConnectionValidators
 			try
 			{
 				var url = new BugzillaUrl(ConnectionSettings);
-				var webClient = new WebClient {Encoding = Encoding.UTF8};
+				WebClient webClient = new TpWebClient { Encoding = Encoding.UTF8 };
 				webClient.DownloadString(url.Url);
 			}
 			catch (Exception exception)
