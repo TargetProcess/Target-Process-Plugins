@@ -1,0 +1,209 @@
+/*
+   Simple GitHub-like styles mostly based on ghf_marked.css from https://github.com/alampros/Docter
+*/
+
+.markdown {
+    font: normal 14px/1.6 Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    text-align: left;
+    color: #333;
+    margin: 5px 5px 15px 5px;
+}
+
+.markdown article {
+    padding: 30px;
+    border: 1px solid #cacaca;
+    background-color: white;
+}
+
+.markdown article > :first-child {
+    margin-top: 0 !important;
+}
+
+.markdown h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.markdown h2 {
+    font-size: 24px;
+    margin: 20px 0 10px;
+    color: black;
+    border-bottom: 1px solid #ccc;
+}
+
+.markdown h3 {
+    font-size: 18px;
+    margin: 20px 0 10px;
+}
+
+.markdown h4 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
+
+.markdown h5 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
+
+.markdown h6 {
+    color: #777;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
+
+.markdown hr {
+    background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+    border: 0 none;
+    height: 4px;
+    margin: 15px 0;
+    padding: 0;
+}
+
+.markdown p {
+    margin: 15px 0;
+}
+
+.markdown pre, .markdown code {
+    font: 12px 'Bitstream Vera Sans Mono', 'Courier', monospace;
+}
+
+.markdown .highlight pre, .markdown pre {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 6px 10px;
+}
+
+.markdown code {
+    white-space: nowrap;
+    border: 1px solid #eaeaea;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin: 0 2px;
+    padding: 0 5px;
+}
+
+.markdown pre > code {
+    white-space: pre;
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.markdown a, .markdown a code {
+    color: #4183C4;
+    text-decoration: none;
+}
+
+.markdown blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 11px;
+    color: #555;
+    margin: 14px 0;
+}
+
+.markdown table {
+    font-size: 14px;
+    border-collapse: collapse;
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.markdown table tr {
+    border-top: 1px solid #ccc;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.markdown table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+
+.markdown table tr th[align="center"], .markdown table tr td[align="center"] {
+    text-align: center;
+}
+
+.markdown table tr th, .markdown table tr td {
+    border: 1px solid #ccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+
+.markdown ul, .markdown ol {
+    margin: 15px 0;
+}
+
+.markdown ul li, .markdown ol li {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.markdown .shadow {
+    -webkit-box-shadow: 0 5px 15px #000;
+    -moz-box-shadow: 0 5px 15px #000;
+    box-shadow: 0 5px 15px #000;
+}
+
+.markdown img {
+    max-width: 540px;
+}
+
+@media screen and (min-width: 1210px) {
+    .markdown img {
+        max-width: 620px;
+    }
+}
+
+@media screen and (min-width: 1290px) {
+    .markdown img {
+        max-width: 690px;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .markdown img {
+        max-width: 790px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .markdown img {
+        max-width: 840px;
+    }
+}
+
+@media screen and (min-width: 1560px) {
+    .markdown img {
+        max-width: 950px;
+    }
+}
+
+@media screen and (min-width: 1740px) {
+    .markdown img {
+        max-width: 1140px;
+    }
+}
+
+@media screen and (min-width: 1880px) {
+    .markdown img {
+        max-width: 1270px;
+    }
+}

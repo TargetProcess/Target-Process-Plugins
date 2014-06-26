@@ -13,6 +13,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFeature
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class WhenMailFromRequesterReceivedSpecs
 	{
 		[Test]

@@ -21,6 +21,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins1")]
 	public class ProfileStorageSpecs
 	{
 		public class ProfileStorageContext

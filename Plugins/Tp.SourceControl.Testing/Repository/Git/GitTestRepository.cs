@@ -1,10 +1,11 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using NGit;
 using StructureMap;
@@ -28,6 +29,8 @@ namespace Tp.SourceControl.Testing.Repository.Git
 		protected override void OnTestRepositoryDeployed()
 		{
 			base.OnTestRepositoryDeployed();
+
+			EnsureUserHomePathForSystemUser();
 
 			_git = NGit.Api.Git.CloneRepository()
 				.SetURI(LocalRepositoryPath)
@@ -96,6 +99,29 @@ namespace Tp.SourceControl.Testing.Repository.Git
 			BatchingProgressMonitor.ShutdownNow();
 
 			return result.GetCherryPickedRefs().Select(x => x.GetName()).First();
+		}
+
+		private void EnsureUserHomePathForSystemUser()
+		{
+			using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent())
+			{
+				if (identity == null || !identity.IsSystem) return;
+				var type = typeof (Sharpen.FilePath).Assembly.GetTypes().FirstOrDefault(ta => ta.Name == "Runtime");
+				if (type != null)
+				{
+					var method = type.GetMethod("GetProperties", BindingFlags.Public | BindingFlags.Static);
+					method.Invoke(null, null);
+					var field = type.GetField("properties", BindingFlags.NonPublic | BindingFlags.Static);
+					if (field != null)
+					{
+						var properties = (System.Collections.Hashtable) field.GetValue(null);
+						if (string.IsNullOrEmpty(properties["user.home"] as string))
+						{
+							properties["user.home"] = Path.Combine(Path.Combine(GetExecutingDirectory(), "App_Data"), "git");
+						}
+					}
+				}
+			}
 		}
 	}
 }

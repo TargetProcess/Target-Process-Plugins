@@ -1,0 +1,10 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.GeneralRelationDTO, Tp.Integration.Messages</Type>
+  <GeneralRelationDTO>
+    <ID xsi:nil="true" />
+    <GeneralRelationID xsi:nil="true" />
+    <MasterID xsi:nil="true" />
+    <SlaveID xsi:nil="true" />
+    <GeneralRelationTypeID xsi:nil="true" />
+  </GeneralRelationDTO>
+</Value>

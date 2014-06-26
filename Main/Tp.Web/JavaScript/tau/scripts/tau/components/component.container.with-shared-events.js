@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.container","tau/components/extensions/component.sharedBus.extension"],function(n,e,t){return{create:function(o){return o.extensions=n.concat([o.extensions,t]),e.create(o)}}});

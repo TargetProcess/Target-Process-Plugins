@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Tp.Core;
 using Tp.Core.Annotations;
 
 // ReSharper disable CheckNamespace
@@ -70,6 +71,16 @@ namespace System.Linq.Dynamic
 		{
 			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IDictionary<,>) &&
 			       type.GetGenericArguments().First() == typeof (string);
+		}
+
+		public static Maybe<string> GetAlias(Expression expr, int exprPos)
+		{
+			string name;
+			if (!TryGetAlias(expr, exprPos, out name))
+			{
+				return Maybe.Nothing;
+			}
+			return name.ToMaybe();
 		}
 	}
 

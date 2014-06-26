@@ -1,1 +1,1 @@
-define(["jQuery","tau/components/extensions/component.extension.base"],function(jQuery,ExtensionBase){return ExtensionBase.extend({"bus afterRender+duplicateBugCountRetrieved":function(evtArgs){var count=evtArgs.duplicateBugCountRetrieved.data.count;count>0&&this.fire("setBadgeText",{text:count})}})})
+define(["jQuery","tau/components/extensions/component.extension.base"],function(e,t){return t.extend({"bus afterRender+duplicateBugCountRetrieved":function(e){var t=e.duplicateBugCountRetrieved.data.count;t>0&&this.fire("setBadgeData",t.toString())}})});

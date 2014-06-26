@@ -4,6 +4,7 @@
 // 
 
 using System;
+using System.Globalization;
 using System.Linq;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -46,7 +47,7 @@ namespace Tp.Git.VersionControlSystem
 		public RevisionId ConvertToRevisionId(string startRevision)
 		{
 			var revisionId = (GitRevisionId) (RevisionId) startRevision;
-			revisionId.Time = DateTime.Parse(startRevision);
+			revisionId.Time = DateTime.Parse(startRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal);
 
 			return revisionId;
 		}

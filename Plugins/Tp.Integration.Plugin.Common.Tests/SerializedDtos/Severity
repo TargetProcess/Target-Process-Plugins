@@ -1,0 +1,9 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.SeverityDTO, Tp.Integration.Messages</Type>
+  <SeverityDTO>
+    <ID xsi:nil="true" />
+    <SeverityID xsi:nil="true" />
+    <Importance>0</Importance>
+    <IsDefault>false</IsDefault>
+  </SeverityDTO>
+</Value>

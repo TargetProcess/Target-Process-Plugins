@@ -1,1 +1,1 @@
-define(["tau/core/bus","app.bus"],function(Bus,promise){var globalBus=new Bus({id:"global",name:"globalBus"});return promise.resolve(globalBus),{bus:null,reset:function(){},get:function(){return globalBus}}})
+define(["tau/core/bus","app.bus"],function(e,n){var u=new e({id:"global",name:"globalBus"});return n.resolve(u),{bus:null,reset:function(){},get:function(){return u}}});

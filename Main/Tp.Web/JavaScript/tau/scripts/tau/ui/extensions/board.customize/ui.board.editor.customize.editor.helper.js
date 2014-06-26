@@ -1,0 +1,1 @@
+define(["Underscore","tau/ui/extensions/board.customize/ui.board.editor.customize.editor.helper.base"],function(e,i){return new i});

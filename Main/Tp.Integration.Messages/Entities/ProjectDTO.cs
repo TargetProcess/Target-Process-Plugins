@@ -3,8 +3,10 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {
@@ -618,8 +620,6 @@ namespace Tp.Integration.Common
 		[ForeignKey]
 		[DataMember][XmlElement(Order = 98)]public Int32? CompanyID { get; set; }
 		
-
-		
 		/// <summary>
         /// Gets or sets the Parent Project Name. Project which entity belongs to
         /// </summary>
@@ -647,7 +647,14 @@ namespace Tp.Integration.Common
         /// <value>The Process Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 102)]public virtual string ProcessName { get; set; }
-		
+
+		[DataMember]
+		[XmlElement(Order = 103)]
+		public Field[] CustomFieldsMetaInfo { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 104)]
+		public decimal? Progress { get; set; }
 	}
 	
 	
@@ -1053,5 +1060,6 @@ namespace Tp.Integration.Common
         /// Process Name
         /// </summary>		
 		ProcessName,
+		Progress
 	}
 }

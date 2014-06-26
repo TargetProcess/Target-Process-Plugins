@@ -1,0 +1,14 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ProjectMemberDTO, Tp.Integration.Messages</Type>
+  <ProjectMemberDTO>
+    <ID xsi:nil="true" />
+    <ProjectMemberID xsi:nil="true" />
+    <WeeklyAvailableHours>40.0</WeeklyAvailableHours>
+    <MembershipEndDate xsi:nil="true" />
+    <Allocation>100</Allocation>
+    <ProjectID xsi:nil="true" />
+    <UserID xsi:nil="true" />
+    <RoleID xsi:nil="true" />
+    <MembershipStartDate xsi:nil="true" />
+  </ProjectMemberDTO>
+</Value>

@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace Tp.PopEmailIntegration
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class UtilsSpecs
 	{
 		[Test]

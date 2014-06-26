@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/component.base.new.list","tau/components/view.new.list/extension.view.new.list","tau/components/view.new.list/extension.view.new.list.card.viewer"],function(e,n,t,i){return{create:function(o){var s={newListRegistry:{baseComponent:e,LifeCycleExtension:t},extensions:[i]};return n.createNewList(s,o)}}});

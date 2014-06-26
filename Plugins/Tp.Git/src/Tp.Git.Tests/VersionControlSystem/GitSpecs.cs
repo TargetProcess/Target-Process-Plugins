@@ -33,7 +33,8 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Git.Tests.VersionControlSystem
 {
-	[TestFixture]
+    [TestFixture]
+    [Category("PartPlugins1")]
 	public class GitSpecs : ISourceControlConnectionSettingsSource
 	{
 		private GitTestRepository _testRepository;
@@ -62,6 +63,12 @@ namespace Tp.Git.Tests.VersionControlSystem
 			                                                                            		Password = _testRepository.Password,
 			                                                                            		StartRevision = "1/1/1980"
 			                                                                            	});
+			SetStartRevision("1/1/1980");
+		}
+
+		private void SetStartRevision(string startRevision)
+		{
+			((ISourceControlConnectionSettingsSource)this).StartRevision = startRevision;
 		}
 
 		string ISourceControlConnectionSettingsSource.Uri
@@ -81,8 +88,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 
 		string ISourceControlConnectionSettingsSource.StartRevision
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			get; set;
 		}
 
 		MappingContainer ISourceControlConnectionSettingsSource.UserMapping
@@ -129,8 +135,13 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = CreateGitRevisionId(DateTime.Parse(("2011-11-04 8:42:11 AM")));
+				const string startRevision = "2011-11-04 8:42:11 AM";
+				
+				SetStartRevision(startRevision);
+
+				var startRevisionId = CreateGitRevisionId(DateTime.Parse(startRevision));
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
+				
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
 				fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time));
 
@@ -144,7 +155,11 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				var startRevisionId = CreateGitRevisionId(DateTime.Parse("2011-11-04 8:42:11"));
+				const string startRevision = "2011-11-04 8:42:11";
+	
+				SetStartRevision(startRevision);
+
+				var startRevisionId = CreateGitRevisionId(DateTime.Parse(startRevision));
 				var revisionRange = git.GetAfterTillHead(startRevisionId, 100).Single();
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
 
@@ -204,9 +219,12 @@ namespace Tp.Git.Tests.VersionControlSystem
 		{
 			using (var git = CreateGit())
 			{
-				GitRevisionId startRevisionId = CreateGitRevisionId(DateTime.Parse("2011-11-04 11:30:19 AM"));
-				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
+				const string startRevision = "2011-11-04 11:30:19 AM";
 
+				SetStartRevision(startRevision);
+
+				var startRevisionId = CreateGitRevisionId(DateTime.Parse(startRevision));
+				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 				var revision = git.GetRevisions(revisionRange).OrderBy(x => x.Time).First();
 
 				AssertEqual(revision.Entries, new[]
@@ -408,7 +426,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 		private GitVersionControlSystem CreateGit(ISourceControlConnectionSettingsSource settings)
 		{
 			return new GitVersionControlSystem(settings, ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
-											   ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>(), ObjectFactory.GetInstance<IStorageRepository>());
+											   ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>(), ObjectFactory.GetInstance<IStorageRepository>(), ObjectFactory.GetInstance<IRevisionIdComparer>());
 		}
 
 		#endregion

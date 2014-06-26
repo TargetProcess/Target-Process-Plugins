@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/model-base"],function(_,BaseModel){var Model=BaseModel.extend({"bus afterInit":function(evt){this.fire("dataBind",{})}});return Model})
+define(["Underscore","tau/core/model-base"],function(e,n){var t=n.extend({"bus afterInit":function(){this.fire("dataBind",{})}});return t});

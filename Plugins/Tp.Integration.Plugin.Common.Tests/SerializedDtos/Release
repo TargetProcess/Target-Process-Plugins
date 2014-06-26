@@ -1,0 +1,19 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ReleaseDTO, Tp.Integration.Messages</Type>
+  <ReleaseDTO>
+    <ID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <StartDate>2013-08-16T20:20:01.811118+03:00</StartDate>
+    <EndDate>2013-09-16T20:20:01.811118+03:00</EndDate>
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <ProjectID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Release</EntityTypeName>
+    <EntityTypeID>2</EntityTypeID>
+  </ReleaseDTO>
+</Value>

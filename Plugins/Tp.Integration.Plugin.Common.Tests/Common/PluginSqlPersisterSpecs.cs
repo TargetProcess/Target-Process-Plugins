@@ -20,6 +20,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins1")]
 	public class PluginSqlPersisterSpecs : SqlPersisterSpecBase
 	{
 		[Test]

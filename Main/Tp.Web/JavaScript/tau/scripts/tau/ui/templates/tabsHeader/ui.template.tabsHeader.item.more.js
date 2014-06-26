@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var r={name:"tabsHeader.item.more",markup:['<li class="tab-item tab-item-more-trigger i-role-moretrigger">','<span  class=" i-role-morelabel" data-text="More">More</span>','<ul class="i-role-moreholder drop-down-list"></ul>',"</li>"]};return e.register(r)});

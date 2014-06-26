@@ -1,0 +1,1 @@
+define([],function(){return{cutToViewport:function(t,n){return 0>t&&(n+=t,t=0),t+n>1&&(n=1-t),{left:t,width:n}}}});

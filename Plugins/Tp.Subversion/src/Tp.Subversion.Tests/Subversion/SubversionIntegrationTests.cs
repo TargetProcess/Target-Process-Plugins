@@ -23,6 +23,7 @@ using log4net.Config;
 namespace Tp.Subversion.Subversion
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class SubversionIntegrationTests
 	{
 		public const string LocalRepositoryPath = "TestRepository";

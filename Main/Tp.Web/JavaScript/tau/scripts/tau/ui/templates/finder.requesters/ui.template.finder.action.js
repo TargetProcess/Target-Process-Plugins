@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"finder-requesters-action",markup:["<span id='${id}' class='action-link tau-finder-action'>${name}</span>"]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var a={name:"finder-requesters-action",markup:["<span id='${id}' class='action-link tau-finder-action'>${name}</span>"]};return e.register(a)});

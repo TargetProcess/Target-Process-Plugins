@@ -20,23 +20,24 @@ namespace Tp.Integration.Plugin.Common.Activity
 	{
 		#region Fields
 
-		private readonly string _accountName;
-		private readonly string _profileName;
 		private static readonly DateTime _date1970 = new DateTime(1970, 1, 1);
+		private readonly string _accountName;
 		private readonly RollingFileAppender.IDateTime _dateTime;
-		private string _scheduledFilename;
-		private DateTime _nextCheck = DateTime.MaxValue;
+		private readonly Locker _locker;
+		private readonly string _profileName;
+		private string _baseFileName;
+		private int _countDirection = -1;
+		private int _curSizeRollBackups;
 		private long _maxFileSize = 10485760L;
 		private int _maxSizeRollBackups;
-		private int _curSizeRollBackups;
-		private int _countDirection = -1;
-		private RollingFileAppender.RollingMode _rollingStyle = RollingFileAppender.RollingMode.Composite;
-		private bool _rollDate = true;
-		private bool _rollSize = true;
-		private bool _staticLogFileName = true;
+		private DateTime _nextCheck = DateTime.MaxValue;
 		private DateTime _now;
+		private bool _rollDate = true;
 		private RollPoint _rollPoint;
-		private string _baseFileName;
+		private bool _rollSize = true;
+		private RollingFileAppender.RollingMode _rollingStyle = RollingFileAppender.RollingMode.Composite;
+		private string _scheduledFilename;
+		private bool _staticLogFileName = true;
 
 		#endregion
 
@@ -121,9 +122,10 @@ namespace Tp.Integration.Plugin.Common.Activity
 			_dateTime = new DefaultDateTime();
 		}
 
-		public PluginRollingFileAppender(PluginRollingFileAppender baseAppender, IActivityLogPathProvider path,
+		public PluginRollingFileAppender(PluginRollingFileAppender baseAppender, IActivityLogPathProvider path, Locker locker,
 		                                 string accountName, string profileName) : this()
 		{
+			_locker = locker;
 			_accountName = accountName;
 			_profileName = profileName;
 			Initialize(baseAppender, path);
@@ -211,21 +213,28 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		protected override void Append(LoggingEvent loggingEvent)
 		{
-			AdjustFileBeforeAppend(loggingEvent.TimeStamp);
+			_locker.TryAcquireLockAndExecute(File, () =>
+				                          {
+					                          AdjustFileBeforeAppend(loggingEvent.TimeStamp);
 
-			base.Append(loggingEvent);
+					                          base.Append(loggingEvent);
+				                          });
 		}
 
 		protected override void Append(LoggingEvent[] loggingEvents)
 		{
-			AdjustFileBeforeAppend(loggingEvents.OrderBy(x => x.TimeStamp).Select(x => x.TimeStamp).First());
+			_locker.TryAcquireLockAndExecute(File, () =>
+				                          {
+					                          AdjustFileBeforeAppend(
+						                          loggingEvents.OrderBy(x => x.TimeStamp).Select(x => x.TimeStamp).First());
 
-			base.Append(loggingEvents);
+					                          base.Append(loggingEvents);
+				                          });
 		}
 
 		protected virtual void AdjustFileBeforeAppend(DateTime timeStamp)
 		{
-			var now = timeStamp;
+			DateTime now = timeStamp;
 
 			if (_rollDate)
 			{
@@ -251,7 +260,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 			{
 				fileName = GetNextOutputFileName(fileName);
 
-				var local0 = 0L;
+				long local0 = 0L;
 
 				if (append)
 				{
@@ -307,9 +316,9 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 			using (SecurityContext.Impersonate(this))
 			{
-				var str = Path.GetFullPath(_baseFileName);
-				var baseFile = Path.GetFileName(str);
-				var existingFiles = GetExistingFiles(str);
+				string str = Path.GetFullPath(_baseFileName);
+				string baseFile = Path.GetFileName(str);
+				IEnumerable<string> existingFiles = GetExistingFiles(str);
 
 				InitializeRollBackups(baseFile, existingFiles);
 			}
@@ -324,14 +333,14 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 			using (SecurityContext.Impersonate(this))
 			{
-				var fullPath = Path.GetFullPath(baseFilePath);
+				string fullPath = Path.GetFullPath(baseFilePath);
 
 				path = Path.GetDirectoryName(fullPath);
 
 				if (Directory.Exists(path))
 				{
-					var fileName = Path.GetFileName(fullPath);
-					var files = Directory.GetFiles(path, ActivityLogFile.GetWildcartPatternFor(fileName));
+					string fileName = Path.GetFileName(fullPath);
+					string[] files = Directory.GetFiles(path, ActivityLogFile.GetWildcartPatternFor(fileName));
 
 					list.AddRange(files.Select(Path.GetFileName));
 				}
@@ -359,7 +368,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 			             lastWriteTime.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo) + "] vs. [" +
 			             _now.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo) + "]");
 			if (lastWriteTime.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo)
-				.Equals(_now.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo)))
+			                 .Equals(_now.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo)))
 			{
 				return;
 			}
@@ -381,7 +390,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 			}
 
 			bool flag;
-			var nextOutputFileName = GetNextOutputFileName(_baseFileName);
+			string nextOutputFileName = GetNextOutputFileName(_baseFileName);
 
 			using (SecurityContext.Impersonate(this))
 			{
@@ -417,7 +426,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 				}
 			}
 
-			var num1 = curFileName.LastIndexOf(".");
+			int num1 = curFileName.LastIndexOf(".");
 
 			if (0 > num1)
 			{
@@ -426,7 +435,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 			if (_staticLogFileName)
 			{
-				var num2 = curFileName.Length - num1;
+				int num2 = curFileName.Length - num1;
 				string datePart;
 
 				using (SecurityContext.Impersonate(this))
@@ -490,9 +499,9 @@ namespace Tp.Integration.Plugin.Common.Activity
 				return;
 			}
 
-			var baseFile1 = baseFile.ToLower(CultureInfo.InvariantCulture);
+			string baseFile1 = baseFile.ToLower(CultureInfo.InvariantCulture);
 
-			foreach (var str in arrayFiles)
+			foreach (string str in arrayFiles)
 			{
 				InitializeFromOneFile(baseFile1, str.ToLower(CultureInfo.InvariantCulture));
 			}
@@ -500,11 +509,11 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		private RollPoint ComputeCheckPeriod(string datePattern)
 		{
-			var str1 = _date1970.ToString(datePattern, DateTimeFormatInfo.InvariantInfo);
+			string str1 = _date1970.ToString(datePattern, DateTimeFormatInfo.InvariantInfo);
 
-			for (var index = 0; index <= 5; ++index)
+			for (int index = 0; index <= 5; ++index)
 			{
-				var str2 = NextCheckDate(_date1970, (RollPoint) index).ToString(datePattern, DateTimeFormatInfo.InvariantInfo);
+				string str2 = NextCheckDate(_date1970, (RollPoint) index).ToString(datePattern, DateTimeFormatInfo.InvariantInfo);
 
 				LogLog.Debug("RollingFileAppender: Type = [" + index + "], r0 = [" + str1 + "], r1 = [" + str2 + "]");
 
@@ -521,7 +530,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 		{
 			if (_staticLogFileName)
 			{
-				var str = _now.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo);
+				string str = _now.ToString(ActivityLogFile.FileDatePattern, DateTimeFormatInfo.InvariantInfo);
 
 				if (_scheduledFilename.Equals(File + str))
 				{
@@ -534,7 +543,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 					CloseFile();
 				}
 
-				for (var index = 1; index <= _curSizeRollBackups; ++index)
+				for (int index = 1; index <= _curSizeRollBackups; ++index)
 				{
 					RollFile(File + '.' + index, _scheduledFilename + '.' + index);
 				}
@@ -602,8 +611,8 @@ namespace Tp.Integration.Plugin.Common.Activity
 				}
 			}
 
-			var path = fileName;
-			var destFileName = string.Concat(new object[] {fileName, ".", Environment.TickCount, ".DeletePending"});
+			string path = fileName;
+			string destFileName = string.Concat(new object[] {fileName, ".", Environment.TickCount, ".DeletePending"});
 			try
 			{
 				using (SecurityContext.Impersonate(this))
@@ -688,9 +697,9 @@ namespace Tp.Integration.Plugin.Common.Activity
 					--_curSizeRollBackups;
 				}
 
-				for (var index = _curSizeRollBackups; index > 0; --index)
+				for (int index = _curSizeRollBackups; index > 0; --index)
 				{
-					var file = logFiles[index];
+					FileInfo file = logFiles[index];
 					string newFileName;
 
 					using (SecurityContext.Impersonate(this))
@@ -709,7 +718,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 			{
 				if (_curSizeRollBackups >= _maxSizeRollBackups && _maxSizeRollBackups > 0)
 				{
-					var num = _curSizeRollBackups - _maxSizeRollBackups;
+					int num = _curSizeRollBackups - _maxSizeRollBackups;
 
 					if (_staticLogFileName)
 					{
@@ -730,7 +739,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		protected DateTime NextCheckDate(DateTime currentDateTime, RollPoint rollPoint)
 		{
-			var dateTime = currentDateTime;
+			DateTime dateTime = currentDateTime;
 
 			switch (rollPoint)
 			{

@@ -4,13 +4,12 @@
 // 
 
 using Tp.Integration.Plugin.Common.Validation;
-using Tp.MashupManager.Dtos;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class DeleteMashupCommand : CrudMashupCommand<MashupDto>
+	public class DeleteMashupCommand : CrudMashupCommand<Mashup>
 	{
-		protected override PluginProfileErrorCollection ExecuteOperation(MashupDto mashup)
+		protected override PluginProfileErrorCollection ExecuteOperation(Mashup mashup)
 		{
 			return MashupRepository.Delete(mashup.Name);
 		}

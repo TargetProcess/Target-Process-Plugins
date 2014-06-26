@@ -1,0 +1,1 @@
+define(["Underscore"],function(n){var e={convertCellsResponseToComet:function(e){return n.flatten(n(e.data.items).map(function(e){return n(e.dynamic.items).map(function(n){return{x:e.x,y:e.y,data:n}})}))}};return e});

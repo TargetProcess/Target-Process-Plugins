@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(e,n,t){return t.extend({"bus afterRender":function(e){var t=e.data.element.find(".ui-attach .preview img");t.each(function(){var e=n(this);if(!e.prop("complete")){var t=e.parent();t.addClass("loading"),e.load(function(){t.removeClass("loading")})}})}})});

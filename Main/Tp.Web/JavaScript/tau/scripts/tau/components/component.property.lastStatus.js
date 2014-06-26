@@ -1,1 +1,1 @@
-define(["tau/components/component.property.bool","tau/ui/templates/property/ui.template.property.status"],function(creator,template){return{create:function(config){return config=config||{},config.propertyName="lastStatus",config.template=template,creator.create(config)}}})
+define(["tau/components/component.property.bool","tau/ui/templates/property/ui.template.property.status"],function(t,e){return{create:function(r){return r=r||{},r.propertyName="lastStatus",r.template=e,t.create(r)}}});

@@ -20,6 +20,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.TestRunImport.Tests
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class TestRunImportPluginProfileInitializationSagaSpecs
 	{
 		private TestRunImportPluginProfile _profileSettings;

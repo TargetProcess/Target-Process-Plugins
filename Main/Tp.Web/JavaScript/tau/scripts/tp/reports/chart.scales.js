@@ -1,1 +1,1 @@
-define(["libs/d3/d3"],function(d3){return{type:function(){return d3.scale.ordinal().domain(["UserStory","Bug","Task","Feature","Request"]).range(["userstory","bug","task","feature","request"])}}})
+define(["libs/d3/d3"],function(e){return{type:function(){return e.scale.ordinal().domain(["UserStory","Bug","Task","Feature","Request"]).range(["userstory","bug","task","feature","request"])}}});

@@ -11,53 +11,15 @@ using System.Linq;
 namespace Tp.Integration.Messages.PluginLifecycle
 {
 	public class MashupCollection : IEnumerable<Mashup>
-	{
+	{	
 		private readonly string _mashupsPhysicalPath;
 		private IEnumerable<Mashup> _mashups;
+		private readonly IMashupDirectoryIgnoreStrategy _directoryIgnoreStrategy; 
 
-		public MashupCollection(string mashupsPhysicalPath)
+		public MashupCollection(string mashupsPhysicalPath, IMashupDirectoryIgnoreStrategy directoryIgnoreStrategy = null)
 		{
 			_mashupsPhysicalPath = mashupsPhysicalPath;
-		}
-
-		private static IEnumerable<Mashup> ScanForMashups(string mashupsPhysicalPath)
-		{
-			if (!Directory.Exists(mashupsPhysicalPath))
-			{
-				return new Mashup[] { };
-			}
-
-			var mashups = new List<Mashup>();
-			var directories = GetMashupsDirectories(mashupsPhysicalPath);
-
-			foreach (var directory in directories)
-			{
-				var baseDir = directory;
-				var configs = Directory.GetFiles(directory, "*.cfg");
-				var mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines));
-
-				var mashupName = new DirectoryInfo(directory).Name;
-				var files = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
-				
-				mashups.Add(new Mashup
-					{
-						MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
-						MashupName = mashupName,
-						MashupConfig = mashupConfig
-					});
-			}
-
-			return mashups;
-		}
-
-		private static IEnumerable<string> GetMashupsDirectories(string mashupsPhysicalPath)
-		{
-			return Directory.GetDirectories(mashupsPhysicalPath);
-		} 
-
-		private static string MakePathRelative(string path, string basePath)
-		{
-			return path.Replace(basePath, ".");
+			_directoryIgnoreStrategy = directoryIgnoreStrategy ?? new IncludeAllMashupDirectoryIgnoreStrategy();
 		}
 
 		public IEnumerator<Mashup> GetEnumerator()
@@ -72,6 +34,58 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		private IEnumerable<Mashup> ScanForMashups(string mashupsPhysicalPath)
+		{
+			if (!Directory.Exists(mashupsPhysicalPath))
+			{
+				return new Mashup[] {};
+			}
+
+			IEnumerable<string> directories = GetMashupsDirectories(mashupsPhysicalPath);
+
+			return (from directory in directories
+					where !ShouldIgnoreMashupDirectory(directory)
+			        let baseDir = directory
+			        let configs = Directory.GetFiles(directory, "*.cfg")
+			        let mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines))
+			        let mashupName = new DirectoryInfo(directory).Name
+					let files = GetMashupFiles(directory)
+			        select new Mashup
+				        {
+					        MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
+					        MashupName = mashupName,
+					        MashupConfig = mashupConfig
+				        }).ToList();
+		}
+
+		private static IEnumerable<string> GetMashupsDirectories(string mashupsPhysicalPath)
+		{
+			return Directory.GetDirectories(mashupsPhysicalPath);
+		}
+
+		private string[] GetMashupFiles(string directory)
+		{
+			if (ShouldIgnoreMashupDirectory(directory))
+			{
+				return new string[0];
+			}
+
+			var files = new List<string>();
+			files.AddRange(Directory.GetFiles(directory, "*.*", SearchOption.TopDirectoryOnly));
+			files.AddRange(Directory.GetDirectories(directory).SelectMany(GetMashupFiles));
+			return files.ToArray();
+		}
+
+		private static string MakePathRelative(string path, string basePath)
+		{
+			return path.Replace(basePath, ".");
+		}
+
+		private bool ShouldIgnoreMashupDirectory(string directory)
+		{
+			return _directoryIgnoreStrategy.ShouldIgnoreMashupDirectory(directory);
 		}
 	}
 }

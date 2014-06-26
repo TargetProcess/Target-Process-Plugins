@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","./editor.adapter.default"],function(e,t,n){return n.extend({_initEditor:function(t,n){this._super(t,n,{savingEvent:"assignment.editor.saving",savedEvent:"assignment.editor.saved"}),e.delay(function(){t.toggleClass("tau-assignments_state_loaded",!0),this._focusOnText(t)}.bind(this),200)}})});

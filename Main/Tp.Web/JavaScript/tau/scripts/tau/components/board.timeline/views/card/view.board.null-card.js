@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/class"],function(n,e,t){var c=t.extend({init:function(n){this._id=n},clearArtifacts:function(){},clear:function(){}});return c});

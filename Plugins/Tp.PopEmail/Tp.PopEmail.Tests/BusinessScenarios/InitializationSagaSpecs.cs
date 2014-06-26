@@ -26,6 +26,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.PopEmailIntegration.BusinessScenarios
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class InitializationSagaSpecs
 	{
 		private readonly List<MessageUidDTO> _uids = new List<MessageUidDTO>();

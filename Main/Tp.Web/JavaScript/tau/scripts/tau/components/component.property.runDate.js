@@ -1,0 +1,1 @@
+define(["tau/components/component.property.date"],function(e){return{create:function(t){return t=_.clone(t||{}),t.propertyName="runDate",t.editable=!1,t.format="datetime",e.create(t)}}});

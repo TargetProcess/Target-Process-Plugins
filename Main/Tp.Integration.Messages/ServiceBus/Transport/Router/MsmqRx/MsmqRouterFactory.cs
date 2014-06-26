@@ -76,8 +76,15 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 																	WindowsIdentity windowsIdentity = WindowsIdentity.GetCurrent();
 
 																	string accessDeniedMessage = string.Format("Do not have permission to access queue [{0}]. Make sure that the current user [{1}] has permission to Send, Receive, and Peek  from this queue.", queue.QueueName, windowsIdentity != null ? windowsIdentity.Name : "no windows identity");
-																	EventLog.WriteEntry("TargetProcess Plugin", accessDeniedMessage, EventLogEntryType.Error);
 																	_log.Fatal(LoggerContext.New(sourceName), accessDeniedMessage, e);
+																	try
+																	{
+																		EventLog.WriteEntry("TargetProcess Plugin", accessDeniedMessage, EventLogEntryType.Error);
+																	}
+																	catch (Exception)
+																	{
+																		//skip exception
+																	}
 
 																	//kill the process only if we cannot access main queue (in case of OnDemand it is router queue, in case of OnSite it is main queue)
 																	if (!isChild)

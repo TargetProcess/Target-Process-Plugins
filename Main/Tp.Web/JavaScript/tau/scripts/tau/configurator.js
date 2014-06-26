@@ -1,1 +1,1 @@
-define(["Underscore","tau/service.container","tau/store/factory.instance"],function(_,ServiceContainer,factoryInstance){var configurator=new ServiceContainer;return configurator.setStoreFactory(factoryInstance),configurator._id=_.uniqueId("global_"),configurator})
+define(["Underscore","tau/service.container","tau/store/factory.instance"],function(e,n,r){var t=new n;return t.setStoreFactory(r),t._id=e.uniqueId("global_"),t});

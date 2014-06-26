@@ -1,1 +1,1 @@
-define([],function(){var formats={};return formats={date:{"short":"d-MMM-yyyy"},time:{"short":"HH:mm"},datetime:{"short":"d-MMM-yyyy HH:mm"}},formats})
+define([],function(){var y={};return y={date:{"short":"d-MMM-yyyy",iso:"yyyy-MM-dd"},time:{"short":"HH:mm",iso:"HH:mm:ss"},datetime:{"short":"d-MMM-yyyy HH:mm",iso:"yyyy-MM-ddTHH:mm:ss"}}});

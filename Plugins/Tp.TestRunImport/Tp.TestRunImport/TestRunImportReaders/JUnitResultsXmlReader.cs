@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.TestRunImport.TestRunImport;
@@ -50,19 +51,67 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 					bool? isSuccess = null;
 					if (!isIncomplete)
 						isSuccess = true;
+			
+					var error = new StringBuilder();
 
-					isSuccess &= !TestCaseNodeContainsChild(testCase, "failure");
-					isSuccess &= !TestCaseNodeContainsChild(testCase, "error");
+					var failureNode = GetChildNode(testCase, "failure");
+					if (failureNode != null)
+					{
+						isSuccess = false;
+						AppendCommentMessage(failureNode, error);
+					}
 
-					result.Add(new TestRunImportResultInfo { Name = testNameAttr.Value, IsSuccess = isSuccess, RunDate = runDate });
+					var errorNode = GetChildNode(testCase, "error");
+					if (errorNode != null)
+					{
+						isSuccess = false;
+						AppendCommentMessage(errorNode, error);
+					}
+
+					result.Add(new TestRunImportResultInfo { Name = testNameAttr.Value, IsSuccess = isSuccess, RunDate = runDate, Comment = (isSuccess.HasValue && !isSuccess.Value) ? error.ToString() : null });
 				}
 				return result;
 			}
 		}
 
-		private static bool TestCaseNodeContainsChild(XmlNode node, string tagName)
+		private static XmlNode GetChildNode(XmlNode node, string tagName)
 		{
-			return node.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.Name == tagName);
+			return node.HasChildNodes ? node.ChildNodes.Cast<XmlNode>().FirstOrDefault(childNode => childNode.Name == tagName) : null;
+		}
+
+		private static void AppendCommentMessage(XmlNode failureNode, StringBuilder errorBuilder)
+		{
+			if (errorBuilder.Length > 0)
+			{
+				errorBuilder.AppendLine("<div><br /></div>");
+			}
+
+			var type = failureNode.Attributes != null ? failureNode.Attributes["type"] : null;
+			if (type != null && !string.IsNullOrEmpty(type.Value))
+			{
+				var typeMessage = type.Value.Trim('\r').TrimStart(new[] { '\n', ' ' }).TrimEnd(new[] { '\n', ' ' });
+				if (!string.IsNullOrEmpty(typeMessage))
+				{
+					foreach (var line in typeMessage.Split('\n'))
+					{
+						errorBuilder.AppendFormat("<div>{0}</div>", line);
+					}
+				}
+			}
+
+			var message = failureNode.Attributes != null ? failureNode.Attributes["message"] : null;
+			if (message != null && !string.IsNullOrEmpty(message.Value))
+			{
+				var errorMessage = message.Value.Trim('\r').TrimStart(new[] { '\n', ' ' }).TrimEnd(new[] { '\n', ' ' });
+				if (!string.IsNullOrEmpty(errorMessage))
+				{
+					errorBuilder.AppendLine("<div><br /></div>");
+					foreach (var line in errorMessage.Split('\n'))
+					{
+						errorBuilder.AppendFormat("<div>{0}</div>", line);
+					}
+				}
+			}
 		}
 	}
 }

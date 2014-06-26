@@ -13,6 +13,7 @@ namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class ReimportFailedOnGettingIdsSpecs : ReimportFailedBugsSpecsBase<BugzillaServiceWithTransportErrorOnGetIdsMock>
 	{
 		[Test]

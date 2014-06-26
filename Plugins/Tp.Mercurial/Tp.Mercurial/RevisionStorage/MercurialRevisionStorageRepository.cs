@@ -12,7 +12,7 @@ namespace Tp.Mercurial.RevisionStorage
 {
 	public class MercurialRevisionStorageRepository : RevisionStorageRepository
 	{
-        public MercurialRevisionStorageRepository(IStorageRepository repository, IProfileCollectionReadonly profiles)
+		public MercurialRevisionStorageRepository(IStorageRepository repository, IProfileCollectionReadonly profiles)
 			: base(repository, profiles)
 		{
 		}
@@ -21,7 +21,8 @@ namespace Tp.Mercurial.RevisionStorage
 		{
 			if (revision.TimeCreated.HasValue)
 			{
-				return string.Format("{0}#{1}", revision.TimeCreated.Value.Ticks, revision.Comment);
+				var key = string.Format("{0}#{1}", revision.TimeCreated.Value.Ticks, revision.Comment);
+				return key.Length > 255 ? key.Substring(0, 255) : key;
 			}
 
 			return revision.Id.Value;

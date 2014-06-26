@@ -1,0 +1,19 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.EntityTypeDTO, Tp.Integration.Messages</Type>
+  <EntityTypeDTO>
+    <ID xsi:nil="true" />
+    <EntityTypeID xsi:nil="true" />
+    <IsAssignable xsi:nil="true" />
+    <IsOwnEffortAvailable xsi:nil="true" />
+    <IsGlobalSearchAvailable xsi:nil="true" />
+    <IsReleasePlannable xsi:nil="true" />
+    <IsIterationPlannable xsi:nil="true" />
+    <IsCustomFieldsHolder xsi:nil="true" />
+    <IsChildsContainer xsi:nil="true" />
+    <IsPrioritizable xsi:nil="true" />
+    <HasAuditHistory xsi:nil="true" />
+    <UnitInHourOnly xsi:nil="true" />
+    <HasInitialEstimate xsi:nil="true" />
+    <PracticeID xsi:nil="true" />
+  </EntityTypeDTO>
+</Value>

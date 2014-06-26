@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/class","tau/components/extensions/component.extension.base"],function(e,n,t){var o=t.extend({"bus relations.changed":function(){this.fire("updateBadge",{})}});return o});

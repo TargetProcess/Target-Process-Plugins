@@ -1,0 +1,1 @@
+define(["Underscore","./model.board.dragndrop"],function(e,d){return d.extend({defaultOptions:{simpleCommands:{}}})});

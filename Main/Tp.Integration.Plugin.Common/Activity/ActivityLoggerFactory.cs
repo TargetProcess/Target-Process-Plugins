@@ -6,6 +6,7 @@
 using System.Linq;
 using System.Reflection;
 using StructureMap;
+using Tp.Core;
 using log4net.Core;
 using log4net.Repository.Hierarchy;
 
@@ -14,11 +15,13 @@ namespace Tp.Integration.Plugin.Common.Activity
 	internal class ActivityLoggerFactory : ILoggerFactory
 	{
 		private readonly ILoggerFactory _factory;
+		private readonly Locker _locker;
 		private readonly IActivityLogPathProvider _path;
 
-		public ActivityLoggerFactory(ILoggerFactory factory)
+		public ActivityLoggerFactory(ILoggerFactory factory, Locker locker)
 		{
 			_factory = factory;
+			_locker = locker;
 			_path = ObjectFactory.GetInstance<IActivityLogPathProvider>();
 		}
 
@@ -51,7 +54,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 			foreach (var appender in logger.Hierarchy.GetAppenders()
 				.OfType<PluginRollingFileAppender>()
 				.Where(x => x.Name.StartsWith(logger.Name))
-				.Select(x => new PluginRollingFileAppender(x, _path, accountName, profileName)))
+				.Select(x => new PluginRollingFileAppender(x, _path, _locker, accountName, profileName)))
 			{
 				appender.ActivateOptions();
 				result.AddAppender(appender);

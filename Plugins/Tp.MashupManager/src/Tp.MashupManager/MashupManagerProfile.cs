@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Tp.Integration.Plugin.Common;
+using Tp.MashupManager.MashupLibrary.Repository.Config;
 
 namespace Tp.MashupManager
 {
@@ -20,6 +21,9 @@ namespace Tp.MashupManager
 
 		[DataMember]
 		public MashupNames MashupNames { get; set; }
+
+		[DataMember]
+		public LibraryRepositoryConfig[] LibraryRepositoryConfigs { get; set; }
 	}
 
 	public class MashupNames : List<string>

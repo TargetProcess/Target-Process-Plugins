@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(t){var a={name:"relations.add.trigger",engine:"jqote2",markup:['<div class="tau-btn-wrap">','<span class="tau-inline-group">','<button class="tau-btn tau-search i-role-add-lookup"></button>','<button class="tau-btn tau-add i-role-quick-add tau-success"></button>',"</span>","</div>"]};return t.register(a)});

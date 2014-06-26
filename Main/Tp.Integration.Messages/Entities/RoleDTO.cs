@@ -80,9 +80,12 @@ namespace Tp.Integration.Common
 		/// </summary>
 		/// <value>The Have Effort.</value>
 		[DataMember][XmlElement(Order = 10)]public Boolean? HaveEffort { get; set; }
-		
 
-		
+		/// <summary>
+		/// Gets or sets the Can Change Onwer. 
+		/// </summary>
+		/// <value>The Can Change Owner.</value>
+		[DataMember][XmlElement(Order = 11)] public Boolean? CanChangeOwner { get; set; }
 	}
 }
 
@@ -121,5 +124,9 @@ namespace Tp.Integration.Common
         /// Have Effort
         /// </summary>		
 		HaveEffort,
+		/// <summary>
+		/// Can Change Owner
+		/// </summary>		
+		CanChangeOwner,
 	}
 }

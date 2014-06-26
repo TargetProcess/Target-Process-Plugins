@@ -258,7 +258,9 @@ namespace Tp.PopEmailIntegration.Sagas
 
 		private void ExecuteMailRule()
 		{
-			MatchedRule.Execute(Data.MessageDto, Data.Attachments);
+			var matchedRule = MatchedRule;
+			Log().InfoFormat("Executing rule '{0}' on message {1}", matchedRule.ToString(), Data.MessageDto.ID);
+			matchedRule.Execute(Data.MessageDto, Data.Attachments);
 			CompleteSaga();
 		}
 

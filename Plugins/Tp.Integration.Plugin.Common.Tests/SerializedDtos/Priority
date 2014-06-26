@@ -1,0 +1,9 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.PriorityDTO, Tp.Integration.Messages</Type>
+  <PriorityDTO>
+    <ID xsi:nil="true" />
+    <PriorityID xsi:nil="true" />
+    <Importance>0</Importance>
+    <IsDefault>false</IsDefault>
+  </PriorityDTO>
+</Value>

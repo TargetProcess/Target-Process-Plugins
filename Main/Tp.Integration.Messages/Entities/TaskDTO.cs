@@ -3,8 +3,10 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {
@@ -559,6 +561,22 @@ namespace Tp.Integration.Common
 		[RelationName]
 		[DataMember][XmlElement(Order = 97)]
 		public string SquadName { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 98)]
+		public Field[] CustomFieldsMetaInfo { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 99)]
+		public virtual DateTime? PlannedStartDate { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 100)]
+		public virtual DateTime? PlannedEndDate { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 101)]
+		public virtual decimal? Progress { get; set; }
 	}
 	
 	
@@ -937,6 +955,9 @@ namespace Tp.Integration.Common
         /// User Story Name
         /// </summary>		
 		UserStoryName,
-		SquadName
+		SquadName,
+		PlannedStartDate,
+		PlannedEndDate,
+		Progress
 	}
 }

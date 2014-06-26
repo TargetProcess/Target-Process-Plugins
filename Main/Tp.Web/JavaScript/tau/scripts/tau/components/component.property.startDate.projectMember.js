@@ -1,0 +1,1 @@
+define(["tau/components/component.property.date"],function(e){return{create:function(t){return t=t||{},t.editable=!0,t.allowReset=!0,t.propertyName="membershipStartDate",e.create(t)}}});

@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/board.plus/ui.extension.board.plus.cardsViewer.board"],function(i){return i.extend({_subscribeWithClickHandler:function(i,e){this._subscribeToIdUnitClicks(i,e)},"bus new.list.open.card.details.view":function(i,e){this._openCardDetails(e.cardData,e.$card)}})});

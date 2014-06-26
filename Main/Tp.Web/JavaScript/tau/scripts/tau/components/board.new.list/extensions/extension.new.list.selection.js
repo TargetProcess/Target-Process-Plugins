@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/extension.base"],function(e,t,n){return n.extend({"bus $selectable.ready":function(e,t){t.tauSelectable("option",{triggerSelector:":checkbox",items:".i-role-nosuchcard"})}})});

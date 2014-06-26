@@ -16,6 +16,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.ValidateProfileUponSaveFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class WhenProfileIsSavingSpecs
 	{
 		[SetUp]

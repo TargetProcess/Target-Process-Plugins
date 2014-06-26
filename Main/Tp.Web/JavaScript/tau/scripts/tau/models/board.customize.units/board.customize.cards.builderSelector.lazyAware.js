@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/board.customize.units/board.customize.cards.builderSelector"],function(e,t){return t.extend({createItemData:function(e,t){if(this.suit(t.unit)){var i=t.unit.getModelByTypeAndSize(e);return t.unit.id+":{"+i+"}"}},suit:function(){throw new Error("Method suit() should be overridden")}})});

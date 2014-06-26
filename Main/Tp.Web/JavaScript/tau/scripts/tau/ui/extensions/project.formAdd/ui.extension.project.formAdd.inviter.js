@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/ui/extensions/inviter/ui.extension.inviter.widget.abstract"],function(e,i,t){return t.extend({"bus configurator.ready":function(e,i){this._initTemplates(i)},"bus configurator.ready + $el.ready":function(e,i,t){this._initWidget(i,t)}})});

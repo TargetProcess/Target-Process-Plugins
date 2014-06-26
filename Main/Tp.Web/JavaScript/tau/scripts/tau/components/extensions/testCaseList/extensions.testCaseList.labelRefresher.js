@@ -1,1 +1,1 @@
-define(["tau/components/extensions/extension.labelRefresher.base"],function(ExtensionBase){return ExtensionBase.extend({eventName:"testCase.items.added",propertyListForEvict:["testCases-count"]})})
+define(["tau/components/extensions/extension.labelRefresher.base"],function(e){return e.extend({eventName:"testCase.items.added",propertyListForEvict:["testCases-count"]})});

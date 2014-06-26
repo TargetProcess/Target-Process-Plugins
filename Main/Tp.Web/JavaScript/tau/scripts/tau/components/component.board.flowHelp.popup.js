@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/board.flowHelp/model.board.flowHelp","tau/ui/extensions/board.flowHelp/ui.extension.board.flowHelp.popup","tau/ui/templates/board.flowHelp/ui.template.board.flowHelp.popup"],function(e,o,t,p,a){return{create:function(e){var l={extensions:[t,p],template:a,name:"board.helpFlow.popup"};return o.create(l,e)}}});

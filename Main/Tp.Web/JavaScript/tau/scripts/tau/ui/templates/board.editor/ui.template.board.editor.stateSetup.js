@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"board.editor.stateSetup",engine:"jqote2",markup:['<button type="button" class="tau-btn tau-board-settings__statesetup i-role-statesetup">Setup States</button>'],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(t){var e={name:"board.editor.stateSetup",engine:"jqote2",markup:['<button type="button" class="tau-btn tau-board-settings__statesetup i-role-statesetup">Set up States</button>'],dependencies:[]};return t.register(e)});

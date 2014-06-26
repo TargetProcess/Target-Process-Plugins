@@ -1,0 +1,9 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.TestCaseTestPlanDTO, Tp.Integration.Messages</Type>
+  <TestCaseTestPlanDTO>
+    <ID xsi:nil="true" />
+    <TestCaseTestPlanID xsi:nil="true" />
+    <TestPlanID xsi:nil="true" />
+    <TestCaseID xsi:nil="true" />
+  </TestCaseTestPlanDTO>
+</Value>

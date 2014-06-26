@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/models/board.editor.customize/model.board.editor.customize.base","tau/ui/extensions/board.customize/ui.board.editor.customize.editor.helper.list","tau/ui/extensions/board.plus/ui.board.plus.utils"],function(e,t,o,i,u){return o.extend({getType:function(e){return u.getListKeyByTypes(e)},getCustomizeSection:function(e){return[e]}})});

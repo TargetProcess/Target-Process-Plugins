@@ -1,1 +1,1 @@
-define(["tau/core/class","tau/core/event"],function(Class,Event){var Service=Class.extend({size:function(){return{width:$(window).width()*.85,height:$(window).height()*.7}}});return Event.implementOn(Service.prototype),Service})
+define(["tau/core/class","tau/core/event"],function(e,t){var n=e.extend({size:function(){return{width:.85*$(window).width(),height:.7*$(window).height()}}});return t.implementOn(n.prototype),n});

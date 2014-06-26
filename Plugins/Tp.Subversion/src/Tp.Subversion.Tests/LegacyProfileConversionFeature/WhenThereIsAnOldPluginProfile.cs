@@ -9,6 +9,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.LegacyProfileConversionFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class WhenThereIsAnOldPluginProfile
 	{
 		[Test]

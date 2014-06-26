@@ -19,6 +19,7 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins1")]
 	public class CreateTasksForNewUserStoryHandlerTests
 	{
 		private readonly UserStoryDTO _userStoryDto = new UserStoryDTO();

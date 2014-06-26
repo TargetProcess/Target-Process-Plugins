@@ -1,1 +1,1 @@
-define(["tau/components/component.creator","tau/models/model.feature.totalEffort","tau/ui/templates/feature/ui.template.totalEffort"],function(creator,ModelFeatureTotalEffort,template){return{create:function(config){var creatorConfig={ModelType:ModelFeatureTotalEffort,template:template};return creator.create(creatorConfig,config)}}})
+define(["tau/components/component.creator","tau/models/model.feature.totalEffort","tau/ui/templates/feature/ui.template.totalEffort"],function(t,e,a){return{create:function(o){var r={ModelType:e,template:a};return t.create(r,o)}}});

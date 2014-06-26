@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/models/board.editor.customize/model.board.editor.customize.base","tau/ui/extensions/board.customize/ui.board.editor.customize.editor.helper"],function(e,t,o,i){return o.extend({getType:function(e){return e[0]},getCustomizeSection:function(e){return e.find("."+i.CLASS_MAP.CARD_SECTION)}})});

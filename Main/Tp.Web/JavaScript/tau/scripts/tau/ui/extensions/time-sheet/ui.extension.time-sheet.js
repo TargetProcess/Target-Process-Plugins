@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base"],function(e,t){return t.extend({"bus afterRender + afterInit":function(t,n,i){var a=i.config.context.configurator.getApplicationPath();n.element.find(".i-role-timesheet").click(function(){e(this).tauIFramePopup({url:a+"/Default/TimeSheet.aspx?rmnav=1&tp3=1"}),e(this).tauIFramePopup("show")})}})});

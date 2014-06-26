@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory","tau/ui/templates/list_/grid/ui.template.list.grid.row"],function(templates){var config={name:"list-grid-group",markup:['   <table>{{tmpl(items) "list-grid-row" }}</table>'],dependencies:["list-grid-row"]};return templates.register(config)})
+define(["tau/core/templates-factory","tau/ui/templates/list_/grid/ui.template.list.grid.row"],function(t){var e={name:"list-grid-group",markup:['   <table>{{tmpl(items) "list-grid-row" }}</table>'],dependencies:["list-grid-row"]};return t.register(e)});

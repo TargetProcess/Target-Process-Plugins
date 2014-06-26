@@ -1,0 +1,10 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.CustomReportDTO, Tp.Integration.Messages</Type>
+  <CustomReportDTO>
+    <ID xsi:nil="true" />
+    <CustomReportID xsi:nil="true" />
+    <IsPublic>true</IsPublic>
+    <ProcessID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+  </CustomReportDTO>
+</Value>

@@ -8,6 +8,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Tfs.Tests.WorkItems
 {
     [TestFixture]
+    [Category("PartPlugins1")]
     public class WorkItemsSpecs
     {
         [Test]

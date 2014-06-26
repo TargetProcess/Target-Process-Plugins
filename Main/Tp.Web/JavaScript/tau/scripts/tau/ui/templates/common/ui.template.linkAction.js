@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"link-action",markup:['<a class="${id}-link user-action" >',"   ${title}","</a>"].join("")};return templates.register(config)})
+define(["tau/core/templates-factory"],function(a){var e={name:"link-action",markup:['<a class="${id}-link user-action" >',"   ${title}","</a>"].join("")};return a.register(e)});

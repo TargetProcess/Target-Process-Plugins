@@ -5,9 +5,12 @@
 
 using System;
 using System.Diagnostics;
+using Tp.Core.Annotations;
 
 namespace Tp.Core
 {
+
+
 	public interface IMaybe
 	{
 		bool HasValue { get; }
@@ -93,10 +96,26 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<T> Try<T>(Func<T> action)
+		public static Maybe<T> Try<T>([InstantHandle] Func<T> action)
 		{
-			return Either.Try(action).Switch(Return, _ => Nothing);
+			return Tp.Core.Try.Create(action).ToMaybe();
 		}
+
+
+		public delegate bool TryDelegate<in TArg, TResult>(TArg value, out TResult result);
+
+		public static Maybe<TResult> FromTryOut<TArg, TResult>(TryDelegate<TArg, TResult> call, TArg value)
+		{
+			TResult result;
+			return call(value, out result) ? Just(result) : Nothing;
+		}
+
+		public static Maybe<TResult> FromTryOut<TResult>(TryDelegate<string, TResult> call, string value)
+		{
+			TResult result;
+			return call(value, out result) ? Just(result) : Nothing;
+		}
+
 
 		[DebuggerStepThrough]
 		public override string ToString()
@@ -121,18 +140,21 @@ namespace Tp.Core
 			[DebuggerStepThrough]
 			get
 			{
-				if(!HasValue)
-				{
-					throw new InvalidOperationException("Cannot get value from Nothing");
-				}
-				return _value;
+				return Value;
 			}
 		}
 
 		public T Value
 		{
 			[DebuggerStepThrough]
-			get { return _value; }
+			get
+			{
+				if (!HasValue)
+				{
+					throw new InvalidOperationException("Cannot get value from Nothing");
+				}
+				return _value;
+			}
 		}
 
 		[DebuggerStepThrough]

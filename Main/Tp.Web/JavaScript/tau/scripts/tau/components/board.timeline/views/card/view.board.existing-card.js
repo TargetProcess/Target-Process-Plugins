@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/board.timeline/views/card/view.board.card"],function(e,n,r){var i=r.extend({init:function(e,n,r,i){this._$dom=e,this._super(n,r,i)},_$render:function(){return this._$dom}});return i});

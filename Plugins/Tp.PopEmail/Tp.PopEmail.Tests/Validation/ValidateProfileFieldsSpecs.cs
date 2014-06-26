@@ -21,6 +21,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.PopEmailIntegration.Validation
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class ValidateProfileFieldsSpecs
 	{
 		private TransportMock _transportMock;

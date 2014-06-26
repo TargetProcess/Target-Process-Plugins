@@ -1,0 +1,1 @@
+define(["tau/core/event"],function(t){return Object.create(new t,{data:{value:{counts:[],limits:{}},writable:!0},update:{value:function(t){this.data=t,this.fire("update",t)},writable:!1},get:{value:function(){return this.data},writable:!1},clear:{value:function(){this.data={counts:[],limits:{}}},writable:!1}})});

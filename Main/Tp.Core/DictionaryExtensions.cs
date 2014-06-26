@@ -6,14 +6,17 @@ namespace System.Collections.Generic
 	[PerformanceCritical]
 	public static class DictionaryExtensions
 	{
-		public static IDictionary<TKey,TValue> WithDefault<TKey,TValue>(this IDictionary<TKey,TValue> d, Func<TKey,TValue> @default)
-		{
-			return new DictWithDefault<TKey, TValue>(d, @default);
-		}
-
-		public class DictWithDefault<TKey, TValue> : IDictionary<TKey, TValue>
+		private class DefaultDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 		{
 			private readonly IDictionary<TKey, TValue> _dictionary;
+			private readonly TValue _defaultValue;
+
+			public DefaultDictionary(IDictionary<TKey, TValue> dictionary, TValue defaultValue)
+			{
+				_dictionary = dictionary;
+				_defaultValue = defaultValue;
+			}
+
 			public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 			{
 				return _dictionary.GetEnumerator();
@@ -71,16 +74,13 @@ namespace System.Collections.Generic
 
 			public bool TryGetValue(TKey key, out TValue value)
 			{
-				if (!_dictionary.TryGetValue(key, out value))
-					value = _default(key);
+				value = this[key];
 				return true;
 			}
 
 			public TValue this[TKey key]
 			{
-				get
-				{
-					return _dictionary.GetValue(key).Anyway(()=>_default(key)); }
+				get { return _dictionary.GetValue(key).GetOrDefault(_defaultValue); }
 				set { _dictionary[key] = value; }
 			}
 
@@ -94,30 +94,12 @@ namespace System.Collections.Generic
 				get { return _dictionary.Values; }
 			}
 
-			private readonly Func<TKey, TValue> _default;
-
-			public DictWithDefault(IDictionary<TKey, TValue> dictionary, Func<TKey, TValue> @default)
-			{
-				_dictionary = dictionary;
-				_default = @default;
-			}
-
 			IEnumerator IEnumerable.GetEnumerator()
 			{
 				return GetEnumerator();
 			}
 		}
-
-		public static TVal GetValueOrDefault<TKey,TVal>(this IDictionary<TKey,TVal> d, TKey k, TVal defVal=default(TVal))
-		{
-			TVal fetched;
-			if(d.TryGetValue(k, out fetched))
-			{
-				return fetched;
-			}
-			return defVal;
-		}
-
+		
 		public static Maybe<TVal> GetValue<TKey, TVal>(this IDictionary<TKey, TVal> d, TKey k)
 		{
 			TVal fetched;
@@ -145,6 +127,11 @@ namespace System.Collections.Generic
 				dictionary.Add(key, value);
 			}
 			return value;
+		}
+
+		public static IDictionary<TKey, TValue> WithDefaultValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TValue defaultValue)
+		{
+			return new DefaultDictionary<TKey, TValue>(dictionary, defaultValue);
 		}
 	}
 }

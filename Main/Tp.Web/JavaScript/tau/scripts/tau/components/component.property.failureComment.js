@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.property.text"],function(e,t){return{create:function(n){return n=e.clone(n||{}),n.propertyName="comment",n.defaultText="N/A",t.create(n)}}});

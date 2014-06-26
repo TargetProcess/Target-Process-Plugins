@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Net;
 using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport;
+using Tp.Integration.Messages.Ticker;
 using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.UnicastBus
@@ -26,6 +28,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 	/// </summary>
 	public class TpUnicastBus : IBusExtended, IStartableBus
 	{
+		/// <summary>
+		/// to reduce log file size, we need to skip some messages that are sent frequently.
+		/// </summary>
+		private IEnumerable<Type> _messageTypesNotToLog = new List<Type> {typeof (CheckIntervalElapsedMessage)};
+
 		/// <summary>
 		/// Header entry key for the given message type that is being subscribed to, when message intent is subscribe or unsubscribe.
 		/// </summary>
@@ -696,7 +703,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				if (Log.IsInfoEnabled)
 				{
 					string log = "Sent with ID {0} to {1}. Data: ".Fmt(id, destination);
-					log += string.Join(", ", messages.Select(x => x.ToString()));
+					log += string.Join(", ", messages.Select(x => x.GetType().ToString()));
 
 					Log.Info(log);
 				}
@@ -975,20 +982,33 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		#region receiving and handling
 
+		private void LogMessage(string message, Type messageType)
+		{
+			if (_messageTypesNotToLog.Contains(messageType))
+			{
+				Log.Debug(message);
+			}
+			else
+			{
+				Log.Info(message);
+			}
+		}
+
 		/// <summary>
 		/// Handles a received message.
 		/// </summary>
 		/// <param name="m">The received message.</param>
+		/// <param name="messageType">message type</param>
 		/// <remarks>
 		/// run by multiple threads so must be thread safe
 		/// public for testing
 		/// </remarks>
-		public void HandleMessage(TransportMessage m)
+		public void HandleMessage(TransportMessage m, Type messageType)
 		{
-			Log.Info("TpUnicastBus : begin calling handlers on message {0}".Fmt(m.Id));
+			LogMessage("TpUnicastBus : begin calling handlers on message {0}".Fmt(m.Id), messageType);
 			Thread.CurrentPrincipal = GetPrincipalToExecuteAs(m.WindowsIdentityName);
 
-			PrepareForHandlingMessage();
+			CleanupOutgoingHeaders();
 
 			ForwardMessageIfNecessary(m);
 
@@ -1011,12 +1031,14 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				if (canDispatch)
 					DispatchMessageToHandlersBasedOnType(toHandle, toHandle.GetType());
 			}
-			Log.Info("TpUnicastBus : end calling handlers on message {0}".Fmt(m.Id));
 
+			LogMessage("TpUnicastBus : end calling handlers on message {0}".Fmt(m.Id), messageType);
+			
 			ExtensionMethods.CurrentMessageBeingHandled = null;
+			CleanupOutgoingHeaders();
 		}
 
-		public void PrepareForHandlingMessage()
+		public void CleanupOutgoingHeaders()
 		{
 			IBus bus = this;
 			bus.OutgoingHeaders.Clear();
@@ -1170,7 +1192,8 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				return;
 			}
 
-			Log.Info("Received message " + msg.Body[0].GetType().Name + " with ID " + msg.Id + " from sender " + msg.ReturnAddress);
+			var message = "Received message " + msg.Body[0].GetType().Name + " with ID " + msg.Id + " from sender " + msg.ReturnAddress;
+			LogMessage(message, msg.Body[0].GetType());
 
 			_messageBeingHandled = msg;
 			_handleCurrentMessageLaterWasCalled = false;
@@ -1179,7 +1202,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				MessageReceived(msg);
 
 			if (!disableMessageHandling)
-				HandleMessage(msg);
+				HandleMessage(msg, msg.Body[0].GetType());
 
 			Log.Debug("Finished handling message.");
 		}

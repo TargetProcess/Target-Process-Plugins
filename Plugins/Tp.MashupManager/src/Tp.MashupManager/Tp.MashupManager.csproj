@@ -10,9 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.MashupManager</RootNamespace>
     <AssemblyName>Tp.MashupManager</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +40,9 @@
     <Reference Include="Common.Logging.Log4Net">
       <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\Libs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
@@ -45,6 +50,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\..\..\..\Libs\NGit\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\..\..\..\Libs\NGit\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="NGit">
+      <HintPath>..\..\..\..\Libs\NGit\NGit.dll</HintPath>
+    </Reference>
+    <Reference Include="NSch">
+      <HintPath>..\..\..\..\Libs\NGit\NSch.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -57,6 +74,9 @@
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharpen">
+      <HintPath>..\..\..\..\Libs\NGit\Sharpen.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
@@ -71,20 +91,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomCommands\Dtos\LibraryRepositoryDto.cs" />
+    <Compile Include="CustomCommands\Dtos\PackageDetailedDto.cs" />
+    <Compile Include="CustomCommands\GetPackageDetailedCommand.cs" />
     <Compile Include="CustomCommands\CrudMashupCommand.cs" />
     <Compile Include="CustomCommands\DeleteMashupCommand.cs" />
+    <Compile Include="CustomCommands\GetLibraryRepositoriesCommand.cs" />
     <Compile Include="CustomCommands\GetMashupInfoCommand.cs" />
     <Compile Include="CustomCommands\GetProfileInfoCommand.cs" />
     <Compile Include="CustomCommands\AddMashupCommand.cs" />
+    <Compile Include="CustomCommands\InstallPackageCommand.cs" />
+    <Compile Include="CustomCommands\LibraryCommand.cs" />
+    <Compile Include="CustomCommands\RefreshLibraryCommand.cs" />
     <Compile Include="DeleteProfileCommandHandler.cs" />
-    <Compile Include="Dtos\UpdateMashupDto.cs" />
+    <Compile Include="CustomCommands\Args\PackageCommandArg.cs" />
+    <Compile Include="CustomCommands\Args\LibraryCommandArg.cs" />
+    <Compile Include="CustomCommands\Args\UpdateMashupCommandArg.cs" />
     <Compile Include="IMashupInfoRepository.cs" />
+    <Compile Include="IMashupLoader.cs" />
+    <Compile Include="MashupLibrary\Package\LibraryPackageDetailed.cs" />
+    <Compile Include="MashupFile.cs" />
+    <Compile Include="MashupLibrary\Package\LibraryPackageBaseInfo.cs" />
+    <Compile Include="MashupLibrary\Package\LibraryPackageCompatibleTpVersion.cs" />
+    <Compile Include="MashupLibrary\Repository\Config\LibraryRepositoryConfigStorage.cs" />
+    <Compile Include="MashupLibrary\Repository\Config\ILibraryRepositoryConfigStorage.cs" />
+    <Compile Include="MashupLibrary\ILibrary.cs" />
+    <Compile Include="MashupLibrary\Repository\Exceptions\RepositoryNotFoundException.cs" />
+    <Compile Include="MashupLibrary\Repository\Exceptions\PackageNotFoundException.cs" />
+    <Compile Include="MashupLibrary\Repository\ILibraryRepository.cs" />
+    <Compile Include="MashupLibrary\Repository\Config\ILibraryRepositoryConfig.cs" />
+    <Compile Include="MashupLibrary\Repository\ILibraryRepositoryFactory.cs" />
+    <Compile Include="MashupLibrary\ILibraryLocalFolder.cs" />
+    <Compile Include="MashupLibrary\Library.cs" />
+    <Compile Include="MashupLibrary\Repository\ISynchronizableLibraryRepository.cs" />
+    <Compile Include="MashupLibrary\Repository\MockSystemReader.cs" />
+    <Compile Include="MashupLibrary\Repository\Synchronizer\ILibraryRepositorySynchronizer.cs" />
+    <Compile Include="MashupLibrary\Repository\LibraryRepository.cs" />
+    <Compile Include="MashupLibrary\Package\LibraryPackage.cs" />
+    <Compile Include="MashupLibrary\Repository\LibraryRepositoryFactory.cs" />
+    <Compile Include="MashupLibrary\Repository\Config\LibraryRepositoryConfig.cs" />
+    <Compile Include="MashupLibrary\LibraryLocalFolder.cs" />
+    <Compile Include="MashupLibrary\Repository\Synchronizer\LibraryRepositorySynchronizer.cs" />
+    <Compile Include="MashupLoader.cs" />
     <Compile Include="MashupStorage\IMashupLocalFolder.cs" />
     <Compile Include="MashupStorage\IMashupScriptStorage.cs" />
     <Compile Include="MashupStorage\MashupLocalFolder.cs" />
     <Compile Include="MashupStorage\MashupScriptStorage.cs" />
+    <Compile Include="PathExtensions.cs" />
     <Compile Include="SingleProfile.cs" />
-    <Compile Include="Dtos\MashupDto.cs" />
+    <Compile Include="Mashup.cs" />
     <Compile Include="CustomCommands\UpdateMashupCommand.cs" />
     <Compile Include="MashupInfoRepository.cs" />
     <Compile Include="MashupManagerProfile.cs" />
@@ -124,6 +179,8 @@
     <None Include="Mashups\PluginUiLayout\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Mashups\ProfileEditor\tau\libs\marked\LICENSE" />
+    <None Include="Mashups\ProfileEditor\tau\mashup.ignore" />
     <None Include="Mashups\SettingsLink\placeholders.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -139,29 +196,58 @@
     <Content Include="mashup-manager-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mashups\ProfileEditor\Libs\jquery.fieldSelection.js" />
     <Content Include="Mashups\PluginUiLayout\PluginLayout.js" />
-    <Content Include="Mashups\ProfileEditor\CodeEditor.js" />
-    <Content Include="Mashups\ProfileEditor\EditorTemplate.js" />
-    <Content Include="Mashups\ProfileEditor\MashupsManagerEditor.js" />
-    <Content Include="Mashups\ProfileEditor\PlaceholderParser.js" />
-    <Content Include="Mashups\ProfileEditor\PlaceholderUtils.js" />
-    <Content Include="Mashups\ProfileEditor\Previewer.js" />
-    <Content Include="Mashups\ProfileEditor\ProfileRepository.js" />
+    <Content Include="Mashups\ProfileEditor\ghf_marked.css" />
     <Content Include="Mashups\ProfileEditor\RegisterMashup.js" />
+    <Content Include="Mashups\ProfileEditor\tau\application.mashup.manager.js" />
+    <Content Include="Mashups\ProfileEditor\tau\components\component.mashup.manager.js" />
+    <Content Include="Mashups\ProfileEditor\tau\components\component.mashup.manager.library.js" />
+    <Content Include="Mashups\ProfileEditor\tau\components\component.mashup.manager.list.js" />
+    <Content Include="Mashups\ProfileEditor\tau\components\component.mashup.manager.mashup.js" />
+    <Content Include="Mashups\ProfileEditor\tau\components\component.mashup.manager.package.js" />
+    <Content Include="Mashups\ProfileEditor\tau\configurations\configuration.mashup.manager.js" />
+    <Content Include="Mashups\ProfileEditor\tau\libs\marked\marked.js" />
+    <Content Include="Mashups\ProfileEditor\tau\models\model.mashup.manager.library.js" />
+    <Content Include="Mashups\ProfileEditor\tau\models\model.mashup.manager.list.js" />
+    <Content Include="Mashups\ProfileEditor\tau\models\model.mashup.manager.mashup.js" />
+    <Content Include="Mashups\ProfileEditor\tau\models\model.mashup.manager.package.js" />
+    <Content Include="Mashups\ProfileEditor\tau\services\service.mashup.manager.base.js" />
+    <Content Include="Mashups\ProfileEditor\tau\services\service.mashup.manager.config.js" />
+    <Content Include="Mashups\ProfileEditor\tau\services\service.mashup.manager.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\extensions\ui.extension.mashup.manager.install.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\extensions\ui.extension.mashup.manager.library.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\extensions\ui.extension.mashup.manager.list.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\extensions\ui.extension.mashup.manager.mashup.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\templates\ui.template.mashup.manager.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\templates\ui.template.mashup.manager.library.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\templates\ui.template.mashup.manager.list.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\templates\ui.template.mashup.manager.mashup.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\templates\ui.template.mashup.manager.package.js" />
+    <Content Include="Mashups\ProfileEditor\tau\ui\templates\ui.template.mashup.manager.package.requiredVersion.js" />
+    <Content Include="Mashups\ProfileEditor\tau\utils\utils.mashup.manager.actionType.js" />
+    <Content Include="Mashups\ProfileEditor\tau\utils\utils.mashup.manager.codeEditor.js" />
+    <Content Include="Mashups\ProfileEditor\tau\utils\utils.mashup.manager.placeholderParser.js" />
+    <Content Include="Mashups\ProfileEditor\tau\utils\utils.mashup.manager.placeholderUtils.js" />
+    <Content Include="Mashups\ProfileEditor\tau\utils\utils.mashup.manager.profileCreator.js" />
+    <Content Include="Mashups\ProfileEditor\tau\views\view.mashup.manager.js" />
     <Content Include="Mashups\SettingsLink\LinkRenderer.js" />
-    <Content Include="Mashups\Tests\mashupManagerEditor.tests.js" />
-    <Content Include="Mashups\Tests\index.html" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\*.*  $(TargetDir)Mashups\ProfileEditor\*.* /Y /D
-echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\Libs\*.*  $(TargetDir)Mashups\ProfileEditor\Libs\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\*.*  $(TargetDir)Mashups\ProfileEditor\tau\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\components\*.*  $(TargetDir)Mashups\ProfileEditor\tau\components\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\models\*.*  $(TargetDir)Mashups\ProfileEditor\tau\models\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\libs\marked\*.*  $(TargetDir)Mashups\ProfileEditor\tau\libs\marked\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\services\*.*  $(TargetDir)Mashups\ProfileEditor\tau\services\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\utils\*.*  $(TargetDir)Mashups\ProfileEditor\tau\utils\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\configurations\*.*  $(TargetDir)Mashups\ProfileEditor\tau\configurations\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\views\*.*  $(TargetDir)Mashups\ProfileEditor\tau\views\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\ui\extensions\*.*  $(TargetDir)Mashups\ProfileEditor\tau\ui\extensions\*.* /Y /D
+echo F | xcopy $(ProjectDir)Mashups\ProfileEditor\tau\ui\templates\*.*  $(TargetDir)Mashups\ProfileEditor\tau\ui\templates\*.* /Y /D
 echo F | xcopy $(ProjectDir)Mashups\SettingsLink\*.*  $(TargetDir)Mashups\SettingsLink\*.* /Y /D
-echo F | xcopy $(ProjectDir)Mashups\PluginUiLayout\*.*  $(TargetDir)Mashups\PluginUiLayout\*.* /D
-echo F | xcopy $(ProjectDir)Mashups\Tests\*.*  $(TargetDir)Mashups\Tests\*.* /Y /D
-
+echo F | xcopy $(ProjectDir)Mashups\PluginUiLayout\*.*  $(TargetDir)Mashups\PluginUiLayout\*.* /Y /D
 
 echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
   </PropertyGroup>
@@ -169,6 +255,13 @@ echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integratio
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

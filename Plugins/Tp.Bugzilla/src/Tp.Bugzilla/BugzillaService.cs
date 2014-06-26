@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -44,8 +44,6 @@ namespace Tp.Bugzilla
 			var errors = new PluginProfileErrorCollection();
 			try
 			{
-				SetServerCertificateValidationCallback(profile);
-
 				var validators = new Queue<Validator>();
 
 				var connectionValidator = new ConnectionValidator(profile);
@@ -86,10 +84,10 @@ namespace Tp.Bugzilla
 			catch (Exception ex)
 			{
 				errors.Add(new PluginProfileError
-				           	{
-				           		FieldName = BugzillaProfile.ProfileField,
-				           		Message = string.Format("The connection with {0} is failed. {1}", profile, ex.Message)
-				           	});
+					{
+						FieldName = BugzillaProfile.ProfileField,
+						Message = string.Format("The connection with {0} is failed. {1}", profile, ex.Message)
+					});
 				throw new BugzillaPluginProfileException(profile, errors);
 			}
 		}
@@ -109,8 +107,6 @@ namespace Tp.Bugzilla
 		public bugCollection GetBugs(int[] bugIDs)
 		{
 			if (bugIDs.Length == 0) return new bugCollection();
-
-			SetServerCertificateValidationCallback();
 
 			return ObjectFactory.GetInstance<BugzillaUrl>().GetBugs(bugIDs);
 		}
@@ -135,7 +131,7 @@ namespace Tp.Bugzilla
 			var response = ExecuteBugzillaQuery(new BugzillaTimezoneQuery());
 
 			TimeSpan timeOffset;
-			if(TimeSpan.TryParse(response, out timeOffset))
+			if (TimeSpan.TryParse(response, out timeOffset))
 			{
 				return timeOffset;
 			}
@@ -145,8 +141,6 @@ namespace Tp.Bugzilla
 
 		private string ExecuteBugzillaQuery(IBugzillaQuery query)
 		{
-			SetServerCertificateValidationCallback();
-
 			try
 			{
 				return ObjectFactory.GetInstance<BugzillaUrl>().ExecuteOnBugzilla(query);
@@ -155,7 +149,7 @@ namespace Tp.Bugzilla
 			{
 				throw new ApplicationException(
 					string.Format("Synchronization failed for following operation: {0}. Profile : '{1}'", query,
-								  _bugzillaProfile), ex);
+					              _bugzillaProfile), ex);
 			}
 		}
 
@@ -166,41 +160,6 @@ namespace Tp.Bugzilla
 			if (result != "OK")
 				throw new ApplicationException(string.Format(
 					"There was exception during performing following operation: {0}. {1}", query.GetOperationDescription(), result));
-		}
-
-		private void SetServerCertificateValidationCallback()
-		{
-			SetServerCertificateValidationCallback(_bugzillaProfile);
-		}
-
-		private void SetServerCertificateValidationCallback(BugzillaProfile profile)
-		{
-			if (ServicePointManager.ServerCertificateValidationCallback == null)
-			{
-				var validator = new RemoteCertificateValidator(profile);
-				ServicePointManager.ServerCertificateValidationCallback = validator.ValidateRemoteCertificate;
-			}
-		}
-
-		private class RemoteCertificateValidator
-		{
-			private readonly BugzillaProfile _profile;
-
-			public RemoteCertificateValidator(BugzillaProfile profile)
-			{
-				_profile = profile;
-			}
-
-			public bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain,
-			                                      SslPolicyErrors sslpolicyerrors)
-			{
-				var webRequest = sender as HttpWebRequest;
-				if (webRequest != null)
-				{
-					return webRequest.Address.Host == (new Uri(_profile.Url)).Host;
-				}
-				return false;
-			}
 		}
 	}
 }

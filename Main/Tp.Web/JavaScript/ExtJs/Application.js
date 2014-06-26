@@ -35,6 +35,29 @@ Ext.apply(Ext.form.NumberField.prototype, {
 });
 
 if (Sys.Browser.agent == Sys.Browser.Safari) {
+    /* Bug 74878 */
+    Sys.Preview.UI.IEDragDropManager.prototype.getScrollOffset = function Sys$Preview$UI$IEDragDropManager$getScrollOffset(element, recursive) {
+        var left = element.scrollLeft;
+        var top = element.scrollTop;
+        var offsetDoubleCalculated = (document.documentElement.scrollTop == document.body.scrollTop) && (document.documentElement.scrollLeft == document.body.scrollLeft);
+        if (recursive) {
+            var parent = element.parentNode;
+            while (parent != null && parent.scrollLeft != null) {
+                if (parent == document.documentElement && offsetDoubleCalculated) {
+                    break;
+                }
+                left += parent.scrollLeft;
+                top += parent.scrollTop;
+
+                if (parent == document.body && (left != 0 && top != 0)) {
+                    break;
+                }
+                parent = parent.parentNode;
+            }
+        }
+        return { x: left, y: top };
+    };
+
 	Sys.UI.DomElement.getLocation = function (element) {
 		/// <summary locid="M:J#Sys.UI.DomElement.getLocation" />
 		/// <param name="element" domElement="true"></param>

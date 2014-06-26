@@ -20,12 +20,12 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.LegacyProfileConversion.Common.Testing
 {
 	[ActionSteps]
-	public abstract class LegacyProfileConverterActionStepsBase<TConverter, TRegistry>
-		where TConverter : LegacyProfileConvertorBase<PluginProfile>
+	public abstract class LegacyProfileConverterActionStepsBase<TConverter, TRegistry, TProfile>
+		where TConverter : LegacyProfileConvertorBase<TProfile>
 		where TRegistry : LegacyProfileConverterUnitTestRegistry, new()
 	{
 		protected TpDatabaseDataContext Context { get; private set; }
-		protected PluginProfile _legacyProfile;
+		protected PluginProfile LegacyProfile;
 		protected int DefaultProcessId { get; set; }
 
 		private static void ClearPluginDb(string pluginConnectionString)
@@ -80,6 +80,7 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			tpDatabaseDataContext.ExecuteCommand("delete from Bug");
 			tpDatabaseDataContext.ExecuteCommand("update General set ParentProjectID=null");
 			tpDatabaseDataContext.ExecuteCommand("delete from ProjectMember");
+			tpDatabaseDataContext.ExecuteCommand("delete from Assignable");
 			tpDatabaseDataContext.ExecuteCommand("delete from Project");
 			tpDatabaseDataContext.ExecuteCommand("delete from CustomReport");
 			tpDatabaseDataContext.ExecuteCommand("DELETE FROM ClientStorageData");
@@ -88,7 +89,6 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			tpDatabaseDataContext.ExecuteCommand("DELETE FROM ClientStorageGroup");
 			tpDatabaseDataContext.ExecuteCommand("delete from TpUser");
 			tpDatabaseDataContext.ExecuteCommand("delete from ExternalReference");
-			tpDatabaseDataContext.ExecuteCommand("delete from Assignable");
 			tpDatabaseDataContext.ExecuteCommand("delete from General");
 			tpDatabaseDataContext.ExecuteCommand("delete from MessageUid");
 			tpDatabaseDataContext.ExecuteCommand("delete from PluginProfile");
@@ -149,32 +149,32 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 <{0} xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
 </{0}>",
 					SettingsXmlNode));
-			_legacyProfile = new PluginProfile
+			LegacyProfile = new PluginProfile
 			                 	{
 			                 		PluginName = PluginName,
 			                 		ProfileName = profileName,
 			                 		Active = true,
 			                 		Settings = xmlDocument.OuterXml,
 			                 	};
-			Context.PluginProfiles.InsertOnSubmit(_legacyProfile);
+			Context.PluginProfiles.InsertOnSubmit(LegacyProfile);
 		}
 
 		protected string GetLegacyProfileValue(string valueName)
 		{
 			var xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(_legacyProfile.Settings);
+			xmlDocument.LoadXml(LegacyProfile.Settings);
 			return GetNodeByName(valueName, xmlDocument).InnerText;
 		}
 
 		protected void SetLegacyProfileValue(string valueName, string value)
 		{
 			var xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(_legacyProfile.Settings);
+			xmlDocument.LoadXml(LegacyProfile.Settings);
 			var valueNode = GetNodeByName(valueName, xmlDocument);
 			valueNode.InnerXml = value;
 			xmlDocument.SelectSingleNode(string.Format("./{0}", SettingsXmlNode)).AppendChild(valueNode);
 
-			_legacyProfile.Settings = xmlDocument.OuterXml;
+			LegacyProfile.Settings = xmlDocument.OuterXml;
 		}
 
 		private static XmlNode GetNodeByName(string valueName, XmlDocument xmlDocument)

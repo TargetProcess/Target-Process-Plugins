@@ -1,0 +1,20 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.UserDTO, Tp.Integration.Messages</Type>
+  <UserDTO>
+    <ID xsi:nil="true" />
+    <UserID xsi:nil="true" />
+    <CreateDate>2013-08-16T20:20:01.883118+03:00</CreateDate>
+    <ModifyDate xsi:nil="true" />
+    <DeleteDate xsi:nil="true" />
+    <IsActive>true</IsActive>
+    <IsAdministrator>false</IsAdministrator>
+    <WeeklyAvailableHours>40.0</WeeklyAvailableHours>
+    <CurrentAllocation>0</CurrentAllocation>
+    <CurrentAvailableHours xsi:nil="true" />
+    <AvailableFrom xsi:nil="true" />
+    <AvailableFutureAllocation xsi:nil="true" />
+    <AvailableFutureHours xsi:nil="true" />
+    <IsObserver>false</IsObserver>
+    <RoleID xsi:nil="true" />
+  </UserDTO>
+</Value>

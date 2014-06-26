@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/class"],function(_,Class){var ImportanceConverter=Class.extend({init:function(minValue,maxValue){this.min=minValue,this.max=maxValue},getKind:function(importance){var result="medium";return importance==this.min?result="high":importance==this.max&&(result="low"),result}});return ImportanceConverter})
+define(["Underscore","tau/core/class"],function(i,n){var t=n.extend({init:function(i,n){this.min=i,this.max=n},getKind:function(i){var n="medium";return i==this.min?n="high":i==this.max&&(n="low"),n}});return t});

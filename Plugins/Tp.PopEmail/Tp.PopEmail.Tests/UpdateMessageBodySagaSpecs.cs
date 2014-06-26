@@ -25,6 +25,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.PopEmailIntegration
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class UpdateMessageBodySagaSpecs
 	{
 		private const string EXCEPTION_STRING = "Exception";

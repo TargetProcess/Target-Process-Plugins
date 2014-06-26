@@ -15,4 +15,25 @@ namespace System
 			DbType = dbType;
 		}
 	}
+
+	public class SqlDateFunctionAttribute : SqlFunctionAttribute
+	{
+		private readonly DatePart _datePartSpecifier;
+
+		public SqlDateFunctionAttribute(string name, DbType dbType, DatePart datePartSpecifier = DatePart.None) : base(name, dbType)
+		{
+			_datePartSpecifier = datePartSpecifier;
+		}
+
+		public DatePart DatePartSpecifier
+		{
+			get { return _datePartSpecifier; }
+		}
+	}
+
+	public enum DatePart
+	{
+		None,
+		s
+	}
 }

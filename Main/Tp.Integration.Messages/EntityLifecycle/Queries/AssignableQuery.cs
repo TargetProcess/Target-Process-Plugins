@@ -11,8 +11,7 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
 	[Serializable]
 	public class AssignableQuery : QueryBase
 	{
-		public string Hql { get; set; }
-		public object[] Params { get; set; }
+		public int? ProjectId { get; set; }
 
 		public override DtoType DtoType
 		{

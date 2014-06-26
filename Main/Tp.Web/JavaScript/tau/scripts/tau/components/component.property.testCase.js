@@ -1,0 +1,1 @@
+define(["tau/components/component.property"],function(e){return{create:function(t){return t=t||{},t.propertyName="testCase",t.showUrl=!0,t.editable=!1,e.create(t)}}});

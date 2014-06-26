@@ -17,6 +17,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.UnitTests
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class EntityStateConverterTest
 	{
 		private BugzillaContext _context;

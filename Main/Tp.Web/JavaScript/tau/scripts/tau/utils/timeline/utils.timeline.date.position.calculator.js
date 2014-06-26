@@ -1,0 +1,1 @@
+define(["tau/utils/utils.date","libs/date.js/build/date"],function(t,e){return function(r){var a=t.getDiff(r.endDate,r.startDate);if(0>=a)throw new Error("End date should be greater or equal to start date.");var n=r.startDate;return{getRelativeDatePosition:function(e){var n=t.getDiff(e,r.startDate);return n/a},getCorrespondingDate:function(t){return new e(n+a*t)}}}});

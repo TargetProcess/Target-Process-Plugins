@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory","tau/ui/templates/tags/ui.template.tags.item"],function(templates){var config={name:"tags",engine:"jqote2",markup:["<span>",'<ul class="ui-tags i-role-editor">','<%= fn.sub("tags.item", this.tags) %>',"</ul>","</span>"]};return templates.register(config)})
+define(["tau/core/templates-factory","tau/ui/templates/tags/ui.template.tags.item"],function(t){var e={name:"tags",engine:"jqote2",markup:["<div>",'<ul class="ui-tags i-role-editor">','<%= fn.sub("tags.item", this.tags) %>',"</ul>","</div>"]};return t.register(e)});

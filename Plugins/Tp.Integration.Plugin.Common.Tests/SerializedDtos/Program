@@ -1,0 +1,18 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ProgramDTO, Tp.Integration.Messages</Type>
+  <ProgramDTO>
+    <ID xsi:nil="true" />
+    <ProgramID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <LastCommentUserID xsi:nil="true" />
+    <ParentProjectID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Program</EntityTypeName>
+  </ProgramDTO>
+</Value>

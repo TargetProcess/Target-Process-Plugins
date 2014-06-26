@@ -19,6 +19,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.Subversion
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class ProcessNewRevisionOnlyFeature
 	{
 		[SetUp]

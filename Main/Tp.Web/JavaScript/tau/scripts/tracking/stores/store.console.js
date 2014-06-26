@@ -1,1 +1,1 @@
-define(["tau/core/class","Underscore"],function(Class,_){return Class.extend({init:function(config){this.config=config||{},_.defaults(this.config,{method:"log"})},post:function(data){console[this.config.method](data)}})})
+define(["tau/core/class","Underscore"],function(n,o){return n.extend({init:function(n){this.config=n||{},o.defaults(this.config,{method:"log"})},post:function(n){console[this.config.method](n)}})});

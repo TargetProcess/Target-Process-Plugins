@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(e,t){return t.extend({"bus beforeInit":function(e,t){var n=t.config.context.entity,r=t.config.context.configurator;this.fire("dataBind",{url:r.getUrlBuilder().getShortViewUrl(n)})}})});

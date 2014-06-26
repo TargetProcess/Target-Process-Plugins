@@ -8,7 +8,9 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Integration.Plugin.Common.Tests.Activity
 {
-	public class ShouldManipulatePluginProfilesActivityLogsTests : ActivityTestBase
+	[TestFixture]
+    [Category("PartPlugins1")]
+    public class ShouldManipulatePluginProfilesActivityLogsTests : ActivityTestBase
 	{
 		[Test]
 		public void ShouldCreateActivityLogForPluginProfile()

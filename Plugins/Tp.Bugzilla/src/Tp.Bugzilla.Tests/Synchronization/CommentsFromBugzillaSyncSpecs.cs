@@ -19,6 +19,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class CommentsFromBugzillaSyncSpecs : BugzillaTestBase
 	{
 		private const string DefaultCreateDate = "2011-07-14 10:59:17";

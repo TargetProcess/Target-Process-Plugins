@@ -1,0 +1,1 @@
+define([],function(){return{appPageEntity:".tau-app.tau-page-entity",popupPageEntity:".ui-popup.tau-page-entity",popupCloseButton:".close",cardDetailsTriggerIcon:".tau-board-list-view_details-view-trigger.tau-icon",cardDetailsTrigger:".tau-board-list-view_details-view-trigger",listEntityDetails:".tau-list-entity-details",pageEntity:".tau-page-entity"}});

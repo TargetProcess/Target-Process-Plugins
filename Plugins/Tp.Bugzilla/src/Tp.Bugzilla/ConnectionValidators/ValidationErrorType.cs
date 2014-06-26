@@ -12,6 +12,7 @@ namespace Tp.Bugzilla.ConnectionValidators
 		InvalidCredentials,
 		TpCgiNotFound,
 		InvalidTpCgiVersion,
-		QueryNotFound
+		QueryNotFound,
+		TrustFailure
 	}
 }

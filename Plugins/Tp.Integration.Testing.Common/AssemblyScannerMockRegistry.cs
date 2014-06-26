@@ -3,8 +3,11 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using NServiceBus.Saga;
+using Tp.Core;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
@@ -57,6 +60,20 @@ namespace Tp.Integration.Testing.Common
 		protected override IProfilePersister GetProfilePersisterInstance()
 		{
 			return new ProfileInMemoryPersister();
+		}
+
+		protected override ITaskFactory GetTaskFactory()
+		{
+			return new MockTaskFactory();
+		}
+	}
+
+	public class MockTaskFactory : ITaskFactory
+	{
+		public Task StartNew(Action action)
+		{
+			action();
+			return new Task(() => { });
 		}
 	}
 }

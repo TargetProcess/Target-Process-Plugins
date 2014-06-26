@@ -15,6 +15,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 	using Tp.Core;
 
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class ProfileStorageSqlPersisterSpecs : SqlPersisterSpecBase
 	{
 		private ProfileStorageSqlPersister _persister;

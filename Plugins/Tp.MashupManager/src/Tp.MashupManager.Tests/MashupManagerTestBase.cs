@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,10 +17,8 @@ using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
-using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.Integration.Testing.Common;
-using Tp.MashupManager.Dtos;
 using Tp.MashupManager.MashupStorage;
 using Tp.Plugin.Core;
 using Tp.Testing.Common.NUnit;
@@ -30,35 +29,36 @@ namespace Tp.MashupManager.Tests
 	public class MashupManagerTestBase
 	{
 		protected PluginCommandResponseMessage _response;
-		protected const string _defaulrProfileName = MashupInfoRepository.ProfileName;
-		protected const string _defaultPlaceholders = "Default";
-		protected const string _defaultScript = "alert(123)";
+		protected const string DefaulrProfileName = MashupInfoRepository.ProfileName;
+		protected const string DefaultPlaceholders = "Default";
+		protected const string DefaultScript = "alert(123)";
+		protected const string DefaultConfigScript = "config";
 
 		[SetUp]
-		public virtual void Init()
+		public virtual void SetUp()
 		{
 			ObjectFactory.Configure(
 				x =>
-					{
-						x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (MashupManagerProfile).Assembly,
-						                                                                        new List<Assembly>
+				{
+					x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(MashupManagerProfile).Assembly,
+																							new List<Assembly>
 						                                                                        	{
 						                                                                        		typeof (ExceptionThrownLocalMessage).
 						                                                                        			Assembly,
 						                                                                        		typeof (MashupManagerProfile).Assembly
 						                                                                        	},
-						                                                                        new Assembly[] {}));
-						x.For<IActivityLogger>().HybridHttpOrThreadLocalScoped().Use<ActivityLoggerMock>();
-						x.Forward<IActivityLogger, ActivityLoggerMock>();
+																							new Assembly[] { }));
+					x.For<IActivityLogger>().HybridHttpOrThreadLocalScoped().Use<ActivityLoggerMock>();
+					x.Forward<IActivityLogger, ActivityLoggerMock>();
 
-						var mashupFolderMock = MockRepository.GenerateStub<IMashupLocalFolder>();
-						mashupFolderMock.Expect(y => y.Path).Return(MashupStorageDirectory);
-						x.For<IMashupLocalFolder>().Use(mashupFolderMock);
-					});
+					var mashupFolderMock = MockRepository.GenerateStub<IMashupLocalFolder>();
+					mashupFolderMock.Expect(y => y.Path).Return(MashupStorageDirectory);
+					x.For<IMashupLocalFolder>().Use(mashupFolderMock);
+				});
 		}
 
 		[TearDown]
-		public void TearDown()
+		public virtual void TearDown()
 		{
 			if (Directory.Exists(MashupStorageDirectory))
 			{
@@ -66,7 +66,7 @@ namespace Tp.MashupManager.Tests
 			}
 		}
 
-		private static string MashupStorageDirectory
+		public static string MashupStorageDirectory
 		{
 			get { return Path.Combine(Directory.GetCurrentDirectory(), "MashupStorage"); }
 		}
@@ -106,6 +106,11 @@ namespace Tp.MashupManager.Tests
 			get { return ObjectFactory.GetInstance<IMashupScriptStorage>(); }
 		}
 
+		protected static IStorageRepository StorageRepository
+		{
+			get { return ObjectFactory.GetInstance<IStorageRepository>(); }
+		}
+
 		[Given("no profiles created")]
 		public void NoProfileCreated()
 		{
@@ -114,7 +119,7 @@ namespace Tp.MashupManager.Tests
 		[Given("profile created")]
 		public void CreateProfile()
 		{
-			CreateProfile(_defaulrProfileName);
+			CreateProfile(DefaulrProfileName);
 		}
 
 		[Given("profile '$profileName' created")]
@@ -126,7 +131,7 @@ namespace Tp.MashupManager.Tests
 		[Given("profile created for account '$accountName'")]
 		public void CreateProfileForAccount(string accountName)
 		{
-			CreateProfileForAccount(_defaulrProfileName, accountName);
+			CreateProfileForAccount(DefaulrProfileName, accountName);
 		}
 
 		[Given("profile '$profileName' created for account '$accountName'")]
@@ -142,13 +147,33 @@ namespace Tp.MashupManager.Tests
 
 			foreach (var mashup in mashups)
 			{
-				ScriptStorage.SaveMashup(new MashupDto
+				var mashupFiles = new List<MashupFile>
+				{
+					new MashupFile {FileName = mashup + ".js", Content = DefaultScript}
+				};
+				ScriptStorage.SaveMashup(new Mashup(mashupFiles)
 				{
 					Name = mashup,
-					Placeholders = _defaultPlaceholders,
-					Script = _defaultScript
+					Placeholders = DefaultPlaceholders
 				});
 			}
+		}
+
+		[Given("mashup '$mashupName' with config file created in profile")]
+		public void SetMashupNamesToProfile(string mashupName)
+		{
+			MashupManagerProfile.MashupNames.Add(mashupName);
+			var mashupFiles = new List<MashupFile>
+			{
+				new MashupFile {FileName = mashupName + ".js", Content = DefaultScript},
+				new MashupFile {FileName = mashupName + ".config.js", Content = DefaultConfigScript}
+			};
+			ScriptStorage.SaveMashup(new Mashup(mashupFiles)
+			{
+				Name = mashupName,
+				Placeholders = DefaultPlaceholders
+				
+			});
 		}
 
 		[Given(@"profile '$profileName' mashups are: (?<mashups>([^,]+,?\s*)+)")]
@@ -167,7 +192,7 @@ namespace Tp.MashupManager.Tests
 			{
 				var mashup = GetMashupFromStorage(mashupName);
 				mashup.Placeholders.Should(Be.Not.Null.And.Not.Empty);
-				mashup.Script.Should(Be.Not.Null.And.Not.Empty);
+				mashup.Files.Should(Be.Not.Null.And.Not.Empty);
 			}
 		}
 
@@ -183,27 +208,44 @@ namespace Tp.MashupManager.Tests
 			var mashup = GetMashupMessageByName(mashupName);
 			mashup.MashupName.Should(Be.EqualTo(mashupName));
 			mashup.PluginMashupScripts.Single().ScriptContent.Should(Be.EqualTo(script));
-			mashup.Placeholders.Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim())));
+			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())));
+		}
+
+		[Then(@"mashup '$mashupName' with placeholders '$placeholders' and fileNames '(?<fileNames>([^,]+,?\s*)+)' should be sent to TP")]
+		public void CheckCreatedInTpMashupWithConfig(string mashupName, string placeholders, string[] fileNames)
+		{
+			var mashup = GetMashupMessageByName(mashupName);
+			mashup.MashupName.Should(Be.EqualTo(mashupName));
+			mashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames));
+			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())));
+		}
+
+		[Then("'$fileName' file of '$mashupName' mashup sended to TP should contain '$script' script")]
+		public void CheckSendedToTpMashupFileContent(string fileName, string mashupName, string script)
+		{
+			var mashup = GetMashupMessageByName(mashupName);
+			mashup.MashupName.Should(Be.EqualTo(mashupName));
+			mashup.PluginMashupScripts.First(x => x.FileName.EqualsIgnoreCase(fileName)).ScriptContent.Should(Be.EqualTo(script));
 		}
 
 		[Then("mashup '$mashupName' with accounts '$accounts' and placeholders '$placeholders' and script '$script' should be sent to TP")]
 		public void CheckCreatedInTpMashup(string mashupName, string accounts, string placeholders, string script)
 		{
-			var mashup = GetMashupMessageByName(mashupName);
+			PluginMashupMessage mashup = GetMashupMessageByName(mashupName);
 			mashup.MashupName.Should(Be.EqualTo(mashupName));
-			mashup.PluginMashupScripts.Select(s => s.ScriptContent).ToArray().Should(Be.EquivalentTo(new []{script, string.Format("{0}{1}", MashupConfig.AccountsConfigPrefix, accounts)}));
-			mashup.Placeholders.Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim())));
+			mashup.PluginMashupScripts.Select(s => s.ScriptContent).ToArray().Should(Be.EquivalentTo(new[] { script, string.Format("{0}{1}", MashupConfig.AccountsConfigPrefix, accounts) }));
+			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())));
 
 			var scriptNames = mashup.PluginMashupScripts.Select(s => s.FileName).ToArray();
 			scriptNames.Count().Should(Be.EqualTo(2));
-			scriptNames.Should(Contains.Item(MashupDto.AccountCfgFileName));
+			scriptNames.Should(Contains.Item(Mashup.AccountCfgFileName));
 			scriptNames.Count(n => n.EndsWith("js")).Should(Be.EqualTo(1));
 		}
 
 		[Then("default mashup '$mashupName' with accounts '$accountName' should be sent to TP")]
 		public void CheckCreatedInTpMashup(string mashupName, string accountName)
 		{
-			CheckCreatedInTpMashup(mashupName, accountName, _defaultPlaceholders, _defaultScript);
+			CheckCreatedInTpMashup(mashupName, accountName, DefaultPlaceholders, DefaultScript);
 		}
 
 		[Then("mashup '$mashupName' with plugin name '$pluginName' should be sent to TP")]
@@ -216,7 +258,7 @@ namespace Tp.MashupManager.Tests
 		[Then("default mashup '$mashupName' should be sent to TP")]
 		public void CheckDefaultMashupSentToTp(string mashupName)
 		{
-			CheckCreatedInTpMashup(mashupName, _defaultPlaceholders, _defaultScript);
+			CheckCreatedInTpMashup(mashupName, DefaultPlaceholders, DefaultScript);
 		}
 
 		[Then("$count mashup should be in profile storage")]
@@ -225,14 +267,35 @@ namespace Tp.MashupManager.Tests
 			Directory.GetDirectories(MashupStorageDirectory).Count().Should(Be.EqualTo(count));
 		}
 
+		[Then(@"profile storage should contain mashup '$mashupName' with placeholders '$placeholders' and files '(?<fileNames>([^,]+,?\s*)+)'")]
+		public void CheckMashupFilesInStorage(string mashupName, string placeholders, string[] fileNames)
+		{
+			var mashup = ScriptStorage.GetMashup(mashupName);
+
+			mashup.Name.Should(Be.EqualTo(mashupName));
+			mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()));
+			mashup.Files.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames));
+
+			MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName));
+		}
+
+		[Then("'$fileName' file of '$mashupName' mashup in storage should contain '$script' script")]
+		public void CheckMashupFileContentInStorage(string fileName, string mashupName, string script)
+		{
+			var mashup = ScriptStorage.GetMashup(mashupName);
+
+			mashup.Name.Should(Be.EqualTo(mashupName));
+			mashup.Files.First(x => x.FileName.EqualsIgnoreCase(fileName)).Content.Should(Be.EqualTo(script));
+		}
+
 		[Then("mashup '$mashupName' with placeholders '$placeholders' and script '$script' should be in profile storage")]
 		public void CheckMashupInStorage(string mashupName, string placeholders, string script)
 		{
 			var mashup = ScriptStorage.GetMashup(mashupName);
 
 			mashup.Name.Should(Be.EqualTo(mashupName));
-			mashup.Placeholders.Should(Be.EqualTo(placeholders));
-			mashup.Script.Should(Be.EqualTo(script));
+			mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()));
+			mashup.Files.First().Content.Should(Be.EqualTo(script));
 
 			MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName));
 		}
@@ -250,7 +313,7 @@ namespace Tp.MashupManager.Tests
 		[Then("default mashup '$mashupName' should be in profile storage")]
 		public void CheckDefaultMashupInStorage(string mashupName)
 		{
-			CheckMashupInStorage(mashupName, _defaultPlaceholders, _defaultScript);
+			CheckMashupInStorage(mashupName, DefaultPlaceholders, DefaultScript);
 		}
 
 		[Then("mashup '$mashupName' should be cleared in TP and profile")]
@@ -284,7 +347,7 @@ namespace Tp.MashupManager.Tests
 			mashupCommand.PluginMashupScripts.Should(Be.Empty);
 		}
 
-		protected MashupDto GetMashupFromStorage(string mashupName)
+		protected Mashup GetMashupFromStorage(string mashupName)
 		{
 			return ScriptStorage.GetMashup(mashupName);
 		}

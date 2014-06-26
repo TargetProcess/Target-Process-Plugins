@@ -29,6 +29,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class AttachmentSyncSpecs : BugzillaTestBase
 	{
 		public override void Init()
@@ -158,18 +159,74 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
 		}
+
+		[Test]
+		public void ShouldNotTryToImportObsoleteAttachments()
+		{
+			@"
+				Given bugzilla profile for project 1 created
+					And bugzilla contains bug with id 1
+					And bug 1 has name 'bug1'
+					And bug 1 has attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
+					And bug 1 has obsolete attachment 'file2' with content '123456' created on '2010-10-10 13:13'
+					And synchronizing bugzilla bugs
+				When synchronizing bugzilla bugs
+				Then bugs with following names should be created in TargetProcess: bug1
+					And bug in TargetProcess with name 'bug1' should have 1 attachments
+					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
+					And no attachments should present on disk
+			"
+				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+		}
+
+		[Test]
+		public void ShouldNotTryToImportDeletedAttachments()
+		{
+			@"
+				Given bugzilla profile for project 1 created
+					And bugzilla contains bug with id 1
+					And bug 1 has name 'bug1'
+					And bug 1 has attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
+					And bug 1 has deleted attachment 'file2' created on '2010-10-10 13:13'
+					And synchronizing bugzilla bugs
+				When synchronizing bugzilla bugs
+				Then bugs with following names should be created in TargetProcess: bug1
+					And bug in TargetProcess with name 'bug1' should have 1 attachments
+					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
+					And no attachments should present on disk
+			"
+				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+		}
 		
 		[Given("bug $bugId has attachment '$fileName' with content '$content' created on '$creationDate'")]
 		public void AddAttachmentToBug(int bugId, string fileName, string content, string creationDate)
 		{
+			CreateAttachment(bugId, fileName, content, creationDate, isobsolete._0);
+		}
+
+		[Given("bug $bugId has obsolete attachment '$fileName' with content '$content' created on '$creationDate'")]
+		public void AddObsoleteAttachmentToBug(int bugId, string fileName, string content, string creationDate)
+		{
+			CreateAttachment(bugId, fileName, content, creationDate, isobsolete._1);
+		}
+
+		[Given("bug $bugId has deleted attachment '$fileName' created on '$creationDate'")]
+		public void AddDeletededAttachmentToBug(int bugId, string fileName, string creationDate)
+		{
+			CreateAttachment(bugId, fileName, null, creationDate, isobsolete._1);
+		}
+
+		private void CreateAttachment(int bugId, string fileName, string content, string creationDate, isobsolete isobsolete)
+		{
 			Context.BugzillaBugs.AddAttachment(bugId,
 			                                   new attachment
-			                                   	{
-			                                   		filename = fileName,
-			                                   		date = creationDate,
-			                                   		data =
-			                                   			new data {Value = Convert.ToBase64String(Encoding.ASCII.GetBytes(content))}
-			                                   	});
+				                                   {
+					                                   filename = fileName,
+					                                   date = creationDate,
+					                                   data = string.IsNullOrEmpty(content) ? null :
+						                                   new data {Value = Convert.ToBase64String(Encoding.ASCII.GetBytes(content))},
+					                                   isobsolete = isobsolete
+				                                   });
 		}
 
 		[Given("attachment for bug $bugId '$fileName' has creation date '$createDate'")]

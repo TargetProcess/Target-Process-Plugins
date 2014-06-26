@@ -1,0 +1,1 @@
+define(["jQuery","Underscore","tau/services/customize/service.customize.card.layout.factory.newlist"],function(e,t,r){return r.extend({_replaceShortUnitsWithLong:function(e){return e}})});

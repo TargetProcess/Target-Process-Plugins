@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using StructureMap;
+using StructureMap.TypeRules;
 using Tp.Core;
 using Tp.Core.Annotations;
 
@@ -38,7 +39,9 @@ namespace System.Linq.Dynamic
 		                                                 	typeof (TimeSpan),
 		                                                 	typeof (Guid),
 		                                                 	typeof (Math),
-		                                                 	typeof (Convert)
+		                                                 	typeof (Convert),
+															typeof (DateTime?),
+															typeof (Enum)
 		                                                 };
 
 
@@ -613,43 +616,47 @@ namespace System.Linq.Dynamic
 
 		private Expression ParseNewJson()
 		{
-			NextToken();
 			var properties = new List<DynamicProperty>();
 			var expressions = new List<Expression>();
-			while (true)
+			do
 			{
+				var token = _token;
+				var pos = _textPos;
+				var ch = _ch;
+				NextToken();
 				int exprPos = _token._pos;
 
+				var expression = Try.Create(ParseExpression);
 
-				string propName;
-				Expression expr = ParseExpression();
-
-	
-				if (TokenIdentifierIs("as"))
-				{
-					NextToken();
-					propName = GetIdentifier();
-					NextToken();
-				}
-				else
-				{
-					var me = expr as MemberExpression;
-
-					if (me != null)
+				Expression expr=null;
+				string propName=null;
+				expression.Switch(
+					e =>
 					{
-						propName = me.Member.Name;
-					}
-					else
-					{
-						if (!DynamicDictionary.TryGetAlias(expr, exprPos, out propName))
-							throw ParseError(exprPos, Res.MissingAsClause);
-					}
-				}
+						expr = e;
+						if (TokenIdentifierIs("as"))
+						{
+							NextToken();
+							propName = GetIdentifier();
+							NextToken();
+						}
+						else if (_token._id == TokenId.Colon)
+						{
+							ParseNameColonExpression(token, pos, ch, ParseError(exprPos, Res.MissingAsClause), out propName, out expr);
+						}
+						else
+						{
+							var maybePropName = GetPropertyName(expr, exprPos);
+							propName = maybePropName
+								.GetOrThrow(() => ParseError(exprPos, Res.MissingAsClause));
+						}
+					},
+					exception => ParseNameColonExpression(token, pos, ch, exception, out propName, out expr));
+
 				expressions.Add(expr);
 				properties.Add(new DynamicProperty(propName, expr.Type));
-				if (_token._id != TokenId.Comma) break;
-				NextToken();
-			}
+
+			} while (_token._id == TokenId.Comma);
 			ValidateToken(TokenId.CloseCurly, Res.CloseParenOrCommaExpected);
 			NextToken();
 			Type type = DynamicExpressionParser.CreateClass(properties);
@@ -660,6 +667,60 @@ namespace System.Linq.Dynamic
 		
 		
 		}
+
+		private Maybe<string> GetPropertyName(Expression expr, int exprPos)
+		{
+			var maybePropName = expr
+				.MaybeAs<MemberExpression>().Bind(x => x.Member.Name)
+				.OrElse(() => GetMethodName(expr))
+				.OrElse(() => DynamicDictionary.GetAlias(expr, exprPos))
+				.OrElse(() => GetConditionName(expr, exprPos));
+			return maybePropName;
+		}
+
+		// special case for protected nullable properties
+		// for x==null?null:(Nullable<T>)Expr(x) returns name of Expr(x)
+		private Maybe<string> GetConditionName(Expression expr, int exprPos)
+		{
+			return expr.MaybeAs<ConditionalExpression>()
+				.Bind(conditional => ExtensionsProvider.GetValue<Expression>(conditional)
+					.Bind(x => GetPropertyName(x, exprPos)));
+		}
+
+		private void ParseNameColonExpression(Token token, int pos, char ch, Exception exception, out string propName,
+			out Expression expr)
+		{
+			_token = token;
+			_textPos = pos;
+			_ch = ch;
+			NextToken();
+			propName = GetIdentifier();
+			NextToken();
+			if (_token._id == TokenId.Colon)
+			{
+				NextToken();
+				expr = ParseExpression();
+			}
+			else
+			{
+				throw exception;
+			}
+		}
+
+		private static Maybe<string> GetMethodName(Expression expr)
+		{
+			return expr.MaybeAs<MethodCallExpression>().Bind(
+				call =>
+				{
+					if (call.Arguments.Count == 0 || (call.Method.IsExtensionMethod() && call.Arguments.Count == 1))
+					{
+						return call.Method.Name.ToMaybe();
+					}
+					return Maybe.Nothing;
+				}
+				);
+		}
+
 		private Expression ParseNewObject()
 		{
 			NextToken();
@@ -771,23 +832,64 @@ namespace System.Linq.Dynamic
 
 		private Expression ParseMemberAccess(Type type, Expression instance)
 		{
-			if (instance != null) type = instance.Type;
+			Type type1 = type;
+			if (instance != null) type1 = instance.Type;
 			int errorPos = _token._pos;
 			string id = GetIdentifier();
 			NextToken();
-			return _token._id == TokenId.OpenParen
-				       ? GenerateMethodCall(type, instance, errorPos, id)
-				       : GenerateMemberAccess(type, instance, errorPos, id);
+			var nextToken = _token._id;
+			return TryParseMemberAcces(type1, instance, nextToken, errorPos, id).Value;
 		}
 
-		private Expression GenerateMethodCall(Type type, Expression instance, int errorPos, string id)
+		private Try<Expression> TryParseMemberAcces(Type type, Expression instance, TokenId nextToken, int errorPos, string id)
 		{
-			Lazy<Expression[]> argumentList = Lazy.Create(ParseArgumentList);
+			if (nextToken == TokenId.OpenParen)
+			{
+				return GenerateMethodCall(type, instance, errorPos, id, Lazy.Create(ParseArgumentList))
+					.ToTry(() => ParseError(errorPos, Res.NoApplicableMethod, id, GetTypeName(type)));
+			}
+
+			return GenerateMemberAccess(type, instance, errorPos, id)
+				.OrElse(() => GenerateMethodCall(type, instance, errorPos, id, Lazy.Create(() => new Expression[0])))
+				.OrElse(() => GenerateNullableMethodCall(type, instance, errorPos, id, nextToken, Lazy.Create(() => new Expression[0])))
+				.ToTry(() => ParseError(errorPos, Res.UnknownPropertyOrField, id, GetTypeName(type)));
+		}
+
+		// returns x=>x==null?null:f(x.Value) with cast to Nullable if needed
+		private Maybe<Expression> GenerateNullableMethodCall(Type type, Expression instance, int errorPos, string id, TokenId nextToken, Lazy<Expression[]> argumentList)
+		{
+			
+			if (type.IsNullable())
+			{
+				var expression = TryParseMemberAcces(type.GetGenericArguments()[0], Expression.Property(instance, "Value"), nextToken, errorPos, id);
+				return expression.Select(e =>
+				{
+					return new
+					{
+						expression = e,
+						protectedExpression = !e.Type.IsNullable() && e.Type.IsValueType
+							? Expression.Convert(e, typeof (Nullable<>).MakeGenericType(e.Type))
+							: e
+					};
+				}).Select( notNull =>
+				{
+					var condition = (Expression)Expression.Condition(Expression.Equal(instance, Expression.Constant(null, type)),
+						Expression.Constant(null, notNull.protectedExpression.Type), notNull.protectedExpression);
+
+					// attach raw expression to condition to get it name in GetConditionalName()
+					ExtensionsProvider.SetValue(condition, notNull.expression);
+					return condition;
+				}
+					).ToMaybe();
+			}
+			return Maybe.Nothing;
+		}
+
+		private Maybe<Expression> GenerateMethodCall(Type type, Expression instance, int errorPos, string id, Lazy<Expression[]> argumentList)
+		{
 			return EnumerableMethod(type, instance, errorPos, id, argumentList)
 				.OrElse(() => SelfMethod(type, instance, errorPos, id, argumentList))
-				.OrElse(() => ExtensionMethod(type, instance, errorPos, id, argumentList))
-				.FailIfNothing(()=>ParseError(errorPos, Res.NoApplicableMethod,
-				                          id, GetTypeName(type)));
+				.OrElse(() => ExtensionMethod(type, instance, errorPos, id, argumentList));
 		}
 
 		private Maybe<Expression> ExtensionMethod(Type type, Expression instance, int errorPos, string methodName, Lazy<Expression[]> args)
@@ -823,7 +925,7 @@ namespace System.Linq.Dynamic
 					return Maybe.Nothing;
 				case 1:
 					var method = (MethodInfo)mb;
-					if (!IsPredefinedType(method.DeclaringType))
+					if (!IsPredefinedType(method.DeclaringType) && !method.DeclaringType.IsEnum)
 						throw ParseError(errorPos, Res.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
 					if (method.ReturnType == typeof(void))
 						throw ParseError(errorPos, Res.MethodIsVoid,
@@ -834,7 +936,7 @@ namespace System.Linq.Dynamic
 			}
 		}
 
-		private Expression GenerateMemberAccess(Type type, Expression instance, int errorPos, string name)
+		private Maybe<Expression> GenerateMemberAccess(Type type, Expression instance, int errorPos, string name)
 		{
 			MemberInfo member = FindPropertyOrField(type, name, instance == null);
 			if (member != null)
@@ -850,8 +952,7 @@ namespace System.Linq.Dynamic
 				return expression;
 			}
 
-			// try to resolve indexer
-			throw ParseError(errorPos, Res.UnknownPropertyOrField,	name, GetTypeName(type));
+			return Maybe.Nothing;
 		}
 
 		private static Type FindGenericType(Type generic, Type type)
@@ -1806,6 +1907,10 @@ namespace System.Linq.Dynamic
 		private bool TokenIdentifierIs(string id)
 		{
 			return _token._id == TokenId.Identifier && String.Equals(id, _token.Text, StringComparison.OrdinalIgnoreCase);
+		}
+		private bool TokenIs(string id)
+		{
+			return String.Equals(id, _token.Text, StringComparison.OrdinalIgnoreCase);
 		}
 
 		private string GetIdentifier()

@@ -3,8 +3,10 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {
@@ -401,16 +403,15 @@ namespace Tp.Integration.Common
 		[DataMember][XmlElement(Order = 63)]
 		public String CustomField60 { get; set; }
 
-		
-
-		
 		/// <summary>
         /// Gets or sets the Entity Type Name. 
         /// </summary>
         /// <value>The Entity Type Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 64)]public virtual string EntityTypeName { get; set; }
-		
+
+		[DataMember][XmlElement(Order = 65)]
+		public Field[] CustomFieldsMetaInfo { get; set; }
 	}
 	
 	

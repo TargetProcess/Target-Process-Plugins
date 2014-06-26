@@ -1,1 +1,1 @@
-define(["tau/components/component.property.bool","tau/ui/templates/property/ui.template.property.status.testCaseRun"],function(creator,template){return{create:function(config){return config=config||{},config.propertyName="passed",config.template=template,creator.create(config)}}})
+define(["tau/components/component.property.bool","tau/ui/templates/property/ui.template.property.status.testCaseRun"],function(e,t){return{create:function(p){return p=p||{},p.propertyName="passed",p.template=t,e.create(p)}}});

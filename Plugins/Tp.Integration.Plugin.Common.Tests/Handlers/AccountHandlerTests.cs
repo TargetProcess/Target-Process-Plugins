@@ -14,6 +14,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Handlers
 	using Plugin.Common.Activity;
 
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public sealed class AccountHandlerTests
 	{
 		private AccountHandler _accountHandler;

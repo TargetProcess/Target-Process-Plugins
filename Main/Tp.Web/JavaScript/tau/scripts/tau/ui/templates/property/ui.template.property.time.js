@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"property-time",markup:["<div>",'   <div class="property"><div class="property-text">${text}<span class="point">${point}</span></div></div>',"</div>"].join("")};return templates.register(config)})
+define(["tau/core/templates-factory"],function(t){var e={name:"property-time",markup:["<div>",'   <div class="property"><div class="property-text">${text}<span class="point">${point}</span></div></div>',"</div>"].join("")};return t.register(e)});

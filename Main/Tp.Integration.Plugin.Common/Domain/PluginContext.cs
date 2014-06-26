@@ -3,6 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
+using System.Threading;
 using NServiceBus;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.ServiceBus;
@@ -27,12 +29,18 @@ namespace Tp.Integration.Plugin.Common.Domain
 
 		public virtual AccountName AccountName
 		{
-			get { return _bus.GetInAccountName(); }
+			get
+			{
+				return _bus.GetInAccountName();
+			}
 		}
 
 		public virtual ProfileName ProfileName
 		{
-			get { return _bus.GetInProfileName(); }
+			get
+			{
+				return _bus.GetInProfileName();
+			}
 		}
 	}
 }

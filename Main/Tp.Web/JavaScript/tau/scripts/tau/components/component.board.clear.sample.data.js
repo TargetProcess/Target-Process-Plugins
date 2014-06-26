@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/clear.sample.data/model.clean.sample.data","tau/components/clear.sample.data/template.clear.sample.data"],function(e,a,t){return{create:function(n){var c={queuedBus:!0,extensions:[a],template:t};return e.create(c,n)}}});

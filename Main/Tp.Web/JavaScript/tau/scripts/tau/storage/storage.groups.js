@@ -1,1 +1,1 @@
-define([],function(){return{ui:{},boards:{}}})
+define([],function(){return{ui:{},boards:{}}});

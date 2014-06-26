@@ -4,14 +4,14 @@
 // 
 
 using Tp.Integration.Plugin.Common.Validation;
-using Tp.MashupManager.Dtos;
+using Tp.MashupManager.CustomCommands.Args;
 
 namespace Tp.MashupManager
 {
 	public interface IMashupInfoRepository
 	{
-		PluginProfileErrorCollection Add(MashupDto dto);
-		PluginProfileErrorCollection Update(UpdateMashupDto dto);
+		PluginProfileErrorCollection Add(Mashup dto, bool generateUniqueName);
+		PluginProfileErrorCollection Update(UpdateMashupCommandArg commandArg);
 		PluginProfileErrorCollection Delete(string mashupName);
 	}
 }

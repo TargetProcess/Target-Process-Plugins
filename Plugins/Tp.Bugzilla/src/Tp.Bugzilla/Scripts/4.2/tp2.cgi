@@ -22,8 +22,8 @@ use MIME::Base64;
 use Data::Dumper;
 require Data::Dumper;
 
-my $cgi = Bugzilla->cgi;
-my $user = Bugzilla->login(LOGIN_REQUIRED);
+local $cgi = Bugzilla->cgi;
+local $user = Bugzilla->login(LOGIN_REQUIRED);
 my $bugsListXmlTemplate = 'tp_bugsListXml';
 my $scriptVersionXmlTemplate = 'tp_scriptVersionXml';
 my $scriptVersion = "2.1.0";
@@ -32,7 +32,7 @@ my $supportedBugzillaVersion = '4.2';
 # get_bugs
 # get_bug_ids
 
-my $cmd = $cgi->param("cmd");
+local $cmd = $cgi->param("cmd");
 
 if ($cmd eq 'check')
 {
@@ -40,7 +40,7 @@ if ($cmd eq 'check')
 }
 elsif (substr($constants.BUGZILLA_VERSION, 0, 3) eq $supportedBugzillaVersion)
 {
-	print $cgi->header('text');
+	print $cgi->header(-type => 'text/plain', -Pragma => 'no-cache');
 	print "BUGZILLA VERSION: " . $constants.BUGZILLA_VERSION . "\n";
 	print "SUPPORTED BUGZILLA VERSION: " . $supportedBugzillaVersion . "\n";
 	print "SCRIPT VERSION: " . $scriptVersion . "\n";
@@ -80,20 +80,17 @@ elsif (substr($constants.BUGZILLA_VERSION, 0, 3) eq $supportedBugzillaVersion)
 	}
 	else
 	{
-		print $cgi->header('text');
 		print "ERROR: Invalid command '".$cmd."'";
 	}
 }
 else
 {
-	print $cgi->header('text');
+	print $cgi->header(-type => 'text/plain', -Pragma => 'no-cache');
 	print "ERROR: Bugzilla version '" . $constants.BUGZILLA_VERSION . "' is not supported by 'tp2.cgi'. Please update 'tp2.cgi' and try again.";
 }
 
 sub get_timezone
 {
-	print $cgi->header('text');
-
 	my $dbh = Bugzilla->dbh;
 	my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(CURTIME(),UTC_TIME())', undef);
 
@@ -102,8 +99,6 @@ sub get_timezone
 
 sub add_comment
 {
-	print $cgi->header('text');
-
 	my $bugId = $cgi->param("bugid");
 
 	my $bug = new Bugzilla::Bug($bugId);
@@ -144,8 +139,8 @@ sub add_comment
 	}
 
 	$dbh->do("INSERT INTO longdescs (bug_id, who, thetext, bug_when)
-                       VALUES (?,?,?,?)", undef,
-                 $bug->id, $ownerid, $comment_text, $date);
+							VALUES (?,?,?,?)", undef,
+							$bug->id, $ownerid, $comment_text, $date);
 
 	$bug->{added_comments} = [];
 	$bug->update();
@@ -155,8 +150,6 @@ sub add_comment
 
 sub assign_user
 {
-	print $cgi->header('text');
-
 	my $bugId = $cgi->param("bugid");
 	my $localUser = $cgi->param("user");
 
@@ -180,8 +173,6 @@ sub assign_user
 
 sub change_status
 {
-	print $cgi->header('text');
-
 	my $id = $cgi->param('id');
 
 	#ValidateBugID($id);
@@ -202,6 +193,10 @@ sub change_status
 	$set_all_fields{'bug_status'} = $cgi->param('status');
 	$set_all_fields{'resolution'} = $cgi->param('resolution');
 	$set_all_fields{'dup_id'} = $cgi->param('dup_id');
+	my $new_status = Bugzilla::Status->check($cgi->param('status'));
+	if($new_status->comment_required_on_change_from($bug->status)) {
+		$set_all_fields{'comment'} = {body => "Status changed from ".$bug->status->name." to ".$new_status->name." by Targetprocess Bugzilla Plugin", is_private => 0};
+	}
 
 	$bug->set_all(\%set_all_fields);
 #	$bug->set_status(scalar $cgi->param('status'),{
@@ -313,11 +308,12 @@ sub check
 {
 	if ($user && $user->login())
 	{
-		print $cgi->header('xml');
+		print $cgi->header(-type => 'text/xml', -Pragma => 'no-cache');
 		my $template = Bugzilla->template;
 		addScriptVersionTemplate($template);
 
 		my $vars = {};
+		my @bugs = ();
 		foreach my $id ($cgi->param('id')) {
 			my @ids = split(/,/, $id);
 			foreach (@ids) {
@@ -389,9 +385,8 @@ sub get_bugs {
 	my $template = Bugzilla->template;
 	addXmlTemplate($template);
 
-	print $cgi->header('xml');
-
 	my $vars = {};
+	my @bugs = ();
 	foreach my $id ($cgi->param('id')) {
 		my @ids = split(/,/, $id);
 		foreach (@ids) {
@@ -422,8 +417,6 @@ sub get_bugs {
 
 sub get_bug_ids
 {
-	print $cgi->header('text');
-
 	my $name = $cgi->param("name");
 	my $date = $cgi->param("date");
 
@@ -436,7 +429,7 @@ sub get_bug_ids
 		my $query = findQuery($queryName);
 
 		if ($query) {
-			my $params =  new Bugzilla::CGI($query->url);
+			my $params = new Bugzilla::CGI($query->url);
 			if ($date) {
 				my $fromdate = $params->param("chfieldfrom");
 				if($fromdate){

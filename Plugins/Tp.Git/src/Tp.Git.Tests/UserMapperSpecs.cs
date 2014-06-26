@@ -20,6 +20,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Git.Tests
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class UserMapperSpecs
 	{
 		private const string _tpName = "someone great";

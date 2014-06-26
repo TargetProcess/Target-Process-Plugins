@@ -11,6 +11,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.MashupManager.Tests.Mashups.CRUD
 {
 	[ActionSteps, TestFixture]
+    [Category("PartPlugins0")]
 	public class CreateMashupSpecs : MashupManagerTestBase
 	{
 		[Test]
@@ -18,7 +19,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 		{
 			@"
 				Given profile created
-				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Script"":""alert(123)""}'
+				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
 				Then 1 mashups should be sent to TP
 					And mashup 'mashup1' with placeholders 'Default' and script 'alert(123)' should be sent to TP
 					And 1 mashup should be in profile storage
@@ -31,7 +32,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 		{
 			@"
 				Given profile created for account 'Account1'
-				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Script"":""alert(123)""}'
+				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
 				Then 1 mashups should be sent to TP
 					And mashup 'Account1 mashup1' with accounts 'Account1' and placeholders 'Default' and script 'alert(123)' should be sent to TP
 					And 1 mashup should be in profile storage
@@ -45,19 +46,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 			@"
 				Given profile created
 					And profile mashups are: mashup1, mashup2
-				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Script"":""alert(123)""}'
-				Then 0 mashups should be sent to TP
-					And command should return validation error for 'Name' field 'Mashup with the same name already exists'
-			".Execute();
-		}
-
-		[Test]
-		public void ShouldNotCreateMashupIfThereIsMashupWithSuchNameUseWhitespaces()
-		{
-			@"
-				Given profile created
-					And profile mashups are: mashup1, mashup2
-				When handle AddMashupCommand command with args '{""Name"":"" mashup1 "", ""Placeholders"":""Default"", ""Script"":""alert(123)""}'
+				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
 				Then 0 mashups should be sent to TP
 					And command should return validation error for 'Name' field 'Mashup with the same name already exists'
 			".Execute();
@@ -68,7 +57,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 		{
 			@"
 				Given profile created
-				When handle AddMashupCommand command with args '{""Name"":""mashup%^&"", ""Placeholders"":""Default"", ""Script"":""alert(123)""}'
+				When handle AddMashupCommand command with args '{""Name"":""mashup%^&"", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
 				Then 0 mashups should be sent to TP
 					And command should return validation error for 'Name' field 'You can only use letters, numbers, space and underscore symbol in Mashup name'
 			".Execute();
@@ -79,9 +68,20 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 		{
 			@"
 				Given profile created
-				When handle AddMashupCommand command with args '{""Name"":"""", ""Placeholders"":""Default"", ""Script"":""alert(123)""}'
+				When handle AddMashupCommand command with args '{""Name"":"""", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
 				Then 0 mashups should be sent to TP
-					And command should return validation error for 'Name' field 'Mashup name should be specified'
+					And command should return validation error for 'Name' field 'Mashup name cannot be empty or consist of whitespace characters only'
+			".Execute();
+		}
+
+		[Test]
+		public void ShouldTrimMashupNameBeforeCreate()
+		{
+			@"
+				Given profile created
+				When handle AddMashupCommand command with args '{""Name"":""  mashup1  "", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
+				And 1 mashup should be in profile storage
+					And mashup 'mashup1' with placeholders 'Default' and script 'alert(123)' should be in profile storage
 			".Execute();
 		}
 

@@ -1,0 +1,11 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.SavedFilterDTO, Tp.Integration.Messages</Type>
+  <SavedFilterDTO>
+    <ID xsi:nil="true" />
+    <SavedFilterID xsi:nil="true" />
+    <IsDefault>false</IsDefault>
+    <IsPublic>false</IsPublic>
+    <ProjectID xsi:nil="true" />
+    <OwnerID xsi:nil="true" />
+  </SavedFilterDTO>
+</Value>

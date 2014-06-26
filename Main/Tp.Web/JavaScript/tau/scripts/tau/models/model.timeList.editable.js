@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/extensions/component.extension.base"],function(_,ExtensionBase){var timeListModel=ExtensionBase.extend({category:"edit","bus beforeInit":function(){this.fire("permissionsReady",{editable:!0})}});return timeListModel})
+define(["Underscore","tau/components/extensions/component.extension.base"],function(e,n){var t=n.extend({category:"edit","bus beforeInit":function(){this.fire("permissionsReady",{editable:!0})}});return t});

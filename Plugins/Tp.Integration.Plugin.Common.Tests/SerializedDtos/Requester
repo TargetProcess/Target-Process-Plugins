@@ -1,0 +1,14 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RequesterDTO, Tp.Integration.Messages</Type>
+  <RequesterDTO>
+    <ID xsi:nil="true" />
+    <UserID xsi:nil="true" />
+    <CreateDate>2013-08-16T20:20:01.832118+03:00</CreateDate>
+    <ModifyDate xsi:nil="true" />
+    <DeleteDate xsi:nil="true" />
+    <IsActive>true</IsActive>
+    <IsAdministrator>false</IsAdministrator>
+    <SourceType>Internal</SourceType>
+    <CompanyID xsi:nil="true" />
+  </RequesterDTO>
+</Value>

@@ -12,7 +12,10 @@ namespace Tp.Mercurial.VersionControlSystem
 	[Serializable]
 	public class MercurialRevisionId : IComparable
 	{
-		public static readonly DateTime UtcTimeMin = NativeConvert.ToDateTime(0);
+		/// <summary>
+		/// it's not 1970 because of http://comments.gmane.org/gmane.comp.version-control.mercurial.general/32454
+		/// </summary>
+		public static readonly DateTime UtcTimeMin = new DateTime(1971, 1, 1);
 		public static readonly DateTime UtcTimeMax = new DateTime(2038, 01, 19);
 
 		public MercurialRevisionId()

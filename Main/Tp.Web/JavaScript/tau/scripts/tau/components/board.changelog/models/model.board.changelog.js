@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/class","tp/gateway","app.path"],function(e,t,n,r,a){return n.extend({retrieveData:function(){return r.getJSON(a.get()+"/changelogs")},setSeen:function(e){return r.postJSON(a.get()+"/changelogs",{version:e})}})});

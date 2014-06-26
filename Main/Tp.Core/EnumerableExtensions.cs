@@ -10,69 +10,6 @@ using Tp.Core.Annotations;
 
 namespace System.Linq
 {
-	public class GroupWithCount<TKey> : IEquatable<GroupWithCount<TKey>>
-	{
-		public bool Equals(GroupWithCount<TKey> other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return EqualityComparer<TKey>.Default.Equals(_key, other._key) && _count == other._count;
-		}
-
-		public static bool operator ==(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
-		{
-			return !Equals(left, right);
-		}
-
-		private readonly TKey _key;
-		private readonly int _count;
-
-		public TKey Key
-		{
-			get { return _key; }
-		}
-
-		public int Count
-		{
-			get { return _count; }
-		}
-
-		public GroupWithCount(TKey key, int count)
-		{
-			_key = key;
-			_count = count;
-		}
-
-		public override string ToString()
-		{
-			var builder = new StringBuilder();
-			builder.Append("{ Key = ");
-			builder.Append(Key);
-			builder.Append(", Count = ");
-			builder.Append(Count);
-			builder.Append(" }");
-			return builder.ToString();
-		}
-
-		public override bool Equals(object value)
-		{
-			var type = value as GroupWithCount<TKey>;
-			return (type != null) && EqualityComparer<TKey>.Default.Equals(type.Key, Key) && EqualityComparer<int>.Default.Equals(type.Count, Count);
-		}
-
-		public override int GetHashCode()
-		{
-			int num = 0x7a2f0b42;
-			num = (-1521134295*num) + EqualityComparer<TKey>.Default.GetHashCode(Key);
-			return (-1521134295*num) + EqualityComparer<int>.Default.GetHashCode(Count);
-		}
-	}
-
 	public static class EnumerableExtensions
 	{
 		// for generic interface IEnumerable<T>
@@ -124,6 +61,16 @@ namespace System.Linq
 				return x.Equals(true) ? "1" : "0";
 			}
 			return x.ToString();
+		}
+
+		public static string ToSqlString(this DateTime date)
+		{
+			//2013-05-02 00:00:00 - Canonical Time
+			return date.ToString("yyyy-MM-dd HH:mm:ss");
+		}
+		public static string ToSqlString(this DateTime? date)
+		{
+			return date == null ? "null" : date.Value.ToSqlString();
 		}
 
 
@@ -226,7 +173,6 @@ namespace System.Linq
 			}
 		}
 
-
 		public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int chunkSize)
 		{
 			return source.Where((x, i) => i % chunkSize == 0).Select((x, i) => source.Skip(i * chunkSize).Take(chunkSize));
@@ -290,6 +236,96 @@ namespace System.Linq
 				yield return i;
 			}
 		}
-	
+
+		public static IEnumerable<TTo> Unfold<TFrom, TTo>(this TFrom seed,
+			Func<TFrom, bool> canGenerate,
+			Func<TFrom, TTo> generateNextValue,
+			Func<TFrom, TFrom> generateNextState)
+		{
+			var state = seed;
+			while (canGenerate(state))
+			{
+				yield return generateNextValue(state);
+				state = generateNextState(state);
+			}
+		}
+
+		public static IEnumerable<TTo> Unfold<TFrom, TTo>(this TFrom seed,
+			Func<TFrom, TTo> generateNextValue,
+			Func<TFrom, TFrom> generateNextState)
+		{
+			return Unfold(seed, x => true, generateNextValue, generateNextState);
+		}
+	}
+
+	public class GroupWithCount
+	{
+		public static GroupWithCount<TKey> New<TKey>(TKey key, int count)
+		{
+			return new GroupWithCount<TKey>(key, count);
+		}
+	}
+
+	public class GroupWithCount<TKey> : IEquatable<GroupWithCount<TKey>>
+	{
+		public bool Equals(GroupWithCount<TKey> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return EqualityComparer<TKey>.Default.Equals(_key, other._key) && _count == other._count;
+		}
+
+		public static bool operator ==(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
+		{
+			return Equals(left, right);
+		}
+
+		public static bool operator !=(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
+		{
+			return !Equals(left, right);
+		}
+
+		private readonly TKey _key;
+		private readonly int _count;
+
+		public TKey Key
+		{
+			get { return _key; }
+		}
+
+		public int Count
+		{
+			get { return _count; }
+		}
+
+		public GroupWithCount(TKey key, int count)
+		{
+			_key = key;
+			_count = count;
+		}
+
+		public override string ToString()
+		{
+			var builder = new StringBuilder();
+			builder.Append("{ Key = ");
+			builder.Append(Key);
+			builder.Append(", Count = ");
+			builder.Append(Count);
+			builder.Append(" }");
+			return builder.ToString();
+		}
+
+		public override bool Equals(object value)
+		{
+			var type = value as GroupWithCount<TKey>;
+			return (type != null) && EqualityComparer<TKey>.Default.Equals(type.Key, Key) && EqualityComparer<int>.Default.Equals(type.Count, Count);
+		}
+
+		public override int GetHashCode()
+		{
+			int num = 0x7a2f0b42;
+			num = (-1521134295 * num) + EqualityComparer<TKey>.Default.GetHashCode(Key);
+			return (-1521134295 * num) + EqualityComparer<int>.Default.GetHashCode(Count);
+		}
 	}
 }

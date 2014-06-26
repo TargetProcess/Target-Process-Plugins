@@ -1,1 +1,1 @@
-define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(_,$,BaseExtension){return BaseExtension.extend({category:"edit","bus afterRender":function(evt){this.config.hasOwnProperty("cssClass")&&evt.data.element.addClass(this.config.cssClass)}})})
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(e,n,s){return s.extend({category:"edit","bus afterRender":function(e){this.config.hasOwnProperty("cssClass")&&e.data.element.addClass(this.config.cssClass)}})});

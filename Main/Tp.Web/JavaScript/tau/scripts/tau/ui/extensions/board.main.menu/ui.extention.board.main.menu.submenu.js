@@ -1,0 +1,1 @@
+define([],function(){return{createSubMenu:function(e,n){var u=e.element,t=u.find(".tau-user-submenu");n.fire("subMenu.ready",t),t.detach(),u.tauBubble({content:t,target:u,alignTo:u,zIndex:999})}}});

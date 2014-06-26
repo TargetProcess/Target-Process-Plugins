@@ -11,7 +11,8 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Git.Tests.VersionControlSystem
 {
-	[TestFixture]
+    [TestFixture]
+    [Category("PartPlugins1")]
 	public class GitRevisionIdSpecs
 	{
 		[Test]

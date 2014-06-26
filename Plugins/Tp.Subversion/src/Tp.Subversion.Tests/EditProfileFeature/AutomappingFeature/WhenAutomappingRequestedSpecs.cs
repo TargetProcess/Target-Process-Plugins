@@ -15,6 +15,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class WhenAutomappingRequestedSpecs
 	{
 		[SetUp]

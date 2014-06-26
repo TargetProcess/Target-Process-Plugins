@@ -9,7 +9,6 @@ using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
-using Tp.Integration.Plugin.Common.Storage;
 
 namespace Tp.MashupManager.CustomCommands
 {
@@ -17,29 +16,29 @@ namespace Tp.MashupManager.CustomCommands
 	{
 		public PluginCommandResponseMessage Execute(string args)
 		{
-			var profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
+			IProfile profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
 
 			return profile == null ? GetEmptyResponseMessage() : GetResponseMessage(profile);
 		}
 
 		public string Name
-			{
+		{
 			get { return "GetProfileInfo"; }
-			}
-			
+		}
+
 		private PluginCommandResponseMessage GetResponseMessage(IProfile profile)
-			{
+		{
 			var command = ObjectFactory.GetInstance<GetProfileCommand>();
 			return command.Execute(profile.Name.Value);
-			}
+		}
 
-		private  PluginCommandResponseMessage GetEmptyResponseMessage()
+		private PluginCommandResponseMessage GetEmptyResponseMessage()
 		{
 			return new PluginCommandResponseMessage
-		{
-			       		PluginCommandStatus = PluginCommandStatus.Succeed,
-						ResponseData = new PluginProfileDto{Name = string.Empty, Settings = new MashupManagerProfile()}.Serialize()
-			       	};
+				{
+					PluginCommandStatus = PluginCommandStatus.Succeed,
+					ResponseData = new PluginProfileDto {Name = string.Empty, Settings = new MashupManagerProfile()}.Serialize()
+				};
 		}
 	}
 }

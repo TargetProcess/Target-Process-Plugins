@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/board.plus/ui.extension.board.plus.cards-lazy-loading.customized"],function(n){var e=n.extend({handlerSliceFail:function(){},redrawCards:function(){}});return e});

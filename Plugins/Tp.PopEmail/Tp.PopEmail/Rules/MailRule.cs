@@ -12,14 +12,16 @@ namespace Tp.PopEmailIntegration.Rules
 {
 	public class MailRule : IMailRule
 	{
-		public MailRule(WhenClauseComposite whenClause, ThenClauseComposite thenClause)
+		public MailRule(WhenClauseComposite whenClause, ThenClauseComposite thenClause, string ruleLine)
 		{
 			_whenClause = whenClause;
 			_thenClause = thenClause;
+			_ruleLine = ruleLine;
 		}
 
 		private readonly WhenClauseComposite _whenClause;
 		private readonly ThenClauseComposite _thenClause;
+		private readonly string _ruleLine;
 
 		public bool IsMatched(EmailMessage message)
 		{
@@ -34,6 +36,11 @@ namespace Tp.PopEmailIntegration.Rules
 		public bool IsNull
 		{
 			get { return false; }
+		}
+
+		public override string ToString()
+		{
+			return _ruleLine;
 		}
 	}
 }

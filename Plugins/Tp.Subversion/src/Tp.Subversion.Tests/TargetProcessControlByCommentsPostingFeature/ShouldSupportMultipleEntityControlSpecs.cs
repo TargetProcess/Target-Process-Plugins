@@ -18,6 +18,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class ShouldSupportMultipleEntityControlSpecs
 	{
 		[SetUp]

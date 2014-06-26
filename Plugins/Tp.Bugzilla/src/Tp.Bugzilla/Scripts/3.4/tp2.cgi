@@ -85,7 +85,6 @@ else
     print "ERROR: Bugzilla version '" . $constants.BUGZILLA_VERSION . "' is not supported by 'tp2.cgi'. Please update 'tp2.cgi' and try again.";
 }
 
-
 sub get_timezone
 {
     print $cgi->header('text');
@@ -107,35 +106,35 @@ sub add_comment
     {
         print "Bug ID=".$bugId." not found";
         exit;
-    }		
-    
+    }
+
     my $comment_text = decode_base64($cgi->param("comment_text"));
     
     my $owner = $cgi->param('owner');
-    my $date = $cgi->param('date') =~ m/^([Z0-9\- :]+)$/ ? $1 : die "Invalid date: ".$cgi->param('date');	
-    
+    my $date = $cgi->param('date') =~ m/^([Z0-9\- :]+)$/ ? $1 : die "Invalid date: ".$cgi->param('date');
+
     my $ownerid = 0;
     my $dbh = Bugzilla->dbh;
     
     if ($owner eq '')
     {
-        $ownerid = $user->id;		
+        $ownerid = $user->id;
         $comment_text = $comment_text."\n\rThis comment was added from TargetProcess";
     }
     else
     {
-        $owner = $owner =~ m/^([a-zA-Z0-9\._@]+)$/ ? $1 : die "Invalid owner: ".$cgi->param('owner');		
-    
+        $owner = $owner =~ m/^([a-zA-Z0-9\._@]+)$/ ? $1 : die "Invalid owner: ".$cgi->param('owner');
+
         my $userids = $dbh->selectcol_arrayref("SELECT userid FROM profiles WHERE login_name = ?", undef, $owner);
-        
+
         if(@$userids < 1)
-        {		
+        {
             $ownerid = $user->id;
             $comment_text = $comment_text."\n\rThis comment was added from TargetProcess by ".$owner;
         }
         else
         {
-            $ownerid = @$userids[0];		
+            $ownerid = @$userids[0];
         }
     }
     
@@ -145,7 +144,7 @@ sub add_comment
                  
     $bug->{added_comments} = [];
     $bug->update();
-    
+
     print 'OK';
 }
 
@@ -174,10 +173,8 @@ sub assign_user
     print 'OK';
 }
 
-
 sub change_status
 {
-
     print $cgi->header('text');
 
     my $id = $cgi->param('id');
@@ -196,11 +193,17 @@ sub change_status
 
     check_resolution();
 
+    my $new_status = Bugzilla::Status->check($cgi->param('status'));
+    if($new_status->comment_required_on_change_from($bug->status)) {
+        $bug->add_comment("Status changed from ".$bug->status->name." to ".$new_status->name." by Targetprocess Bugzilla Plugin", { isprivate => 0 });
+    }
+
     $bug->set_status(scalar $cgi->param('status'),{
                 resolution => scalar $cgi->param('resolution'),
                 dupe_of => scalar $cgi->param('dup_id')
                 }
             );
+
     $bug->update();
 
     print 'OK';
@@ -238,7 +241,7 @@ sub check_resolution
              $dependencies[0]->{'dependencies'} > 0)  {
                 $dependenciesCount = $dependencies[0]->{'dependencies'};
                 print "Can't set resolution to '$resolution'. Bugzilla Bug#$bugId still has $dependenciesCount ";
-                if ($dependenciesCount == 1)     {
+                if ($dependenciesCount == 1) {
             print "dependency.";
                 }
                 else{
@@ -251,61 +254,55 @@ sub check_resolution
 
 sub check
 {
+    if ($user && $user->login()) {
+        print $cgi->header('xml');
+        my $template = Bugzilla->template;
+        addScriptVersionTemplate($template);
 
-    if ($user && $user->login())
-    {
-             print $cgi->header('xml');
-             my $template = Bugzilla->template;
-             addScriptVersionTemplate($template);
-
-
-         my $vars = {};
-         foreach my $id ($cgi->param('id')) {
-        my @ids = split(/,/, $id);
-        foreach (@ids) {
-            my $bug = new Bugzilla::Bug($_);
-            if (!$bug->{error} && !$user->can_see_bug($bug->bug_id)) {
-                $bug->{error} = 'NotPermitted';
+        my $vars = {};
+        foreach my $id ($cgi->param('id')) {
+            my @ids = split(/,/, $id);
+            foreach (@ids) {
+                my $bug = new Bugzilla::Bug($_);
+                if (!$bug->{error} && !$user->can_see_bug($bug->bug_id)) {
+                    $bug->{error} = 'NotPermitted';
+                }
+                push(@bugs, $bug);
             }
-            push(@bugs, $bug);
         }
-         }
 
-             eval {
-               my @customFields = get_custom_field_names();
-               $vars->{'custom_field_names'} = \@customFields;
-             };
+        eval {
+            my @customFields = get_custom_field_names();
+            $vars->{'custom_field_names'} = \@customFields;
+        };
 
-             eval {
-               $vars->{'scriptVersion'}  = $scriptVersion;
-             };
+        eval {
+            $vars->{'scriptVersion'} = $scriptVersion;
+        };
 
-             eval {
-               $vars->{'supportedBugzillaVersion'} = $supportedBugzillaVersion;
-             };
+        eval {
+            $vars->{'supportedBugzillaVersion'} = $supportedBugzillaVersion;
+        };
 
-             eval {
-               $vars->{'severity_names'} =   get_legal_field_values('bug_severity');
-             };
+        eval {
+            $vars->{'severity_names'} = get_legal_field_values('bug_severity');
+        };
 
-             eval {
-               $vars->{'priority_names'} =   get_legal_field_values('priority');
-             };
+        eval {
+            $vars->{'priority_names'} = get_legal_field_values('priority');
+        };
 
-             eval {
-               $vars->{'status_names'} = [Bugzilla::Status->get_all];
-             };
+        eval {
+            $vars->{'status_names'} = [Bugzilla::Status->get_all];
+        };
 
-             eval {
-               my $fieldvalues = Bugzilla->dbh->selectall_arrayref("SELECT value AS name"
-                                      . "  FROM resolution ORDER BY sortkey",
-                                        {Slice =>{}});
-           $vars->{'resolutions'} = $fieldvalues;
-             };
+        eval {
+            my $fieldvalues = Bugzilla->dbh->selectall_arrayref("SELECT value AS name FROM resolution ORDER BY sortkey", { Slice =>{} });
+            $vars->{'resolutions'} = $fieldvalues;
+        };
 
-         $vars->{'timezone'} = $user->timezone->name;
-
-             $template->process($scriptVersionXmlTemplate , $vars) || die $template->error();
+        $vars->{'timezone'} = $user->timezone->name;
+        $template->process($scriptVersionXmlTemplate , $vars) || die $template->error();
     }
 }
 

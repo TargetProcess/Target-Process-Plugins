@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/async.source.adapter"],function(n,c){var e=function(){var e={};return new c({onGet:function(c){var t={};n.each(c.fields,function(n){e.hasOwnProperty(n)&&(t[n]=e[n])}),c.callback(t)},onSet:function(c){var t=c.set;n.each(t,function(n,c){e[c]=n}),c.callback(t)},onBind:function(){},onUnbind:function(){}})};return{create:e}});

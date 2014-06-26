@@ -16,6 +16,8 @@ namespace Tp.PopEmailIntegration.Rules
 		{
 			_thenClauses[TokenType.AttachToProjectClause] = ThenAttachToProjectClause.Create;
 			_thenClauses[TokenType.CreateRequestClause] = ThenCreateRequestClause.Create;
+			_thenClauses[TokenType.CreatePrivateRequestClause] = ThenCreatePrivateRequestClause.Create;
+			_thenClauses[TokenType.CreatePublicRequestClause] = ThenCreatePublicRequestClause.Create;
 		}
 
 		public ThenClauseComposite CreateBy(ParseNode clauseSubtree)

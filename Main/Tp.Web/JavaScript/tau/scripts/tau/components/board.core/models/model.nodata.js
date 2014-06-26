@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/board.core/models/model.board.core"],function(e,t){return t.extend({init:function(e,t){if(this._super(e),!t)throw new Error("[model.board.nodata] configure empty checker");this._emptyChecker=t},createEmptyChecker:function(){return this._emptyChecker},isEmpty:function(e,t,r){return this.createEmptyChecker().isEmpty.apply(this,[e,t,r])}})});

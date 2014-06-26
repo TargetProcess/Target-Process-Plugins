@@ -1,0 +1,1 @@
+define(["tau/core/extension.base","tau/libs/sparklines/sparklines"],function(e,n){return e.extend({"bus dataBind + afterRender":function(e,t,i){var r=i.element,a=r.find(".i-role-sparkline"),l={width:100,height:50,letterWidth:9,letterHeight:9};a.each(function(){var e=new n(l);e.draw(null,this)})}})});

@@ -15,6 +15,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class GetProfilesCommandSpecs
 	{
 		private PluginCommandResponseMessage _response;

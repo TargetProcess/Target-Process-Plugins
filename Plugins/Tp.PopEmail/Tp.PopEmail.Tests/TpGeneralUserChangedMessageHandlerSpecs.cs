@@ -17,6 +17,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.PopEmailIntegration
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class TpGeneralUserChangedMessageHandlerSpecs : PopEmailIntegrationContext
 	{
 		private const string FIRST_NAME = "FirstName";

@@ -1,1 +1,1 @@
-define(["Underscore","jQuery","tau/core/extension.base"],function(_,$,ExtensionBase){return ExtensionBase.extend({"bus afterRender":function(evt,renderData){var $el=renderData.element;this.fire("$el.ready",$el)},"bus $list.ready":function(evt,$list){this.fire("view.component.rendered",{element:$list})}})})
+define(["Underscore","jQuery","tau/core/extension.base"],function(e,n,r){return r.extend({"bus afterRender":function(e,n){var r=n.element;this.fire("$el.ready",r)},"bus $list.ready":function(e,n){this.fire("view.component.rendered",{element:n})}})});

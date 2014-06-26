@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/extension.base"],function(_,ModelBase){var model=ModelBase.extend({"bus beforeInit + activeTab.ready":function(evt,initData,activeTab){this.fire("dataBind",{activeTab:activeTab})}});return model})
+define(["Underscore","tau/core/extension.base"],function(e,n){var t=n.extend({"bus beforeInit + activeTab.ready":function(e,n,t){this.fire("dataBind",{activeTab:t})}});return t});

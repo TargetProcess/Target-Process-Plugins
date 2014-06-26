@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/board.timeline/views/card/view.timeline.card.section-base"],function(e,t,i){var n=i.extend({_isVisible:function(){return this._model.showForecast&&(this._model.hasActual||this._model.hasPlanned)},_metrics:function(){return{left:this._model.forecastLeft,width:Math.max(this._model.forecastWidth,0)}}});return n});

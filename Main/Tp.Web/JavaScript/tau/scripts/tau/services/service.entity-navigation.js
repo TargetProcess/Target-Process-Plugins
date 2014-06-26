@@ -1,0 +1,1 @@
+define(["tau/core/class"],function(n){return n.extend({navigateToEntityView:function(n,t,e){n.to("#"+e+"/"+t)}})});

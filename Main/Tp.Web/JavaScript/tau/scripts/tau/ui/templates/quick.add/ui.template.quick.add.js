@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"quick.add",markup:['<div class="ui-quick-add">','<span class="ui-link ui-quick-add-link">${label}</span>',"</div>"],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(a){var e={name:"quick.add",markup:['<div class="ui-quick-add">','<span class="ui-link ui-quick-add-link">${label}</span>',"</div>"],dependencies:[]};return a.register(e)});

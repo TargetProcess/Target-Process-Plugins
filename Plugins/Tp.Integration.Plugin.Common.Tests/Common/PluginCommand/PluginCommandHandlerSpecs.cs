@@ -23,6 +23,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class PluginCommandHandlerSpecs
 	{
 		private TransportMock _transportMock;

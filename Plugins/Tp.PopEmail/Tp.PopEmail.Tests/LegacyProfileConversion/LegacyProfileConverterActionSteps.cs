@@ -6,7 +6,6 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -14,8 +13,8 @@ using NBehave.Narrator.Framework;
 using Rhino.Mocks;
 using StructureMap;
 using Tp.Integration.Common;
-using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
+using Tp.LegacyProfileConversion.Common.Testing;
 using Tp.LegacyProfileConvertsion.Common;
 using Tp.PopEmailIntegration.Data;
 using Tp.Testing.Common.NUnit;
@@ -23,88 +22,16 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.PopEmailIntegration.LegacyProfileConversion
 {
 	[ActionSteps]
-	public class LegacyProfileConverterActionSteps
+	public class LegacyProfileConverterActionSteps :
+		LegacyProfileConverterActionStepsBase
+			<LegacyProfileConvertor, PopEmailLegacyProfileConverterUnitTestRegistry, Project[]>
 	{
-		private TpDatabaseDataContext _context;
-
-		private static void ClearPluginDb(string pluginConnectionString)
-		{
-			var context = new PluginDatabaseModelDataContext(pluginConnectionString);
-			if (!context.DatabaseExists())
-			{
-				context.CreateDatabase();
-				context.SubmitChanges();
-			}
-			else
-			{
-				ClearDatabase(context);
-			}
-		}
-
-		private static void ClearDatabase(PluginDatabaseModelDataContext context)
-		{
-			var plugins = from plugin in context.Plugins select plugin;
-			Array.ForEach(plugins.ToArray(), x => context.Plugins.DeleteOnSubmit(x));
-			context.SubmitChanges();
-		}
-
-		[BeforeScenario]
-		public void OnBeforeScenario()
-		{
-			ObjectFactory.Configure(x => x.AddRegistry<PopEmailLegacyProfileConverterUnitTestRegistry>());
-			ClearPluginDb(Settings.Default.PluginConnectionString);
-			ClearTpDB(new TpDatabaseDataContext(Settings.Default.TpConnectionString));
-
-			_context = new TpDatabaseDataContext(Settings.Default.TpConnectionString);
-		}
-
-		[AfterScenario]
-		public void OnAfterScenario()
-		{
-			ClearTpDB(new TpDatabaseDataContext(Settings.Default.TpConnectionString));
-			var context = new PluginDatabaseModelDataContext(Settings.Default.PluginConnectionString);
-			ClearDatabase(context);
-		}
-
-		private static void ClearTpDB(DataContext tpDatabaseDataContext)
-		{
-			tpDatabaseDataContext.ExecuteCommand("delete from Project");
-			tpDatabaseDataContext.ExecuteCommand("delete from CustomReport");
-			tpDatabaseDataContext.ExecuteCommand("delete from TpUser");
-			tpDatabaseDataContext.ExecuteCommand("delete from General");
-			tpDatabaseDataContext.ExecuteCommand("delete from MessageUid");
-			tpDatabaseDataContext.ExecuteCommand("delete from PluginProfile");
-		}
-
-		[Given("project '$projectAbbr' created")]
-		public void CreateProject(string projectAbbr)
-		{
-			_context.Generals.InsertOnSubmit(new General {Name = projectAbbr});
-			_context.SubmitChanges();
-
-			var project = new Project
-			              	{
-			              		Abbreviation = projectAbbr,
-			              		ProjectID = _context.Generals.First(x => x.Name == projectAbbr).GeneralID,
-			              		IsActive = true,
-								Color = "#FFFFFF"
-			              	};
-			_context.Projects.InsertOnSubmit(project);
-			_context.SubmitChanges();
-		}
-
 		[Given("project '$projectAbbr' has email integration disabled")]
 		public void DisableProjectEmailIntegration(string projectAbbr)
 		{
-			var project = _context.Projects.First(x => x.Abbreviation == projectAbbr);
+			var project = Context.Projects.First(x => x.Abbreviation == projectAbbr);
 			project.IsInboundMailEnabled = false;
-			_context.SubmitChanges();
-		}
-
-		[Given("account name is '$accountName'")]
-		public void AccountNameIs(string accountName)
-		{
-			ObjectFactory.GetInstance<IConvertorArgs>().Stub(x => x.AccountName).Return(accountName);
+			Context.SubmitChanges();
 		}
 
 		[Given("project '$projectAbbr' InboundMailCreateRequests email setting is set to $value")]
@@ -116,7 +43,7 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		[Given("user '$userLogin' created")]
 		public void CreateUser(string userLogin)
 		{
-			_context.TpUsers.InsertOnSubmit(new TpUser
+			Context.TpUsers.InsertOnSubmit(new TpUser
 			                                	{
 			                                		Login = userLogin,
 			                                		Email = string.Format("{0}@targetprocess.com", userLogin),
@@ -125,13 +52,13 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 			                                		SecretWord = "abc",
 			                                		Type = 1
 			                                	});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Given("requester '$requesterLogin' created")]
 		public void CreateRequester(string requesterLogin)
 		{
-			_context.TpUsers.InsertOnSubmit(new TpUser
+			Context.TpUsers.InsertOnSubmit(new TpUser
 			                                	{
 			                                		Login = requesterLogin,
 			                                		Email = string.Format("{0}@targetprocess.com", requesterLogin),
@@ -140,14 +67,14 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 			                                		SecretWord = "abc",
 			                                		Type = 4
 			                                	});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Given("Message with uid '$uid' for server '$server' and login '$login' exists in tp")]
 		public void CreateMessageUid(string uid, string server, string login)
 		{
-			_context.MessageUids.InsertOnSubmit(new MessageUid {UID = uid, MailServer = server, MailLogin = login});
-			_context.SubmitChanges();
+			Context.MessageUids.InsertOnSubmit(new MessageUid {UID = uid, MailServer = server, MailLogin = login});
+			Context.SubmitChanges();
 		}
 
 		[Given("project '$projectName' InboundMailAutomaticalEmailCheckTime email setting is set to $value")]
@@ -230,31 +157,31 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 <Settings xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
 	<Map></Map>
 </Settings>");
-			_context.PluginProfiles.InsertOnSubmit(new PluginProfile
+			Context.PluginProfiles.InsertOnSubmit(new PluginProfile
 			                                       	{
 			                                       		PluginName = "Bind Email/Request To Project",
 			                                       		ProfileName = profileName,
 			                                       		Active = isActive,
 			                                       		Settings = xmlDocument.OuterXml
 			                                       	});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Given("bind email plugin profile '$profileName' has key '$projectAbbr' and value '$value'")]
 		public void AddKeyToProfile(string profileName, string projectAbbr, string value)
 		{
-			var profile = _context.PluginProfiles.First(x => x.ProfileName == profileName);
+			var profile = Context.PluginProfiles.First(x => x.ProfileName == profileName);
 			var xmlDocument = new XmlDocument();
 			xmlDocument.LoadXml(profile.Settings);
 			var mapNode = xmlDocument.SelectSingleNode("/Settings/Map");
 
-			var projecId = _context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
+			var projecId = Context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
 			var map = new StringDictionary {{projecId.ToString(), value}};
 			mapNode.InnerText += WriteMap(map);
 
 			profile.Settings = xmlDocument.OuterXml;
 
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		private static string WriteMap(StringDictionary map)
@@ -270,9 +197,9 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 
 		private void SetProjectValue(string projectName, Action<Project> changeProjectAction)
 		{
-			var project = _context.Projects.First(x => x.Abbreviation == projectName);
+			var project = Context.Projects.First(x => x.Abbreviation == projectName);
 			changeProjectAction(project);
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[When(@"email settings from Target Process converted to e-mail plugin profile")]
@@ -299,13 +226,6 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 			ObjectFactory.EjectAllInstancesOf<IDatabaseConfiguration>();
 			ObjectFactory.Configure(x => x.For<IDatabaseConfiguration>().Use(args));
 			ObjectFactory.GetInstance<LegacyProfileConvertor>().Execute();
-		}
-
-		[Then("plugin '$pluginName' should have account '$accountName'")]
-		public void PluginShouldHaveAccount(string pluginName, string accountName)
-		{
-			var accounts = AccountCollection.Where(x => x.Name == accountName).Select(y => y.Name.Value).ToArray();
-			accounts.Should(Be.EquivalentTo(new[] {accountName}));
 		}
 
 		[Then("InboundMailProtocol email plugin profile should be '$protocol'")]
@@ -358,11 +278,14 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 			profiles.Length.Should(Be.EqualTo(profileAmount));
 		}
 
-		[Then("plugin profile names should be unique")]
-		public void PluginProfileNamesShouldBeUnique()
+		protected override string SettingsXmlNode
 		{
-			var profileNames = Account.Profiles.Select(x => x.Name.Value).ToArray();
-			profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames));
+			get { return "Settings"; }
+		}
+
+		protected override string PluginName
+		{
+			get { return "Project Email Integration"; }
 		}
 
 		[Then("profile storage should contain user '$userLogin'")]
@@ -400,30 +323,20 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		[Then("email plugin profile should have exact rule : '$rule' where ProjectId is id of project '$projectAbbr'")]
 		public void EmailPluginProfileShouldHaveRule(string rule, string projectAbbr)
 		{
-			var projectId = _context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
+			var projectId = Context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
 			Profile.Rules.Should(Be.EqualTo(rule.Replace("ProjectId", projectId.ToString())));
 		}
 
 		[Then("email plugin profile should contains rule : '$rule' where ProjectId is id of project '$projectAbbr'")]
 		public void EmailPluginProfileShouldContainsRule(string rule, string projectAbbr)
 		{
-			var projectId = _context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
+			var projectId = Context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
 			Profile.Rules.Should(Be.StringContaining(rule.Replace("ProjectId", projectId.ToString())));
 		}
 
 		private static ProjectEmailProfile Profile
 		{
 			get { return Account.Profiles.First().GetProfile<ProjectEmailProfile>(); }
-		}
-
-		private static IAccount Account
-		{
-			get { return AccountCollection.GetOrCreate(ObjectFactory.GetInstance<IConvertorArgs>().AccountName); }
-		}
-
-		private static IAccountCollection AccountCollection
-		{
-			get { return ObjectFactory.GetInstance<IAccountCollection>(); }
 		}
 	}
 }

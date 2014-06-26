@@ -1,6 +1,5 @@
 ﻿using System;
 using NServiceBus;
-using NServiceBus.Unicast.Transport;
 using StructureMap;
 using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Messages.ServiceBus.UnicastBus;
@@ -15,8 +14,7 @@ namespace Tp.Integration.Plugin.Common.Ticker
 	{
 		private readonly IBusExtended _bus;
 		private System.Timers.Timer _checkTimer;
-		private TimeSpan _defaultCheckInterval = TimeSpan.FromSeconds(15);
-		private TimeSpan _infoSendInterval = TimeSpan.FromSeconds(300);
+		private TimeSpan _infoSendInterval = TimeSpan.FromSeconds(600);
 		private System.Timers.Timer _infoSenderTimer;
 
 		public Timer()
@@ -41,7 +39,9 @@ namespace Tp.Integration.Plugin.Common.Ticker
 
 		public void Init()
 		{
-			_checkTimer = new System.Timers.Timer {Interval = _defaultCheckInterval.TotalMilliseconds};
+			var checkInterval = TimeSpan.FromSeconds(Settings.Default.DefaultCheckInterval);
+
+			_checkTimer = new System.Timers.Timer { Interval = checkInterval.TotalMilliseconds };
 			_checkTimer.Elapsed += (sender, elapsedEventArgs) =>
 			                       	{
 			                       		try
@@ -64,7 +64,7 @@ namespace Tp.Integration.Plugin.Common.Ticker
 			                       				}
 			                       			}
 
-											_bus.PrepareForHandlingMessage();
+											_bus.CleanupOutgoingHeaders();
 			                       			_bus.SendLocal(new CheckIntervalElapsedMessage());
 			                       		}
 			                       		catch (Exception e)

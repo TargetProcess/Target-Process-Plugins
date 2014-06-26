@@ -9,6 +9,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.PopEmailIntegration.LegacyProfileConversion
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class LegacyProfileConverterSpecs
 	{
 		[Test]

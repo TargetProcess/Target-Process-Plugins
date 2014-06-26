@@ -1,0 +1,37 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.BugDTO, Tp.Integration.Messages</Type>
+  <BugDTO>
+    <ID xsi:nil="true" />
+    <BugID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <Effort>0.0</Effort>
+    <EffortCompleted>0.0</EffortCompleted>
+    <EffortToDo>0.0</EffortToDo>
+    <TimeSpent xsi:nil="true" />
+    <TimeRemain xsi:nil="true" />
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <EntityStateID>5</EntityStateID>
+    <PriorityID>7</PriorityID>
+    <ProjectID xsi:nil="true" />
+    <IterationID xsi:nil="true" />
+    <ParentID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <SeverityID>5</SeverityID>
+    <BuildID xsi:nil="true" />
+    <UserStoryID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Bug</EntityTypeName>
+    <EntityStateName>Open</EntityStateName>
+    <PriorityName>Fix If Time</PriorityName>
+    <ReleaseName>Backlog</ReleaseName>
+    <SeverityName>Enhancement</SeverityName>
+    <EntityTypeID>8</EntityTypeID>
+    <SquadID xsi:nil="true" />
+  </BugDTO>
+</Value>

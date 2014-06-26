@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/board.new.list/templates/ui.template.fake-list"],function(e,t){return{create:function(n){var a={template:t},r=e.create(a,n);return r.fire("dataBind",{}),r}}});

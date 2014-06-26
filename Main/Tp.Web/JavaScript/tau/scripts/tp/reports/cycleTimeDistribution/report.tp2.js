@@ -1,1 +1,1 @@
-require(["all.components"],function(){require(["jQuery","tp/reports/report.tp2"],function($,initReport){$(function(){return initReport("tp/reports/cycleTimeDistribution/component.report")})})})
+require(["all.components"],function(){require(["jQuery","tp/reports/report.tp2"],function(r,t){r(function(){return t("tp/reports/cycleTimeDistribution/component.report")})})});

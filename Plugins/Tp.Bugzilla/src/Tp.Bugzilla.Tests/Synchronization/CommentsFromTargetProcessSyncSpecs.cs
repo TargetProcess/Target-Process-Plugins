@@ -11,7 +11,6 @@ using StructureMap;
 using Tp.Bugzilla.BugFieldConverters;
 using Tp.Bugzilla.Schemas;
 using Tp.Bugzilla.Tests.Mocks;
-using Tp.Core;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Testing.Common.NBehave;
@@ -20,6 +19,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.Synchronization
 {
 	[TestFixture, ActionSteps]
+	[Category("PartPlugins0")]
 	public class CommentsFromTargetProcessSyncSpecs : BugzillaTestBase
 	{
 		[Test]
@@ -41,7 +41,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 1 in bugzilla should have comment 'comment 2' created by 'Lansie@mail.com'
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-				         	.And<CommentsFromBugzillaSyncSpecs>());
+								.And<CommentsFromBugzillaSyncSpecs>());
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 2 in bugzilla should have comment 'comment 2.1' created by 'Dowson@mail.com'
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-				         	.And<CommentsFromBugzillaSyncSpecs>());
+								.And<CommentsFromBugzillaSyncSpecs>());
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 1 in bugzilla should have comment 'comment 1' created by 'Dowson@mail.com'
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-				         	.And<CommentsFromBugzillaSyncSpecs>());
+								.And<CommentsFromBugzillaSyncSpecs>());
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 in bugzilla should have 1 comments
 			", CommentConverter.StateIsChangedComment)
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-							.And<CommentsFromBugzillaSyncSpecs>());
+								.And<CommentsFromBugzillaSyncSpecs>());
 		}
 
 		[Test]
@@ -128,12 +128,12 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 1 has name 'bug1'
 
 					And synchronizing bugzilla bugs
-				When comment 'comment 1' for bug 'bug1' was created on '2010-10-10 13:13:00' by 'Lansie' in TargetProcess
+				When comment 'comment 1' for bug 'bug1' was created on '2010-10-10 13:13:00+0300' by 'Lansie' in TargetProcess
 				Then bug 1 in bugzilla should have 1 comments
 					And bug 1 in bugzilla should have comment 'comment 1' created on '2010-10-10 15:13:00' by 'Lansie@mail.com'
 			"
 				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-							.And<CommentsFromBugzillaSyncSpecs>());
+								.And<CommentsFromBugzillaSyncSpecs>());
 		}
 
 		[Given("bugzilla has timezone $timeOffset UTC")]

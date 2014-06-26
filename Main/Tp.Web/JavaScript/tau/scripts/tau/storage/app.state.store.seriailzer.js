@@ -1,1 +1,1 @@
-define(["Underscore"],function(_){return{extractSharedState:function(settings){var r=null;return settings.acid&&(r={},r[settings.id]={acid:settings.acid}),r},serialize:function(settings){return settings.acid?settings.id+'={"acid":"'+settings.acid+'"}':null}}})
+define(["Underscore"],function(){return{extractSharedState:function(i){var n=null;return i.acid&&(n={},n[i.id]={acid:i.acid}),n},serialize:function(i){return i.acid?i.id+'={"acid":"'+i.acid+'"}':null}}});

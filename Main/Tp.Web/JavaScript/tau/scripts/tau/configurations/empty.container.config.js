@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/class","tau/ui/templates/ui.template.empty.container"],function(_,BaseClass,MainLayoutTemplate){var ConfigClass=BaseClass.extend({getMasterConfig:function(){return{layout:"selectable",template:MainLayoutTemplate,children:[]}}});return new ConfigClass})
+define(["Underscore","tau/core/class","tau/ui/templates/ui.template.empty.container"],function(e,t,n){var a=t.extend({getMasterConfig:function(){return{layout:"selectable",template:n,children:[]}}});return new a});

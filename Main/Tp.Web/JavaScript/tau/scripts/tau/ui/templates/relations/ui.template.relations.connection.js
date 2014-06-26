@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(n){var a={name:"relations.connection",engine:"jqote2",markup:['<div class="tau-relations-connection">','<span class="tau-in-bg">','<span class="tau-out-bg">',"<b><%= this.masterRelationsCount %></b>",'<b class="tau-icon"></b>',"<b><%= this.slaveRelationsCount %></b>","</span>","</span>","</div>"]};return n.register(a)});

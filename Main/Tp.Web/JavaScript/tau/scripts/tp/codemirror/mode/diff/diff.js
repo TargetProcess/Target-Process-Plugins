@@ -1,1 +1,1 @@
-define(["tp/codemirror/lib/codemirror"],function(CodeMirror){CodeMirror.defineMode("diff",function(){return{token:function(stream){var ch=stream.next();stream.skipToEnd();if(ch=="+")return"plus";if(ch=="-")return"minus";if(ch=="@")return"rangeinfo"}}}),CodeMirror.defineMIME("text/x-diff","diff")})
+define(["tp/codemirror/lib/codemirror"],function(n){n.defineMode("diff",function(){return{token:function(n){var i=n.next();return n.skipToEnd(),"+"==i?"plus":"-"==i?"minus":"@"==i?"rangeinfo":void 0}}}),n.defineMIME("text/x-diff","diff")});

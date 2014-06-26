@@ -30,6 +30,7 @@ using AttachmentPartAddedMessage = Tp.Integration.Messages.EntityLifecycle.Comma
 namespace Tp.Integration.Plugin.Common.Tests.Core
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class PushAttachmentsToTpSagaSpecs
 	{
 		private readonly Guid _outerSagaId = Guid.NewGuid();

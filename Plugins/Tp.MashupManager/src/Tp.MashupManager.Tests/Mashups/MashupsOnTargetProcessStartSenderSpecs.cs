@@ -11,6 +11,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.MashupManager.Tests.Mashups
 {
 	[ActionSteps, TestFixture]
+    [Category("PartPlugins0")]
 	public class MashupsOnTargetProcessStartSenderSpecs : MashupManagerTestBase
 	{
 		[Test]

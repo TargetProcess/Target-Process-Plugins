@@ -10,27 +10,41 @@ namespace Tp.Core
 	public class DateRange : IEquatable<DateRange>
 	{
 		private DateTime? _startDate, _endDate;
+
+		// TODO: remove the flag
+		private readonly bool _validatePeriod;
+
 		public static readonly DateRange AllDates = new DateRange(DateTime.MinValue, DateTime.MaxValue);
+		public static readonly DateRange Empty = new DateRange(null, null);
 
 		public DateRange()
-			: this(new DateTime?(), new DateTime?())
+			:this(true)
+		{
+		}
+		public DateRange(bool validatePeriod): this(null, null, validatePeriod)
 		{
 		}
 
-		public DateRange(DateTime? startDate) : this(startDate, startDate)
+		public DateRange(DateTime? startDate, bool validatePeriod = true)
+			: this(startDate, startDate, validatePeriod)
 		{
 		}
 
-		public DateRange(DateTime? startDate, DateTime? endDate)
+		public DateRange(DateTime? startDate, DateTime? endDate, bool validatePeriod = true)
 		{
+			_validatePeriod = validatePeriod;
 			AssertStartDateFollowsEndDate(startDate, endDate);
 			_startDate = startDate;
 			_endDate = endDate;
 		}
-
 		public TimeSpan? TimeSpan
 		{
 			get { return _endDate - _startDate; }
+		}
+
+		public bool IsOpened
+		{
+			get { return TimeSpan == null; }
 		}
 
 		public DateTime? StartDate
@@ -58,17 +72,11 @@ namespace Tp.Core
 			get { return StartDate.GetValueOrDefault().Date > CurrentDate.Value.Date; }
 		}
 
-		public static DateRange Empty
-		{
-			get { return new DateRange(null, null); }
-		}
-
 		[Annotations.AssertionMethod]
-		private static void AssertStartDateFollowsEndDate(DateTime? startDate,
-		                                                  DateTime? endDate)
+		private void AssertStartDateFollowsEndDate(DateTime? startDate, DateTime? endDate)
 		{
 			if ((startDate.HasValue && endDate.HasValue) &&
-			    (endDate.Value < startDate.Value))
+				(endDate.Value < startDate.Value) && _validatePeriod)
 			{
 				throw new InvalidDateRangeException("Start Date must be less than or equal to End Date");
 			}
@@ -81,6 +89,11 @@ namespace Tp.Core
 				throw new InvalidOperationException("DateRanges do not intersect");
 			}
 			return new DateRange(GetLaterStartDate(other.StartDate), GetEarlierEndDate(other.EndDate));
+		}
+
+		public DateTime? CutDate(DateTime? date)
+		{
+			return GetEarlierEndDate(GetLaterStartDate(date));
 		}
 
 		private DateTime? GetLaterStartDate(DateTime? other)
@@ -110,6 +123,24 @@ namespace Tp.Core
 		public bool Contains(DateTime? other)
 		{
 			return Intersects(new DateRange(other, other));
+		}
+
+		public DateRangeContainsResult Contains(DateRange dateRange)
+		{
+			var result = new DateRangeContainsResult
+			{
+				IncludeStartDate = true,
+				IncludeEndDate = true
+			};
+			if ((StartDate != null && StartDate > dateRange.StartDate) || (EndDate != null && EndDate < dateRange.StartDate))
+			{
+				result.IncludeStartDate = false;
+			}
+			if ((EndDate != null && EndDate < dateRange.EndDate) || (StartDate != null && StartDate > dateRange.EndDate))
+			{
+				result.IncludeEndDate = false;
+			}
+			return result;
 		}
 
 		public bool Intersects(DateRange other)
@@ -142,9 +173,19 @@ namespace Tp.Core
 			}
 		}
 
+		public override string ToString()
+		{
+			return "{0} - {1}".Fmt(StartDate != null ? StartDate.ToString() : "null", EndDate != null ? EndDate.ToString() : "null");
+		}
+
 		public static DateRange Create(DateTime startDate, int duration)
 		{
 			return new DateRange(startDate, startDate.AddDays(duration - 1));
+		}
+
+		public static DateRange CreateEmpty()
+		{
+			return new DateRange(null, null);
 		}
 	}
 }

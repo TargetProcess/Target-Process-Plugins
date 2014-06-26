@@ -1,0 +1,11 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RevisionDTO, Tp.Integration.Messages</Type>
+  <RevisionDTO>
+    <ID xsi:nil="true" />
+    <RevisionID xsi:nil="true" />
+    <CommitDate>0001-01-01T00:00:00</CommitDate>
+    <PluginProfileID xsi:nil="true" />
+    <ProjectID xsi:nil="true" />
+    <AuthorID>1</AuthorID>
+  </RevisionDTO>
+</Value>

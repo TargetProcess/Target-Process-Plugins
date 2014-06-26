@@ -52,7 +52,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
     /// <summary>
     /// Gets or sets whether creation errors shall be ignored.
-    /// <br>Creation errors can occur if e.g. a type has no parameterless constructor
+    /// <br/> Creation errors can occur if e.g. a type has no parameterless constructor
     /// and an instance cannot be instantiated from String.
     /// </summary>
     [Description("Gets or sets whether creation errors shall be ignored.")]
@@ -285,7 +285,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
     /// <summary>
     /// Sets the entries of an IDictionary implementation.
     /// </summary>
-    /// <param name="coll"></param>
+	/// <param name="dictionary"></param>
     /// <param name="parentNode"></param>
     protected void SetDictionaryValues(IDictionary dictionary, XmlNode parentNode)
     {
@@ -469,7 +469,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
     /// <summary>
     /// Creates a type from the specified assembly and type names included in the TypeInfo parameter.
-    /// <b>In case of failure null will be returned.
+    /// <b>In case of failure null will be returned.</b>
     /// </summary>
     /// <param name="info"></param>
     /// <returns></returns>
@@ -480,7 +480,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
     /// <summary>
     /// Creates a type from the specified assembly and type names. 
-    /// <b>In case of failure null will be returned.
+    /// <b>In case of failure null will be returned.</b>
     /// </summary>
     /// <param name="assembly"></param>
     /// <param name="type"></param>

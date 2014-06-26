@@ -1,0 +1,76 @@
+<!-- name: ui.template.board.actions.finish-iteration, fn: ./ui.template.board.actions.finish-iteration.fn -->
+<div class="tau-finish-message">
+    <h2>Finish Iteration</h2>
+
+    <div>
+        <div class="tau-message tau-error">
+            This action may affect User Stories and Bugs assigned to Iteration. Use Finish Iteration with care.
+        </div>
+    </div>
+
+    <div class="tau-iterations">
+        <div class="tau-item tau-finish-iteration">
+            <span class="tau-txt">Finish iteration:</span>
+
+            <div class="tau-iteration-name"><strong><%=this.iteration.name%></strong></div>
+        </div>
+        <div class="tau-item">
+            <span class="tau-txt tau-next-iteration">Next iteration:</span>
+
+            <div class="tau-iteration-name">
+                <select id="to-iteration" class="tau-select">
+                    <%
+                    var alreadyPreSelected = false;
+                    for (var i = 0; i < this.iterations.length; i++) {
+                    var iter = this.iterations[i], selectedAttr = false;
+                    if (!alreadyPreSelected) {
+                    selectedAttr = alreadyPreSelected = iter.startDate > this.iteration.startDate;
+                    }
+                    %>
+                    <option value="<%= iter.id %>" <%= fn.cond(selectedAttr, "selected") %>><%= fn.iterationName(iter) %></option>
+                    <% } %>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="tau-actions">
+        <div class="tau-item">
+            <div class="tau-action-name">
+                <input name="tau-finish-by-move" id="tau-finish-by-slit" checked="checked" type="radio"
+                        value="false"><label for="tau-finish-by-slit">Split User Stories</label>
+            </div>
+            <ul class="tau-action-list">
+                <li>Move the <span class="tau-entity tau-userstory">User Stories</span> that haven&apos;t been started
+                    to the next Iteration
+                </li>
+                <li>Split started but not finished <span class="tau-entity tau-userstory">User Stories</span>. The
+                    Completed tasks will remain in the old User Story, all the rest will be moved to the next Iteration
+                    as a part of the new User Story
+                </li>
+                <li>Move all the incomplete <span class="tau-entity tau-bug">Bugs</span> and <span
+                        class="tau-entity tau-testplanrun">Test Plan Runs</span> to the next Iteration
+                </li>
+                <li>Set the correct Iteration velocity</li>
+            </ul>
+        </div>
+        <div class="tau-item">
+            <div class="tau-action-name">
+                <input name="tau-finish-by-move" id="tau-finish-by-move" type="radio" value="true"><label
+                    for="tau-finish-by-move">Move User Stories</label>
+            </div>
+            <ul class="tau-action-list">
+                <li>Move all the incomplete <span class="tau-entity tau-userstory">User Stories</span>, <span
+                        class="tau-entity tau-bug">Bugs</span> and <span class="tau-entity tau-testplanrun">Test Plan Runs</span>
+                    to the next Iteration
+                </li>
+                <li>Set the correct Iteration velocity</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tau-btn-wrap">
+        <button id="tau-submit-finish-iteration" class="tau-btn tau-primary tau-btn-big">Finish</button>
+        <div class="tau-loader" style="display: none;"></div>
+    </div>
+</div>

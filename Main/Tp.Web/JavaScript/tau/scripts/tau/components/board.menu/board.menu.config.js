@@ -1,0 +1,1 @@
+define([],function(){return{watchedBoardSettingsFields:["name","isShared","viewMode","acid","menuIsVisible","menuNumericPriority","edit"]}});

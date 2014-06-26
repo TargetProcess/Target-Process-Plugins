@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/class"],function(t,a){var n=a.extend({init:function(t){this.id=t.id,this.update(t)},update:function(t){return this._cardData=t,this},cardData:function(){return this._cardData},augment:function(a){t.extend(this._cardData.data,a),this._cardData.lazy=!1}});return n});

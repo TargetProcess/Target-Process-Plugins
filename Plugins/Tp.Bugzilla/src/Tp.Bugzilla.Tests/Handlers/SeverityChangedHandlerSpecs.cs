@@ -18,6 +18,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.Handlers
 {
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class SeverityChangedHandlerSpecs : BugzillaTestBase
 	{
 		[Test]

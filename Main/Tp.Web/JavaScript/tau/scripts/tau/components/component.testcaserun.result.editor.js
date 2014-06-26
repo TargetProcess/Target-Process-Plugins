@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.testcaserun.result.editor","tau/ui/extensions/testCaseRun/ui.extension.testCaseRun.result.editor","tau/ui/templates/testCaseRun/ui.template.testcaserun.result.editor"],function(e,t,n,s){return{create:function(u){u=u||{};var r={extensions:[t,n],template:s};return e.create(r,u)}}});

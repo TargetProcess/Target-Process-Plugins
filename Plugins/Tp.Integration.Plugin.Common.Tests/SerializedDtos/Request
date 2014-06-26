@@ -1,0 +1,38 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RequestDTO, Tp.Integration.Messages</Type>
+  <RequestDTO>
+    <ID xsi:nil="true" />
+    <RequestID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <Effort>0.0</Effort>
+    <EffortCompleted>0.0</EffortCompleted>
+    <EffortToDo>0.0</EffortToDo>
+    <TimeSpent xsi:nil="true" />
+    <TimeRemain xsi:nil="true" />
+    <SourceType>None</SourceType>
+    <IsPrivate>false</IsPrivate>
+    <IsReplied>false</IsReplied>
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <EntityStateID>17</EntityStateID>
+    <PriorityID>22</PriorityID>
+    <ProjectID xsi:nil="true" />
+    <IterationID xsi:nil="true" />
+    <ParentID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <RequestTypeID>1</RequestTypeID>
+    <EntityTypeName>Tp.BusinessObjects.Request</EntityTypeName>
+    <EntityStateName>New</EntityStateName>
+    <PriorityName>Normal</PriorityName>
+    <ReleaseName>Backlog</ReleaseName>
+    <RequestTypeName>Issue</RequestTypeName>
+    <EntityTypeID>17</EntityTypeID>
+    <SquadID xsi:nil="true" />
+  </RequestDTO>
+</Value>

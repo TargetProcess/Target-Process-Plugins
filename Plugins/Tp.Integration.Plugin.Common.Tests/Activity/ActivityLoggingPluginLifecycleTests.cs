@@ -9,7 +9,9 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Integration.Plugin.Common.Tests.Activity
 {
-	public class ActivityLoggingPluginLifecycleTests : ActivityTestBase
+	[TestFixture]
+    [Category("PartPlugins1")]
+    public class ActivityLoggingPluginLifecycleTests : ActivityTestBase
 	{
 		protected override void OnInit()
 		{

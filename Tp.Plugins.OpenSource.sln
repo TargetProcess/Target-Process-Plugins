@@ -97,11 +97,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tp.Testing.Common.NUnit", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{60BF9499-5BA7-447B-B5D8-32D1F5439353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tp.Search", "Plugins\Tp.Search\Tp.Search.csproj", "{F6C8FAB6-DB37-481C-9365-52D143927B0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tp.Search", "Plugins\Tp.Search\src\Tp.Search\Tp.Search.csproj", "{F6C8FAB6-DB37-481C-9365-52D143927B0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoot", "Plugins\Tp.Search\Hoot\Hoot.csproj", "{E6C567B0-ACAD-42D4-9242-4E5E22D2AF1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoot", "Plugins\Tp.Search\src\Hoot\Hoot.csproj", "{E6C567B0-ACAD-42D4-9242-4E5E22D2AF1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mercurial.Net", "Plugins\Tp.Mercurial\Mercurial.Net\Mercurial.Net.csproj", "{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tp.Search.Tests", "Plugins\Tp.Search\src\Tp.Search.Tests\Tp.Search.Tests.csproj", "{8108CEC2-C346-403B-B9FF-B6222CE29C70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -892,6 +894,26 @@ Global
 		{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}.ReleaseBinaries|Mixed Platforms.Build.0 = ReleaseBinaries|x86
 		{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}.ReleaseBinaries|x86.ActiveCfg = ReleaseBinaries|x86
 		{536B722B-DE28-48FC-ABAF-12B4B9FFB44A}.ReleaseBinaries|x86.Build.0 = ReleaseBinaries|x86
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.FuncTests|Any CPU.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.FuncTests|Any CPU.Build.0 = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.FuncTests|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.FuncTests|Mixed Platforms.Build.0 = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.FuncTests|x86.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.Release|x86.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.ReleaseBinaries|Any CPU.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.ReleaseBinaries|Any CPU.Build.0 = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.ReleaseBinaries|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.ReleaseBinaries|Mixed Platforms.Build.0 = Release|Any CPU
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70}.ReleaseBinaries|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -938,5 +960,6 @@ Global
 		{8A525238-BBCD-443A-9693-BE74E1920576} = {643EBE2D-117B-44B8-9F14-08E363EFE41C}
 		{F6C8FAB6-DB37-481C-9365-52D143927B0E} = {60BF9499-5BA7-447B-B5D8-32D1F5439353}
 		{E6C567B0-ACAD-42D4-9242-4E5E22D2AF1D} = {60BF9499-5BA7-447B-B5D8-32D1F5439353}
+		{8108CEC2-C346-403B-B9FF-B6222CE29C70} = {60BF9499-5BA7-447B-B5D8-32D1F5439353}
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,8 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
 	{
 		public abstract DtoType DtoType { get; }
 		public bool IgnoreMessageSizeOverrunFailure { get; set; }
+		public int? Take { get; set; }
+		public int? Skip { get; set; }
 	}
 
 	[Serializable]
@@ -20,5 +22,13 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
 	{
 		public TDto[] Dtos { get; set; }
 		public int QueryResultCount { get; set; }
+
+		/// <summary>
+		/// Because of Msmq limits(4 mb per message), large entities could not be sent.
+		/// This Field contains number of failed dtos.
+		/// </summary>
+		public int FailedDtosCount { get; set; }
+
+		public int TotalQueryResultCount { get; set; }
 	}
 }

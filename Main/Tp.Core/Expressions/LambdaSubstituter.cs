@@ -50,7 +50,7 @@ namespace Tp.Core.Expressions
 			return e;
 		}
 
-		public static Expression Rewrite(Expression @in, ParameterExpression what, Expression with)
+		internal static Expression Rewrite(Expression @in, ParameterExpression what, Expression with)
 		{
 			if (what.Type != with.Type  && !what.Type.IsAssignableFrom(with.Type))
 				with = Expression.Convert(with, what.Type);

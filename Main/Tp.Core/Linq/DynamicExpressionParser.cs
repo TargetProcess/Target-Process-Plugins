@@ -5,6 +5,8 @@ namespace System.Linq.Dynamic
 {
 	public static class DynamicExpressionParser
 	{
+		private const string EMPTY_EXPRESSION = "{}";
+
 		public static Expression Parse(Type resultType, string expression, params object[] values)
 		{
 			var parser = new ExpressionParser(null, expression, values);
@@ -19,6 +21,11 @@ namespace System.Linq.Dynamic
 		public static LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression,
 		                                           params object[] values)
 		{
+			if(expression == EMPTY_EXPRESSION)
+			{
+				return Expression.Lambda(Expression.New(typeof(object)), parameters);
+			}
+
 			var parser = new ExpressionParser(parameters, expression, values);
 			return Expression.Lambda(parser.Parse(resultType), parameters);
 		}

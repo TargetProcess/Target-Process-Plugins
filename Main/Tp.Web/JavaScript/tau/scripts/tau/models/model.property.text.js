@@ -1,1 +1,1 @@
-define(["tau/models/model.property.simple"],function(ModelBase,datesUtil){return ModelBase.extend({})})
+define(["tau/models/model.property.simple"],function(e){return e.extend({})});

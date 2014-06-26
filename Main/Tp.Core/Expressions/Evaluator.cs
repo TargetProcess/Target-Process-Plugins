@@ -34,7 +34,7 @@ namespace Tp.Core
 
 		private static bool CanBeEvaluatedLocally(Expression expression)
 		{
-			return expression.NodeType != ExpressionType.Parameter;
+			return Enum.IsDefined(typeof(ExpressionType), expression.NodeType) && expression.NodeType != ExpressionType.Parameter;
 		}
 
 		/// <summary>
@@ -61,6 +61,18 @@ namespace Tp.Core
 					return null;
 				}
 				return _candidates.Contains(exp) ? Evaluate(exp) : base.Visit(exp);
+			}
+
+			protected override Expression VisitMemberInit(MemberInitExpression node)
+			{
+				var visitAndConvert = VisitAndConvert(node.NewExpression, "VisitMemberInit");
+				var readOnlyCollection = Visit(node.Bindings, VisitMemberBinding);
+				return node.Update(visitAndConvert, readOnlyCollection);
+			}
+
+			protected override Expression VisitExtension(Expression node)
+			{
+				return node;
 			}
 
 			private static Expression Evaluate(Expression e)
@@ -94,6 +106,21 @@ namespace Tp.Core
 				_candidates = new HashSet<Expression>();
 				Visit(expression);
 				return _candidates;
+			}
+
+			protected override Expression VisitExtension(Expression node)
+			{
+				return node;
+			}
+
+			protected override Expression VisitMemberInit(MemberInitExpression node)
+			{
+				var visited = base.VisitMemberInit(node);
+				if (_candidates.Contains(node.NewExpression))
+				{
+					_candidates.Remove(node.NewExpression);
+				}
+				return visited;
 			}
 
 			public override Expression Visit(Expression expression)

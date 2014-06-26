@@ -15,6 +15,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class VcsPluginSpecs
 	{
 		[SetUp]

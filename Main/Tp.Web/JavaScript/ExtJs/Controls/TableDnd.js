@@ -83,21 +83,17 @@ Tp.controls.TableDnd.mousemove = function(ev) {
 	//console.log("Drag object oldy %s", Tp.controls.TableDnd.oldY);
 	var dragObj = Ext.get(Tp.controls.TableDnd.dragObject);
 	var config = Tp.controls.TableDnd.currentTable.tableDnDConfig;
-	var mousePos = Tp.controls.TableDnd.mouseCoords(ev);
+	var mousePos = { x: ev.xy[0], y: ev.xy[1] };
 	var y = mousePos.y - Tp.controls.TableDnd.mouseOffset.y;
 	//auto scroll the window
-	var yOffset = window.pageYOffset;
-	if (document.all) {
-		// Windows version
-		yOffset = document.body.scrollTop;
-	}
+	var yOffset = window.pageYOffset || document.documentElement.scrollTop;
 	if (mousePos.y - yOffset < config.scrollAmount) {
 		window.scrollBy(0, -config.scrollAmount);
 	} else {
 		var windowHeight = Tp.util.getClientHeight();
         
-		if (windowHeight - (mousePos.y - yOffset) < 5) {
-			window.scrollBy(0, 5);
+		if (windowHeight - (mousePos.y - yOffset) < config.scrollAmount) {
+		    window.scrollBy(0, config.scrollAmount);
 		}
 	}
 	//console.log("Drag object y %s", y);
@@ -182,9 +178,9 @@ Tp.controls.TableDnd.getPosition = function(e) {
 }
 
 Tp.controls.TableDnd.mouseCoords = function(ev) {
-	return {
-		x: ev.getPageX() + document.body.scrollLeft - document.body.clientLeft,
-		y: ev.getPageY() + document.body.scrollTop - document.body.clientTop
+    return {
+        x: ev.getPageX() - document.body.clientLeft,
+        y: ev.getPageY() - document.body.clientTop
 	};
 }
 

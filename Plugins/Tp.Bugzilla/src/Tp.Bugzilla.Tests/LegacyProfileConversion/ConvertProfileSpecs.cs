@@ -9,6 +9,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class ConvertProfileSpecs
 	{
 		private const string FULL_MAPPING_TEMPLATE =

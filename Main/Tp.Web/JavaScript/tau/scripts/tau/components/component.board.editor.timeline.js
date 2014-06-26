@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/board.editor.timeline/model.board.editor.timeline","tau/ui/templates/board.editor.timeline/ui.template.board.editor.timeline"],function(e,t,o,r){return{create:function(e){var i={extensions:[o],template:r};return e["queue.bus"]=!0,t.create(i,e)}}});

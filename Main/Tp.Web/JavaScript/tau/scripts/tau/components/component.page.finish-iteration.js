@@ -1,0 +1,1 @@
+define(["tau/components/component.page.base","tau/views/view.page.finish-iteration"],function(e,n){return{create:function(t){var i={name:"finish iteration page component",turnOffErrorEmiter:!0,extensions:[],ViewType:n,entity:t.entity};return t["queue.bus"]=!0,e.create(i,t)}}});

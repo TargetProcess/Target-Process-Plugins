@@ -1,1 +1,1 @@
-define(["tau/core/model.editable.base","libs/underscore"],function(ModelBase){var EditableCommentModel=ModelBase.extend({name:"User Editable","bus dataBind":function(){this.fire("permissionsReady",{editable:!0})}});return EditableCommentModel})
+define(["tau/core/model.editable.base","libs/underscore"],function(e){var i=e.extend({name:"User Editable","bus dataBind":function(){this.fire("permissionsReady",{editable:!0})}});return i});

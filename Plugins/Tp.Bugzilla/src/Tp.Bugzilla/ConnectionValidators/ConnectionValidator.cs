@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -24,8 +24,15 @@ namespace Tp.Bugzilla.ConnectionValidators
 			try
 			{
 				var url = new BugzillaUrl(ConnectionSettings);
-				WebClient webClient = new TpWebClient { Encoding = Encoding.UTF8 };
+				WebClient webClient = new TpWebClient(errors) {Encoding = Encoding.UTF8};
 				webClient.DownloadString(url.Url);
+			}
+			catch (WebException webException)
+			{
+				if (webException.Status != WebExceptionStatus.TrustFailure)
+				{
+					errors.Add(new PluginProfileError { FieldName = BugzillaProfile.UrlField, Message = webException.Message, AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString() });
+				}
 			}
 			catch (Exception exception)
 			{

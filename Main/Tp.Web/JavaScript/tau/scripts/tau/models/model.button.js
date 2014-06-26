@@ -1,1 +1,1 @@
-define(["tau/core/model.editable.base","app.path"],function(ModelBase,AppPath){return ModelBase.extend({onInit:function(){this.fire("dataBind",{label:this.config.label,disabled:this.config.disabled})}})})
+define(["tau/core/model.editable.base","app.path"],function(e){return e.extend({onInit:function(){this.fire("dataBind",{label:this.config.label,disabled:this.config.disabled})}})});

@@ -6,6 +6,7 @@
 using NServiceBus;
 using NServiceBus.Unicast;
 using StructureMap;
+using Tp.Core;
 using log4net;
 using log4net.Core;
 using log4net.Repository.Hierarchy;
@@ -42,7 +43,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 			{
 				var repository = ((Hierarchy) LoggerManager.GetRepository("log4net-default-repository"));
 
-				repository.LoggerFactory = new ActivityLoggerFactory(repository.LoggerFactory);
+				repository.LoggerFactory = new ActivityLoggerFactory(repository.LoggerFactory, ObjectFactory.GetInstance<Locker>());
 			}
 		}
 	}

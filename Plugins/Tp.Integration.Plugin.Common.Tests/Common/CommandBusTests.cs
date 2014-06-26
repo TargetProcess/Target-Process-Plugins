@@ -16,6 +16,7 @@ using Tp.Integration.Messages.EntityLifecycle.Commands;
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class CommandBusTests
 	{
 		[SetUp]

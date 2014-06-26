@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/board.context.selector/ui.template.board.context.selector.lists"],function(e){var t={name:"board.context.selector",engine:"jqote2",markup:['<%= fn.sub("board.context.selector.lists", this) %>']};return e.register(t)});

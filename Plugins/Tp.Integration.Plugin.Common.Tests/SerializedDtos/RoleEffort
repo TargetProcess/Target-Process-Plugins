@@ -1,0 +1,16 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RoleEffortDTO, Tp.Integration.Messages</Type>
+  <RoleEffortDTO>
+    <ID xsi:nil="true" />
+    <RoleEffortID xsi:nil="true" />
+    <InitialEstimate>0.0</InitialEstimate>
+    <Effort>0.0</Effort>
+    <EffortCompleted>0.0</EffortCompleted>
+    <EffortToDo>0.0</EffortToDo>
+    <TimeSpent xsi:nil="true" />
+    <TimeRemain xsi:nil="true" />
+    <SubstractionFromParentEffort>false</SubstractionFromParentEffort>
+    <AssignableID xsi:nil="true" />
+    <RoleID xsi:nil="true" />
+  </RoleEffortDTO>
+</Value>

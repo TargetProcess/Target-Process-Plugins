@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/board.customize/ui.extension.board.editor.customize.card.remove","tau/ui/extensions/board.customize/ui.extension.board.editor.customize.initHelperList"],function(e,i){return e.extend(_.defaults({},i))});

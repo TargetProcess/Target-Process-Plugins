@@ -1,1 +1,1 @@
-define([],function(){return{nextTick:function(func){setTimeout(func,1)}}})
+define([],function(){return{nextTick:function(n){setTimeout(n,1)}}});

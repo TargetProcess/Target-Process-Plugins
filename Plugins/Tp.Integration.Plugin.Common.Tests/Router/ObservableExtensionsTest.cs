@@ -9,6 +9,7 @@ using TpObservableExtensions = Tp.Core.ObservableExtensions;
 namespace Tp.Integration.Plugin.Common.Tests.Router
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	class ObservableExtensionsTest
 	{
 		private class Data

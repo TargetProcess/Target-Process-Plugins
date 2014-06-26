@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var r={name:"board.menu",engine:"jqote2",markup:['<div class="i-role-views-navigator"><div>']};return e.register(r)});

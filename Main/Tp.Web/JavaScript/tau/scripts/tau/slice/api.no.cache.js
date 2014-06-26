@@ -1,0 +1,1 @@
+define(["jQuery"],function(e){return{process:function(e){return e.resolver(null)},evict:e.noop}});

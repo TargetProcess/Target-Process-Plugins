@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/board.customize.units/board.customize.cards.builderSelector.lazyAware"],function(e,r){return r.extend({suit:function(e){return e.lazy===!0}})});

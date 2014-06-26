@@ -4,6 +4,10 @@
 // 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Tp.Core;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using log4net;
 
@@ -11,13 +15,19 @@ namespace Tp.Integration.Plugin.Common.Activity
 {
 	public class PluginActivityLogger : IActivityLogger
 	{
-		private readonly ILogManager _logManager;
+		private readonly ILogProvider _logProvider;
+		private readonly Maybe<IPluginContext> _pluginContext;
 
-		public PluginActivityLogger(ILogManager logManager)
+		public PluginActivityLogger(ILogProvider logProvider):this(logProvider, Maybe.Nothing)
 		{
-			_logManager = logManager;
 		}
 
+		internal PluginActivityLogger(ILogProvider logProvider, Maybe<IPluginContext> pluginContext)
+		{
+			_logProvider = logProvider;
+			_pluginContext = pluginContext;
+		}
+		
 		public void Info(string message)
 		{
 			Log(log => log.Info(message));
@@ -78,12 +88,22 @@ namespace Tp.Integration.Plugin.Common.Activity
 			Info(string.Format(format, args));
 		}
 
+		public bool IsDebugEnabled
+		{
+			get { return GetLoggers().Any(x => x.IsDebugEnabled); }
+		}
+
 		protected virtual void Log(Action<ILog> action)
 		{
-			foreach (var log in _logManager.GetActivityLoggers())
+			foreach (var log in GetLoggers())
 			{
 				action(log);
 			}
+		}
+
+		private IEnumerable<ILog> GetLoggers()
+		{
+			return _pluginContext.HasValue ? _logProvider.GetActivityLoggers(_pluginContext.Value) : _logProvider.GetActivityLoggers();
 		}
 	}
 }

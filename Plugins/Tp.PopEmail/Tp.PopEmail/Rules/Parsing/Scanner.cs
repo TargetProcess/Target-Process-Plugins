@@ -71,6 +71,14 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             Patterns.Add(TokenType.CreateRequestKeyword, regex);
             Tokens.Add(TokenType.CreateRequestKeyword);
 
+            regex = new Regex(@"create private request in project", RegexOptions.Compiled);
+            Patterns.Add(TokenType.CreatePrivateRequestKeyword, regex);
+            Tokens.Add(TokenType.CreatePrivateRequestKeyword);
+
+            regex = new Regex(@"create public request in project", RegexOptions.Compiled);
+            Patterns.Add(TokenType.CreatePublicRequestKeyword, regex);
+            Tokens.Add(TokenType.CreatePublicRequestKeyword);
+
             regex = new Regex(@"company matched to project", RegexOptions.Compiled);
             Patterns.Add(TokenType.CompanyMatchedKeyword, regex);
             Tokens.Add(TokenType.CompanyMatchedKeyword);
@@ -206,25 +214,29 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             SubjectContainsClause= 2,
             AttachToProjectClause= 3,
             CreateRequestClause= 4,
-            CompanyMatchedClause= 5,
-            WhenStatement= 6,
-            WhenPart= 7,
-            ThenStatement= 8,
-            ThenPart= 9,
-            Start   = 10,
+            CreatePrivateRequestClause= 5,
+            CreatePublicRequestClause= 6,
+            CompanyMatchedClause= 7,
+            WhenStatement= 8,
+            WhenPart= 9,
+            ThenStatement= 10,
+            ThenPart= 11,
+            Start   = 12,
 
             //Terminal tokens:
-            NUMBER  = 11,
-            EOF     = 12,
-            STRING_PARAM= 13,
-            WHITESPACE= 14,
-            WhenKeyword= 15,
-            SubjectContainsKeyword= 16,
-            ThenKeyword= 17,
-            AttachToProjectKeyword= 18,
-            CreateRequestKeyword= 19,
-            CompanyMatchedKeyword= 20,
-            AndKeyword= 21
+            NUMBER  = 13,
+            EOF     = 14,
+            STRING_PARAM= 15,
+            WHITESPACE= 16,
+            WhenKeyword= 17,
+            SubjectContainsKeyword= 18,
+            ThenKeyword= 19,
+            AttachToProjectKeyword= 20,
+            CreateRequestKeyword= 21,
+            CreatePrivateRequestKeyword= 22,
+            CreatePublicRequestKeyword= 23,
+            CompanyMatchedKeyword= 24,
+            AndKeyword= 25
     }
 
     public class Token

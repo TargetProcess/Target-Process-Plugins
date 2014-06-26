@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"customField-richtext",markup:['<div class="ui-customfield ui-customfield-richtext">','   <div class="ui-customfield__value value">{{html value}}</div>',"</div>"]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var t={name:"customField-richtext",markup:['<div class="ui-customfield ui-customfield-richtext">','<div class="ui-customfield__value tau-clientinput value">{{html value}}</div>',"</div>"]};return e.register(t)});

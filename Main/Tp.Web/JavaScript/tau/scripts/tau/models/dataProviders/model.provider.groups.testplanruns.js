@@ -1,1 +1,1 @@
-define(["Underscore","tau/models/dataProviders/model.provider.groups.base"],function(_,Class){return Class.extend({fetch:function(key,items,fnCallback){return this._fetchState(key,["testplanrun"],fnCallback)}})})
+define(["Underscore","tau/models/dataProviders/model.provider.groups.base"],function(e,t){return t.extend({fetch:function(e,t,r){return this._fetchState(e,["testplanrun"],r)}})});

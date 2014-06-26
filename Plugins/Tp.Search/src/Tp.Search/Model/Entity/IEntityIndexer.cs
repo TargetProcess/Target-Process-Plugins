@@ -1,0 +1,41 @@
+// 
+// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using System.Collections.Generic;
+using Tp.Core;
+using Tp.Integration.Common;
+using Tp.Search.Model.Document;
+using hOOt;
+
+namespace Tp.Search.Model.Entity
+{
+	public interface IEntityIndexer
+	{
+		IndexResult AddGeneralIndex(GeneralDTO general, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateGeneralIndex(GeneralDTO general, ICollection<GeneralField> changedFields, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveGeneralIndex(GeneralDTO general, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult AddAssignableIndex(AssignableDTO assignable, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateAssignableIndex(AssignableDTO assignable, ICollection<AssignableField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveAssignableIndex(AssignableDTO assignable, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult AddTestCaseIndex(TestCaseDTO testCase, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateTestCaseIndex(TestCaseDTO testCase, ICollection<TestCaseField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveTestCaseIndex(TestCaseDTO testCase, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult AddCommentIndex(CommentDTO comment, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateCommentIndex(CommentDTO comment, ICollection<CommentField> changedFields, Maybe<int?> projectId, Maybe<int?> squadId, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveCommentIndex(CommentDTO comment, DocumentIndexOptimizeSetup optimizeSetup = null);
+
+		IndexResult AddImpedimentIndex(ImpedimentDTO impediment, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateImpedimentIndex(ImpedimentDTO impediment, ICollection<ImpedimentField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveImpedimentIndex(ImpedimentDTO impediment, DocumentIndexOptimizeSetup optimizeSetup = null);
+
+		void OptimizeGeneralIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
+		void OptimizeAssignableIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
+		void OptimizeTestCaseIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
+		void OptimizeCommentIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
+		void OptimizeImpedimentIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
+
+		void UpdateAssignablesForProjectProcessChange(ProjectDTO project);
+	}
+}

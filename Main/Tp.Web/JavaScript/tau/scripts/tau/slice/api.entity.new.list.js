@@ -1,0 +1,1 @@
+define(["jQuery","tau/slice/api.new.list"],function(e,n){return n.extend({treeViewByLevel:function(e){return this._currentOrderingConfig=e.$set.orderingConfig,this.resolveDeferred("sort",e)},_prepareCommand:function(n){return n.config=e.extend(!0,n.config,{$set:{entityId:this._newListSliceOptions.entityId,orderingConfig:this._currentOrderingConfig}}),n}})});

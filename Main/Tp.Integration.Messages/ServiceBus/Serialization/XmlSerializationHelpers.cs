@@ -8,13 +8,12 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Tp.Integration.Messages.ServiceBus.Serialization
 {
   /// <summary>
   /// This struct supports the Yaowi Framework infrastructure and is not intended to be used directly from your code. 
-  /// <P>This struct records relevant object information.
+  /// <p>This struct records relevant object information.</p>
   /// </summary>
   /// <remarks>
   /// Strings in a struct? Strings are reference types and structs should not contain types like this. TODO!
@@ -198,7 +197,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
     }
 
     /// <summary>
-    /// Determines whether the Type has a binary constructor.<p>
+    /// Determines whether the Type has a binary constructor.
     /// This is seen as an indication that this is binary data.
     /// </summary>
     /// <param name="type"></param>
@@ -224,7 +223,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
     /// <summary>
     /// Returns the <code>Type</code> of the constructor with exact one parameter which is
-    /// either a <code>byte[]</code> or a <code>Stream</code>.<br>
+    /// either a <code>byte[]</code> or a <code>Stream</code>.<br/>
     /// A a non-null returnvalue is also an inducator, that the given <code>Type</code> 
     /// has a constructor with a binary parameter.
     /// </summary>

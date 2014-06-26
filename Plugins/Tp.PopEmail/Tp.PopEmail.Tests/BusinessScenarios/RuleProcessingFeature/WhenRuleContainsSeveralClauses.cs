@@ -13,6 +13,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.PopEmailIntegration.BusinessScenarios.RuleProcessingFeature
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class WhenRuleContainsSeveralClauses
 	{
 		[Test]

@@ -1,1 +1,1 @@
-define(["tau/components/component.field.richText"],function(creator){return{create:function(config){return config=config||{},config.fieldName="steps",creator.create(config)}}})
+define(["tau/components/component.property.richtext"],function(e){return{create:function(t){return t=t||{},t.fieldName="steps",e.create(t)}}});

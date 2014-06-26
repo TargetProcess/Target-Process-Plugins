@@ -8,6 +8,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class WhenThereIsAnOldTestRunImportPluginProfileSpecs
 	{
 		[Test]

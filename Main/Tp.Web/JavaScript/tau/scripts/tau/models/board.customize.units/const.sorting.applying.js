@@ -1,0 +1,1 @@
+define(["Underscore"],function(){return{ALL:"all",NONE:"none",SINGLE:"single"}});

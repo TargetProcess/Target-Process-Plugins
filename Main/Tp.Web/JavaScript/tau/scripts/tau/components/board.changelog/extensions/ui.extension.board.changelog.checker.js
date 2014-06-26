@@ -1,0 +1,1 @@
+define(["jQuery","Underscore","tau/components/board.changelog/extensions/ui.extension.board.changelog.base"],function(e,n,o){return o.extend({_afterInitialize:function(){this._controller.checkNewVersion(),this._super()}})});

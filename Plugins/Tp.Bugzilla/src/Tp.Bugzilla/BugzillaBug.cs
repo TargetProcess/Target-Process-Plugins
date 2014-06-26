@@ -107,7 +107,7 @@ namespace Tp.Bugzilla
 		{
 			var storedAttachments = new List<LocalStoredAttachment>();
 
-			foreach (var attachment in attachments)
+			foreach (var attachment in attachments.Where(a => a.isobsolete == isobsolete._0 && a.data.Value != null))
 			{
 				var attachmentFileName = GetAttachmentFileName(attachment);
 				FileId fileId = null;

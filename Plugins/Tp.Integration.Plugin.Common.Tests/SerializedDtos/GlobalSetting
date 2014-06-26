@@ -1,0 +1,17 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.GlobalSettingDTO, Tp.Integration.Messages</Type>
+  <GlobalSettingDTO>
+    <ID xsi:nil="true" />
+    <GlobalSettingID xsi:nil="true" />
+    <SMTPServer>localhost</SMTPServer>
+    <SMTPPort>25</SMTPPort>
+    <SMTPLogin />
+    <SMTPPassword />
+    <SMTPAuthentication>false</SMTPAuthentication>
+    <IsEmailNotificationsEnabled>false</IsEmailNotificationsEnabled>
+    <NotifyRequester>false</NotifyRequester>
+    <NotifyAutoCreatedRequester>false</NotifyAutoCreatedRequester>
+    <DisableHttpAccess>false</DisableHttpAccess>
+    <CsvExportDelimiter>,</CsvExportDelimiter>
+  </GlobalSettingDTO>
+</Value>

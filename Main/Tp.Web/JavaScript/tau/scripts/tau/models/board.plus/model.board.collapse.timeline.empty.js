@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/board.plus/model.board.collapse.empty"],function(e,a){return a.extend({_isAxisValueEmpty:function(a,s){var t=s.dynamic.items[0].data||{},n=e.has(s,"x")&&!t.isBacklog;return this._super(a,s)&&!n}})});

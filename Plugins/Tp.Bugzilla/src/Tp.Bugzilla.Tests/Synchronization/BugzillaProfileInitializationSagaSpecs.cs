@@ -12,6 +12,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Bugzilla.Tests.Synchronization
 {
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class BugzillaProfileInitializationSagaSpecs : BugzillaTestBase
 	{
 		[Test]

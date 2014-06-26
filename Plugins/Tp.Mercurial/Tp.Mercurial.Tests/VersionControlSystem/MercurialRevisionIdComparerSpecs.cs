@@ -13,6 +13,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Mercurial.Tests.VersionControlSystem
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class MercurialRevisionIdComparerSpecs
 	{
 		private MercurialRevisionIdComparer _comparer;

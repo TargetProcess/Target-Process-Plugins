@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.property.bool"],function(_,creator){return{create:function(config){return config=_.clone(config||{}),config.propertyName="isPrivate",config.editable=!0,creator.create(config)}}})
+define(["Underscore","tau/components/component.property.bool"],function(e,n){return{create:function(r){return r=e.clone(r||{}),r.propertyName="isPrivate",r.editable=!0,n.create(r)}}});

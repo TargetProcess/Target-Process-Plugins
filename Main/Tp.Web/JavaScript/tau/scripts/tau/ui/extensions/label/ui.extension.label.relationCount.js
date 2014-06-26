@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/label/ui.extension.label"],function(t){return t.extend({updateBadgeElement:function(t,n){t.text(n.totalRelationCount.toString()),this.config.quantityCssClass&&t.addClass(this.config.quantityCssClass),t.toggleClass("ui-red-quantity",n.blockerRelationCount>0)}})});

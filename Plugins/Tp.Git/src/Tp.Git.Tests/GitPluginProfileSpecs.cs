@@ -12,6 +12,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Git.Tests
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class GitPluginProfileSpecs
 	{
 		private GitPluginProfile _profile;

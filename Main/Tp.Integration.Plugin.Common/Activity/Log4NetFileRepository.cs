@@ -18,22 +18,24 @@ namespace Tp.Integration.Plugin.Common.Activity
 {
 	internal class Log4NetFileRepository : ILog4NetFileRepository
 	{
+		private readonly Locker _locker;
 		private readonly ILogManager _logManager;
 
-		public Log4NetFileRepository(ILogManager logManager)
+		public Log4NetFileRepository(ILogManager logManager, Locker locker)
 		{
 			_logManager = logManager;
+			_locker = locker;
 		}
 
 		#region Get Records By
 
 		public virtual IEnumerable<ActivityLogRecord> GetActivityRecordsFor(Logger logger, ActivityFilter filter)
 		{
-			var filesList = GetSuitableFiles(logger, filter);
+			IEnumerable<string> filesList = GetSuitableFiles(logger, filter);
 
 			var result = new List<ActivityLogRecord>();
 
-			foreach (var file in filesList)
+			foreach (string file in filesList)
 			{
 				result.AddRange(GetRecordsFromFile(filter, file));
 			}
@@ -43,16 +45,16 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		protected virtual IEnumerable<string> GetSuitableFiles(Logger logger, ActivityFilter filter)
 		{
-			var files = GetFilesForLogger(logger);
-			var suitableItems = FilterFileNames(files, filter);
+			string[] files = GetFilesForLogger(logger);
+			int[] suitableItems = FilterFileNames(files, filter);
 
 			if (!suitableItems.Any())
 			{
 				return Enumerable.Empty<string>();
 			}
 
-			var firstItemIndex = suitableItems.Min(x => x);
-			var lastItemIndex = suitableItems.Max(x => x) + 1;
+			int firstItemIndex = suitableItems.Min(x => x);
+			int lastItemIndex = suitableItems.Max(x => x) + 1;
 
 			var filesList = new List<string>();
 			if (!filter.DateRange.StartDate.HasValue)
@@ -69,7 +71,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		protected virtual string[] GetFilesForLogger(Logger logger)
 		{
-			var logFileName = GetLogFilePathFromLogger(logger);
+			string logFileName = GetLogFilePathFromLogger(logger);
 
 			if (string.IsNullOrEmpty(logFileName))
 			{
@@ -85,8 +87,8 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 			return new[] {logFileName}
 				.Concat(directory
-				        	.GetFiles(ActivityLogFile.GetWildcartPatternFor(logFileName))
-				        	.Select(x => x.FullName))
+					        .GetFiles(ActivityLogFile.GetWildcartPatternFor(logFileName))
+					        .Select(x => x.FullName))
 				.OrderBy(ActivityLogFile.GetOrder)
 				.ToArray();
 		}
@@ -98,7 +100,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 				return String.Empty;
 			}
 
-			var appender = logger.Appenders.OfType<PluginRollingFileAppender>().FirstOrDefault();
+			PluginRollingFileAppender appender = logger.Appenders.OfType<PluginRollingFileAppender>().FirstOrDefault();
 			if (appender != null)
 			{
 				return appender.File;
@@ -110,39 +112,39 @@ namespace Tp.Integration.Plugin.Common.Activity
 		private static int[] FilterFileNames(IEnumerable<string> files, ActivityFilter filter)
 		{
 			return files.Select((x, i) => new {Item = x, Index = i})
-				.Where(x => filter.DateRange.IsInRangeIncludingEndDate(ActivityLogFile.GetDate(x.Item)))
-				.Select(x => x.Index)
-				.ToArray();
+			            .Where(x => filter.DateRange.IsInRangeIncludingEndDate(ActivityLogFile.GetDate(x.Item)))
+			            .Select(x => x.Index)
+			            .ToArray();
 		}
 
 		protected virtual IEnumerable<ActivityLogRecord> GetRecordsFromFile(ActivityFilter filter, string file)
 		{
 			return GetFromLog(file, Enumerable.Empty<ActivityLogRecord>(),
 			                  (csvReader, defaultValue) =>
-			                  	{
-			                  		var records = new List<ActivityLogRecord>();
-			                  		while (csvReader.Read())
-			                  		{
-			                  			var record = GetActivityRecord(csvReader);
-			                  			if (filter.DateRange.IsInRangeIncludingEndDate(record.DateTime))
-			                  			{
-			                  				records.Add(record);
-			                  			}
-			                  		}
+				                  {
+					                  var records = new List<ActivityLogRecord>();
+					                  while (csvReader.Read())
+					                  {
+						                  ActivityLogRecord record = GetActivityRecord(csvReader);
+						                  if (filter.DateRange.IsInRangeIncludingEndDate(record.DateTime))
+						                  {
+							                  records.Add(record);
+						                  }
+					                  }
 
-			                  		return records;
-			                  	});
+					                  return records;
+				                  });
 		}
 
 		private static ActivityLogRecord GetActivityRecord(CsvReader csvReader)
 		{
 			return new ActivityLogRecord
-			       	{
-			       		DateTime = DateTime.ParseExact(csvReader[0], CsvLayout.DATE_TIME_FORMAT, CultureInfo.InvariantCulture),
-			       		Level = csvReader[1],
-			       		Message = csvReader[2],
-			       		Details = csvReader[3]
-			       	};
+				       {
+					       DateTime = DateTime.ParseExact(csvReader[0], CsvLayout.DATE_TIME_FORMAT, CultureInfo.InvariantCulture),
+					       Level = csvReader[1],
+					       Message = csvReader[2],
+					       Details = csvReader[3]
+				       };
 		}
 
 		#endregion
@@ -151,7 +153,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		public virtual void RemoveFoldersFor(IEnumerable<Logger> loggers)
 		{
-			var folders = loggers
+			IEnumerable<string> folders = loggers
 				.SelectMany(GetLoggerFolders)
 				.Distinct();
 
@@ -167,7 +169,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 		{
 			try
 			{
-				foreach (var folder in folders.Where(Directory.Exists))
+				foreach (string folder in folders.Where(Directory.Exists))
 				{
 					Directory.Delete(folder, true);
 				}
@@ -190,7 +192,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		public void RemoveFilesFor(Logger logger)
 		{
-			var files = GetLoggerFiles(logger)
+			IEnumerable<string> files = GetLoggerFiles(logger)
 				.SelectMany(GetFilesFromFolderByPattern)
 				.Distinct();
 
@@ -199,8 +201,8 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		protected virtual IEnumerable<string> GetFilesFromFolderByPattern(string fileName)
 		{
-			var folder = fileName.GetDirectoryName();
-			var pattern = fileName.GetFileNameWithoutExtension() + "*";
+			string folder = fileName.GetDirectoryName();
+			string pattern = fileName.GetFileNameWithoutExtension() + "*";
 
 			var directory = new DirectoryInfo(folder);
 			if (directory.Exists)
@@ -213,7 +215,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		protected virtual void RemoveFiles(IEnumerable<string> files)
 		{
-			foreach (var file in files.Where(File.Exists))
+			foreach (string file in files.Where(File.Exists))
 			{
 				File.Delete(file);
 			}
@@ -228,20 +230,23 @@ namespace Tp.Integration.Plugin.Common.Activity
 				           (current, file) => current | (File.Exists(file) && GetFromLog(file, false, (reader, _) => reader.Read())));
 		}
 
-		private static T GetFromLog<T>(string fileName, T defaultValue, Func<CsvReader, T, T> func)
+		private T GetFromLog<T>(string fileName, T defaultValue, Func<CsvReader, T, T> func)
 		{
 			if (!File.Exists(fileName))
 			{
 				return defaultValue;
 			}
 
-			using (var reader = new StreamReader(fileName))
-			{
-				using (var csvReader = new CsvReader(reader, CsvLayout.DELIMITER))
-				{
-					return func(csvReader, defaultValue);
-				}
-			}
+			var result = _locker.TryAcquireLockAndExecute(fileName, () =>
+				                                  {
+					                                  using (var reader = new StreamReader(fileName))
+					                                  using (var csvReader = new CsvReader(reader, CsvLayout.DELIMITER))
+					                                  {
+						                                  return func(csvReader, defaultValue);
+					                                  }
+				                                  });
+
+			return result.HasValue ? result.Value : defaultValue;
 		}
 	}
 }

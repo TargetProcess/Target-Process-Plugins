@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base","tau/ui/extensions/board.main.menu/ui.extention.board.main.menu.submenu"],function(e,n,u){return n.extend({"bus afterRender + $children.rendered":function(e,n){u.createSubMenu(n,this.bus)}})});

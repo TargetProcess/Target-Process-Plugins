@@ -12,6 +12,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class PluginProfileSerializationTests
 	{
 		[Test]

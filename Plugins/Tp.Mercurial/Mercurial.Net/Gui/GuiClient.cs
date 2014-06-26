@@ -267,7 +267,7 @@ namespace Mercurial.Gui
             var environmentVariables = new[]
             {
                 new KeyValuePair<string, string>("LANGUAGE", "EN"),
-                new KeyValuePair<string, string>("HGENCODING", "cp1252"),
+                new KeyValuePair<string, string>("HGENCODING", "utf-8"),
             };
 
             return CommandProcessor.BeginExecute(
@@ -325,7 +325,7 @@ namespace Mercurial.Gui
             var environmentVariables = new[]
             {
                 new KeyValuePair<string, string>("LANGUAGE", "EN"),
-                new KeyValuePair<string, string>("HGENCODING", "cp1252"),
+                new KeyValuePair<string, string>("HGENCODING", "utf-8"),
             };
 
             CommandProcessor.Execute(repository.Path, ClientPath, command, environmentVariables, new string[0]);

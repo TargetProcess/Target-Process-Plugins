@@ -8,6 +8,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Mercurial.Tests
 {
     [TestFixture]
+    [Category("PartPlugins1")]
     public class ModelsTest
     {
         [Test]

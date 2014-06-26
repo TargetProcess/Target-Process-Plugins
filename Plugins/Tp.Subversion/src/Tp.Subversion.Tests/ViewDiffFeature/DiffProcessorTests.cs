@@ -10,6 +10,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Subversion.ViewDiffFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class DiffProcessorTests
 	{
 		[Test]

@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"diagnostics.storeListeners.details",markup:['<span class="tau-store-listener ui-link">${name}</span><br/>'],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(a){var e={name:"diagnostics.storeListeners.details",markup:['<span class="tau-store-listener ui-link" data-details="${sub.callback.toString()}">${name}</span><br/>']};return a.register(e)});

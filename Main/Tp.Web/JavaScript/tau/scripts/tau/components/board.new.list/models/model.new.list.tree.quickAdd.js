@@ -1,0 +1,1 @@
+define(["jQuery","Underscore","tau/components/board.new.list/models/model.new.list.tree.data"],function(e,t,n){return n.extend({_loadData:function(e){return this.slice.treeViewPossibleActions(e)},getExpansionStateForLoadData:function(){return this.treeModel.getExpansionState()},_getDataModelFromNodeModel:function(e){return e.quickAddModel}})});

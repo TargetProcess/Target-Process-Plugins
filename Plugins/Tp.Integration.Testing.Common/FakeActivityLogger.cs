@@ -14,20 +14,20 @@ namespace Tp.Integration.Testing.Common
 {
 	public class FakeActivityLogger : PluginActivityLogger
 	{
-		private readonly ILogManager _logManager;
+		private readonly ILogProvider _logProvider;
 
 		public List<string> LoggersUsed { get; set; }
 
-		public FakeActivityLogger(ILogManager logManager)
-			: base(logManager)
+		public FakeActivityLogger(ILogProvider logProvider)
+			: base(logProvider)
 		{
-			_logManager = logManager;
+			_logProvider = logProvider;
 			LoggersUsed = new List<string>();
 		}
 
 		protected override void Log(Action<ILog> action)
 		{
-			var logs = _logManager.GetActivityLoggers()
+			var logs = _logProvider.GetActivityLoggers()
 				//.Where(x => ActivityLoggerRegistry.IsKnownLogger(x.Logger.Name))
 				.Select(x => x.Logger.Name)
 				.ToList();

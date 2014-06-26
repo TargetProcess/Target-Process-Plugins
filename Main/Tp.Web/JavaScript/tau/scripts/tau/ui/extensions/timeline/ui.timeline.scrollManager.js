@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/class","tau/ui/extensions/board.plus/ui.board.plus.scrollManager"],function(e,n,t){var r=t.extend({getScrollableElement:function(){return this.$element.find(".tau-timeline-canvas")},getScrollableChild:function(e){return e.children().first()}});return r});

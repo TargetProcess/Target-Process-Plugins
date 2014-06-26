@@ -3,7 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
-using System.Collections.Generic;
 using log4net;
 
 namespace Tp.Integration.Plugin.Common.Logging
@@ -26,11 +25,5 @@ namespace Tp.Integration.Plugin.Common.Logging
 		/// <param name="name">Log4net logger name</param>
 		/// <returns></returns>
 		ILog GetLogger(string name);
-
-		/// <summary>
-		/// Gets all available loggers
-		/// </summary>
-		/// <returns></returns>
-		IEnumerable<ILog> GetActivityLoggers();
 	}
 }

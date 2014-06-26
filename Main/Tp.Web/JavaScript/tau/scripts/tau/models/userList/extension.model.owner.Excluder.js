@@ -1,1 +1,1 @@
-define(["Underscore","tau/models/userList/extension.model.user.Excluder"],function(_,EditableBase){return EditableBase.extend({getUserPropertyName:function(){return"owner"}})})
+define(["Underscore","tau/models/userList/extension.model.user.Excluder"],function(e,r){return r.extend({getUserPropertyName:function(){return"owner"}})});

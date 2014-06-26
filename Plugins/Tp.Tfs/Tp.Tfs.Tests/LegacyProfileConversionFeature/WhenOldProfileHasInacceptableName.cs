@@ -9,6 +9,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class WhenOldProfileHasInacceptableName
 	{
 		[Test]

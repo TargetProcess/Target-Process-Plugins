@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.assignmentsList","tau/ui/templates/assignmentsList/ui.template.feature.assignmentsList"],function(_,ComponentAssignmentList,template){return{create:function(config){return _(config).extend({template:template}),ComponentAssignmentList.create(config)}}})
+define(["Underscore","tau/components/component.assignmentsList","tau/ui/templates/assignmentsList/ui.template.feature.assignmentsList"],function(e,t,n){return{create:function(s){return e(s).extend({template:n}),t.create(s)}}});

@@ -15,6 +15,7 @@ using log4net.Core;
 namespace Tp.MashupManager.Tests.Profile
 {
 	[ActionSteps, TestFixture]
+    [Category("PartPlugins0")]
 	public class SingleProfileForPluginSpecs : MashupManagerTestBase
 	{
 		[Test]
@@ -69,7 +70,7 @@ namespace Tp.MashupManager.Tests.Profile
 		[Then(@"returned profile should have following mashups: (?<mashupNames>([^,]+,?\s*)+)")]
 		public void CheckMashupNamesOfReturnedProfile(string[] mashupNames)
 		{
-			CheckMashupNamesOfReturnedProfile(_defaulrProfileName, mashupNames);
+			CheckMashupNamesOfReturnedProfile(DefaulrProfileName, mashupNames);
 		}
 
 		[Then(@"returned profile '$profileName' should have following mashups: (?<mashupNames>([^,]+,?\s*)+)")]

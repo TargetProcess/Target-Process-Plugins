@@ -60,7 +60,11 @@ Tp.controls.Lookup.ProjectsFilterControl = Ext.extend(Ext.form.ComboBox, {
 			var allProjectsValue = [], contextProjectsValue = [], otherProjectsValue = [];
 			this.data = [[allProjectsValue, '--- All Projects ---']];
 			this.data.push([contextProjectsValue, '- Projects from Context -']);
-			Array.forEach(_projectContext, function (item) {
+
+            var pc = ((typeof(window._projectContext) !== "undefined") ?  _projectContext : []);
+            var prjs = ((typeof(window.projects) !== "undefined") ?  projects : []);
+
+			Array.forEach(pc, function (item) {
 				if (!this.projectIds || this.projectIds.length == 0 || Array.contains(this.projectIds, item[this.valueField])) {
 					if (this.projectId && item[this.valueField] == this.projectId) curProject = item[this.displayField];
 					this.data.push([[item[this.valueField]], item[this.displayField]]);
@@ -69,11 +73,11 @@ Tp.controls.Lookup.ProjectsFilterControl = Ext.extend(Ext.form.ComboBox, {
 				}
 			}, this);
 			this.data.push([otherProjectsValue, '- Other Projects -']);
-			Array.forEach(projects, function (item) {
+			Array.forEach(prjs, function (item) {
 				if (item.type == 'Project') {
 					if (!this.projectIds || this.projectIds.length == 0 || Array.contains(this.projectIds, item[this.valueField])) {
 						if (!curProject && this.projectId && item[this.valueField] == this.projectId) curProject = item[this.displayField];
-						if (Array.findOne(_projectContext, function (i) { return i.id == item.id; }, this) == null) {
+						if (Array.findOne(pc, function (i) { return i.id == item.id; }, this) == null) {
 							this.data.push([[item[this.valueField]], item[this.displayField]]);
 							otherProjectsValue.push(item[this.valueField]);
 							allProjectsValue.push(item[this.valueField]);

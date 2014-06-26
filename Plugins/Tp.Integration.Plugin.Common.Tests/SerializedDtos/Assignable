@@ -1,0 +1,30 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.AssignableDTO, Tp.Integration.Messages</Type>
+  <AssignableDTO>
+    <ID xsi:nil="true" />
+    <AssignableID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <Effort>0.0</Effort>
+    <EffortCompleted>0.0</EffortCompleted>
+    <EffortToDo>0.0</EffortToDo>
+    <TimeSpent xsi:nil="true" />
+    <TimeRemain xsi:nil="true" />
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <EntityTypeID xsi:nil="true" />
+    <EntityStateID xsi:nil="true" />
+    <PriorityID xsi:nil="true" />
+    <ProjectID xsi:nil="true" />
+    <IterationID xsi:nil="true" />
+    <ParentID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <ReleaseName>Backlog</ReleaseName>
+    <SquadID xsi:nil="true" />
+  </AssignableDTO>
+</Value>

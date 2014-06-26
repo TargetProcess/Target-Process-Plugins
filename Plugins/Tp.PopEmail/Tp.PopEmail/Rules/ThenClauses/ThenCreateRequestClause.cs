@@ -6,7 +6,6 @@
 using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.PopEmailIntegration.Rules.Parsing;
 

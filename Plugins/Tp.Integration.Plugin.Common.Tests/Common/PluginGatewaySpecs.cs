@@ -22,7 +22,8 @@ using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
-	[TestFixture]
+    [TestFixture]
+    [Category("PartPlugins1")]
 	public class PluginGatewaySpecs
 	{
 		[SetUp]

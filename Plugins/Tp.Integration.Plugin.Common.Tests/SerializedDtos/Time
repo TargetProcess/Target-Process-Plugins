@@ -1,0 +1,17 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.TimeDTO, Tp.Integration.Messages</Type>
+  <TimeDTO>
+    <ID xsi:nil="true" />
+    <TimeID xsi:nil="true" />
+    <Spent xsi:nil="true" />
+    <Remain>0.0</Remain>
+    <CreateDate>2013-08-16T20:20:01.875118+03:00</CreateDate>
+    <SpentDate>2013-08-16T00:00:00+03:00</SpentDate>
+    <Estimation>false</Estimation>
+    <ProjectID xsi:nil="true" />
+    <UserID>1</UserID>
+    <AssignableID xsi:nil="true" />
+    <CustomActivityID xsi:nil="true" />
+    <RoleID xsi:nil="true" />
+  </TimeDTO>
+</Value>

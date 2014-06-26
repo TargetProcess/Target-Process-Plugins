@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NBehave.Narrator.Framework;
 using NServiceBus.Saga;
 using NUnit.Framework;
@@ -15,7 +14,6 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
-using Tp.Integration.Plugin.Common.SagaPersister;
 using Tp.Integration.Testing.Common.Persisters;
 using Tp.PopEmailIntegration.Initialization;
 using Tp.PopEmailIntegration.Rules;
@@ -24,7 +22,8 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.PopEmailIntegration.InfrastructureScenarios
 {
-	[TestFixture, ActionSteps]
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class CreateRequestFromMessageSagaSpecs : PopEmailIntegrationContext
 	{
 		private MessageDTO _message;
@@ -35,17 +34,19 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		public void OnBeforeScenario()
 		{
 			Transport.On<CreateCommand>(x => x.Dto is RequestDTO).Reply(
-				message => new RequestCreatedMessage {Dto = new RequestDTO {ID = 10}});
+				message => new RequestCreatedMessage { Dto = new RequestDTO { ID = 10, Description = ((RequestDTO)message.Dto).Description } });
 			Transport.On<AttachGeneralUserToRequestCommand>().Reply(
 				message => new GeneralUserAttachedToRequestMessage {RequestId = REQUEST_ID, RequesterId = _message.FromID});
 			Transport.On<AttachMessageToGeneralCommand>().Reply(
 				message => new MessageAttachedToGeneralMessage {GeneralId = REQUEST_ID, MessageId = _message.FromID});
+			Transport.On<UpdateCommand>(x => x.Dto is RequestDTO).Reply(
+				message => new RequestUpdatedMessage { ChangedFields = new[] { RequestField.Description } });
 			Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
 				message => new MessageUpdatedMessage {ChangedFields = new[] {MessageField.IsProcessed}});
-			Transport.On<CreateCommand>(x => x.Dto is AttachmentDTO).Reply(
+			Transport.On<CloneAttachmentCommand>().Reply(
 				message =>
 				new AttachmentCreatedMessage
-				{Dto = new AttachmentDTO {ID = 11, OriginalFileName = ((AttachmentDTO) message.Dto).OriginalFileName}});
+				{Dto = new AttachmentDTO {ID = 11, OriginalFileName = message.Dto.OriginalFileName}});
 
 			_attachments = new List<AttachmentDTO>();
 		}
@@ -86,6 +87,22 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 				.Execute();
 		}
 
+		[Test]
+		public void ShouldCreateRequestWithAttachmentsInBodyFromMessage()
+		{
+			@"Given message 2 with subject 'Subject'
+					And the message has body '~/Attachment.aspx?AttachmentID=12'
+					And the message is from user with id 100
+					And the message has attachment 'file1'
+				When CreateRequestFromMessageCommand with project 1 and the message received
+				Then Request should be created
+					And the request should have attachment 'file1'
+					And the request description should be '~/Attachment.aspx?AttachmentID=11'
+					And message 2 should be marked as processed
+			"
+				.Execute();
+		}
+
 		[Given("message $messageId with subject '$subject'")]
 		public void CreateMessage(int messageId, string subject)
 		{
@@ -108,7 +125,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		[Given("the message has attachment '$attachmentFileName'")]
 		public void MessageHasAttachment(string attachmentFileName)
 		{
-			_attachments.Add(new AttachmentDTO {OriginalFileName = attachmentFileName});
+			_attachments.Add(new AttachmentDTO {OriginalFileName = attachmentFileName, AttachmentID = 12});
 		}
 
 		[When("CreateRequestFromMessageCommand with project $projectId and the message received")]
@@ -122,7 +139,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		[Then("Request should be created")]
 		public void RequestShouldBeCreated()
 		{
-			Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Count().Should(Be.EqualTo(1));
+			Transport.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RequestDTO).Should(Be.EqualTo(1));
 		}
 
 		[Then("the request should have description '$description'")]
@@ -174,7 +191,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		[Then("message $messageId should be marked as processed")]
 		public void MessageShouldBeMarkedAsProcessed(int messageId)
 		{
-			var command = Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).First();
+			var command = Transport.TpQueue.GetMessages<UpdateCommand>().First(x => x.Dto is MessageDTO);
 			command.ChangedFields.Should(Be.EquivalentTo(new[] {MessageField.IsProcessed.ToString()}));
 			((MessageDTO) command.Dto).IsProcessed.Should(Be.True);
 			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Where(x => !(x is NewEmailProfileInitializationSagaData)).Count().Should(
@@ -184,9 +201,14 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		[Then("the request should have attachment '$attachmentFileName'")]
 		public void RequestShouldHaveAttachment(string attachmentFileName)
 		{
-			Transport.TpQueue.GetMessages<CreateCommand>().Where(
-				x => x.Dto is AttachmentDTO && ((AttachmentDTO) x.Dto).OriginalFileName == attachmentFileName).First().Should(
-					Be.Not.Null);
+			Transport.TpQueue.GetMessages<CloneAttachmentCommand>().First(x => x.Dto.OriginalFileName == attachmentFileName).Should(Be.Not.Null);
+		}
+
+		[Then("the request description should be '$description'")]
+		public void RequestDescriptionShouldBe(string description)
+		{
+			var request = Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is RequestDTO).Select(x => x.Dto as RequestDTO).First();
+			request.Description.Should(Be.EqualTo(description));
 		}
 
 		private RequestDTO RequestDto()

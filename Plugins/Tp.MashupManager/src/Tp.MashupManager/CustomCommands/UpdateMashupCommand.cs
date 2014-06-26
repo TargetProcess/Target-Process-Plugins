@@ -4,13 +4,13 @@
 // 
 
 using Tp.Integration.Plugin.Common.Validation;
-using Tp.MashupManager.Dtos;
+using Tp.MashupManager.CustomCommands.Args;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class UpdateMashupCommand : CrudMashupCommand<UpdateMashupDto>
+	public class UpdateMashupCommand : CrudMashupCommand<UpdateMashupCommandArg>
 	{
-		protected override PluginProfileErrorCollection ExecuteOperation(UpdateMashupDto mashup)
+		protected override PluginProfileErrorCollection ExecuteOperation(UpdateMashupCommandArg mashup)
 		{
 			return MashupRepository.Update(mashup);
 		}

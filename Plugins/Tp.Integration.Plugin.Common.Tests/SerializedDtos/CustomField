@@ -1,0 +1,12 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.CustomFieldDTO, Tp.Integration.Messages</Type>
+  <CustomFieldDTO>
+    <ID xsi:nil="true" />
+    <CustomFieldID xsi:nil="true" />
+    <Required>false</Required>
+    <FieldType>Text</FieldType>
+    <EnabledForFilter>false</EnabledForFilter>
+    <ProcessID>1</ProcessID>
+    <ProcessName>All Practices</ProcessName>
+  </CustomFieldDTO>
+</Value>

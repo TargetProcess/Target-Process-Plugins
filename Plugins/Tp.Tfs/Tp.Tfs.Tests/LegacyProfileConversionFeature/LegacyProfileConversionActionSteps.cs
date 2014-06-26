@@ -15,6 +15,7 @@ using Tp.Core;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
+using Tp.LegacyProfileConversion.Common.Testing;
 using Tp.LegacyProfileConvertsion.Common;
 using Tp.SourceControl.RevisionStorage;
 using Tp.Tfs.LegacyProfileConversion;
@@ -23,102 +24,16 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 {
 	[ActionSteps]
-	public class LegacyProfileConverterActionSteps
+	public class LegacyProfileConverterActionSteps : LegacyProfileConverterActionStepsBase
+			<LegacyProfileConvertor, TfsLegacyProfileConversionUnitTestRegistry, PluginProfile>
 	{
-		private TpDatabaseDataContext _context;
-		private PluginProfile _legacyProfile;
-
-		private static void ClearPluginDb(string pluginConnectionString)
-		{
-			var context = new PluginDatabaseModelDataContext(pluginConnectionString);
-			if (!context.DatabaseExists())
-			{
-				context.CreateDatabase();
-				context.SubmitChanges();
-			}
-			else
-			{
-				ClearDatabase(context);
-			}
-		}
-
-		private static void ClearDatabase(PluginDatabaseModelDataContext context)
-		{
-            context.ExecuteCommand("delete from ProfileStorage");
-            context.ExecuteCommand("delete from Profile");
-            context.ExecuteCommand("delete from Account");
-            context.ExecuteCommand("delete from Plugin");
-		}
-
-		public void OnDatabaseTearDown() {}
-
-		[BeforeScenario]
-		public void OnBeforeScenario()
-		{
-			ObjectFactory.Configure(x => x.AddRegistry<TfsLegacyProfileConversionUnitTestRegistry>());
-
-            _context = new TpDatabaseDataContext(Properties.Settings.Default.TpConnectionString);
-            ClearTpDB(_context);
-            ClearPluginDb(Properties.Settings.Default.PluginConnectionString);
-	    }
-
-		[AfterScenario]
-		public void OnAfterScenario()
-		{
-			ClearTpDB(_context);
-			var context = new PluginDatabaseModelDataContext(Properties.Settings.Default.PluginConnectionString);
-			ClearDatabase(context);
-		}
-
-		private static void ClearTpDB(DataContext tpDatabaseDataContext)
-		{
-            if (!tpDatabaseDataContext.DatabaseExists())
-            {
-                tpDatabaseDataContext.CreateDatabase();
-                tpDatabaseDataContext.SubmitChanges();
-            }
-            else
-            {
-                tpDatabaseDataContext.ExecuteCommand("delete from Project");
-                tpDatabaseDataContext.ExecuteCommand("delete from TpUser");
-                tpDatabaseDataContext.ExecuteCommand("delete from General");
-                tpDatabaseDataContext.ExecuteCommand("delete from MessageUid");
-                tpDatabaseDataContext.ExecuteCommand("delete from PluginProfile");
-                tpDatabaseDataContext.ExecuteCommand("delete from Revision");  
-            }
-		}
-
-		[Given("account name is '$accountName'")]
-		public void AccountNameIs(string accountName)
-		{
-			ObjectFactory.GetInstance<IConvertorArgs>().Stub(x => x.AccountName).Return(accountName);
-		}
-
-		[Given("profile name is '$profileName'")]
-		public void SetProfileName(string profileName)
-		{
-			var xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(
-				@"<?xml version=""1.0"" encoding=""utf-16""?>
-<Settings xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-</Settings>");
-			_legacyProfile = new PluginProfile
-			{
-                PluginName = "Team Foundation Server Integration",
-				ProfileName = profileName,
-				Active = true,
-				Settings = xmlDocument.OuterXml,
-			};
-			_context.PluginProfiles.InsertOnSubmit(_legacyProfile);
-		}
-
 		[Given("the last imported revision is $revision")]
 		public void SetLastImportedRevision(int revision)
 		{
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 
-			var lastRevision = new Revision {PluginProfileID = _legacyProfile.PluginProfileID, SourceControlID = revision, CommitDate = DateTime.Today.AddDays(-20)};
-			_context.Revisions.InsertOnSubmit(lastRevision);
+			var lastRevision = new Revision {PluginProfileID = LegacyProfile.PluginProfileID, SourceControlID = revision, CommitDate = DateTime.Today.AddDays(-20)};
+			Context.Revisions.InsertOnSubmit(lastRevision);
 
             ConvertPluginProfile();
 		}
@@ -177,42 +92,19 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		[Given("tfs revision $revisionId is imported")]
 		public void ImportRevision(int revisionId)
 		{
-			_context.Revisions.InsertOnSubmit(new Revision
+			Context.Revisions.InsertOnSubmit(new Revision
 			                                  	{
 			                                  		SourceControlID = revisionId,
 													CommitDate = CurrentDate.Value,
-													PluginProfileID = _legacyProfile.PluginProfileID
+													PluginProfileID = LegacyProfile.PluginProfileID
 			                                  	});
-			_context.SubmitChanges();
-		}
-
-		private string GetLegacyProfileValue(string valueName)
-		{
-			var xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(_legacyProfile.Settings);
-			return GetNodeByName(valueName, xmlDocument).InnerText;
-		}
-
-		private void SetLegacyProfileValue(string valueName, string value)
-		{
-			var xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(_legacyProfile.Settings);
-			var valueNode = GetNodeByName(valueName, xmlDocument);
-			valueNode.InnerXml = value;
-			xmlDocument.SelectSingleNode("./Settings").AppendChild(valueNode);
-
-			_legacyProfile.Settings = xmlDocument.OuterXml;
-		}
-
-		private static XmlNode GetNodeByName(string valueName, XmlDocument xmlDocument)
-		{
-			return xmlDocument.SelectSingleNode("//" + valueName) ?? xmlDocument.CreateElement(valueName);
+			Context.SubmitChanges();
 		}
 
 		[When(@"legacy tfs plugin profile from Target Process converted to new tfs plugin profile")]
-        public void ConvertPluginProfile()
+        public void ConvertTfsPluginProfile()
 		{
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 
 			var args = ObjectFactory.GetInstance<IConvertorArgs>();
 			args.Stub(x => x.TpConnectionString).Return(Properties.Settings.Default.TpConnectionString);
@@ -221,13 +113,13 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 
 			ObjectFactory.EjectAllInstancesOf<IDatabaseConfiguration>();
 			ObjectFactory.Configure(x => x.For<IDatabaseConfiguration>().Use(args));
-            ObjectFactory.GetInstance<LegacyProfileConvertor>().Execute(_legacyProfile.ProfileName);
+            ObjectFactory.GetInstance<LegacyProfileConvertor>().Execute(LegacyProfile.ProfileName);
 		}
 
 		[When(@"revisions migrated from old profile to the new one")]
 		public void MigrateRevisionsFromOldProfileToTheNewOne()
 		{
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 
 			var args = ObjectFactory.GetInstance<IConvertorArgs>();
 			args.Stub(x => x.TpConnectionString).Return(Properties.Settings.Default.TpConnectionString);
@@ -237,14 +129,7 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 
 			ObjectFactory.EjectAllInstancesOf<IDatabaseConfiguration>();
 			ObjectFactory.Configure(x => x.For<IDatabaseConfiguration>().Use(args));
-            ObjectFactory.GetInstance<LegacyRevisionsImporter>().Execute(_legacyProfile.ProfileName);
-		}
-
-		[Then("plugin '$pluginName' should have account '$accountName'")]
-		public void PluginShouldHaveAccount(string pluginName, string accountName)
-		{
-			var accounts = AccountCollection.Where(x => x.Name == accountName).Select(y => y.Name.Value).ToArray();
-			accounts.Should(Be.EquivalentTo(new[] {accountName}));
+            ObjectFactory.GetInstance<LegacyRevisionsImporter>().Execute(LegacyProfile.ProfileName);
 		}
 
 		[Then(@"profile should have tp users: (?<users>([^,]+,?\s*)+)")]
@@ -262,7 +147,7 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		[Given("user '$userLogin' created")]
 		public void CreateUser(string userLogin)
 		{
-			_context.TpUsers.InsertOnSubmit(new TpUser
+			Context.TpUsers.InsertOnSubmit(new TpUser
 			{
 				Login = userLogin,
 				Email = string.Format("{0}@targetprocess.com", userLogin),
@@ -271,13 +156,13 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 				SecretWord = "abc",
 				Type = 1
 			});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Given("requester '$requesterLogin' created ")]
 		public void CreateRequester(string requesterLogin)
 		{
-			_context.TpUsers.InsertOnSubmit(new TpUser
+			Context.TpUsers.InsertOnSubmit(new TpUser
 			{
 				Login = requesterLogin,
 				Email = string.Format("{0}@targetprocess.com", requesterLogin),
@@ -286,13 +171,13 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 				SecretWord = "abc",
 				Type = 4
 			});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Given("tp user with login '$userLogin' and email '$userMail'")]
 		public void CreateUserWithMail(string userLogin, string userMail)
 		{
-			_context.TpUsers.InsertOnSubmit(new TpUser
+			Context.TpUsers.InsertOnSubmit(new TpUser
 			{
 				Login = userLogin,
 				Email = userMail,
@@ -301,13 +186,13 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 				SecretWord = "abc",
 				Type = 1
 			});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Given("deleted tp user with login '$userLogin' and email '$userMail'")]
 		public void CreateDeletedUserWithMail(string userLogin, string userMail)
 		{
-			_context.TpUsers.InsertOnSubmit(new TpUser
+			Context.TpUsers.InsertOnSubmit(new TpUser
 			{
 				Login = userLogin,
 				Email = userMail,
@@ -317,7 +202,7 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 				Type = 1,
 				DeleteDate = CurrentDate.Value
 			});
-			_context.SubmitChanges();
+			Context.SubmitChanges();
 		}
 
 		[Then("tfs repository should be '$tfsUrl'")]
@@ -350,20 +235,6 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 			Profile.StartRevision.Should(Be.EqualTo(revision.ToString()));
 		}
 
-		[Then("'$profileName' plugin profile should be created")]
-		public void PluginShouldHaveProfile(string profileName)
-		{
-			PluginProfilesShouldBeCreated(new[]{profileName});
-		}
-
-		[Then(@"plugin profiles should be created: (?<pluginProfileNames>([^,]+,?\s*)+)")]
-		public void PluginProfilesShouldBeCreated(string[] pluginProfileNames)
-		{
-			var profiles =
-				(from profile in Account.Profiles select profile.Name.Value).ToArray();
-			profiles.Should(Be.EquivalentTo(pluginProfileNames));
-		}
-
 		[Then("$profileAmount plugin profiles should be created")]
 		public void PluginShouldHaveProfilesAmountConverted(int profileAmount)
 		{
@@ -384,11 +255,14 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 			Profile.UserMapping.Count.Should(Be.EqualTo(userCount));
 		}
 
-		[Then("plugin profile names should be unique")]
-		public void PluginProfileNamesShouldBeUnique()
+		protected override string SettingsXmlNode
 		{
-			var profileNames = Account.Profiles.Select(x => x.Name.Value).ToArray();
-			profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames));
+			get { return "Settings"; }
+		}
+
+		protected override string PluginName
+		{
+			get { return "Team Foundation Server Integration"; }
 		}
 
 		[Then(@"profile should have revisions: (?<revisionIds>([^,]+,?\s*)+)")]
@@ -406,20 +280,5 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		{
 			get { return Account.Profiles.First(); }
 		}
-
-		private static IAccountReadonly Account
-		{
-			get
-			{
-				var accountName = ObjectFactory.GetInstance<IConvertorArgs>().AccountName;
-				return AccountCollection.First(acc => acc.Name == accountName);
-			}
-		}
-
-		private static IEnumerable<IAccountReadonly> AccountCollection
-		{
-			get { return ObjectFactory.GetInstance<IAccountCollection>(); }
-		}
-
 	}
 }

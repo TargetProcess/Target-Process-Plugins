@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base","tau/services/customize/service.customize.card.layout.factory"],function(e,r,t){return r.extend({"bus configurator.ready:last + boardSettings.ready":function(e,r,a){var o=new t(r,a.boardSettings);this.fire("cardLayoutFactory.ready",o)}})});

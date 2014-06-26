@@ -106,7 +106,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 
 		private void SendUpdateTestCaseRun(TestCaseRunDTO dto)
 		{
-			if (dto.Passed.HasValue && !dto.Passed.Value)
+			if (dto.Passed.HasValue && !dto.Passed.Value && string.IsNullOrEmpty(dto.Comment))
 			{
 				dto.Comment = string.Format("Result imported by '{0}' plugin", _profile.Name.Value);
 			}

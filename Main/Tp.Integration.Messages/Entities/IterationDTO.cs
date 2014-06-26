@@ -3,8 +3,10 @@
 // Changes to this file will be lost if the code is regenerated.
 //-----------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;using System.Runtime.Serialization;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {
@@ -463,6 +465,14 @@ namespace Tp.Integration.Common
         /// <value>The Entity Type ID.</value>
 		[ForeignKey]
 		[DataMember][XmlElement(Order = 82)]public Int32? EntityTypeID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 83)]
+		public Field[] CustomFieldsMetaInfo { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 84)]
+		public decimal? Progress { get; set; }
 	}
 	
 	
@@ -788,5 +798,6 @@ namespace Tp.Integration.Common
         /// Release Name
         /// </summary>		
 		ReleaseName,
+		Progress
 	}
 }

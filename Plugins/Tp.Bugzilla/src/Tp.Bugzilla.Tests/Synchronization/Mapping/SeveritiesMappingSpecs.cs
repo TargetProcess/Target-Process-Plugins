@@ -17,6 +17,7 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 {
 	[ActionSteps]
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class SeveritiesMappingSpecs : MappingTestBase<SeverityDTO> 
 	{
 		[Test]

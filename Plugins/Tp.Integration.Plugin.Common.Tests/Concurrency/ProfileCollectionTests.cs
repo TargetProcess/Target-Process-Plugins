@@ -14,6 +14,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class ProfileCollectionTests : DomainObjectConcurrencyTest
 	{
 		private const string ACCOUNT_NAME = "Account";

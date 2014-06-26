@@ -13,6 +13,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Bugzilla.Tests.Handlers
 {
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class ProjectChangedHandlerSpecs : BugzillaTestBase
 	{
 		[Test]

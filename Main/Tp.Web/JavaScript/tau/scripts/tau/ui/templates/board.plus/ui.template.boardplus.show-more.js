@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/nls/translator"],function(e,t){var a={name:"boardplus.show-more",engine:"jqote2",markup:['<div class="i-role-tau-always-last i-role-cell-paging-stack tau-show-more-cards-trigger"><button>'+t("show more&hellip;")+"</button></div>"],dependencies:[]};return e.register(a)});

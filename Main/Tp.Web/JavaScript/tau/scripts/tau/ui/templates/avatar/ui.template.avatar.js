@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"user.avatar",markup:['<div class="box ui-avatar tau-avatar_${id}">','<img src="${url}" /> ',"</div>"].join("")};return templates.register(config)})
+define(["tau/core/templates-factory"],function(a){var r={name:"user.avatar",markup:['<div class="box ui-avatar tau-avatar_${id}">','<img src="${url}" /> ',"</div>"].join("")};return a.register(r)});

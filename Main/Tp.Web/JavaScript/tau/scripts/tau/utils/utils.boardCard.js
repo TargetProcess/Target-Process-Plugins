@@ -1,0 +1,1 @@
+define(["Underscore"],function(){var n={convertToEntity:function(n){return{entityType:{name:n.entityType},id:n.entityId}}};return n});

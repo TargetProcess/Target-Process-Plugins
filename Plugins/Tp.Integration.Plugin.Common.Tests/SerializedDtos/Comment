@@ -1,0 +1,11 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.CommentDTO, Tp.Integration.Messages</Type>
+  <CommentDTO>
+    <ID xsi:nil="true" />
+    <CommentID xsi:nil="true" />
+    <CreateDate>2013-08-16T20:20:01.500118+03:00</CreateDate>
+    <GeneralID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <ParentID xsi:nil="true" />
+  </CommentDTO>
+</Value>

@@ -15,6 +15,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Common.ServiceBus
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class MsmqTransportWithUiSupportTests
 	{
 		[Test]

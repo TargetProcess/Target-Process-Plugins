@@ -1,1 +1,1 @@
-define([],function(){return{create:function(c){var navigator=c.navigator;return{dblclick:function(r){navigator.to(r.type+"/"+r.id)}}}}})
+define([],function(){return{create:function(n){var t=n.navigator;return{dblclick:function(n){t.to(n.type+"/"+n.id)}}}}});

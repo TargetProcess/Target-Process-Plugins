@@ -17,6 +17,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class ShouldSupportMultilineCommentSpecs
 	{
 		[SetUp]

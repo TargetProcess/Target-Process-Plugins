@@ -1,1 +1,1 @@
-define(["tau/components/component.creator","tau/models/model.releaseNotes","tau/ui/templates/releaseNotes/ui.template.releaseNotes"],function(creator,Model,template){return{create:function(config){var creatorConfig={extensions:[Model],template:template};return creator.create(creatorConfig,config)}}})
+define(["tau/components/component.creator","tau/models/model.releaseNotes","tau/ui/templates/releaseNotes/ui.template.releaseNotes"],function(e,t,a){return{create:function(n){var o={extensions:[t],template:a};return e.create(o,n)}}});

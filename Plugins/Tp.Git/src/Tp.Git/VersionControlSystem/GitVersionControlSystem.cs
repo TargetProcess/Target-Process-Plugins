@@ -21,14 +21,17 @@ namespace Tp.Git.VersionControlSystem
 	public class GitVersionControlSystem : SourceControl.VersionControlSystem.VersionControlSystem
 	{
 		private readonly IDiffProcessor _diffProcessor;
+		private readonly IRevisionIdComparer _revisionComparer;
 		private readonly GitClient _git;
+		private const int MissingRevisionsCheckInterval = 7;
 
 		public GitVersionControlSystem(ISourceControlConnectionSettingsSource settings,
 		                               ICheckConnectionErrorResolver errorResolver, IActivityLogger logger,
-		                               IDiffProcessor diffProcessor, IStorageRepository profile)
+		                               IDiffProcessor diffProcessor, IStorageRepository profile, IRevisionIdComparer revisionComparer)
 			: base(settings, errorResolver, logger)
 		{
 			_diffProcessor = diffProcessor;
+			_revisionComparer = revisionComparer;
 			_git = new GitClient(settings, profile.Get<GitRepositoryFolder>());
 		}
 
@@ -63,14 +66,28 @@ namespace Tp.Git.VersionControlSystem
 			return _git.RetrieveAuthors(dateRange);
 		}
 
+		private RevisionId GetFrom(RevisionId @from)
+		{
+			var startRevision = _revisionComparer.ConvertToRevisionId(_settings.StartRevision);
+			var missingRevisionsCheckInterval = @from.Time.Value.AddDays(-MissingRevisionsCheckInterval);
+			var toChangeset = startRevision.Time > missingRevisionsCheckInterval
+								  ? startRevision
+								  : new RevisionId { Time = missingRevisionsCheckInterval };
+
+			return toChangeset;
+		}
+
 		public override RevisionRange[] GetFromTillHead(RevisionId @from, int pageSize)
 		{
-			return _git.GetFromTillHead(from.Time.Value, pageSize).ToArray();
+			var actualFrom = GetFrom(@from);
+
+			return _git.GetFromTillHead(actualFrom.Time.Value, pageSize).ToArray();
 		}
 
 		public override RevisionRange[] GetAfterTillHead(RevisionId @from, int pageSize)
 		{
-			return _git.GetAfterTillHead(from, pageSize).ToArray();
+			var actualFrom = GetFrom(@from);
+			return _git.GetAfterTillHead(actualFrom, pageSize).ToArray();
 		}
 
 		public override RevisionRange[] GetFromAndBefore(RevisionId @from, RevisionId to, int pageSize)

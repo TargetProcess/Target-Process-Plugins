@@ -22,6 +22,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class ShouldPostTimeSpecs
 	{
 		[SetUp]

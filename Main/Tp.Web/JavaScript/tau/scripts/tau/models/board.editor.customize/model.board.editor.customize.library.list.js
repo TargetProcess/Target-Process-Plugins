@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/models/board.editor.customize/model.board.editor.customize.library"],function(r,e,t){return t.extend({"bus configurator.ready:last + units.ready:last + layout.changed:last":function(e,t,i,n){var o=r.filter(i,function(r){return r.hideInLibrary!==!0});this._super(e,t,o,n)}})});

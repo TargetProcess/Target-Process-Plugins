@@ -1,1 +1,1 @@
-define(["tau/components/component.creator","tau/ui/extensions/quick.add/ui.extension.quick.add","tau/ui/templates/quick.add/ui.template.quick.add"],function(creator,ExtensionAdd,Template){return{create:function(config){var creatorConfig={extensions:[ExtensionAdd],template:Template};return creator.create(creatorConfig,config)}}})
+define(["tau/components/component.creator","tau/ui/extensions/quick.add/ui.extension.quick.add","tau/ui/templates/quick.add/ui.template.quick.add"],function(e,t,n){return{create:function(u){var a={extensions:[t],template:n};return e.create(a,u)}}});

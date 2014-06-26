@@ -176,6 +176,12 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
                 case TokenType.CreateRequestClause:
                     Value = EvalCreateRequestClause(tree, paramlist);
                     break;
+                case TokenType.CreatePrivateRequestClause:
+                    Value = EvalCreatePrivateRequestClause(tree, paramlist);
+                    break;
+                case TokenType.CreatePublicRequestClause:
+                    Value = EvalCreatePublicRequestClause(tree, paramlist);
+                    break;
                 case TokenType.CompanyMatchedClause:
                     Value = EvalCompanyMatchedClause(tree, paramlist);
                     break;
@@ -213,6 +219,16 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
         }
 
         protected virtual object EvalCreateRequestClause(ParseTree tree, params object[] paramlist)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual object EvalCreatePrivateRequestClause(ParseTree tree, params object[] paramlist)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual object EvalCreatePublicRequestClause(ParseTree tree, params object[] paramlist)
         {
             throw new NotImplementedException();
         }

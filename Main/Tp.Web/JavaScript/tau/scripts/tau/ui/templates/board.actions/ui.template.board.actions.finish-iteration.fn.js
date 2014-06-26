@@ -1,0 +1,1 @@
+define(["tau/utils/utils.date"],function(t){return{iterationName:function(t){return t.name+" ("+this.processDates(t.startDate,t.endDate)+")"},processDates:function(e,a){var r=e.getYear()==a.getYear()?"d-MMM":t.getFormatData().date.short;return t.formatAs(e,r)+" &mdash; "+t.formatAs(a,r)}}});

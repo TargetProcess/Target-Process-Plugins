@@ -1,1 +1,1 @@
-define(["Underscore","tau/components/component.property.text"],function(_,ComponentPropertyTime){return{create:function(config){return config=_.clone(config||{}),config.propertyName="lastFailureComment",config.defaultText="N/A",ComponentPropertyTime.create(config)}}})
+define(["Underscore","tau/components/component.property.text"],function(e,t){return{create:function(n){return n=e.clone(n||{}),n.propertyName="lastFailureComment",n.defaultText="N/A",t.create(n)}}});

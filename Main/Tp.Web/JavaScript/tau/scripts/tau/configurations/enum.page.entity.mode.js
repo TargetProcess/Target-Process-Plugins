@@ -1,0 +1,1 @@
+define([],function(){return{full:"full",listEntityDetails:"listEntityDetails"}});

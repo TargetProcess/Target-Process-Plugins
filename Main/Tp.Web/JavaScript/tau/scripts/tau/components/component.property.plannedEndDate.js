@@ -1,0 +1,1 @@
+define(["tau/components/component.property.date"],function(e){return{create:function(n){return n=n||{},n.propertyName="plannedEndDate",n.allowReset=!0,e.create(n)}}});

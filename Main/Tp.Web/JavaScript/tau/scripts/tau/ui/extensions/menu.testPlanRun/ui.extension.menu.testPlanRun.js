@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base"],function(e,t){return t.extend({"bus afterRender":function(t,r){var n=r.element;this.fire("$el.ready",n),n.on("click",".tau-action",_.bind(function(t){t.preventDefault();var r=e(t.currentTarget);this.fire("url.process",r.attr("href")+"&rmnav=1&tp3=1")},this))}})});

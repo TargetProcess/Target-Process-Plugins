@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var t={name:"timeline.track",engine:"jqote2",markup:['<div class="<%= this.roleCssClass %> tau-timeline-track"></div>']};return e.register(t)});

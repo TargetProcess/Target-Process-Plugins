@@ -1,0 +1,1 @@
+define(["tau/slice/new.list.factory","tau/slice/api.entity.new.list"],function(e,t){var i=e.extend({_createSlice:function(e,i){return new t(e,i,this._newListSliceOptions)}});return i});

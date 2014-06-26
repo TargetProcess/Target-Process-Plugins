@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/class"],function(e,t,i){return i.extend({init:function(){this._firstLabel=""},render:function(e){e.parent().find(".tau-period-label").remove(),t('<div class="tau-period-label"></div>').html(this._firstLabel).insertBefore(e)},setLabel:function(e){this._firstLabel=e||""},isEmpty:function(){return""===this._firstLabel}})});

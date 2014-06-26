@@ -1,1 +1,1 @@
-define([],function(){console.log("WARNING: user/mashups should be defined before entry point manually")})
+define([],function(){console.log("WARNING: user/mashups should be defined before entry point manually")});

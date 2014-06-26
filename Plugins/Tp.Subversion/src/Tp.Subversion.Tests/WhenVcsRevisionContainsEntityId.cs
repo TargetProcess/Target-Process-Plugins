@@ -24,6 +24,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Subversion
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class WhenVcsRevisionContainsEntityId
 	{
 		[SetUp]

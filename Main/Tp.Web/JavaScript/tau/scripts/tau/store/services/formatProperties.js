@@ -1,1 +1,1 @@
-define([],function(){return{customFields:{}}})
+define([],function(){return{customFields:{}}});

@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/list/teamprojects/ui.extension.list.teamprojects.action.assign.base"],function(e){return e.extend({_getTeamProject:function(e,t,i){return{id:i.id,project:{id:i.project.id,projectMembers:i.project.projectMembers},team:{id:e.id,teamMembers:i.teamMembers}}}})});

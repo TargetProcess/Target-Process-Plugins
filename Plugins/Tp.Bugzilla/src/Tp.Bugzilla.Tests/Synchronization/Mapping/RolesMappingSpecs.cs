@@ -19,6 +19,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class RolesMappingSpecs : MappingTestBase<RoleDTO>
 	{
 		[Test]

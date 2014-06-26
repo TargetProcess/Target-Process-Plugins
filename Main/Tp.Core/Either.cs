@@ -6,18 +6,6 @@ namespace Tp.Core
 {
 	public static class Either
 	{
-		public static Either<T, Exception> Try<T>(Func<T> action)
-		{
-			try
-			{
-				return CreateLeft<T, Exception>(action());
-			}
-			catch (Exception e)
-			{
-				return CreateRight<T, Exception>(e);
-			}
-		}
-
 		public static Choice If(bool condition)
 		{
 			return new Choice(condition);

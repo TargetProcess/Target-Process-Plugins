@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory","tau/ui/tags/ui.tag.term"],function(templates,termTag){var config={tags:[termTag],name:"entity-icon",markup:['<em class="ui-type-icon ui-type-icon-${__type.toLowerCase()}">{{term(__type) "iconBig"}}</em>'],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory","tau/ui/tags/ui.tag.term"],function(e,t){var i={tags:[t],name:"entity-icon",markup:['<em class="ui-type-icon ui-type-icon-${__type.toLowerCase()}">{{term(__type) "iconBig"}}</em>'],dependencies:[]};return e.register(i)});

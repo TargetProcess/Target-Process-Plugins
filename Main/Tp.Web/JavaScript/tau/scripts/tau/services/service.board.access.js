@@ -1,0 +1,1 @@
+define(["Underscore"],function(n){return{isOwner:function(i,r){return n.contains(i.ownerIds,r.id)},isEditable:function(n,i){return this.isOwner(n,i)||i.isAdministrator}}});

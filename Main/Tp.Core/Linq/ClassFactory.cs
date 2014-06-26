@@ -10,7 +10,7 @@ using StructureMap.TypeRules;
 namespace System.Linq.Dynamic
 // ReSharper restore CheckNamespace
 {
-	internal class ClassFactory
+	public class ClassFactory
 	{
 		public static readonly ClassFactory Instance = new ClassFactory();
 

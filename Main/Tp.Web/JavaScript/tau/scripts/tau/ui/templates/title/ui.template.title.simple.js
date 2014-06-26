@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"title.simple",engine:"jqote2",markup:['<div class="ui-title ui-title_type_simple">','<div class="ui-title__title i-role-title"><%! this.name %></div>',"</div>"],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var i={name:"title.simple",engine:"jqote2",markup:['<div class="ui-title ui-title_type_simple">','<div class="ui-title__title i-role-title"><%! this.name %></div>',"</div>"],dependencies:[]};return e.register(i)});

@@ -33,6 +33,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Mercurial.Tests.VersionControlSystem
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class MercurialSpecs : ISourceControlConnectionSettingsSource
 	{
 		private MercurialTestRepository _testRepository;

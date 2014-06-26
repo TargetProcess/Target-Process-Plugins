@@ -1,1 +1,1 @@
-define(["jQuery"],function($){return $.Deferred()})
+define(["jQuery"],function(e){return e.Deferred()});

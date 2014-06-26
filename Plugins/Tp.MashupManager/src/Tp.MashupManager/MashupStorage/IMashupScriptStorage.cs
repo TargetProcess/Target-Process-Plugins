@@ -4,15 +4,14 @@
 // 
 
 using Tp.Integration.Messages;
-using Tp.MashupManager.Dtos;
 
 namespace Tp.MashupManager.MashupStorage
 {
 	public interface IMashupScriptStorage
 	{
-		MashupDto GetMashup(string mashupName);
-		MashupDto GetMashup(AccountName account, string mashupName);
-		void SaveMashup(MashupDto mashup);
+		Mashup GetMashup(string mashupName);
+		Mashup GetMashup(AccountName account, string mashupName);
+		void SaveMashup(Mashup mashup);
 		void DeleteMashup(string mashup);
 	}
 }

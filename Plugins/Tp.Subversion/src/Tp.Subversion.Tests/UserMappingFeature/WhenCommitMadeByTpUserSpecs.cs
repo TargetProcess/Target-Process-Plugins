@@ -15,6 +15,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.UserMappingFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class WhenCommitMadeByTpUserSpecs
 	{
 		[SetUp]

@@ -12,6 +12,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Router
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	internal class MessageConsumerTest
 	{
 		[Test]

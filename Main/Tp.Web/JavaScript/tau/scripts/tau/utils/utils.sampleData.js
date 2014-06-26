@@ -1,0 +1,1 @@
+define([],function(){return{buildConfirmationString:function(e){for(var n=e.ProjectNames||e.projectNames,r=e.UserNames||e.userNames,t="Sample Projects and Users will be deleted.\n\nProjects: ",s=0;s<n.length;s++)t+=n[s],s<n.length-1&&(t+=", ");t+=".\nUsers: ";for(var s=0;s<r.length;s++)t+=r[s],s<r.length-1&&(t+=", ");return t+=".\n\nDelete this data?"}}});

@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/bus.collection"],function(_,BusCollection){var registry=new BusCollection;return window.tau=window.tau||{},_.extend(window.tau,{buses:registry}),registry})
+define(["Underscore","tau/core/bus.collection"],function(e,n){var o=new n;return window.tau=window.tau||{},e.extend(window.tau,{buses:o}),o});

@@ -18,6 +18,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.Integration
 {
 	[TestFixture, ActionSteps]
+	[Category("PartPlugins0")]
 	public class CheckConnectionTest : BugzillaTestBase
 	{
 		private readonly PluginProfileErrorCollection _errors = new PluginProfileErrorCollection();
@@ -86,7 +87,7 @@ namespace Tp.Bugzilla.Tests.Integration
 				.Execute();
 		}
 
-		[Test,Ignore("Move to functional test because of test searches presetup is needed")]
+		[Test, Ignore("Move to functional test because of test searches presetup is needed")]
 		public void ShouldCheckValidConnectionWhenQueriesSeparatedWithSpaces()
 		{
 			@"

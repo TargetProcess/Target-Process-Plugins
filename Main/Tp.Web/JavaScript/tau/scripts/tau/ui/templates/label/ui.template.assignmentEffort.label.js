@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"assignment-effort-label",markup:['<div><span class="property"><span class="effort">${totalEffort}&nbsp;${point}</span></span>']};return templates.register(config)})
+define(["tau/core/templates-factory"],function(a){var t={name:"assignment-effort-label",markup:['<div><span class="property"><span class="effort">${totalEffort}&nbsp;${point}</span></span>']};return a.register(t)});

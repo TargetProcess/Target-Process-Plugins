@@ -1,0 +1,1 @@
+define(["tau/models/board.owner/model.board.owner"],function(e){return e.extend({"bus afterInit":function(e,t){this._super(e,t),this.fire("boardSettings.ready",t.config.data.boardSettingsArg)}})});

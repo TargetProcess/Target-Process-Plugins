@@ -1,11 +1,11 @@
 .CodeMirror {
   line-height: 1em;
   font-family: monospace;
+  height: auto;
 }
-.CodeMirror-scroll {
-  overflow: auto;
-  height: 300px;
-  
+.CodeMirror-scroll {  
+  overflow-y: hidden;
+  overflow-x: auto;    
   position: relative;
 }
 .CodeMirror-gutter {

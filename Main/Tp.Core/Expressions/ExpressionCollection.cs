@@ -13,7 +13,7 @@ namespace Tp.Core.Expressions
 	/// Provides an <see cref="IEnumerable{Expression}"/> created by walking through an expression
 	/// tree.
 	/// </summary>
-	public sealed class ExpressionCollection : ExpressionVisitor, IEnumerable<Expression>
+	internal sealed class ExpressionCollection : ExpressionVisitor, IEnumerable<Expression>
 	{
 		private readonly List<Expression> _expressions = new List<Expression>();
 

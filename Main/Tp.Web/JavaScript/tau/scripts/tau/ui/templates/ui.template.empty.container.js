@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"container.empty.master",engine:"jqote2",markup:["<div>",'<div role="main"></div>',"</div>"],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var n={name:"container.empty.master",engine:"jqote2",markup:["<div>",'<div role="main"></div>',"</div>"],dependencies:[]};return e.register(n)});

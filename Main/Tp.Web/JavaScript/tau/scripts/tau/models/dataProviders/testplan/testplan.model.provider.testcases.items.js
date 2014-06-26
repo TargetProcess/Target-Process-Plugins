@@ -1,1 +1,1 @@
-define(["Underscore","tau/models/dataProviders/userstory/userstory.model.provider.testcases.items"],function(_,Class){return Class.extend({})})
+define(["Underscore","tau/models/dataProviders/userstory/userstory.model.provider.testcases.items"],function(e,r){return r.extend({})});

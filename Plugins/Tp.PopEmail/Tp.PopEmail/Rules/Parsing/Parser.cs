@@ -127,6 +127,68 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             parent.Token.UpdateRange(node.Token);
         }
 
+        private void ParseCreatePrivateRequestClause(ParseNode parent)
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.CreatePrivateRequestClause), "CreatePrivateRequestClause");
+            parent.Nodes.Add(node);
+
+
+            
+            tok = scanner.Scan(TokenType.CreatePrivateRequestKeyword);
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.CreatePrivateRequestKeyword) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CreatePrivateRequestKeyword.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                return;
+            }
+
+            
+            tok = scanner.Scan(TokenType.NUMBER);
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.NUMBER) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.NUMBER.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                return;
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        }
+
+        private void ParseCreatePublicRequestClause(ParseNode parent)
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.CreatePublicRequestClause), "CreatePublicRequestClause");
+            parent.Nodes.Add(node);
+
+
+            
+            tok = scanner.Scan(TokenType.CreatePublicRequestKeyword);
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.CreatePublicRequestKeyword) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CreatePublicRequestKeyword.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                return;
+            }
+
+            
+            tok = scanner.Scan(TokenType.NUMBER);
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.NUMBER) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.NUMBER.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                return;
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        }
+
         private void ParseCompanyMatchedClause(ParseNode parent)
         {
             Token tok;
@@ -249,7 +311,7 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.ThenStatement), "ThenStatement");
             parent.Nodes.Add(node);
 
-            tok = scanner.LookAhead(TokenType.AttachToProjectKeyword, TokenType.CreateRequestKeyword);
+            tok = scanner.LookAhead(TokenType.AttachToProjectKeyword, TokenType.CreateRequestKeyword, TokenType.CreatePrivateRequestKeyword, TokenType.CreatePublicRequestKeyword);
             switch (tok.Type)
             {
                 case TokenType.AttachToProjectKeyword:
@@ -275,6 +337,44 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
 
                     
                     ParseCreateRequestClause(node);
+
+                    
+                    tok = scanner.LookAhead(TokenType.AndKeyword);
+                    if (tok.Type == TokenType.AndKeyword)
+                    {
+                        tok = scanner.Scan(TokenType.AndKeyword);
+                        n = node.CreateNode(tok, tok.ToString() );
+                        node.Token.UpdateRange(tok);
+                        node.Nodes.Add(n);
+                        if (tok.Type != TokenType.AndKeyword) {
+                            tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.AndKeyword.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                            return;
+                        }
+                    }
+                    break;
+                case TokenType.CreatePrivateRequestKeyword:
+
+                    
+                    ParseCreatePrivateRequestClause(node);
+
+                    
+                    tok = scanner.LookAhead(TokenType.AndKeyword);
+                    if (tok.Type == TokenType.AndKeyword)
+                    {
+                        tok = scanner.Scan(TokenType.AndKeyword);
+                        n = node.CreateNode(tok, tok.ToString() );
+                        node.Token.UpdateRange(tok);
+                        node.Nodes.Add(n);
+                        if (tok.Type != TokenType.AndKeyword) {
+                            tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.AndKeyword.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                            return;
+                        }
+                    }
+                    break;
+                case TokenType.CreatePublicRequestKeyword:
+
+                    
+                    ParseCreatePublicRequestClause(node);
 
                     
                     tok = scanner.LookAhead(TokenType.AndKeyword);
@@ -319,9 +419,11 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             
             do {
                 ParseThenStatement(node);
-                tok = scanner.LookAhead(TokenType.AttachToProjectKeyword, TokenType.CreateRequestKeyword);
+                tok = scanner.LookAhead(TokenType.AttachToProjectKeyword, TokenType.CreateRequestKeyword, TokenType.CreatePrivateRequestKeyword, TokenType.CreatePublicRequestKeyword);
             } while (tok.Type == TokenType.AttachToProjectKeyword
-                || tok.Type == TokenType.CreateRequestKeyword);
+                || tok.Type == TokenType.CreateRequestKeyword
+                || tok.Type == TokenType.CreatePrivateRequestKeyword
+                || tok.Type == TokenType.CreatePublicRequestKeyword);
 
             parent.Token.UpdateRange(node.Token);
         }

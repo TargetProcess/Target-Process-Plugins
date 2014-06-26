@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.creator","tau/models/page.error/model.page.error","tau/ui/templates/page/ui.template.page.error"],function(e,t,r,n){return{create:function(o){var a={queuedBus:!0,extensions:e.compact([r].concat(o.extensions||[])),template:n};return t.create(a,o)}}});

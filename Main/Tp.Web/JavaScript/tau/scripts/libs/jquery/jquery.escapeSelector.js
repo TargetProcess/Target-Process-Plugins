@@ -1,0 +1,1 @@
+define(["libs/jquery/jquery"],function(e){e.escapeSelector=function(e){return e.replace(/[!"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~]/g,"\\$&")}});

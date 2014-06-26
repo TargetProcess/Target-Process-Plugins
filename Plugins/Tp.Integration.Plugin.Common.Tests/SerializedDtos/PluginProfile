@@ -1,0 +1,9 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.PluginProfileDTO, Tp.Integration.Messages</Type>
+  <PluginProfileDTO>
+    <ID xsi:nil="true" />
+    <PluginProfileID xsi:nil="true" />
+    <SyncDate xsi:nil="true" />
+    <Active>false</Active>
+  </PluginProfileDTO>
+</Value>

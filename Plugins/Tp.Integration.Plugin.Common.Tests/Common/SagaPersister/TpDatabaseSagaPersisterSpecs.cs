@@ -21,6 +21,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Common.SagaPersister
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	[ActionSteps]
 	public class TpDatabaseSagaPersisterSpecs : SqlPersisterSpecBase
 	{

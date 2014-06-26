@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.PopEmailIntegration.Rules.Parsing;
 
@@ -26,10 +25,15 @@ namespace Tp.PopEmailIntegration.Rules
 
 		public IEnumerable<MailRule> Parse()
 		{
-			return Parse(_storageRepository.GetProfile<ProjectEmailProfile>());
+			return Parse(_storageRepository.GetProfile<ProjectEmailProfile>(), (message, args) => { });
 		}
 
 		public IEnumerable<MailRule> Parse(ProjectEmailProfile profile)
+		{
+			return Parse(profile, (message, args) => _log.InfoFormat(message, args));
+		}
+
+		private IEnumerable<MailRule> Parse(ProjectEmailProfile profile, Action<string, object[]> log)
 		{
 			foreach (var ruleLine in GetRuleLines(profile))
 			{
@@ -39,16 +43,16 @@ namespace Tp.PopEmailIntegration.Rules
 				{
 					var errors = new StringBuilder();
 					tree.Errors.ForEach(x => errors.Append(string.Format("<{0}>", x.Message)));
-					_log.InfoFormat("rule '{0}' can not be parsed because of the following errors: {1}", ruleLine, errors);
+					log("rule '{0}' can not be parsed because of the following errors: {1}", new object[] {ruleLine, errors});
 					continue;
 				}
 
-				_log.InfoFormat("rule '{0}' parsed successfully and prepared to process", ruleLine);
+				log("rule '{0}' parsed successfully and prepared to process", new object[] {ruleLine});
 
 				var thenClause = _thenClauseFactory.CreateBy(tree);
 				var whenClauses = new WhenClauseFactory(thenClause);
 				var whenClause = whenClauses.CreateBy(tree);
-				yield return new MailRule(whenClause, thenClause);
+				yield return new MailRule(whenClause, thenClause, ruleLine);
 			}
 		}
 

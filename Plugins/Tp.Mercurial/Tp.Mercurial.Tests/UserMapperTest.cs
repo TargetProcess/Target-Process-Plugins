@@ -21,6 +21,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Mercurial.Tests
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class UserMapperSpecs
 	{
 		private const string _tpName = "someone great";

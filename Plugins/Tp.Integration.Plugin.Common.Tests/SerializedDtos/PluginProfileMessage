@@ -1,0 +1,10 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.PluginProfileMessageDTO, Tp.Integration.Messages</Type>
+  <PluginProfileMessageDTO>
+    <ID xsi:nil="true" />
+    <PluginProfileMessageID xsi:nil="true" />
+    <CreateDate>2013-08-16T20:20:01.769118+03:00</CreateDate>
+    <Successfull>true</Successfull>
+    <PluginProfileID xsi:nil="true" />
+  </PluginProfileMessageDTO>
+</Value>

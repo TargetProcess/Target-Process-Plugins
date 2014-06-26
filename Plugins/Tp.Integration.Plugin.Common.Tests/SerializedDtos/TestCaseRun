@@ -1,0 +1,12 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.TestCaseRunDTO, Tp.Integration.Messages</Type>
+  <TestCaseRunDTO>
+    <ID xsi:nil="true" />
+    <TestCaseRunID xsi:nil="true" />
+    <RunDate xsi:nil="true" />
+    <Passed xsi:nil="true" />
+    <Runned>false</Runned>
+    <TestPlanRunID xsi:nil="true" />
+    <TestCaseTestPlanID xsi:nil="true" />
+  </TestCaseRunDTO>
+</Value>

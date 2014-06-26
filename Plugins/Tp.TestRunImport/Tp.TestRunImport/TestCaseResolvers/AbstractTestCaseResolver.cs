@@ -118,7 +118,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
 					dto => testCaseRunDtos.FirstOrDefault(t => t.TestCaseTestPlanID == dto.TestCaseTestPlanID)).Where(
 						testCaseRunDto => testCaseRunDto != null).ToList();
 
-				if (resolved.Count() == 0)
+				if (!resolved.Any())
 				{
 					notFound.Invoke(info.Name);
 					continue;
@@ -129,6 +129,9 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
 					found.Invoke(info.Name);
 					dto.Passed = info.IsSuccess;
 					dto.RunDate = info.RunDate;
+					dto.Comment = (info.IsSuccess.HasValue && !info.IsSuccess.Value && !string.IsNullOrEmpty(info.Comment))
+						              ? info.Comment
+						              : null;
 					dto.Runned = true;
 				}
 			}

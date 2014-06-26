@@ -1,1 +1,1 @@
-define(["Underscore","i18n!tau/nls/tokens"],function(_,tokens){var gettext=function(t){var r=tokens.hasOwnProperty(t)?tokens[t]:t;return r=_.isFunction(r)?r():r,r};return gettext.gettext=gettext,gettext})
+define(["Underscore","i18n!tau/nls/tokens"],function(n,t){var e=function(e){var r=t.hasOwnProperty(e)?t[e]:e;return n.isFunction(r)?r():r};return e.gettext=e,e});

@@ -1,0 +1,15 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.EntityStateDTO, Tp.Integration.Messages</Type>
+  <EntityStateDTO>
+    <ID xsi:nil="true" />
+    <EntityStateID xsi:nil="true" />
+    <Initial>false</Initial>
+    <Final>false</Final>
+    <Planned>false</Planned>
+    <RequiredComment>false</RequiredComment>
+    <NumericPriority>0</NumericPriority>
+    <ProcessID>1</ProcessID>
+    <RoleID xsi:nil="true" />
+    <ProcessName>All Practices</ProcessName>
+  </EntityStateDTO>
+</Value>

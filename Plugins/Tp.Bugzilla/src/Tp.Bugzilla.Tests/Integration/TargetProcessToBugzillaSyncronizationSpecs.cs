@@ -15,6 +15,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.Integration
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class TargetProcessToBugzillaSyncronizationSpecs : BugzillaTestBase
 	{
 		private string _bugzillaResponse;

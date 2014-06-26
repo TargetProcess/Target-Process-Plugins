@@ -24,6 +24,7 @@ namespace Tp.Bugzilla.Tests.Validation
 {
 	[ActionSteps]
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class ValidateProfileSpecs
 	{
 		private BugzillaProfile _settings;

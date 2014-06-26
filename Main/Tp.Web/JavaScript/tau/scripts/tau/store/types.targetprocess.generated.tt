@@ -1,10 +1,10 @@
 ﻿<#@ template hostSpecific="true" #>
 <#@ output extension=".js" #>
-<#@ include file="TpModel.ttinclude"  #>
+<#@ include file="TpModel.ttinclude" #>
 //TargetProcess types generated. File should not be modified
-define(["tau/store/types"], function(tauTypes) {
+define([], function() {
 	return [
-		{ name:"context" }
+		{ name: "context" }
 <#
 	ProcessEntities(registerType);
 #>
@@ -13,19 +13,18 @@ define(["tau/store/types"], function(tauTypes) {
 <#+
   	void registerType(XElement entity, string className, string baseClassName) {
 #>
-	,
-	{
-		name: '<#= this.FirstToLower(className) #>',
-		parent: <#=  string.IsNullOrEmpty(baseClassName) ? "null" : "'" + this.FirstToLower(baseClassName) + "'" #>,
-		resource: '<#= this.FirstToLower(this.Pluralize(className)) #>',
-		aliases: ['<#= className #>', '<#= this.FirstToLower(this.Pluralize(className)) #>', '<#= this.Pluralize(className) #>' ],
-		fields: [<#= this.getDefaultFields(entity) #>],
-		simpleFields: [<#= this.getFieldsSimple(entity) #>],
-		refs: {
-				<#+ _processRefs(entity); #>
-				}
-		
-	}
+		,
+		{
+			name: '<#= this.FirstToLower(className) #>',
+			parent: <#= string.IsNullOrEmpty(baseClassName) ? "null" : "'" + this.FirstToLower(baseClassName) + "'" #>,
+			resource: '<#= this.FirstToLower(this.Pluralize(className)) #>',
+			aliases: ['<#= className #>', '<#= this.FirstToLower(this.Pluralize(className)) #>', '<#= this.Pluralize(className) #>'],
+			fields: [<#= this.getDefaultFields(entity) #>],
+			simpleFields: [<#= this.getFieldsSimple(entity) #>],
+			refs: {
+<#+ _processRefs(entity); #>
+			}
+		}
 	
 <#+
 	}
@@ -44,7 +43,7 @@ string getDefaultFields(XElement entity) {
 		defaultList.Insert(0, "'id'");
 	}
 	
-	return string.Join(",", defaultList.ToArray());
+	return string.Join(", ", defaultList.ToArray());
 }
 
 	
@@ -55,7 +54,7 @@ string getFieldsSimple(XElement entity) {
 		list.Insert(0, "'id'");
 	}
 	
-	return string.Join(",", list.ToArray());
+	return string.Join(", ", list.ToArray());
 }
 
 List<string> getFieldsSimpleList(XElement entity) {
@@ -126,9 +125,9 @@ void _writeRef(XElement el, XElement relationNode, int length, int index) {
 		}
 		
 	}
-	#>
-		"<#= this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) #>" : { <#= isList ? "list: true," : "" #> name: "<#= this.FirstToLower(Normalize(el.Attribute("Type"))) #>", multiplicity: '<#= multiplicity #>',  relationProperty: '<#= relationProperty #>' } <#= index != length ? "," : "" #> 
-	<#+
+#>
+				"<#= this.Normalize(this.FirstToLower(el.Attribute("Name").Value)) #>": {<#= isList ? " list: true," : "" #> name: "<#= this.FirstToLower(Normalize(el.Attribute("Type"))) #>", multiplicity: '<#= multiplicity #>', relationProperty: '<#= relationProperty #>' }<#= index != length ? "," : "" #>
+<#+
 }
 
 List<XElement> GetAttributesSet(XElement entity, string name) 

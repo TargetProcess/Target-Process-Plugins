@@ -1,0 +1,1 @@
+define(["tau/ui/extensions/board.customize/ui.board.editor.customize.editor.helper.list"],function(i){var t={init:function(t){this._super(t),this.helper=i},"bus public.unit.readyForLibrary":function(i,t){this.helper.setUnits(t)},"bus configurator.ready":function(i,t){this.helper.setConfigurator(t)}};return t});

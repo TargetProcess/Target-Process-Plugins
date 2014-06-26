@@ -1,1 +1,1 @@
-define(["tp/reports/settings/time/template.time","tp/reports/settings/time/extension.time.form"],function(TimeTemplate,TimeFormExtension){return{extensions:[TimeFormExtension]}})
+define(["tp/reports/settings/time/template.time","tp/reports/settings/time/extension.time.form"],function(t,e){return{extensions:[e]}});

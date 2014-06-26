@@ -1,0 +1,8 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ProcessDTO, Tp.Integration.Messages</Type>
+  <ProcessDTO>
+    <ID xsi:nil="true" />
+    <ProcessID xsi:nil="true" />
+    <IsDefault>false</IsDefault>
+  </ProcessDTO>
+</Value>

@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"property-endDate-list",markup:['<span><span class="tau-extension-tooltip" title="Completion date: ${text}">',"${text}","</span>","</span>"].join("")};return templates.register(config)})
+define(["tau/core/templates-factory"],function(t){var e={name:"property-endDate-list",markup:['<span><span class="tau-extension-tooltip" title="Completion date: ${text}">',"${text}","</span>","</span>"].join("")};return t.register(e)});

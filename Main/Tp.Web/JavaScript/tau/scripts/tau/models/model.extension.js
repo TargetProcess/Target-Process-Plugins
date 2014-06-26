@@ -1,1 +1,1 @@
-define(["tau/core/model-base"],function(ModelBase){var ModelExtension=ModelBase.extend({onInit:function(){this.fire("registerStoreRequest"),this.fire("commitTransaction")}});return ModelExtension})
+define(["tau/core/model-base"],function(e){var t=e.extend({onInit:function(){this.fire("registerStoreRequest"),this.fire("commitTransaction")}});return t});

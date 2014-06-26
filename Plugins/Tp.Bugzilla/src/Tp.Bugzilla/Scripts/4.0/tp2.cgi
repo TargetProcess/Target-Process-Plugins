@@ -199,6 +199,10 @@ sub change_status
 	$set_all_fields{'bug_status'} = $cgi->param('status');
 	$set_all_fields{'resolution'} = $cgi->param('resolution');
 	$set_all_fields{'dup_id'} = $cgi->param('dup_id');
+	my $new_status = Bugzilla::Status->check($cgi->param('status'));
+	if($new_status->comment_required_on_change_from($bug->status)) {
+		$set_all_fields{'comment'} = {body => "Status changed from ".$bug->status->name." to ".$new_status->name." by Targetprocess Bugzilla Plugin", is_private => 0};
+	}
 
 	$bug->set_all(\%set_all_fields);
 #	$bug->set_status(scalar $cgi->param('status'),{

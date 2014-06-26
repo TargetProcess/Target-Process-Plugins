@@ -1,0 +1,33 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ProjectDTO, Tp.Integration.Messages</Type>
+  <ProjectDTO>
+    <ID xsi:nil="true" />
+    <ProjectID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>1</NumericPriority>
+    <IsActive>true</IsActive>
+    <DeleteDate xsi:nil="true" />
+    <SourceControlType>None</SourceControlType>
+    <SCStartingRevision xsi:nil="true" />
+    <IsProduct>false</IsProduct>
+    <InboundMailCreateRequests>false</InboundMailCreateRequests>
+    <InboundMailAutomaticalEmailCheckTime>0</InboundMailAutomaticalEmailCheckTime>
+    <IsInboundMailEnabled>false</IsInboundMailEnabled>
+    <InboundMailAutoCheck>false</InboundMailAutoCheck>
+    <InboundMailPort>110</InboundMailPort>
+    <InboundMailUseSSL>false</InboundMailUseSSL>
+    <LastCommentUserID xsi:nil="true" />
+    <ParentProjectID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <ProgramOfProjectID xsi:nil="true" />
+    <ProcessID>1</ProcessID>
+    <CompanyID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Project</EntityTypeName>
+    <ProcessName>All Practices</ProcessName>
+  </ProjectDTO>
+</Value>

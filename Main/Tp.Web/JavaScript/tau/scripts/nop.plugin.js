@@ -1,0 +1,1 @@
+define([],function(){return{load:function(n,e,f){f()}}});

@@ -162,7 +162,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 			get { return _removedFiles; }
 		}
 
-		public Log4NetFileRepositoryMock(ILogManager logManager):base(logManager)
+		public Log4NetFileRepositoryMock(ILogManager logManager, Locker locker):base(logManager, locker)
 		{
 			_removedFiles = new List<string>();
 			_removedFolders = new List<string>();

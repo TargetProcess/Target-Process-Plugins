@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","./editor.adapter.default"],function(e,t,a){return a.extend({adaptEditorData:function(e,t){var a=this._super(e,t);return e.hideIf&&(a.hasValue=!e.hideIf(t)),a},_initEditor:function(e,t){this._super(e,t,{savingEvent:"beforeSave",savedEvent:"afterSave",saveFailedEvent:"saveFailed",finishedEvent:"afterSave"})}})});

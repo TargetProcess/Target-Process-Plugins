@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Core</RootNamespace>
     <AssemblyName>Tp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
@@ -34,6 +34,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +69,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DelegateDecompiler">
+      <HintPath>..\..\packages\DelegateDecompiler.0.8.1.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
@@ -75,14 +80,18 @@
       <HintPath>..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Mono.Reflection">
+      <HintPath>..\..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -97,46 +106,82 @@
   <ItemGroup>
     <Compile Include="Annotations\PerformanceCriticalAttribute.cs" />
     <Compile Include="Annotations\Resharper.cs" />
+    <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Base64Converter.cs" />
     <Compile Include="ClientId.cs" />
     <Compile Include="CompositeDisposable.cs" />
+    <Compile Include="Configuration\CustomConfigurationFileReader.cs" />
+    <Compile Include="Configuration\DefaultConfiguration.cs" />
+    <Compile Include="Configuration\FallbackConfiguration.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
+    <Compile Include="Configuration\IConfigurationReader.cs" />
+    <Compile Include="CountExtensions.cs" />
     <Compile Include="Csv\CsvExtensions.cs" />
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
+    <Compile Include="Csv\CsvRenderer.cs" />
     <Compile Include="Csv\MalformedCsvException.cs" />
     <Compile Include="CurrentDate.cs" />
+    <Compile Include="DateRangeContainsResult.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Delta.cs" />
-    <Compile Include="DependentPropertyHelper.cs" />
     <Compile Include="Diagnostics\Diagnostics.cs" />
+    <Compile Include="Diagnostics\DiagnosticsRegistry.cs" />
+    <Compile Include="Diagnostics\IPerformanceCounter.cs" />
+    <Compile Include="Diagnostics\IPerformanceCounters.cs" />
+    <Compile Include="Diagnostics\IPerformanceCountersCategoryInfo.cs" />
+    <Compile Include="Diagnostics\NullSafePerformanceCounter.cs" />
+    <Compile Include="Diagnostics\PerformanceCounter.cs" />
+    <Compile Include="Diagnostics\PerformanceCountersBase.cs" />
+    <Compile Include="Diagnostics\PerformanceCounterService.cs" />
+    <Compile Include="Diagnostics\Time\ITimePoints.cs" />
+    <Compile Include="Diagnostics\Time\SingleTimePoints.cs" />
+    <Compile Include="Diagnostics\Time\Source\ITimePointsSource.cs" />
+    <Compile Include="Diagnostics\Time\Source\StartOnlyTimePointSource.cs" />
+    <Compile Include="Diagnostics\Time\Source\TimePointsSource.cs" />
+    <Compile Include="Diagnostics\Time\TimePoint.cs" />
+    <Compile Include="Diagnostics\Time\TimePoints.cs" />
+    <Compile Include="Diagnostics\Time\TimePointsBase.cs" />
+    <Compile Include="Diagnostics\Time\TpProfiler.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="DirectoryExtensions.cs" />
-    <Compile Include="Dynamics\Expando.cs" />
     <Compile Include="Either.cs" />
+    <Compile Include="Expressions\Visitors\CtorTypeChanger.cs" />
+    <Compile Include="Expressions\InlineableAttribute.cs" />
+    <Compile Include="Expressions\InlineEnvironmentAttribute.cs" />
+    <Compile Include="Expressions\Visitors\InlineVisitor.cs" />
+    <Compile Include="Expressions\Visitors\InlineApplyVisitor.cs" />
+    <Compile Include="Expressions\Visitors\ProtectFromNullReferenceVisitor.cs" />
+    <Compile Include="Expressions\Visitors\Replacer.cs" />
     <Compile Include="ExtensionsProvider.cs" />
+    <Compile Include="Features\ClientFeatureAttribute.cs" />
     <Compile Include="Func.cs" />
     <Compile Include="IDetailedException.cs" />
     <Compile Include="IExecutor.cs" />
+    <Compile Include="IInvariant.cs" />
     <Compile Include="INameValueDataProvider.cs" />
+    <Compile Include="IStatelessConverter.cs" />
+    <Compile Include="ITaskFactory.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="Linq\IMethodProvider.cs" />
-    <Compile Include="MultiDictionary.cs" />
+    <Compile Include="Locker.cs" />
+    <Compile Include="NullableExtensions.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="PropertyBag\ErasedTypedKeyStorage.cs" />
     <Compile Include="PropertyBag\IPropertyBagSetter.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="ServerErrorCode.cs" />
+    <Compile Include="ServerExceptionAttribute.cs" />
     <Compile Include="ServiceManager.cs" />
     <Compile Include="Services\EmptyService.cs" />
     <Compile Include="EqualityHelpers.cs" />
-    <Compile Include="Expressions\ExpressionVisitorEx.cs" />
     <Compile Include="Expressions\Evaluator.cs">
       <SubType>
       </SubType>
     </Compile>
     <Compile Include="EmptyObserver.cs" />
     <Compile Include="ExceptionExtensions.cs" />
-    <Compile Include="Expressions\LambdaExtensions.cs" />
     <Compile Include="Expressions\ExpressionCollection.cs" />
     <Compile Include="Expressions\ExpressionComparison.cs" />
     <Compile Include="Expressions\ExpressionEnumerable.cs" />
@@ -197,6 +242,7 @@
     <Compile Include="StringUtils.cs" />
     <Compile Include="TpLogManagerExtensions.cs" />
     <Compile Include="TpPolicy.cs" />
+    <Compile Include="Try.cs" />
     <Compile Include="TupleExtensions.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="PropertyBag\IPropertyBagGetter.cs" />
@@ -236,10 +282,18 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y /d</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

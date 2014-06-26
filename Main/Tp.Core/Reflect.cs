@@ -7,8 +7,6 @@ using System.Reflection;
 
 public partial class Reflect
 {
-	public static readonly MethodInfo SelectMethod = GetMethod(() => new[] { 1 }.Select(default(Func<int, int>))).GetGenericMethodDefinition();
-
 	public static PropertyInfo GetIndexer<T, TIndexer>()
 	{
 		return (from propertyInfo in typeof(T).GetProperties()

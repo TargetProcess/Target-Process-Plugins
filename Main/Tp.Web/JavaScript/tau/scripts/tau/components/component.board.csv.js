@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/extensions/board.csv/ui.extension.board.csv","tau/ui/templates/board.csv/ui.template.board.csv","tau/ui/extensions/application.generic/ui.extension.application.generic.boardSpecific","tau/core/extension.configurator"],function(e,t,n,i,o){return{create:function(a){var c={extensions:[t,i,o],template:n};return e.create(c,a)}}});

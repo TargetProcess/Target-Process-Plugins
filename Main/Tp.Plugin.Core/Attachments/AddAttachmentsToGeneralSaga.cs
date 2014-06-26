@@ -18,9 +18,9 @@ using Tp.Integration.Plugin.Common;
 namespace Tp.Plugin.Core.Attachments
 {
 	public class AddAttachmentsToGeneralSaga : TpSaga<AddAttachmentToGeneralSagaData>,
-	                                           IAmStartedByMessages<AddAttachmentsToGeneralCommandInternal>,
-	                                           IHandleMessages<AttachmentCreatedMessage>,
-	                                           IHandleMessages<TargetProcessExceptionThrownMessage>
+																						 IAmStartedByMessages<AddAttachmentsToGeneralCommandInternal>,
+																						 IHandleMessages<AttachmentCreatedMessage>,
+																						 IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
 		public override void ConfigureHowToFindSaga()
 		{
@@ -39,47 +39,50 @@ namespace Tp.Plugin.Core.Attachments
 			Data.Attachments = message.Attachments;
 			Data.GeneralId = message.GeneralId;
 			Data.OuterSagaId = message.OuterSagaId;
+			Data.CreatedAttachments = new AttachmentDTO[] { };
 			foreach (var attachmentDto in message.Attachments)
 			{
 				var clonedAttachment = Clone(attachmentDto);
 				clonedAttachment.GeneralID = message.GeneralId;
-				Send(new CreateAttachmentCommand(clonedAttachment));
+				Send(new CloneAttachmentCommand { Dto = clonedAttachment });
 			}
 
-			if (message.Attachments.Count() == 0)
+			if (!message.Attachments.Any())
 			{
-				SendAttachmentsAddedMessage();
+				SendAttachmentsAddedMessage(new AttachmentDTO[] { });
 			}
 		}
 
 		private static AttachmentDTO Clone(AttachmentDTO attachmentDto)
 		{
 			return new AttachmentDTO
-			       	{
-			       		OriginalFileName = attachmentDto.OriginalFileName,
-			       		UniqueFileName = attachmentDto.UniqueFileName,
-			       		CreateDate = attachmentDto.CreateDate,
-			       		Description = attachmentDto.Description,
-			       		OwnerID = attachmentDto.OwnerID,
-						AttachmentFileID = attachmentDto.AttachmentFileID,
-			       	};
+			{
+				OriginalFileName = attachmentDto.OriginalFileName,
+				UniqueFileName = attachmentDto.UniqueFileName,
+				CreateDate = attachmentDto.CreateDate,
+				Description = attachmentDto.Description,
+				OwnerID = attachmentDto.OwnerID,
+				AttachmentFileID = attachmentDto.AttachmentFileID,
+				MessageID = attachmentDto.MessageID
+			};
 		}
 
 		public void Handle(AttachmentCreatedMessage message)
 		{
 			Log().InfoFormat("Attachment {0} was added to general with id {1}",
-			                 message.Dto.OriginalFileName, message.Dto.GeneralID);
+											 message.Dto.OriginalFileName, message.Dto.GeneralID);
 			Data.ProcessedAttachmentsCount++;
+			Data.CreatedAttachments = Data.CreatedAttachments.Concat(new[] { message.Dto }).ToArray();
 
 			if (Data.Attachments.Count() == Data.ProcessedAttachmentsCount)
 			{
-				SendAttachmentsAddedMessage();
+				SendAttachmentsAddedMessage(Data.CreatedAttachments);
 			}
 		}
 
-		private void SendAttachmentsAddedMessage()
+		private void SendAttachmentsAddedMessage(AttachmentDTO[] attachments)
 		{
-			SendLocal(new AttachmentsAddedToGeneralMessage {SagaId = Data.OuterSagaId});
+			SendLocal(new AttachmentsAddedToGeneralMessage { SagaId = Data.OuterSagaId, Attachments = attachments });
 			MarkAsComplete();
 		}
 
@@ -101,6 +104,7 @@ namespace Tp.Plugin.Core.Attachments
 	[Serializable]
 	public class AttachmentsAddedToGeneralMessage : SagaMessage, IPluginLocalMessage
 	{
+		public AttachmentDTO[] Attachments { get; set; }
 	}
 
 	public class AddAttachmentToGeneralSagaData : ISagaEntity
@@ -111,6 +115,7 @@ namespace Tp.Plugin.Core.Attachments
 		public Guid OuterSagaId { get; set; }
 		public int ProcessedAttachmentsCount { get; set; }
 		public AttachmentDTO[] Attachments { get; set; }
+		public AttachmentDTO[] CreatedAttachments { get; set; }
 		public int? GeneralId { get; set; }
 	}
 }

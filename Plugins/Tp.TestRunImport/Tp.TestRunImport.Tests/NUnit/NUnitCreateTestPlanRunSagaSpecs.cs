@@ -10,6 +10,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.TestRunImport.Tests.NUnit
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class NUnitCreateTestPlanRunSagaSpecs : CreateTestPlanRunSagaSpecsBase
 	{
 		[Test]

@@ -1,0 +1,9 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.TpEventDTO, Tp.Integration.Messages</Type>
+  <TpEventDTO>
+    <ID xsi:nil="true" />
+    <TpEventID xsi:nil="true" />
+    <ActionType xsi:nil="true" />
+    <EntityStateID xsi:nil="true" />
+  </TpEventDTO>
+</Value>

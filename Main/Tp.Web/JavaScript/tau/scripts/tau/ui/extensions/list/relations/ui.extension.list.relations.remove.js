@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(e){return e.extend({"bus afterRender":function(e){var n=e.data.element,t=this.config.store;n.on("click",".i-role-remove",function(e){var n=$(e.target).data("relationId");t.remove("relation",{id:n}).done()})}})});

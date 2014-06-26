@@ -23,6 +23,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.TestRunImport.Tests.Commands
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class ValidateProfileForMappingSpecs
 	{
 		private TestRunImportPluginProfile _settings;

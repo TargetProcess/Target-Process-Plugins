@@ -157,7 +157,8 @@ tau.mashups
 	        _onCheckConnection: function (e) {
 	            e.preventDefault();
 
-	            this.checkConnectionBtn.success('clear');
+	            var btn = this.checkConnectionBtn;
+	            btn.data('ui-success') && btn.success('clear');
 	            Bus.publish("CheckConnectionCommand", [this._getProfileFromEditor()]);
 	        },
 

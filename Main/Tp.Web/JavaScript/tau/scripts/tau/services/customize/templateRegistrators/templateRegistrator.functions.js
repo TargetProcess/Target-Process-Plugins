@@ -1,0 +1,1 @@
+define(["Underscore"],function(n){return{getDataAttributes:function(t){var r="";return t&&(r=n.map(t,function(n,r){return"data-"+r+'="'+t[r]+'"'}).join(" ")),r}}});

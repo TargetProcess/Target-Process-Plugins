@@ -73,4 +73,16 @@ public static partial class GetCustomAttributeExtension
 			.GetCustomAttributes(typeof(TAttribute), inherit)
 			.Cast<TAttribute>();
 	}
+
+
+	public static Maybe<TAttribute> GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute
+	{
+		var type = value.GetType();
+		var name = Enum.GetName(type, value);
+		return type.GetField(name) // I prefer to get attributes this way
+			.GetCustomAttributes(true)
+			.OfType<TAttribute>()
+			.FirstOrNothing();
+	}
+
 }

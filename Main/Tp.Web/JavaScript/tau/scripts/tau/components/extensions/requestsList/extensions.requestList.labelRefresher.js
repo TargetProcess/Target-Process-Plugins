@@ -1,1 +1,1 @@
-define(["tau/components/extensions/extension.labelRefresher.base"],function(ExtensionBase){return ExtensionBase.extend({eventName:["requestWasAttachedToEntity","requestIsDetachedFromEntity"],propertyListForEvict:["requests-count"]})})
+define(["tau/components/extensions/extension.labelRefresher.base"],function(e){return e.extend({eventName:["requestWasAttachedToEntity","requestIsDetachedFromEntity"],propertyListForEvict:["requests-count"]})});

@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/dataProviders/model.provider.items.bugs"],function(t,e){return e.extend({_convertData:function(t){return t=this._super(t),t=this._calculateEffortToMaximum(t),this._sortByPriority(t)},_convertItem:function(t){var e=this._super(t);return e.visibleEntityState=e.entityState,e}})});

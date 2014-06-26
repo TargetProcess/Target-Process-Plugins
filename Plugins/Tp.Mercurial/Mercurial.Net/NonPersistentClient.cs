@@ -101,11 +101,11 @@ namespace Mercurial
             ClientExecutable.LazyInitialize();
             var specialArguments = (IEnumerable<string>)new[]
             {
-                "--noninteractive", "--encoding", "cp1252",
+                "--noninteractive", "--encoding", "utf-8",
             };
             var environmentVariables = new[]
             {
-                new KeyValuePair<string, string>("LANGUAGE", "EN"), new KeyValuePair<string, string>("HGENCODING", "cp1252"),
+                new KeyValuePair<string, string>("LANGUAGE", "EN"), new KeyValuePair<string, string>("HGENCODING", "utf-8"),
             };
 
             try

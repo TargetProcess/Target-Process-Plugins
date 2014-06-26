@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/board.core/models/model.board.plus"],function(e,i){return i.extend({init:function(){this._super()},onGetSliceInfo:function(e){var i=e.config.definition,o=this.getEmptyModelInfoArgs(i);o.viewMode="list",o.cardSize=this._zoomToSize(o),this.onSliceInfoRetrieved.fire(o),this.onBoardPagingSettingsRetrieved.fire(o)}})});

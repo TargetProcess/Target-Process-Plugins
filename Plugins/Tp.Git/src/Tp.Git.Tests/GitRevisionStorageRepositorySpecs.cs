@@ -6,7 +6,8 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Git.Tests
 {
-	[TestFixture]
+    [TestFixture]
+    [Category("PartPlugins1")]
 	public class GitRevisionStorageRepositorySpecs
 	{
 		[Bug(54401)]

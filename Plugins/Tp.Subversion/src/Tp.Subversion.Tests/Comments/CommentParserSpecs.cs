@@ -19,6 +19,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Subversion.Comments
 {
 	[TestFixture, Ignore]
+    [Category("PartPlugins1")]
 	public class CommentParserSpecs
 	{
 		[Test]

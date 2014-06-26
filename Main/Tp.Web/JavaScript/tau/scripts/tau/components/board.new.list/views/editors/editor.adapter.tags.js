@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","./editor.adapter.default"],function(n,e,i){return i.extend({_initEditor:function(n,e){this._super(n,e,{savingEvent:"tags.inline.changing",savedEvent:"tags.inline.changed",finishedEvent:"tags.inline.edit.finished"}),this._focusOnText(n)}})});

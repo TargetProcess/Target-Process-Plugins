@@ -11,6 +11,7 @@ using Tp.Integration.Testing.Common;
 namespace Tp.Integration.Plugin.Common.Tests
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class StructureMapRegistryTests
 	{
 		[SetUp]

@@ -1,0 +1,34 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.FeatureDTO, Tp.Integration.Messages</Type>
+  <FeatureDTO>
+    <ID xsi:nil="true" />
+    <FeatureID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <Effort>0.0</Effort>
+    <EffortCompleted>0.0</EffortCompleted>
+    <EffortToDo>0.0</EffortToDo>
+    <TimeSpent xsi:nil="true" />
+    <TimeRemain xsi:nil="true" />
+    <InitialEstimate>0.0</InitialEstimate>
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <EntityStateID>20</EntityStateID>
+    <PriorityID>10</PriorityID>
+    <ProjectID xsi:nil="true" />
+    <IterationID xsi:nil="true" />
+    <ParentID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Feature</EntityTypeName>
+    <EntityStateName>New</EntityStateName>
+    <PriorityName>Nice To Have</PriorityName>
+    <ReleaseName>Backlog</ReleaseName>
+    <EntityTypeID>9</EntityTypeID>
+    <SquadID xsi:nil="true" />
+  </FeatureDTO>
+</Value>

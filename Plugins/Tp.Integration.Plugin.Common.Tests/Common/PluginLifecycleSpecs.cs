@@ -7,6 +7,8 @@ using System.IO;
 using NServiceBus;
 using NUnit.Framework;
 using StructureMap;
+using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.PluginLifecycle;
 using Tp.Testing.Common.NBehave;
@@ -14,12 +16,19 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class PluginLifecycleSpecs
 	{
 		[SetUp]
 		public void Init()
 		{
-			ObjectFactory.Initialize(x => x.AddRegistry<PluginStorageWithInMemoryPersisterMockRegistry>());
+			ObjectFactory.Initialize(x =>
+				{
+					x.AddRegistry<PluginStorageWithInMemoryPersisterMockRegistry>();
+					x.For<ILogManager>().HybridHttpOrThreadLocalScoped().Use<TpLogManager>();
+					x.Forward<ILogManager, ILogProvider>();
+				});
+			
 			if (Directory.Exists(DefaultPluginMashupRepository.PluginMashupDefaultPath))
 			{
 				Directory.Delete(DefaultPluginMashupRepository.PluginMashupDefaultPath, true);

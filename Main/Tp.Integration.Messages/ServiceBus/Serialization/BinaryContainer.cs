@@ -13,7 +13,7 @@ using System.Runtime.Serialization;
 namespace Tp.Integration.Messages.ServiceBus.Serialization
 {
   /// <summary>
-  /// Container for binary data.<p>
+  /// Container for binary data.
   /// This class can be used to encapsulate binary data for serialization or transportation purposes.
   /// </summary>
   [Serializable]
@@ -94,13 +94,13 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
   }
 
   /// <summary>
-  /// XmlBinaryContainer TypeConverter.<p>
+  /// XmlBinaryContainer TypeConverter.
   /// Converts the <code>XmlBinaryContainer</code> to or from <code>byte[]</code> and <code>Stream</code>s.
   /// </summary>
   public class BinaryContainerTypeConverter : TypeConverter
   {
     /// <summary>
-    /// <see cref="System.ComponentModel.TypeConverter.CanConvertFrom"/>
+    /// <see cref="CanConvertFrom"/>
     /// </summary>
     /// <param name="context"></param>
     /// <param name="sourceType"></param>
@@ -115,7 +115,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
     }
 
     /// <summary>
-    /// <see cref="System.ComponentModel.TypeConverter.ConvertFrom"/>
+    /// <see cref="ConvertFrom"/>
     /// </summary>
     /// <param name="context"></param>
     /// <param name="culture"></param>
@@ -164,7 +164,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
     }
 
     /// <summary>
-    /// <see cref="System.ComponentModel.TypeConverter.CanConvertTo"/>
+    /// <see cref="CanConvertTo"/>
     /// </summary>
     /// <param name="context"></param>
     /// <param name="destinationType"></param>
@@ -184,7 +184,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
     }
 
     /// <summary>
-    /// <see cref="System.ComponentModel.TypeConverter.ConvertTo"/>
+    /// <see cref="ConvertTo"/>
     /// </summary>
     /// <param name="context"></param>
     /// <param name="culture"></param>

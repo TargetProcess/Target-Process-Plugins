@@ -1,1 +1,1 @@
-define(["tau/store/typesClass"],function(TypesClass){return new TypesClass})
+define(["tau/store/typesClass"],function(e){return new e});

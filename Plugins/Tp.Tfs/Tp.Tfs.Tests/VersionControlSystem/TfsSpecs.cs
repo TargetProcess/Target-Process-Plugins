@@ -35,6 +35,8 @@ using Tp.SourceControl.Testing.Repository.Tfs;
 namespace Tp.Tfs.Tests.VersionControlSystem
 {
 	[TestFixture]
+    [Ignore]
+	[Category("PartPlugins1")]
 	public class TfsSpecs : ISourceControlConnectionSettingsSource
 	{
 		private TfsTestRepository _testRepository;
@@ -208,7 +210,6 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				TfsRevisionId fromExpected = CreateTfsRevisionId("12");
 				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value));
 
-
 				TfsRevisionId toExpected = CreateTfsRevisionId("18");
 				TfsRevisionId toChangeSet = revisionRange.ToChangeset;
 				toChangeSet.Value.Should(Be.EqualTo(toExpected.Value));
@@ -255,7 +256,6 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			}
 		}
 
-
 		[Test]
 		public void ShouldRetrieveRevisionsWithAddedFiles()
 		{
@@ -299,7 +299,6 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			}
 		}
 
-
 		private static void AssertEqual(IList<RevisionEntryInfo> actual, IList<RevisionEntryInfo> expected)
 		{
 			actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()));
@@ -311,7 +310,6 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				actual[i].Path.Should(Be.EqualTo(expected[i].Path));
 			}
 		}
-
 
 		private void AssertCommits(string[] commits, string startRevision = "1", string endRevision = "19")
 		{
@@ -363,8 +361,7 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			var testRepo = new TfsTestRepositoryWithMergeCommit();
 			_tfsRepoUri = testRepo.Uri.ToString();
 
-			AssertCommits(
-					new string[] { "first commit", "second commit", "third commit" }, "5", "7");
+			AssertCommits(new[] { "first commit", "second commit", "third commit" }, "5", "7");
 		}
 
 		[Test]

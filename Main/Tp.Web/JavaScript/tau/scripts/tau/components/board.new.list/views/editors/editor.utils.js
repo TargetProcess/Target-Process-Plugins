@@ -1,0 +1,1 @@
+define([],function(){return{toggleElementBusyIndicator:function(e,n){return e.toggleClass("tau-elems-cell_unit-busy",n)}}});

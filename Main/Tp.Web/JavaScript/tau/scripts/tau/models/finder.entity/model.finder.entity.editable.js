@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(t,e){return e.extend({"bus result.ready":function(t,e){this.totalResult=(this.totalResult||[]).concat(e.items)},"bus item.selected":function(e,n){var i=t.find(this.totalResult,function(t){return t.id==n});this.fire("entitySelected",{entity:i})}})});

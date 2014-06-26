@@ -57,4 +57,10 @@ namespace Tp.Integration.Messages.EntityLifecycle.Commands
 		public string FileName { get; set; }
 		public string TPStorageFileName { get; set; }
 	}
+
+	[Serializable]
+	public class CloneAttachmentCommand : SagaMessage, ITargetProcessCommand
+	{
+		public AttachmentDTO Dto { get; set; }
+	}
 }

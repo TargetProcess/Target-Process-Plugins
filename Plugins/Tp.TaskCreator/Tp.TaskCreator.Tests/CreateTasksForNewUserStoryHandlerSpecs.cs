@@ -15,6 +15,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.TaskCreator.Tests
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class CreateTasksForNewUserStoryHandlerSpecs
 	{
 		private IProfileReadonly _profileInstance;

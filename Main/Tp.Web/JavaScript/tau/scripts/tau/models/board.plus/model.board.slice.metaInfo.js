@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/event.emitter"],function(_,Model){return Model.extend({"bus model.cells.content.loaded":function(evt){var metaInfo=evt.data.data.metaInfo||{},self=this;self.fire("model.cells.metaInfo.ready",metaInfo)}})})
+define(["Underscore","tau/core/extension.base"],function(e,n){return n.extend({"bus model.cells.content.loaded":function(e){var n=e.data.metaInfo||e.data.data.metaInfo||{};this.fire("model.cells.metaInfo.ready",n)}})});

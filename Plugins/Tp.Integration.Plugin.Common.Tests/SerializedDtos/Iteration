@@ -1,0 +1,23 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.IterationDTO, Tp.Integration.Messages</Type>
+  <IterationDTO>
+    <ID xsi:nil="true" />
+    <IterationID xsi:nil="true" />
+    <Name>Iteration #x.x</Name>
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <Velocity>0.0</Velocity>
+    <Duration>14</Duration>
+    <LastCommentUserID xsi:nil="true" />
+    <ParentProjectID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Iteration</EntityTypeName>
+    <EntityTypeID>3</EntityTypeID>
+  </IterationDTO>
+</Value>

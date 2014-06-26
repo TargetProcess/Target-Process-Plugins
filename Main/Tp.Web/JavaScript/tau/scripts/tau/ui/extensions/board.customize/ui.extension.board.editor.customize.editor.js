@@ -1,0 +1,1 @@
+define(["jQuery","tau/components/extensions/component.extension.base","tau/ui/extensions/board.customize/ui.board.editor.customize.editor.helper"],function(e,t,n){return t.extend({"bus elementRefreshedWithData":function(e,t){this.fire("parent.ready",t)},"bus elementRefreshedWithData:last + public.searchText.changed":function(e,t,i){n.highlightUnitsOnCard(t.element,i)}})});

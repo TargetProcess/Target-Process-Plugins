@@ -1,0 +1,24 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ImpedimentDTO, Tp.Integration.Messages</Type>
+  <ImpedimentDTO>
+    <ID xsi:nil="true" />
+    <ImpedimentID xsi:nil="true" />
+    <StartDate>2013-08-16T20:20:01.558118+03:00</StartDate>
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <IsPrivate>false</IsPrivate>
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <AssignableID xsi:nil="true" />
+    <EntityStateID xsi:nil="true" />
+    <PriorityID>20</PriorityID>
+    <ProjectID xsi:nil="true" />
+    <ResponsibleID>1</ResponsibleID>
+    <EntityTypeName>Tp.BusinessObjects.Impediment</EntityTypeName>
+    <PriorityName>Small</PriorityName>
+  </ImpedimentDTO>
+</Value>

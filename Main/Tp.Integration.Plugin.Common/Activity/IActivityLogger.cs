@@ -13,6 +13,8 @@ namespace Tp.Integration.Plugin.Common.Activity
 	/// </summary>
 	public interface IActivityLogger
 	{
+		bool IsDebugEnabled { get; }
+
 		void Debug(string message);
 
 		void DebugFormat(string format, params object[] args);

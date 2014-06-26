@@ -21,6 +21,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 {
 	[TestFixture]
 	[ActionSteps]
+    [Category("PartPlugins0")]
 	public class BugSyncSpecs : BugzillaTestBase
 	{
 		[Test]

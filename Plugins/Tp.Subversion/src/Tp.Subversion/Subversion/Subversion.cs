@@ -235,7 +235,7 @@ namespace Tp.Subversion.Subversion
 			var arg = new SvnLogArgs(CreateSvnRevisionRangeBy(new RevisionRange(revisionId, revisionId)))
 			{BaseUri = new Uri(_root), ThrowOnError = true};
 
-			var revisions = GetSvnRevisions(arg, String.Empty);
+			var revisions = GetSvnRevisions(arg);
 
 			var item = revisions[0].ChangedPaths.FirstOrDefault(itemCollection => itemCollection.Path == path);
 

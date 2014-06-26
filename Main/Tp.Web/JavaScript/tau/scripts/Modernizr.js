@@ -1,1 +1,1 @@
-define(["libs/modernizr/modernizr","libs/modernizr/modernizr.hidpr"],function(Modernizr){return Modernizr})
+define(["libs/modernizr/modernizr","libs/modernizr/modernizr.hidpr"],function(r){return r});

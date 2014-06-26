@@ -9,14 +9,14 @@ namespace Tp.Core
 {
 	public static class PatternMatching
 	{
-		public static Case<T, object> Match<T>(this T o)
+		public static CaseClause<T, object> Match<T>(this T o)
 		{
-			return new Case<T, object>(o);
+			return new CaseClause<T, object>(o);
 		}
 
-		public static Case<T, TU> Match<T, TU>(this T o, TU typeMarker)
+		public static CaseClause<T, TU> Match<T, TU>(this T o, TU typeMarker)
 		{
-			return new Case<T, TU>(o);
+			return new CaseClause<T, TU>(o);
 		}
 
 		public static T InlineMatch<T>(this T e) where T : Expression
@@ -32,34 +32,34 @@ namespace Tp.Core
 		}
 
 
-		public class Case<T, TResult>
+		public class CaseClause<T, TResult>
 		{
 			private Maybe<TResult> _result;
 			private readonly T _root;
 
-			internal Case(T root)
+			internal CaseClause(T root)
 			{
 				_root = root;
 				_result = Maybe.Nothing;
 			}
 
-			public Case<T, TResult> For(Func<T, bool> @case, TResult result)
+			public CaseClause<T, TResult> Case(Func<T, bool> @case, TResult result)
 			{
 				if (!_result.HasValue && @case(_root))
 					_result = Maybe.Just(result);
 				return this;
 			}
 
-			public Case<T, TResult> For(Func<T, bool> @case, Func<T, TResult> func)
+			public CaseClause<T, TResult> Case(Func<T, bool> @case, Func<T, TResult> func)
 			{
 				if (!_result.HasValue && @case(_root))
 					_result = Maybe.Just(func(_root));
 				return this;
 			}
 
-			public Case<T, TResult> For<T1>(Func<T1, TResult> func)
+			public CaseClause<T, TResult> Case<T1>(Func<T1, TResult> func)
 			{
-				return For(x => x is T1, x => func((T1)(object) x));
+				return Case(x => x is T1, x => func((T1)(object)x));
 			}
 
 			public TResult End(Func<T, TResult> @default)
@@ -86,15 +86,15 @@ namespace Tp.Core
 			{
 				return node.Method
 					.Match(default(Expression))
-					.For(IsEndMethod, _ => VisitEndMethod(node))
-					.For(IsForWithTypeMethod, _ => VisitForWithType(node))
-					.For(IsForMethod, _ => VisitForWithCondition(node))
+					.Case(IsEndMethod, _ => VisitEndMethod(node))
+					.Case(IsCaseWithTypeMethod, _ => VisitForWithType(node))
+					.Case(IsCaseMethod, _ => VisitForWithCondition(node))
 					.End(_ => base.VisitMethodCall(node));
 			}
 
-			private bool IsForWithTypeMethod(MethodInfo method)
+			private bool IsCaseWithTypeMethod(MethodInfo method)
 			{
-				return IsForMethod(method) && method.IsGenericMethod;
+				return IsCaseMethod(method) && method.IsGenericMethod;
 			}
 
 			private Expression VisitEndMethod(MethodCallExpression node)
@@ -156,9 +156,9 @@ namespace Tp.Core
 				return base.VisitMethodCall(node);
 			}
 
-			private bool IsForMethod(MethodInfo method)
+			private bool IsCaseMethod(MethodInfo method)
 			{
-				return IsMethodFromCase(method) && method.Name == "For";
+				return IsMethodFromCase(method) && method.Name == "Case";
 			}
 
 			private bool IsMatchMethod(MethodInfo method)
@@ -177,19 +177,19 @@ namespace Tp.Core
 
 			private static bool IsMethodFromCase(MethodInfo method)
 			{
-				return method.DeclaringType.IsGenericType && method.DeclaringType.GetGenericTypeDefinition() == typeof(Case<object, object>).GetGenericTypeDefinition();
+				return method.DeclaringType.IsGenericType && method.DeclaringType.GetGenericTypeDefinition() == typeof(CaseClause<object, object>).GetGenericTypeDefinition();
 			}
 		}
 
-		public static CaseE<T,T1> MatchE<T, T1>()
+		public static CaseE<TSource,TResult> MatchE<TSource, TResult>()
 		{
-			return new CaseE<T, T1>();
+			return new CaseE<TSource, TResult>();
 		}
 
 		public class CaseE<T, TResult>
 		{
-			static readonly MethodInfo ForMethodInfo = Reflect.GetMethod<Case<T, TResult>, Case<T, TResult>>(x => x.For(y => true, y => default(TResult)));
-			static readonly MethodInfo EndMethodInfo = Reflect.GetMethod<Case<T, TResult>, TResult>(x => x.End(y => default(TResult)));
+			internal static readonly MethodInfo ForMethodInfo = Reflect.GetMethod<CaseClause<T, TResult>, CaseClause<T, TResult>>(x => x.Case(y => true, y => default(TResult)));
+			static readonly MethodInfo EndMethodInfo = Reflect.GetMethod<CaseClause<T, TResult>, TResult>(x => x.End(y => default(TResult)));
 
 
 			private readonly CaseE<T, TResult> _previousCase;
@@ -208,19 +208,19 @@ namespace Tp.Core
 			{
 			}
 
-			public CaseE<T, TResult> For(Expression<Func<T, bool>> @case, Expression<Func<T, TResult>> then)
+			public CaseE<T, TResult> Case(Expression<Func<T, bool>> @case, Expression<Func<T, TResult>> then)
 			{
 				return new CaseE<T, TResult>(this, @case, then);
 			}
 
 
-			public CaseE<T, TResult> For<T1>(Expression<Func<T1, TResult>> func1)
+			public CaseE<T, TResult> Case<T1>(Expression<Func<T1, TResult>> func1)
 			{
 				Expression<Func<T, TResult>> expression = x => func1.Apply((T1)(object)x);
 				return new CaseE<T, TResult>(this, x => x is T1, expression.InlineApply());
 			}
 
-			public CaseE<T, TResult> For(Type t1, LambdaExpression expression)
+			public CaseE<T, TResult> Case(Type t1, LambdaExpression expression)
 			{
 				ParameterExpression p = Expression.Parameter(typeof (T));
 				Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(Expression.TypeIs(p, t1), p);
@@ -240,7 +240,7 @@ namespace Tp.Core
 			{
 				var cases = AllCases().Reverse();
 
-				Expression<Func<T, Case<T,TResult>>> start = x => x.Match(default(TResult));
+				Expression<Func<T, CaseClause<T,TResult>>> start = x => x.Match(default(TResult));
 
 				Expression e = Expression.Call(
 					cases.Aggregate(start.Body, (current, @case) => Expression.Call(current, ForMethodInfo, @case._func, @case._func1)),

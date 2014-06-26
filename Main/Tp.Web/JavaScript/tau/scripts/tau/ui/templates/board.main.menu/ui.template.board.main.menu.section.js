@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var n={name:"board.main.menu.section",engine:"jqote2",markup:['<div class="tau-menu-section">',"</div>"].join(""),dependencies:[]};return e.register(n)});

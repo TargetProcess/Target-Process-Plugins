@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace System
 {
@@ -30,5 +31,10 @@ namespace System
 
 		}
 
+
+		public static bool IsExtensionMethod(this MethodInfo methodInfo)
+		{
+			return methodInfo.GetCustomAttribute<ExtensionAttribute>().HasValue;
+		}
 	}
 }

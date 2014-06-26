@@ -1,0 +1,10 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RuleDTO, Tp.Integration.Messages</Type>
+  <RuleDTO>
+    <ID xsi:nil="true" />
+    <RuleID xsi:nil="true" />
+    <RoleExtension xsi:nil="true" />
+    <RoleID xsi:nil="true" />
+    <TpEventID xsi:nil="true" />
+  </RuleDTO>
+</Value>

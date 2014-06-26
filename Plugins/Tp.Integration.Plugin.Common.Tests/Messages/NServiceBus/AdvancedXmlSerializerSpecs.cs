@@ -4,15 +4,19 @@
 // 
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Xml;
 using NBehave.Narrator.Framework;
 using NServiceBus;
 using NUnit.Framework;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Entities;
 using Tp.Integration.Messages.EntityLifecycle;
+using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.ServiceBus.Serialization;
 using Tp.Integration.Plugin.Common.Tests.Common;
 using Tp.Testing.Common.NBehave;
@@ -21,6 +25,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class AdvancedXmlSerializerSpecs
 	{
 		private SampleMessage _message;
@@ -147,6 +152,29 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			memoryStrem.Seek(0, SeekOrigin.Begin);
 			var res = new AdvancedXmlSerializer().Deserialize(memoryStrem)[0] as SampleMessage;
 			res.Name.Should(Be.Not.Empty);
+		}
+
+		[Test]
+		public void ShouldDeserializeAfterAddingNewProperties()
+		{
+			const string oldSerializedMessage = @"<?xml version=""1.0"" encoding=""utf-8""?><object name="""" type=""TK0"" assembly=""""><!-- Data section : Don't edit any attributes ! --><items><item name=""0"" type=""TK1"" assembly=""""><properties><property name=""Dto"" type=""TK2"" assembly=""""><properties><property name=""Name"" type=""TK3"" assembly="""">US Name</property></properties></property><property name=""SagaId"" type=""TK4"" assembly="""">00000000-0000-0000-0000-000000000000</property></properties></item></items><!-- TypeDictionary : Don't edit anything in this section at all ! --><typedictionary name="""" type=""System.Collections.Hashtable"" assembly=""mscorlib""><items><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK0</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages.EntityLifecycle.Messages.UserStoryCreatedMessage[]</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK3</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.String</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK1</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages.EntityLifecycle.Messages.UserStoryCreatedMessage</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK2</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Common.UserStoryDTO</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK4</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.Guid</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item></items></typedictionary></object>";
+			var deserialized = _deserializer.Deserialize(new XmlDocument {InnerXml = oldSerializedMessage});
+			((UserStoryCreatedMessage[])deserialized).Single().Dto.CustomFieldsMetaInfo.Should(Be.Null);
+		}
+
+		[Test]
+		public void SerializeCustomFieldsMetaCorrectly()
+		{
+			var dto = new UserStoryDTO
+				{
+					CustomFieldsMetaInfo = new[] {new Field {FieldType = FieldTypeEnum.Text, Value = "Value"}}
+				};
+
+			var message = new UserStoryCreatedMessage {Dto = dto};
+			var serialized = _serializer.Serialize(message);
+			var deserialized = _deserializer.Deserialize(serialized);
+			var meta = ((UserStoryCreatedMessage) deserialized).Dto.CustomFieldsMetaInfo;
+			meta.Single().FieldType.Should(Be.EqualTo(FieldTypeEnum.Text));
 		}
 
 		[Given("sample message with name '$sampleMessageName'")]

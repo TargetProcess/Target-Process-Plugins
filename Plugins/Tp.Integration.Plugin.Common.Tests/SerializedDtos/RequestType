@@ -1,0 +1,7 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RequestTypeDTO, Tp.Integration.Messages</Type>
+  <RequestTypeDTO>
+    <ID xsi:nil="true" />
+    <RequestTypeID xsi:nil="true" />
+  </RequestTypeDTO>
+</Value>

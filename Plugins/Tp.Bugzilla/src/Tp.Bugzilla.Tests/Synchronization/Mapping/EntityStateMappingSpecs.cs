@@ -18,6 +18,7 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 {
 	[ActionSteps]
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class EntityStateMappingSpecs : MappingTestBase<EntityStateDTO>
 	{
 		[Test]

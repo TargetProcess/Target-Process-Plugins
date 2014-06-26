@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 using System;
 using System.Xml.Serialization;using System.Runtime.Serialization;
-using Tp.Integration.Common;
+using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {
@@ -443,6 +443,140 @@ namespace Tp.Integration.Common
         /// <value>The Entity Type ID.</value>
 		[ForeignKey]
 		[DataMember][XmlElement(Order = 79)]public Int32? EntityTypeID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 80)]
+		public Field[] CustomFieldsMetaInfo { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Effort. Total effort of assignable. Can be set if only one ActorEffort for assignable exists
+		/// </summary>
+		/// <value>The Effort.</value>
+		[DataMember]
+		[XmlElement(Order = 81)]
+		public Decimal? Effort { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Effort Completed. Effort spent on assignment. Read-only calculated field
+		/// </summary>
+		/// <value>The Effort Completed.</value>
+		[DataMember]
+		[XmlElement(Order = 82)]
+		public Decimal? EffortCompleted { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Effort To Do. Effort required to complete assignment. Read-only calculated field
+		/// </summary>
+		/// <value>The Effort To Do.</value>
+		[DataMember]
+		[XmlElement(Order = 83)]
+		public Decimal? EffortToDo { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Time Spent. Total time spent on assignment. Read-only calculated field
+		/// </summary>
+		/// <value>The Time Spent.</value>
+		[DataMember]
+		[XmlElement(Order = 84)]
+		public Decimal? TimeSpent { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Time Remain. Total time remaining to complete assignment for Role. Read-only calculated field
+		/// </summary>
+		/// <value>The Time Remain.</value>
+		[DataMember]
+		[XmlElement(Order = 85)]
+		public Decimal? TimeRemain { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Entity State ID. State of assignable. For example, User Story may be in Open or Done state
+		/// </summary>
+		/// <value>The Entity State ID.</value>
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 86)]
+		public Int32? EntityStateID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Entity State Name. State of assignable. For example, User Story may be in Open or Done state
+		/// </summary>
+		/// <value>The Entity State Name.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 87)]
+		public virtual string EntityStateName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Iteration ID. Assignable may be assigned to Iteration or may be in Backlog (Iteration is not defined in this case)
+		/// </summary>
+		/// <value>The Iteration ID.</value>
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 88)]
+		public Int32? IterationID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Iteration Name. Assignable may be assigned to Iteration or may be in Backlog (Iteration is not defined in this case)
+		/// </summary>
+		/// <value>The Iteration Name.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 89)]
+		public virtual string IterationName { get; set; }
+
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 90)]
+		public Int32? SquadID { get; set; }
+
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 91)]
+		public string SquadName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Parent ID. Used for Task only (Task parent is a User Story)
+		/// </summary>
+		/// <value>The Parent ID.</value>
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 92)]
+		public Int32? ParentID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Parent Name. Used for Task only (Task parent is a User Story)
+		/// </summary>
+		/// <value>The Parent Name.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 93)]
+		public virtual string ParentName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Release ID. Assignable may be assigned to Release or may be in project Backlog (Release is not defined in this case)
+		/// </summary>
+		/// <value>The Release ID.</value>
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 94)]
+		public Int32? ReleaseID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Release Name. Assignable may be assigned to Release or may be in project Backlog (Release is not defined in this case)
+		/// </summary>
+		/// <value>The Release Name.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 95)]
+		public virtual string ReleaseName { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 96)]
+		public virtual DateTime? PlannedStartDate { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 97)]
+		public virtual DateTime? PlannedEndDate { get; set; }
 	}
 	
 	
@@ -752,9 +886,81 @@ namespace Tp.Integration.Common
         /// Entity Type Name
         /// </summary>		
 		EntityTypeName,
+		/// <summary>
+		/// Entity State Name
+		/// </summary>		
+		EntityStateName,
         /// <summary>
         /// Project Name
-        /// </summary>		
+        /// </summary>
 		ProjectName,
+		/// <summary>
+        /// Priority Name
+        /// </summary>		
+		PriorityName,
+		/// <summary>
+		/// Effort
+		/// </summary>		
+		Effort,
+		/// <summary>
+		/// Effort Completed
+		/// </summary>		
+		EffortCompleted,
+		/// <summary>
+		/// Effort To Do
+		/// </summary>		
+		EffortToDo,
+		/// <summary>
+		/// Time Spent
+		/// </summary>		
+		TimeSpent,
+		/// <summary>
+		/// Time Remain
+		/// </summary>		
+		TimeRemain,
+		/// <summary>
+		/// Entity State ID
+		/// </summary>		
+		EntityStateID,
+		/// <summary>
+		/// Iteration ID
+		/// </summary>		
+		IterationID,
+		/// <summary>
+		/// Squad ID
+		/// </summary>	
+		SquadID,
+		/// <summary>
+		/// Squad Name
+		/// </summary>
+		SquadName,
+		/// <summary>
+		/// Iteration Name
+		/// </summary>
+		IterationName,
+		/// <summary>
+		/// Release Name
+		/// </summary>		
+		ReleaseName,
+		/// <summary>
+		/// Parent ID
+		/// </summary>		
+		ParentID,
+		/// <summary>
+		/// Parent Name
+		/// </summary>		
+		ParentName,
+		/// <summary>
+		/// Release ID
+		/// </summary>		
+		ReleaseID,
+		/// <summary>
+		/// Planned Start Date
+		/// </summary>	
+		PlannedStartDate,
+		/// <summary>
+		/// Planned End Date
+		/// </summary>	
+		PlannedEndDate
 	}
 }

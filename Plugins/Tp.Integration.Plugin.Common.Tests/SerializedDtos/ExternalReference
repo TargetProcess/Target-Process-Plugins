@@ -1,0 +1,10 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.ExternalReferenceDTO, Tp.Integration.Messages</Type>
+  <ExternalReferenceDTO>
+    <ID xsi:nil="true" />
+    <ExternalReferenceID xsi:nil="true" />
+    <TpID xsi:nil="true" />
+    <CreateDate>2013-08-16T20:20:01.513118+03:00</CreateDate>
+    <PluginProfileID xsi:nil="true" />
+  </ExternalReferenceDTO>
+</Value>

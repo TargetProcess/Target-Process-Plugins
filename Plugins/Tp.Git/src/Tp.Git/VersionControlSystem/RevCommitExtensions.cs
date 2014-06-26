@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using NGit;
 using NGit.Diff;
-using NGit.Dircache;
 using NGit.Revwalk;
 using NGit.Treewalk;
 using NGit.Treewalk.Filter;
@@ -40,8 +39,8 @@ namespace Tp.Git.VersionControlSystem
 			       		Id = commit.Id.Name,
 			       		Time = commit.GetCommitTime(),
 			       		Entries = commit.GetEntriesEnc(repository),
-						Email = authorIdent.GetEmailAddress(),
-						TimeCreated = commit.GetAuthorTime()
+			       		Email = authorIdent.GetEmailAddress(),
+			       		TimeCreated = commit.GetAuthorTime()
 			       	};
 		}
 

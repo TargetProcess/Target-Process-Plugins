@@ -11,13 +11,13 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
 	[Serializable]
 	public class CommentQuery : QueryBase
 	{
-		public string Hql { get; set; }
-		public object[] Params { get; set; }
-
+		public int?[] GeneralEntityTypes { get; set; }
 		public override DtoType DtoType
 		{
 			get { return new DtoType(typeof(CommentDTO)); }
 		}
+
+		public int? GeneralId { get; set; }
 	}
 
 	[Serializable]

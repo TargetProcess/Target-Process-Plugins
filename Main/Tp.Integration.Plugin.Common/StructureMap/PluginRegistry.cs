@@ -14,6 +14,7 @@ using Tp.AuthenticationServiceProxy;
 using Tp.BugServiceProxy;
 using Tp.BuildServiceProxy;
 using Tp.CommentServiceProxy;
+using Tp.Core;
 using Tp.CustomActivityServiceProxy;
 using Tp.CustomFieldServiceProxy;
 using Tp.EntityStateServiceProxy;
@@ -51,7 +52,6 @@ using Tp.RevisionServiceProxy;
 using Tp.RoleEffortServiceProxy;
 using Tp.RoleServiceProxy;
 using Tp.SeverityServiceProxy;
-using Tp.SolutionServiceProxy;
 using Tp.TagsServiceProxy;
 using Tp.TaskServiceProxy;
 using Tp.TestCaseRunServiceProxy;
@@ -111,12 +111,21 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<PluginRuntime>().Singleton().Use<PluginRuntime>();
 			For<IEventAggregator>().Use(c => c.GetInstance<PluginRuntime>().EventAggregator);
 
+			For<Locker>().Singleton().Use<Locker>();
 			For<IActivityLogPathProvider>().Singleton().Use<ActivityLogPathProvider>();
 			For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
+			For<IActivityLoggerFactory>().Singleton().Use<PluginActivityLoggerFactory>();
 			For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
 			For<ILogManager>().Singleton().Use<TpLogManager>();
-
+			Forward<ILogManager, ILogProvider>();
 			For<IRouterChildTagsSource>().Singleton().Use<RouterChildTagsSource>();
+
+			For<ITaskFactory>().Singleton().Use(GetTaskFactory);
+		}
+
+		protected virtual ITaskFactory GetTaskFactory()
+		{
+			return new TpTaskFactory();
 		}
 
 		protected virtual ITpBus CreateTpBus()
@@ -189,7 +198,6 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<RoleEffortService>().Use(CreateService<RoleEffortService>);
 			For<RoleService>().Use(CreateService<RoleService>);
 			For<SeverityService>().Use(CreateService<SeverityService>);
-			For<SolutionService>().Use(CreateService<SolutionService>);
 			For<TagsService>().Use(CreateService<TagsService>);
 			For<TaskService>().Use(CreateService<TaskService>);
 			For<TestCaseRunService>().Use(CreateService<TestCaseRunService>);

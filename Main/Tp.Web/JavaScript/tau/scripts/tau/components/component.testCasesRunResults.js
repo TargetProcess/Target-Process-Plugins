@@ -1,1 +1,1 @@
-define(["tau/components/component.creator","tau/models/model.testCasesRunResults","tau/ui/templates/testCasesRunResults/ui.template.testCasesRunResults"],function(creator,ModelType,template){return{create:function(config){var creatorConfig={ModelType:ModelType,template:template};return creator.create(creatorConfig,config)}}})
+define(["tau/components/component.creator","tau/models/model.testCasesRunResults","tau/ui/templates/testCasesRunResults/ui.template.testCasesRunResults"],function(e,t,s){return{create:function(u){var n={ModelType:t,template:s};return e.create(n,u)}}});

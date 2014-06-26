@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/model-base"],function(_,EditableBase){return EditableBase.extend({name:"Model Extension Unassign Action","bus extendDataToBind":function(evtArgs){var data=evtArgs.data;data.headerActions.push({id:"unassign",title:"Unassign"})}})})
+define(["Underscore","tau/core/model-base"],function(n,e){return e.extend({name:"Model Extension Unassign Action","bus extendDataToBind":function(n){var e=n.data;e.headerActions.push({id:"unassign",title:"Unassign"})}})});

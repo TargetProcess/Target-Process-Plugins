@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -20,13 +20,14 @@ using Tp.PopEmailIntegration.Rules;
 namespace Tp.PopEmailIntegration.Sagas
 {
 	internal class CreateRequestFromMessageSaga : TpSaga<CreateRequestFromMessageSagaData>,
-	                                              IAmStartedByMessages<CreateRequestFromMessageCommand>,
-	                                              IHandleMessages<RequestCreatedMessage>,
-	                                              IHandleMessages<GeneralUserAttachedToRequestMessage>,
-	                                              IHandleMessages<MessageAttachedToGeneralMessage>,
-	                                              IHandleMessages<AttachmentsAddedToGeneralMessage>,
-	                                              IHandleMessages<MessageUpdatedMessage>,
-	                                              IHandleMessages<TargetProcessExceptionThrownMessage>
+																								IAmStartedByMessages<CreateRequestFromMessageCommand>,
+																								IHandleMessages<RequestCreatedMessage>,
+																								IHandleMessages<GeneralUserAttachedToRequestMessage>,
+																								IHandleMessages<MessageAttachedToGeneralMessage>,
+																								IHandleMessages<AttachmentsAddedToGeneralMessage>,
+																								IHandleMessages<MessageUpdatedMessage>,
+																								IHandleMessages<RequestDescriptionUpdatedMessageInternal>,
+																								IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
 		public override void ConfigureHowToFindSaga()
 		{
@@ -35,6 +36,7 @@ namespace Tp.PopEmailIntegration.Sagas
 			ConfigureMapping<MessageAttachedToGeneralMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<AttachmentsAddedToGeneralMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<MessageUpdatedMessage>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<RequestDescriptionUpdatedMessageInternal>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
 		}
 
@@ -47,19 +49,19 @@ namespace Tp.PopEmailIntegration.Sagas
 				Data.MessageDto = message.MessageDto;
 
 				Log().Info(string.Format("Creating request from message with id {0} in project {1}", message.MessageDto.ID,
-				                         message.ProjectId));
+																 message.ProjectId));
 
 				var requestDto = new RequestDTO
-				                 	{
-				                 		OwnerID = message.MessageDto.FromID,
-				                 		Name = string.IsNullOrEmpty(message.MessageDto.Subject)
-				                 		       	? string.Format("Created from Message with ID {0}", message.MessageDto.ID)
-				                 		       	: message.MessageDto.Subject,
-				                 		Description = Utils.TextToHtml(message.MessageDto.Body ?? string.Empty),
-				                 		ProjectID = message.ProjectId,
-				                 		SourceType = RequestSourceEnum.Email,
-				                 		IsPrivate = true,
-				                 	};
+													{
+														OwnerID = message.MessageDto.FromID,
+														Name = string.IsNullOrEmpty(message.MessageDto.Subject)
+																		? string.Format("Created from Message with ID {0}", message.MessageDto.ID)
+																		: message.MessageDto.Subject,
+														Description = Utils.TextToHtml(message.MessageDto.Body ?? string.Empty),
+														ProjectID = message.ProjectId,
+														SourceType = RequestSourceEnum.Email,
+														IsPrivate = message.IsPrivate,
+													};
 				Send(new CreateRequestCommand(requestDto));
 			}
 			else
@@ -75,10 +77,11 @@ namespace Tp.PopEmailIntegration.Sagas
 		public void Handle(RequestCreatedMessage message)
 		{
 			Data.RequestId = message.Dto.ID;
+			Data.RequestDto = message.Dto;
 			var requestId = message.Dto.ID;
 			var requesterId = Data.MessageDto.FromID;
 			Log().Info(string.Format("Attaching requester with Id {0} to request with id {1}", requesterId, requestId));
-			Send(new AttachGeneralUserToRequestCommand {RequesterId = requesterId, RequestId = requestId});
+			Send(new AttachGeneralUserToRequestCommand { RequesterId = requesterId, RequestId = requestId });
 		}
 
 		public void Handle(GeneralUserAttachedToRequestMessage message)
@@ -86,27 +89,38 @@ namespace Tp.PopEmailIntegration.Sagas
 			var messageId = Data.MessageDto.ID;
 			var requestId = message.RequestId;
 			Log().Info(string.Format("Attaching message with id {0} to request with id {1}", messageId, requestId));
-			Send(new AttachMessageToGeneralCommand {MessageId = messageId, GeneralId = requestId});
+			Send(new AttachMessageToGeneralCommand { MessageId = messageId, GeneralId = requestId });
 		}
 
 		public void Handle(MessageAttachedToGeneralMessage message)
 		{
 			Log().Info(string.Format("Adding attachments to request with id {0}", message.GeneralId));
-			SendLocal(new AddAttachmentsToGeneralCommandInternal
-			          	{Attachments = Data.Attachments, GeneralId = message.GeneralId, OuterSagaId = Data.Id});
+			SendLocal(new AddAttachmentsToGeneralCommandInternal { Attachments = Data.Attachments, GeneralId = message.GeneralId, OuterSagaId = Data.Id });
 		}
 
 		public void Handle(AttachmentsAddedToGeneralMessage message)
 		{
+			Log().Info(string.Format("Updating description for request with id {0}", Data.RequestId));
+			SendLocal(new UpdateRequestDescriptionCommandInternal
+				{
+					RequestAttachmentDtos = message.Attachments,
+					RequestDto = Data.RequestDto,
+					MessageAttachmentDtos = Data.Attachments,
+					OuterSagaId = Data.Id
+				});
+		}
+
+		public void Handle(RequestDescriptionUpdatedMessageInternal message)
+		{
 			Log().Info(string.Format("Marking message with id {0} as processed", Data.MessageDto.ID));
 			Data.MessageDto.IsProcessed = true;
-			Send(new UpdateMessageCommand(Data.MessageDto, new Enum[] {MessageField.IsProcessed}));
+			Send(new UpdateMessageCommand(Data.MessageDto, new Enum[] { MessageField.IsProcessed }));
 		}
 
 		public void Handle(MessageUpdatedMessage message)
 		{
 			Log().Info(string.Format("Request with id {0} is successfully created from message with id {1}", Data.RequestId,
-			                         Data.MessageDto.ID));
+															 Data.MessageDto.ID));
 			MarkAsComplete();
 		}
 
@@ -142,6 +156,7 @@ namespace Tp.PopEmailIntegration.Sagas
 		public string Originator { get; set; }
 		public string OriginalMessageId { get; set; }
 		public MessageDTO MessageDto { get; set; }
+		public RequestDTO RequestDto { get; set; }
 		public int? RequestId { get; set; }
 		public AttachmentDTO[] Attachments { get; set; }
 	}

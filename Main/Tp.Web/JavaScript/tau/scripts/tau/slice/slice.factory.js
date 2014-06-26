@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/class","tau/slice/slice.space.cached"],function(_,Class,Slice){return Class.extend({init:function(config){this.defaults=config||{}},create:function(config){return _.defaults(config,this.defaults),new Slice(config)}})})
+define(["Underscore","tau/core/class","tau/slice/slice.space.cached","tau/slice/url.resolver"],function(e,t,n,r){return t.extend({init:function(e){this.defaults=e||{}},create:function(t){var c=t||{};return e.defaults(c,this.defaults),new n(c,new r({prefix:"matrix"}))}})});

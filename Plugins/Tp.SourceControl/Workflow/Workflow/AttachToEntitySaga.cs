@@ -4,9 +4,7 @@
 // 
 
 using System;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using NServiceBus;
 using NServiceBus.Saga;
 using Tp.Integration.Common;
@@ -79,6 +77,8 @@ namespace Tp.SourceControl.Workflow.Workflow
 			{
 				action.Execute(actionParamFiller, command => Send(command), _logger);
 			}
+
+			MarkAsComplete();
 		}
 
 		public void Handle(TargetProcessExceptionThrownMessage message)

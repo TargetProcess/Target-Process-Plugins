@@ -9,7 +9,6 @@ using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common.Validation;
-using Tp.MashupManager.Dtos;
 using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager.CustomCommands
@@ -43,7 +42,7 @@ namespace Tp.MashupManager.CustomCommands
 			       		PluginCommandStatus = PluginCommandStatus.Fail,
 			       		ResponseData =
 			       			new PluginProfileErrorCollection
-			       				{new PluginProfileError {FieldName = MashupDto.NameField, Message = message}}.Serialize()
+			       				{new PluginProfileError {FieldName = Mashup.NameField, Message = message}}.Serialize()
 			       	};
 		}
 	}

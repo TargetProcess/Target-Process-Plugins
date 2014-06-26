@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/board.new.list/views/view.new.list.tree","tau/components/board.new.list/views/view.new.list.tree.node","tau/components/board.new.list/views/view.new.list.paging.root"],function(e,n,t,i,o){return t.extend({createPagingView:function(){return new o(this.skeleton.findRootPagingContainer())},_getViewConstructor:function(){return i}})});

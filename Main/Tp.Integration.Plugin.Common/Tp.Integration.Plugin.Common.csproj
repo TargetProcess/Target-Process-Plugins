@@ -10,9 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Integration.Plugin.Common</RootNamespace>
     <AssemblyName>Tp.Integration.Plugin.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -114,7 +116,9 @@
     <Compile Include="Activity\ActivityLoggerRegistry.cs" />
     <Compile Include="Activity\ActivityLogInitialization.cs" />
     <Compile Include="Activity\ActivityLogRecord.cs" />
+    <Compile Include="Activity\PluginActivityLoggerFactory.cs" />
     <Compile Include="Activity\DateRangeExtensions.cs" />
+    <Compile Include="Activity\IActivityLoggerFactory.cs" />
     <Compile Include="Activity\ILog4NetFileRepository.cs" />
     <Compile Include="Activity\Log4NetActivityLog.cs" />
     <Compile Include="Activity\IActivityLog.cs" />
@@ -123,6 +127,8 @@
     <Compile Include="Activity\TpLogManager.cs" />
     <Compile Include="AssembliesHost.cs" />
     <Compile Include="ConfigureSagaPersister.cs" />
+    <Compile Include="Domain\IPluginContextSnapshot.cs" />
+    <Compile Include="Domain\PluginContextSnapshot.cs" />
     <Compile Include="Events\AccountCollectionCreated.cs" />
     <Compile Include="Domain\AccountDomainObject.cs" />
     <Compile Include="Domain\AccountCollection.cs" />
@@ -150,6 +156,7 @@
     <Compile Include="Handlers\SyncNowMessageHandler.cs" />
     <Compile Include="ITargetProcessConditionalMessageRouter.cs" />
     <Compile Include="ITargetProcessMessageWhenNoProfilesHandler.cs" />
+    <Compile Include="Logging\ILogProvider.cs" />
     <Compile Include="PluginCommand\Embedded\DeleteUnusedQueuesCommand.cs" />
     <Compile Include="PluginDataFolder.cs" />
     <Compile Include="PluginLifecycle\RouterChildTagsSource.cs" />
@@ -324,6 +331,13 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

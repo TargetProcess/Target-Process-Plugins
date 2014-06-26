@@ -10,7 +10,7 @@ namespace Mercurial.Gui.Clients
         /// <summary>
         /// This field is used to specify the encoding of the listfile.
         /// </summary>
-        private static readonly Encoding _FileListEncoding = Encoding.GetEncoding("Windows-1252");
+        private static readonly Encoding _FileListEncoding = Encoding.UTF8;
 
         /// <summary>
         /// Gets the option to pass to the TortoiseHg command line client to read in the file list.

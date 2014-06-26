@@ -11,5 +11,10 @@ namespace System
 		{
 			return new Lazy<T>(valueFactory, threadSafetyMode);
 		}
+
+		public static Lazy<T> Create<T>(T value, LazyThreadSafetyMode threadSafetyMode = LazyThreadSafetyMode.ExecutionAndPublication)
+		{
+			return new Lazy<T>(()=>value, threadSafetyMode);
+		}
 	}
 }

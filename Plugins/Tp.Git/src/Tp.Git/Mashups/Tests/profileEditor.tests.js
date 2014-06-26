@@ -81,11 +81,11 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
 
         editor.render();
 
-        equals(this._placeHolder.find('#name').val(), 'Profile#1');
-        equals(this._placeHolder.find('#uri').val(), 'file:///D:/diff/repos/RepositoryToTestSvn');
-        equals(this._placeHolder.find('#login').val(), 'test');
-        equals(this._placeHolder.find('#password').val(), '123456');
-        equals(this._placeHolder.find('#startRevision').val(), '0');
+        equal(this._placeHolder.find('#name').val(), 'Profile#1');
+        equal(this._placeHolder.find('#uri').val(), 'file:///D:/diff/repos/RepositoryToTestSvn');
+        equal(this._placeHolder.find('#login').val(), 'test');
+        equal(this._placeHolder.find('#password').val(), '123456');
+        equal(this._placeHolder.find('#startRevision').val(), '0');
     });
 
     test('should create profile on save button click when in create mode', function () {
@@ -135,7 +135,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
         editor._onSave();
 
         deepEqual(this._profileRepository.lastUpdatedProfile, editedProfile);
-        equals(this._profileRepository.lastUpdatedProfileName, this._profileNameSource.getProfileName());
+        equal(this._profileRepository.lastUpdatedProfileName, this._profileNameSource.getProfileName());
     });
 
     test('should reset userId attribute', function () {

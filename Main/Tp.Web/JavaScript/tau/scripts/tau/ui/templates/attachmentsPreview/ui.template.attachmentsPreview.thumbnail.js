@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(t){var i={name:"attachmentsPreview.thumbnail",engine:"jqote2",markup:["<li >",'<a href="<%= this.uri %>">','<img class="ui-attach-thumbnail i-role-thumb <% if (this.selected){ %> selected<% } %>" src="<%= this.thumbnailUri %>" data-id="<%= this.id %>" data-big-src="<%= this.uri %>" />',"</a>","</li>"]};return t.register(i)});

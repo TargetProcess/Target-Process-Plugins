@@ -484,10 +484,10 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		[Then("general $generalId should have attachment '$fileName'")]
 		public void GeneralShouldHaveAttachment(int generalId, string fileName)
 		{
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().FirstOrDefault(
-				x => x.Dto is AttachmentDTO && ((AttachmentDTO) x.Dto).GeneralID == generalId &&
-				     ((AttachmentDTO) x.Dto).OriginalFileName == fileName &&
-				     ((AttachmentDTO) x.Dto).AttachmentFileID == fileName.GetHashCode()).Should(Be.Not.Null);
+			Context.Transport.TpQueue.GetMessages<CloneAttachmentCommand>().FirstOrDefault(
+				x => x.Dto.GeneralID == generalId &&
+				     x.Dto.OriginalFileName == fileName &&
+				     x.Dto.AttachmentFileID == fileName.GetHashCode()).Should(Be.Not.Null);
 		}
 
 		private static CommentDTO CreatedComment()

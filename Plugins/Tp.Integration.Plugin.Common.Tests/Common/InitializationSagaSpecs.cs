@@ -29,6 +29,7 @@ using ISagaMessage = Tp.Integration.Messages.EntityLifecycle.ISagaMessage;
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
 	public class InitializationSagaSpecs
 	{
 		private TransportMock _transport;

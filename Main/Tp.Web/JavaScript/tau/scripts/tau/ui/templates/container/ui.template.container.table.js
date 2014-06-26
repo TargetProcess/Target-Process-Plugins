@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"container.table",markup:['<table class="${cssClass} container-table">',"   <tr></tr>","</table>"],dependencies:[]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var t={name:"container.table",markup:['<table class="${cssClass} container-table">',"   <tr></tr>","</table>"],dependencies:[]};return e.register(t)});

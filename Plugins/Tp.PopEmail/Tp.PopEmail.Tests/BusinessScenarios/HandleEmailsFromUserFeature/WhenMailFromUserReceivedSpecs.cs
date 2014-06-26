@@ -3,15 +3,13 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Collections.Generic;
-using System.Text;
-using System;
 using NUnit.Framework;
 using Tp.Testing.Common.NBehave;
 
 namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class WhenMailFromUserReceivedSpecs
 	{
 		[Test]
@@ -130,7 +128,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		[Test]
 		public void ShouldAttachRequestToActiveUser()
 		{
-			@"Given	project 1
+			@"Given project 1
 					And deleted user 'Joe Black' with email 'sender@company.com'
 					And user 'Sara White' with email 'sender@company.com'
 					And profile has a rule: then attach to project 1 and create request in project 1

@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){return e.register({name:"relations.filter.project.output",engine:"jqote2",markup:["<div>",'<span class="tau-project-name" style="background-color: <%! this.value.color || "transparent" %>;"><%! this.value.abbreviation %></span>',"</div>"]})});

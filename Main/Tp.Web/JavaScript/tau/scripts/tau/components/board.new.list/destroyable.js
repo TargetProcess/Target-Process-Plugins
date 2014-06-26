@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/class"],function(e,s){return s.extend({_addChildDestroyable:function(e){this._childDestroyables||(this._childDestroyables=[]),this._childDestroyables.push(e)},destroy:function(){e.invoke(this._childDestroyables,"destroy"),this._childDestroyables=[]}})});

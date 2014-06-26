@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NGit;
 using NGit.Revwalk;
@@ -41,13 +40,12 @@ namespace Tp.Git.VersionControlSystem
 			try
 			{
 				var filter = ApplyNoMergesFilter(CommitTimeRevFilter.After(from));
+
 				revWalk.SetRevFilter(filter);
 
-				var commits =
-					(from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
+				var commits = (from revision in revWalk orderby revision.GetCommitTime() ascending select revision).ToArray().Split(pageSize);
+				var fromTillHead = commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
 
-				var fromTillHead =
-					commits.Select(x => new RevisionRange(x.First().ConvertToRevisionId(), x.Last().ConvertToRevisionId())).ToArray();
 				return fromTillHead;
 			}
 			finally
@@ -56,15 +54,15 @@ namespace Tp.Git.VersionControlSystem
 			}
 		}
 
-		private static RevFilter ApplyNoMergesFilter(RevFilter filter)
-		{
-			return AndRevFilter.Create(new[] {RevFilter.NO_MERGES, filter});
-		}
-
 		public IEnumerable<RevisionRange> GetAfterTillHead(RevisionId revisionId, int pageSize)
 		{
 			var addSeconds = revisionId.Time.Value.AddSeconds(1);
 			return GetFromTillHead(addSeconds, pageSize);
+		}
+
+		private static RevFilter ApplyNoMergesFilter(RevFilter filter)
+		{
+			return AndRevFilter.Create(new[] {RevFilter.NO_MERGES, filter});
 		}
 
 		private RevWalk CreateRevWalker()
@@ -90,7 +88,7 @@ namespace Tp.Git.VersionControlSystem
 		{
 			var revWalk = CreateRevWalker();
 			revWalk.SetRevFilter(CommitTimeRevFilter.Between(dateRange.StartDate.GetValueOrDefault(),
-			                                                 dateRange.EndDate.GetValueOrDefault()));
+															 dateRange.EndDate.GetValueOrDefault()));
 
 			var commits = revWalk.ToArray();
 
@@ -103,7 +101,7 @@ namespace Tp.Git.VersionControlSystem
 			try
 			{
 				RevFilter betweenFilter = CommitTimeRevFilter.Between(((GitRevisionId) fromChangeset).Time,
-				                                                      ((GitRevisionId) toChangeset).Time);
+																	  ((GitRevisionId) toChangeset).Time);
 
 				revWalk.SetRevFilter(ApplyNoMergesFilter(betweenFilter));
 				var commits = revWalk.ToArray();
@@ -141,7 +139,7 @@ namespace Tp.Git.VersionControlSystem
 			try
 			{
 				var filter = CommitTimeRevFilter.Between(((GitRevisionId) from).Time.AddSeconds(1),
-				                                         ((GitRevisionId) to).Time.AddSeconds(-1));
+														 ((GitRevisionId) to).Time.AddSeconds(-1));
 				revWalk.SetRevFilter(ApplyNoMergesFilter(filter));
 
 				var commits =
@@ -173,12 +171,12 @@ namespace Tp.Git.VersionControlSystem
 				var credentialsProvider = new UsernamePasswordCredentialsProvider(settings.Login, settings.Password);
 				if (repositoryFolder.Exists())
 				{
-                    string path = repositoryFolder.GetAbsolutePath();
+					string path = repositoryFolder.GetAbsolutePath();
 					nativeGit = NGit.Api.Git.Open(path);
 				}
 				else
 				{
-                    string path = repositoryFolder.GetAbsolutePath();
+					string path = repositoryFolder.GetAbsolutePath();
 					nativeGit = NGit.Api.Git.CloneRepository()
 						.SetURI(settings.Uri)
 						.SetNoCheckout(true)
@@ -208,7 +206,7 @@ namespace Tp.Git.VersionControlSystem
 		}
 
 		private static bool IsRepositoryUriChanged(GitRepositoryFolder repositoryFolder,
-		                                           ISourceControlConnectionSettingsSource settings)
+												   ISourceControlConnectionSettingsSource settings)
 		{
 			return (settings.Uri.ToLower() != repositoryFolder.RepoUri.ToLower()) && repositoryFolder.Exists();
 		}
@@ -222,15 +220,15 @@ namespace Tp.Git.VersionControlSystem
 				return repositoryFolder;
 			}
 
-            GitRepositoryFolder folder = _folder.Single();
-            if (!folder.CheckFolder(_folder))
-            {
-                var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
-                _folder.ReplaceWith(repositoryFolder);
-                return repositoryFolder;
-            }
+			GitRepositoryFolder folder = _folder.Single();
+			if (!folder.CheckFolder(_folder))
+			{
+				var repositoryFolder = GitRepositoryFolder.Create(settings.Uri);
+				_folder.ReplaceWith(repositoryFolder);
+				return repositoryFolder;
+			}
 
-            return folder;
+			return folder;
 		}
 
 		public string GetFileContent(RevCommit commit, string path)

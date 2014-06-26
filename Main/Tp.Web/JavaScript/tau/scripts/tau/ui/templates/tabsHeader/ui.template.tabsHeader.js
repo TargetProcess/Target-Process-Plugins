@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(t){var e={name:"tabsHeader",markup:['<div class="entity-tabs">','<div class="entity-tabs__holder">','<ul class="entity-tabs__list i-role-tabheaders">',"</ul>","</div>","</div>"]};return t.register(e)});

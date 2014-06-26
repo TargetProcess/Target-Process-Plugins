@@ -9,6 +9,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.TestRunImport.Tests.Selenium
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class SeleniumResultsCommandSpecs
 	{
 		[Test]

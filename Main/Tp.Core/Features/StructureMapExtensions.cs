@@ -42,6 +42,16 @@ namespace Tp.Core.Features
 			return new ElseFeatureTogglingContext<TService>(this);
 		}
 
+		public ElseFeatureTogglingContext<TService> Use<TServiceImpl>(Func<TServiceImpl> creator) where TServiceImpl : TService
+		{
+			IfFeatureToggled = condition => condition.If(context =>
+			{
+				var features = context.GetInstance<ITpFeatureList>();
+				return _condition(features);
+			}).ThenIt.Is.ConstructedBy(() => creator());
+			return new ElseFeatureTogglingContext<TService>(this);
+		}
+
 		private Action<ConditionalInstance<TService>.ConditionalInstanceExpression> IfFeatureToggled { get; set; }
 		internal Action<ConditionalInstance<TService>.ConditionalInstanceExpression> Default { get; set; }
 
@@ -71,6 +81,13 @@ namespace Tp.Core.Features
 		public void ElseUse<TServiceImpl>() where TServiceImpl : TService
 		{
 			_context.Default = condition => condition.TheDefault.Is.Type<TServiceImpl>();
+			Action<ConditionalInstance<TService>.ConditionalInstanceExpression> action = _context.Action;
+			_context.Expression.ConditionallyUse(action);
+		}
+
+		public void ElseUse<TServiceImpl>(Func<TServiceImpl> creator) where TServiceImpl : TService
+		{
+			_context.Default = condition => condition.TheDefault.Is.ConstructedBy(() => creator());
 			Action<ConditionalInstance<TService>.ConditionalInstanceExpression> action = _context.Action;
 			_context.Expression.ConditionallyUse(action);
 		}

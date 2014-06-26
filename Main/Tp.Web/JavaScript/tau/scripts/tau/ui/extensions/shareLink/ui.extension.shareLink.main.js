@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(e,n){return n.extend({"bus afterRender":function(e,n){var t=n.element,r=t.find(".i-role-trigger"),o=t.find(".i-role-content");r.tauBubble({content:o.detach(),onShow:function(){o.find("textarea").caretAll()}})}})});

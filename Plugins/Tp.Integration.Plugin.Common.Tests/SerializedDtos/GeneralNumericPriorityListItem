@@ -1,0 +1,10 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.GeneralNumericPriorityListItemDTO, Tp.Integration.Messages</Type>
+  <GeneralNumericPriorityListItemDTO>
+    <ID xsi:nil="true" />
+    <GeneralID xsi:nil="true" />
+    <ParentProjectID xsi:nil="true" />
+    <NumericPriority xsi:nil="true" />
+    <EntityTypeID xsi:nil="true" />
+  </GeneralNumericPriorityListItemDTO>
+</Value>

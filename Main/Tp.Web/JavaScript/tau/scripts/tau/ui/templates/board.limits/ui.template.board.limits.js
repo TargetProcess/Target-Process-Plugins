@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"board.limit",engine:"jqote2",markup:['<div class="i-role-limit-list" >',"</div>"]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var i={name:"board.limit",engine:"jqote2",markup:['<div class="i-role-limit-list" >',"</div>"]};return e.register(i)});

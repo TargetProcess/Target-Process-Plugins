@@ -9,6 +9,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.UnitTests
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	internal class BugzillaProfileTests
 	{
 		[Test]

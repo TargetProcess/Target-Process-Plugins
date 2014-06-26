@@ -1,0 +1,1 @@
+define(["tau/core/class","Underscore"],function(n){return n.extend({init:function(n){this.config=n||{},window.testconsole={posts:[]}},post:function(n){window.testconsole.posts.push(n)}})});

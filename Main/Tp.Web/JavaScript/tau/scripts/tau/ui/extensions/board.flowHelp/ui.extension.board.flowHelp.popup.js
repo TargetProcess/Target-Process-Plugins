@@ -1,0 +1,1 @@
+define(["jQuery","Underscore","tau/core/extension.base"],function(e,n,r){return r.extend({init:function(){var e=this;e._super.apply(e,arguments)},"bus afterRender:last + update":function(e,n,r){this.fire("refresh",r)}})});

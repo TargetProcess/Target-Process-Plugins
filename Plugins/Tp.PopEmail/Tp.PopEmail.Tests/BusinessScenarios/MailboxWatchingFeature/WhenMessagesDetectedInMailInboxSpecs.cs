@@ -9,6 +9,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.PopEmailIntegration.BusinessScenarios.MailboxWatchingFeature
 {
 	[TestFixture]
+    [Category("PartPlugins0")]
 	public class WhenMessagesDetectedInMailInboxSpecs
 	{
 		[Test]

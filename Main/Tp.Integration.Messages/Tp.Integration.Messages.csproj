@@ -10,9 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Integration.Messages</RootNamespace>
     <AssemblyName>Tp.Integration.Messages</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -124,6 +126,7 @@
     <Compile Include="Entities\EntityTypeDTO.cs" />
     <Compile Include="Entities\ExternalReferenceDTO.cs" />
     <Compile Include="Entities\FeatureDTO.cs" />
+    <Compile Include="Entities\Field.cs" />
     <Compile Include="Entities\GeneralDTO.cs" />
     <Compile Include="Entities\GeneralFieldExtensionDTO.cs" />
     <Compile Include="Entities\GeneralListItemDTO.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Entities\GeneralRelationTypeDto.cs" />
     <Compile Include="Entities\GeneralUserDTO.cs" />
     <Compile Include="Entities\GlobalSettingDTO.cs" />
+    <Compile Include="Entities\ICustomFieldInfo.cs" />
     <Compile Include="Entities\ImpedimentDTO.cs" />
     <Compile Include="Entities\IterationDTO.cs" />
     <Compile Include="Entities\LicenseDTO.cs" />
@@ -145,6 +149,7 @@
     <Compile Include="Entities\PluginProfileMessageDTO.cs" />
     <Compile Include="Entities\PracticeDTO.cs" />
     <Compile Include="Entities\PriorityDTO.cs" />
+    <Compile Include="Entities\ProcessAdminDTO.cs" />
     <Compile Include="Entities\ProcessDTO.cs" />
     <Compile Include="Entities\ProcessPracticeDTO.cs" />
     <Compile Include="Entities\ProgramDTO.cs" />
@@ -164,7 +169,6 @@
     <Compile Include="Entities\RuleDTO.cs" />
     <Compile Include="Entities\SavedFilterDTO.cs" />
     <Compile Include="Entities\SeverityDTO.cs" />
-    <Compile Include="Entities\SolutionDTO.cs" />
     <Compile Include="Entities\SystemUserDTO.cs" />
     <Compile Include="Entities\TagBundleDTO.cs" />
     <Compile Include="Entities\TagBundleTagDTO.cs" />
@@ -209,7 +213,6 @@
     <Compile Include="EntityLifecycle\Commands\Requester.cs" />
     <Compile Include="EntityLifecycle\Commands\Role.cs" />
     <Compile Include="EntityLifecycle\Commands\RoleEffort.cs" />
-    <Compile Include="EntityLifecycle\Commands\Solution.cs" />
     <Compile Include="EntityLifecycle\Commands\Tag.cs" />
     <Compile Include="EntityLifecycle\Commands\TagBundle.cs" />
     <Compile Include="EntityLifecycle\Commands\Task.cs" />
@@ -251,6 +254,7 @@
     <Compile Include="EntityLifecycle\Messages\Milestone.cs" />
     <Compile Include="EntityLifecycle\Messages\Priority.cs" />
     <Compile Include="EntityLifecycle\Messages\Process.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProcessAdminDelegate.cs" />
     <Compile Include="EntityLifecycle\Messages\ProcessPractice.cs" />
     <Compile Include="EntityLifecycle\Messages\Program.cs" />
     <Compile Include="EntityLifecycle\Messages\Project.cs" />
@@ -266,7 +270,6 @@
     <Compile Include="EntityLifecycle\Messages\RoleEntityType.cs" />
     <Compile Include="EntityLifecycle\Messages\Rule.cs" />
     <Compile Include="EntityLifecycle\Messages\Severity.cs" />
-    <Compile Include="EntityLifecycle\Messages\Solution.cs" />
     <Compile Include="EntityLifecycle\Messages\Tag.cs" />
     <Compile Include="EntityLifecycle\Messages\TagBundle.cs" />
     <Compile Include="EntityLifecycle\Messages\Task.cs" />
@@ -286,6 +289,7 @@
     <Compile Include="EntityLifecycle\Queries\EntityState.cs" />
     <Compile Include="EntityLifecycle\Queries\GeneralQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\GlobalSetting.cs" />
+    <Compile Include="EntityLifecycle\Queries\ImpedimentQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\MessageUid.cs" />
     <Compile Include="EntityLifecycle\Queries\Priority.cs" />
     <Compile Include="EntityLifecycle\Queries\Project.cs" />
@@ -313,6 +317,8 @@
     <Compile Include="ForeignKeyAttribute.cs" />
     <Compile Include="IRouterStarter.cs" />
     <Compile Include="PluginLifecycle\EmbeddedPluginCommands.cs" />
+    <Compile Include="PluginLifecycle\IMashupDirectoryIgnoreStrategy.cs" />
+    <Compile Include="PluginLifecycle\IncludeAllMashupDirectoryIgnoreStrategy.cs" />
     <Compile Include="PluginLifecycle\IPluginLifecycleMessage.cs" />
     <Compile Include="PluginLifecycle\IPluginLocalMessage.cs" />
     <Compile Include="PluginLifecycle\Mashup.cs" />
@@ -420,6 +426,13 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

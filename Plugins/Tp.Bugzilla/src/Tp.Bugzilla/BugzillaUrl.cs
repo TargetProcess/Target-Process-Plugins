@@ -15,6 +15,7 @@ using Tp.Bugzilla.BugzillaQueries;
 using Tp.Bugzilla.Schemas;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
+using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla
 {
@@ -98,7 +99,7 @@ namespace Tp.Bugzilla
 		private string UploadDataToBugzilla(string query)
 		{
 			var encoding = Encoding.UTF8;
-			var webClient = new TpWebClient { Encoding = encoding };
+			var webClient = new TpWebClient(new PluginProfileErrorCollection()) { Encoding = encoding };
 			webClient.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
 
 			if (!string.IsNullOrEmpty(_profile.Login) && !string.IsNullOrEmpty(_profile.Password))

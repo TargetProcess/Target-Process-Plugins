@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/class","tau/ui/extensions/board.plus/cells.paging.size.config"],function(e,n,t,i){return t.extend({getPageSize:function(e,n){var t=0;return n>1&&5>n?t=1:n>=5&&(t=2),i[e][t]},isAxisExist:function(e,n){var t=e[n];return t&&t.types&&t.types.length>0},getMaxPageSize:function(){return i[0][0]}})});

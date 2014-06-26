@@ -29,6 +29,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 
 
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class AttachMessageToProjectSagaSpecs
 	{
 		[Test]

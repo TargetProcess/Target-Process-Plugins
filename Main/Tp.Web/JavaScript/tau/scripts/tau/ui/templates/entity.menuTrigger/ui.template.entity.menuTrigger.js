@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var i={name:"entity.menuTrigger",engine:"jqote2",markup:["<% if (!this.isEmpty){ %>",'<div class="ui-menu-actions">','<span class="ui-menu__trigger i-role-trigger">',"Actions",'<span class="ui-menu__indicator"></span>',"</span>","</div>","<% } %>"],dependencies:[]};return e.register(i)});

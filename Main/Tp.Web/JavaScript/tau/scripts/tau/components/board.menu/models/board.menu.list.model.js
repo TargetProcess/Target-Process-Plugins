@@ -1,0 +1,1 @@
+define(["require","Underscore"],function(e){var r=e("Underscore");return{applyBoardFilter:function(e,n){return n&&n.length?(n=n.toLowerCase(),r.filter(e,function(e){return e.name.toLowerCase().indexOf(n)>=0})):e},filterHiddenBoards:function(e,n){return r.filter(e,function(e){return e.menuIsVisible===!0||e.boardId===n})}}});

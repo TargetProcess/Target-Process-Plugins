@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"team-members-editor",engine:"jqote2",markup:["<div>",'<br /><button type="button" role="action-add" class="tau-button-add">Assign users</button>',"</div>"]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(t){var e={name:"team-members-editor",engine:"jqote2",markup:["<div>",'<br /><button type="button" role="action-add" class="tau-button-add">Assign users</button>',"</div>"]};return t.register(e)});

@@ -34,13 +34,13 @@ namespace Tp.Mercurial.VersionControlSystem
 		}
 
         public IEnumerable<RevisionRange> GetFromTillHead(DateTime from, int pageSize)
-		{
-            var command = new LogCommand();
-            var pages = _repository.Log(command).
-                Where(ch => ch.Timestamp >= from).
-                OrderBy(ch => ch.Timestamp).
-                ToArray().
-                Split(pageSize);
+        {
+	        var command = new LogCommand().WithAdditionalArgument("-d >{0:yyyy-MM-dd}".Fmt(from));
+            var pages = _repository.Log(command)
+				.Where(ch => ch.Timestamp >= from)
+				.OrderBy(ch => ch.Timestamp)
+				.ToArray()
+				.Split(pageSize);
 
 		    var result = pages.Select(page => new RevisionRange(page.First().ToRevisionId(), page.Last().ToRevisionId()));
 
@@ -63,9 +63,35 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public IEnumerable<RevisionRange> GetFromAndBefore(RevisionId fromRevision, RevisionId toRevision, int pageSize)
         {
-			var from = new RevSpec(fromRevision.Value);
-			var to = new RevSpec(toRevision.Value);
-	        var command = new LogCommand().WithRevision(RevSpec.Range(from, to));
+	        var command = new LogCommand();
+			if (string.IsNullOrEmpty(fromRevision.Value))
+			{
+				if (string.IsNullOrEmpty(toRevision.Value))
+				{
+					command = command.WithAdditionalArgument("-d {0:yyyy-MM-dd} to {1:yyyy-MM-dd}".Fmt(fromRevision.Time.Value, toRevision.Time.Value));
+				}
+				else
+				{
+					var to = new RevSpec(toRevision.Value);
+					command = command.WithRevision(RevSpec.To(to));
+					command = command.WithAdditionalArgument("-d >{0:yyyy-MM-dd}".Fmt(fromRevision.Time.Value));
+				}
+			}
+			else
+			{
+				var from = new RevSpec(fromRevision.Value);
+				if (string.IsNullOrEmpty(toRevision.Value))
+				{
+					command = command.WithAdditionalArgument("-d <{0:yyyy-MM-dd}".Fmt(toRevision.Time.Value));
+					command = command.WithRevision(RevSpec.From(from));
+				}
+				else
+				{
+					var to = new RevSpec(toRevision.Value);
+					command = command.WithRevision(RevSpec.Range(from, to));
+				}
+			}
+
             var pages = _repository.Log(command)
                 .OrderBy(ch => ch.Timestamp)
                 .ToArray()

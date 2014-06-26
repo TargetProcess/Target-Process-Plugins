@@ -1,0 +1,9 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.RevisionAssignableDTO, Tp.Integration.Messages</Type>
+  <RevisionAssignableDTO>
+    <ID xsi:nil="true" />
+    <RevisionAssignableID xsi:nil="true" />
+    <AssignableID xsi:nil="true" />
+    <RevisionID xsi:nil="true" />
+  </RevisionAssignableDTO>
+</Value>

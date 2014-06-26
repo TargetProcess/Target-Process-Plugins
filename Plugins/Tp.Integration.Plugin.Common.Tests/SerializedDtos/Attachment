@@ -1,0 +1,13 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.AttachmentDTO, Tp.Integration.Messages</Type>
+  <AttachmentDTO>
+    <ID xsi:nil="true" />
+    <FileSize xsi:nil="true" />
+    <AttachmentID xsi:nil="true" />
+    <CreateDate>2013-08-16T20:20:01.417118+03:00</CreateDate>
+    <GeneralID xsi:nil="true" />
+    <MessageID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <AttachmentFileID xsi:nil="true" />
+  </AttachmentDTO>
+</Value>

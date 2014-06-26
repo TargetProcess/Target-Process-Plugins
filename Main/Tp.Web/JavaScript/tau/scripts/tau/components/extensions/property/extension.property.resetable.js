@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/components/extensions/component.extension.base"],function(e,n,t){return t.extend({"bus permissionsReady + afterRender + dataBind":function(n){var t=n.permissionsReady.data;if(t.editable){var i=n.afterRender.data.element;i.on("click",".i-role-reset",e.bind(function(){return this.fire("reset.apply"),!1},this))}}})});

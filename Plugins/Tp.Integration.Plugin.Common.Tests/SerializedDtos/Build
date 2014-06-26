@@ -1,0 +1,22 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.BuildDTO, Tp.Integration.Messages</Type>
+  <BuildDTO>
+    <ID xsi:nil="true" />
+    <ProjectID xsi:nil="true" />
+    <BuildID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <BuildDate>2013-08-16T20:20:01.499118+03:00</BuildDate>
+    <LastCommentUserID xsi:nil="true" />
+    <ParentProjectID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <IterationID xsi:nil="true" />
+    <ReleaseID xsi:nil="true" />
+    <EntityTypeName>Tp.BusinessObjects.Build</EntityTypeName>
+  </BuildDTO>
+</Value>

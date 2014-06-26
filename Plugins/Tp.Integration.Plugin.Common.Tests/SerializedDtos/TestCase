@@ -1,0 +1,24 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.TestCaseDTO, Tp.Integration.Messages</Type>
+  <TestCaseDTO>
+    <ID xsi:nil="true" />
+    <TestCaseID xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <EndDate xsi:nil="true" />
+    <CreateDate xsi:nil="true" />
+    <ModifyDate xsi:nil="true" />
+    <LastCommentDate xsi:nil="true" />
+    <NumericPriority>0</NumericPriority>
+    <LastStatus xsi:nil="true" />
+    <LastRunDate xsi:nil="true" />
+    <LastCommentUserID xsi:nil="true" />
+    <OwnerID>1</OwnerID>
+    <LastEditorID xsi:nil="true" />
+    <UserStoryID xsi:nil="true" />
+    <ProjectID xsi:nil="true" />
+    <PriorityID>25</PriorityID>
+    <EntityTypeName>Tp.BusinessObjects.TestCase</EntityTypeName>
+    <PriorityName>Moderate</PriorityName>
+    <EntityTypeID>12</EntityTypeID>
+  </TestCaseDTO>
+</Value>

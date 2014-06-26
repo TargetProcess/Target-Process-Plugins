@@ -1,0 +1,1 @@
+define(["libs/d3/d3"],function(n){return{precision:function(t){return function(r){return n.format("s")(Math.round(r*Math.pow(10,t))/Math.pow(10,t))}}}});

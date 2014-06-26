@@ -1,1 +1,1 @@
-define(["tau/core/model.editable.base","Underscore"],function(ModelBase,_){var EditablePropertyEffortModel=ModelBase.extend({name:"Effort Editable","bus beforeInit+dataBind":function(){var self=this,permissions={editable:!0};this.fire("permissionsReady",permissions)}});return EditablePropertyEffortModel})
+define(["tau/core/model.editable.base","Underscore"],function(e){var i=e.extend({name:"Effort Editable","bus beforeInit+dataBind":function(){var e={editable:!0};this.fire("permissionsReady",e)}});return i});

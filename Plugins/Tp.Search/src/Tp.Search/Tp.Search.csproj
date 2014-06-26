@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F6C8FAB6-DB37-481C-9365-52D143927B0E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Search</RootNamespace>
+    <AssemblyName>Tp.Search</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\libs\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <HintPath>..\..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net, Version=1.2.0.2, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tp.Service.Proxies, Version=2.15.0.15001, Culture=neutral, PublicKeyToken=ee2a1130677e5334, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bus\AccountRemovedMessageHandler.cs" />
+    <Compile Include="Bus\AutomaticOnDemandProfileCreator.cs" />
+    <Compile Include="Bus\Commands\BuildSearchIndexesCommand.cs" />
+    <Compile Include="Bus\Data\IndexProgressData.cs" />
+    <Compile Include="Bus\Data\PageData.cs" />
+    <Compile Include="Bus\Data\TeamProjectRelation.cs" />
+    <Compile Include="Bus\Serialization\IndexExistingEntitiesSagaPreviousVersionCorrecter.cs" />
+    <Compile Include="Bus\Serialization\SearchPatchCollection.cs" />
+    <Compile Include="Bus\Utils\SagaServices.cs" />
+    <Compile Include="Bus\Workflow\AssignablesIndexing.cs" />
+    <Compile Include="Bus\Workflow\CommentsIndexing.cs" />
+    <Compile Include="Bus\Workflow\DocumentIndexMemoryWatcher.cs" />
+    <Compile Include="Bus\Workflow\DocumentIndexOptimizer.cs" />
+    <Compile Include="Bus\Workflow\GeneralsIndexing.cs" />
+    <Compile Include="Bus\Workflow\ImpedimentsIndexing.cs" />
+    <Compile Include="Bus\Workflow\IndexAlgorithm.cs" />
+    <Compile Include="Bus\Workflow\TestCasesIndexing.cs" />
+    <Compile Include="Config\DocumentIndexSetupConfig.cs" />
+    <Compile Include="Model\Document\CharactersDocumentIndexDataTypeService.cs" />
+    <Compile Include="Model\Document\DigitsDocumentIndexDataTypeService.cs" />
+    <Compile Include="Model\Document\DocumentIndex.cs" />
+    <Compile Include="Model\Document\IIndexDataFactory.cs" />
+    <Compile Include="Model\Document\IndexAttribute\ImpedimentDocumentAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\ImpedimentIndexAttribute.cs" />
+    <Compile Include="Model\Document\IndexDataFactory.cs" />
+    <Compile Include="Model\Document\DocumentIndexOptimizeSetup.cs" />
+    <Compile Include="Model\Exceptions\DocumentIndexConcurrentAccessException.cs" />
+    <Compile Include="Model\Document\DocumentIndexDataTypeServiceFactory.cs" />
+    <Compile Include="Model\Document\DocumentIndexDataTypeToken.cs" />
+    <Compile Include="Model\Document\DocumentIndexMetadata.cs" />
+    <Compile Include="Model\Document\DocumentIndexMonitor.cs" />
+    <Compile Include="Model\Document\DocumentIndexRebuilder.cs" />
+    <Compile Include="Model\Document\FileService.cs" />
+    <Compile Include="Model\Document\IDocumentIndexDataTypeService.cs" />
+    <Compile Include="Model\Document\IFileService.cs" />
+    <Compile Include="Model\Document\IndexAttribute\CustomFieldsProvider.cs" />
+    <Compile Include="Model\Document\ILock.cs" />
+    <Compile Include="Model\Document\IndexAttribute\DocumentIndexDataTypeAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\DocumentIndexVersionAttribute.cs" />
+    <Compile Include="Model\Document\LockToken.cs" />
+    <Compile Include="Model\IndexProgress.cs" />
+    <Compile Include="Bus\Workflow\AssignableSquadChangedSaga.cs" />
+    <Compile Include="Messages\AssignableSquadChangedLocalMessage.cs" />
+    <Compile Include="Model\Document\IndexAttribute\AssignableDocumentAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\CommentIndexAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\DocumentIndexAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\AssignableIndexAttribute.cs" />
+    <Compile Include="Model\Document\DocumentIndexes.cs" />
+    <Compile Include="Model\Document\DocumentFactory.cs" />
+    <Compile Include="Model\Document\DocumentIndexType.cs" />
+    <Compile Include="Model\Document\EnumServices.cs" />
+    <Compile Include="Model\Document\IndexAttribute\GeneralDocumentAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\GeneralIndexAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\IDocumentFieldsProvider.cs" />
+    <Compile Include="Model\Document\IndexAttribute\IIndexFieldsProvider.cs" />
+    <Compile Include="Model\Document\IndexAttribute\IndexFileName.cs" />
+    <Compile Include="Model\Document\IndexAttribute\TestCaseDocumentAttribute.cs" />
+    <Compile Include="Model\Document\IndexAttribute\TestCaseIndexAttribute.cs" />
+    <Compile Include="Model\Optimization\DeferredOptimizeType.cs" />
+    <Compile Include="Model\Optimization\DocumentIndexOptimizeByCallsHint.cs" />
+    <Compile Include="Model\Optimization\DocumentIndexOptimizeHintFactory.cs" />
+    <Compile Include="Model\Optimization\DocumentIndexOptimizeNoHint.cs" />
+    <Compile Include="Model\Optimization\DocumentIndexPeriodicOptimizeHint.cs" />
+    <Compile Include="Model\Optimization\DocumentIndexPeriodicOptimizeHintFactory.cs" />
+    <Compile Include="Model\Optimization\DocumentIndexPeriodicOptimizeNoHint.cs" />
+    <Compile Include="Model\Optimization\IDocumentIndexOptimizeHint.cs" />
+    <Compile Include="Model\Optimization\IDocumentIndexPeriodicOptimizeHint.cs" />
+    <Compile Include="Model\Query\ContextQueryPlanBuilder.cs" />
+    <Compile Include="Model\Query\IContextQueryPlanBuilder.cs" />
+    <Compile Include="Model\Query\ImpedimentContextQueryPlanBuilder.cs" />
+    <Compile Include="Model\Query\IProjectContextQueryPlanBuilder.cs" />
+    <Compile Include="Model\Query\ParsedQuery.cs" />
+    <Compile Include="Model\Query\QueryPlan.cs" />
+    <Compile Include="Model\Query\QueryPlanCombinators.cs" />
+    <Compile Include="Model\Query\QueryPlanResult.cs" />
+    <Compile Include="Model\Query\QueryResult.cs" />
+    <Compile Include="Model\Utils\TextOperations.cs" />
+    <Compile Include="Model\Query\QueryRunner.cs" />
+    <Compile Include="Model\Query\Page.cs" />
+    <Compile Include="Model\Query\QueryEngine.cs" />
+    <Compile Include="Model\Query\QueryRunResult.cs" />
+    <Compile Include="Model\Query\QueryPlanFull.cs" />
+    <Compile Include="Model\Query\QueryPlanBuilder.cs" />
+    <Compile Include="Bus\Data\QueryResultData.cs" />
+    <Compile Include="Model\Document\DocumentIndexSetup.cs" />
+    <Compile Include="Model\Document\EnumDescriptions.cs" />
+    <Compile Include="Model\Entity\IEntityTypeProvider.cs" />
+    <Compile Include="Model\Document\DocumentIndexTyped.cs" />
+    <Compile Include="Model\Document\DocumentIndexTypeToken.cs" />
+    <Compile Include="Model\Document\DocumentIndexProviderServices.cs" />
+    <Compile Include="Model\Document\DocumentIndexShutdownSetup.cs" />
+    <Compile Include="Model\Document\IDocumentIndexProvider.cs" />
+    <Compile Include="Model\Document\IDocumentIndex.cs" />
+    <Compile Include="Model\Query\QueryParser.cs" />
+    <Compile Include="Bus\MashupForTp2.cs" />
+    <Compile Include="Bus\Data\QueryData.cs" />
+    <Compile Include="Bus\Commands\SearchCommand.cs" />
+    <Compile Include="Bus\SendEnableForTp2Mashup.cs" />
+    <Compile Include="Bus\Commands\SetEnableForTp2.cs" />
+    <Compile Include="Model\Document\DocumentIdFactory.cs" />
+    <Compile Include="Model\Entity\EntityDocument.cs" />
+    <Compile Include="Model\Entity\EntityIndexer.cs" />
+    <Compile Include="Model\Document\IDocumentIdFactory.cs" />
+    <Compile Include="Model\Entity\IEntityIndexer.cs" />
+    <Compile Include="Model\Document\DocumentIndexProvider.cs" />
+    <Compile Include="Messages\GeneralProjectChangedLocalMessage.cs" />
+    <Compile Include="Messages\IndexExistingEntitiesDoneLocalMessage.cs" />
+    <Compile Include="Messages\IndexExistingEntitiesLocalMessage.cs" />
+    <Compile Include="Messages\ProjectProcessChangedLocalMessage.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Bus\RunAtStartStopInitializer.cs" />
+    <Compile Include="Bus\SearcherOnTargetProcessStartSender.cs" />
+    <Compile Include="Bus\SearcherPluginUpdatedProfileInitializationSaga.cs" />
+    <Compile Include="Bus\SearcherProfile.cs" />
+    <Compile Include="Bus\SearchableEntityLifecycleHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructureMap\PluginRegistry.cs" />
+    <Compile Include="Bus\SearcherPluginProfileInitializationSaga.cs" />
+    <Compile Include="Bus\Workflow\AutomaticSearcherListener.cs" />
+    <Compile Include="Model\Query\QueryEntityTypeProvider.cs" />
+    <Compile Include="Bus\Workflow\GeneralProjectChangedSaga.cs" />
+    <Compile Include="Bus\Workflow\IndexExistingEntitiesSaga.cs" />
+    <Compile Include="Model\Query\IQueryResultFactory.cs" />
+    <Compile Include="Bus\Workflow\ProjectProcessChangedSaga.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\PluginUiLayout\placeholders.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\SearchApplication\SearchApplication.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\SearchTP2\SearchTP2.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mashups\SearchTP3\SearchTP3.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="PluginSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Mashups\TPSearch\placeholders.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Tp.Integration.Plugin.Common.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Uninstall.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mashups\TPSearch\jquery\" />
+    <Folder Include="Mashups\TPSearch\templates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mashups\PluginUiLayout\PluginLayout.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\ProfileEditor\searcherProfileEditor.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\ProfileEditor\editorTmpl.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\ProfileEditor\registerMashup.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\SearchApplication.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchTP2\SearchTP2.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchTP3\SearchTP3.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_flat_0_aaaaaa_40x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_flat_75_ffffff_40x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_glass_55_fbf9ee_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_glass_65_ffffff_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_glass_75_dadada_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_glass_75_e6e6e6_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_glass_95_fef1ec_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-bg_highlight-soft_75_cccccc_1x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-icons_222222_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-icons_2e83ff_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-icons_454545_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-icons_888888_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\images\ui-icons_cd0a0a_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\jquery.highlight-3.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\SearchResultsItem.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\SearchResultsItemTmpl.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\SearchResultsTmpl.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\TPSearch\tpSearch.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\EnableInTp2.js" />
+    <Content Include="search-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Mashups\TPSearch\commands.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Mashups\TPSearch\SearchResults.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93bf8935-0436-4e51-ac35-0ba1d93b8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{ef010d25-b262-4051-b369-bd62f334a190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692e1db-2933-4f02-a5e6-ba303f1825b1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
+      <Project>{bbfa5c9b-6c11-4b62-a9b1-e631462d333b}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
+      <Project>{fcaff2c5-aff5-454a-91d1-6e2f653f1bcb}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hoot\Hoot.csproj">
+      <Project>{e6c567b0-acad-42d4-9242-4e5e22d2af1d}</Project>
+      <Name>Hoot</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

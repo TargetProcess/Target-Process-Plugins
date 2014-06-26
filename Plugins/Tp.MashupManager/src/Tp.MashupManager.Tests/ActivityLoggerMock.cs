@@ -50,6 +50,8 @@ namespace Tp.MashupManager.Tests
 
 		public MessagesContainer Messages { get; private set; }
 
+		public bool IsDebugEnabled { get { return true; } }
+
 		public void Debug(string message)
 		{
 			Messages.Add(Level.Debug, message);

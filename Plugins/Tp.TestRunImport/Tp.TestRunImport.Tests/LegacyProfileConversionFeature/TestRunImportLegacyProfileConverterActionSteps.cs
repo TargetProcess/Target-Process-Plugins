@@ -16,7 +16,9 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 {
 	[ActionSteps]
-	public abstract class TestRunImportLegacyProfileConverterActionSteps<T> : LegacyProfileConverterActionStepsBase<T, TestRunImportLegacyProfileConversionUnitTestRegistry> where T : TestRunImportLegacyProfileConvertor
+	public abstract class TestRunImportLegacyProfileConverterActionSteps<T> :
+		LegacyProfileConverterActionStepsBase<T, TestRunImportLegacyProfileConversionUnitTestRegistry, PluginProfile>
+		where T : TestRunImportLegacyProfileConvertor
 	{
 		[Given("sync interval is $syncInterval")]
 		public void SetSyncInterval(int syncInterval)

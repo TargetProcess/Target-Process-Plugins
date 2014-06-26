@@ -49,8 +49,17 @@ namespace Tp.Integration.Messages.PluginLifecycle
 
 		public bool Matches(MashupPlaceholder mashupPlaceHolderValue, AccountName accountName)
 		{
-			return Placeholders.Any(x => x.Equals(mashupPlaceHolderValue.Value,StringComparison.InvariantCultureIgnoreCase)) &&
-				   (Accounts.Contains(accountName.Value.ToLower()) || Accounts.IsNullOrEmpty());
+			return PlaceholderMatches(mashupPlaceHolderValue) && AccountMatches(accountName);
+		}
+
+		public bool AccountMatches(AccountName accountName)
+		{
+			return (Accounts.Contains(accountName.Value.ToLower()) || Accounts.IsNullOrEmpty());
+		}
+
+		public bool PlaceholderMatches(MashupPlaceholder mashupPlaceHolderValue)
+		{
+			return Placeholders.Any(x => x.Equals(mashupPlaceHolderValue.Value,StringComparison.InvariantCultureIgnoreCase));
 		}
 	}
 }

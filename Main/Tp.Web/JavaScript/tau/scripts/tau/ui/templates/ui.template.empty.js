@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var n={name:"empty",engine:"jqote2",markup:["<div></div>"],dependencies:[]};return e.register(n)});

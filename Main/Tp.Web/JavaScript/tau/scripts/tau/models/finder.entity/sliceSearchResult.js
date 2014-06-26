@@ -1,0 +1,1 @@
+define(["tau/core/class"],function(t){var i=t.extend({init:function(t){var i=t.data.dynamic.items,e=i.length,a=t.data.fixed.items.length?!!t.data.fixed.items[0]:!1,n=t.command;this.items=i,this.paging={start:n.$skip||0,end:(n.$skip||0)+e,count:e,hasNext:a}}});return i});

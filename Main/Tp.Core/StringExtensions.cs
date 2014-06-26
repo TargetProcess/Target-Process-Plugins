@@ -58,6 +58,11 @@ namespace System
 			return stringBuilder.AppendFormat(format, args).AppendLine();
 		}
 
+		public static bool Contains(this string source, string value, StringComparison comparisonType)
+		{
+			return source.IndexOf(value, comparisonType) >= 0;
+		}
+
 		public static string ToStringSafe(this object s)
 		{
 			if (s == null)
@@ -141,7 +146,7 @@ namespace System
 						{
 							throw new ArgumentException(Res.InvalidCharacterLiteral);
 						}
-						yield return SpecialCharacters.GetValue(enumerator.Current).FailIfNothing(() => new ArgumentException(Res.InvalidCharacter.Fmt(enumerator.Current)));
+						yield return SpecialCharacters.GetValue(enumerator.Current).GetOrThrow(() => new ArgumentException(Res.InvalidCharacter.Fmt(enumerator.Current)));
 					}
 					else
 					{
@@ -149,6 +154,17 @@ namespace System
 					}
 				}
 			}
+		}
+
+		public static string CamelCase(this string value)
+		{
+			if (string.IsNullOrEmpty(value))
+			{
+				return value;
+			}
+			var sb = new StringBuilder(value);
+			sb[0] = char.ToLowerInvariant(sb[0]);
+			return sb.ToString();
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 {
 	[ActionSteps]
 	public class LegacyProfileConverterActionSteps :
-		LegacyProfileConverterActionStepsBase<LegacyProfileConvertor, BugzillaLegacyProfileConversionUnitTestRegistry>
+		LegacyProfileConverterActionStepsBase<LegacyProfileConvertor, BugzillaLegacyProfileConversionUnitTestRegistry, PluginProfile>
 	{
 		private int _externalId = 1;
 
@@ -281,7 +281,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 				EntityTypeID = entityType,
 				ExternalID = externalId,
 				TpID = tpId,
-				PluginProfileID = _legacyProfile.PluginProfileID,
+				PluginProfileID = LegacyProfile.PluginProfileID,
 				CreateDate = DateTime.Now
 			});
 		}

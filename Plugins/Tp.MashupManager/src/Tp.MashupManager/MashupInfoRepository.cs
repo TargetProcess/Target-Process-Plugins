@@ -3,6 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using StructureMap;
 using Tp.Integration.Messages.PluginLifecycle;
@@ -11,7 +13,7 @@ using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
-using Tp.MashupManager.Dtos;
+using Tp.MashupManager.CustomCommands.Args;
 using Tp.MashupManager.MashupStorage;
 using log4net;
 
@@ -22,6 +24,7 @@ namespace Tp.MashupManager
 		private readonly ITpBus _bus;
 		private readonly IMashupScriptStorage _scriptStorage;
 		private readonly IPluginContext _context;
+		private readonly Lazy<MashupManagerProfile> _lazyMashupManagerProfile;
 		private readonly ILog _log;
 		public const string ProfileName = "Mashups";
 
@@ -29,37 +32,42 @@ namespace Tp.MashupManager
 		{
 			_bus = bus;
 			_scriptStorage = scriptStorage;
-			_log = logManager.GetLogger(GetType());
 			_context = context;
+			_lazyMashupManagerProfile =
+				Lazy.Create(() => ObjectFactory.GetInstance<ISingleProfile>().Profile.GetProfile<MashupManagerProfile>());
+			_log = logManager.GetLogger(GetType());
 		}
 
-		public PluginProfileErrorCollection Add(MashupDto dto)
+		public PluginProfileErrorCollection Add(Mashup dto, bool generateUniqueName)
 		{
-			NormalizeMashup(dto);
-			var errors = dto.ValidateAdd(ManagerProfile);
-
-			if (!errors.Any())
+			if (generateUniqueName)
 			{
-				AddMashupNameToPlugin(dto);
-
-				_scriptStorage.SaveMashup(dto);
-
-				_bus.Send(dto.CreatePluginMashupMessage());
-
-				_log.InfoFormat("Add mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
+				dto.Name = GetUniqueMashupName(dto.Name);
 			}
+
+			var errors = dto.ValidateAdd(ManagerProfile);
+			if (errors.Any())
+			{
+				return errors;
+			}
+
+			AddMashupNameToPlugin(dto.Name);
+			_scriptStorage.SaveMashup(dto);
+			_bus.Send(dto.CreatePluginMashupMessage());
+			_log.InfoFormat("Add mashup command sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
 			return errors;
 		}
 
-		public PluginProfileErrorCollection Update(UpdateMashupDto dto)
+		public PluginProfileErrorCollection Update(UpdateMashupCommandArg commandArg)
 		{
-			NormalizeMashup(dto);
-			if (dto.IsNameChanged())
+			if (commandArg.IsNameChanged())
 			{
-				var addErrors = Add(dto);
+				CompleteWithNotChangedOriginFiles(commandArg);
+				var addErrors = Add(commandArg, false);
+
 				if (!addErrors.Any())
 				{
-					var deleteErrors = Delete(dto.OldName);
+					var deleteErrors = Delete(commandArg.OldName);
 					foreach (var error in deleteErrors)
 					{
 						addErrors.Add(error);
@@ -69,86 +77,86 @@ namespace Tp.MashupManager
 				return addErrors;
 			}
 
-			return UpdateInternal(dto);
+			return UpdateInternal(commandArg);
 		}
 
 		public PluginProfileErrorCollection Delete(string name)
 		{
 			DeleteMashupNameToPlugin(name);
-
 			_scriptStorage.DeleteMashup(name);
-
-			var dto = new MashupDto {Name = name};
-
+			var dto = new Mashup {Name = name};
 			_bus.Send(dto.CreatePluginMashupMessage());
-
 			_log.InfoFormat("Clean mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
-
 			return new PluginProfileErrorCollection();
+		}
+
+		private string GetUniqueMashupName(string mashupName)
+		{
+			var uniqueName = mashupName;
+			var index = 1;
+
+			while (ManagerProfile.MashupNames.Any(n => n.EqualsIgnoreCase(uniqueName)))
+			{
+				uniqueName = "{0} {1}".Fmt(mashupName, index);
+				index++;
+			}
+			
+			return uniqueName;
 		}
 
 		private MashupManagerProfile ManagerProfile
 		{
-			get
-			{
-				IProfile profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
+			get { return _lazyMashupManagerProfile.Value; }
+		}		
 
-				return profile != null
-						? profile.GetProfile<MashupManagerProfile>()
-						: null;
-			}
-		}
-
-		private void NormalizeMashup(MashupDto mashup)
+		private void AddMashupNameToPlugin(string name)
 		{
-			mashup.Name = mashup.Name.Trim();
-		}
-
-		private void AddMashupNameToPlugin(MashupDto dto)
-		{
-			var names = ManagerProfile != null ? ManagerProfile.MashupNames : new MashupNames();
-			names.Add(dto.Name);
-			CreateOrUpdateProfile(names);
+			ManagerProfile.MashupNames.Add(name);
+			UpdateProfile(ManagerProfile);
 		}
 
 		private void DeleteMashupNameToPlugin(string name)
 		{
-			var names = ManagerProfile.MashupNames;
-			names.Remove(name);
-
-			CreateOrUpdateProfile(names);
+			ManagerProfile.MashupNames.Remove(name);
+			UpdateProfile(ManagerProfile);
 		}
 
-		private PluginProfileErrorCollection UpdateInternal(UpdateMashupDto dto)
+		private PluginProfileErrorCollection UpdateInternal(UpdateMashupCommandArg commandArg)
 		{
-			var errors = dto.ValidateUpdate(ManagerProfile);
-
-			if (!errors.Any())
+			var errors = commandArg.ValidateUpdate(ManagerProfile);
+			if (errors.Any())
 			{
-				_scriptStorage.SaveMashup(dto);
-				_bus.Send(dto.CreatePluginMashupMessage());
-
-				_log.InfoFormat("Update mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name,
-				                _context.AccountName.Value);
+				return errors;
 			}
-
-			return errors;
+			CompleteWithNotChangedOriginFiles(commandArg);
+			_scriptStorage.SaveMashup(commandArg);
+			_bus.Send(commandArg.CreatePluginMashupMessage());
+			_log.InfoFormat("Update mashup commnad sent to TP (Mashup '{0}' for account '{1}')", commandArg.Name, _context.AccountName.Value);
+			return new PluginProfileErrorCollection();
 		}
 
-		private void CreateOrUpdateProfile(MashupNames names)
+		private void UpdateProfile(MashupManagerProfile managerProfile)
 		{
-			var command = ObjectFactory.GetInstance<AddOrUpdateProfileCommand>();
-
-			var pluginProfileDto = new PluginProfileDto
+			var addOrUpdateProfileCommand = ObjectFactory.GetInstance<AddOrUpdateProfileCommand>();
+			var profileDto = new PluginProfileDto
 			{
 				Name = ProfileName,
-				Settings = new MashupManagerProfile
-				{
-					MashupNames = names
-				}
+				Settings = managerProfile
 			};
+			addOrUpdateProfileCommand.Execute(profileDto.Serialize());
+		}
 
-			command.Execute(pluginProfileDto.Serialize());
+		private void CompleteWithNotChangedOriginFiles(UpdateMashupCommandArg commandArg)
+		{
+			var originMashup = _scriptStorage.GetMashup(commandArg.OldName);
+			var filesToBeAdded = originMashup.Files
+				.Where(x => !commandArg.Files.Any(y => y.FileName.Equals(x.FileName, StringComparison.InvariantCultureIgnoreCase)))
+				.ToArray();
+
+			if (filesToBeAdded.Any())
+			{
+				commandArg.Files.AddRange(filesToBeAdded);
+			}
 		}
 	}
 }

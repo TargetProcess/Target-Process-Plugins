@@ -1,0 +1,8 @@
+<Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Tp.Integration.Common.MilestoneDTO, Tp.Integration.Messages</Type>
+  <MilestoneDTO>
+    <ID xsi:nil="true" />
+    <MilestoneId xsi:nil="true" />
+    <Date>0001-01-01T00:00:00</Date>
+  </MilestoneDTO>
+</Value>

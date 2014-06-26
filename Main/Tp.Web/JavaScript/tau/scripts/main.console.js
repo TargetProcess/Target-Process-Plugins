@@ -1,1 +1,1 @@
-(function(){function callback(){window.document.title="TargetProcess REST Console"}var libs=["Underscore","jQuery","tau/ui/restConsole"];require({priority:libs}),require(libs,callback)})()
+!function(){function e(){window.document.title="Targetprocess REST Console"}var r=["Underscore","jQuery","tau/ui/restConsole"];require({priority:r}),require(r,e)}();

@@ -18,6 +18,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Bugzilla.Tests.Synchronization
 {
 	[TestFixture, ActionSteps]
+    [Category("PartPlugins0")]
 	public class EntityStateSyncSpecs : BugzillaTestBase
 	{
 		[Test]

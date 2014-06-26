@@ -1,1 +1,1 @@
-define(["tau/store/factory"],function(Factory){return new Factory})
+define(["tau/store/factory"],function(e){return new e});

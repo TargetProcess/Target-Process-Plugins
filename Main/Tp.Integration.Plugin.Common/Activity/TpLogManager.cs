@@ -12,11 +12,10 @@ using log4net;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	internal class TpLogManager : ILogManager
+	internal class TpLogManager : ILogManager, ILogProvider
 	{
 		private readonly IActivityLogPathProvider _path;
 		private readonly IPluginContext _context;
-
 		public TpLogManager(IActivityLogPathProvider path, IPluginContext context)
 		{
 			_path = path;
@@ -31,14 +30,23 @@ namespace Tp.Integration.Plugin.Common.Activity
 		public ILog GetLogger(string name)
 		{
 			return ActivityLoggerRegistry.IsKnownLogger(name)
-			       	? LogManager.GetLogger(_path.GetLogPathFor(_context.AccountName.Value, _context.ProfileName.Value, name))
+					? GetLogger(_path, name, _context)
 			       	: LogManager.GetLogger(name);
 		}
 
 		public IEnumerable<ILog> GetActivityLoggers()
 		{
-			return ActivityLoggerRegistry.LoggersNames.Select(GetLogger)
-				.Concat(GetLogger(typeof(TpLogManager)));
+			return GetActivityLoggers(_context);
+		}
+
+		public IEnumerable<ILog> GetActivityLoggers(IPluginContext context)
+		{
+			return ActivityLoggerRegistry.LoggersNames.Select(n => GetLogger(_path, n, context)).Concat(GetLogger(typeof(TpLogManager)));
+		}
+
+		private static ILog GetLogger(IActivityLogPathProvider path, string name, IPluginContext context)
+		{
+			return LogManager.GetLogger(path.GetLogPathFor(context.AccountName.Value, context.ProfileName.Value, name));
 		}
 	}
 }

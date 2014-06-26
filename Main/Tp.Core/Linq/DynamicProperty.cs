@@ -13,6 +13,27 @@ namespace System.Linq.Dynamic
 			_type = type;
 		}
 
+		protected bool Equals(DynamicProperty other)
+		{
+			return string.Equals(_name, other._name) && _type == other._type;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((DynamicProperty)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((_name != null ? _name.GetHashCode() : 0) * 397) ^ (_type != null ? _type.GetHashCode() : 0);
+			}
+		}
+
 		public string Name
 		{
 			get { return _name; }

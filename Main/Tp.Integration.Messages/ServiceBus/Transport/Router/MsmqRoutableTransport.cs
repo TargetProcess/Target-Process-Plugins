@@ -786,7 +786,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				{
 					TransportMessageReceived(this, new TransportMessageReceivedEventArgs(msg));
 				}
-				Logger.Info(LoggerContext.New(origin.MessageOrigin.Name, msg), "Transport message received");
+
+				Logger.Debug(LoggerContext.New(origin.MessageOrigin.Name, msg), "Transport message received");
 			}
 			catch (Exception e)
 			{

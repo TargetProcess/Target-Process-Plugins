@@ -1,1 +1,1 @@
-define(["Underscore","tau/utils/utils.urlBuilder.service","tau/configurator"],function(_,UrlBuilder,configurator){return new UrlBuilder(configurator)})
+define(["Underscore","tau/utils/utils.urlBuilder.service","tau/configurator"],function(e,r,u){return new r(u)});

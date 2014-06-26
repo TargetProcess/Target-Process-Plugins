@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/ui/extensions/choice/ui.extension.choice.editable"],function(i,e,n){return n.extend({_updateState:function(i){var e=!0;this.config.confirmation&&window.confirm&&(e=window.confirm(this.config.confirmation)),e&&this.fire("entityState.selected",{id:i})}})});

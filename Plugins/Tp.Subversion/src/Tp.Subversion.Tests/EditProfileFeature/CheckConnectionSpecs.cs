@@ -19,6 +19,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.Subversion.EditProfileFeature
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class CheckConnectionSpecs
 	{
 		[SetUp]

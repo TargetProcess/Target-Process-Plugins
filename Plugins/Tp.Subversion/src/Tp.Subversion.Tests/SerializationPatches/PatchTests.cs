@@ -28,6 +28,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Subversion.SerializationPatches
 {
 	[TestFixture]
+    [Category("PartPlugins1")]
 	public class PatchTests
 	{
 		[SetUp]

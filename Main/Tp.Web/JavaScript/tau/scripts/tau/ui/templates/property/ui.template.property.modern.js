@@ -1,1 +1,1 @@
-define(["tau/core/templates-factory"],function(templates){var config={name:"property.modern",engine:"jqote2",markup:['<span class="tau-dropdown-toggle i-role-property " data-value="<%! this.value %>">',"<i><%! this.value %></i>","</span>"]};return templates.register(config)})
+define(["tau/core/templates-factory"],function(e){var a={name:"property.modern",engine:"jqote2",markup:['<span class="tau-dropdown-toggle i-role-property " data-value="<%! this.value %>">',"<i><%! this.value %></i>","</span>"]};return e.register(a)});

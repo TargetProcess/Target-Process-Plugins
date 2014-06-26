@@ -44,6 +44,8 @@ namespace Tp.Integration.Testing.Common
 			AddMessage(message);
 		}
 
+		public bool IsDebugEnabled { get { return true; } }
+
 		public void Debug(string message)
 		{
 			AddMessage(message);

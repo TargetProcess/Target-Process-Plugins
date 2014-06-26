@@ -11,9 +11,6 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
 	[Serializable]
 	public class TestCaseQuery : QueryBase
 	{
-		public string Hql { get; set; }
-		public object[] Params { get; set; }
-
 		public override DtoType DtoType
 		{
 			get { return new DtoType(typeof(TestCaseDTO)); }

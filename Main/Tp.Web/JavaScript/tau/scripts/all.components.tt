@@ -7,7 +7,7 @@
 <#@ import namespace="System.Diagnostics" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections" #>
-<#@ import namespace="System.Collections.Generic" #> 
+<#@ import namespace="System.Collections.Generic" #>
 require([
     'tracking/tauspy',
 <#
@@ -15,7 +15,7 @@ require([
 var currentPath = Host.ResolvePath("tau\\components");
 var files = Directory.GetFiles(currentPath, "*.js");
 
-foreach(var file in files) {	
+foreach(var file in files) {
 	var name = new FileInfo(file).Name.Replace(".js", string.Empty);
     //if (name.IndexOf(".board.") == -1) {
 #>
@@ -23,7 +23,12 @@ foreach(var file in files) {
 <#
     //}
 }#>
-    'tau/components/extensions/print.convert.extension'
+    'tp/reports/burndown/component.report',
+    'tp/reports/cycleTimeDistribution/component.report',
+    'tp/reports/processControl/component.report',
+    'tp/reports/relationsNetwork/component.report',
+    'tau/components/extensions/component.creator.extension',
+    'libs/debug.extensions'
 ],
 function() {
     return {};

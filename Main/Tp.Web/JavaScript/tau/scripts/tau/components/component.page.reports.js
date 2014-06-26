@@ -1,1 +1,1 @@
-define(["tau/components/component.page.base","tau/views/view.page.reports"],function(BaseCreator,ViewType){return{create:function(componentContext){var componentConfig={name:"reports page component",turnOffErrorEmiter:!0,extensions:[],ViewType:ViewType};return BaseCreator.create(componentConfig,componentContext)}}})
+define(["tau/components/component.page.base","tau/views/view.page.reports"],function(e,n){return{create:function(r){var t={name:"reports page component",turnOffErrorEmiter:!0,extensions:[],ViewType:n};return e.create(t,r)}}});
