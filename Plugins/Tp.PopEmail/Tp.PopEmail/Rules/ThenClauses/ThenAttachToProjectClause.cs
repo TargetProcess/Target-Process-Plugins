@@ -21,7 +21,7 @@ namespace Tp.PopEmailIntegration.Rules.ThenClauses
 		{
 		}
 
-		public override void Execute(MessageDTO dto, AttachmentDTO[] attachments)
+		public override void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
 		{
 			_bus.SendLocal(new AttachMessageToProjectCommand {MessageDto = dto, ProjectId = _projectId});
 		}

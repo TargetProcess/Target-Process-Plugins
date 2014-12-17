@@ -19,11 +19,11 @@ namespace Tp.PopEmailIntegration.Rules.ThenClauses
 			_clauses.Add(thenClause);
 		}
 
-		public void Execute(MessageDTO dto, AttachmentDTO[] attachments)
+		public void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
 		{
 			foreach (var thenClause in _clauses)
 			{
-				thenClause.Execute(dto, attachments);
+				thenClause.Execute(dto, attachments, requesters);
 			}
 		}
 

@@ -28,9 +28,9 @@ namespace Tp.PopEmailIntegration.Rules
 			return _whenClause.IsMatched(message) && _thenClause.IsMatched(message);
 		}
 
-		public void Execute(MessageDTO dto, AttachmentDTO[] attachments)
+		public void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
 		{
-			_thenClause.Execute(dto, attachments);
+			_thenClause.Execute(dto, attachments, requesters);
 		}
 
 		public bool IsNull

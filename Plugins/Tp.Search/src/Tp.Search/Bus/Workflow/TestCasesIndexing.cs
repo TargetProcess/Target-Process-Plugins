@@ -21,7 +21,7 @@ namespace Tp.Search.Bus.Workflow
 
 		protected override void IndexEntity(TestCaseDTO dto)
 		{
-			EntityIndexer.UpdateTestCaseIndex(dto, new[] { TestCaseField.Steps, TestCaseField.Success }, true, DocumentIndexOptimizeSetup.NoOptimize);
+			EntityIndexer.UpdateTestCaseIndex(dto, new[] { TestCaseField.Description }, true, DocumentIndexOptimizeSetup.NoOptimize);
 		}
 
 		protected override void OptimizeIndex()

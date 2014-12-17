@@ -1,0 +1,74 @@
+<!-- name: board.context.selector.lists.program, fn: ./ui.template.board.context.selector.lists.program.fn -->
+<div class="tau-teams-projects-manager i-role-popupcontent">
+    <section class="tau-teams-projects-search">
+        <span class="tau-inline-group tau-search">
+            <input name="filter" type="text" placeholder="Search Projects and Teams" class="tau-in-text">
+            <button class="tau-btn tau-search" type="button"></button>
+        </span>
+    </section>
+    <section class="tau-managed-category <% if (this.teams.length == (this.canAddTeams === false ? 0 : 1)) { %>tau-managed-category_isempty_true tau-no-team<% } %> tau-teams i-role-section-teams">
+        <header>
+            <label class="tau-checkbox tau-extension-board-tooltip i-role-select-all-item" data-title="Select all teams">
+                <input <%if (this.checkedAllTeam) {%>checked<%}%> type="checkbox" value="">
+                <i class="tau-checkbox__icon"></i>
+                <span class="tau-checkbox-label">Teams</span>
+            </label>
+
+            <button class="tau-add i-role-formtrigger" type="button">New team</button>
+
+        </header>
+        <ul class="tau-category-items-selector i-role-list">
+            <%= fn.sub("board.context.selector.teams.list", this.teams) %>
+        </ul>
+
+        <div class="tau-no-message">
+            <div class="tau-img"></div>
+            <p>Team is a group of people working together toward a common vision. Teams can work on projects.</p>
+            <div class="tau-btn-wrap"><button class="tau-btn tau-success i-role-formtrigger" type="button">Create team</button></div>
+        </div>
+
+        <div class="tau-managed-category__message tau-managed-category__message_not-found" data-text-nofound="No such team found" data-text-noitems="No available teams"></div>
+    </section>
+    <section class="tau-managed-category <% if (this.projects.length == (this.canAddProjects === false ? 0 : 1)){ %>tau-managed-category_isempty_true tau-no-project<% } %> tau-projects i-role-section-projects">
+        <header>
+            <label class="tau-checkbox tau-extension-board-tooltip i-role-select-all-item" data-title="Select all projects">
+                <input <%if (this.checkedAllProject) {%>checked<%}%> type="checkbox">
+                <i class="tau-checkbox__icon"></i>
+                <span class="tau-checkbox-label">Projects</span>
+            </label>
+
+            <span class="tau-add">
+                <a href="#" type="button" class="i-role-formtrigger">New project</a>
+                <span>or</span>
+                <a href="#" type="button" class="i-role-add-program-trigger">program</a>
+            </span>
+
+        </header>
+        <ul class="tau-category-items-selector i-role-list">
+            <% _.each(this.projects, function(item) { %>
+                <% if(item.type === "Program") { %>
+                    <%= fn.sub("board.context.selector.program", item) %>
+                <% } else if (item.type === "Project") { %>
+                    <%= fn.sub("board.context.selector.projects.list", item) %>
+                <% } else {
+                    throw new Error("the type '" + item.type + "' is not supported in template 'board.context.selector.lists.program'")
+                } %>
+            <% }); %>
+        </ul>
+
+        <div class="tau-no-message">
+            <div class="tau-img"></div>
+            <p>You usually need a project to deliver results. Projects hold all the work that needs to be done.</p>
+            <div class="tau-btn-wrap"><button class="tau-btn tau-success i-role-formtrigger" type="submit">Create project</button></div>
+        </div>
+
+        <div class="tau-managed-category__message tau-managed-category__message_not-found" data-text-nofound="No such project found" data-text-noitems="No available projects"></div>
+    </section>
+    <% var updaterStateClass = this.isShowButtonVisible ? "tau-teams-projects-updater_state_enabled": ""; %>
+    <section class="tau-teams-projects-updater <%= updaterStateClass %>">
+        <button class="tau-btn tau-primary tau-teams-projects-submit i-role-action-submit" role="action-submit" type="button"><%= (this.submitLabel || "Show") %></button>
+        <% if (this.loggedUser && this.loggedUser.isAdministrator) { %>
+            <a class="tau-setup-process i-role-process-submit">Set up Process</a>
+        <% } %>
+    </section>
+</div>

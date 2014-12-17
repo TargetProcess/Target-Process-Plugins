@@ -1,0 +1,1 @@
+define(["require","tau/models/model.property.date.editable"],function(e){var t=e("tau/models/model.property.date.editable");return t.extend({isEditable:function(){return this.config.editable===!0||void 0===this.config.editable}})});

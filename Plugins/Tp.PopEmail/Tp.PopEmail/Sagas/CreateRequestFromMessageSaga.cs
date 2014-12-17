@@ -20,19 +20,19 @@ using Tp.PopEmailIntegration.Rules;
 namespace Tp.PopEmailIntegration.Sagas
 {
 	internal class CreateRequestFromMessageSaga : TpSaga<CreateRequestFromMessageSagaData>,
-																								IAmStartedByMessages<CreateRequestFromMessageCommand>,
-																								IHandleMessages<RequestCreatedMessage>,
-																								IHandleMessages<GeneralUserAttachedToRequestMessage>,
-																								IHandleMessages<MessageAttachedToGeneralMessage>,
-																								IHandleMessages<AttachmentsAddedToGeneralMessage>,
-																								IHandleMessages<MessageUpdatedMessage>,
-																								IHandleMessages<RequestDescriptionUpdatedMessageInternal>,
-																								IHandleMessages<TargetProcessExceptionThrownMessage>
+												IAmStartedByMessages<CreateRequestFromMessageCommand>,
+												IHandleMessages<RequestCreatedMessage>,
+												IHandleMessages<RequestersAttachedToRequestMessageInternal>,
+												IHandleMessages<MessageAttachedToGeneralMessage>,
+												IHandleMessages<AttachmentsAddedToGeneralMessage>,
+												IHandleMessages<MessageUpdatedMessage>,
+												IHandleMessages<RequestDescriptionUpdatedMessageInternal>,
+												IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
 		public override void ConfigureHowToFindSaga()
 		{
 			ConfigureMapping<RequestCreatedMessage>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<GeneralUserAttachedToRequestMessage>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<RequestersAttachedToRequestMessageInternal>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<MessageAttachedToGeneralMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<AttachmentsAddedToGeneralMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<MessageUpdatedMessage>(saga => saga.Id, message => message.SagaId);
@@ -46,6 +46,7 @@ namespace Tp.PopEmailIntegration.Sagas
 			if (!IsMessageFromProject(user.Email) && !IsMessageFromTargetProcess(user.Email))
 			{
 				Data.Attachments = message.Attachments;
+				Data.Requesters = message.Requesters;
 				Data.MessageDto = message.MessageDto;
 
 				Log().Info(string.Format("Creating request from message with id {0} in project {1}", message.MessageDto.ID,
@@ -79,15 +80,13 @@ namespace Tp.PopEmailIntegration.Sagas
 			Data.RequestId = message.Dto.ID;
 			Data.RequestDto = message.Dto;
 			var requestId = message.Dto.ID;
-			var requesterId = Data.MessageDto.FromID;
-			Log().Info(string.Format("Attaching requester with Id {0} to request with id {1}", requesterId, requestId));
-			Send(new AttachGeneralUserToRequestCommand { RequesterId = requesterId, RequestId = requestId });
+			SendLocal(new AttachRequestersToRequestCommandInternal { OuterSagaId = Data.Id, Requesters = Data.Requesters, RequestId = requestId });
 		}
 
-		public void Handle(GeneralUserAttachedToRequestMessage message)
+		public void Handle(RequestersAttachedToRequestMessageInternal message)
 		{
 			var messageId = Data.MessageDto.ID;
-			var requestId = message.RequestId;
+			var requestId = Data.RequestId;
 			Log().Info(string.Format("Attaching message with id {0} to request with id {1}", messageId, requestId));
 			Send(new AttachMessageToGeneralCommand { MessageId = messageId, GeneralId = requestId });
 		}
@@ -159,5 +158,6 @@ namespace Tp.PopEmailIntegration.Sagas
 		public RequestDTO RequestDto { get; set; }
 		public int? RequestId { get; set; }
 		public AttachmentDTO[] Attachments { get; set; }
+		public int[] Requesters { get; set; }
 	}
 }

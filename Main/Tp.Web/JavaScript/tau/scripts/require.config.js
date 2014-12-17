@@ -1,0 +1,1 @@
+require.config({waitSeconds:15,shim:{"notifications/hubs":["libs/jquery/jquery.signalR"],"libs/jquery/jquery.signalR":["jQuery"]},paths:{react:"vendors/react/react-with-addons",jsx:"libs/react/jsx",JSXTransformer:"libs/react/JSXTransformer"},jsx:{fileExtension:".jsx"}});

@@ -17,6 +17,7 @@ using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Testing.Common.Persisters;
 using Tp.PopEmailIntegration.Initialization;
 using Tp.PopEmailIntegration.Rules;
+using Tp.PopEmailIntegration.Sagas;
 using Tp.Testing.Common.NBehave;
 using Tp.Testing.Common.NUnit;
 
@@ -28,6 +29,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 	{
 		private MessageDTO _message;
 		private List<AttachmentDTO> _attachments;
+		private List<int> _requesters;
 		private const int REQUEST_ID = 10;
 
 		[BeforeScenario]
@@ -36,7 +38,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 			Transport.On<CreateCommand>(x => x.Dto is RequestDTO).Reply(
 				message => new RequestCreatedMessage { Dto = new RequestDTO { ID = 10, Description = ((RequestDTO)message.Dto).Description } });
 			Transport.On<AttachGeneralUserToRequestCommand>().Reply(
-				message => new GeneralUserAttachedToRequestMessage {RequestId = REQUEST_ID, RequesterId = _message.FromID});
+				message => new GeneralUserAttachedToRequestMessage { RequestId = REQUEST_ID, RequesterId = message.RequesterId });
 			Transport.On<AttachMessageToGeneralCommand>().Reply(
 				message => new MessageAttachedToGeneralMessage {GeneralId = REQUEST_ID, MessageId = _message.FromID});
 			Transport.On<UpdateCommand>(x => x.Dto is RequestDTO).Reply(
@@ -49,6 +51,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 				{Dto = new AttachmentDTO {ID = 11, OriginalFileName = message.Dto.OriginalFileName}});
 
 			_attachments = new List<AttachmentDTO>();
+			_requesters = new List<int>();
 		}
 
 		[Test]
@@ -88,6 +91,21 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		}
 
 		[Test]
+		public void ShouldCreateRequestWithRequestersInCopyFromMessage()
+		{
+			@"Given message 2 with subject 'Subject'
+					And the message is from user with id 100
+					And the message has copy to user with id 101
+				When CreateRequestFromMessageCommand with project 1 and the message received
+				Then Request should be created
+					And requester with id 100 should be attached to the request
+					And requester with id 101 should be attached to the request
+					And message 2 should be marked as processed
+			"
+				.Execute();
+		}
+
+		[Test]
 		public void ShouldCreateRequestWithAttachmentsInBodyFromMessage()
 		{
 			@"Given message 2 with subject 'Subject'
@@ -113,7 +131,15 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		public void MessageIsFromUser(int userId)
 		{
 			_message.FromID = userId;
+			_requesters.Add(userId);
 			Transport.HandleMessageFromTp(new UserCreatedMessage {Dto = new UserDTO {UserID = userId, Email = Guid.NewGuid().ToString()}});
+		}
+
+		[Given("the message has copy to user with id $userId")]
+		public void MessageHasCopyToUser(int userId)
+		{
+			_requesters.Add(userId);
+			Transport.HandleMessageFromTp(new UserCreatedMessage { Dto = new UserDTO { UserID = userId, Email = Guid.NewGuid().ToString() } });
 		}
 
 		[Given("the message has body '$body'")]
@@ -133,7 +159,7 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		{
 			Transport.HandleLocalMessage(Storage,
 			                             new CreateRequestFromMessageCommand
-			                             {MessageDto = _message, ProjectId = projectId, Attachments = _attachments.ToArray()});
+			                             {MessageDto = _message, ProjectId = projectId, Attachments = _attachments.ToArray(), Requesters = _requesters.ToArray()});
 		}
 
 		[Then("Request should be created")]
@@ -175,8 +201,8 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		[Then("requester with id $requesterId should be attached to the request")]
 		public void RequesterShouldBeAttachedToRequest(int requesterId)
 		{
-			var command = Transport.TpQueue.GetMessages<AttachGeneralUserToRequestCommand>().First();
-			command.RequesterId.Should(Be.EqualTo(requesterId));
+			var command = Transport.TpQueue.GetMessages<AttachGeneralUserToRequestCommand>().First(x => x.RequesterId == requesterId);
+			command.Should(Be.Not.Null);
 			command.RequestId.Should(Be.EqualTo(REQUEST_ID));
 		}
 

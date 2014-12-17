@@ -58,8 +58,12 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\..\..\Libs\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
@@ -69,7 +73,7 @@
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Libs\Yahoo\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
@@ -113,6 +117,7 @@
   <ItemGroup>
     <Compile Include="ConnectionSettings.cs" />
     <Compile Include="CustomCommands\CheckConnectionCommand.cs" />
+    <Compile Include="Data\MailAddressLite.cs" />
     <Compile Include="Data\MessageUidCollection.cs" />
     <Compile Include="Data\MessageUidRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
@@ -123,6 +128,8 @@
     <Compile Include="Initialization\UpdatedEmailProfileInitializationSaga.cs" />
     <Compile Include="Rules\ThenClauses\ThenCreatePrivateRequestClause.cs" />
     <Compile Include="Rules\ThenClauses\ThenCreatePublicRequestClause.cs" />
+    <Compile Include="Sagas\AttachRequestersToRequestSaga.cs" />
+    <Compile Include="Sagas\CreateRequestersForMessageSaga.cs" />
     <Compile Include="Sagas\UpdateRequestDescriptionSaga.cs" />
     <Compile Include="TargetProcessStateTracking\GlobalSetttingUpdatedMessageHandler.cs" />
     <Compile Include="TargetProcessStateTracking\ProjectChangedMessageHandler.cs" />
@@ -141,7 +148,6 @@
     <Compile Include="Rules\WhenClauses\WhenSenderAndProjectCompanyMatched.cs" />
     <Compile Include="Sagas\AttachMessageToGeneralSaga.cs" />
     <Compile Include="Sagas\CreateCommentSaga.cs" />
-    <Compile Include="Sagas\CreateRequesterForMessageSaga.cs" />
     <Compile Include="Sagas\CreateRequestFromMessageSaga.cs" />
     <Compile Include="Data\EmailMessage.cs" />
     <Compile Include="Data\UserLite.cs" />
@@ -328,6 +334,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

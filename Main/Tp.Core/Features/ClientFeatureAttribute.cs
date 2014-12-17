@@ -17,10 +17,4 @@ namespace Tp.Core.Features
 			ClientFeatureName = clientFeatureName;
 		}
 	}
-
-
-	[AttributeUsage(AttributeTargets.Field)]
-	public class OverrideableByMashupAttribute : Attribute
-	{
-	}
 }

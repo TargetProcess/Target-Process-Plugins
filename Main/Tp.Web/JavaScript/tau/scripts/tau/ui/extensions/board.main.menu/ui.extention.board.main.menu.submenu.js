@@ -1,1 +1,1 @@
-define([],function(){return{createSubMenu:function(e,n){var u=e.element,t=u.find(".tau-user-submenu");n.fire("subMenu.ready",t),t.detach(),u.tauBubble({content:t,target:u,alignTo:u,zIndex:999})}}});
+define([],function(){return{createSubMenu:function(n,e){var t=n.element,o=t.find(".tau-user-submenu");e.fire("subMenu.ready",o),o.detach(),t.tauBubble({content:o,target:t,alignTo:t,ignoreOverlap:!0,onPositionConfig:function(n){n.at="left-30 bottom-10"},onArrowPositionConfig:function(n){n.at="center bottom-10"},zIndex:999})}}});

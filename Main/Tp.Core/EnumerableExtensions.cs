@@ -8,6 +8,7 @@ using System.Text;
 using Tp.Core;
 using Tp.Core.Annotations;
 
+// ReSharper disable once CheckNamespace
 namespace System.Linq
 {
 	public static class EnumerableExtensions
@@ -44,7 +45,7 @@ namespace System.Linq
 		
 		public static string ToSqlString<T>(this IEnumerable<T> values)
 		{
-			if (values == null || !values.Any())
+			if (values.IsNullOrEmpty())
 				return " ( null )";
 
 			return String.Format(" ({0}) ", String.Join(",", values.Select(ToSimpleSqlString)));
@@ -138,6 +139,11 @@ namespace System.Linq
 			return !enumerable.Any();
 		}
 
+		public static bool Empty<T>(this ICollection<T> collection)
+		{
+			return collection.Count == 0;
+		}
+
 		public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
 		{
 			return enumerable == null || !enumerable.Any();
@@ -173,7 +179,7 @@ namespace System.Linq
 			}
 		}
 
-		public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int chunkSize)
+		public static IEnumerable<IEnumerable<T>> Split<T>(this IList<T> source, int chunkSize)
 		{
 			return source.Where((x, i) => i % chunkSize == 0).Select((x, i) => source.Skip(i * chunkSize).Take(chunkSize));
 		}
@@ -255,6 +261,23 @@ namespace System.Linq
 			Func<TFrom, TFrom> generateNextState)
 		{
 			return Unfold(seed, x => true, generateNextValue, generateNextState);
+		}
+
+		public static Tuple<List<T>, List<T>> Partition<T>(this IEnumerable<T> sequence, Func<T, bool> predicate)
+		{
+			return Partition(sequence, predicate, (l, r) => Tuple.Create(l.ToList(), r.ToList()));
+		}
+
+		public static TResult Partition<T, TResult>(this IEnumerable<T> sequence, Func<T, bool> predicate,
+			Func<IEnumerable<T>, IEnumerable<T>, TResult> resultSelector)
+		{
+			var groups = sequence.GroupBy(predicate).ToArray();
+			var matches = groups.FirstOrDefault(x => x.Key);
+			var doesNotMatch = groups.FirstOrDefault(x => !x.Key);
+
+			return resultSelector(
+				matches ?? Enumerable.Empty<T>(),
+				doesNotMatch ?? Enumerable.Empty<T>());
 		}
 	}
 

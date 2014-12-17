@@ -21,7 +21,7 @@ namespace Tp.Core
 		{
 			return
 				((IEnumerable<KeyValuePair<TKey, TValue>>) this).Select(
-					x => new KeyValuePair<TKey, Maybe<TValue>>(x.Key, x.Value.ToMaybe())).GetEnumerator();
+					x => new KeyValuePair<TKey, Maybe<TValue>>(x.Key, Maybe.Just(x.Value))).GetEnumerator();
 		}
 
 		public void Add(KeyValuePair<TKey, Maybe<TValue>> item)
@@ -68,7 +68,7 @@ namespace Tp.Core
 		{
 			TValue value;
 			bool result = TryGetValue(key, out value);
-			maybeValue = result ? value.ToMaybe() : Maybe.Nothing;
+			maybeValue = result ? Maybe.Just(value) : Maybe.Nothing;
 			return result;
 		}
 
@@ -97,7 +97,7 @@ namespace Tp.Core
 
 		public new ICollection<Maybe<TValue>> Values
 		{
-			get { return base.Values.Select(x => x.ToMaybe()).ToList().AsReadOnly(); }
+			get { return base.Values.Select(x => Maybe.Just(x)).ToList().AsReadOnly(); }
 		}
 
 		#endregion

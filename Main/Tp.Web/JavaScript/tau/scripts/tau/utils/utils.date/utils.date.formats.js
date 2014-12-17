@@ -1,1 +1,1 @@
-define([],function(){var y={};return y={date:{"short":"d-MMM-yyyy",iso:"yyyy-MM-dd"},time:{"short":"HH:mm",iso:"HH:mm:ss"},datetime:{"short":"d-MMM-yyyy HH:mm",iso:"yyyy-MM-ddTHH:mm:ss"}}});
+define([],function(){var y={};return y={date:{"short":"d-MMM-yyyy",iso:"yyyy-MM-dd"},time:{"short":"HH:mm",iso:"HH:mm:ss"},datetime:{"short":"d-MMM-yyyy HH:mm",full:"d-MMM-yyyy HH:mm:ss",iso:"yyyy-MM-ddTHH:mm:ss"}}});

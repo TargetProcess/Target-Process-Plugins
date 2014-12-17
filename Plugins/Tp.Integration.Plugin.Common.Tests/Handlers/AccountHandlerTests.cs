@@ -4,6 +4,8 @@ using StructureMap;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.AccountLifecycle;
 using Tp.Integration.Messages.PluginLifecycle;
+using Tp.Integration.Messages.ServiceBus.Transport;
+using Tp.Integration.Messages.ServiceBus.Transport.Router;
 using Tp.Integration.Plugin.Common.Handlers;
 using Tp.Integration.Plugin.Common.Tests.Common;
 using Tp.Integration.Plugin.TaskCreator.Tests;
@@ -21,26 +23,32 @@ namespace Tp.Integration.Plugin.Common.Tests.Handlers
 		private AccountCollectionMock _accountCollection;
 		private TpBusMock _bus;
 		private PluginContextMock _pluginContextMock;
+		private TransportMock _msmqTransport;
 
-		public AccountHandlerTests()
+		[SetUp]
+		public void Setup()
 		{
 			_accountCollection = new AccountCollectionMock();
 			_bus = new TpBusMock();
 			_pluginContextMock = new PluginContextMock();
+			_msmqTransport = ObjectFactory.GetInstance<TransportMock>();
 			_accountHandler = new AccountHandler(_accountCollection, _bus, _pluginContextMock,
 			                                     new TpLogManager(new ActivityLogPathProvider(), _pluginContextMock),
-			                                     ObjectFactory.GetInstance<TransportMock>());
+												 _msmqTransport);
 		}
 
-		[TestCase]
-		public void RemoveAccount()
+		[TestCase(RoutableTransportMode.OnDemand, true)]
+		[TestCase(RoutableTransportMode.OnSite, false)]
+		public void RemoveAccount(RoutableTransportMode mode, bool isQueueDelete)
 		{
+			_msmqTransport.RoutableTransportMode = mode;
 			var accountName = new AccountName("Account");
 			_accountCollection.GetOrCreate(accountName);
 			Assert.IsTrue(_accountCollection.Any(c => c.Name == accountName.Value));
 			_accountHandler.Handle(new AccountRemovedMessage(accountName.Value));
 			_accountHandler.Handle(_bus.PluginCommands.OfType<AccountRemovedLastStepMessage>().Single());
 			Assert.IsFalse(_accountCollection.Any(c => c.Name == accountName.Value));
+			Assert.AreEqual(_msmqTransport.IsQueueDeleted, isQueueDelete);
 		}
 
 		[TestCase]

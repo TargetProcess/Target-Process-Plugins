@@ -1,0 +1,12 @@
+<!-- name: total-effort -->
+<% if (this.hidden) { %>
+<div class="hidden"></div>
+<% } else { %>
+<div>
+    <div class="ui-total-effort">
+        <%! fn.term(this.entityType, "name") %> has
+        <span class="child-count"><%= this.childCount %></span> <%! fn.term(this.childType, "names") %>
+        with total effort <span class="effort"><%= this.effort %></span><%= this.pointName %>
+    </div>
+</div>
+<% } %>

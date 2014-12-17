@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/core/extension.base"],function(e,t,n){return n.extend({"bus configurator.ready:last + slice.ready:last + expansion.state.changed":function(e,t,n,r){t.getFeaturesService().isEnabled("entity.new.list.comet")&&this.fire("comet.parameters",n.slice.getCometParameters(r))}})});

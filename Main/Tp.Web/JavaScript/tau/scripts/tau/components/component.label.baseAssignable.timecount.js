@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.label","tau/models/model.label.baseAssignable.timecount","tau/ui/extensions/label/ui.extension.label.refresher.comet"],function(e,n,t,o){return{create:function(s){return s=e.extend({modelType:t},s),s.extensions=[o].concat(s.extensions||[]),n.create(s)}}});

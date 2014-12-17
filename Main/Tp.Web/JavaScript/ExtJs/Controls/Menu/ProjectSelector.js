@@ -346,7 +346,7 @@ Tp.controls.menu.ProjectSelector = Ext.extend(Object, {
 
 								'>',
                                     this.getCheckBoxMarkup(),
-                                    '<img src="{[this.getProgramIcon()]}" alt=""/>',
+                                    '<span class="tau-entity-icon tau-entity-icon--program">Program</span>',
                         '</tpl>',
                         '<tpl if="type==\'Project\'">',
                             '<tr class="Project">',
@@ -357,7 +357,7 @@ Tp.controls.menu.ProjectSelector = Ext.extend(Object, {
 
                                 '>',
                                     this.getCheckBoxMarkup(),
-                                    '<img src="{[this.getProjectIcon()]}" alt=""/>',
+                                    '<span class="tau-entity-icon tau-entity-icon--icon tau-entity-icon--project">Project</span>',
                         '</tpl>',
 							'<tpl if="type==\'Project\'">',
                             	'<tpl if="abbreviation != &quot;&quot;"><div class="projectAbbr">{abbreviation}</div></tpl><a onclick=\'projectContextService.setCurrent({id})\'>{name}</a></td>',

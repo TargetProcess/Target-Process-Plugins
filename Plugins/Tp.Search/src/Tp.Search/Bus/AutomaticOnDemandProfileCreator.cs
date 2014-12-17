@@ -1,11 +1,8 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using StructureMap;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
@@ -41,7 +38,7 @@ namespace Tp.Search.Bus
 
 		private void CreateProfile(ITargetProcessMessage message)
 		{
-			if (IsMessageOfCrudType(message.GetType()) && _pluginContext.AccountName != AccountName.Empty)
+			if (message.IsMessageOfCrudType() && _pluginContext.AccountName != AccountName.Empty)
 			{
 				var command = ObjectFactory.GetInstance<AddOrUpdateProfileCommand>();
 				var result = command.Execute(new PluginProfileDto { Name = SearcherProfile.Name }.Serialize());
@@ -53,21 +50,6 @@ namespace Tp.Search.Bus
 						Arguments = bool.TrueString
 					});
 				}
-			}
-		}
-
-		private bool IsMessageOfCrudType(Type messageType)
-		{
-			return GetBaseTypes(messageType).Where(x => x.IsGenericType).Select(x => x.GetGenericTypeDefinition()).Any(x => x == typeof(EntityCreatedMessage<>) || x == typeof(EntityUpdatedMessage<,>) || x == typeof(EntityDeletedMessage<>));
-		}
-
-		private IEnumerable<Type> GetBaseTypes(Type t)
-		{
-			var parent = t;
-			while (parent != null)
-			{
-				yield return parent;
-				parent = parent.BaseType;
 			}
 		}
 	}

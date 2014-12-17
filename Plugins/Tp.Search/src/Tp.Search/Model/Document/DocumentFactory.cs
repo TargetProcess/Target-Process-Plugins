@@ -76,9 +76,8 @@ namespace Tp.Search.Model.Document
 
 		public EntityDocument CreateTestCase(TestCaseDTO testCase)
 		{
-			var steps = string.IsNullOrEmpty(testCase.Steps) ? string.Empty : string.Format(" {0}", testCase.Steps);
-			var success = string.IsNullOrEmpty(testCase.Success) ? string.Empty : string.Format(" {0}", testCase.Success);
-			string format = string.Format("{0}{1}{2} ", testCase.Name, steps, success);
+			var description = string.IsNullOrEmpty(testCase.Description) ? string.Empty : string.Format(" {0}", testCase.Description);
+			string format = string.Format("{0}{1} ", testCase.Name, description);
 			var text = _textOperations.Prepare(AppendCustomFields(format, testCase.CustomFieldsMetaInfo));
 			return new EntityDocument(testCase.TestCaseID.Value.ToString(CultureInfo.InvariantCulture), text)
 			{

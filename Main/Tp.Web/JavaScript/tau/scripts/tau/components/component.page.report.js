@@ -1,0 +1,1 @@
+define(["tau/components/component.page.base","tau/views/view.page.report"],function(e,n){return{create:function(r){var t={name:"report page component",turnOffErrorEmiter:!0,extensions:[],ViewType:n};return r.queuedBus=!0,e.create(t,r)}}});

@@ -12,8 +12,7 @@ namespace Tp.Integration.Messages.EntityLifecycle
 	/// </summary>
 	/// <typeparam name="TEntityDto">The type of deleted entity.</typeparam>
 	[Serializable]
-	public class EntityDeletedMessage<TEntityDto> : EntityCreatedMessage<TEntityDto>
-		where TEntityDto : DataTransferObject, new()
+	public class EntityDeletedMessage<TEntityDto> : EntityMessage<TEntityDto>, IEntityDeletedMessage<TEntityDto> where TEntityDto : DataTransferObject, new()
 	{
 	}
 }

@@ -1,0 +1,1 @@
+define(["Underscore"],function(e){return{create:function(r,t){var i=e.map(t,function(e){return{id:e}});return{evictProperties:[r.id,r.entityType.name,["projects"]],type:"program",data:{id:r.id,fields:["id","projects"],$set:{projects:i}}}}}});

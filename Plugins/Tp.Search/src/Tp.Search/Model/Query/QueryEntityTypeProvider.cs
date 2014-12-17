@@ -56,6 +56,7 @@ namespace Tp.Search.Model.Query
 			_entityTypeIds.Add(TASK_TYPE_ID);
 			_entityTypeIds.Add(BUG_TYPE_ID);
 			_entityTypeIds.Add(FEATURE_TYPE_ID);
+			_entityTypeIds.Add(EPIC_TYPE_ID);
 			_entityTypeIds.Add(TESTCASE_TYPE_ID);
 			_entityTypeIds.Add(TESTPLANRUN_TYPE_ID);
 			_entityTypeIds.Add(REQUEST_TYPE_ID);
@@ -66,14 +67,14 @@ namespace Tp.Search.Model.Query
 			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(TASK_TYPE_ID), TASK_TYPE_ID);
 			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(BUG_TYPE_ID), BUG_TYPE_ID);
 			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(FEATURE_TYPE_ID), FEATURE_TYPE_ID);
-			//_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(TESTPLAN_TYPE_ID), TESTPLAN_TYPE_ID);
+			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(EPIC_TYPE_ID), EPIC_TYPE_ID);
+			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(TESTPLAN_TYPE_ID), TESTPLAN_TYPE_ID);
 			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(TESTPLANRUN_TYPE_ID), TESTPLANRUN_TYPE_ID);
 			_assignableTypeIds.Add(documentIdFactory.CreateEntityTypeId(REQUEST_TYPE_ID), REQUEST_TYPE_ID);
 
 			_generalTypeIds.Add(documentIdFactory.CreateEntityTypeId(TESTCASE_TYPE_ID), TESTCASE_TYPE_ID);
 			_generalTypeIds.Add(documentIdFactory.CreateEntityTypeId(RELEASE_TYPE_ID), RELEASE_TYPE_ID);
 			_generalTypeIds.Add(documentIdFactory.CreateEntityTypeId(ITERATION_TYPE_ID), ITERATION_TYPE_ID);
-			_generalTypeIds.Add(documentIdFactory.CreateEntityTypeId(TESTPLAN_TYPE_ID), TESTPLAN_TYPE_ID);
 			_generalTypeIds.Add(documentIdFactory.CreateEntityTypeId(IMPEDIMENT_TYPE_ID), IMPEDIMENT_TYPE_ID);
 
 			_entityTypeNames = new Dictionary<int?, string>
@@ -90,6 +91,7 @@ namespace Tp.Search.Model.Query
 					{14, "TestPlanRun".ToLower()},
 					{4, "UserStory".ToLower()},
 					{16, "Impediment".ToLower()},
+					{27, "Epic".ToLower()}
 				};
 
 			_noSquadEntityTypeNames = new List<string>
@@ -160,6 +162,11 @@ namespace Tp.Search.Model.Query
 		/// Comment Type I
 		/// </summary>
 		public const int COMMENT_TYPE_ID = 19;
+
+		/// <summary>
+		/// Epic Type ID
+		/// </summary>
+		public const int EPIC_TYPE_ID = 27;
 
 		public Maybe<string> GetEntityTypeName(int? entityTypeId)
 		{

@@ -58,7 +58,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		{
 			var @while = While ?? (_ => true);
 			Func<IObservable<TMessage>> takeWhile = () => _messageSource.Iterate(handleMessage, _scheduler, s => _log.Info(LoggerContext.New(Name), s)).TakeWhile(m => @while(m));
-			_observable = takeWhile.ToSelfRepairingHotObservable(_ => { }, e => { });
+			_observable = takeWhile.ToSelfRepairingHotObservable(e => { });
 			_subscription = _observable.Subscribe(new CompositeObserver(_observers));
 		}
 

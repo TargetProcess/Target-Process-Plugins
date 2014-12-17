@@ -1,21 +1,28 @@
 <!-- name: ui.template.board.actions.finish-iteration, fn: ./ui.template.board.actions.finish-iteration.fn -->
 <div class="tau-finish-message">
-    <h2>Finish Iteration</h2>
+    <%
+        var userStory = this.termProcessor.getTerm('UserStory', 'name');
+        var userStories = this.termProcessor.getTerm('UserStory', 'names');
+        var iteration = this.termProcessor.getTerm('Iteration', 'name');
+        var bug = this.termProcessor.getTerm('Bug', 'name');
+        var bugs = this.termProcessor.getTerm('Bug', 'names');
+    %>
+    <h2>Finish <%= iteration %></h2>
 
     <div>
         <div class="tau-message tau-error">
-            This action may affect User Stories and Bugs assigned to Iteration. Use Finish Iteration with care.
+            This action may affect <%! userStories %> and <%! bugs %> assigned to <%! iteration %>. Use Finish <%! iteration %> with care.
         </div>
     </div>
 
     <div class="tau-iterations">
         <div class="tau-item tau-finish-iteration">
-            <span class="tau-txt">Finish iteration:</span>
+            <span class="tau-txt">Finish <%! iteration.toLowerCase() %>:</span>
 
-            <div class="tau-iteration-name"><strong><%=this.iteration.name%></strong></div>
+            <div class="tau-iteration-name"><strong><%=this.iteration.name %></strong></div>
         </div>
         <div class="tau-item">
-            <span class="tau-txt tau-next-iteration">Next iteration:</span>
+            <span class="tau-txt tau-next-iteration">Next <%! iteration.toLowerCase() %>:</span>
 
             <div class="tau-iteration-name">
                 <select id="to-iteration" class="tau-select">
@@ -38,33 +45,33 @@
         <div class="tau-item">
             <div class="tau-action-name">
                 <input name="tau-finish-by-move" id="tau-finish-by-slit" checked="checked" type="radio"
-                        value="false"><label for="tau-finish-by-slit">Split User Stories</label>
+                        value="false"><label for="tau-finish-by-slit">Split <%! userStories %></label>
             </div>
             <ul class="tau-action-list">
-                <li>Move the <span class="tau-entity tau-userstory">User Stories</span> that haven&apos;t been started
-                    to the next Iteration
+                <li>Move the <span class="tau-entity-icon tau-entity-icon--userstory"><%! userStories %></span> that haven&apos;t been started
+                    to the next <%! iteration %>
                 </li>
-                <li>Split started but not finished <span class="tau-entity tau-userstory">User Stories</span>. The
-                    Completed tasks will remain in the old User Story, all the rest will be moved to the next Iteration
-                    as a part of the new User Story
+                <li>Split started but not finished <span class="tau-entity-icon tau-entity-icon--userstory"><%! userStories %></span>. The
+                    Completed tasks will remain in the old <%! userStory %>, all the rest will be moved to the next <%! iteration %>
+                    as a part of the new <%! userStory %>
                 </li>
-                <li>Move all the incomplete <span class="tau-entity tau-bug">Bugs</span> and <span
-                        class="tau-entity tau-testplanrun">Test Plan Runs</span> to the next Iteration
+                <li>Move all the incomplete <span class="tau-entity-icon tau-entity-icon--bug"><%! bugs %></span> and <span
+                        class="tau-entity-icon tau-entity-icon--testplanrun">Test Plan Runs</span> to the next <%! iteration %>
                 </li>
-                <li>Set the correct Iteration velocity</li>
+                <li>Set the correct <%! iteration %> velocity</li>
             </ul>
         </div>
         <div class="tau-item">
             <div class="tau-action-name">
                 <input name="tau-finish-by-move" id="tau-finish-by-move" type="radio" value="true"><label
-                    for="tau-finish-by-move">Move User Stories</label>
+                    for="tau-finish-by-move">Move <%! userStories %></label>
             </div>
             <ul class="tau-action-list">
-                <li>Move all the incomplete <span class="tau-entity tau-userstory">User Stories</span>, <span
-                        class="tau-entity tau-bug">Bugs</span> and <span class="tau-entity tau-testplanrun">Test Plan Runs</span>
-                    to the next Iteration
+                <li>Move all the incomplete <span class="tau-entity-icon tau-entity-icon--userstory"><%! userStories %></span>, <span
+                        class="tau-entity-icon tau-entity-icon--bug"><%! bugs %></span> and <span class="tau-entity-icon tau-entity-icon--userstory">Test Plan Runs</span>
+                    to the next <%! iteration %>
                 </li>
-                <li>Set the correct Iteration velocity</li>
+                <li>Set the correct <%! iteration %> velocity</li>
             </ul>
         </div>
     </div>

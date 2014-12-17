@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -39,8 +40,8 @@ namespace Tp.MashupManager.MashupLibrary.Repository.Config
 		public IEnumerable<ILibraryRepositoryConfig> GetConfigs()
 		{	
 			return _singleProfile.Profile.NothingIfNull()
-				.Bind(x => x.GetProfile<MashupManagerProfile>().LibraryRepositoryConfigs.NothingIfNull()
-					.If(y => y.Any())
+				.Select(x => x.GetProfile<MashupManagerProfile>().LibraryRepositoryConfigs.NothingIfNull()
+					.Where(y => y.Any())
 					.Bind(y => y.Cast<ILibraryRepositoryConfig>()))
 				.GetOrElse(()=>DefaultConfigs);
 		}

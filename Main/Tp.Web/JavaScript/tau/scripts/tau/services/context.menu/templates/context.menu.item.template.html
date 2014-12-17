@@ -1,0 +1,7 @@
+<!-- name: context.menu.item -->
+<div
+    role="option"
+    class="<%= this.menuItem.getMenuItemClassName(this.menuConfig) %> drop-down-option"
+    title="<%= this.menuItem.getTooltipText ? this.menuItem.getTooltipText(this.menuConfig) : '' %>">
+    <%= this.menuItem.getContent(this.menuConfig) %>
+</div>

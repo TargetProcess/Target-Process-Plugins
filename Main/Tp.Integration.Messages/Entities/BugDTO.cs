@@ -607,6 +607,24 @@ namespace Tp.Integration.Common
 		[XmlElement(Order = 105)]
 		public virtual decimal? Progress { get; set; }
 
+
+		[DataMember]
+		[XmlElement(Order = 106)]
+		public virtual int? SquadIterationID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 107)]
+		public virtual string SquadIterationName { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 108)]
+		public virtual int? FeatureID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 109)]
+		public virtual string FeatureName { get; set; }
+
+
 		public override string ToString()
 		{
 			if (ID.HasValue)
@@ -1014,6 +1032,10 @@ namespace Tp.Integration.Common
 		SquadName,
 		PlannedStartDate,
 		PlannedEndDate,
-		Progress
+		Progress,
+		SquadIterationID,
+		SquadIterationName,
+		FeatureID,
+		FeatureName
 	}
 }

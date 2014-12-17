@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/ui/extensions/board.workflow/ui.extension.board.workflow.base"],function(e,n,r){return r.extend({"bus afterInit":function(e){e.sender.fire("dataBind",{})},"bus afterRender + configurator.ready:last + boardSettings.ready:last":function(e,n,r,t){this.configure(r,t.boardSettings,n.element)}})});

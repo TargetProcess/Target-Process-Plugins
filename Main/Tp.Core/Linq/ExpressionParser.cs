@@ -683,8 +683,8 @@ namespace System.Linq.Dynamic
 		private Maybe<string> GetConditionName(Expression expr, int exprPos)
 		{
 			return expr.MaybeAs<ConditionalExpression>()
-				.Bind(conditional => ExtensionsProvider.GetValue<Expression>(conditional)
-					.Bind(x => GetPropertyName(x, exprPos)));
+				.Select(conditional => ExtensionsProvider.GetValue<Expression>(conditional)
+					.Select(x => GetPropertyName(x, exprPos)));
 		}
 
 		private void ParseNameColonExpression(Token token, int pos, char ch, Exception exception, out string propName,
@@ -709,12 +709,12 @@ namespace System.Linq.Dynamic
 
 		private static Maybe<string> GetMethodName(Expression expr)
 		{
-			return expr.MaybeAs<MethodCallExpression>().Bind(
+			return expr.MaybeAs<MethodCallExpression>().Select(
 				call =>
 				{
 					if (call.Arguments.Count == 0 || (call.Method.IsExtensionMethod() && call.Arguments.Count == 1))
 					{
-						return call.Method.Name.ToMaybe();
+						return Maybe.Just(call.Method.Name);
 					}
 					return Maybe.Nothing;
 				}

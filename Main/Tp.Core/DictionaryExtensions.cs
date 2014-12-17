@@ -1,4 +1,5 @@
-﻿using Tp.Core;
+﻿using System.Collections.ObjectModel;
+using Tp.Core;
 using Tp.Core.Annotations;
 
 namespace System.Collections.Generic
@@ -132,6 +133,11 @@ namespace System.Collections.Generic
 		public static IDictionary<TKey, TValue> WithDefaultValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TValue defaultValue)
 		{
 			return new DefaultDictionary<TKey, TValue>(dictionary, defaultValue);
+		}
+
+		public static IReadOnlyDictionary<TKey,TValue> ToReadonly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+		{
+			return new ReadOnlyDictionary<TKey, TValue>(dictionary);
 		}
 	}
 }

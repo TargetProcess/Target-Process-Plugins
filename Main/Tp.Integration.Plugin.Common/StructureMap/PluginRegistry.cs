@@ -116,7 +116,7 @@ namespace Tp.Integration.Plugin.Common.StructureMap
 			For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
 			For<IActivityLoggerFactory>().Singleton().Use<PluginActivityLoggerFactory>();
 			For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
-			For<ILogManager>().Singleton().Use<TpLogManager>();
+			For<ILogManager>().Singleton().Use<Activity.TpLogManager>();
 			Forward<ILogManager, ILogProvider>();
 			For<IRouterChildTagsSource>().Singleton().Use<RouterChildTagsSource>();
 

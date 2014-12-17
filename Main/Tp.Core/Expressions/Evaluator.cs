@@ -152,7 +152,7 @@ namespace Tp.Core
 			Maybe<object> lambda = from methodCallExpression in lambdaContainer.MaybeAs<MethodCallExpression>()
 			                       from @object in methodCallExpression.Object.MaybeAs<ConstantExpression>(nullMeansNothing: false)
 			                       from parameters in GetParameters(methodCallExpression)
-			                       from lambdaExpression in methodCallExpression.Method.Invoke(@object == null ? null : @object.Value, parameters.ToArray()).ToMaybe()
+			                       from lambdaExpression in Maybe.Just(methodCallExpression.Method.Invoke(@object == null ? null : @object.Value, parameters.ToArray()))
 			                       select lambdaExpression;
 
 			Maybe<object> maybe = lambda.OrElse(() => Evaluate(lambdaContainer));

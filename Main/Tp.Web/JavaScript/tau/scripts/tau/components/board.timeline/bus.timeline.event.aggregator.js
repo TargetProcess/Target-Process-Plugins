@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/class"],function(e,a){return a.extend({init:function(){this.rendered=e.Callbacks(),this.hintHide=e.Callbacks(),this.cardUnselect=e.Callbacks(),this.viewTimelineTracksCountChanged=e.Callbacks(),this.onBeforeUpdateCell=e.Callbacks(),this.onAfterUpdateCell=e.Callbacks(),this.onCellUpdated=e.Callbacks(),this.onAxisUpdated=e.Callbacks()}})});

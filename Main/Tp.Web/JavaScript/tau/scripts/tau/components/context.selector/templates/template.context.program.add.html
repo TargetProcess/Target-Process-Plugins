@@ -1,0 +1,31 @@
+<!-- name: template.context.program.add, fn: ./template.context.program.add.fn -->
+<form class="i-role-form">
+    <div class="tau-new-entity-form">
+        <div class="tau-new-entity-form__row">
+            <div class="tau-note"><b>New program</b></div>
+            <div class="tau-new-entity-info tau-new-entity-info--full"><input type="text"
+                    class="tau-in-text tau-new-entity-name" placeholder="Enter program name here" name="name">
+            </div>
+        </div>
+
+        <div class="tau-new-entity-form__row">
+            <div class="tau-note">Include projects</div>
+
+            <% if(_.isEmpty(this.projects)) { %>
+            <div class="tau-no-items"><strong>No Projects available so far.</strong><br>You can add new Projects to Program later.</div>
+            <% } else { %>
+            <div class="tau-projects">
+                <ul class="tau-category-items-selector i-role-list" style="max-height: 264px; overflow-y: auto;">
+                    <%= fn.sub('board.context.selector.projects.list', this.projects) %>
+                </ul>
+            </div>
+            <% } %>
+
+        </div>
+
+        <div class="tau-new-entity-form__row">
+            <button type="submit" class="tau-btn tau-success">Create program</button>
+            <button type="reset" class="tau-btn">Cancel</button>
+        </div>
+    </div>
+</form>

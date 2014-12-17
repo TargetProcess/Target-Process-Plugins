@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/extensions/ui.extension.entity.delete","tau/ui/templates/ui.template.empty"],function(e,t,n){return{create:function(o){var i=o.context.configurator,a=o.context.entity,r={extensions:[{extType:t,args:[i,a]}],template:n};return e.create(r,o)}}});

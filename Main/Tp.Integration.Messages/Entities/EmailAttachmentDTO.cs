@@ -5,10 +5,10 @@
 using System;
 using System.Xml.Serialization;using System.Runtime.Serialization;
 
-namespace Tp.Integration.Messages.Entities
+namespace Tp.Integration.Common
 {
 	[Serializable][DataContract]
-	public class EmailAttachmentDTO
+	public partial class EmailAttachmentDTO : DataTransferObject
 	{
 		[DataMember][XmlElement(Order = 3)]public byte[] Buffer { get; set; }
 

@@ -4,6 +4,7 @@
 // 
 
 
+using Tp.Integration.Messages.ServiceBus.Transport.Router;
 
 namespace Tp.Integration.Plugin.Common.Handlers
 {
@@ -95,7 +96,10 @@ namespace Tp.Integration.Plugin.Common.Handlers
 		{
 			_log.InfoFormat("Removing account {0}", message.AccountName);
 			_collection.Remove(message.AccountName);
-			_msmqTransport.TryDeleteQueue(message.AccountName);
+			if (_msmqTransport.RoutableTransportMode == RoutableTransportMode.OnDemand)
+			{
+				_msmqTransport.TryDeleteQueue(message.AccountName);
+			}
 		}
 	}
 }

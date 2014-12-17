@@ -1,0 +1,15 @@
+<!-- name: board.context.selector.program, fn: ./ui.template.board.context.selector.program.fn -->
+<% var disabled = _.isEmpty(this.projects); %>
+<li class="i-role-item i-role-program">
+    <label data-title="Select to see work assigned to this program" class="tau-checkbox tau-extension-board-tooltip i-role-select-program">
+        <input type="checkbox" value="<%= this.id %>" <%= this.selected ? 'checked' : '' %> <%= (disabled ? 'disabled' : '')%> />
+        <i class="tau-checkbox__icon"></i>
+        <span class="tau-checkbox-label">
+            <span class="tau-category-items-selector_level_link"><%! this.name %></span> <span class="tau-category-items-selector_level_count i-role-projects-count"><%= this.projects.length %></span>
+        </span>
+    </label>
+    <i data-title="Open this program in a popup" class="tau-extension-board-tooltip tau-category-items-selector__viewtrigger tau-icon tau-icon_type_svg tau-icon_name_newwindow i-role-viewtrigger" data-entity-id="<%! this.id %>" data-entity-type="program"></i>
+    <ul class="tau-category-items-selector_level">
+        <%= fn.sub("board.context.selector.projects.list", this.projects) %>
+    </ul>
+</li>

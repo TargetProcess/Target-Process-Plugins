@@ -510,6 +510,10 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 89)]
 		public Int32? EntityTypeID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 90)]
+		public string ResponsibleName { get; set; }
 	}
 	
 	
@@ -852,6 +856,7 @@ namespace Tp.Integration.Common
         /// </summary>		
 		ProjectName,
 		PlannedStartDate,
-		PlannedEndDate
+		PlannedEndDate,
+		ResponsibleName
 	}
 }

@@ -1,1 +1,1 @@
-define(["tau/components/component.property.richtext"],function(e){return{create:function(t){return t=t||{},t.fieldName="description",e.create(t)}}});
+define(["tau/components/component.property.richtext"],function(e){return{create:function(t){return t=t||{},t.fieldName="description",t.placeholder=t.placeholder||"Double-click to add description...",e.create(t)}}});

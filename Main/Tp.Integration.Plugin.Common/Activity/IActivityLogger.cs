@@ -4,6 +4,7 @@
 // 
 
 using System;
+using Tp.Core.Annotations;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
@@ -17,14 +18,17 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		void Debug(string message);
 
+		[StringFormatMethod("format")]
 		void DebugFormat(string format, params object[] args);
 
 		void Info(string message);
 
+		[StringFormatMethod("format")]
 		void InfoFormat(string format, params object[] args);
 
 		void Warn(string message);
 
+		[StringFormatMethod("format")]
 		void WarnFormat(string format, params object[] args);
 
 		void Error(string message);
@@ -33,6 +37,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
 		void Error(string message, Exception exception);
 
+		[StringFormatMethod("format")]
 		void ErrorFormat(string format, params object[] args);
 
 		void Fatal(string message);

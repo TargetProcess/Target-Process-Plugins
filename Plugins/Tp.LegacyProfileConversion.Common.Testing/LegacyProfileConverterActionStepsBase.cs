@@ -130,10 +130,29 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		{
 			Project project = Context.Projects.First(x => x.Abbreviation == projectAbbr);
 			Context.Generals.InsertOnSubmit(new General { Name = testPlanName });
+			const string testPlanProcess = "TestPlanProcess";
+			Context.Processes.InsertOnSubmit(new Process { Name = testPlanProcess });
 			Context.SubmitChanges();
+
+			const string testPlanEntityState = "TestPlanEntityState";
+			var processId = Context.Processes.First(x => x.Name == testPlanProcess).ProcessID;
+			Context.EntityStates.InsertOnSubmit(new EntityState { Name = testPlanEntityState, ProcessID = processId });
+			Context.SubmitChanges();
+
+			var generalId = Context.Generals.First(x => x.Name == testPlanName).GeneralID;
+			var entityStateId = Context.EntityStates.First(x => x.Name == testPlanEntityState).EntityStateID;
+			Context.Assignables.InsertOnSubmit(new Assignable
+			{
+				AssignableID = generalId,
+				EntityStateID = entityStateId,
+				Effort = 0,
+				EffortCompleted = 0,
+				EffortToDo = 0
+			});
+
 			Context.TestPlans.InsertOnSubmit(new TestPlan
 			{
-				TestPlanID = Context.Generals.First(x => x.Name == testPlanName).GeneralID,
+				TestPlanID = generalId,
 				ProjectID = project.ProjectID
 			});
 			Context.SubmitChanges();

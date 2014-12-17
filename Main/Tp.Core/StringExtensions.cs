@@ -42,6 +42,24 @@ namespace System
 			return String.Format(format, args);
 		}
 
+		[StringFormatMethod("format")]
+		public static string Fmt(this string format, object arg1)
+		{
+			return String.Format(format, arg1);
+		}
+
+		[StringFormatMethod("format")]
+		public static string Fmt(this string format, object arg1, object arg2)
+		{
+			return String.Format(format, arg1, arg2);
+		}
+
+		[StringFormatMethod("format")]
+		public static string Fmt(this string format, object arg1, object arg2, object arg3)
+		{
+			return String.Format(format, arg1, arg2, arg3);
+		}
+
 		public static bool IsNullOrEmpty(this string format)
 		{
 			return String.IsNullOrEmpty(format);

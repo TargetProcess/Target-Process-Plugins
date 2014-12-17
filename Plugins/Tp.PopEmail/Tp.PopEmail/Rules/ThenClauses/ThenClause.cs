@@ -34,6 +34,6 @@ namespace Tp.PopEmailIntegration.Rules.ThenClauses
 			return projects.Any(x => x.ProjectID == _projectId && x.DeleteDate == null);
 		}
 
-		public abstract void Execute(MessageDTO dto, AttachmentDTO[] attachments);
+		public abstract void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
 	}
 }

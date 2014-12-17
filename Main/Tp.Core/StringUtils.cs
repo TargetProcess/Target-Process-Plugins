@@ -21,7 +21,7 @@ namespace Tp.Core
 	/// </summary>
 	public static class StringUtils
 	{
-		public static readonly string[] LineBreaks = new[] {"\r\n", "\r", "\n"};
+		public static readonly string[] LineBreaks = new[] { "\r\n", "\r", "\n" };
 
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace Tp.Core
 		[SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")]
 		public static string TrimToEmpty(this string value)
 		{
-			return IsBlank(value) ? string.Empty : value.Trim();
+			return IsBlank(value) ? String.Empty : value.Trim();
 		}
 
 		public static List<int> ToIntList(this IList<string> ids)
@@ -270,12 +270,53 @@ namespace Tp.Core
 			// Convert Base64 String to byte[]
 			var imageBytes = Convert.FromBase64String(base64String);
 			var ms = new MemoryStream(imageBytes, 0,
-			                          imageBytes.Length);
+									  imageBytes.Length);
 
 			// Convert byte[] to Image
 			ms.Write(imageBytes, 0, imageBytes.Length);
 			var image = Image.FromStream(ms, true);
 			return image;
+		}
+		public static bool IsManyWords(string text, char delimiter = ' ')
+		{
+			return !String.IsNullOrEmpty(text) && text.Contains(delimiter);
+		}
+
+		public static string[] GetWords(string text, char delimiter = ' ')
+		{
+			if (IsManyWords(text, delimiter))
+			{
+				return text.Split(delimiter).Where(c => !string.IsNullOrEmpty(c)).ToArray();
+			}
+			return new[] { text };
+		}
+
+		public static string GetAbbreviation(string text)
+		{
+			if (IsManyWords(text))
+			{
+				var strArray = GetWords(text);
+				var chars = strArray.Select(c => c[0].ToString().ToUpper());
+				return string.Join("", chars.Take(2));
+			}
+			else
+			{
+				var result = GetLastWord(text);
+				return result == String.Empty ? String.Empty : result[0].ToString();
+			}
+		}
+
+		public static bool EqualWithoutSpaces(this string a, string b, StringComparison comparison = StringComparison.CurrentCulture)
+		{
+			if (a == null && b == null)
+			{
+				return true;
+			}
+			if (a == null || b == null)
+			{
+				return false;
+			}
+			return String.Equals(a.Replace(" ", ""), b.Replace(" ", ""), comparison);
 		}
 	}
 }

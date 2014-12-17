@@ -8,7 +8,7 @@ using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
 {
-	public class MilestoneDTO : DataTransferObject
+	public partial class MilestoneDTO : DataTransferObject
 	{
 		[DataMember][XmlElement(Order = 3)]public int? MilestoneId { get; set; }
 

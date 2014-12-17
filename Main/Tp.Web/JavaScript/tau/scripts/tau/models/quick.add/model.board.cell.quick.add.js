@@ -1,0 +1,1 @@
+define(["Underscore","jQuery","tau/models/quick.add/model.board.quick.add.base"],function(e,d,i){return i.extend({resolveSliceAddData:function(){var e=d.Deferred(),i=this.config.options;return e.resolve({slice:i.slice,types:i.addAction.data.types,action:i.action,viewMode:i.viewMode,isGeneralAdd:!1}),e}})});

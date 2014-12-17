@@ -4,6 +4,7 @@
 // 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NServiceBus;
@@ -21,7 +22,8 @@ using Tp.PopEmailIntegration.Rules;
 
 namespace Tp.PopEmailIntegration.Sagas
 {
-	public class EmailProcessingSaga : TpSaga<EmailProcessingSagaData>, IAmStartedByMessages<EmailReceivedMessage>,
+	public class EmailProcessingSaga : TpSaga<EmailProcessingSagaData>,
+									   IAmStartedByMessages<EmailReceivedMessage>,
 	                                   IHandleMessages<MessageCreatedMessage>,
 	                                   IHandleMessages<AttachmentsPushedToTPMessageInternal>,
 	                                   IHandleMessages<MessageBodyUpdatedMessageInternal>,
@@ -30,9 +32,8 @@ namespace Tp.PopEmailIntegration.Sagas
 	                                   IHandleMessages<TargetProcessExceptionThrownMessage>,
 	                                   IHandleMessages<CommentCreatedMessageInternal>,
 	                                   IHandleMessages<CommentCreateFailedMessageInternal>,
-									   IHandleMessages<RequesterCreationFailedMessageInternal>,
-									   IHandleMessages<RequesterCreatedMessageInternal>
-
+									   IHandleMessages<RequestersCreationFailedMessageInternal>,
+									   IHandleMessages<RequestersCreatedMessageInternal>
 	{
 		public override void ConfigureHowToFindSaga()
 		{
@@ -44,94 +45,143 @@ namespace Tp.PopEmailIntegration.Sagas
 			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<CommentCreatedMessageInternal>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<CommentCreateFailedMessageInternal>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<RequesterCreationFailedMessageInternal>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<RequesterCreatedMessageInternal>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<RequestersCreationFailedMessageInternal>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<RequestersCreatedMessageInternal>(saga => saga.Id, message => message.SagaId);
 		}
 
 		public void Handle(EmailReceivedMessage emailMessage)
 		{
 			Data.EmailReceivedMessage = emailMessage;
-			var userFrom = GetUserFrom(emailMessage);
 			
-			if (userFrom != null)
+			var requestersDtoToCreate = new List<RequesterDTO>();
+
+			var fromAddress = new MailAddressLite { Address = emailMessage.Mail.FromAddress, DisplayName = emailMessage.Mail.FromDisplayName };
+			ProcessAddress(fromAddress, requestersDtoToCreate);
+
+			if (emailMessage.Mail.CC != null)
 			{
-				RestoreDeletedRequester(userFrom);
-				InvokeRules(userFrom.Id);
+				foreach (var ccAddress in emailMessage.Mail.CC)
+				{
+					ProcessAddress(ccAddress, requestersDtoToCreate);
+				}
+			}
+
+			if (requestersDtoToCreate.Empty())
+			{
+				var fromRequester = GetRequesterByAddress(fromAddress.Address);
+				InvokeRules(fromRequester.Id);
 			}
 			else
 			{
-				var requesterDto = CreateRequesterDTO(emailMessage.Mail);
-				SendLocal(new CreateRequesterForMessageCommandInternal { RequesterDto = requesterDto, OuterSagaId = Data.Id });
+				SendLocal(new CreateRequestersForMessageCommandInternal { RequestersDto = requestersDtoToCreate.ToArray(), OuterSagaId = Data.Id });
 			}
 		}
 
-		private static UserLite GetUserFrom(EmailReceivedMessage emailMessage)
+		private void ProcessAddress(MailAddressLite address, List<RequesterDTO> requestersDtoToCreate)
 		{
-			var people = ObjectFactory.GetInstance<UserRepository>().GetByEmail(emailMessage.Mail.FromAddress).ToArray();
+			var requester = GetRequesterByAddress(address.Address);
+			if (requester != null)
+			{
+				RestoreDeletedRequester(requester);
+			}
+			else
+			{
+				var requesterDto = CreateRequesterDtoFromAddress(address);
+				requestersDtoToCreate.Add(requesterDto);
+			}
+		}
+
+		private static UserLite GetRequesterByAddress(string address)
+		{
+			var people = ObjectFactory.GetInstance<UserRepository>().GetByEmail(address).ToArray();
 
 			var requesters = people.Where(x => x.UserType == UserType.Requester).ToArray();
-			if(!requesters.Empty())
+			if (requesters.Empty())
 			{
-				var requesterFrom = requesters.FirstOrDefault(x => !x.IsDeletedRequester);
-				return requesterFrom ?? requesters.FirstOrDefault();
+				return people.Where(x => x.UserType == UserType.User).FirstOrDefault(x => !x.IsDeletedOrInactiveUser);
 			}
 
-
-			return people.Where(x => x.UserType == UserType.User).FirstOrDefault(x => !x.IsDeletedOrInactiveUser);
+			var requester = requesters.FirstOrDefault(x => !x.IsDeletedRequester);
+			return requester ?? requesters.FirstOrDefault();
 		}
 
-		public void Handle(RequesterCreatedMessageInternal emailMessage)
+		public void Handle(RequestersCreatedMessageInternal message)
 		{
-			var users = ObjectFactory.GetInstance<UserRepository>().GetByEmail(Data.EmailReceivedMessage.Mail.FromAddress);
-			var user = users.OrderBy(x => x.UserType).FirstOrDefault();
-			if (user == null)
+			var fromUsers = ObjectFactory.GetInstance<UserRepository>().GetByEmail(Data.EmailReceivedMessage.Mail.FromAddress);
+			var fromUser = fromUsers.OrderBy(x => x.UserType).FirstOrDefault();
+			if (fromUser == null)
 			{
 				Log().ErrorFormat("Failed to find user with email '{0}'. Message will not be processed", Data.EmailReceivedMessage.Mail.FromAddress);
 				MarkAsComplete();
 			}
 			else
-			{
-				InvokeRules(user.Id);
+			{				
+				InvokeRules(fromUser.Id);
 			}
 		}
 
-		public void Handle(RequesterCreationFailedMessageInternal emailMessage)
+		private IEnumerable<int> GetRequestersForEmail(EmailMessage emailMessage)
+		{
+			var requesterAddresses = new List<string>();
+			requesterAddresses.Add(emailMessage.FromAddress);
+			if (emailMessage.CC != null) 
+			{
+				requesterAddresses.AddRange(emailMessage.CC.Select(ccAddress => ccAddress.Address));
+			}
+
+			foreach (var requesterAddress in requesterAddresses)
+			{
+				var users = ObjectFactory.GetInstance<UserRepository>().GetByEmail(requesterAddress);
+				var user = users.OrderBy(x => x.UserType).FirstOrDefault();
+				if (user != null && user.Id.HasValue)
+				{
+					yield return user.Id.Value;
+				}				
+			}
+		}
+
+		public void Handle(RequestersCreationFailedMessageInternal emailMessage)
 		{
 			Log().ErrorFormat("Failed to create message with subject '{0}'", Data.EmailReceivedMessage.Mail.Subject);
 			CompleteSaga();
 		}
 
-		private static RequesterDTO CreateRequesterDTO(EmailMessage messageToProcess)
+		private static RequesterDTO CreateRequesterDtoFromAddress(MailAddressLite address)
 		{
-			var requesterDto = new RequesterDTO { Email = messageToProcess.FromAddress, SourceType = RequesterSourceTypeEnum.Mail };
-            if (string.IsNullOrEmpty(messageToProcess.FromDisplayName)) 
+			var requesterDto = new RequesterDTO { Email = address.Address, SourceType = RequesterSourceTypeEnum.Mail };
+            if (string.IsNullOrEmpty(address.DisplayName))
+			{
                 return requesterDto;
+			}
 
-			var name = messageToProcess.FromDisplayName.Split(new[] { ' ' }, 2);
+			var name = address.DisplayName.Split(new[] { ' ' }, 2);
 			switch (name.Length)
 			{
 				case 1:
-					requesterDto.FirstName = string.IsNullOrEmpty(name[0]) ? messageToProcess.FromAddress : name[0];
+					requesterDto.FirstName = string.IsNullOrEmpty(name[0]) ? address.Address : name[0];
 					break;
 				case 2:
 					requesterDto.FirstName = name[0];
 					requesterDto.LastName = name[1];
 					break;
 			}
+
 			return requesterDto;
 		}
 
-		private void RestoreDeletedRequester(UserLite userFrom)
+		private void RestoreDeletedRequester(UserLite requester)
 		{
-			if (userFrom.UserType == UserType.Requester && userFrom.DeleteDate != null)
+			if (requester.UserType == UserType.Requester && requester.DeleteDate != null)
 			{
-				Send(new UpdateRequesterCommand(new RequesterDTO { ID = userFrom.Id, DeleteDate = null },
+				Send(new UpdateRequesterCommand(new RequesterDTO { ID = requester.Id, DeleteDate = null },
 															new Enum[] { RequesterField.DeleteDate }));
 			}
 		}
 
 		private void InvokeRules(int? fromUserId)
 		{
+			Data.Requesters = GetRequestersForEmail(Data.EmailReceivedMessage.Mail).ToArray();
+
 			var messageDto = Data.EmailReceivedMessage.Mail.Convert();
 			if (!MatchedRule.IsNull || MessageContainsTicket(messageDto.Body))
 			{
@@ -260,7 +310,7 @@ namespace Tp.PopEmailIntegration.Sagas
 		{
 			var matchedRule = MatchedRule;
 			Log().InfoFormat("Executing rule '{0}' on message {1}", matchedRule.ToString(), Data.MessageDto.ID);
-			matchedRule.Execute(Data.MessageDto, Data.Attachments);
+			matchedRule.Execute(Data.MessageDto, Data.Attachments, Data.Requesters);
 			CompleteSaga();
 		}
 
@@ -297,5 +347,6 @@ namespace Tp.PopEmailIntegration.Sagas
 		public EmailReceivedMessage EmailReceivedMessage { get; set; }
 		public MessageDTO MessageDto { get; set; }
 		public AttachmentDTO[] Attachments { get; set; }
+		public int[] Requesters { get; set; }
 	}
 }

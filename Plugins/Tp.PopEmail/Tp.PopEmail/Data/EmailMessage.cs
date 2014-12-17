@@ -21,6 +21,7 @@ namespace Tp.PopEmailIntegration.Data
 		public string FromAddress { get; set; }
 		public string FromDisplayName { get; set; }
 		public string Recipients { get; set; }
+		public List<MailAddressLite> CC { get; set; } 
 		public string Subject { get; set; }
 		public ContentTypeEnum ContentType { get; set; }
 		public string Body { get; set; }

@@ -84,6 +84,7 @@
       <Association Name="General_Comment" Member="Comments" ThisKey="GeneralID" OtherKey="GeneralID" Type="Comment" />
       <Association Name="General_Attachment" Member="Attachments" ThisKey="GeneralID" OtherKey="GeneralID" Type="Attachment" />
       <Association Name="General_Project" Member="Project1" ThisKey="GeneralID" OtherKey="ProjectID" Type="Project" Cardinality="One" />
+      <Association Name="General_Assignable" Member="Assignable" ThisKey="GeneralID" OtherKey="AssignableID" Type="Assignable" Cardinality="One" />
       <Association Name="TpUser_General" Member="TpUser" ThisKey="LastCommentUserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="TpUser_General1" Member="TpUser1" ThisKey="LastEditorID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
       <Association Name="TpUser_General2" Member="TpUser2" ThisKey="OwnerID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
@@ -141,6 +142,7 @@
       <Association Name="TestPlan_TestCaseTestPlan" Member="TestCaseTestPlans" ThisKey="TestPlanID" OtherKey="TestPlanID" Type="TestCaseTestPlan" />
       <Association Name="General_TestPlan" Member="General" ThisKey="TestPlanID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
       <Association Name="Project_TestPlan" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+      <Association Name="Assignable_TestPlan" Member="Assignable" ThisKey="TestPlanID" OtherKey="AssignableID" Type="Assignable" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TestCaseTestPlan" Member="TestCaseTestPlans">
@@ -183,6 +185,7 @@
       <Column Name="Importance" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IsDefault" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Priority_Assignable" Member="Assignables" ThisKey="PriorityID" OtherKey="PriorityID" Type="Assignable" />
     </Type>
   </Table>
   <Table Name="dbo.EntityState" Member="EntityStates">
@@ -198,6 +201,7 @@
       <Column Name="RequiredComment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Planned" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="NumericPriority" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="EntityState_Assignable" Member="Assignables" ThisKey="EntityStateID" OtherKey="EntityStateID" Type="Assignable" />
       <Association Name="Role_EntityState" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
       <Association Name="Process_EntityState" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
     </Type>
@@ -244,6 +248,7 @@
       <Column Name="UserStoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="BuildID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Severity_Bug" Member="Severity" ThisKey="SeverityID" OtherKey="SeverityID" Type="Severity" IsForeignKey="true" />
+      <Association Name="Assignable_Bug" Member="Assignable" ThisKey="BugID" OtherKey="AssignableID" Type="Assignable" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -284,6 +289,7 @@
       <Column Name="RoleID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Role_Team" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
       <Association Name="TpUser_Team" Member="TpUser" ThisKey="UserID" OtherKey="UserID" Type="TpUser" IsForeignKey="true" />
+      <Association Name="Assignable_Team" Member="Assignable" ThisKey="AssignableID" OtherKey="AssignableID" Type="Assignable" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Project" Member="Projects">
@@ -317,8 +323,39 @@
       <Association Name="Project_Revision" Member="Revisions" ThisKey="ProjectID" OtherKey="ProjectID" Type="Revision" />
       <Association Name="Project_TestPlan" Member="TestPlans" ThisKey="ProjectID" OtherKey="ProjectID" Type="TestPlan" />
       <Association Name="Project_ProjectMember" Member="ProjectMembers" ThisKey="ProjectID" OtherKey="ProjectID" Type="ProjectMember" />
+      <Association Name="Project_Assignable" Member="Assignables" ThisKey="ProjectID" OtherKey="ProjectID" Type="Assignable" />
       <Association Name="General_Project" Member="General" ThisKey="ProjectID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
       <Association Name="Process_Project" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Assignable" Member="Assignables">
+    <Type Name="Assignable">
+      <Column Name="AssignableID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Effort" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="EffortCompleted" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="EffortToDo" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TimeSpent" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="TimeRemain" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="EntityStateID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PriorityID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IterationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ParentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ReleaseID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SquadIterationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SquadID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PlannedStartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PlannedEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Progress" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Association Name="Assignable_TestPlan" Member="TestPlan" ThisKey="AssignableID" OtherKey="TestPlanID" Type="TestPlan" Cardinality="One" />
+      <Association Name="Assignable_Bug" Member="Bug" ThisKey="AssignableID" OtherKey="BugID" Type="Bug" Cardinality="One" />
+      <Association Name="Assignable_Team" Member="Teams" ThisKey="AssignableID" OtherKey="AssignableID" Type="Team" />
+      <Association Name="Assignable_Assignable" Member="Assignables" ThisKey="AssignableID" OtherKey="ParentID" Type="Assignable" />
+      <Association Name="Assignable_Assignable" Member="Assignable1" ThisKey="ParentID" OtherKey="AssignableID" Type="Assignable" IsForeignKey="true" />
+      <Association Name="EntityState_Assignable" Member="EntityState" ThisKey="EntityStateID" OtherKey="EntityStateID" Type="EntityState" IsForeignKey="true" />
+      <Association Name="General_Assignable" Member="General" ThisKey="AssignableID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
+      <Association Name="Priority_Assignable" Member="Priority" ThisKey="PriorityID" OtherKey="PriorityID" Type="Priority" IsForeignKey="true" />
+      <Association Name="Project_Assignable" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

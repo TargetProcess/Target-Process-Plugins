@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(n){return n.extend({"bus childComponentCreated":function(n,e){e.on("noData",this.fire.bind(this,"noData"))}})});

@@ -78,7 +78,7 @@ namespace Tp.SourceControl.Workflow.Workflow
 			}
 			else
 			{
-				_logger.InfoFormat("Revision has already been imported. Aborting revision import. Revision ID: {0}", localMessage.Revision.Id.Value);
+				//_logger.InfoFormat("Revision has already been imported. Aborting revision import. Revision ID: {0}", localMessage.Revision.Id.Value);
 				MarkAsComplete();
 			}
 		}

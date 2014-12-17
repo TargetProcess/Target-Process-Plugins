@@ -1,0 +1,1 @@
+define([],function(){return["#f9d9d1","#fbe9d6","#fdfadb","#e2eece","#d2ecea","#ceeefa","#d2e0ef","#dddceb","#f5d2e2","#e0e0e0"]});

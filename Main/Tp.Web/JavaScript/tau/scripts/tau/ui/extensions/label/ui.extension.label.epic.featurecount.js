@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(e,t){return t.extend({"bus beforeInit":function(e,t){var i={definition:{cells:{items:[{id:"feature"}],filter:"?Epic.Id == "+t.config.context.entity.id}}};this.fire("comet.parameters.ready",i)}})});

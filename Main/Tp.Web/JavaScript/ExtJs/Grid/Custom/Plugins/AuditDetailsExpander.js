@@ -61,7 +61,7 @@ Tp.custom.plugins.AuditDetailsExpander = Ext.extend(Tp.controls.grid.plugins.Bun
 		}
 
 		if (changes.length == 0)
-			html = 'no any changes...';
+			html = 'no changes...';
 
 		div.update(html);
 	},

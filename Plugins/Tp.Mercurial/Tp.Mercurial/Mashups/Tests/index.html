@@ -37,7 +37,14 @@
         });
 
         require(['tp/mashups'], function (Mashups) {
-            window['tau'] = { mashups: new Mashups()  };
+            window.tau = { mashups: new Mashups() };
+            tau.mashups.setPlaceholder(
+                'footerPlaceholder',
+                '/',
+                '/JavaScript/Mashups/Mercurial ProfileEditor/',
+                '~/JavaScript/Mashups/Mercurial ProfileEditor/ProfileEditor.js'
+            );
+
             require([
                 "testConfiguration",
                 "profileEditor.tests.js",

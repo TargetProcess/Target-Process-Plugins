@@ -3,6 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 //
 
+using System.Collections.Generic;
+using System.ComponentModel;
 using StructureMap;
 using System;
 using System.Linq;
@@ -13,66 +15,33 @@ namespace Tp.Core.Features
 	{
 		None = 0,
 		InboundEmailIntegration,
-		TestCaseLibrary,
-		UserStoriesCountReport,
-		BugsProgressReport,
-		NewPluginList,
 		LightEdition,
 		[ClientFeature("tp3.only")]
 		TP3OnlyMode,
-		NewBugzillaIntegration,
 		ProEdition,
-		MashupManagerPlugin,
-		GitPlugin,
-		SubversionViewDiff,
-		GitViewDiff,
 		SwitchToProEdition,
 		SecureJsonp,
 		[ClientFeature("comet.notifications")]
+		[Mashup("KanbanNotifications")]
+		[Mashup("BoardNotifications")]
 		ServerNotifications,
 		NewFlushStrategy,
 		PublishBusinessRuleSideEffects,
 		SliceSpecificCases,
-		[ClientFeature("quick.add")]
-		QuickAdd,
-		[ClientFeature("axes.quick.add")]
-		AxesQuickAdd,
-		[ClientFeature("full.counts")]
-		FullCounts,
 		NewPrioritization,
-		[ClientFeature("boardTemplates")]
-		BoardTemplates,
 		ParallelExpanders,
 		SliceCellFilterPropertiesAutoSet,
-		[ClientFeature("entity.quickAdd")]
-		EntityQuickAdd,
 		ParallelSliceCalls,
-		[ClientFeature("flowHelp")]
-		FlowHelp,
-		[ClientFeature("boardEditorPrioritization")]
-		BoardEditorPrioritization,
 		OptimizeForUnknownQueryHint,
 		Diagnostics,
-		[ClientFeature("board.customize.list")]
-		CustomizeCardsList,
-		[ClientFeature("board.lists")]
-		Lists,
-		[ClientFeature("newlist.operations")]
-		ListsOperations,
-		FirstTimeTp3Login,
-		[ClientFeature("board.timeline.forecast")]
-		TimelineForecast,
 		TrackProgressInDb,
 		FlattenInnerReport,
 		[ClientFeature("board.cardBatchMoveVisualEffects")]
 		CardBatchMoveVisualEffects,
-		CustomFieldsServerNotification,
 		[ClientFeature("context.v2")]
 		Context2,
 		[ClientFeature("contextPrototype")]
 		ContextPrototype,
-		[ClientFeature("boardSettings.cache")]
-		BoardSettingsCache,
 
 		[OverrideableByMashup]
 		Cdn,
@@ -80,16 +49,51 @@ namespace Tp.Core.Features
 		PerforcePlugin,
 		DisableProtocolCheck,
 		SkipSecurityCheckingForSecondLevelEntities,
-		BatchFlushForMove,
-		BatchFlushForPrioritize,
 		BatchFlushForTestCases,
 		[ClientFeature("cache.axis")]
 		CacheAxis,
-		[ClientFeature("new.board.menu")]
-		NewBoardMenu,
+		[ClientFeature("board.menu.comet")]
+		ViewsMenuCometClient,
+		ViewsMenuCometServer,
 		SqlTimeProfiling,
-		[ClientFeature("terms.tp3")]
-		TermsInTp3
+		[ClientFeature("load.progress")]
+		LoadProgress,
+		OrderPreservingEntityStateGrouping,
+		[ClientFeature("mashups.loader")]
+		MashupsLoader,
+		LockAccountOnTransactionOperation,
+		DisableTransactionalMsmqMessageProcessing,
+		[ClientFeature("process.setup")]
+		ProcessSetup,
+		[ClientFeature("warning.noProjectIsDeprecated")]
+		WarningNoProjectIsDeprecated,
+		Follow,
+		[ClientFeature("move.highlight")]
+		MoveHighlight,
+		
+		/// <summary>
+		/// When enabled, old DTOs will be extended with original DTO value and author of changes
+		/// </summary>
+		ExtendedOldDto,
+
+		/// <summary>
+		/// Used to toggle the visibility of Epics entity in view setup. Does not affect REST and Slice API visibility
+		/// </summary>
+		[ClientFeature("entity.epics")]
+		Epics,
+
+		/// <summary>
+		/// Toggles client subscriptions on entity newlist comet hub
+		/// </summary>
+		[ClientFeature("entity.new.list.comet")]
+		EntityNewListComet,
+		[ClientFeature("release.crossproject")]
+		CrossProjectReleases,
+
+		/// <summary>
+		/// Toggles logging for email notifications
+		/// </summary>
+		EmailNotificationsLogging
 	}
 
 	public interface ITpFeatureList
@@ -104,6 +108,11 @@ namespace Tp.Core.Features
 			return Enum.GetValues(typeof(TpFeature)).Cast<TpFeature>().Where(list.IsEnabled).ToArray();
 		}
 
+		public static Dictionary<TpFeature, bool> GetAllFeatures()
+		{
+			return Enum.GetValues(typeof(TpFeature)).Cast<TpFeature>().Where(x => x != TpFeature.None).ToDictionary(x => x, x => x.IsEnabled());
+		}
+
 		public static bool IsEnabled(this TpFeature feature)
 		{
 			return ObjectFactory.GetInstance<ITpFeatureList>().IsEnabled(feature);
@@ -114,5 +123,9 @@ namespace Tp.Core.Features
 			return feature.GetAttribute<ClientFeatureAttribute>().Bind(x => x.ClientFeatureName).GetOrElse(() => feature.ToString().CamelCase());
 		}
 
+		public static IEnumerable<string> GetMashupNames(this TpFeature feature)
+		{
+			return feature.GetAttributes<MashupAttribute>().Select(x => x.MashupName);
+		}
 	}
 }

@@ -1,0 +1,1 @@
+define(["require","tau/core/templates-factory"],function(e){var t=e("tau/core/templates-factory"),i={name:"date.simple",engine:"jqote2",markup:['<div class="ui-date__editable ui-title ui-title_type_simple">','<div class="property" style="display:inline">','<span class="property-text"><%!this.text%></span>',"</div>","</div>"],dependencies:[]};return t.register(i)});

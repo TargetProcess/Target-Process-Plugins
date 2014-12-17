@@ -42,7 +42,13 @@
         });
 
         require(['tp/mashups'], function (Mashups) {
-            window['tau'] = { mashups:new Mashups()  };
+            window.tau = { mashups: new Mashups() };
+            tau.mashups.setPlaceholder(
+                'footerPlaceholder',
+                '/',
+                '/JavaScript/Mashups/Bugzilla Bugzilla List Details/',
+                '~/JavaScript/Mashups/Bugzilla Bugzilla List Details/IconViewer.js'
+            );
 
             require(["iconViewer.tests.js"]);
         });

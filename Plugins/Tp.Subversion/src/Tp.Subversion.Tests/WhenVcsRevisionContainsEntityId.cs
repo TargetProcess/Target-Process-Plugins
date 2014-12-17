@@ -48,6 +48,19 @@ namespace Tp.Subversion
 		}
 
 		[Test]
+		public void ShouldAttachRevisionToEntityIgnoreCase()
+		{
+			@"Given vcs history is:
+					|commit|
+					|{Id:1, Comment:""ID:1"", Author:""John"",Time:""10.01.2000"", Entries:[{Path:""/root/file1.txt"", Action:""Add""}]}|
+					And profile Start Revision is 1
+				When plugin started up
+				Then revision 1 should be attached to TP entity 1
+					And there should be no uncompleted attach to entity sagas"
+				.Execute(In.Context<VcsPluginActionSteps>().And<WhenVcsRevisionContainsEntityId>());
+		}
+
+		[Test]
 		public void ShouldAttachRevisionToSeveralEntities()
 		{
 			@"Given vcs history is:

@@ -31,7 +31,13 @@
         });
 
         require(['tp/mashups'], function (Mashups) {
-            window['tau'] = { mashups:new Mashups()  };
+            window.tau = { mashups: new Mashups() };
+            tau.mashups.setPlaceholder(
+                'footerPlaceholder',
+                '/',
+                '/JavaScript/Mashups/Bugzilla ProfileEditor/',
+                '~/JavaScript/Mashups/Bugzilla ProfileEditor/MappingView.js'
+            );
 
             require(["RestService.tests.js",
                 "MappingController.tests.js",

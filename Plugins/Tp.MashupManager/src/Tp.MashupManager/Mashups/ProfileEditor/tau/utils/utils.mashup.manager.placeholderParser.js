@@ -3,29 +3,29 @@ define([
     , 'tau/mashup.manager/utils/utils.mashup.manager.placeholderUtils'
     , 'jQuery'
     , 'libs/jquery/jquery.fieldSelection'
-], function (_, PlaceholderUtils) {
-    function PlaceholderParser() {
+], function(_, PlaceholderUtils) {
+    var PlaceholderParser = function() {
         this.placeholderUtils = new PlaceholderUtils();
         this.savedcontent = '';
         this.selection = null;
     };
 
     PlaceholderParser.prototype = {
-        attach: function (placeholder) {
-            placeholder.bind('paste', _.bind(function (event) {
-                _.bind(this.handlepaste(placeholder, event), this);
+        attach: function(placeholder) {
+            placeholder.on('paste', _.bind(function(event) {
+                this.handlepaste(placeholder, event);
             }, this));
         },
 
-        handlepaste: function (elem, e) {
+        handlepaste: function(elem, e) {
             this.savedcontent = elem.val();
             this.selection = elem.fieldSelection();
 
-            if (e && e.clipboardData && e.clipboardData.getData) {// Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
+            if (e && e.clipboardData && e.clipboardData.getData) {
+                // Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
                 if (/text\/plain/.test(e.clipboardData.types)) {
                     elem.val(e.clipboardData.getData('text/plain'));
-                }
-                else {
+                } else {
                     elem.val('');
                 }
                 this.waitforpastedata(elem);
@@ -34,31 +34,30 @@ define([
                     e.preventDefault();
                 }
                 return false;
-            }
-            else {// Everything else - empty editdiv and allow browser to paste content into it, then cleanup
+            } else {
+                // Everything else - empty editdiv and allow browser to paste content into it, then cleanup
                 elem.val('');
                 this.waitforpastedata(elem);
                 return true;
             }
         },
 
-        waitforpastedata: function (elem) {
+        waitforpastedata: function(elem) {
             var context = this;
             if (elem.val()) {
                 this.processpaste(elem);
-            }
-            else {
+            } else {
                 var that = {
-                    e: elem
-                }
-                that.callself = function () {
-                    context.waitforpastedata(that.e)
-                }
+                    e: elem,
+                    callself: function() {
+                        context.waitforpastedata(that.e);
+                    }
+                };
                 setTimeout(that.callself, 20);
             }
         },
 
-        processpaste: function (elem) {
+        processpaste: function(elem) {
             var pasteddata = elem.val();
 
             var value = this.savedcontent;
@@ -72,8 +71,8 @@ define([
             this._selectRange(elem, firstPart.length, firstPart.length);
         },
 
-        _selectRange: function (el, start, end) {
-            return el.each(function () {
+        _selectRange: function(el, start, end) {
+            return el.each(function() {
                 if (this.setSelectionRange) {
                     this.focus();
                     this.setSelectionRange(start, end);
@@ -84,7 +83,7 @@ define([
                     range.moveStart('character', start);
                     range.select();
                 }
-            })
+            });
         }
     };
 

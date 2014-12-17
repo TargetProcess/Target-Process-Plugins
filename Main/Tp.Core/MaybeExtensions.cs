@@ -1,7 +1,7 @@
-// 
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
+//
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Collections.Generic;
@@ -17,19 +17,21 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public static void Do<TFrom>(this Maybe<TFrom> m, Action<TFrom> f, Action @else = null)
 		{
-			if (m == Maybe.Nothing)
+			if (m.HasValue)
+			{
+				f(m.Value);
+			}
+			else
 			{
 				if (@else != null)
 					@else();
 			}
-			else
-				f(m.Value);
 		}
 
 		[DebuggerStepThrough]
 		public static bool TryGetValue<T>(this Maybe<T> m, out T value)
 		{
-			if (m != Maybe.Nothing)
+			if (m.HasValue)
 			{
 				value = m.Value;
 				return true;
@@ -40,27 +42,15 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<TTo> Bind<TFrom, TTo>(this Maybe<TFrom> m, Func<TFrom, TTo> f)
+		public static Maybe<TTo> Bind<TFrom, TTo>(this Maybe<TFrom> m, [InstantHandle]Func<TFrom, TTo> f)
 		{
-			return m.Bind(x => Maybe.Return(f(x)));
-		}
-
-		[DebuggerStepThrough]
-		public static Maybe<TTo> Bind<TFrom, TTo>(this Maybe<TFrom> m, Func<TFrom, Maybe<TTo>> f)
-		{
-			return m.Select(f);
-		}
-
-		[DebuggerStepThrough]
-		public static Maybe<T> If<T>(this Maybe<T> m, Func<T, bool> condition)
-		{
-			return m.Bind(x => condition(x) ? x.ToMaybe() : Maybe.Nothing);
+			return m.HasValue? Maybe.Return(f(m.Value)) : Maybe<TTo>.Nothing;
 		}
 
 		[DebuggerStepThrough]
 		public static Maybe<T> Where<T>(this Maybe<T> m, Func<T, bool> condition)
 		{
-			return m.If(condition);
+			return m.HasValue && condition(m.Value) ? m : Maybe<T>.Nothing;
 		}
 
 		[DebuggerStepThrough]
@@ -84,7 +74,7 @@ namespace Tp.Core
 				{
 					var current = enumerator.Current;
 					if (condition(current))
-						return current.ToMaybe();
+						return Maybe.Just(current);
 				}
 				return Maybe.Nothing;
 			}
@@ -93,7 +83,7 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public static Maybe<T> SingleOrNothing<T>(this IEnumerable<T> items, Func<T, bool> condition)
 		{
-			Maybe<T> result = Maybe.Nothing;
+			var result = Maybe<T>.Nothing;
 			using (var enumerator = items.GetEnumerator())
 			{
 				while (enumerator.MoveNext())
@@ -101,12 +91,11 @@ namespace Tp.Core
 					var current = enumerator.Current;
 					if (condition(current))
 					{
-						if (result == Maybe.Nothing)
-							result = current;
-						else
+						if (result.HasValue)
 						{
 							return Maybe.Nothing;
 						}
+						result = Maybe.Just(current);
 					}
 				}
 				return result;
@@ -120,13 +109,13 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<TTo> Select<TFrom, TTo>(this Maybe<TFrom> m, Func<TFrom, Maybe<TTo>> f)
+		public static Maybe<TTo> Select<TFrom, TTo>(this Maybe<TFrom> m, [InstantHandle]Func<TFrom, Maybe<TTo>> f)
 		{
-			return Maybe.Bind(m, f);
+			return m.HasValue ? f(m.Value) : Maybe.Nothing;
 		}
 
 		[DebuggerStepThrough]
-		public static Try<TVal> ToTry<TVal, TError>(this Maybe<TVal> maybe, Func<TError> error) where TError : Exception
+		public static Try<TVal> ToTry<TVal, TError>(this Maybe<TVal> maybe, [InstantHandle]Func<TError> error) where TError : Exception
 		{
 			if (maybe.HasValue)
 			{
@@ -136,7 +125,7 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static TVal GetOrThrow<TVal, TError>(this Maybe<TVal> maybe, Func<TError> error) where TError : Exception
+		public static TVal GetOrThrow<TVal, TError>(this Maybe<TVal> maybe, [InstantHandle]Func<TError> error) where TError : Exception
 		{
 			if (!maybe.HasValue)
 			{
@@ -150,7 +139,6 @@ namespace Tp.Core
 		{
 			return tries.Select(f => f()).Where(m => m.HasValue).FirstOrDefault(Maybe.Nothing);
 		}
-
 
 		[DebuggerStepThrough]
 		public static IEnumerable<T> Choose<T>(this IEnumerable<Maybe<T>> items)
@@ -192,13 +180,7 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public static Maybe<TC> SelectMany<TA, TB, TC>(this Maybe<TA> ma, Func<TA, Maybe<TB>> func, Func<TA, TB, TC> selector)
 		{
-			return ma.Bind(a => func(a).Bind(b => selector(a, b).ToMaybe()));
-		}
-
-		[DebuggerStepThrough]
-		public static Maybe<T> ToMaybe<T>(this T value)
-		{
-			return Maybe.Just(value);
+			return ma.Select(a => func(a).Select(b => Maybe.Just(selector(a, b))));
 		}
 
 		[DebuggerStepThrough]
@@ -213,10 +195,21 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<T> NothingIfNull<T>(this T o)
-			where T : class
+		public static Maybe<IEnumerable<T>> NothingIfEmpty<T>(this IEnumerable<T> xs) where T : class
+		{
+			return xs.Any() ? Maybe.Return(xs) : Maybe.Nothing;
+		}
+
+		[DebuggerStepThrough]
+		public static Maybe<T> NothingIfNull<T>(this T o) where T : class
 		{
 			return Maybe.ReturnIfNotNull(o);
+		}
+
+		[DebuggerStepThrough]
+		public static Maybe<T> NothingIfNull<T>(this T? o) where T : struct
+		{
+			return o.HasValue ? Maybe.Just(o.Value) : Maybe.Nothing;
 		}
 
 		[DebuggerStepThrough]
@@ -232,9 +225,43 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static T GetOrDefault<T>(this Maybe<T> maybe, T @default)
+		public static T GetOrDefault<T>(this Maybe<T> maybe, T @default = default(T))
 		{
 			return maybe == Maybe.Nothing ? @default : maybe.Value;
 		}
+
+		[DebuggerStepThrough]
+		public static Maybe<TResult> Either<T1, T2, TResult>(
+			this Maybe<T1> left, Maybe<T2> right,
+			[InstantHandle] Func<T1, TResult> caseLeft,
+			[InstantHandle] Func<T2, TResult> caseRight)
+		{
+			if (left.HasValue)
+			{
+				return Maybe.Just(caseLeft(left.Value));
+			}
+
+			if (right.HasValue)
+			{
+				return Maybe.Just(caseRight(right.Value));
+			}
+
+			return Maybe.Nothing;
+		}
+
+		public static T? ToNullable<T>(this Maybe<T> maybe) where T : struct
+		{
+			return maybe.HasValue ? maybe.Value : (T?) null;
+		}
+
+		[DebuggerStepThrough]
+		public static IEnumerable<T> ToEnumerable<T>(this Maybe<T> maybe)
+		{
+			if (maybe.HasValue)
+			{
+				yield return maybe.Value;
+			}
+		}
+
 	}
 }

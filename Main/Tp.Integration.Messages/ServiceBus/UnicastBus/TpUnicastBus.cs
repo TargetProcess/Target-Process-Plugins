@@ -1106,8 +1106,14 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			{
 				var messageTypesToMethods = handlerToMessageTypeToHandleMethodMap[o.GetType()];
 				foreach (var messageType in messageTypesToMethods.Keys)
-					if (messageType.IsAssignableFrom(message.GetType()))
+					if (messageType.IsInstanceOfType(message))
 						messageTypesToMethods[messageType].Invoke(o, new object[] { message });
+
+				var disposable = o as IDisposable;
+				if (disposable != null)
+				{
+					disposable.Dispose();
+				}
 			}
 			);
 		}
@@ -1661,7 +1667,15 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			string destination;
 
 			lock (messageTypeToDestinationLookup)
-				messageTypeToDestinationLookup.TryGetValue(messageType, out destination);
+			{
+				if (!messageTypeToDestinationLookup.TryGetValue(messageType, out destination))
+				{
+					if (messageType.IsGenericType)
+					{
+						messageTypeToDestinationLookup.TryGetValue(messageType.GetGenericTypeDefinition(), out destination);
+					}
+				};
+			}
 
 			if (destination == string.Empty)
 				destination = null;

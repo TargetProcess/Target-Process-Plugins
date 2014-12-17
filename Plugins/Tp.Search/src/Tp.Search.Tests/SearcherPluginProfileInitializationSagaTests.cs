@@ -45,7 +45,7 @@ namespace Tp.Search.Tests
 					new AssignableDTO {ID = 2, EntityStateID = 11, SquadID = 10, ProjectID = 1, EntityTypeID = QueryEntityTypeProvider.USERSTORY_TYPE_ID},
 					new AssignableDTO {ID = 3, EntityStateID = 12, SquadID = 11, ProjectID = 1, EntityTypeID = QueryEntityTypeProvider.BUG_TYPE_ID}
 				};
-			_testCases = new[] { new TestCaseDTO { ID = 4, Success = "Success step", Steps = "Steps", ProjectID = 1, EntityTypeID=QueryEntityTypeProvider.TESTCASE_TYPE_ID } };
+			_testCases = new[] { new TestCaseDTO { ID = 4, Description = "Test Case Description", ProjectID = 1, EntityTypeID=QueryEntityTypeProvider.TESTCASE_TYPE_ID } };
 
 			_transport.On<GeneralQuery>().Reply(x => ReplyOnEntityQuery<GeneralQuery, GeneralDTO, GeneralQueryResult>(x, _generals));
 			_transport.On<CommentQuery>().Reply(x => ReplyOnEntityQuery<CommentQuery, CommentDTO, CommentQueryResult>(x, _comments));
@@ -65,9 +65,8 @@ namespace Tp.Search.Tests
 
 			CheckOnlyOneEntity("FirstDescription");
 			CheckOnlyOneEntity("SecondDescription");
-
-			CheckOnlyOneEntity("Success step");
-			CheckOnlyOneEntity("Steps");
+			
+			CheckOnlyOneEntity("Test Case Description");
 
 			CheckNothing("Nothing");
 

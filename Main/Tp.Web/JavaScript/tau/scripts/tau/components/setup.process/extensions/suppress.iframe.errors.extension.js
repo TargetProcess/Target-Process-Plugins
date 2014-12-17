@@ -1,0 +1,1 @@
+define(["require","tau/core/extension.base","tau/utils/utils.frame"],function(e){"use strict";var r=e("tau/core/extension.base"),t=e("tau/utils/utils.frame");return r.extend({"bus afterRender":function(e,r){var n=r.element.find("iframe");n.on("remove",function(){t.suppressRequireErrors(n)})}})});

@@ -1,1 +1,1 @@
-define([],function(){return{watchedBoardSettingsFields:["name","isShared","viewMode","acid","menuIsVisible","menuNumericPriority","edit"]}});
+define([],function(){return{watchedBoardSettingsFields:["name","isShared","customSharedData","viewMode","acid","menuGroupKey","menuIsVisible","menuNumericPriority","edit","ownerIds","isFavorite"]}});

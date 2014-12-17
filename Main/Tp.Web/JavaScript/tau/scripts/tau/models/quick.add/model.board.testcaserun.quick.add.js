@@ -1,0 +1,1 @@
+define(["require","tau/models/quick.add/model.board.general.quick.add"],function(e){var t=e("tau/models/quick.add/model.board.general.quick.add");return t.extend({getTypes:function(){return this.types},getViewMode:function(){return"board"},onInit:function(e){this.types=e.options.types,this._super(e)},getDefinition:function(e){var t=this._super(e);return t.global.acid=null,t}})});

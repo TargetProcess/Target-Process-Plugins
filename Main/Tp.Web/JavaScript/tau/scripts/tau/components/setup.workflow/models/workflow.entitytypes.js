@@ -1,0 +1,1 @@
+define([],function(){return[{id:"epic",practice:"Requirements"},{id:"feature",practice:"Requirements"},{id:"userstory",practice:"Planning"},{id:"request",practice:"Help Desk"},{id:"bug",practice:"Bug Tracking"},{id:"task",practice:"Planning"},{id:"testplan",practice:"Test Cases"},{id:"testplanrun",practice:"Test Cases"}]});

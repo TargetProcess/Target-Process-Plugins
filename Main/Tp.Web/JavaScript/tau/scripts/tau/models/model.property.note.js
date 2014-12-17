@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base.stateful","tau/utils/utils.htmlConverter"],function(e,t,i){var n=t.extend({onInit:function(e){var t=e.context.entity,n=t.entityType.name,o=e.fieldName;this.store.get(n,{id:t.id,fields:["id",o]}).done({success:function(e){var t=e[0].data;this.fire("dataBind",{value:i.fromSourceToHtml(t.comment),id:t.id})},scope:this})}});return n});

@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
@@ -40,12 +40,22 @@ namespace Tp.Testing.Common.NBehave
 			{
 				var failed = failedScenario.ActionStepResults.ToList().FindAll(x => x.Result is Failed);
 				var failMessage = new StringBuilder();
+				var first = true;
 				foreach (var stepResult in failed)
 				{
-					failMessage.AppendLine(string.Format("Step '{0}' failed with result:", stepResult.StringStep));
-					failMessage.AppendLine(stepResult.Result.Message);
-					failMessage.AppendLine(string.Empty);
+					if (first)
+					{
+						failMessage.AppendLine(string.Format("Step '{0}' failed with result:", stepResult.StringStep.Trim()));
+						failMessage.AppendLine(stepResult.Result.Message);
+						failMessage.AppendLine(string.Empty);
+						first = false;
+					}
+					else
+					{
+						failMessage.AppendLine(string.Format("Step '{0}' failed", stepResult.StringStep.Trim()));
+					}
 				}
+				failMessage.AppendLine(string.Empty);
 				throw new Exception(failMessage.ToString(), ((Failed)failed[0].Result).Exception);
 			}
 

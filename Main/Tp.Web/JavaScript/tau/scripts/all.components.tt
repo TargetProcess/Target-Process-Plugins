@@ -8,8 +8,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
-require([
-    'tracking/tauspy',
+define('all.components', [
 <#
 
 var currentPath = Host.ResolvePath("tau\\components");

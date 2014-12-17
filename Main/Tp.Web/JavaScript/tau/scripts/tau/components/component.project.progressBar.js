@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.project.progressBar","template!tau/ui/templates/progressBar/ui.template.portfolioItem.progressBar"],function(e,t,r){return{create:function(o){var a={extensions:[t],template:r};return e.create(a,o)}}});

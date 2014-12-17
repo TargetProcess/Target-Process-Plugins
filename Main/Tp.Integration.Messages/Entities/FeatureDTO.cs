@@ -568,6 +568,31 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 100)]
 		public virtual decimal? Progress { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 101)]
+		public virtual int? SquadIterationID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 102)]
+		public virtual string SquadIterationName { get; set; }
+		/// <summary>
+		/// Gets or sets the Epic ID. Reference to the epic
+		/// </summary>
+		/// <value>The Epic ID.</value>
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 103)]
+		public Int32? EpicID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Epic Name. Reference to the epic
+		/// </summary>
+		/// <value>The Epic Name.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 104)]
+		public virtual string EpicName { get; set; }
 	}
 	
 	
@@ -945,6 +970,10 @@ namespace Tp.Integration.Common
 		SquadName,
 		PlannedStartDate,
 		PlannedEndDate,
-		Progress
+		Progress,
+		SquadIterationID,
+		SquadIterationName,
+		EpicID,
+		EpicName
 	}
 }

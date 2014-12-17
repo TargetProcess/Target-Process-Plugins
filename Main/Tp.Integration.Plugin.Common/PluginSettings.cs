@@ -12,10 +12,17 @@ namespace Tp.Integration.Plugin.Common
 		{
 			get { return Settings.Default.PluginInputQueue; }
 		}
+
+		public bool IsHidden
+		{
+			get { return Settings.Default.IsHidden; }
+		}
 	}
 
 	public interface IPluginSettings
 	{
 		string PluginInputQueue { get; }
+
+		bool IsHidden { get; }
 	}
 }

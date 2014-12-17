@@ -1,0 +1,1 @@
+define(["require","Underscore","jQuery","./editor.adapter.default"],function(e){var r=(e("Underscore"),e("jQuery"),e("./editor.adapter.default"));return r.extend({_initEditor:function(e,r){this._super(e,r,{savingEvent:"beforeSave",savedEvent:"afterSave",finishedEvent:"afterSave"}),e.on("blur",function(){r.tauBubble("hide")})}})});

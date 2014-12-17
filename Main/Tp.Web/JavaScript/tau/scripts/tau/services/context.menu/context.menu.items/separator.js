@@ -1,0 +1,1 @@
+define(["require","Underscore","tau/core/class"],function(e){var n=e("Underscore"),t=e("tau/core/class");return t.extend({getMenuItemClassName:n.constant("drop-down-separator"),getContent:n.constant("")})});

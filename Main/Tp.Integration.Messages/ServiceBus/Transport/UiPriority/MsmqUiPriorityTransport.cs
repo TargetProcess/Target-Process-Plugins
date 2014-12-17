@@ -21,6 +21,7 @@ using NServiceBus.Unicast.Transport;
 using NServiceBus.Unicast.Transport.Msmq;
 using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport.Router;
+using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 using Tp.Integration.Messages.ServiceBus.UnicastBus;
 using log4net;
 
@@ -528,8 +529,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				//in case AbortHandlingCurrentMessage was called
 				return;
 			}
-			catch
+			catch(Exception e)
 			{
+				Logger.Warn("Failed to process message.", e);
 				if (IsTransactional)
 				{
 					IncrementFailuresForMessage(_messageId);

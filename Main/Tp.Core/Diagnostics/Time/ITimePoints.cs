@@ -10,5 +10,7 @@ namespace Tp.Core.Diagnostics.Time
 		void CopyFrom(ITimePoints timePoints);
 		ITimePoints CreateSnapshot();
 		IEnumerable<TimePoint> Points { get; }
+
+		long GetOrder();
 	}
 }

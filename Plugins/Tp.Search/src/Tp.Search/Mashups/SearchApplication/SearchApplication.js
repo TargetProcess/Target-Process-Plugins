@@ -1,4 +1,3 @@
-require(['all.components'], function () {
 tau.mashups
 .addDependency('jQuery')
 .addDependency('application.creator')
@@ -97,5 +96,4 @@ tau.mashups
                 });
         };
         return appCreator;
-});
 });

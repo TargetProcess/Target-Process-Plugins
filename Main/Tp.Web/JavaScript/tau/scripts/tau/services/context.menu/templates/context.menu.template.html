@@ -1,0 +1,8 @@
+<!-- name: context.menu, deps: [template!tau/services/context.menu/templates/context.menu.item.template] -->
+<div class="ui-drop-down t3-views-navigator-context-menu">
+    <div role="list" class="drop-down-list">
+        <div class="drop-down-list__inner i-inner">
+            <%= fn.sub('context.menu.item', this.menuItems) %>
+        </div>
+    </div>
+</div>

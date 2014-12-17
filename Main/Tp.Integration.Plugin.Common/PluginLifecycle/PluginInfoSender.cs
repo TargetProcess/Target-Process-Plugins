@@ -70,7 +70,8 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 			          		       		Category = attribute.Category,
 			          		       		Description = attribute.Description,
 			          		       		PluginInputQueue = _pluginQueueFactory.Create(_pluginSettings.PluginInputQueue).IndependentAddressForQueue,
-			          		       		PluginIconContent = _pluginIcon.GetIconContent()
+			          		       		PluginIconContent = _pluginIcon.GetIconContent(),
+										IsHidden = _pluginSettings.IsHidden
 			          		       	}
 			          	});
 		}

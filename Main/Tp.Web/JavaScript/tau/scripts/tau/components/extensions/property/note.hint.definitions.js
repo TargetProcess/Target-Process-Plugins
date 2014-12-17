@@ -1,0 +1,1 @@
+define([],function(){return{DEFAULT_HINT:{name:"default",className:"tau-note-property-empty"},DETAILS_HINT:{name:"details",className:"tau-note-property-details"}}});

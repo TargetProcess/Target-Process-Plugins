@@ -1,0 +1,34 @@
+<!-- name: list.program.projects.list.item -->
+<tr class="i-role-item" role="item" data-entity-id="<%= this.id %>">
+    <td>
+        <div class="tau-project-name">
+            <h3>
+                <a href="<%= this.uri %>">
+                    <i <% if (this.color) { %>style="background-color: <%= this.color %>;"<% } %> class="tau-icon tau-icon_type_color"></i>
+                    <%! this.name %>
+                </a>
+            </h3>
+        </div>
+    </td>
+    <td title="User Stories sparkline provides an overview of progress over the last <%= this.sparklineLength %> weeks. The numbers shown are: a maximum of user stories done/added at any given week out of those 16, and done/added in the current calendar week (on the right).">
+        <svg class="tau-sparkline i-role-sparkline" data-source='<%= JSON.stringify(this.userStoriesSparkline) %>'></svg>
+    </td>
+    <td>
+        <div class="tau-fraction tau-userstory">
+            <span title="done"><%= this.closedUsCount %></span><br>
+            <b title="open"><%= this.openUsCount %></b>
+        </div>
+    </td>
+    <td title="Bugs sparkline provides an overview of progress over the last <%= this.sparklineLength %> weeks. The numbers shown are: a maximum of bugs fixed/added at any given week out of those 16, and fixed/added in the current calendar week (on the right).">
+        <svg class="tau-sparkline tau-sparkline-bugs i-role-sparkline" data-source='<%= JSON.stringify(this.bugsSparkline) %>'></svg>
+    </td>
+    <td>
+        <div class="tau-fraction tau-bug" >
+            <span title="done"><%= this.closedBugsCount %></span><br>
+            <b title="open"><%= this.openBugsCount %></b>
+        </div>
+    </td>
+    <td class="tau-assign-info">
+        <button class="tau-btn tau-attention tau-unassign" type="button" data-confirm-message="Are you sure you want to remove project '<%! this.name %>' from this program?">Unassign</button>
+    </td>
+</tr>

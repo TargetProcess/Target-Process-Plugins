@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/shareLinkReport/model.shareLinkReport","tau/ui/extensions/shareLinkReport/ui.extension.shareLinkReport.main","tau/ui/templates/shareLinkReport/ui.template.shareLink"],function(e,t,n,r){return{create:function(a){var i={extensions:[t,n],template:r};return e.create(i,a)}}});

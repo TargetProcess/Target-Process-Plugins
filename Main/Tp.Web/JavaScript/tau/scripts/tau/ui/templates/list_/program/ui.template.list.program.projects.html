@@ -1,0 +1,32 @@
+<!-- name: list.program.projects, fn: ./ui.template.list.program.projects.fn -->
+<div class="tau-team-control i-role-project-list">
+
+<% if (this.items.length){ %>
+    <table class="tau-team-info tau-project-info">
+        <colgroup>
+            <col class="tau-team">
+            <col class="tau-us-progress">
+            <col class="tau-us-total">
+            <col class="tau-bug-progress">
+            <col class="tau-bug-total">
+            <col class="tau-assign-info">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th><i class="tau-entity-icon tau-entity-icon--userstory"><%=fn.term("userStory", "iconSmall")%></i><%=fn.term("userStory", "names")%></th>
+                <th>Done / Open</th>
+                <th><i class="tau-entity-icon tau-entity-icon--bug"><%=fn.term("bug", "iconSmall")%></i><%=fn.term("bug", "names")%></th>
+                <th>Done / Open</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <%= fn.sub("list.program.projects.list.item", this.items) %>
+        </tbody>
+    </table>
+<% }else{ %>
+    <div class="tau-message">This program has no projects</div>
+<% } %>
+
+</div>

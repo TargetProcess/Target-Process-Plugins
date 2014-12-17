@@ -451,8 +451,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 					{
 						ProcessMessage(m);
 					}
-					catch
+					catch(Exception e)
 					{
+						Logger.Warn(LoggerContext.New(message.MessageOrigin.Name), "Failed to process message.", e);
 						OnFailedMessageProcessing(message);
 					}
 				}));
@@ -479,8 +480,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				//in case AbortHandlingCurrentMessage was called
 				return;
 			}
-			catch
+			catch(Exception e)
 			{
+				Logger.Warn(LoggerContext.New(message.MessageOrigin.Name), "Failed to process message.", e);
 				if (IsTransactional)
 				{
 					IncrementFailuresForMessage(_messageId);

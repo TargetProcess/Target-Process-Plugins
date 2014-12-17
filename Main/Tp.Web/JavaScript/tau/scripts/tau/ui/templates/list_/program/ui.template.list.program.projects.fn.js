@@ -1,0 +1,1 @@
+define(["template!tau/ui/templates/list_/program/ui.template.list.program.projects.list.item"],function(){return{}});

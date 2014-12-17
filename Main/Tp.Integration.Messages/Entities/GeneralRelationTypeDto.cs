@@ -4,7 +4,7 @@ using System.Xml.Serialization;using System.Runtime.Serialization;
 namespace Tp.Integration.Common
 {
 	[Serializable][DataContract]
-	public class GeneralRelationTypeDTO : DataTransferObject
+	public partial class GeneralRelationTypeDTO : DataTransferObject
 	{
 		[PrimaryKey]
 		public override int? ID

@@ -12,7 +12,7 @@ namespace Tp.Integration.Common
 	/// It is a basic class for all DTOs in system
 	/// </summary>
 	[Serializable][DataContract]
-	public class DataTransferObject
+	public class DataTransferObject : IDataTransferObject
 	{
 		/// <summary>
 		/// Gets or sets the ID.
@@ -20,6 +20,11 @@ namespace Tp.Integration.Common
 		/// <value>The ID.</value>
 		[XmlElement(Order = 0)][DataMember(IsRequired = true)]
 		public virtual int? ID { get; set; }
+
+		public virtual T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitDataTransferObject(this);
+		}
 
 		public override string ToString()
 		{

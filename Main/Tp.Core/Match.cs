@@ -59,7 +59,12 @@ namespace Tp.Core
 
 			public CaseClause<T, TResult> Case<T1>(Func<T1, TResult> func)
 			{
-				return Case(x => x is T1, x => func((T1)(object)x));
+				return Case(x => x is T1, x => func((T1) (object) x));
+			}
+
+			public CaseClause<T, TResult> Case<T1>(Func<T1, bool> predicate, Func<T1, TResult> func)
+			{
+				return Case(x => x is T1 && predicate((T1) (object) x), x => func((T1) (object) x));
 			}
 
 			public TResult End(Func<T, TResult> @default)

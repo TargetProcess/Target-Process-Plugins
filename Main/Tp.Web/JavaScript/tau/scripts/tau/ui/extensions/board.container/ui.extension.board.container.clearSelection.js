@@ -1,0 +1,1 @@
+define(["jQuery","tau/core/extension.base"],function(e,o){return o.extend({"bus afterRender":function(e,o){o.element.on("mousedown",'[role="aside"],.i-role-board-body-holder,[role="clipboard-body"]',function(){$.clearSelection()})}})});

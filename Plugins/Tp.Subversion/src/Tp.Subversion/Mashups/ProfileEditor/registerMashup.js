@@ -70,7 +70,7 @@ tau.mashups
 
 					handler(that.placeholder.find(selector));
 
-					$(selector).live('focus', function () {
+					$(document).on('focus', selector, function () {
 
 						var $el = $(this);
 

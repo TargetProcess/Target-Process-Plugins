@@ -10,7 +10,7 @@ namespace Tp.PopEmailIntegration.Rules.ThenClauses
 {
 	public interface IThenClause
 	{
-		void Execute(MessageDTO dto, AttachmentDTO[] attachments);
+		void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
 		bool IsMatched(EmailMessage message);
 	}
 }

@@ -1,0 +1,11 @@
+<!-- name: 'teststep-hints' -->
+<div class="test-case-tip">
+    <div class="tau-btn tau-btn-small tau-btn-transparent-dark"><%= this.ctrlBtnName%></div> + <div class="tau-btn tau-btn-small tau-btn-transparent-dark">Enter</div> &mdash; add step after,&nbsp;&nbsp;
+    <div class="tau-btn tau-btn-small tau-btn-transparent-dark"><%= this.ctrlBtnName%></div> + <div class="tau-btn tau-btn-small tau-btn-transparent-dark">Shift</div> + <div class="tau-btn tau-btn-small tau-btn-transparent-dark">Enter</div> &mdash; add step before,&nbsp;&nbsp;
+    <div class="tau-btn tau-btn-small tau-btn-transparent-dark"><%= this.ctrlBtnName%></div>
+    <% if(this.delFnBtnName) {%>
+        + <div class="tau-btn tau-btn-small tau-btn-transparent-dark"><%= this.delFnBtnName%></div>
+    <% } %>
+    + <div class="tau-btn tau-btn-small tau-btn-transparent-dark"><%= this.delBtnName%></div> &mdash; delete current step.&nbsp;&nbsp;
+    <a href="#" class="test-case-tip__link">Got it</a>
+</div>

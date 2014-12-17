@@ -1,9 +1,8 @@
 define(function(require) {
     var _ = require('Underscore');
-
+    var $ = require('jQuery');
     var React = require('libs/react/react-ex');
-
-    var listModel = require('./../models/board.menu.list.model');
+    var transformations = require('./../services/board.menu.transformations.service');
 
     var dependencies = [
         'boardMenuListView',
@@ -12,150 +11,96 @@ define(function(require) {
         'boardSettingsService'
     ];
 
-    return React.defineClass(dependencies, function(ListView, ActionsView, SearchView, boardSettingsService) {
+    return React.defineClass(dependencies,
+        function(ListView, ActionsView, SearchView, boardSettingsService) {
 
-        return {
-            getInitialState: function() {
-                return {
-                    allBoards: [],
-                    filterText: '',
-                    currentBoardId: '',
-                    showHidden: false,
-                    focusedBoardId: '',
-                    isLoading: false
-                };
-            },
+            return {
+                getDefaultProps: function() {
+                    return {
+                        filterText: '',
+                        viewMenuSections: null
+                    };
+                },
 
-            componentWillMount: function() {
-                this.setState({currentBoardId: boardSettingsService.getCurrentSettings().id});
+                getInitialState: function() {
+                    return {
+                        currentBoardId: '',
+                        showHidden: false,
+                        focusedBoardId: '',
+                        isLoading: true
+                    };
+                },
 
-                this.props.model.acidUpdated.add(this._onAcidUpdated, this);
-                boardSettingsService.settingsUpdated.add(this._onBoardSettingsUpdated, this);
-            },
+                componentWillMount: function() {
+                    this.setState({currentBoardId: boardSettingsService.getCurrentSettings().id});
+                },
 
-            componentWillUnmount: function() {
-                this.props.model.acidUpdated.remove(this);
-                boardSettingsService.settingsUpdated.remove(this);
-            },
+                componentDidMount: function() {
+                    this.setState({isLoading: true});
 
-            componentDidMount: function() {
-                this.setState({isLoading: true});
+                    this.props.model.loadBoards()
+                        .always(function() {
+                            this.setState({
+                                isLoading: false
+                            });
+                        }.bind(this));
+                },
 
-                this.props.model.loadBoards()
-                    .done(this._whenBoardsLoaded)
-                    .fail(this._whenBoardLoadingFailed);
-            },
+                componentWillReceiveProps: function(newProps) {
+                    if (newProps.filterText !== this.props.filterText) {
+                        var querySpec = this._createBoardQuerySpec();
+                        querySpec.filterText = newProps.filterText;
+                        var focusedId = transformations.getDefaultFocusedBoardId(
+                            newProps.viewMenuSections.getAllViewGroups(), querySpec);
+                        this.setState({focusedBoardId: focusedId});
+                    }
+                },
 
-            _whenBoardsLoaded: function(data) {
-                var boards = _.map(data.items, this._createBoardItem);
-                this.setState({
-                    isLoading: false,
-                    allBoards: boards
-                });
-            },
+                _getVisibleBoards: function() {
+                    // TODO: optimize
+                    var boards = _.flatMap(this.props.viewMenuSections.getAllViewGroups(), _.property('boards'));
+                    return transformations.getVisibleBoards(boards, this._createBoardQuerySpec());
+                },
 
-            _whenBoardLoadingFailed: function() {
-                this.setState({
-                    isLoading: false,
-                    allBoards: []
-                });
-            },
+                /**
+                 * @return {BoardQuerySpec}
+                 */
+                _createBoardQuerySpec: function() {
+                    return {
+                        filterText: this.props.filterText,
+                        showHidden: this.state.showHidden,
+                        currentBoardId: this.state.currentBoardId
+                    };
+                },
 
-            _createBoardItem: function(boardData) {
-                // TODO: perhaps create and return React component here?
-                // TODO: or maybe a board view model wrapper?
-                var boardId = boardData.key || boardData.id;
+                render: function() {
+                    if (this.state.isLoading) {
+                        return <div className="t3-views-navigator i-role-board-menu"></div>;
+                    }
 
-                return {
-                    boardId: boardId,
-                    link: this.props.model.getBoardLink(boardId),
-                    name: boardData.name || boardId,
-                    viewMode: boardData.viewMode,
-                    isShared: boardData.isShared,
-                    menuIsVisible: boardData.menuIsVisible,
-                    edit: !!boardData.edit
-                };
-            },
+                    //TODO: move current query spec to model
 
-            _onAcidUpdated: function() {
-                _.each(this.state.allBoards, function(board) {
-                    board.link = this.props.model.getBoardLink(board.boardId);
-                }, this);
+                    var querySpec = this._createBoardQuerySpec();
 
-                this.setState({allBoards: this.state.allBoards});
-            },
-
-            _onBoardSettingsUpdated: function(newSettings) {
-                var newBoardId = boardSettingsService.getCurrentSettings().id;
-                this.setState({currentBoardId: newBoardId});
-
-                var currentBoard = _.find(this.state.allBoards, function(board) {
-                    return board.boardId === newBoardId;
-                });
-
-                if (currentBoard) {
-                    // FIXME: looks ugly
-                    _.each(newSettings, function(v, k) {
-                        if (_.has(currentBoard, k)) {
-                            currentBoard[k] = v;
-                        }
-                    });
-
-                    this.setState({allBoards: this.state.allBoards});
-                }
-            },
-
-            _getVisibleBoards: function() {
-                var filteredBoards = listModel.applyBoardFilter(this.state.allBoards, this.state.filterText);
-                if (this.state.showHidden) {
-                    return filteredBoards;
-                }
-
-                return listModel.filterHiddenBoards(filteredBoards, this.state.currentBoardId);
-            },
-
-            _hasHiddenBoards: function() {
-                return _.some(this.state.allBoards, function(board) {
-                    return board.menuIsVisible === false; // board is visible if true or not present
-                });
-            },
-
-            _createBoard: function() {
-                this.props.model.createBoard().done(function(boardDefinition) {
-                    var boardItem = this._createBoardItem(boardDefinition);
-                    this.state.allBoards.push(boardItem);
-                    this.setState({allBoards: this.state.allBoards});
-
-                    this.props.model.redirectToBoard(boardDefinition.id);
-                }.bind(this));
-            },
-
-            render: function() {
-                if (this.state.isLoading) {
-                    return <div className="t3-views-navigator"></div>;
-                }
-
-                var visibleBoards = this._getVisibleBoards();
-
-                return (
-                    <div className="t3-views-navigator">
-                        <SearchView
-                            boards={visibleBoards}
-                            searchTerm={this.state.filterText}
+                    return (
+                        <div className="t3-views-navigator i-role-board-menu">
+                            <SearchView
+                            viewMenuSections={this.props.viewMenuSections}
+                            querySpec={querySpec}
+                            focusedBoardId={this.state.focusedBoardId}/>
+                            <ListView
+                            ref="listView"
+                            viewMenuSections={this.props.viewMenuSections}
                             currentBoardId={this.state.currentBoardId}
                             focusedBoardId={this.state.focusedBoardId}
-                            model={this.props.model}/>
-                        <ListView
-                            boards={visibleBoards}
-                            currentBoardId={this.state.currentBoardId}
-                            focusedBoardId={this.state.focusedBoardId}/>
-                        <ActionsView
-                            hasHiddenBoards={this._hasHiddenBoards()}
-                            showHidden={this.state.showHidden}
-                            createBoard={this._createBoard} />
-                    </div>
-                    );
+                            model={this.props.model}
+                            querySpec={querySpec} />
+                            <ActionsView
+                            hasHiddenBoards={this.props.viewMenuSections.hasHiddenItems()}
+                            showHidden={this.state.showHidden} />
+                        </div>
+                        );
+                }
             }
-        }
-    });
+        });
 });

@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
 	/// Data Transfer object of Attachment File. Represents reference to file or file content.
 	/// </summary>
 	[Serializable][DataContract]
-	public class AttachmentFileDTO : DataTransferObject
+	public partial class AttachmentFileDTO : DataTransferObject
 	{
 		/// <summary>
 		/// Gets or sets the ID.

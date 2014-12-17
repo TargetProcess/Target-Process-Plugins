@@ -1,0 +1,1 @@
+define(["tau/components/component.property.date","tau/models/model.property.date.validation.portfolio"],function(e,t){return{create:function(o){return o=o||{},o.propertyName="endDate",o.validationExtension=t,o.allowReset=!0,e.create(o)}}});

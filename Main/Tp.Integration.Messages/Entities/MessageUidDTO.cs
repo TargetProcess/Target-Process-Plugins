@@ -11,7 +11,7 @@ namespace Tp.Integration.Common
 	/// Data Transfer object of Message Uid. Represents reference to downloaded message.
 	/// </summary>
 	[Serializable][DataContract]
-	public class MessageUidDTO : DataTransferObject
+	public partial class MessageUidDTO : DataTransferObject
 	{
 		/// <summary>
 		/// Gets or sets the ID.

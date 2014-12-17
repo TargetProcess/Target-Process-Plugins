@@ -34,6 +34,9 @@ namespace Tp.Search.Bus
 																								IHandleMessages<FeatureCreatedMessage>,
 																								IHandleMessages<FeatureUpdatedMessage>,
 																								IHandleMessages<FeatureDeletedMessage>,
+																								IHandleMessages<EpicCreatedMessage>,
+																								IHandleMessages<EpicUpdatedMessage>,
+																								IHandleMessages<EpicDeletedMessage>,
 																								IHandleMessages<TestCaseCreatedMessage>,
 																								IHandleMessages<TestCaseUpdatedMessage>,
 																								IHandleMessages<TestCaseDeletedMessage>,
@@ -65,6 +68,7 @@ namespace Tp.Search.Bus
 			Mapper.CreateMap<TaskDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
 			Mapper.CreateMap<BugDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
 			Mapper.CreateMap<FeatureDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
+			Mapper.CreateMap<EpicDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
 			Mapper.CreateMap<TestCaseDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
 			Mapper.CreateMap<TestPlanDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
 			Mapper.CreateMap<TestPlanRunDTO, GeneralDTO>().ForMember(dest => dest.ParentProjectID, opt => opt.MapFrom(src => src.ProjectID));
@@ -75,7 +79,8 @@ namespace Tp.Search.Bus
 			Mapper.CreateMap<TaskDTO, AssignableDTO>();
 			Mapper.CreateMap<BugDTO, AssignableDTO>();
 			Mapper.CreateMap<FeatureDTO, AssignableDTO>();
-			//Mapper.CreateMap<TestPlanDTO, AssignableDTO>();
+			Mapper.CreateMap<EpicDTO, AssignableDTO>();
+			Mapper.CreateMap<TestPlanDTO, AssignableDTO>();
 			Mapper.CreateMap<TestPlanRunDTO, AssignableDTO>();
 			Mapper.CreateMap<RequestDTO, AssignableDTO>();
 		}
@@ -201,6 +206,21 @@ namespace Tp.Search.Bus
 			RemoveAssignableIndex(Mapper.Map<FeatureDTO, AssignableDTO>(message.Dto));
 		}
 
+		public void Handle(EpicCreatedMessage message)
+		{
+			AddAssignableIndex(Mapper.Map<EpicDTO, AssignableDTO>(message.Dto));
+		}
+
+		public void Handle(EpicUpdatedMessage message)
+		{
+			UpdateAssignableIndex(Mapper.Map<EpicDTO, AssignableDTO>(message.Dto), GetAssignableChangedFields(message.ChangedFields));
+		}
+
+		public void Handle(EpicDeletedMessage message)
+		{
+			RemoveAssignableIndex(Mapper.Map<EpicDTO, AssignableDTO>(message.Dto));
+		}
+
 		public void Handle(TestCaseCreatedMessage message)
 		{
 			AddTestCaseIndex(message.Dto);
@@ -218,20 +238,17 @@ namespace Tp.Search.Bus
 
 		public void Handle(TestPlanCreatedMessage message)
 		{
-			AddGeneralIndex(Mapper.Map<TestPlanDTO, GeneralDTO>(message.Dto));
-			//AddAssignableIndex(Mapper.Map<TestPlanDTO, AssignableDTO>(message.Dto));
+			AddAssignableIndex(Mapper.Map<TestPlanDTO, AssignableDTO>(message.Dto));
 		}
 
 		public void Handle(TestPlanUpdatedMessage message)
 		{
-			UpdateGeneralIndex(Mapper.Map<TestPlanDTO, GeneralDTO>(message.Dto), GetGeneralChangedFields(message.ChangedFields));
-			//UpdateAssignableIndex(Mapper.Map<TestPlanDTO, AssignableDTO>(message.Dto), GetAssignableChangedFields(message.ChangedFields));
+			UpdateAssignableIndex(Mapper.Map<TestPlanDTO, AssignableDTO>(message.Dto), GetAssignableChangedFields(message.ChangedFields));
 		}
 
 		public void Handle(TestPlanDeletedMessage message)
 		{
-			RemoveGeneralIndex(Mapper.Map<TestPlanDTO, GeneralDTO>(message.Dto));
-			//RemoveAssignableIndex(Mapper.Map<TestPlanDTO, AssignableDTO>(message.Dto));
+			RemoveAssignableIndex(Mapper.Map<TestPlanDTO, AssignableDTO>(message.Dto));
 		}
 
 		public void Handle(TestPlanRunCreatedMessage message)
@@ -385,5 +402,7 @@ namespace Tp.Search.Bus
 			}
 			a();
 		}
+
+
 	}
 }

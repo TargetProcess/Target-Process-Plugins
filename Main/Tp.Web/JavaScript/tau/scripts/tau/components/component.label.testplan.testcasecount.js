@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.label","tau/models/model.label.testplan.testcasecount","tau/ui/extensions/label/ui.extension.label.refresher.comet"],function(e,t,n,o){return{create:function(s){return s=e.extend(s,{modelType:n,countFieldNames:["testCases"],extensions:(s.extensions||[]).concat(o)}),t.create(s)}}});

@@ -23,7 +23,7 @@ tau.mashups
                     Description: 'Example: Resolved <span class="mapping-notes-chain">&nbsp;</span> Fixed',
                     KeyName: 'Bugzilla Status',
                     ValueName: 'TargetProcess State',
-                    HowTo: '<a href="http://help.targetprocess.com/workflow/work_by_role" target="_blank">How to change States in TargetProcess</a>',
+                    HowTo: '<a href="https://guide.targetprocess.com/settings/processes.html" target="_blank">How to change States in TargetProcess</a>',
                     onAutomap: $.proxy(this.automap, this)
                 });
 
@@ -35,7 +35,7 @@ tau.mashups
                     Description: 'Example: Critical <span class="mapping-notes-chain">&nbsp;</span> Major',
                     KeyName: 'Bugzilla Severity',
                     ValueName: 'TargetProcess Severity',
-                    HowTo: '<a href="http://help.targetprocess.com/settings/severity" target="_blank">How to change Severities for Bugs in TargetProcess</a>',
+                    HowTo: '<a href="https://guide.targetprocess.com/settings/how-to-customize-bug-severity-values.html" target="_blank">How to change Severities for Bugs in TargetProcess</a>',
                     onAutomap: $.proxy(this.automap, this)
                 });
 
@@ -47,7 +47,7 @@ tau.mashups
                     Description: 'Example: Good <span class="mapping-notes-chain">&nbsp;</span> Must Have',
                     KeyName: 'Bugzilla Priority',
                     ValueName: 'TargetProcess Priority',
-                    HowTo: '<a href="http://help.targetprocess.com/settings/bv" target="_blank">How to change Priorities for Bugs in TargetProcess</a>',
+                    HowTo: '<a href="https://guide.targetprocess.com/settings/business-value.html" target="_blank">How to change Priorities for Bugs in TargetProcess</a>',
                     onAutomap: $.proxy(this.automap, this)
                 });
 

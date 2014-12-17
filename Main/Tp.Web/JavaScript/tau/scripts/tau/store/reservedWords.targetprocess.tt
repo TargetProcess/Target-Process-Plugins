@@ -1,0 +1,18 @@
+﻿<#@ template hostSpecific="true" #>
+<#@ output extension=".generated.js" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ import namespace="Tp.Rest" #> 
+<#@ import namespace="Tp.BusinessObjects" #> 
+define(function() {
+<#
+     var entityKindHashSet = new ReservedWords().GetReservedWords().OrderBy(x=>x);
+     var words = string.Join(",\n", entityKindHashSet.Select(x=>"'"+x.ToString()+"'").ToArray());
+#>
+    return [<#= words#>];
+});

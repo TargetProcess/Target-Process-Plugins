@@ -42,7 +42,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 					}
 				}, Scheduler.ThreadPool, s => Console.WriteLine("Trace: " + s));
 			var ev = new ManualResetEvent(false);
-			var source = TpObservableExtensions.ToSelfRepairingHotObservable(createOriginSource, _ => { }, e =>
+			var source = TpObservableExtensions.ToSelfRepairingHotObservable(createOriginSource, e =>
 				{
 					Console.WriteLine(e);
 					errors++;

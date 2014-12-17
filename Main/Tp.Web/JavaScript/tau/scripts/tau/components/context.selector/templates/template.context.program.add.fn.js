@@ -1,0 +1,1 @@
+define(["tau/ui/templates/board.context.selector/ui.template.board.context.selector.projects.list"],function(){return{}});

@@ -1,1 +1,1 @@
-define(["libs/underscore","tau/extensions/extension.underscore","tau/extensions/extension.underscore.callbacks","tau/extensions/extension.underscore.async","libs/underscore/underscore.string"],function(e){return e});
+define(["libs/underscore","tau/extensions/extension.underscore","tau/extensions/extension.underscore.callbacks","tau/extensions/extension.underscore.numbers","tau/extensions/extension.underscore.async","libs/underscore/underscore.string","libs/underscore/underscore.inflection"],function(e){return e});

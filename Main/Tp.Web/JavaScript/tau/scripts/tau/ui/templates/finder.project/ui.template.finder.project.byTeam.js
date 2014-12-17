@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/finder.project/ui.template.finder.project.abstract"],function(e){var t={name:"finder.project.byTeam",engine:"jqote2",markup:['<%= fn.sub("finder.project.abstract", this) %>']};return e.register(t)});

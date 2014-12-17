@@ -75,7 +75,15 @@ namespace Tp.Integration.Common
         /// <value>The Role Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 8)]public virtual string RoleName { get; set; }
-		
+
+
+		/// <summary>
+		/// Gets or sets the Assignable Type. Reference to entity to which person assigned
+		/// </summary>
+		/// <value>The Assignable Type.</value>
+		[DataMember]
+		[XmlElement(Order = 9)]
+		public virtual string AssignableType{ get; set; }
 	}
 	
 	
@@ -104,5 +112,6 @@ namespace Tp.Integration.Common
         /// Role Name
         /// </summary>		
 		RoleName,
+		AssignableType
 	}
 }

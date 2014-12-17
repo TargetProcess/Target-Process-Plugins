@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/class","./comet.subscription"],function(n,t,e){return t.extend({init:function(n){this.cometConnection=n},listen:function(n,t){return new e(n,t,this.cometConnection)}})});
+define(["Underscore","tau/core/class","./comet.subscription"],function(n,t,e){return t.extend({init:function(n){this._cometConnection=n},listen:function(n,t){return new e(n,t,this._cometConnection)}})});

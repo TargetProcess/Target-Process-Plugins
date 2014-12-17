@@ -10,7 +10,7 @@ namespace Tp.Core.MaybeConvert
 			{
 				int result;
 				if (int.TryParse(s, out result))
-					return result.ToMaybe();
+					return Maybe.Just(result);
 			}
 
 			return Maybe.Nothing;

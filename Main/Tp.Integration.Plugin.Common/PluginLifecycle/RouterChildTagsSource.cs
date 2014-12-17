@@ -36,7 +36,9 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 				return true;
 			}
 			var conditionalMessageRouter = ObjectFactory.TryGetInstance<ITargetProcessConditionalMessageRouter>();
-			return conditionalMessageRouter != null && conditionalMessageRouter.Handle(message);
+
+			return Properties.Settings.Default.AlwaysRouteMessage ||
+			       conditionalMessageRouter != null && conditionalMessageRouter.Handle(message);
 		}
 	}
 }

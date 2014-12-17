@@ -55,10 +55,13 @@ namespace Tp.Integration.Common
         /// Gets or sets the Description. Brief description of the process
         /// </summary>
         /// <value>The Description.</value>
-		[DataMember][XmlElement(Order = 6)]public String Description { get; set; }
-		
+		[DataMember]
+		[XmlElement(Order = 6)]
+		public String Description { get; set; }
 
-		
+		[DataMember]
+		[XmlElement(Order = 7)]
+		public string UnitAbbreviation { get; set; }
 	}
 	
 	
@@ -79,5 +82,6 @@ namespace Tp.Integration.Common
         /// Description
         /// </summary>		
 		Description,
+		UnitAbbreviation
 	}
 }

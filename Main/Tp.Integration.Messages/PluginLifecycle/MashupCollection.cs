@@ -43,7 +43,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
 				return new Mashup[] {};
 			}
 
-			IEnumerable<string> directories = GetMashupsDirectories(mashupsPhysicalPath);
+			IEnumerable<string> directories = Directory.GetDirectories(mashupsPhysicalPath);
 
 			return (from directory in directories
 					where !ShouldIgnoreMashupDirectory(directory)
@@ -55,14 +55,10 @@ namespace Tp.Integration.Messages.PluginLifecycle
 			        select new Mashup
 				        {
 					        MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
+							MashupPhysicalFilePaths = files.ToArray(),
 					        MashupName = mashupName,
 					        MashupConfig = mashupConfig
 				        }).ToList();
-		}
-
-		private static IEnumerable<string> GetMashupsDirectories(string mashupsPhysicalPath)
-		{
-			return Directory.GetDirectories(mashupsPhysicalPath);
 		}
 
 		private string[] GetMashupFiles(string directory)
@@ -82,7 +78,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		{
 			return path.Replace(basePath, ".");
 		}
-
+		
 		private bool ShouldIgnoreMashupDirectory(string directory)
 		{
 			return _directoryIgnoreStrategy.ShouldIgnoreMashupDirectory(directory);

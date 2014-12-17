@@ -1,0 +1,1 @@
+define(["require","./service.views.menu.item.api"],function(e){var i=e("./service.views.menu.item.api");return i.extend({init:function(e,i){this._super({storageConfig:e,storageKeyPrefix:"__board_group_legacy",itemType:"group",apiItemType:"group",clientId:i.clientId})}})});

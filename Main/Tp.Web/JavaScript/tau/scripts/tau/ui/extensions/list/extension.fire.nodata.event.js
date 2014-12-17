@@ -1,0 +1,1 @@
+define(["tau/components/extensions/component.extension.base"],function(n){return n.extend({"bus dataBind":function(n,e){0===e.items.length&&this.fire("noData")}})});

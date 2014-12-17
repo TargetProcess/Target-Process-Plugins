@@ -577,6 +577,14 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 97)]
 		public virtual DateTime? PlannedEndDate { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 98)]
+		public virtual int? SquadIterationID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 99)]
+		public virtual string SquadIterationName { get; set; }
 	}
 	
 	
@@ -956,11 +964,15 @@ namespace Tp.Integration.Common
 		ReleaseID,
 		/// <summary>
 		/// Planned Start Date
-		/// </summary>	
+		/// </summary>		
 		PlannedStartDate,
 		/// <summary>
 		/// Planned End Date
-		/// </summary>	
-		PlannedEndDate
+		/// </summary>		
+		PlannedEndDate,
+		/// <summary>
+		/// Progress
+		/// </summary>		
+		Progress
 	}
 }

@@ -1,0 +1,1 @@
+define(["tau/components/component.creator"],function(e){return{create:function(t){var n={name:"board.tp-settings.user-voice",engine:"jqote2",markup:['<li class="tau-setting-submenu__item">','   <a href="javascript:UserVoice.showPopupWidget();" class="i-role-user-voice">Send idea</a>',"</li>"]},a={template:n,extensions:[]},i=e.create(a,t);return i.fire("dataBind",{}),i}}});

@@ -80,7 +80,7 @@ namespace System.Linq.Dynamic
 			{
 				return Maybe.Nothing;
 			}
-			return name.ToMaybe();
+			return Maybe.Just(name);
 		}
 	}
 

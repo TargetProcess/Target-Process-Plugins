@@ -515,8 +515,11 @@ namespace Tp.Integration.Testing.Common
 			return InputQueue;
 		}
 
+		public bool IsQueueDeleted { get; private set; }
+
 		public bool TryDeleteQueue(string accountName)
 		{
+			IsQueueDeleted = true;
 			return true;
 		}
 

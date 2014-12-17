@@ -80,6 +80,15 @@ namespace Tp.Integration.Common
         /// <value>The General Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 9)]public virtual string GeneralName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the General Type. Reference to entity
+		/// </summary>
+		/// <value>The General Type.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 10)]
+		public virtual string GeneralType { get; set; }
 		
 	}
 	
@@ -113,5 +122,6 @@ namespace Tp.Integration.Common
         /// General Name
         /// </summary>		
 		GeneralName,
+		GeneralType,
 	}
 }

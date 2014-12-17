@@ -1,0 +1,1 @@
+define(["Underscore"],function(e){return{getFullName:function(r){var n=e.asString(r.firstName)+" "+e.asString(r.lastName);return e.trim(n)||(n=r.email||""),n}}});

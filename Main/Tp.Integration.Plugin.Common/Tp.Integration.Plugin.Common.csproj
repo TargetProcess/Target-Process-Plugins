@@ -57,6 +57,12 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.MSMQ">
       <HintPath>..\..\Libs\NServiceBus\binaries\Interop.MSMQ.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -157,6 +163,7 @@
     <Compile Include="ITargetProcessConditionalMessageRouter.cs" />
     <Compile Include="ITargetProcessMessageWhenNoProfilesHandler.cs" />
     <Compile Include="Logging\ILogProvider.cs" />
+    <Compile Include="Logging\LoggerReferencer.cs" />
     <Compile Include="PluginCommand\Embedded\DeleteUnusedQueuesCommand.cs" />
     <Compile Include="PluginDataFolder.cs" />
     <Compile Include="PluginLifecycle\RouterChildTagsSource.cs" />
@@ -307,7 +314,7 @@
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Storage\Persisters\PluginDatabaseModel.dbml">

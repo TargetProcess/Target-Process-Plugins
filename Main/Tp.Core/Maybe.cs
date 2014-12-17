@@ -4,6 +4,8 @@
 // 
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Tp.Core.Annotations;
 
@@ -40,12 +42,6 @@ namespace Tp.Core
 			return v == null ? Nothing : Just(v);
 		}
 
-
-		[DebuggerStepThrough]
-		public static Maybe<TTo> Bind<TTo, TFrom>(Maybe<TFrom> m, Func<TFrom, Maybe<TTo>> f)
-		{
-			return m.HasValue ? f(m.Value) : Nothing;
-		}
 
 		[DebuggerStepThrough]
 		public override int GetHashCode()
@@ -116,7 +112,6 @@ namespace Tp.Core
 			return call(value, out result) ? Just(result) : Nothing;
 		}
 
-
 		[DebuggerStepThrough]
 		public override string ToString()
 		{
@@ -175,7 +170,7 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public bool Equals(Maybe<T> other)
 		{
-			return (!HasValue && !other.HasValue) || (other.HasValue && Equals(other.Value, Value));
+			return (!HasValue && !other.HasValue) || (other.HasValue && HasValue && Equals(other.Value, Value));
 		}
 
 		[DebuggerStepThrough]
@@ -196,6 +191,7 @@ namespace Tp.Core
 			return HasValue ? Value.GetHashCode() : 0;
 		}
 
+
 		[DebuggerStepThrough]
 		public static bool operator ==(Maybe<T> left, Maybe<T> right)
 		{
@@ -215,6 +211,12 @@ namespace Tp.Core
 		{
 			_value = value;
 			_hasValue = true;
+		}
+
+		public IEnumerator<T> GetEnumerator()
+		{
+			if (_hasValue)
+				yield return _value;
 		}
 
 		[DebuggerStepThrough]

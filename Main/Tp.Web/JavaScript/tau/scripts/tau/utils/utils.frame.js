@@ -1,0 +1,1 @@
+define([],function(){return{getFrameWindow:function(r){var n=r[0].contentWindow;return n&&n!==window?n:{}},suppressRequireErrors:function(r){try{var n=this.getFrameWindow(r);n.tauIFramePopupIsUnloading=!0,n.require&&(n.require.onError=function(){})}catch(e){}}}});

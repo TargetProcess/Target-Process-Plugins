@@ -4,7 +4,6 @@
 //-----------------------------------------------------------------------------
 using System;
 using System.Xml.Serialization;using System.Runtime.Serialization;
-using Tp.Integration.Common;
 
 namespace Tp.Integration.Common
 {
@@ -70,12 +69,6 @@ namespace Tp.Integration.Common
 		[DataMember][XmlElement(Order = 8)]public Boolean? PersonalEmailAccess { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Pair. 
-		/// </summary>
-		/// <value>The Pair.</value>
-		[DataMember][XmlElement(Order = 9)]public Boolean? Pair { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Have Effort. 
 		/// </summary>
 		/// <value>The Have Effort.</value>
@@ -116,10 +109,6 @@ namespace Tp.Integration.Common
         /// Personal Email Access
         /// </summary>		
 		PersonalEmailAccess,
-        /// <summary>
-        /// Pair
-        /// </summary>		
-		Pair,
         /// <summary>
         /// Have Effort
         /// </summary>		

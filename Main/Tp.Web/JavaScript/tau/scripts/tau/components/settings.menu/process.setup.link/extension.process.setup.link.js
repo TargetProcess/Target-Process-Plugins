@@ -1,0 +1,1 @@
+define(["require","tau/core/extension.base"],function(e){var t=e("tau/core/extension.base");return t.extend({"bus afterRender":function(e,t){var n=this.bus.getGlobalBus(),r=n.fire.bind(n,"process.setup.start");t.element.on("click",".i-role-process-setup",r)}})});

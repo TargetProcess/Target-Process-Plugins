@@ -609,6 +609,14 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 106)]
 		public virtual decimal? Progress { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 107)]
+		public virtual int? SquadIterationID { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 108)]
+		public virtual string SquadIterationName { get; set; }
 	}
 	
 	
@@ -1010,6 +1018,8 @@ namespace Tp.Integration.Common
 		SquadName,
 		PlannedStartDate,
 		PlannedEndDate,
-		Progress
+		Progress,
+		SquadIterationID,
+		SquadIterationName,
 	}
 }

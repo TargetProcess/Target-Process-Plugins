@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -9,19 +9,16 @@ using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
-using MailBee.BounceMail;
 using MailBee.Mime;
 using NServiceBus;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Plugin.Core.Attachments;
 using Tp.PopEmailIntegration.Data;
 using Tp.PopEmailIntegration.EmailReader.Client;
-using log4net;
 using Attachment = MailBee.Mime.Attachment;
 using MailMessage = MailBee.Mime.MailMessage;
 using MailPriority = MailBee.Mime.MailPriority;
@@ -31,7 +28,7 @@ namespace Tp.PopEmailIntegration.EmailReader
 	public class EmailReader : IHandleMessages<EmailUidsRetrievedMessage>
 	{
 		private readonly IEmailClient _client;
-		private MessageUidRepository _messageUidRepository;
+		private readonly MessageUidRepository _messageUidRepository;
 		private readonly ILocalBus _localBus;
 		private readonly ProjectEmailProfile _profile;
 		private readonly IActivityLogger _log;
@@ -99,7 +96,7 @@ namespace Tp.PopEmailIntegration.EmailReader
 				catch(Exception e)
 				{
 					//Just skip this message
-					_log.Error(String.Format("Error parsing message."), e);
+					_log.Error(string.Format("Error parsing message."), e);
 					return true;
 				}
 
@@ -169,7 +166,7 @@ namespace Tp.PopEmailIntegration.EmailReader
 		/// </summary>
 		/// <param name="mailBeeMailMessage">MailBee mail message.</param>
 		/// <returns>.NET FX mail message.</returns>
-		private static System.Net.Mail.MailMessage ConvertToNetMailMessage(MailMessage mailBeeMailMessage)
+		private System.Net.Mail.MailMessage ConvertToNetMailMessage(MailMessage mailBeeMailMessage)
 		{
 			var mailMessage = new System.Net.Mail.MailMessage
 			{
@@ -182,17 +179,18 @@ namespace Tp.PopEmailIntegration.EmailReader
 				IsBodyHtml = mailBeeMailMessage.IsBodyAvail("text/html", false),
 				From = new MailAddress(mailBeeMailMessage.From.AsString),
 			};
-			foreach (EmailAddress emailAddress in mailBeeMailMessage.To)
+
+			foreach (var emailAddress in mailBeeMailMessage.To.Cast<EmailAddress>().Where(emailAddress => !mailMessage.To.TryAdd(emailAddress.AsString)))
 			{
-				mailMessage.To.Add(new MailAddress(emailAddress.AsString));
+				_log.WarnFormat("To address \"{0}\" is not in a recognized format.", emailAddress.AsString);
 			}
-			foreach (EmailAddress emailAddress in mailBeeMailMessage.Cc)
+			foreach (var emailAddress in mailBeeMailMessage.Cc.Cast<EmailAddress>().Where(emailAddress => !mailMessage.CC.TryAdd(emailAddress.AsString)))
 			{
-				mailMessage.CC.Add(new MailAddress(emailAddress.AsString));
+				_log.WarnFormat("Cc address \"{0}\" is not in a recognized format.", emailAddress.AsString);
 			}
-			foreach (EmailAddress emailAddress in mailBeeMailMessage.Bcc)
+			foreach (var emailAddress in mailBeeMailMessage.Bcc.Cast<EmailAddress>().Where(emailAddress => !mailMessage.Bcc.TryAdd(emailAddress.AsString)))
 			{
-				mailMessage.Bcc.Add(new MailAddress(emailAddress.AsString));
+				_log.WarnFormat("Bcc address \"{0}\" is not in a recognized format.", emailAddress.AsString);
 			}
 			switch (mailBeeMailMessage.Priority)
 			{
@@ -240,6 +238,7 @@ namespace Tp.PopEmailIntegration.EmailReader
 				FromAddress = message.From.Address,
 				FromDisplayName = message.From.DisplayName,
 				Recipients = String.Join("; ", message.To.Select(address => address.Address).ToArray()),
+				CC = message.CC.Select(address => new MailAddressLite { Address = address.Address, DisplayName = address.DisplayName }).ToList(),
 				Subject = message.Subject,
 				ContentType = ContentTypeEnum.Email,
 				Body = message.Body,
@@ -271,5 +270,22 @@ namespace Tp.PopEmailIntegration.EmailReader
 	public class EmailUidsRetrievedMessage : IPluginLocalMessage
 	{
 		public string[] Uids { get; set; }
+	}
+
+	public static class MailAddressCollectionExtensions
+	{
+		public static bool TryAdd(this MailAddressCollection mailAddressCollection, string address)
+		{
+			try
+			{
+				var mailAddress = new MailAddress(address);
+				mailAddressCollection.Add(mailAddress);
+				return true;
+			}
+			catch
+			{
+			}
+			return false;
+		}
 	}
 }

@@ -2232,5 +2232,28 @@ namespace Tp.Search.Tests
 			result.Total.Should(Be.EqualTo(1));
 			result.CommentIds.Should(Be.EquivalentTo(new[] { "1" }));
 		}
+
+		[Test]
+		public void SearchEpicByNameAndDescription()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			var id = 1;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = id,
+				Name = "zagzag",
+				Description = "bla bla bla",
+				EntityTypeID = 27,
+				ParentProjectID = 1
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "+zagzag +bla",
+				ProjectIds = new[] { 1 }
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+		}
 	}
 }

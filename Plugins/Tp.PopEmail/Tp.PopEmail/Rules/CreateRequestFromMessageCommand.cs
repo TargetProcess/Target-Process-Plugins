@@ -20,6 +20,7 @@ namespace Tp.PopEmailIntegration.Rules
 		public MessageDTO MessageDto { get; set; }
 		public int ProjectId { get; set; }
 		public AttachmentDTO[] Attachments { get; set; }
+		public int[] Requesters { get; set; }
 		public bool IsPrivate { get; set; }
 	}
 }

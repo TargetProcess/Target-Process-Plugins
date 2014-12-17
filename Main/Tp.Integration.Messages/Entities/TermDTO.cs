@@ -73,7 +73,13 @@ namespace Tp.Integration.Common
         /// <value>The Process Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 8)]public virtual string ProcessName { get; set; }
-		
+
+
+	    public TermDTO Clone()
+	    {
+		    return (TermDTO) MemberwiseClone();
+	    }
+
 	}
 	
 	

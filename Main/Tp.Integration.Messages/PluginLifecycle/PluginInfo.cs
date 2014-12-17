@@ -27,5 +27,6 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		public PluginAccount[] Accounts { get; set; }
 		public string PluginInputQueue { get; set; }
 		public string PluginIconContent { get; set; }
+		public bool IsHidden { get; set; }
 	}
 }

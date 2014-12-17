@@ -1,0 +1,9 @@
+<!-- name: portfolioItem-progress-bar -->
+<div class="entity-progress-box">
+   <div class="ui-progress-bar-progress ui-progressbar__progress" title="<%! this.title %>">
+       <% var percentCompletedRounded = Math.round(this.percentCompleted); %>
+      <span class="ui-progress-progress ui-progressbar__progress__indicator" style="width:<%= percentCompletedRounded < 15 ? 15 : percentCompletedRounded %>%;">
+         <span class="ui-label ui-progressbar__progress__label"><b class="value"><%= percentCompletedRounded %>%</b></span>
+      </span>
+   </div>
+</div>

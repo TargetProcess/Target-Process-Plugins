@@ -56,8 +56,12 @@ namespace Tp.Integration.Common
         /// </summary>
         /// <value>The Always On.</value>
 		[DataMember][XmlElement(Order = 6)]public Boolean? AlwaysOn { get; set; }
-		
 
+		/// <summary>
+        /// Gets or sets the Display Name. Display name of the practice. For example, Planning
+        /// </summary>
+        /// <value>The Display Name.</value>
+		[DataMember][XmlElement(Order = 7)]public String DisplayName { get; set; }
 		
 	}
 	
@@ -79,5 +83,9 @@ namespace Tp.Integration.Common
         /// Always On
         /// </summary>		
 		AlwaysOn,
+        /// <summary>
+        /// Display Name
+        /// </summary>		
+		DisplayName,
 	}
 }

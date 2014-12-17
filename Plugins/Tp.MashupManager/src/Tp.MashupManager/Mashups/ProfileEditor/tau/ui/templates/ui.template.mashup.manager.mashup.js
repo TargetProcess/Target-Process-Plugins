@@ -1,3 +1,5 @@
+/*eslint max-len: [1, 210, 4]*/
+/*jshint maxlen: 210*/
 define([
     'tau/core/templates-factory'
 ], function(templates) {
@@ -25,8 +27,8 @@ define([
             '<p class="label">',
             '<span class="small">',
             'That\'s where your mashup will be executed. Enter either a global (e.g. footerPlaceholder),<br>',
-            'or a local placeholder for a single page (e.g. Project_QA_Bug_View) or use Ctrl+C/Ctrl+V.',
-            '<a href="javascript:void(0);" class="note i-role-placeholdersHelpLink">How to name placeholders</a>',
+            'or a local placeholder for a single page (e.g. Project_QA_Bug_View) or use Ctrl+C/Ctrl+V. ',
+            '<a href="javascript:void(0);" tabindex="-1" class="note i-role-placeholdersHelpLink">How to name placeholders</a>',
             '</span>',
             '<div style="display: none;" class="pb-20 i-role-placeholdersHelp">',
             '<p class="pt-15 pb-10">The rule of thumb is:</p>',
@@ -82,12 +84,12 @@ define([
             '<p class="label">',
             '<span class="small">Use this syntax for your mashup javascript code. <a href="http://dev.targetprocess.com/mashups/index#javascript" target="_blank" title="More" class="note">More</a></span>',
             '</p>',
-            '<textarea type="text" name="Script" class="input i-role-script" style="width: 560px; height: 300px;"><%! this.script %></textarea>',
+            '<textarea name="Script" class="input i-role-script" style="width: 560px; height: 300px;"><%! this.script %></textarea>',
             '</div>',
             '<div class="separator"></div>',
             '<div class="p-10">',
-            '<p class="error-message" style="display:none" class="i-role-failedOperation"><span></span></p>',
-            '<button class="button primary middle i-role-save" onclick="javascript:void(0);return false;">Save Mashup</button>',
+            '<p class="error-message" style="display: none;" class="i-role-failedOperation"><span></span></p>',
+            '<button class="button primary middle i-role-save" onclick="return false;">Save Mashup</button>',
             '</div>',
             '</div>'
         ]

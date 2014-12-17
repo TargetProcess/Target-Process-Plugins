@@ -97,6 +97,14 @@ namespace Tp.Integration.Common
 		/// <value>The General Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 12)]public virtual string GeneralName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the General Type. Reference to entity. Attachment can be added to almost any entity
+		/// </summary>
+		/// <value>The General Type.</value>
+		[DataMember]
+		[XmlElement(Order = 13)]
+		public virtual string GeneralType { get; set; }
 	}
 
 
@@ -141,5 +149,6 @@ namespace Tp.Integration.Common
 		/// General Name
 		/// </summary>		
 		GeneralName,
+		GeneralType
 	}
 }

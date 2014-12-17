@@ -1,14 +1,11 @@
 // 
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 using StructureMap;
 using Tp.BugTracking.ConnectionValidators;
 using Tp.Bugzilla.BugzillaQueries;

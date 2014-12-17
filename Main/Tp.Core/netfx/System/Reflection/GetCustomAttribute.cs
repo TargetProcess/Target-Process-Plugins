@@ -77,12 +77,21 @@ public static partial class GetCustomAttributeExtension
 
 	public static Maybe<TAttribute> GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute
 	{
+		return GetAttributes<TAttribute>(value).FirstOrNothing();
+	}
+
+	public static IEnumerable<TAttribute> GetAttributes<TAttribute>(this Enum value) where TAttribute : Attribute
+	{
 		var type = value.GetType();
 		var name = Enum.GetName(type, value);
 		return type.GetField(name) // I prefer to get attributes this way
 			.GetCustomAttributes(true)
-			.OfType<TAttribute>()
-			.FirstOrNothing();
+			.OfType<TAttribute>();
 	}
 
+	public static TAttribute GetCustomAttributeOrThrow<TAttribute>(this Type type, bool inherit = true)
+		where TAttribute : Attribute
+	{
+		return GetCustomAttributes<TAttribute>(type, inherit).FirstOrNothing().GetOrThrow(() => new InvalidOperationException("There is no {0} attribute on {1}".Fmt(typeof(TAttribute).Name, type.Name)));
+	}
 }

@@ -4,7 +4,7 @@
 <% @TinyPG Language="C#"%>
 
 //add registered keywords here
-IdKeyword1 -> @"id:";
+IdKeyword1 -> @"(?i)id:";
 IdKeyword2 -> @"#";
 TimeKeyword -> @"time:";
 StatusKeyword1 -> @"status:";
@@ -22,8 +22,8 @@ COMMA -> @",";
 NUMBER -> @"[0-9]+";
 DECIMAL -> @"\d+([\.,]\d+)?";
 //list all the registered keywords inside
-ANY_TEXT -> @"(.(?<!#)(?<!(id|time|status|state|comment|comm|comments|cmt):))+\s";
-ANY_SYMBOL -> @"((?!#)(?!(id|time|status|state|comment|comm|comments|cmt):).)";
+ANY_TEXT -> @"(?i)(.(?<!#)(?<!(id|time|status|state|comment|comm|comments|cmt):))+\s";
+ANY_SYMBOL -> @"(?i)((?!#)(?!(id|time|status|state|comment|comm|comments|cmt):).)";
 
 Start -> (ActionNode)* EOF
 {

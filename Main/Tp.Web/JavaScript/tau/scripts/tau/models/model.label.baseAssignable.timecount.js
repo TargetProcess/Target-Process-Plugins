@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/model.label"],function(e,i){return i.extend({"bus beforeInit":function(e,i){var t={definition:{cells:{items:[{id:"time"}],filter:"?Assignable.Id == "+i.config.context.entity.id}}};this.fire("comet.parameters.ready",t)}})});

@@ -1,0 +1,1 @@
+define({SHOW:"show",SILENT:"silent",PRINT:"print"});

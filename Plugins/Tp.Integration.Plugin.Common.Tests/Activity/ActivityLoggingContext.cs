@@ -76,7 +76,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		protected virtual void InitializeActivityLogging(ConfigurationExpression x)
 		{
 			x.For<IActivityLogPathProvider>().HybridHttpOrThreadLocalScoped().Use<ActivityLogPathProvider>();
-			x.For<ILogManager>().HybridHttpOrThreadLocalScoped().Use<TpLogManager>();
+			x.For<ILogManager>().HybridHttpOrThreadLocalScoped().Use<Plugin.Common.Activity.TpLogManager>();
 			x.For<Log4NetFileRepositoryMock>().Singleton().Use<Log4NetFileRepositoryMock>();
 			x.Forward<Log4NetFileRepositoryMock, ILog4NetFileRepository>();
 		}

@@ -34,35 +34,12 @@ namespace Tp.Core
 		{
 			get
 			{
-				var context = GetContext();
-				if (context == null)
-				{
-					return _timeKeeper;
-				}
-				
-				if (!context.Contains(TIME_KEEPER_NAME))
-				{
-					TimeKeeper = CurrentTimeKeeper.Instance;
-				}
-
-				return (ITimeKeeper) context.GetValue(TIME_KEEPER_NAME);
+				return _timeKeeper;
 			}
 			set
 			{
-				var context = GetContext();
-				if (context == null)
-				{
-					_timeKeeper = value;
-				}
-				else
-					context.SetValue(TIME_KEEPER_NAME, value);
+				_timeKeeper = value;
 			}
-		}
-
-		private static IContext GetContext()
-		{
-			var context = ObjectFactory.TryGetInstance<IContext>();
-			return context;
 		}
 
 		/// <summary>

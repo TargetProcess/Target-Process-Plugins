@@ -63,7 +63,7 @@ namespace Tp.Core
 
 		public Maybe<T> ToMaybe()
 		{
-			return _value.ToMaybe();
+			return Maybe.Just(_value);
 		}
 
 		public Try<U> Select<U>(Func<T, U> selector)

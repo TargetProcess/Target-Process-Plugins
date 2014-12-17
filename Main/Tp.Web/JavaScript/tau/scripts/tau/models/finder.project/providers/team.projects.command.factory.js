@@ -1,0 +1,1 @@
+define({create:function(e,t){var i=_.map(t,function(e){return{project:{id:e}}});return{evictProperties:[e.id,e.entityType.name,["teamProjects"]],type:"team",data:{id:e.id,fields:["id","teamProjects"],$set:{teamProjects:i}}}}});

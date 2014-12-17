@@ -1,0 +1,1 @@
+define({GENERAL:"general",PROJECT:"project",BUG:"bug",USER_STORY:"userStory",TEST_PLAN:"testPlan",RELEASE:"release",ITERATION:"iteration",BUILD:"build",TEST_CASE:"testCase",REQUEST:"request",TEST_PLAN_RUN:"testPlanRun",TASK:"task",FEATURE:"feature",IMPEDIMENT:"impediment"});

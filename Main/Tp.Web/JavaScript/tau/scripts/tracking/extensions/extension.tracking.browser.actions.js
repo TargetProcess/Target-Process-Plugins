@@ -1,0 +1,1 @@
+define(["./extension.tracking.base","jQuery"],function(n,t){return n.extend({init:function(){t(window).on("focus blur",this.trackFocusBlur)},trackFocusBlur:function(n){var t=n.type;taus.track("action",{action:t,name:t+" application",tags:["focus|blur application","browser event"]})}})});

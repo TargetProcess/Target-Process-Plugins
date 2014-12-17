@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/ui/extensions/board.workflow/ui.extension.board.workflow","tau/ui/templates/board.workflow/ui.template.board.workflow","tau/core/helpers/extension.configurator"],function(e,o,t,r){return{create:function(n){var a={extensions:[o,r],template:t};return e.create(a,n)}}});

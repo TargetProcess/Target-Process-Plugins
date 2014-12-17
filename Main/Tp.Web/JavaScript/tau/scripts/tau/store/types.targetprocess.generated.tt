@@ -12,6 +12,8 @@ define([], function() {
 });
 <#+
   	void registerType(XElement entity, string className, string baseClassName) {
+		if (!IsClass(entity))
+			return;
 #>
 		,
 		{
@@ -21,12 +23,29 @@ define([], function() {
 			aliases: ['<#= className #>', '<#= this.FirstToLower(this.Pluralize(className)) #>', '<#= this.Pluralize(className) #>'],
 			fields: [<#= this.getDefaultFields(entity) #>],
 			simpleFields: [<#= this.getFieldsSimple(entity) #>],
+<#+
+	var effortInHours = this.resolveEffortInHours(entity);
+	if (effortInHours != null) {
+#>
+			effortInHours: <#= this.FirstToLower(effortInHours) #>,
+<#+	} #>
 			refs: {
 <#+ _processRefs(entity); #>
 			}
 		}
-	
 <#+
+	}
+	
+string resolveEffortInHours(XElement entity) {
+	var maybeTagsElement = entity.Element(xmlns + "Tags");
+	if(maybeTagsElement == null) {
+		return null;
+	}
+	var maybeEffortInHoursKindTagElement = maybeTagsElement.Elements().FirstOrDefault(e => e.Name == xmlns + "Tag" && (string)e.Attribute("Name") == "EffortInHours");
+	if(maybeEffortInHoursKindTagElement == null) {
+		return null;
+	}
+	return maybeEffortInHoursKindTagElement.Value;
 	}
 
 string getDefaultFields(XElement entity) {
@@ -46,7 +65,6 @@ string getDefaultFields(XElement entity) {
 	return string.Join(", ", defaultList.ToArray());
 }
 
-	
 string getFieldsSimple(XElement entity) {
 	var list = this.getFieldsSimpleList(entity);
 	

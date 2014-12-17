@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var t={name:"settings.popup",engine:"jqote2",markup:["<div>",'<ul class="tau-setting-submenu">',"</ul>","</div>"]};return e.register(t)});
