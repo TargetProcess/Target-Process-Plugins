@@ -1,0 +1,1 @@
+define(["require","Underscore"],function(i){var r=i("Underscore");return{isConfigured:function(i){return i?r.isString(i)?!0:i.id?!0:r.isArray(i.types)&&i.types.length>0:!1},isListConfigured:function(i){var e=r.any([i.x,i.y],this.isConfigured,this),n=this.isConfigured(i.cells);return e||n}}});

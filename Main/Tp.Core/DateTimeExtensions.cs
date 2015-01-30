@@ -4,6 +4,7 @@
 // 
 
 using System.Data;
+using System.Linq.Dynamic;
 using Tp.Core;
 
 // ReSharper disable CheckNamespace
@@ -37,7 +38,7 @@ namespace System
 		public static string GetPartWeekName(this DateTime weekStartDate, DateTime weekEndDate)
 		{
 			return String.Format("{0} - {1}", weekStartDate.ToString(FORMATE_DATE_STRING),
-													 weekEndDate.ToString(FORMATE_DATE_STRING));
+				weekEndDate.ToString(FORMATE_DATE_STRING));
 		}
 
 		public static string GetWeekName(this DateTime date)
@@ -65,14 +66,16 @@ namespace System
 		[SqlFunction("dbo.f_WeekNumber", DbType.UInt32)]
 		public static int WeekNumber(this DateTime date)
 		{
-			return ((int)Math.Floor((date - new DateTime(1990, 1, 1)).TotalDays)) / 7;
+			return ((int) Math.Floor((date - new DateTime(1990, 1, 1)).TotalDays)) / 7;
 		}
 
 		[SqlFunction("dbo.f_Date", DbType.Date)]
+		[DynamicExpressionAlias("Day")]
 		public static DateTime? Date(this DateTime? date)
 		{
-			return date.Map(x => x.Date);
+			return date.Select(x => x.Date);
 		}
+
 
 		[SqlFunction("dbo.f_ForecastEndDate", DbType.Date)]
 		public static DateTime? ForecastEndDate(this DateTime? startDate, DateTime now, decimal? progress)
@@ -90,9 +93,9 @@ namespace System
 			{
 				return null;
 			}
-			decimal stepInMs = (decimal)(passedDuration.TotalMilliseconds * 0.01) / progress.Value;
+			decimal stepInMs = (decimal) (passedDuration.TotalMilliseconds * 0.01) / progress.Value;
 			decimal forecastDurationInMs = stepInMs * (1 - progress.Value) * 100;
-			TimeSpan forecastDuration = TimeSpan.FromMilliseconds((long)Math.Ceiling(forecastDurationInMs));
+			TimeSpan forecastDuration = TimeSpan.FromMilliseconds((long) Math.Ceiling(forecastDurationInMs));
 			DateTime predictedEndDate = now + forecastDuration;
 			return predictedEndDate;
 		}
@@ -105,17 +108,17 @@ namespace System
 
 		public static DateTime? AddDays(this DateTime? date, double days)
 		{
-			return date.Map(x => x.AddDays(days));
+			return date.Select(x => x.AddDays(days));
 		}
 
 		public static DateTime? Subtract(this DateTime? date, TimeSpan timeSpan)
 		{
-			return date.Map(x => x.Subtract(timeSpan));
+			return date.Select(x => x.Subtract(timeSpan));
 		}
 
 		public static DateTime? TrimMilliseconds(this DateTime? dateTime)
 		{
-			return dateTime.HasValue ? (DateTime?) TrimMilliseconds(dateTime.Value) : null;
+			return dateTime.Select(x => x.TrimMilliseconds());
 		}
 
 		public static DateTime TrimMilliseconds(this DateTime dateTime)
@@ -142,7 +145,37 @@ namespace System
 			return NO_DATE;
 		}
 
-		public static readonly DateTime MaxDateValue = new DateTime(9999,12,31);
-		public static readonly DateTime MinDateValue = new DateTime(1753,1,1);
+		public static readonly DateTime MaxDateValue = new DateTime(9999, 12, 31);
+		public static readonly DateTime MinDateValue = new DateTime(1753, 1, 1);
+
+
+		[DynamicExpressionAlias("Year")]
+		[SqlFunction("dbo.f_FloorYear", DbType.DateTime)]
+		public static DateTime? FloorYear(this DateTime? date)
+		{
+			return date.Select(x => new DateTime(x.Year, 1, 1, 0, 0, 0, x.Kind));
+		}
+
+		[DynamicExpressionAlias("Quarter")]
+		[SqlFunction("dbo.f_FloorQuarter", DbType.DateTime)]
+		public static DateTime? FloorQuarter(this DateTime? date)
+		{
+			return date.Select(x => new DateTime(x.Year, (((x.Month - 1) / 3) * 3 + 1), 1, 0, 0, 0, x.Kind));
+		}
+
+		[DynamicExpressionAlias("Month")]
+		[SqlFunction("dbo.f_FloorMonth", DbType.DateTime)]
+		public static DateTime? FloorMonth(this DateTime? date)
+		{
+			return date.Select(x => new DateTime(x.Year, x.Month, 1, 0, 0, 0, x.Kind));
+		}
+
+		[DynamicExpressionAlias("Week")]
+		[SqlFunction("dbo.f_FloorWeek", DbType.DateTime)]
+		public static DateTime? FloorWeek(this DateTime? date)
+		{
+			return date.Select(x => new DateTime(x.Year, x.Month, x.Day, 0, 0, 0, x.Kind).AddDays(-(int) x.DayOfWeek));
+		}
+
 	}
 }

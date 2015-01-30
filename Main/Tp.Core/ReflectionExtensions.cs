@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Tp.Core;
 
 namespace System
 {
@@ -31,10 +32,18 @@ namespace System
 
 		}
 
-
 		public static bool IsExtensionMethod(this MethodInfo methodInfo)
 		{
 			return methodInfo.GetCustomAttribute<ExtensionAttribute>().HasValue;
+		}
+
+		public static Maybe<PropertyInfo> FindPropertyInHierarchy(this Type type, string name, BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance)
+		{
+			return type.GetProperty(name, flags)
+				.NothingIfNull()
+				.OrElse(() => type.BaseType
+					.NothingIfNull()
+					.Bind(t => t.FindPropertyInHierarchy(name, flags)));
 		}
 	}
 }

@@ -32,5 +32,15 @@ namespace Tp.Search.Model.Document
 		{
 			return Convert.ToString(projectId).PadLeft(_int64Width, '0');
 		}
+
+		public int ParseProjectId(string projectId)
+		{
+			var trimmed = projectId.TrimStart('0');
+			if (string.IsNullOrEmpty(trimmed))
+			{
+				return 0;
+			}
+			return int.Parse(trimmed);
+		}
 	}
 }

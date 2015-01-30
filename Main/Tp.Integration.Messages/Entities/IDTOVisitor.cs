@@ -56,6 +56,7 @@ namespace Tp.Integration.Common
 		T VisitProject(IProjectDTO project);
 		T VisitProjectMember(IProjectMemberDTO projectmember);
 		T VisitRelease(IReleaseDTO release);
+		T VisitReleaseProject(IReleaseProjectDTO releaseProject);
 		T VisitRequester(IRequesterDTO requester);
 		T VisitRequestRequester(IRequestRequesterDTO requestrequester);
 		T VisitRequestType(IRequestTypeDTO requesttype);
@@ -458,6 +459,14 @@ namespace Tp.Integration.Common
 		public override T Accept<T>(IDTOVisitor<T> visitor)
 		{
 			return visitor.VisitRelease(this);
+		}
+	}
+
+	public partial class ReleaseProjectDTO
+	{
+		public override T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitReleaseProject(this);
 		}
 	}
 	public partial class RequesterDTO

@@ -105,6 +105,11 @@ namespace Tp.Search.Model.Document
 			return _charactersIndex.FindDocumentByName<T>(name);
 		}
 
+		public IndexData GetExistingIndexByNumber(int number)
+		{
+			return _charactersIndex.GetExistingIndexByNumber(number);
+		}
+
 		public void SaveDocument(hOOt.Document document, bool deleteOld)
 		{
 			_charactersIndex.SaveDocument(document, deleteOld);

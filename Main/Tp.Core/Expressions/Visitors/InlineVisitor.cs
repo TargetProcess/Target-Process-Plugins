@@ -116,10 +116,12 @@ namespace Tp.Core.Expressions
 		private static Try<MethodInfo> FindMethodToInline(MemberInfo member, string inlineMethodName)
 		{
 			Func<MethodInfo, bool> matchByParameters;
+			Func<MethodInfo, bool> matchByGenericArguments;
 			var method = member as MethodInfo;
 			if (method == null)
 			{
 				matchByParameters = methodInfo => methodInfo.GetParameters().Length == 0;
+				matchByGenericArguments = x => true;
 			}
 			else
 			{
@@ -131,6 +133,16 @@ namespace Tp.Core.Expressions
 					.Where(x => !x.GetCustomAttribute<InlineEnvironmentAttribute>().HasValue)
 					.Select(candidateParam => new {candidateParam.Name, candidateParam.ParameterType})
 					.All(targetParams.Contains);
+
+				if (method.IsGenericMethod)
+				{
+					var genericArgumentsCount = method.GetGenericArguments().Length;
+					matchByGenericArguments = x => x.GetGenericArguments().Length == genericArgumentsCount;
+				}
+				else
+				{
+					matchByGenericArguments = x => !x.IsGenericMethod;
+				}
 			}
 
 
@@ -140,6 +152,7 @@ namespace Tp.Core.Expressions
 				.GetMethods()
 				.Where(x => x.Name == methodName && typeof (Expression).IsAssignableFrom(x.ReturnType))
 				.Where(matchByParameters)
+				.Where(matchByGenericArguments)
 				.ToArray();
 
 			if (candidates.Length > 1)

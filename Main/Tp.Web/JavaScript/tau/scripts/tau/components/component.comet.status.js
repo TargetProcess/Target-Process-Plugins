@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/comet.status/extensions/comet.status.extension","template!tau/components/comet.status/templates/comet.status.template"],function(t,e,n){return{create:function(o){var s={extensions:[e],template:n};return t.create(s,o)}}});

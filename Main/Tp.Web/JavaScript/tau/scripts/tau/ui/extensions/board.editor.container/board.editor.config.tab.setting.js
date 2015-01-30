@@ -1,0 +1,1 @@
+define(["require","jQuery"],function(t){var e=t("jQuery"),s=function(t,s){this.tabHeaderClass=t,this.setStateCustomAction=s||e.noop};return s.prototype.setState=function(t,e,s,a){var i=s.getBoardAccessService().isEditable(e,s.getLoggedUser());t.toggleClass(this.tabHeaderClass,!i),this.setStateCustomAction(t,e,s,a)},s});

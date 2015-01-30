@@ -1,6 +1,8 @@
 <!-- name: affected.projects -->
 <ul class="t3-processes-navigator--affected-projects">
-    <% _.each(this.projects, function(projectName) { %>
-        <li class="t3-processes-navigator--affected-projects--item"><%= projectName %></li>
+    <% _.each(this.projects, function(project) { %>
+        <li class="t3-processes-navigator--affected-projects--item">
+            <a class="t3-process__link" data-projectid="<%= project.id %>" href="<%= project.url %>"><%= project.name %></a>
+        </li>
     <% }); %>
 </ul>

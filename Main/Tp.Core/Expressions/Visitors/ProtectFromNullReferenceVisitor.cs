@@ -7,23 +7,49 @@ namespace Tp.Core.Expressions.Visitors
 	{
 		protected override Expression VisitMember(MemberExpression memberExpression)
 		{
-			var expression = Visit(memberExpression.Expression);
-			var resultType = memberExpression.Member.ResultType();
-			if (expression.Type.IsValueType)
+			return ProtectFromNull(memberExpression, memberExpression.Expression);
+		}
+		protected override Expression VisitIndex(IndexExpression node)
+		{
+			return ProtectFromNull(node, node.Object);
+		}
+
+		protected override Expression VisitMethodCall(MethodCallExpression node)
+		{
+			if (node.Method.IsSpecialName && node.Method.Name == "get_Item")
+			{
+				return ProtectFromNull(node, node.Object);
+			}
+			return base.VisitMethodCall(node);
+		}
+
+		protected override Expression VisitUnary(UnaryExpression node)
+		{
+			if (node.NodeType == ExpressionType.Convert && node.Type.IsValueType && !node.Operand.Type.IsValueType)
+			{
+				return ProtectFromNull(node, node.Operand);
+			}
+
+			return base.VisitUnary(node);
+		}
+
+		private Expression ProtectFromNull(Expression memberExpression, Expression target)
+		{
+			var targetType = target.Type;
+			if (targetType.IsValueType)
 			{
 				return memberExpression;
 			}
 			else
 			{
+				var condition = Expression.ReferenceEqual(Visit(target), Expression.Constant(null, target.Type));
 
-				Expression condition = Expression.ReferenceEqual(expression, Expression.Constant(expression.Type.DefaultValue()));
-				var conditionalExpression = Expression.Condition(
-					condition,
-					Expression.Constant(resultType.DefaultValue(), resultType),
-					memberExpression);
-				return conditionalExpression;
+				var @true = Expression.Constant(memberExpression.Type.DefaultValue(), memberExpression.Type);
+				var @false = memberExpression;
+				return Expression.Condition(condition, @true, @false);
 			}
-
 		}
+
+
 	}
 }

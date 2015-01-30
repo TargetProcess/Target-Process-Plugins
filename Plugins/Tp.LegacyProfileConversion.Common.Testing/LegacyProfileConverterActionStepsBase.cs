@@ -14,6 +14,7 @@ using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Storage.Persisters;
 using Tp.Integration.Plugin.Common.Storage.Repositories;
+using Tp.Integration.Testing.Common;
 using Tp.LegacyProfileConvertsion.Common;
 using Tp.Testing.Common.NUnit;
 
@@ -61,7 +62,10 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			ClearTpDb(new TpDatabaseDataContext(TpConnectionString));
 
 			Context = new TpDatabaseDataContext(TpConnectionString);
-			DefaultProcessId = Context.Processes.First(p => p.IsDefault == true).ProcessID;
+			var newProcess = Context.Processes.First(p => p.IsDefault == true).Clone<Process>();
+			Context.Processes.InsertOnSubmit(newProcess);
+			Context.SubmitChanges();
+			DefaultProcessId = newProcess.ProcessID;
 		}
 
 		[AfterScenario]
@@ -131,20 +135,22 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 			Project project = Context.Projects.First(x => x.Abbreviation == projectAbbr);
 			Context.Generals.InsertOnSubmit(new General { Name = testPlanName });
 			const string testPlanProcess = "TestPlanProcess";
-			Context.Processes.InsertOnSubmit(new Process { Name = testPlanProcess });
+			var process = new Process {Name = testPlanProcess};
+			Context.Processes.InsertOnSubmit(process);
 			Context.SubmitChanges();
 
-			const string testPlanEntityState = "TestPlanEntityState";
-			var processId = Context.Processes.First(x => x.Name == testPlanProcess).ProcessID;
-			Context.EntityStates.InsertOnSubmit(new EntityState { Name = testPlanEntityState, ProcessID = processId });
+			var workflow = new Workflow() {Process = process, EntityTypeID = 13};
+			Context.Workflows.InsertOnSubmit(workflow);
+
+			var entityState = new EntityState {Name = "TestPlanEntityState", EntityTypeID = 13, Process = process};
+			workflow.EntityStates.Add(entityState);
 			Context.SubmitChanges();
 
 			var generalId = Context.Generals.First(x => x.Name == testPlanName).GeneralID;
-			var entityStateId = Context.EntityStates.First(x => x.Name == testPlanEntityState).EntityStateID;
 			Context.Assignables.InsertOnSubmit(new Assignable
 			{
 				AssignableID = generalId,
-				EntityStateID = entityStateId,
+				EntityState = entityState,
 				Effort = 0,
 				EffortCompleted = 0,
 				EffortToDo = 0

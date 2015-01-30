@@ -4,6 +4,8 @@ define(function(require) {
 
     return React.defineClass([], function() {
         return {
+            displayName: 'ProcessOptionGroup',
+
             _activate: function() {
                 this.props.setActivePage({
                     optionGroupId: this.props.optionGroup.getId()
@@ -21,7 +23,7 @@ define(function(require) {
                             <div className="t3-name">{this.props.optionGroup.getTitle()}</div>
                         </a>
                     </div>
-                    );
+                );
             }
         };
     });

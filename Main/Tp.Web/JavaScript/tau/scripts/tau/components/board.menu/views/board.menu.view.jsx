@@ -15,6 +15,8 @@ define(function(require) {
         function(ListView, ActionsView, SearchView, boardSettingsService) {
 
             return {
+                displayName: 'BoardMenu',
+
                 getDefaultProps: function() {
                     return {
                         filterText: '',

@@ -8,6 +8,7 @@ namespace Tp.Search.Model.Document
 	{
 		List<TDocument> Find<TDocument>(QueryPlanResult plan, int page, int pageSize, int skip, out int total) where TDocument : hOOt.Document;
 		T FindDocumentByName<T>(string name) where T : hOOt.Document, new();
+		IndexData GetExistingIndexByNumber(int number);
 		T GetLastDocument<T>() where T : hOOt.Document;
 		void SaveDocument(hOOt.Document document, bool deleteOld);
 

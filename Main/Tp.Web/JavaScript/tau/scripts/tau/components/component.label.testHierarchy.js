@@ -1,0 +1,1 @@
+define(["Underscore","tau/components/component.label","tau/models/model.label.testHierarchy","tau/ui/extensions/ui.extension.label.testHierarchy.updater"],function(e,n,t,o){return{create:function(r){return r=e.extend(r,{modelType:t,extensions:(r.extensions||[]).concat(o)}),n.create(r)}}});

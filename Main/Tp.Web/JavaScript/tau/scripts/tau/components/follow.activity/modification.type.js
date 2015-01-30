@@ -1,0 +1,1 @@
+define([],function(){return{None:0,Deleted:1,InnerFieldUpdated:2,ChildRemoved:3,ChildAdded:4,ChildUpdated:5}});

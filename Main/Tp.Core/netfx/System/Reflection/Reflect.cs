@@ -252,7 +252,6 @@ public static partial class Reflect<TTarget>
 
 		return info;
 	}
-
 	/// <summary>
 	/// Gets the field represented by the lambda expression.
 	/// </summary>

@@ -1,0 +1,22 @@
+<!-- name: customReport.editor.dsl.template -->
+
+<div class="tau-board-settings tau-boardsettings" role="form-settings">
+    <div class="tau-board-settings-group__help"><span class="tau-help i-role-tooltipArticle"
+        data-article-id="customReport.dsl.editor">About Setup</span></div>
+    <div class="tau-board-settings-columns tau-board-settings-dsl">
+        <div class="tau-board-settings-columns__two-items">
+            <h4>Select data source</h4>
+            <span class="tau-help i-role-tooltipArticle" data-article-id="customReport.dsl.source"></span>
+            <pre class="tau-in-text i-role-report-dataSource"><%= this.dataSource %></pre>
+        </div>
+        <div class="tau-board-settings-columns__two-items">
+            <h4>Select chart</h4>
+            <span class="tau-help i-role-tooltipArticle" data-article-id="customReport.dsl.chart"></span>
+            <pre class="tau-in-text i-role-report-definition"><%= this.report %></pre>
+        </div>
+    </div>
+    <% if (this.isEditable) { %>
+    <button class="tau-btn tau-btn-big tau-primary i-role-apply-chartSettings">Apply changes</button>
+    <% } %>
+</div>
+

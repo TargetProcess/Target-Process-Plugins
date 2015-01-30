@@ -78,7 +78,7 @@ define(function(require) {
                     var boards = this._getBoards();
                     var focusedBoard = this._getFocusedBoard(boards);
                     if (focusedBoard) {
-                        bus.fire('board.menu.switch.board', focusedBoard.boardId);
+                        bus.fire('board.menu.switch.view', focusedBoard.boardId);
                         this._setFilter('');
                         this._changeFocusedBoard('');
                         window.location.href = focusedBoard.link;

@@ -370,6 +370,10 @@ namespace Tp.Integration.Common
 		}
 	}
 
+	public partial class ReleaseProjectDTO : IReleaseProjectDTO
+	{
+	}
+
 	public partial class RequesterDTO : IRequesterDTO
 	{
 	}

@@ -529,77 +529,88 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
     /// <returns></returns>
     private object CreateInstance(ObjectInfo info)
     {
-      try
-      {
-        // Enough information to create an instance?
-        if (!info.IsSufficient)
-          return null;
+	    try
+	    {
+		    // Enough information to create an instance?
+		    if (!info.IsSufficient)
+			    return null;
 
-        object obj;
+		    object obj;
 
-        // Get the Type
-        Type type = CreateType(info.Assembly, info.Type);
+		    // Get the Type
+		    Type type = CreateType(info.Assembly, info.Type);
 
-        if (type == null)
-        {
-          throw new Exception("Assembly or Type not found.");
-        }
+		    if (type == null)
+		    {
+			    throw new TypeNotFoundWhileDeserializationException("Assembly or Type not found.");
+		    }
 
-        // Ok, we've got the Type, now try to create an instance.
-        
-        // Is there a binary constructor?
-        if(!String.IsNullOrEmpty(info.ConstructorParamType))
-        {
-          Object ctorparam = null;
+		    // Ok, we've got the Type, now try to create an instance.
 
-        	if (!String.IsNullOrEmpty(info.Value))
-          {
-            byte[] barr = Convert.FromBase64String(info.Value);
+		    // Is there a binary constructor?
+		    if (!String.IsNullOrEmpty(info.ConstructorParamType))
+		    {
+			    Object ctorparam = null;
 
-            Type ctorparamtype = CreateType(info.ConstructorParamAssembly, info.ConstructorParamType);
+			    if (!String.IsNullOrEmpty(info.Value))
+			    {
+				    byte[] barr = Convert.FromBase64String(info.Value);
 
-            // What type of parameter is needed?
-            if(typeof(Stream).IsAssignableFrom(ctorparamtype))
-            {
-              // Stream
-              ctorparam = new MemoryStream(barr);
-            }
-            else if (typeof(byte[]).IsAssignableFrom(ctorparamtype))
-            {
-              // byte[]
-              ctorparam = barr;
-            }
-          }
+				    Type ctorparamtype = CreateType(info.ConstructorParamAssembly, info.ConstructorParamType);
 
-          obj = Activator.CreateInstance(type, new object[] { ctorparam });
+				    // What type of parameter is needed?
+				    if (typeof (Stream).IsAssignableFrom(ctorparamtype))
+				    {
+					    // Stream
+					    ctorparam = new MemoryStream(barr);
+				    }
+				    else if (typeof (byte[]).IsAssignableFrom(ctorparamtype))
+				    {
+					    // byte[]
+					    ctorparam = barr;
+				    }
+			    }
 
-          return obj;
-        }
+			    obj = Activator.CreateInstance(type, new object[] {ctorparam});
 
-        // Until now only properties with binary data support constructors with parameters
+			    return obj;
+		    }
 
-        // Problem: only parameterless constructors or constructors with one parameter
-        // which can be converted from String are supported.
-        // Failure Example:
-        // string s = new string();
-        // string s = new string("");
-        // This cannot be compiled, but the follwing works;
-        // string s = new string("".ToCharArray());
-        // The TypeConverter provides a way to instantite objects by non-parameterless 
-        // constructors if they can be converted fro String
-        try
-        {
-          TypeConverter tc = GetConverter(type);
-          if (tc.CanConvertFrom(typeof(string)))
-          {
-            obj = tc.ConvertFromInvariantString(info.Value);
-            return obj;
-          }
-        }
-        catch { ; }
+		    // Until now only properties with binary data support constructors with parameters
 
-        return Activator.CreateInstance(type);
-      }
+		    // Problem: only parameterless constructors or constructors with one parameter
+		    // which can be converted from String are supported.
+		    // Failure Example:
+		    // string s = new string();
+		    // string s = new string("");
+		    // This cannot be compiled, but the follwing works;
+		    // string s = new string("".ToCharArray());
+		    // The TypeConverter provides a way to instantite objects by non-parameterless 
+		    // constructors if they can be converted fro String
+		    try
+		    {
+			    TypeConverter tc = GetConverter(type);
+			    if (tc.CanConvertFrom(typeof (string)))
+			    {
+				    obj = tc.ConvertFromInvariantString(info.Value);
+				    return obj;
+			    }
+		    }
+		    catch
+		    {
+			    ;
+		    }
+
+		    return Activator.CreateInstance(type);
+	    }
+	    catch (TypeNotFoundWhileDeserializationException)
+	    {
+			if (IgnoreCreationErrors)
+			{
+				return null;
+			}
+		    throw;
+	    }
       catch (Exception e)
       {
         string msg = "Creation of an instance failed. Type: " + info.Type + " Assembly: " + info.Assembly + " Cause: " + e.Message;
@@ -900,4 +911,12 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
     #endregion Misc
   }
+
+	public class TypeNotFoundWhileDeserializationException : Exception
+	{
+		public TypeNotFoundWhileDeserializationException(string message)
+			: base(message)
+		{
+		}
+	}
 }

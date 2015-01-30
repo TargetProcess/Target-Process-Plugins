@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Tp.Core.Annotations;
 using Tp.Core.Expressions;
 
 namespace Tp.Core
@@ -57,7 +58,7 @@ namespace Tp.Core
 				return this;
 			}
 
-			public CaseClause<T, TResult> Case<T1>(Func<T1, TResult> func)
+			public CaseClause<T, TResult> Case<T1>([InstantHandle]Func<T1, TResult> func)
 			{
 				return Case(x => x is T1, x => func((T1) (object) x));
 			}
@@ -67,7 +68,7 @@ namespace Tp.Core
 				return Case(x => x is T1 && predicate((T1) (object) x), x => func((T1) (object) x));
 			}
 
-			public TResult End(Func<T, TResult> @default)
+			public TResult End([InstantHandle] Func<T, TResult> @default)
 			{
 				if (@default == null)
 					@default = _ => default(TResult);
@@ -237,7 +238,6 @@ namespace Tp.Core
 				var selectorLambda = Expression.Lambda(Expression.Convert(selector, typeof(TResult)), p1);
 
 
-//				Expression<Func<T, TResult>> expression = x => func1.Apply((T1)(object)x);
 				return new CaseE<T, TResult>(this, lambda, (Expression<Func<T, TResult>>) selectorLambda);
 			}
 

@@ -5,8 +5,19 @@
 </div>
 <div class="tau-testcaserun-results__middle">
     <span class="i-role-results">
-        <button class="tau-btn tau-btn-big tau-passed <% if (this.passed) { %>tau-checked<% } %>" data-result="passed">Passed</button>
-        <button class="tau-btn tau-btn-big tau-failed <% if (this.failed) { %>tau-checked<% } %>" data-result="failed">Failed</button>
-        <button class="tau-btn tau-btn-big tau-skipped <% if (this.skipped) { %>tau-checked<% } %>" data-result="skipped">Skipped</button>
+        <button class="tau-btn tau-btn-big tau-passed <% if (this.passed) { %>tau-checked<% } %>" data-result="<%= this.status.passed %>">
+            <%= this.status.getName(this.status.passed) %>
+        </button>
+        <button class="tau-btn tau-btn-big tau-failed <% if (this.failed) { %>tau-checked<% } %>" data-result="<%= this.status.failed %>">
+            <%= this.status.getName(this.status.failed) %>
+        </button>
+        <button class="tau-btn tau-btn-big tau-skipped <% if (this.skipped) { %>tau-checked<% } %>" data-result="<%= this.status.skipped %>">
+            <%= this.status.getName(this.status.skipped) %>
+        </button>
+        <% if (fn.isFeatureEnabled('tcr.blocked.status.enabled')) { %>
+            <button class="tau-btn tau-btn-big tau-blocked <% if (this.blocked) { %>tau-checked<% } %>" data-result="<%= this.status.blocked %>">
+                <%= this.status.getName(this.status.blocked) %>
+            </button>
+        <% } %>
     </span>
 </div>

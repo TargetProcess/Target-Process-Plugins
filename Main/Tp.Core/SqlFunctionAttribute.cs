@@ -34,6 +34,17 @@ namespace System
 	public enum DatePart
 	{
 		None,
-		s
+		Year,
+		Quarter,
+		Month,
+		DayOfYear,
+		Day,
+		Week,
+		Hour,
+		Minute,
+		Second,
+		Millisecond,
+		Microsecond,
+		Nanosecond
 	}
 }

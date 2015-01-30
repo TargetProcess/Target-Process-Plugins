@@ -1,0 +1,1 @@
+define(["require","jsx!../../linked.view.base/view.selector.view.factory"],function(e){var i=e("jsx!../../linked.view.base/view.selector.view.factory");return i.createSelectorViewClass({viewTypeName:"list",displayName:"LinkedListSelector"})});

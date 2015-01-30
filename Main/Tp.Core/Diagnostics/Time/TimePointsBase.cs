@@ -9,7 +9,7 @@ namespace Tp.Core.Diagnostics.Time
 		public long GetOrder()
 		{
 			return Points.FirstOrNothing()
-				.Bind(p => p.Order)
+				.Select(p => p.Order)
 				.GetOrDefault(-1);
 		}
 

@@ -1,0 +1,1 @@
+define([],function(){return{None:0,Simple:1,SimpleCustomField:2,UrlCustomField:3,TemplatedUrlCustomField:4,DateCustomField:5,RichTextCustomField:6,EmptyCustomField:7,ProjectSquad:8,GeneralEntity:9,EmptyField:10,Comment:11,Assignment:12,Attachment:13,State:14}});

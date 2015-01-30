@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 //
@@ -25,14 +25,14 @@ namespace Tp.Core.Features
 		[Mashup("KanbanNotifications")]
 		[Mashup("BoardNotifications")]
 		ServerNotifications,
-		NewFlushStrategy,
-		PublishBusinessRuleSideEffects,
 		SliceSpecificCases,
 		NewPrioritization,
 		ParallelExpanders,
 		SliceCellFilterPropertiesAutoSet,
 		ParallelSliceCalls,
 		OptimizeForUnknownQueryHint,
+		[Description(@"The solution to handle ""parameter sniffing"" based on assigning the stored procedure parameters to local variables and then using the local variables in the query.")]
+		QueryWithLocalVariables,
 		Diagnostics,
 		TrackProgressInDb,
 		FlattenInnerReport,
@@ -63,14 +63,38 @@ namespace Tp.Core.Features
 		MashupsLoader,
 		LockAccountOnTransactionOperation,
 		DisableTransactionalMsmqMessageProcessing,
+
+		/// <summary>
+		/// Toggles easy process setup on client side
+		/// </summary>
 		[ClientFeature("process.setup")]
 		ProcessSetup,
+
+		/// <summary>
+		/// Toggles restriction for sub workflow creation on serve side
+		/// and team workflow editor on client side
+		/// </summary>
+		[ClientFeature("process.sub.workflows")]
+		SubWorkflows,
+
+		/// <summary>
+		/// Toggles restriction to assign multiple team on one card
+		/// </summary>
+		TeamStates,
+
 		[ClientFeature("warning.noProjectIsDeprecated")]
 		WarningNoProjectIsDeprecated,
+
+		/// <summary>
+		/// Toggles visibility of 'No project' in UI (context menu, project selector on view, project axis)
+		/// </summary>
+		[ClientFeature("hide.noProject")]
+		HideNoProject,
+
 		Follow,
 		[ClientFeature("move.highlight")]
 		MoveHighlight,
-		
+
 		/// <summary>
 		/// When enabled, old DTOs will be extended with original DTO value and author of changes
 		/// </summary>
@@ -87,13 +111,60 @@ namespace Tp.Core.Features
 		/// </summary>
 		[ClientFeature("entity.new.list.comet")]
 		EntityNewListComet,
+
+		/// <summary>
+		/// Toggles visibility of dasboards in views menu
+		/// </summary>
+		[ClientFeature("dashboards")]
+		Dashboards,
+
+		/// <summary>
+		/// Toggles cross project releases support
+		/// </summary>
 		[ClientFeature("release.crossproject")]
 		CrossProjectReleases,
 
 		/// <summary>
 		/// Toggles logging for email notifications
 		/// </summary>
-		EmailNotificationsLogging
+		EmailNotificationsLogging,
+
+		/// <summary>
+		/// Toggles visibility of reports in views menu
+		/// </summary>
+		[ClientFeature("customReports")]
+		CustomReports,
+
+		/// <summary>
+		/// Toggles posibility to see hierarchies of test plans and test plan runs in slice
+		/// Does not toggle hierarchy in rest
+		/// </summary>
+		[ClientFeature("qa.area.hierarchy")]
+		QaAreaHierarchy,
+
+		/// <summary>
+		/// Toggles returning total child count for a sub-tree of a List view.
+		/// See US#90142 for details.
+		/// </summary>
+		[ClientFeature("new.list.deep.counts")]
+		DeepListCounts,
+
+		/// <summary>
+		/// When enabled slice will use table instead of view for hierarchies of test plan runs
+		/// </summary>
+		UseTestRunItemTable,
+
+		/// <summary>
+		/// See US#92442 for details.
+		/// </summary>
+		[ClientFeature("rule.engine")]
+		RuleEngine,
+
+		/// <summary>
+		/// Prefetch template data for general quick add on each context change. See US#95641 for details.
+		/// </summary>
+		[ClientFeature("general.quick.add.data.prefetch")]
+		GeneralQuickAddDataPrefetch,
 	}
 
 	public interface ITpFeatureList
@@ -120,7 +191,7 @@ namespace Tp.Core.Features
 
 		public static string GetClientName(this TpFeature feature)
 		{
-			return feature.GetAttribute<ClientFeatureAttribute>().Bind(x => x.ClientFeatureName).GetOrElse(() => feature.ToString().CamelCase());
+			return feature.GetAttribute<ClientFeatureAttribute>().Select(x => x.ClientFeatureName).GetOrElse(() => feature.ToString().CamelCase());
 		}
 
 		public static IEnumerable<string> GetMashupNames(this TpFeature feature)

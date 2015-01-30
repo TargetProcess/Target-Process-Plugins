@@ -11,5 +11,6 @@ namespace Tp.Search.Model.Document
 		string CreateSquadId(int squadId);
 		string CreateEntityStateId(int entityStateId);
 		string CreateProjectId(int projectId);
+		int ParseProjectId(string projectId);
 	}
 }

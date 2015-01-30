@@ -1,1 +1,1 @@
-define(["tau/components/component.property.date"],function(e){return{create:function(n){return n=_.clone(n||{}),n.propertyName="endDate",e.create(n)}}});
+define(["require","Underscore","tau/components/component.property.date"],function(e){var n=e("Underscore"),r=e("tau/components/component.property.date");return{create:function(e){return e=n.clone(e||{}),e.propertyName="endDate",r.create(e)}}});

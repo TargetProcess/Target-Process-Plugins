@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
-using System.Threading;
-using StructureMap.TypeRules;
 
 // ReSharper disable CheckNamespace
 namespace System.Linq.Dynamic
@@ -39,8 +36,7 @@ namespace System.Linq.Dynamic
 				PermissionSet.RevertAssert();
 			}
 #endif
-			_classes = new Cache<Signature, Type>(x => CreateDynamicClass(x));
-			new ReaderWriterLock();
+			_classes = new Cache<Signature, Type>(CreateDynamicClass);
 		}
 
 		public Type GetDynamicClass(IEnumerable<DynamicProperty> properties, Type baseType=null)
@@ -61,7 +57,7 @@ namespace System.Linq.Dynamic
 			FieldBuilder[] fields = GenerateProperties(tb, signature._properties);
 			GenerateEquals(tb, fields);
 			GenerateGetHashCode(tb, fields);
-//			GenerateToString(tb, fields);
+			GenerateToString(tb, fields);
 
 			Type result = tb.CreateType();
 			_classCount++;
@@ -76,7 +72,7 @@ namespace System.Linq.Dynamic
 #endif
 		}
 
-		private FieldBuilder[] GenerateProperties(TypeBuilder tb, DynamicProperty[] properties)
+		private static FieldBuilder[] GenerateProperties(TypeBuilder tb, DynamicProperty[] properties)
 		{
 			var fields = new FieldBuilder[properties.Length];
 			for (int i = 0; i < properties.Length; i++)
@@ -108,7 +104,7 @@ namespace System.Linq.Dynamic
 			return fields;
 		}
 
-		private void GenerateEquals(TypeBuilder tb, IEnumerable<FieldInfo> fields)
+		private static void GenerateEquals(TypeBuilder tb, IEnumerable<FieldInfo> fields)
 		{
 			MethodBuilder mb = tb.DefineMethod("Equals",
 			                                   MethodAttributes.Public | MethodAttributes.ReuseSlot |
@@ -169,14 +165,18 @@ namespace System.Linq.Dynamic
 		private void GenerateToString(TypeBuilder tb, IEnumerable<FieldInfo> fields)
 		{
 			MethodBuilder mb = tb.DefineMethod("ToString",
-			                                   MethodAttributes.Public | MethodAttributes.ReuseSlot |
-			                                   MethodAttributes.Virtual | MethodAttributes.HideBySig,
-			                                   typeof (string), Type.EmptyTypes);
+											   MethodAttributes.Public | MethodAttributes.ReuseSlot |
+											   MethodAttributes.Virtual | MethodAttributes.HideBySig,
+											   typeof(string), Type.EmptyTypes);
+			
 
 
 			ILGenerator gen = mb.GetILGenerator();
-			var appendObject = typeof (StringBuilder).GetMethod("Append", new[] {typeof (object)});
 
+			gen.DeclareLocal(typeof(string));
+
+			var appendObject = typeof (StringBuilder).GetMethod("Append", new[] {typeof (object)});
+			
 			gen.Emit(OpCodes.Newobj, typeof (StringBuilder).GetConstructor(Type.EmptyTypes));
 			gen.Emit(OpCodes.Stloc_0); // sb
 			GenerateAppend(gen, "{ ");
@@ -188,7 +188,7 @@ namespace System.Linq.Dynamic
 
 				FieldInfo field = fieldInfos[index];
 
-				GenerateAppend(gen, field.Name);
+				GenerateAppend(gen, field.Name.TrimStart('_'));
 				GenerateAppend(gen, "=");
 
 				gen.Emit(OpCodes.Ldloc_0); // sb
@@ -208,13 +208,13 @@ namespace System.Linq.Dynamic
 
 			gen.Emit(OpCodes.Ldloc_0); // sb
 			gen.Emit(OpCodes.Callvirt, typeof (object).GetMethod("ToString"));
-			gen.Emit(OpCodes.Stloc_1);
-			gen.Emit(OpCodes.Ldloc_1);
+			gen.Emit(OpCodes.Stloc_0);
+			gen.Emit(OpCodes.Ldloc_0);
 			gen.Emit(OpCodes.Ret);
 		}
 
 		readonly static MethodInfo AppendString = typeof(StringBuilder).GetMethod("Append", new[] { typeof(string) });
-		private void GenerateAppend(ILGenerator gen, string value)
+		private static void GenerateAppend(ILGenerator gen, string value)
 		{
 			gen.Emit(OpCodes.Ldloc_0); // sb
 			gen.Emit(OpCodes.Ldstr, value);

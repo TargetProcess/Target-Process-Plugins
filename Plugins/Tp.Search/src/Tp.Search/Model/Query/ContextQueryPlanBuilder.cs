@@ -69,22 +69,16 @@ namespace Tp.Search.Model.Query
 
 		Maybe<QueryPlan> IProjectContextQueryPlanBuilder.BuildProjectContextPlan(IEnumerable<int> projectIds, bool includeNoProject, DocumentIndexTypeToken projectIndexTypeToken)
 		{
-			var queryBuf = new List<string>();
-			if (projectIds != null)
-			{
-				queryBuf.AddRange(projectIds.Select(projectId => _indexDataFactory.CreateProjectData(projectId)));
-			}
-			if (includeNoProject)
-			{
-				queryBuf.Add(_indexDataFactory.CreateProjectData(null));
-			}
-			if (!queryBuf.Any())
+			ProjectIndexData projectIdsIndexData = projectIds != null ? new ProjectIndexData(projectIds.Cast<int?>().ToList()) : ProjectIndexData.Empty;
+			ProjectIndexData nullProjectIndexData = includeNoProject ? new ProjectIndexData(new int?[] {null}) : ProjectIndexData.Empty;
+			var result = ProjectIndexData.Sum(projectIdsIndexData, nullProjectIndexData);
+			string query = result.ToString();
+			if (string.IsNullOrEmpty(query))
 			{
 				return Maybe.Nothing;
 			}
-			string query = String.Join(" ", queryBuf.ToArray());
 			IDocumentIndex projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, projectIndexTypeToken);
-			return projectContextIndex.BuildExecutionPlan(new ParsedQuery(words:query), _profile.Initialized);
+			return projectContextIndex.BuildExecutionPlan(new ParsedQuery(words: query), _profile.Initialized);
 		}
 
 		private IProjectContextQueryPlanBuilder ContextPlansBuilder

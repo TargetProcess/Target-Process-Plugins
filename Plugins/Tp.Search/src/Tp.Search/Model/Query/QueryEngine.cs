@@ -54,7 +54,7 @@ namespace Tp.Search.Model.Query
 		{
 			Maybe<QueryPlanResult> entityPlan = Maybe.Nothing;
 			Maybe<QueryPlanResult> commentPlan = Maybe.Nothing;
-			Parallel.Invoke(() => entityPlan = planFull.EntityPlan.Bind(p => p.Eval()), () => commentPlan = planFull.CommentPlan.Bind(p => p.Eval()));
+			Parallel.Invoke(() => entityPlan = planFull.EntityPlan.Select(p => p.Eval()), () => commentPlan = planFull.CommentPlan.Select(p => p.Eval()));
 		    int entitiesTotalCount;
 			int commentsTotalCount;
 			var entityDocuments = FindEntities(entityPlan, page, out entitiesTotalCount);

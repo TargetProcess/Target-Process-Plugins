@@ -1,0 +1,150 @@
+<!-- name: customReport.editor.dataSource.template -->
+
+<div class="tau-board-settings tau-boardsettings" role="form-settings">
+    <div class="tau-board-settings-group__help">
+        <span class="tau-help i-role-tooltipArticle" data-article-id="customReport.dsl.editor">About Setup</span>
+    </div>
+
+    <div class="i-role-cant-parse text-size-m <%= this.canParse ? 'tau-hide' : '' %>">
+        Can't show Report definition. Use DSL tab.
+    </div>
+
+    <div class="i-role-can-parse <%= !this.canParse ? 'tau-hide' : '' %>">
+        <div class="tau-board-settings-columns">
+            <div class="tau-board-settings-columns__two-items">
+                <div class="tau-board-settings-cards">
+                    <h4>Select data source</h4>
+                    <span class="tau-help i-role-tooltipArticle" data-article-id="customreport.editor.selectCards"></span>
+
+                    <div class="tau-section-cards">
+                        <% _.forEach(this.cells.types, function(item){ %>
+                        <% if (item.isSelected) { %>
+                        <input type="checkbox" name="cells_types" value="<%= item.id %>" class="tau-input-hidden" checked="checked" />
+                        <% } else { %>
+                        <input type="checkbox" name="cells_types" value="<%= item.id %>" class="tau-input-hidden" />
+                        <% } %>
+
+                        <% var btnChecked = item.isSelected ? "tau-checked" : ""; %>
+                        <button type="button" class="i-role-cell-type tau-btn tau-<%= item.id %> <%= btnChecked %>">
+                            <%= item.name %>
+                        </button>
+
+                        <% }); %>
+                        <button class="tau-btn tau-more hidden" type="button">more&hellip;</button>
+                    </div>
+                </div>
+
+
+                <div class="tau-board-settings-lanes">
+                    <div class="tau-section">
+                        <%= fn.sub("board.editor.filter", this.cells) %>
+                    </div>
+                </div>
+
+                <div runas="board.editor.remember.context" data-context:general='' data-childrenContainerSelector='.i-role-output'></div>
+            </div>
+            <div class="tau-board-settings-columns__two-items">
+
+                <h4>Setup chart</h4>
+
+                <div class="tau-board-settings__setup-chart">
+                    <div class="tau-board-settings__setup-chart__row">
+                        <div class="tau-board-settings__setup-chart__title">
+                            <div class="tau-board-settings__setup-chart__text">
+                                <span class="tau-icon-general i-role-x2-toggle"></span>X
+                            </div>
+                        </div>
+                        <div class="tau-board-settings__setup-chart__value">
+
+                            <input class="tau-in-text i-role-firstX" type="text">
+                        </div>
+                        <div class="tau-board-settings__setup-chart__filter">
+                            <%= fn.sub("board.editor.filter", this.x1) %>
+                        </div>
+                    </div>
+                    <div class="tau-board-settings__setup-chart__row tau-board-settings__setup-chart__row--level i-role-x2-section">
+                        <div class="tau-board-settings__setup-chart__title"></div>
+                        <div class="tau-board-settings__setup-chart__value">
+
+                            <input class="tau-in-text i-role-secondX" type="text">
+                        </div>
+                        <div class="tau-board-settings__setup-chart__filter">
+                            <%= fn.sub("board.editor.filter", this.x2) %>
+                        </div>
+                    </div>
+                    <div class="tau-board-settings__setup-chart__row">
+                        <div class="tau-board-settings__setup-chart__title">
+                            <div class="tau-board-settings__setup-chart__text">
+                                <span class="tau-icon-general i-role-y2-toggle"></span>Y
+                            </div>
+                        </div>
+                        <div class="tau-board-settings__setup-chart__value">
+
+                            <input class="tau-in-text i-role-firstY" type="text">
+                        </div>
+                        <div class="tau-board-settings__setup-chart__filter">
+                            <%= fn.sub("board.editor.filter", this.y1) %>
+                        </div>
+                    </div>
+                    <div
+                        class="tau-board-settings__setup-chart__row tau-board-settings__setup-chart__row--level i-role-y2-section">
+                        <div class="tau-board-settings__setup-chart__title"></div>
+                        <div class="tau-board-settings__setup-chart__value">
+
+                            <input class="tau-in-text i-role-secondY" type="text">
+                        </div>
+                        <div class="tau-board-settings__setup-chart__filter">
+                            <%= fn.sub("board.editor.filter", this.y2) %>
+                        </div>
+                    </div>
+                    <div class="tau-board-settings__setup-chart__row">
+                        <div class="tau-board-settings__setup-chart__title">
+                            <div class="tau-board-settings__setup-chart__text tau-board-settings__setup-chart__text--letter-wrap">
+                                <span class="tau-board-settings__setup-chart__letter tau-text_type_bug">C</span>
+                                <span class="tau-board-settings__setup-chart__letter tau-text_type_userstory">O</span>
+                                <span class="tau-board-settings__setup-chart__letter tau-text_type_feature">L</span>
+                                <span class="tau-board-settings__setup-chart__letter tau-text_type_request">O</span>
+                                <span class="tau-board-settings__setup-chart__letter tau-text_type_release">R</span>
+                            </div>
+                        </div>
+                        <div class="tau-board-settings__setup-chart__value">
+
+                            <input class="tau-in-text i-role-color" type="text">
+                        </div>
+                        <div class="tau-board-settings__setup-chart__filter">
+                            <%= fn.sub("board.editor.filter", this.color) %>
+                        </div>
+                    </div>
+                    <div class="tau-board-settings__setup-chart__row">
+                        <div class="tau-board-settings__setup-chart__title">
+                            <div class="tau-board-settings__setup-chart__text tau-board-settings__setup-chart__text--letter-wrap">
+                                <span class="text-size-xxs">s</span>
+                                <span class="text-size-s">i</span>
+                                <span class="text-size-l">z</span>
+                                <span class="text-size-xl">e</span>
+                            </div>
+                        </div>
+                        <div class="tau-board-settings__setup-chart__value">
+
+                            <input class="tau-in-text i-role-size" type="text">
+                        </div>
+                        <div class="tau-board-settings__setup-chart__filter">
+                            <%= fn.sub("board.editor.filter", this.size) %>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="tau-board-settings__setup-chart__button">
+                    <button class="tau-btn tau-chart-line" data-chart-type="line">Line</button>
+                    <button class="tau-btn tau-chart-scatter" data-chart-type="scatterplot">Scatter</button>
+                    <button class="tau-btn tau-chart-bar" data-chart-type="bar">Bar</button>
+                </div>
+            </div>
+        </div>
+        <% if (this.isEditable) { %>
+        <button class="tau-btn tau-btn-big tau-primary tau-btn__finish-settings i-role-apply-changes">Apply changes</button>
+        <% } %>
+    </div>
+</div>
+

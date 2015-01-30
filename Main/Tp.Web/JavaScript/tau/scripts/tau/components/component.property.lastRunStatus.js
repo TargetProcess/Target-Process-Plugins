@@ -1,0 +1,1 @@
+define(["require","tau/components/component.property.base.status"],function(t){var e=t("tau/components/component.property.base.status");return{create:function(t){return t=t||{},t.propertyName="lastRunStatus",e.create(t)}}});

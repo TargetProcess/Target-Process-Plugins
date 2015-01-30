@@ -40,9 +40,9 @@ namespace Tp.MashupManager.MashupLibrary.Repository.Config
 		public IEnumerable<ILibraryRepositoryConfig> GetConfigs()
 		{	
 			return _singleProfile.Profile.NothingIfNull()
-				.Select(x => x.GetProfile<MashupManagerProfile>().LibraryRepositoryConfigs.NothingIfNull()
+				.Bind(x => x.GetProfile<MashupManagerProfile>().LibraryRepositoryConfigs.NothingIfNull()
 					.Where(y => y.Any())
-					.Bind(y => y.Cast<ILibraryRepositoryConfig>()))
+					.Select(y => y.Cast<ILibraryRepositoryConfig>()))
 				.GetOrElse(()=>DefaultConfigs);
 		}
 

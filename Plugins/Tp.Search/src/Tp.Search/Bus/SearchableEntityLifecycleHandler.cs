@@ -55,7 +55,9 @@ namespace Tp.Search.Bus
 																								IHandleMessages<CommentCreatedMessage>,
 																								IHandleMessages<CommentUpdatedMessage>,
 																								IHandleMessages<CommentDeletedMessage>,
-																								IHandleMessages<ProjectUpdatedMessage>
+																								IHandleMessages<ProjectUpdatedMessage>,
+																								IHandleMessages<ReleaseProjectCreatedMessage>,
+																								IHandleMessages<ReleaseProjectDeletedMessage>
 	{
 		private readonly IEntityIndexer _entityIndexer;
 		private readonly DocumentIndexRebuilder _documentIndexRebuilder;
@@ -131,6 +133,15 @@ namespace Tp.Search.Bus
 			RemoveGeneralIndex(Mapper.Map<ReleaseDTO, GeneralDTO>(message.Dto));
 		}
 
+		public void Handle(ReleaseProjectCreatedMessage message)
+		{
+			AddReleaseProjectIndex(message.Dto);
+		}
+
+		public void Handle(ReleaseProjectDeletedMessage message)
+		{
+			RemoveReleaseProjectIndex(message.Dto);
+		}
 		public void Handle(IterationCreatedMessage message)
 		{
 			AddGeneralIndex(Mapper.Map<IterationDTO, GeneralDTO>(message.Dto));
@@ -319,6 +330,11 @@ namespace Tp.Search.Bus
 			}
 		}
 
+		private void AddReleaseProjectIndex(ReleaseProjectDTO releaseProject)
+		{
+			RebuildOrAction(() => _entityIndexer.AddReleaseProjectIndex(releaseProject, DocumentIndexOptimizeSetup.DeferredOptimize));
+		}
+
 		private void AddGeneralIndex(GeneralDTO generalDto)
 		{
 			RebuildOrAction(() => _entityIndexer.AddGeneralIndex(generalDto, DocumentIndexOptimizeSetup.DeferredOptimize));
@@ -364,6 +380,11 @@ namespace Tp.Search.Bus
 			RebuildOrAction(() => _entityIndexer.RemoveGeneralIndex(generalDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
+		private void RemoveReleaseProjectIndex(ReleaseProjectDTO releaseProjectDto)
+		{
+			RebuildOrAction(() => _entityIndexer.RemoveReleaseProjectIndex(releaseProjectDto, DocumentIndexOptimizeSetup.DeferredOptimize));
+		}
+
 		private void RemoveAssignableIndex(AssignableDTO assignableDto)
 		{
 			RebuildOrAction(() => _entityIndexer.RemoveAssignableIndex(assignableDto, DocumentIndexOptimizeSetup.DeferredOptimize));
@@ -394,6 +415,7 @@ namespace Tp.Search.Bus
 			RebuildOrAction(() => _entityIndexer.RemoveCommentIndex(commentDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
+
 		private void RebuildOrAction(Action a)
 		{
 			if(_documentIndexRebuilder.RebuildIfNeeded())
@@ -402,7 +424,5 @@ namespace Tp.Search.Bus
 			}
 			a();
 		}
-
-
 	}
 }

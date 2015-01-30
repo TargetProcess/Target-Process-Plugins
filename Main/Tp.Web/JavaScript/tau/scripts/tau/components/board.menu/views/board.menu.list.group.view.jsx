@@ -6,11 +6,14 @@ define(function(require) {
     var transformations = require('./../services/board.menu.transformations.service');
     var renamer = require('tau/components/board.menu/services/board.menu.item.rename.service');
 
+    var Name = require('jsx!./../views/board.menu.list.item.name.view');
+
     return React.defineClass(
-        ['board.menu.list.item.view', 'board.menu.list.item.name.view',
-            'boardMenuViewsMenuService', 'boardContextMenuService', 'boardMenuBus'],
-        function(ListItemView, Name, viewsMenuService, contextMenuService, bus) {
+        ['board.menu.list.item.view', 'boardMenuViewsMenuService', 'boardContextMenuService', 'boardMenuBus'],
+        function(ListItemView, viewsMenuService, contextMenuService, bus) {
             return {
+                displayName: 'BoardMenuListGroup',
+
                 _isRenamingActivated: false,
 
                 _getGroupClassName: function() {
@@ -118,26 +121,27 @@ define(function(require) {
                     }
 
                     var listItems = _.map(boards, function(board) {
-                        return new ListItemView({
-                            board: board,
-                            key: board.boardId,
-                            isCurrentBoard: board.boardId === this.props.currentBoardId,
-                            isFocusedBoard: board.boardId === this.props.focusedBoardId,
-                            showContextMenu: this._showViewContextMenu,
-                            renamingId: this.props.renamingId
-                        });
+                        return <ListItemView
+                            id={board.boardId}
+                            key={board.boardId}
+                            board={board}
+                            isCurrentBoard={board.boardId === this.props.currentBoardId}
+                            isFocusedBoard={board.boardId === this.props.focusedBoardId}
+                            showContextMenu={this._showViewContextMenu}
+                            renamingId={this.props.renamingId}
+                        />;
                     }, this);
 
                     if (!isRegular) {
                         return (
                             <div className={this._getGroupContainerClassName()}
-                            data-sortable-key={this._getSortableKey(groupModel)}>
+                                data-sortable-key={this._getSortableKey(groupModel)}>
                                 <div className={this._getGroupClassName()}>
                                 {listItems}
                                 </div>
                                 <div className="t3-views__drop-placeholder"></div>
                             </div>
-                            );
+                        );
                     }
 
                     // Fix [draggable] > [contenteditable] problem in IE11
@@ -148,15 +152,15 @@ define(function(require) {
 
                     return (
                         <div className={this._getGroupContainerClassName()}
-                        draggable={groupIsDraggable} data-sortable-key={this._getSortableKey(groupModel)}>
+                            draggable={groupIsDraggable} data-sortable-key={this._getSortableKey(groupModel)}>
                             <div className={this._getGroupClassName()} onContextMenu={this._showGroupContextMenu}>
                                 <Name name={groupModel.name || groupModel.groupId} onClick={this._toggleGroupExpanded}
-                                onActionClick={this._showGroupContextMenu} isGroup={true} />
+                                    onActionClick={this._showGroupContextMenu} isGroup={true} />
                             {listItems}
                             </div>
                             <div className="t3-views__drop-placeholder"></div>
                         </div>
-                        );
+                    );
                 }
             };
         }

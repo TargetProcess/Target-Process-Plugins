@@ -1,0 +1,1 @@
+ace.define("ace/snippets/twig",["require","exports","module"],function(e,i){"use strict";i.snippetText=void 0,i.scope="twig"});

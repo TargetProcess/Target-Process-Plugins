@@ -1,0 +1,22 @@
+<!-- name: list.release.projects, deps: [template!tau/ui/templates/list_/release/ui.template.list.release.projects.list.item] -->
+<div class="tau-team-control i-role-project-list">
+    <% if (this.items.length) { %>
+    <table class="tau-team-info tau-project-info">
+        <colgroup>
+            <col>
+            <col class="tau-assign-button">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>Project</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <%= fn.sub("list.release.projects.list.item", this.items) %>
+        </tbody>
+    </table>
+    <% } else { %>
+    <div class="tau-message">This release has no projects</div>
+    <% } %>
+</div>

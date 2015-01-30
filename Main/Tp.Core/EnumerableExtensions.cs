@@ -1,9 +1,10 @@
-﻿// 
+// 
 // Copyright (c) 2005-2010 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Tp.Core;
 using Tp.Core.Annotations;
@@ -171,11 +172,18 @@ namespace System.Linq
 
 		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
 		{
+			source.ForEach((x, i) => action(x));
+		}
+
+
+		public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+		{
 			if (source == null)
 				return;
+			var index = 0;
 			foreach (var elem in source)
 			{
-				action(elem);
+				action(elem, index++);
 			}
 		}
 
@@ -278,6 +286,16 @@ namespace System.Linq
 			return resultSelector(
 				matches ?? Enumerable.Empty<T>(),
 				doesNotMatch ?? Enumerable.Empty<T>());
+		}
+
+		public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> xs)
+		{
+			return new ReadOnlyCollection<T>(xs.ToList());
+		}
+
+		public static IEnumerable<T> ToEnumerable<T>(this T value)
+		{
+			yield return value;
 		}
 	}
 

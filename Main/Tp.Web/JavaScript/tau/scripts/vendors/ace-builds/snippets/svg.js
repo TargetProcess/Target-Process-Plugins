@@ -1,0 +1,1 @@
+ace.define("ace/snippets/svg",["require","exports","module"],function(e,s){"use strict";s.snippetText=void 0,s.scope="svg"});

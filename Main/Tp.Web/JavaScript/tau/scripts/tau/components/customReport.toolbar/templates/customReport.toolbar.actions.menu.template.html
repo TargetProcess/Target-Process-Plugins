@@ -1,0 +1,22 @@
+<!-- name: customReport.toolbar.actions.menu -->
+<div class="actions-menu-items actions-menu-items--reports i-role-bubble-holder">
+    <div class="tau-board-actions-item">
+        <span class="options-button"></span>
+        <button role="action-toggle-editor" class="tau-btn tau-btn-settings tau-board-settings-toggle" type="button">
+            Set up Report
+        </button>
+        <div class="tau-txt">Go to Report settings</div>
+    </div>
+    <div class="tau-board-actions-item">
+        <span class="clone-report-button"></span>
+        <div class="tau-txt">Make a copy of this Report.</div>
+    </div>
+    <% if (this.model.isEditable) { %>
+    <div class="tau-board-actions-item">
+        <span class="remove-report-button">
+        </span>
+        <div class="tau-txt">Report will be removed.<br/>The data will remain safe.</div>
+    </div>
+    <% } %>
+</div>
+

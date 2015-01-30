@@ -143,7 +143,7 @@ namespace System
 		public static Maybe<TEnum> TryGetByDescription<TEnum>(string description) where TEnum:struct 
 		{
 			RaiseErrorIfNotEnum<TEnum>();
-			return EnumDescriptionCache<TEnum>.Cache.FirstOrNothing(x => x.Value == description).Bind(x=>x.Key);
+			return EnumDescriptionCache<TEnum>.Cache.FirstOrNothing(x => x.Value == description).Select(x=>x.Key);
 		}
 
 		public static Exception CreateUnexpectedEnumError<TEnum>(this TEnum val)

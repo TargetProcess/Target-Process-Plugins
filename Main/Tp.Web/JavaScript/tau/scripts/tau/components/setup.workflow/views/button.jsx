@@ -3,9 +3,10 @@ define(function(require) {
 
     return React.createClass({
         render: function() {
-            return this.transferPropsTo(
-                <button className="tau-btn" type="button">{this.props.children}</button>
-            );
+            var props = this.props;
+            props.className = (props.className || '') + ' tau-btn';
+            props.type = 'button';
+            return React.createElement('button', props, props.children);
         }
     });
 });

@@ -1,0 +1,20 @@
+<!-- name: dashboard.editor.container -->
+<div class="tau-board-settings" id="<%= _.uniqueId('dashboardSettings') %>">
+    <div class="tau-board-settings-header i-role-tabheaders" role="toolbar">
+        <ul class="tau-board-settings-groups-tags i-role-tabheaders">
+            <li class="i-role-tabheader tau-extension-board-tooltip" data-label="layout"
+                data-title="Change Dashboard layout and context">Setup
+            </li>
+            <li class="i-role-tabheader tau-active tau-extension-board-tooltip" data-label="widgets"
+                data-title="Add widgets to Dashboard">Widgets
+            </li>
+            <li class="i-role-tabheader tau-extension-board-tooltip" data-label="access"
+                data-title="Change Dashboard permissions">Access
+            </li>
+        </ul>
+        <button role="close-settings" class="tau-btn tau-settings-close" type="button">Finish setup</button>
+    </div>
+    <div class="i-role-tab tau-board-settings-group" role="layout" data-label="layout"></div>
+    <div class="i-role-tab tau-board-settings-group tau-active" role="widgets" data-label="widgets"></div>
+    <div class="i-role-tab tau-board-settings-group" role="access" data-label="access"></div>
+</div>

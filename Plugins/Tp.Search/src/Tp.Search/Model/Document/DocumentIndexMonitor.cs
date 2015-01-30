@@ -79,6 +79,15 @@ namespace Tp.Search.Model.Document
 			}
 		}
 
+		public IndexData GetExistingIndexByNumber(int number)
+		{
+			lock (_gate)
+			{
+				BornOrRessurectIfDead();
+				return _documentIndex.GetExistingIndexByNumber(number);
+			}
+		}
+
 		public IndexResult Index(hOOt.Document document, bool deleteOld, DocumentIndexOptimizeSetup setup)
 		{
 			lock(_gate)

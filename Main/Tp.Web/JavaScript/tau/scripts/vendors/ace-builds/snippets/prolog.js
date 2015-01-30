@@ -1,0 +1,1 @@
+ace.define("ace/snippets/prolog",["require","exports","module"],function(e,o){"use strict";o.snippetText=void 0,o.scope="prolog"});

@@ -10,16 +10,17 @@ using System.IO;
 using System.Messaging;
 using System.Threading;
 using System.Transactions;
-using System.Xml.Serialization;
 using NServiceBus;
 using NServiceBus.Serialization;
 using NServiceBus.Unicast.Transport;
 using NServiceBus.Unicast.Transport.Msmq;
 using NServiceBus.Utils;
+using Tp.Integration.Messages.ServiceBus.Serialization;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx;
 using Tp.Integration.Messages.ServiceBus.UnicastBus;
+using XmlSerializer = System.Xml.Serialization.XmlSerializer;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 {
@@ -533,6 +534,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				try
 				{
 					result.Body = Extract(m);
+				}
+				catch (TypeNotFoundWhileDeserializationException e)
+				{
+					Logger.Warn(LoggerContext.New(message.MessageOrigin.Name, result), "Could not extract message data.", e);
+					OnFinishedMessageProcessing(message);
+					return;
 				}
 				catch (Exception e)
 				{

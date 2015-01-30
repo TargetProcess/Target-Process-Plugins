@@ -1,13 +1,21 @@
 define(function(require) {
     var React = require('libs/react/react-ex'),
-        SettingsService = require('../services/state.item.process.settings.menu.service');
+        SettingsService = require('../services/state.item.process.settings.service'),
+        AddTeamWorkflow = require('jsx!./add.team.workflow.view');
 
     return React.createClass({
         getInitialState: function() {
             return {
                 name: this.props.name,
-                edit: false
+                isRenaming: false,
+                settingsService: this._getSettingsService()
             };
+        },
+
+        componentDidMount: function() {
+            if (this.props.isNew) {
+                this._toggleSettings();
+            }
         },
 
         componentWillReceiveProps: function(nextProps) {
@@ -20,29 +28,37 @@ define(function(require) {
 
         _getSettingsService: function() {
             var result = new SettingsService(
-                this.refs.settings.getDOMNode(),
-                this.refs.namePlaceholder.getDOMNode(),
+                function() {
+                    return this.refs.settings.getDOMNode();
+                }.bind(this),
+                function() {
+                    return this.refs.namePlaceholder.getDOMNode();
+                }.bind(this),
                 this.props.stateSettings);
-            result.onToggleRename.add(function(isShown) {
-                this.setState({ edit: isShown, containerWidth: this.refs.container.getDOMNode().offsetWidth });
-            }, this);
+
+            result.onToggleRename.add(this._toggleRename, this);
             result.onRename.add(this._rename, this);
+            result.onRename.add(function(newName) {
+                this.setState({name: newName});
+            }, this);
+
             return result;
         },
 
+        _toggleRename: function(isShown) {
+            this.setState({isRenaming: isShown, containerWidth: this.refs.container.getDOMNode().offsetWidth});
+        },
+
         _toggleSettings: function() {
-            this._getSettingsService().toggleSettings(this.props.id);
+            this.state.settingsService.toggleSettings(this.props.id);
         },
 
         _beginNameEdit: function() {
-            this._getSettingsService().showNameEditor(false);
+            this.state.settingsService.showNameEditor(false);
         },
 
-        _rename: function(newName) {
-            var nameChanged = newName !== this.state.name;
-            if (nameChanged) {
-                this.setState({name: newName});
-
+        _rename: function(newName, options) {
+            if (!options.isManaged) {
                 this.props.renameStateAction({
                     id: this.props.id,
                     name: newName
@@ -50,27 +66,51 @@ define(function(require) {
             }
         },
 
+        _onMouseMove: function(e) {
+            var stateElement = e.currentTarget;
+            var elementRect = stateElement.getBoundingClientRect();
+            var x = e.pageX - elementRect.left;
+            if (x < elementRect.width / 2) {
+                this.props.leftTriggered();
+            } else {
+                this.props.rightTriggered();
+            }
+        },
+
+        _onMouseOut: function() {
+            this.props.outTriggered();
+        },
+
+        componentWillUnmount: function() {
+            this.state.settingsService.dispose();
+        },
+
         render: function() {
-            var containerClasses = React.addons.classSet({
+            var gridItemClasses = React.addons.classSet({
                 'process-grid__item': true,
-                'active': this.state.edit
+                'active': this.state.isRenaming
             });
 
-            var containerStyle = this.state.edit ? {
+            var gridItemStyle = this.state.isRenaming ? {
                 'minWidth': this.state.containerWidth
-            } : {};
+            } : {'width': this.props.width};
 
-            var innerClasses = React.addons.classSet({
+            var isSortable = this.props.isSortable && !this.state.isRenaming;
+            var isDraggable = isSortable && this.props.allowDrag;
+            var isRenameable = this.props.isEnabled && !this.state.isRenaming;
+            var gridStateClasses = React.addons.classSet({
                 'process-grid__state': true,
-                'edit': this.state.edit
+                'tau-draggable': isDraggable,
+                'tau-clickable': !isDraggable && isRenameable,
+                'edit': this.state.isRenaming
             });
 
             var actions = {
-                toggleSettings: this.props.isDisabled ? null : this._toggleSettings,
-                beginEdit: this.props.isDisabled ? null : this._beginNameEdit
+                toggleSettings: this.props.isEnabled ? this._toggleSettings : null,
+                beginEdit: isRenameable ? this._beginNameEdit : null
             };
 
-            var showSettings = !this.props.isDisabled;
+            var showSettings = this.props.isEnabled;
             var showLoader = this.props.isLoading;
             var settingsClasses = React.addons.classSet({
                 'tau-icon-general': showSettings || showLoader,
@@ -78,13 +118,26 @@ define(function(require) {
                 'tau-icon-loading': showLoader
             });
 
+            var addTeamWorkflowButton = this.props.canAddTeamWorkflow ?
+                <AddTeamWorkflow addTeamWorkflowAction={this.props.addTeamWorkflowAction}
+                    defaultTeamWorkflowText={this.props.defaultTeamWorkflowText} /> :
+                null;
+
+            var title = isSortable ?
+                (isDraggable ? '' : 'The order of the states mapped to the initial and final states of sub workflows can\'t be changed.') :
+                'The order of the initial and final states can\'t be changed.';
+
             return (
-                <div ref="container" className={containerClasses} style={containerStyle}>
-                    <div className={innerClasses}>
+                <div ref="container" className={gridItemClasses} style={gridItemStyle}
+                    data-sortable-key={this.props.id} data-sortable={isSortable} draggable={isDraggable}>
+                    <div className={gridStateClasses} title={title}
+                        onMouseMove={this._onMouseMove} onMouseOut={this._onMouseOut}>
                         <div ref="namePlaceholder" className="tau-in-text" onDoubleClick={actions.beginEdit}>{this.state.name}</div>
-                        <span ref="settings" className={settingsClasses} onClick={actions.toggleSettings} />
+                        <span ref="settings" title="Change state settings" className={settingsClasses} onClick={actions.toggleSettings} />
                     </div>
-                </div>);
+                    {addTeamWorkflowButton}
+                </div>
+            );
         }
     });
 });

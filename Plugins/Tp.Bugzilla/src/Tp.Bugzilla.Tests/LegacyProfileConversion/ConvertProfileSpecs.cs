@@ -18,8 +18,8 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					And project 'p1' for the first process created
 					And user 'tpuser1' created
 					And user 'tpuser2' created
-					And state 'Open' created
-					And state 'Done' created
+					And state 'Open_test' created
+					And state 'Done_test' created
 					And priority 'High' created
 					And priority 'Low' created
 					And severity 'Important' created
@@ -39,8 +39,8 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					|bzuser2|tpuser2|
 					And state mapping is:
 					|bugzilla|targetprocess|
-					|open|Open|
-					|completed|Done|
+					|open|Open_test|
+					|completed|Done_test|
 					And priority mapping is:
 					|bugzilla|targetprocess|
 					|P1|High|
@@ -67,8 +67,8 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					And mapped states count shoud be 2
 					And state mapping should be:
 					|bugzilla|targetprocess|
-					|open|Open|
-					|completed|Done|
+					|open|Open_test|
+					|completed|Done_test|
 					And mapped priorities count shoud be 2
 					And priority mapping should be:
 					|bugzilla|targetprocess|
@@ -80,7 +80,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					|S1|Important|
 					|S2|Valuable|
 					And profile should have tp users: tpuser1, tpuser2
-					And profile should have tp states: Open, Done
+					And profile should have tp states: Open_test, Done_test
 					And profile should have tp priorities: High, Low
 					And profile should have tp severities: Important, Valuable
 					And profile should have tp roles: Programmer, QA Engineer

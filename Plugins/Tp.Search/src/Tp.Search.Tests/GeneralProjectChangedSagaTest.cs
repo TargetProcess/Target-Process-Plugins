@@ -1,7 +1,10 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using StructureMap;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.EntityLifecycle.Commands;
+using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.EntityLifecycle.Queries;
 using Tp.Integration.Testing.Common;
 using Tp.Search.Bus;
@@ -39,6 +42,7 @@ namespace Tp.Search.Tests
 			_transport.On<AssignableQuery>().Reply(x => ReplyOnAssignableQuery(x, new AssignableDTO[]{}));
 			_transport.On<TestCaseQuery>().Reply(x => new TestCaseQueryResult { Dtos = new TestCaseDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<ImpedimentQuery>().Reply(x => new ImpedimentQueryResult { Dtos = new ImpedimentDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
+			_transport.On<ReleaseProjectQuery>().Reply(x => new ReleaseProjectQueryResult { Dtos = new ReleaseProjectDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<CommentQuery>().Reply(x => ReplyOnEntityQuery<CommentQuery, CommentDTO, CommentQueryResult>(x, _comments));
 		}
 
@@ -54,8 +58,21 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 }
 			});
 			result.Total.Should(Be.EqualTo(1));
+			
+			var generalDto = _generals.First();
+			var newProjectId = 2;
+			_transport.HandleMessageFromTp(profile, new UserStoryUpdatedMessage
+			{
+				Dto = new UserStoryDTO
+				{
+					ID = generalDto.ID,
+					EntityTypeID = generalDto.EntityTypeID,
+					ProjectID = newProjectId
+				},
+				ChangedFields = new[] { UserStoryField.ProjectID}
+			});
 
-			_transport.HandleLocalMessage(profile, new GeneralProjectChangedLocalMessage { ProjectId = 2, GeneralId = 2});
+			_transport.HandleLocalMessage(profile, new GeneralProjectChangedLocalMessage { ProjectId = newProjectId, GeneralId = generalDto.ID.Value });
 
 			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
 			queryRunner.Run(new QueryData

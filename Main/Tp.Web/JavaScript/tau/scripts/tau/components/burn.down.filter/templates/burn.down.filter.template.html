@@ -1,0 +1,40 @@
+<ul class="chart-filter-list">
+    <li class="chart-filter-list__item tau-chart-filter-list__item">
+        <label class="tau-select">
+            <span class="divider chart-filter-list__title">Burn Down for</span>
+            <span class="_burnDownType iterations-caret iterations-caret-disabled" tabindex="0"></span>
+        </label>
+        <label class="tau-select">
+            <span class="_selectedIteration iterations-caret iterations-caret-disabled" tabindex="0"></span>
+        </label>
+    </li>
+    <li class="chart-filter-list__item i-selectedProject-wrap tau-chart-filter-list__item">
+        <label class="tau-select">
+            <span class="divider chart-filter-list__title"></span>
+            <span class="_selectedProject iterations-caret iterations-caret-disabled" tabindex="0"></span>
+        </label>
+    </li>
+    <li class="chart-filter-list__item _unitsOption chart-filter-list__item--switch-units tau-chart-filter-list__item">
+        <label class="tau-switch">
+            <span class="divider chart-filter-list__title">Estimate in</span>
+            <div class="tau-inline-group">
+                <a href="#" class="tau-btn tau-btn-board-view _inPoints selected" tabindex="0">Points</a><a href="#" class="tau-btn tau-btn-board-view _inHours" tabindex="0">Hours</a>
+            </div>
+        </label>
+    </li>
+    <li class="chart-filter-list__item ui-dateeditor tau-chart-filter-list__item">
+        <label class="tau-select">
+            <span class="divider chart-filter-list__title">Start Date</span>
+            <input type="text" maxlength="20" class="_startDate hasDatePicker tau-select" name="StartDate" tabindex="0">
+        </label>
+    </li>
+    <li class="chart-filter-list__item tau-chart-filter-list__item">
+        <label class="tau-checkbox"><input type="checkbox" class="_weekends" tabindex="0"><i class="tau-checkbox__icon"></i><span>Weekends</span></label>
+    </li>
+    <li class="chart-filter-list__item _bugsOption tau-chart-filter-list__item">
+        <label class="tau-checkbox"><input type="checkbox" class="_include-bugs" tabindex="0"><i class="tau-checkbox__icon"></i><span>Include <%! fn.term('bug', 'names') %></span></label>
+    </li>
+    <li class="chart-filter-list__item _empty tau-chart-filter-list__item" style="display: none;">
+        <div>Select <%! fn.term('project', 'names') %> or <%! fn.term('team', 'names') %> with <%! fn.term('release', 'names') %> or <%! fn.term('iteration', 'names') %> in top menu.</div>
+    </li>
+</ul>

@@ -84,7 +84,7 @@ namespace Tp.Subversion
 		[Given("$svnUsersCount svn users mapped to TP users")]
 		public void MapSvnUsersToTpUsers(int svnUsersCount)
 		{
-			Context.Revisions.Take(svnUsersCount).Select(x => x.Author).ForEach(Context.CreateTpUser);
+			Context.Revisions.Take(svnUsersCount).Select(x => x.Author).ForEach(x => Context.CreateTpUser(x));
 		}
 
 		[Given("$tpUsersCount unmapped TP users")]

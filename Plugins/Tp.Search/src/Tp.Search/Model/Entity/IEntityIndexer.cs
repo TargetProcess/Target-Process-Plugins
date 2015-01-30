@@ -30,6 +30,9 @@ namespace Tp.Search.Model.Entity
 		IndexResult UpdateImpedimentIndex(ImpedimentDTO impediment, ICollection<ImpedimentField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult RemoveImpedimentIndex(ImpedimentDTO impediment, DocumentIndexOptimizeSetup optimizeSetup = null);
 
+		IndexResult AddReleaseProjectIndex(ReleaseProjectDTO releaseProject, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveReleaseProjectIndex(ReleaseProjectDTO releaseProject, DocumentIndexOptimizeSetup optimizeSetup = null);
+
 		void OptimizeGeneralIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 		void OptimizeAssignableIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 		void OptimizeTestCaseIndex(DocumentIndexOptimizeSetup optimizeSetup = null);

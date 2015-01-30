@@ -1,0 +1,24 @@
+<!-- name: customReport.editor.container -->
+<div class="tau-board-settings" id="<%= _.uniqueId('reportSettings') %>">
+    <div class="tau-board-settings-header i-role-tabheaders" role="toolbar">
+        <ul class="tau-board-settings-groups-tags i-role-tabheaders">
+            <li class="i-role-tabheader tau-extension-board-tooltip" data-label="library"
+                data-title="Select Report template">Templates
+            </li>
+            <li class="i-role-tabheader tau-extension-board-tooltip tau-active" data-label="dataSource"
+                data-title="Edit Report definition">Setup
+            </li>
+            <li class="i-role-tabheader tau-extension-board-tooltip" data-label="dsl"
+                data-title="Edit Report definition via DSL">DSL
+            </li>
+            <li class="i-role-tabheader tau-extension-board-tooltip" data-label="access"
+                data-title="Change Report permissions">Access
+            </li>
+        </ul>
+        <button role="close-settings" class="tau-btn tau-settings-close" type="button">Finish setup</button>
+    </div>
+    <div class="i-role-tab tau-board-settings-group" role="library" data-label="library"></div>
+    <div class="i-role-tab tau-board-settings-group tau-active" role="dataSource" data-label="dataSource"></div>
+    <div class="i-role-tab tau-board-settings-group" role="dsl" data-label="dsl"></div>
+    <div class="i-role-tab tau-board-settings-group" role="access" data-label="access"></div>
+</div>

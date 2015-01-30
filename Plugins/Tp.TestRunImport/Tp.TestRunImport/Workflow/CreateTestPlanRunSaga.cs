@@ -130,7 +130,9 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 					                  		TestCaseID = testCaseTestPlanDto.TestCaseID,
 					                  		LastFailureComment = message.Dto.Comment,
 					                  		LastRunDate = message.Dto.RunDate,
+#pragma warning disable 612
 					                  		LastStatus = message.Dto.Passed
+#pragma warning restore 612
 					                  	};
 					Send(new UpdateCommand
 					     	{

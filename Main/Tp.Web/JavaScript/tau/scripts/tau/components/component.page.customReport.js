@@ -1,0 +1,1 @@
+define(["require","tau/components/component.page.base","tau/views/view.page.customReport"],function(e){var t=e("tau/components/component.page.base"),n=e("tau/views/view.page.customReport");return{create:function(e){var o={name:"custom report page component",turnOffErrorEmiter:!0,turnOffLoadingIndicator:!0,extensions:[],ViewType:n};return t.create(o,e)}}});

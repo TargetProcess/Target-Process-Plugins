@@ -34,7 +34,7 @@ namespace Tp.Search.Config
 
 		private int? LoadInt(string sectionName)
 		{
-			return Load(sectionName, null, s => MaybeInt(s).Bind(x => (int?)x));
+			return Load(sectionName, null, s => MaybeInt(s).Select(x => (int?)x));
 		}
 
 		private T LoadEnum<T>(string sectionName, T defaultValue)

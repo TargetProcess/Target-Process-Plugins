@@ -23,7 +23,7 @@ namespace Tp.Core.Expressions.Visitors
 				var maybe = Evaluator.SimpleEval(lambdaContainer);
 
 
-				return maybe.Select(x => x.MaybeAs<LambdaExpression>())
+				return maybe.OfType<LambdaExpression>()
 					.GetOrThrow(() => new Exception("Could not Simplify expression " + node))
 					.Apply(node.Arguments.Skip(1));
 

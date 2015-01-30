@@ -1,0 +1,1 @@
+define(["tau/core/class","./sortable"],function(n,t){return n.mixin(t,{_getBoundary:function(n){return{offset:n.left,dimension:n.width}},_getPosition:function(n){return n.clientX}})});

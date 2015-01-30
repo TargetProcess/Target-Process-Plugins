@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Linq;
 using Tp.Core.Annotations;
 
 namespace Tp.Core
@@ -15,7 +14,7 @@ namespace Tp.Core
 	public static class MaybeExtensions
 	{
 		[DebuggerStepThrough]
-		public static void Do<TFrom>(this Maybe<TFrom> m, Action<TFrom> f, Action @else = null)
+		public static void Do<TFrom>(this Maybe<TFrom> m, [InstantHandle]Action<TFrom> f, [InstantHandle]Action @else = null)
 		{
 			if (m.HasValue)
 			{
@@ -42,7 +41,7 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<TTo> Bind<TFrom, TTo>(this Maybe<TFrom> m, [InstantHandle]Func<TFrom, TTo> f)
+		public static Maybe<TTo> Select<TFrom, TTo>(this Maybe<TFrom> m, [InstantHandle]Func<TFrom, TTo> f)
 		{
 			return m.HasValue? Maybe.Return(f(m.Value)) : Maybe<TTo>.Nothing;
 		}
@@ -60,9 +59,9 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<T> SingleOrNothing<T>(this IEnumerable<T> items)
+		public static Maybe<T> SingleOrNothing<T>(this IEnumerable<T> items, bool throwOnSeveral = true)
 		{
-			return SingleOrNothing(items, x => true);
+			return SingleOrNothing(items, x => true, throwOnSeveral);
 		}
 
 		[DebuggerStepThrough]
@@ -81,7 +80,7 @@ namespace Tp.Core
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<T> SingleOrNothing<T>(this IEnumerable<T> items, Func<T, bool> condition)
+		public static Maybe<T> SingleOrNothing<T>(this IEnumerable<T> items, [InstantHandle] Func<T, bool> condition, bool throwOnSeveral = true)
 		{
 			var result = Maybe<T>.Nothing;
 			using (var enumerator = items.GetEnumerator())
@@ -93,7 +92,14 @@ namespace Tp.Core
 					{
 						if (result.HasValue)
 						{
-							return Maybe.Nothing;
+							if (throwOnSeveral)
+							{
+								throw new InvalidOperationException("The input sequence contains more than one element.");
+							}
+							else
+							{
+								result = Maybe.Nothing;
+							}
 						}
 						result = Maybe.Just(current);
 					}
@@ -105,14 +111,20 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public static IEnumerable<Maybe<TTo>> Bind<TTo, TFrom>(this IEnumerable<Maybe<TFrom>> m, Func<TFrom, Maybe<TTo>> f)
 		{
-			return m.Select(x => x.Select(f));
+			return m.Select(x => x.Bind(f));
 		}
 
 		[DebuggerStepThrough]
-		public static Maybe<TTo> Select<TFrom, TTo>(this Maybe<TFrom> m, [InstantHandle]Func<TFrom, Maybe<TTo>> f)
+		public static Maybe<TTo> Bind<TFrom, TTo>(this Maybe<TFrom> m, [InstantHandle]Func<TFrom, Maybe<TTo>> f)
 		{
 			return m.HasValue ? f(m.Value) : Maybe.Nothing;
 		}
+
+		public static Maybe<T> OfType<T>(this IMaybe maybe, bool nullMeansNothing = true)
+		{
+			return maybe.HasValue ? maybe.Value.MaybeAs<T>(nullMeansNothing) : Maybe<T>.Nothing;
+		}
+
 
 		[DebuggerStepThrough]
 		public static Try<TVal> ToTry<TVal, TError>(this Maybe<TVal> maybe, [InstantHandle]Func<TError> error) where TError : Exception
@@ -163,24 +175,16 @@ namespace Tp.Core
 			return Maybe.Just((IEnumerable<T>)result.AsReadOnly());
 		}
 
-
-
 		[DebuggerStepThrough]
-		public static IEnumerable<TResult> Choose<T, TResult>(this IEnumerable<Maybe<T>> items, Func<T, TResult> f)
+		public static IEnumerable<TResult> Choose<T, TResult>(this IEnumerable<T> items, Func<T, Maybe<TResult>> f)
 		{
-			return items.Where(i => i.HasValue).Select(i => f(i.Value));
+			return items.Select(f).Where(x => x.HasValue).Select(x => x.Value);
 		}
-
-		[DebuggerStepThrough]
-		public static IObservable<T> Choose<T>(this IObservable<Maybe<T>> items)
-		{
-			return items.Where(i => i.HasValue).Select(i => i.Value);
-		}
-
+			
 		[DebuggerStepThrough]
 		public static Maybe<TC> SelectMany<TA, TB, TC>(this Maybe<TA> ma, Func<TA, Maybe<TB>> func, Func<TA, TB, TC> selector)
 		{
-			return ma.Select(a => func(a).Select(b => Maybe.Just(selector(a, b))));
+			return ma.Bind(a => func(a).Bind(b => Maybe.Just(selector(a, b))));
 		}
 
 		[DebuggerStepThrough]
@@ -197,7 +201,7 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public static Maybe<IEnumerable<T>> NothingIfEmpty<T>(this IEnumerable<T> xs) where T : class
 		{
-			return xs.Any() ? Maybe.Return(xs) : Maybe.Nothing;
+			return xs.Any() ? Maybe.Return(xs.AsEnumerable()) : Maybe.Nothing;
 		}
 
 		[DebuggerStepThrough]
@@ -215,19 +219,19 @@ namespace Tp.Core
 		[DebuggerStepThrough]
 		public static Maybe<T> OrElse<T>(this Maybe<T> maybe, [InstantHandle] Func<Maybe<T>> @else)
 		{
-			return maybe == Maybe.Nothing ? @else() : maybe;
+			return maybe.HasValue ? maybe : @else();
 		}
 
 		[DebuggerStepThrough]
 		public static T GetOrElse<T>(this Maybe<T> maybe, [InstantHandle] Func<T> @else)
 		{
-			return maybe == Maybe.Nothing ? @else() : maybe.Value;
+			return maybe.HasValue ? maybe.Value : @else();
 		}
 
 		[DebuggerStepThrough]
 		public static T GetOrDefault<T>(this Maybe<T> maybe, T @default = default(T))
 		{
-			return maybe == Maybe.Nothing ? @default : maybe.Value;
+			return maybe.HasValue ? maybe.Value : @default;
 		}
 
 		[DebuggerStepThrough]

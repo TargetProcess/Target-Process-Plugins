@@ -35,12 +35,12 @@ namespace Tp.Search.Model.Document
 		[TestCaseIndex(new[] { TestCaseField.ProjectID })]
 		[ImpedimentIndex(new[] { ImpedimentField.ProjectID })]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
-		[DocumentIndexVersion(5)]
+		[DocumentIndexVersion(6)]
 		EntityProject,
 
 		[IndexFileName("CommentProject")]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
-		[DocumentIndexVersion(5)]
+		[DocumentIndexVersion(6)]
 		CommentProject,
 
 		[IndexFileName("EntityType")]

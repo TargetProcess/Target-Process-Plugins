@@ -1,0 +1,1 @@
+define([],function(){return{SOURCE_ALL:"all",SOURCE_RELATED_TO_ME:"related"}});

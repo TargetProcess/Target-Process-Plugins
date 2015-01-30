@@ -39,10 +39,10 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.4.0.11282")]
+// [assembly: AssemblyVersion("3.5.4.13447")]
 
-[assembly: AssemblyVersion("3.4.0.11282")]
-[assembly: AssemblyFileVersion("3.4.0.11282")]
+[assembly: AssemblyVersion("3.5.4.13447")]
+[assembly: AssemblyFileVersion("3.5.4.13447")]
 [assembly:
 	PluginAssembly("Project Email Integration",
 		"Retrieves emails from your POP account into internal Inbox and creates requests from emails.", "Email Integration",

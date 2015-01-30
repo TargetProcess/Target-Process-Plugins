@@ -178,13 +178,13 @@ namespace Tp.Core
 
 		public static Maybe<object> Evaluate(Expression argument)
 		{
-			var value = argument.MaybeAs<ConstantExpression>().Bind(x => x.Value)
+			var value = argument.MaybeAs<ConstantExpression>().Select(x => x.Value)
 				.OrElse(() =>
 				        from memberExpression in argument.MaybeAs<MemberExpression>()
 				        from @object in memberExpression.Expression.MaybeAs<ConstantExpression>(nullMeansNothing: false)
 				        from computedValue in
-					        memberExpression.Member.MaybeAs<PropertyInfo>().Bind(x => x.GetValue(@object.Value, null))
-					        .OrElse(() => memberExpression.Member.MaybeAs<FieldInfo>().Bind(x => x.GetValue(@object.Value)))
+					        memberExpression.Member.MaybeAs<PropertyInfo>().Select(x => x.GetValue(@object.Value, null))
+					        .OrElse(() => memberExpression.Member.MaybeAs<FieldInfo>().Select(x => x.GetValue(@object.Value)))
 				        select computedValue
 				);
 			return value;

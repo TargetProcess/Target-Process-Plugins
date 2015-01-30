@@ -20,8 +20,6 @@ namespace Tp.Search.Bus.Workflow
 	                                         IHandleMessages<TargetProcessExceptionThrownMessage>,
 	                                         IHandleMessages<AssignableQueryResult>
 	{
-		private readonly IEntityIndexer _entityIndexer;
-		private readonly IEntityTypeProvider _entityTypesProvider;
 		private readonly IActivityLogger _logger;
 		private readonly AssignablesIndexing _assignablesIndexing;
 
@@ -31,10 +29,8 @@ namespace Tp.Search.Bus.Workflow
 
 		public ProjectProcessChangedSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider, IActivityLogger logger)
 		{
-			_entityIndexer = entityIndexer;
-			_entityTypesProvider = entityTypesProvider;
 			_logger = logger;
-			_assignablesIndexing = new AssignablesIndexing(_entityIndexer, () => Data, _entityTypesProvider, d => MarkAsComplete(), q
+			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => MarkAsComplete(), q
 			                                                                                                                        =>
 				{
 					q.ProjectId = Data.ProjectId;

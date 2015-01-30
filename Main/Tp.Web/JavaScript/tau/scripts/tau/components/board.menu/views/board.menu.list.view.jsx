@@ -10,14 +10,23 @@ define(function(require) {
 
         function(SectionView, boardSettingsService, scrollService) {
             return {
+                displayName: 'BoardMenuList',
+
                 mixins: [SortableGroups, Tooltips, Scrollable],
+
+                getSortableOptions: function() {
+                    return {
+                        sortItems: this.sortItems,
+                        sortGroups: this.sortGroups
+                    };
+                },
 
                 componentDidMount: function() {
                     boardSettingsService.currentBoardChanged.add(this._scrollToCurrentView, this);
 
                     var $list = $(this.getDOMNode());
                     var intervalId = setInterval(function() {
-                        if ($list.closest('[role=application]').length > 0) {
+                        if ($list.closest('[role=application]').length) {
                             this._scrollToCurrentView();
                             clearInterval(intervalId);
                         }
@@ -57,24 +66,23 @@ define(function(require) {
 
                 render: function() {
                     var sectionNodes = _.map(this.props.viewMenuSections.items, function(section) {
-                        return new SectionView({
-                            key: section.sectionType,
-                            section: section,
-                            querySpec: this.props.querySpec,
-                            currentBoardId: this.props.currentBoardId,
-                            focusedBoardId: this.props.focusedBoardId,
-                            renamingId: this.state.renamingId
-                        });
+                        return (<SectionView
+                            key={section.sectionType}
+                            section={section}
+                            querySpec={this.props.querySpec}
+                            currentBoardId={this.props.currentBoardId}
+                            focusedBoardId={this.props.focusedBoardId}
+                            renamingId={this.state.renamingId}
+                        />);
                     }, this);
 
                     return (
                         <div className="t3-views-catalog"
-                        onDragStart={this.sortStart} onDragOver={this.sortDragOver}
-                        onDragEnd={this.sortEnd} onDrop={this.sortDrop}>
+                            onDragStart={this.sortStart} onDragOver={this.sortDragOver}
+                            onDragEnd={this.sortEnd} onDrop={this.sortDrop}>
                         {sectionNodes}
                         </div>
-                        );
-
+                    );
                 }
             }
         });

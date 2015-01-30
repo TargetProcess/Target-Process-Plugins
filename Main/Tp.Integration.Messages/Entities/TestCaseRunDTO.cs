@@ -99,6 +99,23 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 10)]
 		public virtual string TestPlanRunName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Last Executor ID. Reference to last executor user id
+		/// </summary>
+		/// <value>The Last Executor ID.</value>
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order = 11)]
+		public virtual Int32? LastExecutorID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Start Run Date. Date when first test step from test case was run
+		/// </summary>
+		/// <value>The Start Run Date.</value>
+		[DataMember]
+		[XmlElement(Order = 12)]
+		public DateTime? StartRunDate { get; set; }
 	}
 	
 	/// <summary>
@@ -133,6 +150,14 @@ namespace Tp.Integration.Common
         /// <summary>
         /// Test Plan Run Name
         /// </summary>		
-		TestPlanRunName
+		TestPlanRunName,
+		/// <summary>
+        /// Last Executor ID
+        /// </summary>		
+		LastExecutorID,
+		/// <summary>
+		/// Start Run Date
+		/// </summary>		
+		StartRunDate
 	}
 }

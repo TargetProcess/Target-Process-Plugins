@@ -56,6 +56,20 @@ namespace Tp.Search.Model.Document
 			return _hoot.FindDocumentByFileName<T>(name);
 		}
 
+		public IndexData GetExistingIndexByNumber(int number)
+		{
+			if (!_isAlive)
+			{
+				return new IndexData
+				{
+					DocNumber = -1,
+					Words = new List<string>()
+				};
+			}
+			UpdateLastUsedToken();
+			return _hoot.GetExistingIndex(number);
+		}
+
 		public QueryPlan BuildExecutionPlan(ParsedQuery parsedQuery, bool freeCache)
 		{
 			if (!_isAlive)

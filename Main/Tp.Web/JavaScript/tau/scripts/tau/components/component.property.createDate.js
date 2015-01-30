@@ -1,1 +1,1 @@
-define(["tau/components/component.property.date"],function(e){return{create:function(t){return t=t||{},t.propertyName="createDate",e.create(t)}}});
+define(["require","tau/components/component.property.date"],function(e){var t=e("tau/components/component.property.date");return{create:function(e){return e=e||{},e.propertyName="createDate",t.create(e)}}});

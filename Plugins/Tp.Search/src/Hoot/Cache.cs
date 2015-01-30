@@ -9,6 +9,11 @@ using System.Xml.Serialization;
 
 namespace hOOt
 {
+	public class IndexData
+	{
+		public int DocNumber { get; set; }
+		public IEnumerable<string> Words { get; set; }
+	}
 	public class IndexResult
 	{
 		public IndexResult()

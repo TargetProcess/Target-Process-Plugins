@@ -63,7 +63,7 @@ namespace Tp.Search.Model.Entity
 			if (indexResult.DocNumber != -1)
 			{
 				IDocumentIndex projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				projectContextIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(general.ParentProjectID), optimizeSetup);
+				projectContextIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(general.ParentProjectID).ToString(), optimizeSetup);
 				IDocumentIndex entityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
 				entityTypeIndex.Index(indexResult.DocNumber, entityTypeName, optimizeSetup);
 			}
@@ -77,6 +77,60 @@ namespace Tp.Search.Model.Entity
 			Maybe<string> maybeEntityTypeName = _entityTypeProvider.GetEntityTypeName(entityTypeId);
 			string entityTypeName = maybeEntityTypeName.GetOrThrow(() => new ApplicationException("Entity type name was not found {0}".Fmt(entityTypeId)));
 			return entityTypeName;
+		}
+
+		public IndexResult AddReleaseProjectIndex(ReleaseProjectDTO releaseProject, DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (releaseProject.ReleaseProjectID == null)
+			{
+				return new IndexResult();
+			}
+			IDocumentIndex entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			EntityDocument document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(releaseProject.ReleaseID));
+			if (document == null)
+			{
+				_log.Debug("Cannot index releaseproject {0} for release {1} and project {2}".Fmt(releaseProject.ID, releaseProject.ReleaseName, releaseProject.ProjectName));
+				return new IndexResult();
+			}
+			if (document.DocNumber != -1)
+			{
+				IDocumentIndex projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+				var indexData = projectContextIndex.GetExistingIndexByNumber(document.DocNumber);
+				var currentProjectData = ProjectIndexData.Parse(indexData);
+				var result = ProjectIndexData.Sum(currentProjectData, new ProjectIndexData(new[] {releaseProject.ProjectID}));
+				projectContextIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+				return new IndexResult
+				{
+					DocNumber = document.DocNumber
+				};
+			}
+			return new IndexResult();
+		}
+
+		public IndexResult RemoveReleaseProjectIndex(ReleaseProjectDTO releaseProject, DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (releaseProject.ReleaseProjectID == null)
+			{
+				return new IndexResult();
+			}
+			IDocumentIndex entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(releaseProject.ReleaseID));
+			if (document == null)
+			{
+				_log.Debug("ReleaseProject {0} for release {1} and project {2} has been already deleted".Fmt(releaseProject.ID, releaseProject.ReleaseName, releaseProject.ProjectName));
+				return new IndexResult();
+			}
+			if (document.DocNumber != 0)
+			{
+				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+				var indexData = entityProjectIndex.GetExistingIndexByNumber(document.DocNumber);
+				var currentProjectData = ProjectIndexData.Parse(indexData);
+				var result = ProjectIndexData.Substract(currentProjectData, new ProjectIndexData(new[] {releaseProject.ProjectID}));
+				entityProjectIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+			}
+			return new IndexResult();
 		}
 
 		public void OptimizeGeneralIndex(DocumentIndexOptimizeSetup optimizeSetup = null)
@@ -106,6 +160,7 @@ namespace Tp.Search.Model.Entity
 				_logHelper.LogUpdateMessage(entityTypeName, general.GeneralID, general.Name);
 				return new IndexResult();
 			}
+			int oldProjectId = _documentIdFactory.ParseProjectId(document.ProjectId);
 			if (changedFields.Any(f => entityIndex.Type.IsBelongedToDocumentFields(f)))
 			{
 				document.ProjectId = _documentIdFactory.CreateProjectId(general.ParentProjectID.GetValueOrDefault());
@@ -125,7 +180,13 @@ namespace Tp.Search.Model.Entity
 			IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 			if (changedFields.Any(f => entityProjectIndex.Type.IsBelongedToIndexFields(f)) && document.DocNumber >= 0)
 			{
-				entityProjectIndex.Update(document.DocNumber, general.ParentProjectID.HasValue ? _indexDataFactory.CreateProjectData(general.ParentProjectID.Value) : string.Empty, optimizeSetup);
+				var projectIndexDataToAdd = _indexDataFactory.CreateProjectData(general.ParentProjectID.GetValueOrDefault());
+				var projectIndexDataToRemove = _indexDataFactory.CreateProjectData(oldProjectId);
+				var indexData = entityProjectIndex.GetExistingIndexByNumber(document.DocNumber);
+				var currentProjectIndexData = ProjectIndexData.Parse(indexData);
+				var result = ProjectIndexData.Substract(currentProjectIndexData, projectIndexDataToRemove);
+				var finalResult = ProjectIndexData.Sum(result, projectIndexDataToAdd);
+				entityProjectIndex.Update(document.DocNumber, finalResult.ToString(), optimizeSetup);
 				_localBus.SendLocal(new GeneralProjectChangedLocalMessage
 				{
 					GeneralId = general.GeneralID.Value,
@@ -156,7 +217,6 @@ namespace Tp.Search.Model.Entity
 				return new IndexResult();
 			}
 			var emptyDocument = _documentFactory.CreateEmptyEntityDocument(document.DocNumber, EntityDocument.CreateName(general.GeneralID));
-			//var optimizeSetup = new DocumentIndexOptimizeSetup(shouldOptimize: true, shouldDefer: true, shouldFreeMemory: true);
 			var indexResult = entityIndex.Rebuild(emptyDocument, false, optimizeSetup);
 			_log.Debug(string.Format("Removed {0} #{1} - '{2}'", entityTypeName, general.GeneralID.GetValueOrDefault(), general.Name));
 			if (document.DocNumber >= 0)
@@ -188,7 +248,7 @@ namespace Tp.Search.Model.Entity
 			if (indexResult.DocNumber != -1)
 			{
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(assignable.ProjectID), optimizeSetup);
+				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(assignable.ProjectID).ToString(), optimizeSetup);
 				IDocumentIndex entityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
 				entityTypeIndex.Index(indexResult.DocNumber, entityTypeName, optimizeSetup);
 				if (assignable.EntityStateID != null)
@@ -257,7 +317,7 @@ namespace Tp.Search.Model.Entity
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 				if (changedFields.Any(f => entityProjectIndex.Type.IsBelongedToIndexFields(f)))
 				{
-					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(assignable.ProjectID), optimizeSetup);
+					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(assignable.ProjectID).ToString(), optimizeSetup);
 					if (!isIndexing)
 					{
 						_localBus.SendLocal(new GeneralProjectChangedLocalMessage { GeneralId = assignable.AssignableID.Value, ProjectId = assignable.ProjectID });
@@ -342,7 +402,7 @@ namespace Tp.Search.Model.Entity
 			if (indexResult.DocNumber != -1)
 			{
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(testCase.ProjectID), optimizeSetup);
+				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(testCase.ProjectID).ToString(), optimizeSetup);
 				if (testCase.EntityTypeID != null)
 				{
 					IDocumentIndex entityTypeIndices = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
@@ -402,7 +462,7 @@ namespace Tp.Search.Model.Entity
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 				if (changedFields.Any(f => entityProjectIndex.Type.IsBelongedToIndexFields(f)))
 				{
-					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(testCase.ProjectID), optimizeSetup);
+					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(testCase.ProjectID).ToString(), optimizeSetup);
 					if (!isIndexing)
 					{
 						_localBus.SendLocal(new GeneralProjectChangedLocalMessage
@@ -467,7 +527,7 @@ namespace Tp.Search.Model.Entity
 			if (indexResult.DocNumber != -1)
 			{
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(impediment.ProjectID), optimizeSetup);
+				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(impediment.ProjectID).ToString(), optimizeSetup);
 				IDocumentIndex entityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
 				entityTypeIndex.Index(indexResult.DocNumber, entityTypeName, optimizeSetup);
 				if (impediment.EntityStateID != null)
@@ -533,7 +593,7 @@ namespace Tp.Search.Model.Entity
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 				if (changedFields.Any(f => entityProjectIndex.Type.IsBelongedToIndexFields(f)))
 				{
-					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(impediment.ProjectID), optimizeSetup);
+					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(impediment.ProjectID).ToString(), optimizeSetup);
 					if (!isIndexing)
 					{
 						_localBus.SendLocal(new GeneralProjectChangedLocalMessage
@@ -628,19 +688,13 @@ namespace Tp.Search.Model.Entity
 			}
 			indexResult = commentIndex.Index(doc, false, optimizeSetup);
 			_log.Debug(string.Format("Added comment #{0} to #{1} - '{2}':{3}", comment.CommentID.GetValueOrDefault(), comment.GeneralID.GetValueOrDefault(), comment.GeneralName, indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " no words added;"));
-			if (indexResult.DocNumber != -1)
+			if (indexResult.DocNumber != -1 && commentEntity.DocNumber != -1)
 			{
-				int? projectId = null;
-				if (commentEntity.ProjectId != null)
-				{
-					int projectIdValue;
-					if (int.TryParse(commentEntity.ProjectId, out projectIdValue))
-					{
-						projectId = projectIdValue == 0 ? null : (int?)projectIdValue;
-					}
-				}
+				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+				var entityProjectIndexResult = entityProjectIndex.GetExistingIndexByNumber(commentEntity.DocNumber);
+				var entityProjectIndexData = ProjectIndexData.Parse(entityProjectIndexResult);
 				IDocumentIndex commentProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentProject);
-				commentProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(projectId), optimizeSetup);
+				commentProjectIndex.Index(indexResult.DocNumber, entityProjectIndexData.ToString(), optimizeSetup);
 				int? squadId = null;
 				if (commentEntity.SquadId != null)
 				{
@@ -654,7 +708,7 @@ namespace Tp.Search.Model.Entity
 				commentSquadIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateSquadData(squadId), optimizeSetup);
 				IDocumentIndex commentEntityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentEntityType);
 				Maybe<string> maybeEntityTypeName = _entityTypeProvider.GetEntityTypeName(int.Parse(commentEntity.EntityTypeId));
-				string entityTypeName = maybeEntityTypeName.GetOrThrow(() => new ApplicationException("No entgity type name for {0}".Fmt(commentEntity.EntityTypeId)));
+				string entityTypeName = maybeEntityTypeName.GetOrThrow(() => new ApplicationException("No entity type name for {0}".Fmt(commentEntity.EntityTypeId)));
 				commentEntityTypeIndex.Index(indexResult.DocNumber, entityTypeName, optimizeSetup);
 			}
 			return indexResult;
@@ -692,9 +746,11 @@ namespace Tp.Search.Model.Entity
 			{
 				if (projectId.HasValue)
 				{
+					IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+					var entityProjectIndexResult = entityProjectIndex.GetExistingIndexByNumber(commentEntityDocument.DocNumber);
+					var entityProjectIndexData = ProjectIndexData.Parse(entityProjectIndexResult);
 					IDocumentIndex commentProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentProject);
-					int? projectIdValue = projectId.Value;
-					commentProjectIndex.Update(commentDocument.DocNumber, _indexDataFactory.CreateProjectData(projectIdValue), optimizeSetup);
+					commentProjectIndex.Update(commentDocument.DocNumber, entityProjectIndexData.ToString(), optimizeSetup);
 				}
 				if (squadId.HasValue)
 				{

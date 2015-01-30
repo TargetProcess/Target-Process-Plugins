@@ -1,0 +1,1 @@
+define(["require","Underscore"],function(e){"use strict";var n=e("Underscore");return{getUniqueName:function(e,r){var i=0,t=null;do t=0===i?e:e+" "+i,++i;while(n.contains(r,t));return t}}});

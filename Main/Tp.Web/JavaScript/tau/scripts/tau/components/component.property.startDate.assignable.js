@@ -1,0 +1,1 @@
+define(["require","tau/components/component.property.startDate","tau/models/model.property.startDate.assignable"],function(e){var t=e("tau/components/component.property.startDate"),r=e("tau/models/model.property.startDate.assignable");return{create:function(e){return e.ModelType=r,t.create(e)}}});

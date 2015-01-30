@@ -1,0 +1,1 @@
+define(["require","tau/core/class","jQuery","Underscore"],function(e){var t=e("tau/core/class"),n=e("jQuery"),r=e("Underscore");return t.extend({id:"__source_stub",init:function(e){this._templatesReady=n.when(e).then(function(e){return r.map(e,function(e){return n.when(e)})})},getWidgetTemplates:function(){return this._templatesReady}})});

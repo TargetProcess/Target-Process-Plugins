@@ -9,6 +9,8 @@ define(function(require) {
         ['board.menu.list.group.view'],
         function(GroupView) {
             return {
+                displayName: 'BoardMenuListSection',
+
                 _getSectionClassName: function() {
                     return React.addons.classSet({
                         't3-views-section': true,
@@ -24,18 +26,19 @@ define(function(require) {
                     });
 
                     if (!visibleData.boards.length && !visibleRegularGroups.length) {
-                        return <noscript/>;
+                        return null;
                     }
 
                     var groupViews = _.map(visibleData.groups, function(group) {
-                        return new GroupView({
-                            groupModel: group,
-                            key: group.groupId,
-                            querySpec: this.props.querySpec,
-                            currentBoardId: this.props.currentBoardId,
-                            focusedBoardId: this.props.focusedBoardId,
-                            renamingId: this.props.renamingId
-                        });
+                        return <GroupView
+                            groupModel={group}
+                            id={group.groupId}
+                            key={group.groupId}
+                            querySpec={this.props.querySpec}
+                            currentBoardId={this.props.currentBoardId}
+                            focusedBoardId={this.props.focusedBoardId}
+                            renamingId={this.props.renamingId}
+                        />;
                     }, this);
 
                     var name = <div className="t3-name">{this.props.section.name}</div>;
@@ -45,7 +48,7 @@ define(function(require) {
                             {name}
                             {groupViews}
                         </div>
-                        );
+                    );
                 }
             };
         }

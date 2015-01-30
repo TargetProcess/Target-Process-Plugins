@@ -1,0 +1,1 @@
+define(["require","tau/components/board.new.list/context.menu.component.builder"],function(n){var e=n("tau/components/board.new.list/context.menu.component.builder");return e.extend({_getMenuSettings:function(){var n=this.config.listOptions;return n&&n.contextMenu}})});

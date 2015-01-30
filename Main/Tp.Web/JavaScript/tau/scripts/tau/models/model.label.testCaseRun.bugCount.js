@@ -1,0 +1,1 @@
+define(["require","tau/models/model.label"],function(e){var t=e("tau/models/model.label");return t.extend({"bus beforeInit":function(e,t){var i={definition:{cells:{items:[{id:"bug"}],filter:"?TestCaseRuns.Where(Id == "+t.config.context.entity.id+")"}}};this.fire("comet.parameters.ready",i)}})});

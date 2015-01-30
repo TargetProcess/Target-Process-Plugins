@@ -201,9 +201,11 @@
       <Column Name="RequiredComment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Planned" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="NumericPriority" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WorkflowID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="EntityState_Assignable" Member="Assignables" ThisKey="EntityStateID" OtherKey="EntityStateID" Type="Assignable" />
       <Association Name="Role_EntityState" Member="Role" ThisKey="RoleID" OtherKey="RoleID" Type="Role" IsForeignKey="true" />
       <Association Name="Process_EntityState" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" />
+      <Association Name="Workflow_EntityState" Member="Workflow" ThisKey="WorkflowID" OtherKey="WorkflowID" Type="Workflow" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Process" Member="Processes">
@@ -214,6 +216,7 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="Process_EntityState" Member="EntityStates" ThisKey="ProcessID" OtherKey="ProcessID" Type="EntityState" />
       <Association Name="Process_Project" Member="Projects" ThisKey="ProcessID" OtherKey="ProcessID" Type="Project" />
+      <Association Name="Process_Workflow" Member="Workflows" ThisKey="ProcessID" OtherKey="ProcessID" Type="Workflow" />
     </Type>
   </Table>
   <Table Name="dbo.ExternalReference" Member="ExternalReferences">
@@ -356,6 +359,19 @@
       <Association Name="General_Assignable" Member="General" ThisKey="AssignableID" OtherKey="GeneralID" Type="General" IsForeignKey="true" />
       <Association Name="Priority_Assignable" Member="Priority" ThisKey="PriorityID" OtherKey="PriorityID" Type="Priority" IsForeignKey="true" />
       <Association Name="Project_Assignable" Member="Project" ThisKey="ProjectID" OtherKey="ProjectID" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Workflow" Member="Workflows">
+    <Type Name="Workflow">
+      <Column Name="WorkflowID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ParentWorkflowID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProcessID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EntityTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Workflow_Workflow" Member="Workflows" ThisKey="WorkflowID" OtherKey="ParentWorkflowID" Type="Workflow" />
+      <Association Name="Workflow_EntityState" Member="EntityStates" ThisKey="WorkflowID" OtherKey="WorkflowID" Type="EntityState" />
+      <Association Name="Workflow_Workflow" Member="Workflow1" ThisKey="ParentWorkflowID" OtherKey="WorkflowID" Type="Workflow" IsForeignKey="true" />
+      <Association Name="Process_Workflow" Member="Process" ThisKey="ProcessID" OtherKey="ProcessID" Type="Process" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

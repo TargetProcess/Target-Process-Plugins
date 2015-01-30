@@ -1,0 +1,1 @@
+define(["require","./dashboard.layout.model.base"],function(e){var r=e("./dashboard.layout.model.base");return r.extend({init:function(e){this._super("error"),this.errorMessage=e}})});

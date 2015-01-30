@@ -12,7 +12,7 @@ namespace Tp.Integration.Messages
 	{
 		public static string Serialize<T>(this T obj) where T : class
 		{
-			return obj.Serialize(new Type[] { });
+			return obj.Serialize(Type.EmptyTypes);
 		}
 
 		public static string Serialize<T>(this T obj, IEnumerable<Type> knownTypes) where T : class
@@ -29,7 +29,7 @@ namespace Tp.Integration.Messages
 
 		public static T Deserialize<T>(this string content) where T : class
 		{
-			return content.Deserialize<T>(new Type[] { });
+			return content.Deserialize<T>(Type.EmptyTypes);
 		}
 
 		public static object Deserialize(this string content, Type contentValueType, params Type[] knownTypes)

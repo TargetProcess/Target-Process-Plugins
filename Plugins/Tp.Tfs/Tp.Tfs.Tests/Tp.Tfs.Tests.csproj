@@ -15,7 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -162,52 +162,40 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
-      <Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
-      <Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
-      <Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
-      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
-      <Name>Tp.Plugin.Core</Name>
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project><Name>Tp.Plugin.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NBehave\Tp.Testing.Common.NBehave.csproj">
-      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project>
-      <Name>Tp.Testing.Common.NBehave</Name>
+      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project><Name>Tp.Testing.Common.NBehave</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NUnit\Tp.Testing.Common.NUnit.csproj">
-      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project>
-      <Name>Tp.Testing.Common.NUnit</Name>
+      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project><Name>Tp.Testing.Common.NUnit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
-      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
-      <Name>Tp.Integration.Testing.Common</Name>
+      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project><Name>Tp.Integration.Testing.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.LegacyProfileConversion.Common.Testing\Tp.LegacyProfileConversion.Common.Testing.csproj">
-      <Project>{05A1F4C0-E8E5-4310-A655-20F98DFD2921}</Project>
-      <Name>Tp.LegacyProfileConversion.Common.Testing</Name>
+      <Project>{05A1F4C0-E8E5-4310-A655-20F98DFD2921}</Project><Name>Tp.LegacyProfileConversion.Common.Testing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
-      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
-      <Name>Tp.LegacyProfileConversion.Common</Name>
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project><Name>Tp.LegacyProfileConversion.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.SourceControl.Testing\Tp.SourceControl.Testing.csproj">
-      <Project>{35D5084D-F8CD-49F1-A3A7-FB1F4A0F538E}</Project>
-      <Name>Tp.SourceControl.Testing</Name>
+      <Project>{35D5084D-F8CD-49F1-A3A7-FB1F4A0F538E}</Project><Name>Tp.SourceControl.Testing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.SourceControl\Tp.SourceControl.csproj">
-      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
-      <Name>Tp.SourceControl</Name>
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project><Name>Tp.SourceControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.Tfs\Tp.Tfs.csproj">
-      <Project>{C35E2D70-71B0-4FD4-91BB-8E90BBBCF58F}</Project>
-      <Name>Tp.Tfs</Name>
+      <Project>{C35E2D70-71B0-4FD4-91BB-8E90BBBCF58F}</Project><Name>Tp.Tfs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -220,13 +208,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

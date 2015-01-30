@@ -1,0 +1,1 @@
+define(["Underscore","tau/models/extension.model.base"],function(e,n){return n.extend({category:"model extension user retriever","bus extendDataToBind":function(e,n){n.loggedUser=this.config.context.configurator.getLoggedUser()}})});

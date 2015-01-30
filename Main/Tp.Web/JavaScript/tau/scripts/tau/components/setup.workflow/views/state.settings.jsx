@@ -16,12 +16,12 @@ define(function(require) {
                 var isActive = _.contains(this.props.activeStateIds, state.id);
 
                 return (
-                    <label className="tau-checkbox tau-extension-board-tooltip">
+                    <label className="tau-checkbox">
                         <input type="checkbox" value={state.id} checked={isActive} onChange={this._onStateCheckboxChange}/>
                         <i className="tau-checkbox__icon"></i>
                         <span className="tau-checkbox-label">{state.name}</span>
                     </label>
-                    );
+                );
             }
         },
 
@@ -48,18 +48,21 @@ define(function(require) {
             return (
                 <ul className="tau-transitions-states__list">
                     <li className="tau-transitions-states__list__item">
-                        <label className="tau-checkbox tau-extension-board-tooltip">
+                        <label className="tau-checkbox">
                             <input type="checkbox" value="all" checked={allStatesEnabled} onChange={this._toggleAllStates} />
                             <i className="tau-checkbox__icon"></i>
                             <span className="tau-checkbox-label tau-transitions-category__title">{this.props.name}</span>
                         </label>
+                        &nbsp;
+                        <span className="tau-help i-role-tooltipArticle"
+                            data-article-id="state.settings.transitions"
+                            data-from={this.props.transitionFrom}
+                            data-entity-types={this.props.terms.names} />
                     </li>
                     {_.map(this.props.states, function(state) {
-                        return (
-                            <li key={state.id} className="tau-transitions-states__list__item">
-                                {this._getStateContent(state)}
-                            </li>
-                            );
+                        return <li key={state.id} className="tau-transitions-states__list__item">
+                            {this._getStateContent(state)}
+                        </li>;
                     }, this)}
                 </ul>
             )
@@ -69,12 +72,18 @@ define(function(require) {
     var PlannedView = React.createClass({
         render: function() {
             return (
-                <label className="tau-checkbox tau-extension-board-tooltip">
-                    <input type="checkbox" checkedLink={this.props.isPlannedLink} />
-                    <i className="tau-checkbox__icon"></i>
-                    <span className="tau-checkbox-label">State is Planned</span>
-                </label>
-                );
+                <div>
+                    <label className="tau-checkbox">
+                        <input type="checkbox" checkedLink={this.props.isPlannedLink} />
+                        <i className="tau-checkbox__icon"></i>
+                        <span className="tau-checkbox-label">State is Planned</span>
+                    </label>
+                    &nbsp;
+                    <span className="tau-help i-role-tooltipArticle"
+                        data-article-id="state.settings.isPlanned"
+                        data-entity-type={this.props.terms.name} />
+                </div>
+            );
         }
     });
 
@@ -84,15 +93,16 @@ define(function(require) {
                 <div>
                     <label className="tau-select">
                         <span className="tau-transitions-category__title tau-transitions-category__title--updater">Responsible role</span>
-                        <select disabled={this.props.disabled} valueLink={this.props.activeRoleLink} className="tau-select tau-transitions-states-feature-list__role">
+                        <select disabled={this.props.disabled} valueLink={this.props.activeRoleLink}
+                            className="tau-select tau-transitions-states-feature-list__role">
                             {_.map(this.props.roles, function(role) {
                                 return <option key={role.id} value={role.id}>{role.name}</option>
                             })}
                         </select>
                     </label>
-                    <p className="tau-transitions-updater-comment">People assigned to this role for a {this.props.terms.name} will be responsible for it in this state.</p>
+                    <p className="tau-transitions-updater-comment">People assigned to this role will be responsible for {this.props.terms.name} in this state.</p>
                 </div>
-                );
+            );
         }
     });
 
@@ -121,8 +131,8 @@ define(function(require) {
             this.setState(partialState);
         },
 
-        _onSave: function() {
-            this.props.saveStateAction(this.state);
+        _onSave: function(e) {
+            this.props.saveStateAction(this.state, e.currentTarget);
         },
 
         _onDelete: function(e) {
@@ -133,44 +143,58 @@ define(function(require) {
             return this.state.isInitial || this.state.isFinal;
         },
 
+        _hasInitialOrFinalSubStates: function() {
+            return this.state.initialSubEntityStatesCount > 0 || this.state.finalSubEntityStatesCount > 0;
+        },
+
         _canBePlanned: function() {
             return !this._isInitialOrFinal();
         },
 
         _canBeDeleted: function() {
-            return !this._isInitialOrFinal();
+            return !this._isInitialOrFinal() && !this._hasInitialOrFinalSubStates();
+        },
+
+        _deletedTitle: function() {
+            return this._isInitialOrFinal() ?
+                'The initial and final states can\'t be deleted.' :
+                (this._hasInitialOrFinalSubStates() ?
+                    'The states mapped to the initial and final states of sub workflows can\'t be deleted.' : '');
         },
 
         render: function() {
-            var plannedView = this.state.isInitial || this.state.isFinal ? null :
-                <PlannedView isPlannedLink={this.linkState('isPlanned')} />;
-
             return (
-                <div className="tau-transitions-setup">
+                <div className="tau-state-settings">
                     <section className="tau-transitions-category tau-previous-states">
                         <TransitionsView
-                        name="Previous states"
-                        states={this.props.config.states}
-                        activeStateIds={this.state.previousStateIds}
-                        changeStatesAction={this._changePreviousStates}/>
+                            transitionFrom={true}
+                            name="Transition From"
+                            terms={this.props.config.terms}
+                            states={this.props.config.states}
+                            activeStateIds={this.state.previousStateIds}
+                            changeStatesAction={this._changePreviousStates} />
                     </section>
                     <section className="tau-transitions-category tau-transitions-updater">
-                        <RolesView disabled={this.state.isFinal} activeRoleLink={this.linkState('activeRoleId')} roles={this.props.config.roles} terms={this.props.config.terms} />
-                        {this._canBePlanned() ? <PlannedView isPlannedLink={this.linkState('isPlanned')} /> : null}
+                        <RolesView disabled={this.state.isFinal} activeRoleLink={this.linkState('activeRoleId')}
+                            roles={this.props.config.roles} terms={this.props.config.terms} />
+                        {this._canBePlanned() ? <PlannedView isPlannedLink={this.linkState('isPlanned')} terms={this.props.config.terms} /> : null}
                         <section className="tau-transitions-controls">
                             <ButtonView className="tau-btn tau-primary" onClick={this._onSave}>Save</ButtonView>
-                            {this._canBeDeleted() ? <ButtonView className="tau-attention tau-remove-state" onClick={this._onDelete}>Delete State</ButtonView> : null}
+                            <ButtonView className="tau-attention tau-remove-state" disabled={!this._canBeDeleted()}
+                                title={this._deletedTitle()} onClick={this._onDelete}>Delete State</ButtonView>
                         </section>
                     </section>
                     <section className="tau-transitions-category tau-next-states">
                         <TransitionsView
-                        name="Next states"
-                        states={this.props.config.states}
-                        activeStateIds={this.state.nextStateIds}
-                        changeStatesAction={this._changeNextStates}/>
+                            transitionFrom={false}
+                            name="Transition To"
+                            terms={this.props.config.terms}
+                            states={this.props.config.states}
+                            activeStateIds={this.state.nextStateIds}
+                            changeStatesAction={this._changeNextStates} />
                     </section>
                 </div>
-                );
+            );
         }
     });
 });

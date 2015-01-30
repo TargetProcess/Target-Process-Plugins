@@ -35,7 +35,6 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,10 +69,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelegateDecompiler">
-      <HintPath>..\..\packages\DelegateDecompiler.0.8.1.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\DelegateDecompiler.0.8.1.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,11 +80,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Reflection">
-      <HintPath>..\..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
@@ -98,7 +97,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
@@ -151,6 +150,7 @@
     <Compile Include="Expressions\InlineEnvironmentAttribute.cs" />
     <Compile Include="Expressions\Visitors\InlineVisitor.cs" />
     <Compile Include="Expressions\Visitors\InlineApplyVisitor.cs" />
+    <Compile Include="Expressions\Visitors\ProtectFromDivideByZeroVisitor.cs" />
     <Compile Include="Expressions\Visitors\ProtectFromNullReferenceVisitor.cs" />
     <Compile Include="Expressions\Visitors\Replacer.cs" />
     <Compile Include="ExtensionsProvider.cs" />
@@ -161,6 +161,7 @@
     <Compile Include="Features\OverrideableByMashupAttribute.cs" />
     <Compile Include="FileSystemWatcherImpl.cs" />
     <Compile Include="Func.cs" />
+    <Compile Include="HierarchyStructureNode.cs" />
     <Compile Include="IDetailedException.cs" />
     <Compile Include="IExecutor.cs" />
     <Compile Include="IFileSystem.cs" />
@@ -172,7 +173,11 @@
     <Compile Include="Inflector.cs" />
     <Compile Include="IStatelessConverter.cs" />
     <Compile Include="ITaskFactory.cs" />
+    <Compile Include="ITransactionScope.cs" />
+    <Compile Include="ITransactionScopeProvider.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="Linq\DynamicExpressionAliasAttribute.cs" />
+    <Compile Include="Linq\ExtenedExpressionParser.cs" />
     <Compile Include="Linq\IMethodProvider.cs" />
     <Compile Include="Lock.cs" />
     <Compile Include="LocalFileSystem.cs" />
@@ -253,6 +258,7 @@
     <Compile Include="Disposable.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StringUtils.cs" />
+    <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TpLogManager.cs" />
     <Compile Include="TpLogManagerExtensions.cs" />
     <Compile Include="TpPolicy.cs" />
@@ -302,13 +308,6 @@
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y /d</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

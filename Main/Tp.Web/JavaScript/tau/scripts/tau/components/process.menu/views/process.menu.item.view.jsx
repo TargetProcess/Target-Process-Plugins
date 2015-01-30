@@ -1,79 +1,19 @@
 define(function(require) {
     var $ = require('jQuery'),
+        _ = require('Underscore'),
         React = require('libs/react/react-ex'),
         optionGroupsCreator = require('tau/components/setup.process/process.optionGroups'),
         RenameService = require('tau/services/rename.service'),
-        boardBubbleTemplate = require('template!tau/components/tauBubble/templates/board.bubble'),
-        affectedProjectsTemplate = require('template!tau/components/process.menu/templates/affected.projects.template');
+        ProcessUsageSummary = require('jsx!./process.menu.item.usage.summary');
 
-    var ProcessUsageSummary = React.createClass({
-        _getProjectsCount: function() {
-            return this.props.process.projects.length;
-        },
-
-        _getAffectedProjectsSummary: function() {
-            var projectsCount = this._getProjectsCount();
-            if (projectsCount > 0) {
-                return 'Changes affect ' + projectsCount + ' project(s)';
-            } else {
-                var text = 'The process is not used.';
-                if (!this.props.process.isDefault) {
-                    text += ' You can delete it.';
-                }
-                return text;
-            }
-        },
-
-        _toggleProjectsBubble: function() {
-            if (this._getProjectsCount()) {
-                $(this.getDOMNode()).tauBubble({
-                    className: 'tau-bubble-tooltipArticle',
-                    template: boardBubbleTemplate.render(),
-                    onPositionConfig: function(config) {
-                        config.collision = 'fit';
-                        config.my = 'left';
-                        config.at = 'right center';
-                    },
-                    hideOnScroll: true,
-                    hideOnScrollContainer: '.t3-process__catalog',
-                    content: affectedProjectsTemplate.render({ projects: this.props.process.projects }),
-                    zIndex: 999,
-                    onHide: function() {
-                        this.destroy();
-                    },
-                    onResize: function($popup, data) {
-                        var $content = $popup.find('[role=content]');
-                        var margins = $popup.outerHeight() - $content.height();
-                        $content.css({
-                            maxHeight: window.document.body.offsetHeight - margins,
-                            overflowY: 'auto'
-                        });
-                    }
-                }).tauBubble('toggle');
-            }
-        },
-
-        render: function() {
-            var isProjectsLinkVisible = this.props.process.projects.length > 0;
-
-            var classes = React.addons.classSet({
-                't3-process__text': true,
-                't3-process__link': isProjectsLinkVisible
-            });
-
-            return (
-                <div className={classes} onClick={this._toggleProjectsBubble}>{this._getAffectedProjectsSummary()}</div>
-            );
-        }
-    });
-
-    return React.defineClass(['item.optionGroup.view', 'item.optionGroup.workflows.view'], function(OptionGroupView, WorkflowOptionGroupView) {
+    return React.defineClass([
+        'item.optionGroup.view', 'item.optionGroup.workflows.view'
+    ], function(OptionGroupView, WorkflowOptionGroupView) {
         return {
-            _activate: function() {
+            displayName: 'ProcessMenuItem',
+
+            _activateProcess: function() {
                 this.props.setActivePage({processId: this.props.process.id});
-            },
-            _selectProcess: function() {
-                this._activate();
             },
             _showContextMenu: function(event) {
                 var $target = $(this.refs.title.getDOMNode());
@@ -104,56 +44,80 @@ define(function(require) {
             },
             componentWillReceiveProps: function(newProps) {
                 var hasJustAttachedToDom = !this.props.isInDom && newProps.isInDom;
-                if (hasJustAttachedToDom) {
+                if (hasJustAttachedToDom || this.props.isNew) {
                     this.setState({
-                        bodyHeight: $(this.getDOMNode()).find('.t3-process__body').height()
+                        bodyHeight: $(this.refs.processBody.getDOMNode()).height()
                     });
+                }
+                var becameActive = (hasJustAttachedToDom || !this.props.active) && newProps.active;
+                if (becameActive) {
+                    this._scrollIntoView();
+                    if (!hasJustAttachedToDom) {
+                        $(this.getDOMNode()).one('transitionend webkitTransitionEnd', this._scrollIntoViewIfActive);
+                    }
+                }
+            },
+            _scrollIntoViewIfActive: function() {
+                if (this.props.active) {
+                    this._scrollIntoView();
+                }
+            },
+            _scrollIntoView: function() {
+                var scrollableRect = this.props.getScrollableRect();
+                var elementRect = this.getDOMNode().getBoundingClientRect();
+                var isAboveView = elementRect.top < scrollableRect.top;
+                var isBelowView = elementRect.top + elementRect.height > scrollableRect.top + scrollableRect.height;
+                if (isAboveView || isBelowView) {
+                    var alignWithTop = isAboveView;
+                    this.getDOMNode().scrollIntoView(alignWithTop);
                 }
             },
             render: function() {
                 var isMenuItemActive = this.props.active || !this.props.isInDom;
 
-                var optionGroups = null;
-
-                if (isMenuItemActive) {
-                    optionGroups = _.map(optionGroupsCreator.groups, function(group) {
-                        var optionGroup = optionGroupsCreator.create(this.props.urlBuilder, group, this.props.process.id);
-                        var isActive = this.props.activePage.optionGroupId == optionGroup.getId();
-                        var params = {
-                            key: group,
-                            optionGroup: optionGroup,
-                            active: isActive,
-                            activePage: this.props.activePage,
-                            setActivePage: this.props.setActivePage
-                        };
-                        if (optionGroupsCreator.groups.Workflows == optionGroup.getId()) {
-                            _.extend(params, { entityTypes: this.props.process.entityTypes });
-                            return new WorkflowOptionGroupView(params);
-                        } else {
-                            return new OptionGroupView(params);
-                        }
-                    }, this);
-                }
+                var optionGroups = _.map(optionGroupsCreator.groups, function(group) {
+                    var optionGroup = optionGroupsCreator.create(this.props.urlBuilder, group, this.props.process.id);
+                    var isActive = this.props.activePage.optionGroupId == optionGroup.getId();
+                    var params = {
+                        key: group,
+                        optionGroup: optionGroup,
+                        active: isActive,
+                        activePage: this.props.activePage,
+                        setActivePage: this.props.setActivePage
+                    };
+                    if (optionGroupsCreator.groups.Workflows == optionGroup.getId()) {
+                        params.entityTypes = this.props.process.entityTypes;
+                        //return <WorkflowOptionGroupView {...params} />;
+                        return React.createElement(WorkflowOptionGroupView, params);
+                    } else {
+                        //return <OptionGroupView {...params} />;
+                        return React.createElement(OptionGroupView, params);
+                    }
+                }, this);
 
                 var classes = React.addons.classSet({
                     't3-process__item t3-process__item--outer': true,
                     't3-active': isMenuItemActive
                 });
 
-                var titleClickHandler = this.props.isBeingRenamed ? null : this._selectProcess;
+                var titleClickHandler = this.props.isBeingRenamed ? null : this._activateProcess;
                 return (
                     <div className={classes} role="process">
                         <div className="t3-process__item__title" role="title" ref="title" onClick={titleClickHandler}>
                             <div className="t3-actions-trigger" onClick={this._showContextMenu}></div>
                             <div className="t3-process__counter">{this.props.process.projects.length}</div>
                             <div className="t3-header" ref="header">{this.props.process.name}</div>
-                            <ProcessUsageSummary process={this.props.process} />
+                            <ProcessUsageSummary process={this.props.process} urlBuilder={this.props.urlBuilder}
+                                openEntityViewAction={this.props.openEntityViewAction} hidden={!this.props.user.isAdministrator} />
                         </div>
-                        <div className="t3-process__body" style={{'height': isMenuItemActive ? this.state.bodyHeight : 0}}>
+                        <div
+                            ref="processBody"
+                            className="t3-process__body"
+                            style={{'height': isMenuItemActive ? this.state.bodyHeight : 0}}>
                             {optionGroups}
                         </div>
                     </div>
-                    );
+                );
             }
         };
     });

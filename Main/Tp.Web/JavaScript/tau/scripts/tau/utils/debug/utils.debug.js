@@ -1,0 +1,1 @@
+define(["Underscore"],function(n){function o(o){return window.appIsInDebugMode?n.isFunction(o)?!o():!o:!1}function r(n,o){var r=Array.prototype.slice.call(o,1);Function.prototype.apply.call(n||console.log,console,r)}return{assertWarn:function(n){o(n)&&r(console.warn,arguments)},assertError:function(n){o(n)&&r(console.error,arguments)}}});

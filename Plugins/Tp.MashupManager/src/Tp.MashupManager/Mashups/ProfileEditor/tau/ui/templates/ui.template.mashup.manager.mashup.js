@@ -84,7 +84,7 @@ define([
             '<p class="label">',
             '<span class="small">Use this syntax for your mashup javascript code. <a href="http://dev.targetprocess.com/mashups/index#javascript" target="_blank" title="More" class="note">More</a></span>',
             '</p>',
-            '<textarea name="Script" class="input i-role-script" style="width: 560px; height: 300px;"><%! this.script %></textarea>',
+            '<div class="mashup-details__code-wrapper"><pre name="Script" class="input i-role-script mashup-details__code-wrapper__pre"><%! this.script %></pre></div>',
             '</div>',
             '<div class="separator"></div>',
             '<div class="p-10">',

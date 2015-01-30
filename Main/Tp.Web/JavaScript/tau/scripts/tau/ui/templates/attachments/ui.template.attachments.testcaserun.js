@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory","tau/ui/templates/attachments/ui.template.attachments.attachment"],function(t){var e={name:"attachments.testcaserun",engine:"jqote2",markup:["<div>",'<span class="ui-label ui-ctrl-title">Test Case Attachments</span>','<div class="i-role-attachments"></div>','<div class="ui-label i-role-error"></div>',"</div>"]};return t.register(e)});

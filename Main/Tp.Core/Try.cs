@@ -38,10 +38,10 @@ namespace Tp.Core
 
 		T Value { get; }
 		bool IsSuccess { get; }
-		void Switch(Action<T> sucess, Action<Exception> exception);
+		void Switch([InstantHandle]Action<T> sucess, [InstantHandle]Action<Exception> exception);
 
-		Try<T> Recover(Func<Exception, T> recover);
-		Try<T> Recover(Func<Exception, Try<T>> recover);
+		Try<T> Recover([InstantHandle]Func<Exception, T> recover);
+		Try<T> Recover([InstantHandle]Func<Exception, Try<T>> recover);
 	}
 	public sealed class Success<T> : Try<T> {
 		private readonly T _value;
@@ -68,14 +68,7 @@ namespace Tp.Core
 
 		public Try<U> Select<U>(Func<T, U> selector)
 		{
-			try
-			{
-				return new Success<U>(selector(_value));
-			}
-			catch (Exception ex)
-			{
-				return new Failure<U>(ex);
-			}
+			return Try.Create(() => selector(_value));
 		}
 
 		public Try<T> Where(Func<T, bool> filter)
@@ -172,12 +165,12 @@ namespace Tp.Core
 
 		public Try<T> Recover(Func<Exception, T> recover)
 		{
-			return new Success<T>(recover(Exception));
+			return Try.Create(() => recover(Exception));
 		}
 
 		public Try<T> Recover(Func<Exception, Try<T>> recover)
 		{
-			return recover(Exception);
+			return Try.Create(() => recover(Exception)).SelectMany(x => x);
 		}
 	}
 }

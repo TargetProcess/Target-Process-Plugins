@@ -719,6 +719,31 @@ namespace hOOt
 			return result;
 		}
 
+		public IndexData GetExistingIndex(int recnum)
+		{
+			LogIndex();
+			using (var bmp = CreateBitmapStream())
+			{
+				var words = new List<string>();
+				foreach (KeyValuePair<string, Cache> vc in _index)
+				{
+					string indexedWord = vc.Key;
+					Cache cache = vc.Value;
+					LoadCacheIfNotLoaded(cache, bmp);
+					bool isWordIndexed = cache.GetBitmap().Get(recnum);
+					if (isWordIndexed)
+					{
+						words.Add(indexedWord);
+					}
+				}
+				return new IndexData
+				{
+					DocNumber = recnum,
+					Words = words
+				};
+			}
+		}
+
 		public IndexResult UpdateExistingIndex(int recnum, string text)
 		{
 			Log("UpdateExistingIndex started");

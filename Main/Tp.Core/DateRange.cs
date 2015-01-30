@@ -17,11 +17,7 @@ namespace Tp.Core
 		public static readonly DateRange AllDates = new DateRange(DateTime.MinValue, DateTime.MaxValue);
 		public static readonly DateRange Empty = new DateRange(null, null);
 
-		public DateRange()
-			:this(true)
-		{
-		}
-		public DateRange(bool validatePeriod): this(null, null, validatePeriod)
+		public DateRange() : this(null, null)
 		{
 		}
 
@@ -33,10 +29,11 @@ namespace Tp.Core
 		public DateRange(DateTime? startDate, DateTime? endDate, bool validatePeriod = true)
 		{
 			_validatePeriod = validatePeriod;
-			AssertStartDateFollowsEndDate(startDate, endDate);
 			_startDate = startDate;
 			_endDate = endDate;
+			AssertDateRangeIsValid();
 		}
+
 		public TimeSpan? TimeSpan
 		{
 			get { return _endDate - _startDate; }
@@ -52,8 +49,8 @@ namespace Tp.Core
 			get { return _startDate; }
 			set
 			{
-				AssertStartDateFollowsEndDate(value, _endDate);
 				_startDate = value;
+				AssertDateRangeIsValid();
 			}
 		}
 
@@ -62,8 +59,8 @@ namespace Tp.Core
 			get { return _endDate; }
 			set
 			{
-				AssertStartDateFollowsEndDate(_startDate, value);
 				_endDate = value;
+				AssertDateRangeIsValid();
 			}
 		}
 
@@ -73,10 +70,9 @@ namespace Tp.Core
 		}
 
 		[Annotations.AssertionMethod]
-		private void AssertStartDateFollowsEndDate(DateTime? startDate, DateTime? endDate)
+		private void AssertDateRangeIsValid()
 		{
-			if ((startDate.HasValue && endDate.HasValue) &&
-				(endDate.Value < startDate.Value) && _validatePeriod)
+			if (_validatePeriod && !IsValidRange(StartDate, EndDate))
 			{
 				throw new InvalidDateRangeException("Start Date must be less than or equal to End Date");
 			}
@@ -183,9 +179,9 @@ namespace Tp.Core
 			return new DateRange(startDate, startDate.AddDays(duration - 1));
 		}
 
-		public static DateRange CreateEmpty()
+		public static bool IsValidRange(DateTime? startDate, DateTime? endDate)
 		{
-			return new DateRange(null, null);
+			return !startDate.HasValue || !endDate.HasValue || startDate.Value <= endDate.Value;
 		}
 	}
 }

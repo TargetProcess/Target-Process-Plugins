@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/templates-factory"],function(e,a){var r={name:"boardplus.container",engine:"jqote2",markup:['<div class="tau-board tau-board_animate_false">',"</div>"],dependencies:[]};return a.register(r)});
+define(["tau/core/templates-factory"],function(e){var a={name:"boardplus.container",engine:"jqote2",markup:['<div class="tau-board"></div>']};return e.register(a)});

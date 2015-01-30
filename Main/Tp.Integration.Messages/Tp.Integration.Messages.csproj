@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,7 +58,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -76,7 +75,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
@@ -124,6 +123,7 @@
     <Compile Include="Entities\GeneralFollowerDTO.cs" />
     <Compile Include="Entities\IDTOVisitor.cs" />
     <Compile Include="Entities\Interfaces.cs" />
+    <Compile Include="Entities\ReleaseProjectDTO.cs" />
     <Compile Include="Entities\SquadIterationDTO.cs" />
     <Compile Include="Entities\TestStepDTO.cs" />
     <Compile Include="Entities\TestStepRunDTO.cs" />
@@ -265,6 +265,7 @@
     <Compile Include="EntityLifecycle\Messages\GeneralFollower.cs" />
     <Compile Include="EntityLifecycle\Messages\GlobalSetting.cs" />
     <Compile Include="EntityLifecycle\Messages\Impediment.cs" />
+    <Compile Include="EntityLifecycle\Messages\ReleaseProject.cs" />
     <Compile Include="EntityLifecycle\Messages\SquadIteration.cs" />
     <Compile Include="EntityLifecycle\Messages\Iteration.cs" />
     <Compile Include="EntityLifecycle\Messages\Message.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="EntityLifecycle\Queries\Process.cs" />
     <Compile Include="EntityLifecycle\Queries\Project.cs" />
     <Compile Include="EntityLifecycle\Queries\QueryBase.cs" />
+    <Compile Include="EntityLifecycle\Queries\ReleaseProjectQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\Requester.cs" />
     <Compile Include="EntityLifecycle\Queries\Role.cs" />
     <Compile Include="EntityLifecycle\Queries\Severity.cs" />
@@ -445,13 +447,6 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

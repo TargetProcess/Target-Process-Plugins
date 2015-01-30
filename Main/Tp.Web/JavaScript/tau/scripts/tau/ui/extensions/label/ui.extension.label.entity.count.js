@@ -1,0 +1,1 @@
+define(["Underscore","tau/core/extension.base"],function(e,i){return i.extend({init:function(e,i,t){this._super(e),this.on("beforeInit",function(e,n){var r={definition:{cells:{items:[{id:i}],filter:"?"+t+".Id == "+n.config.context.entity.id}}};this.fire("comet.parameters.ready",r)})}})});

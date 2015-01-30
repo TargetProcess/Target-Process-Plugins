@@ -2255,5 +2255,111 @@ namespace Tp.Search.Tests
 			result.Total.Should(Be.EqualTo(1));
 			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
 		}
+
+		[Test]
+		public void SearchReleaseByProjectId()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			var releaseId = 1;
+			var projectId = 2;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = releaseId,
+				Name = "zagzag",
+				Description = "bla bla bla",
+				EntityTypeID = QueryEntityTypeProvider.RELEASE_TYPE_ID,
+				ParentProjectID = 1
+			});
+			indexer.AddReleaseProjectIndex(new ReleaseProjectDTO
+			{
+				ID = 1,
+				ReleaseID = releaseId,
+				ProjectID = projectId
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "+zagzag +bla",
+				ProjectIds = new[] { projectId }
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }));
+		}
+
+		[Test]
+		public void SearchReleaseByProjectIdIfReleaseProjectChange()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			var releaseId = 1;
+			var releaseMainProjectId = 1;
+			var releaseOtherProjectId = 2;
+			var newReleaseProjectId = 3;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = releaseId,
+				Name = "zagzag",
+				Description = "bla bla bla",
+				EntityTypeID = QueryEntityTypeProvider.RELEASE_TYPE_ID,
+				ParentProjectID = releaseMainProjectId
+			});
+			indexer.AddReleaseProjectIndex(new ReleaseProjectDTO
+			{
+				ID = 1,
+				ReleaseID = releaseId,
+				ProjectID = releaseOtherProjectId,
+			});
+			indexer.UpdateGeneralIndex(new GeneralDTO
+			{
+				ID = releaseId,
+				ParentProjectID = newReleaseProjectId,
+				EntityTypeID = QueryEntityTypeProvider.RELEASE_TYPE_ID,
+			}, new[] { GeneralField.ParentProjectID});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "+zagzag +bla",
+				ProjectIds = new[] { releaseOtherProjectId }
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }));
+		}
+
+		[Test]
+		public void SearchCommentsForCrossProjectReleases()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			var releaseId = 1;
+			var releaseMainProjectId = 1;
+			var releaseOtherProjectId = 2;
+			var commentId = 3;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = releaseId,
+				Name = "zagzag",
+				Description = "bla bla bla",
+				EntityTypeID = QueryEntityTypeProvider.RELEASE_TYPE_ID,
+				ParentProjectID = releaseMainProjectId
+			});
+			indexer.AddReleaseProjectIndex(new ReleaseProjectDTO
+			{
+				ID = releaseId,
+				ReleaseID = releaseId,
+				ProjectID = releaseOtherProjectId,
+			});
+			indexer.AddCommentIndex(new CommentDTO
+			{
+				CommentID = commentId,
+				GeneralID = releaseId,
+				Description = "qwerty ffff"
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "+qwerty",
+				ProjectIds = new[] { releaseOtherProjectId }
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.CommentIds.Should(Be.EquivalentTo(new[] { commentId.ToString() }));
+		}
 	}
 }

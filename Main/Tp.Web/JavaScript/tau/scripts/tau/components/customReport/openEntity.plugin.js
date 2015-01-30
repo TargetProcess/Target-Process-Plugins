@@ -1,0 +1,1 @@
+define([],function(){return function(t){return{onElementClick:function(e,n){var i=n.elementData.dataItem;i&&t.getEntityViewService().showEntityView({entityId:parseInt(i.id,10),entityType:i.type})}}}});

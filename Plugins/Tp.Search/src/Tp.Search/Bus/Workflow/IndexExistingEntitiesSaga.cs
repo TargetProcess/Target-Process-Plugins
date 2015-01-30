@@ -25,10 +25,9 @@ namespace Tp.Search.Bus.Workflow
 			                          IHandleMessages<AssignableQueryResult>,
 			                          IHandleMessages<TestCaseQueryResult>,
 			                          IHandleMessages<ImpedimentQueryResult>,
-			                          IHandleMessages<CommentQueryResult>
+			                          IHandleMessages<CommentQueryResult>,
+									  IHandleMessages<ReleaseProjectQueryResult>
 	{
-		private readonly IEntityIndexer _entityIndexer;
-		private readonly IEntityTypeProvider _entityTypesProvider;
 		private readonly IDocumentIndexProvider _documentIndexProvider;
 		private readonly IPluginContext _pluginContext;
 		private readonly IActivityLogger _logger;
@@ -38,6 +37,7 @@ namespace Tp.Search.Bus.Workflow
 		private readonly TestCasesIndexing _testCasesIndexing;
 		private readonly ImpedimentsIndexing _impedimentsIndexing;
 		private readonly CommentsIndexing _commentsIndexing;
+		private readonly ReleaseProjectIndexing _releaseProjectIndexing;
 
 		public IndexExistingEntitiesSaga()
 		{
@@ -45,17 +45,16 @@ namespace Tp.Search.Bus.Workflow
 
 		public IndexExistingEntitiesSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider, IDocumentIndexProvider documentIndexProvider, IPluginContext pluginContext, IActivityLogger logger, SagaServices sagaServices)
 		{
-			_entityIndexer = entityIndexer;
-			_entityTypesProvider = entityTypesProvider;
 			_documentIndexProvider = documentIndexProvider;
 			_pluginContext = pluginContext;
 			_logger = logger;
 			_sagaServices = sagaServices;
-			_generalsIndexing = new GeneralsIndexing(_entityIndexer, () => Data, _entityTypesProvider, d => _assignablesIndexing.Start(), q => Send(q), _logger);
-			_assignablesIndexing = new AssignablesIndexing(_entityIndexer, () => Data, _entityTypesProvider, d => _testCasesIndexing.Start(), q => Send(q), _logger);
-			_testCasesIndexing = new TestCasesIndexing(_entityIndexer, () => Data, _entityTypesProvider, d => _impedimentsIndexing.Start(), q => Send(q), _logger);
-			_impedimentsIndexing = new ImpedimentsIndexing(_entityIndexer, () => Data, _entityTypesProvider, d => _commentsIndexing.Start(), q => Send(q), _logger);
-			_commentsIndexing = new CommentsIndexing(_entityIndexer, () => Data, _entityTypesProvider, d =>
+			_generalsIndexing = new GeneralsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _assignablesIndexing.Start(), q => Send(q), _logger);
+			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testCasesIndexing.Start(), q => Send(q), _logger);
+			_testCasesIndexing = new TestCasesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _impedimentsIndexing.Start(), q => Send(q), _logger);
+			_impedimentsIndexing = new ImpedimentsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _releaseProjectIndexing.Start(), q => Send(q), _logger);
+			_releaseProjectIndexing = new ReleaseProjectIndexing(entityIndexer, () => Data, entityTypesProvider, d => _commentsIndexing.Start(), q => Send(q), _logger);
+			_commentsIndexing = new CommentsIndexing(entityIndexer, () => Data, entityTypesProvider, d =>
 				{
 					SendLocal(new IndexExistingEntitiesDoneLocalMessage { SagaId = Data.OuterSagaId });
 					MarkAsComplete();
@@ -69,6 +68,7 @@ namespace Tp.Search.Bus.Workflow
 			ConfigureMapping<AssignableQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<TestCaseQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<ImpedimentQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<ReleaseProjectQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
 		}
 
@@ -105,6 +105,11 @@ namespace Tp.Search.Bus.Workflow
 			_commentsIndexing.Handle(message);
 		}
 
+		public void Handle(ReleaseProjectQueryResult message)
+		{
+			_releaseProjectIndexing.Handle(message);
+		}
+
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
 			_logger.Error("Build indexes failed", new Exception(message.ExceptionString));
@@ -125,12 +130,14 @@ namespace Tp.Search.Bus.Workflow
 		public int GeneralsRetrievedCount { get; set; }
 		public int AssignablesRetrievedCount { get; set; }
 		public int TestCasesRetrievedCount { get; set; }
+		public int ReleaseProjectsRetrievedCount { get; set; }
 		public int ImpedimentsRetrievedCount { get; set; }
 		public int CommentsRetrievedCount { get; set; }
 
 		public int GeneralsCurrentDataWindowSize { get; set; }
 		public int AssignablesCurrentDataWindowSize { get; set; }
 		public int TestCasesCurrentDataWindowSize { get; set; }
+		public int ReleaseProjectsCurrentDataWindowSize { get; set; }
 		public int ImpedimentsCurrentDataWindowSize { get; set; }
 		public int CommentsCurrentDataWindowSize { get; set; }
 	}

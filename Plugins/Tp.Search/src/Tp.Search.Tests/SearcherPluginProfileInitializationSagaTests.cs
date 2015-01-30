@@ -51,6 +51,7 @@ namespace Tp.Search.Tests
 			_transport.On<CommentQuery>().Reply(x => ReplyOnEntityQuery<CommentQuery, CommentDTO, CommentQueryResult>(x, _comments));
 			_transport.On<TestCaseQuery>().Reply(x => ReplyOnEntityQuery<TestCaseQuery, TestCaseDTO, TestCaseQueryResult>(x, _testCases));
 			_transport.On<ImpedimentQuery>().Reply(x => new ImpedimentQueryResult { Dtos = new ImpedimentDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
+			_transport.On<ReleaseProjectQuery>().Reply(x => new ReleaseProjectQueryResult { Dtos = new ReleaseProjectDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<AssignableQuery>().Reply(x => ReplyOnAssignableQuery(x, _assignables));
 		}
 

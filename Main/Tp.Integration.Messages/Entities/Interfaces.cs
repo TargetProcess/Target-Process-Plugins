@@ -678,6 +678,13 @@ namespace Tp.Integration.Common
 	{
 	}
 
+	public interface IReleaseProjectDTO : IDataTransferObject
+	{
+		Nullable<Int32> ReleaseProjectID { get; set; }
+		Nullable<Int32> ReleaseID { get; set; }
+		Nullable<Int32> ProjectID { get; set; }
+	}
+
 	public interface IRequesterDTO : IDataTransferObject
 	{
 	
@@ -903,6 +910,7 @@ namespace Tp.Integration.Common
 		String Steps { get; set; }
 		String Success { get; set; }
 		Nullable<Boolean> LastStatus { get; set; }
+		TestCaseRunStatusDTO LastRunStatus { get; set; }
 		String LastFailureComment { get; set; }
 		Nullable<DateTime> LastRunDate { get; set; }
 
@@ -919,6 +927,7 @@ namespace Tp.Integration.Common
 	{
 		Nullable<Int32> TestCaseRunID { get; set; }
 		Nullable<DateTime> RunDate { get; set; }
+		Nullable<DateTime> StartRunDate { get; set; }
 		Nullable<Boolean> Passed { get; set; }
 		Nullable<Boolean> Runned { get; set; }
 		String Comment { get; set; }

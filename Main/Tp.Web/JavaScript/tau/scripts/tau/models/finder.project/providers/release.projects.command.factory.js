@@ -1,0 +1,1 @@
+define(["Underscore"],function(e){return{create:function(t,r){var i=e.map(r,function(e){return{id:e}});return{evictProperties:[t.id,t.entityType.name,["projects"]],type:"release",data:{id:t.id,fields:["id","projects"],$set:{projects:i}}}}}});

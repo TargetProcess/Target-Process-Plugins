@@ -1,0 +1,1 @@
+define([],function(){return{HIGHLIGHT_COLOR:"#f9d9d1",NO_STATE_CHANGE_DAYS:5}});

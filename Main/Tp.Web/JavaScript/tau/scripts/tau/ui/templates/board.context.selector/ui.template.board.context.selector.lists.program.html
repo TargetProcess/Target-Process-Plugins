@@ -29,7 +29,7 @@
 
         <div class="tau-managed-category__message tau-managed-category__message_not-found" data-text-nofound="No such team found" data-text-noitems="No available teams"></div>
     </section>
-    <section class="tau-managed-category <% if (this.projects.length == (this.canAddProjects === false ? 0 : 1)){ %>tau-managed-category_isempty_true tau-no-project<% } %> tau-projects i-role-section-projects">
+    <section class="tau-managed-category <% if (this.canAddProjects !== false && this.projects.length === this.minProjectsCount){ %>tau-managed-category_isempty_true tau-no-project<% } %> tau-projects i-role-section-projects">
         <header>
             <label class="tau-checkbox tau-extension-board-tooltip i-role-select-all-item" data-title="Select all projects">
                 <input <%if (this.checkedAllProject) {%>checked<%}%> type="checkbox">
@@ -67,8 +67,8 @@
     <% var updaterStateClass = this.isShowButtonVisible ? "tau-teams-projects-updater_state_enabled": ""; %>
     <section class="tau-teams-projects-updater <%= updaterStateClass %>">
         <button class="tau-btn tau-primary tau-teams-projects-submit i-role-action-submit" role="action-submit" type="button"><%= (this.submitLabel || "Show") %></button>
-        <% if (this.loggedUser && this.loggedUser.isAdministrator) { %>
-            <a class="tau-setup-process i-role-process-submit">Set up Process</a>
+        <% if (this.loggedUser && this.loggedUser.isProcessAdministrator) { %>
+            <a class="tau-setup-process i-role-process-setup-link">Set up Process</a>
         <% } %>
     </section>
 </div>

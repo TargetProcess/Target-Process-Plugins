@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/property.teamEntityState/property.teamEntityState.extension"],function(t,e){return{create:function(n){var o={extensions:[e],template:{engine:"jqote2",markup:["<div></div>"]}};return t.create(o,n)}}});

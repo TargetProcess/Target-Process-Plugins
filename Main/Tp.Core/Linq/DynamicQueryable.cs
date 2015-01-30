@@ -28,7 +28,7 @@ namespace System.Linq.Dynamic
 			if (predicate.IsNullOrEmpty())
 				return source;
 
-			LambdaExpression lambda = DynamicExpressionParser.ParseLambda(source.ElementType, typeof(bool), predicate, values);
+			LambdaExpression lambda = DynamicExpressionParser.Instance.ParseLambda(source.ElementType, typeof(bool), predicate, values);
 			return source.Provider.CreateQuery(
 				Expression.Call(
 					typeof(Queryable), "Where",
@@ -40,7 +40,7 @@ namespace System.Linq.Dynamic
 		{
 			if (source == null) throw new ArgumentNullException("source");
 			if (selector == null) throw new ArgumentNullException("selector");
-			LambdaExpression lambda = DynamicExpressionParser.ParseLambda(source.ElementType, null, selector, values);
+			LambdaExpression lambda = DynamicExpressionParser.Instance.ParseLambda(source.ElementType, null, selector, values);
 			return source.Provider.CreateQuery(
 				Expression.Call(
 					typeof (Queryable), "Select",
@@ -61,8 +61,7 @@ namespace System.Linq.Dynamic
 			                 	{
 			                 		Expression.Parameter(source.ElementType, null)
 			                 	};
-			var parser = new ExpressionParser(parameters, ordering, values);
-			IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();
+			var orderings = DynamicExpressionParser.Instance.ParseOrdering(ordering, values, parameters);
 			Expression queryExpr = source.Expression;
 			string methodAsc = "OrderBy";
 			string methodDesc = "OrderByDescending";
@@ -104,8 +103,8 @@ namespace System.Linq.Dynamic
 			if (source == null) throw new ArgumentNullException("source");
 			if (keySelector == null) throw new ArgumentNullException("keySelector");
 			if (elementSelector == null) throw new ArgumentNullException("elementSelector");
-			LambdaExpression keyLambda = DynamicExpressionParser.ParseLambda(source.ElementType, null, keySelector, values);
-			LambdaExpression elementLambda = DynamicExpressionParser.ParseLambda(source.ElementType, null, elementSelector, values);
+			LambdaExpression keyLambda = DynamicExpressionParser.Instance.ParseLambda(source.ElementType, null, keySelector, values);
+			LambdaExpression elementLambda = DynamicExpressionParser.Instance.ParseLambda(source.ElementType, null, elementSelector, values);
 			return source.Provider.CreateQuery(
 				Expression.Call(
 					typeof (Queryable), "GroupBy",

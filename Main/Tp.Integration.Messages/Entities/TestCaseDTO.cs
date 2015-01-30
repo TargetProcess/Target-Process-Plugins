@@ -10,6 +10,15 @@ using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {
+	public enum TestCaseRunStatusDTO
+	{
+		NotRun = 0,
+		Passed = 1,
+		Failed = 2,
+		OnHold = 3,
+		Blocked = 4
+	}
+
     /// <summary>
     /// Data Transfer object of Test Case. Represents Test Case entity. Test Case belongs to project and may belong to User Story. Test Case may be assigned to Test Plan..
     /// </summary>
@@ -407,7 +416,7 @@ namespace Tp.Integration.Common
         /// Gets or sets the Last Status. Defines whether test case passed or failed last time. True - passed, False - failed
         /// </summary>
         /// <value>The Last Status.</value>
-		[DataMember][XmlElement(Order = 74)]public Boolean? LastStatus { get; set; }
+		[DataMember][XmlElement(Order = 74)][Obsolete]public Boolean? LastStatus { get; set; }
 
 		/// <summary>
         /// Gets or sets the Last Failure Comment. Comment that describes failure. Optional.
@@ -501,6 +510,14 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 88)]
 		public Field[] CustomFieldsMetaInfo { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Last Run Status. Defines last test case run status
+		/// </summary>
+		/// <value>The Last Run Status.</value>
+		[DataMember]
+		[XmlElement(Order = 89)]
+		public TestCaseRunStatusDTO LastRunStatus { get; set; }
 	}
 	
 	

@@ -1,0 +1,1 @@
+define(["require","Underscore","tau/core/class"],function(e){var n=e("Underscore"),r=e("tau/core/class");return r.extend({selectBestColumnForNewWidget:function(e){return e.length?n.min(e,function(e){return e.widgets.length}):null}})});

@@ -1,10 +1,19 @@
 define(function(require) {
+    var $ = require('jQuery');
     var React = require('libs/react/react-ex');
+    var ActionsMenuItem = require('./board.menu.actions.menu.item');
+    var IntegrationMixin = require('./board.menu.actions.integration.mixin');
 
     return React.defineClass(
-        ['boardMenuBus', 'settingsService', 'boardsOperationsService', 'integrationService'],
-        function(bus, settingsService, boardsOperationsService, integrationService) {
+        ['boardMenuBus', 'settingsService', 'boardsOperationsService', 'integrationService', 'featuresService'],
+        function(bus, settingsService, boardsOperationsService, integrationService, featuresService) {
             return {
+                displayName: 'BoardMenuActions',
+
+                mixins: [IntegrationMixin],
+
+                _getIntegrationService: _.constant(integrationService),
+
                 getInitialState: function() {
                     return {
                         isNewItemMenuVisible: false
@@ -13,11 +22,16 @@ define(function(require) {
 
                 componentDidMount: function() {
                     settingsService.getShowHiddenBoards().then(this._setShowHidden);
-                    integrationService.actionsMenuItemsUpdated.add(this.forceUpdate, this);
+
+                    $('body').on('click.viewMenuActions', function(event) {
+                        if (!$(event.target).closest('.i-role-add-board-button').length) {
+                            this.setState({isNewItemMenuVisible: false});
+                        }
+                    }.bind(this));
                 },
 
                 componentWillUnmount: function() {
-                    integrationService.actionsMenuItemsUpdated.remove(this);
+                    $('body').off('.viewMenuActions');
                 },
 
                 _getAddViewTriggerClassName: function() {
@@ -52,15 +66,22 @@ define(function(require) {
                     this.setState({isNewItemMenuVisible: !this.state.isNewItemMenuVisible});
                 },
 
-                _onCreateBoard: function() {
-                    this.setState({isNewItemMenuVisible: false});
+                _resetMenuLook: function() {
                     bus.fire('board.menu.update.search.filter', '');
-                    boardsOperationsService.createBoardAndRedirect();
+                },
+
+                _onCreateView: function() {
+                    this._resetMenuLook();
+                    boardsOperationsService.createViewAndRedirect();
+                },
+
+                _onCreateDashboard: function() {
+                    this._resetMenuLook();
+                    boardsOperationsService.createDashboardAndRedirect();
                 },
 
                 _onCreateGroup: function() {
-                    this.setState({isNewItemMenuVisible: false});
-                    bus.fire('board.menu.update.search.filter', '');
+                    this._resetMenuLook();
 
                     boardsOperationsService
                         .createViewGroup()
@@ -75,6 +96,12 @@ define(function(require) {
                         });
                 },
 
+                _onCreateReport: function() {
+                    this._resetMenuLook();
+                    boardsOperationsService.createReportAndRedirect();
+                },
+
+
                 _setShowHidden: function(show) {
                     bus.fire('board.menu.toggle.hidden', show);
                 },
@@ -84,36 +111,55 @@ define(function(require) {
                         <div className="t3-controls">
                             {this._getNewItemMenu()}
                             <div
-                            className={this._getAddViewTriggerClassName()}
-                            onClick={this._onShowOptionsClick}
-                            title="Create new Groups and Views">
+                                className={this._getAddViewTriggerClassName()}
+                                onClick={this._onShowOptionsClick}
+                                title="Create new Groups and Views">
                                 <span>Create</span>
                             </div>
                             {this._getToggleHiddenButton()}
                         </div>
-                        );
+                    );
                 },
 
                 _getNewItemMenu: function() {
-                    var customItems = integrationService.getCustomActionsMenuItems();
+                    var customItems = _.reduce(integrationService.getCustomActionsMenuItems(), (acc, item, index) => {
+                        acc['customItem' + index] = item;
+                        return acc;
+                    }, {});
 
                     return (
                         <div className={this._getNewItemMenuClassName()}>
-                            <div className="t3-group i-role-create-group-menu-item" onClick={this._onCreateGroup}>
-                                <div className="t3-header">
-                                    <span className="tau-icon-general"></span>
-                                    <div className="t3-name">New Group</div>
-                                </div>
-                            </div>
-                            <div className="t3-view t3-grid i-role-create-view-menu-item" onClick={this._onCreateBoard}>
-                                <div className="t3-header">
-                                    <span className="tau-icon-general"></span>
-                                    <div className="t3-name">New View</div>
-                                </div>
-                            </div>
+                            {this._getNewMenuItem('Group', 't3-group i-role-create-group-menu-item', this._onCreateGroup)}
+                            {this._getNewDashboardItem()}
+                            {this._getNewReportItem()}
+                            {this._getNewMenuItem('View', 't3-view t3-grid i-role-create-view-menu-item', this._onCreateView)}
                             {customItems}
                         </div>
-                        );
+                    );
+                },
+
+                _getNewDashboardItem: function() {
+                    if (!featuresService.isEnabled('dashboards')) {
+                        return null;
+                    }
+
+                    return this._getNewMenuItem(
+                        'Dashboard', 't3-dashboard i-role-create-dashboard-menu-item',
+                        this._onCreateDashboard);
+                },
+
+                _getNewReportItem: function() {
+                    if (!featuresService.isEnabled('customReports')) {
+                        return null;
+                    }
+
+                    return this._getNewMenuItem(
+                        'Report', 't3-customReport i-role-create-customReport-menu-item',
+                        this._onCreateReport);
+                },
+
+                _getNewMenuItem: function(name, className, onActivate) {
+                    return <ActionsMenuItem className={className} onActivate={onActivate} name={name} />;
                 },
 
                 _getToggleHiddenButton: function() {
@@ -127,10 +173,10 @@ define(function(require) {
 
                     return (
                         <div
-                        className={this._getToggleHiddenBoardsButtonClassName()}
-                        onClick={this._onToggleHiddenBoards}
-                        title={title}/>
-                        );
+                            className={this._getToggleHiddenBoardsButtonClassName()}
+                            onClick={this._onToggleHiddenBoards}
+                            title={title}/>
+                    );
                 }
             }
         });

@@ -1,1 +1,1 @@
-define(["tau/components/component.creator","tau/models/model.iteration.canBeFinished","tau/ui/templates/ui.template.empty"],function(e,t,n){return{create:function(a){var o={extensions:[t],template:n};return e.create(o,a)}}});
+define(["tau/components/component.creator","tau/models/model.iteration.canBeFinished","template!tau/ui/templates/empty"],function(e,t,n){return{create:function(a){var o={extensions:[t],template:n};return e.create(o,a)}}});

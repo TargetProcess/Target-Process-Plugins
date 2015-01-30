@@ -117,6 +117,16 @@ namespace Tp.Integration.Common
         /// <value>The Role Name.</value>
 		[RelationName]
 		[DataMember][XmlElement(Order = 15)]public virtual string RoleName { get; set; }
+
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 16)]
+		public virtual int? ParentEntityStateID { get; set; }
+
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order = 17)]
+		public virtual int? WorkflowID { get; set; }
 		
 	}
 	
@@ -174,5 +184,9 @@ namespace Tp.Integration.Common
         /// Role Name
         /// </summary>		
 		RoleName,
+
+		WorkflowID,
+
+		ParentEntityStateID
 	}
 }

@@ -217,6 +217,12 @@ namespace Tp.Integration.Common
 		{
 			return VisitGeneral(release);
 		}
+
+		public T VisitReleaseProject(IReleaseProjectDTO releaseProject)
+		{
+			return VisitDataTransferObject(releaseProject);
+		}
+
 		public virtual T VisitRequester(IRequesterDTO requester)
 		{
 			return VisitDataTransferObject(requester);

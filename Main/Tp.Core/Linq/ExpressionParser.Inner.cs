@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Linq.Expressions;
 using Tp.Core.Annotations;
 
 // ReSharper disable CheckNamespace
@@ -12,10 +13,49 @@ namespace System.Linq.Dynamic
 {
 	internal partial class ExpressionParser
 	{
+		static ExpressionParser()
+		{
+			ContainsMethod = Reflect<int[]>.GetMethod(x => x.Contains(default(int))).GetGenericMethodDefinition();
+		}
+
+
+		private static readonly Type[] PredefinedTypes = {
+		                                                 	typeof (Object),
+		                                                 	typeof (Boolean),
+		                                                 	typeof (Char),
+		                                                 	typeof (String),
+		                                                 	typeof (SByte),
+		                                                 	typeof (Byte),
+		                                                 	typeof (Int16),
+		                                                 	typeof (UInt16),
+		                                                 	typeof (Int32),
+		                                                 	typeof (UInt32),
+		                                                 	typeof (Int64),
+		                                                 	typeof (UInt64),
+		                                                 	typeof (Single),
+		                                                 	typeof (Double),
+		                                                 	typeof (Decimal),
+		                                                 	typeof (DateTime),
+		                                                 	typeof (TimeSpan),
+		                                                 	typeof (Guid),
+		                                                 	typeof (Math),
+		                                                 	typeof (Convert),
+															typeof (DateTime?),
+															typeof (Enum)
+		                                                 };
+
+
+		private static readonly Expression TrueLiteral = Expression.Constant(true);
+		private static readonly Expression FalseLiteral = Expression.Constant(false);
+		private static readonly Expression NullLiteral = Expression.Constant(null);
+
+		private const string KEYWORD_IT = "it";
+		private const string KEYWORD_IIF = "iif";
+		private const string KEYWORD_NEW = "new";
 		private struct Token
 		{
-			public TokenId _id;
-			public int _pos;
+			public TokenId ID;
+			public int Position;
 			public string Text;
 		}
 
@@ -168,5 +208,6 @@ namespace System.Linq.Dynamic
 			void Average(decimal selector);
 			void Average(decimal? selector);
 		}
+
 	}
 }

@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/models/model.attachments.testcaserun","tau/ui/templates/attachments/ui.template.attachments.testcaserun"],function(t,e,a){return{create:function(n){var c=n||{},s={extensions:[e],template:a};return t.create(s,c)}}});
