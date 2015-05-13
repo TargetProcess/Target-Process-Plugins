@@ -863,5 +863,9 @@ namespace Tp.Integration.Common
         /// Priority Name
         /// </summary>		
 		PriorityName,
+		/// <summary>
+		///   Last Run Status
+		/// </summary>
+		LastRunStatus
 	}
 }

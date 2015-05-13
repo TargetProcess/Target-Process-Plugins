@@ -1,0 +1,1 @@
+define(["require","./editor.adapter.default","tau/models/page.entity/entity.context.factory"],function(t){var e=t("./editor.adapter.default"),n=t("tau/models/page.entity/entity.context.factory");return e.extend({adaptComponentContext:function(t){return n.create(t.entity,t.configurator)}})});

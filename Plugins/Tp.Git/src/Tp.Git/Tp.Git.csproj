@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -95,6 +94,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tp.Core.Functional, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+    </Reference>
     <Reference Include="Tp.Service.Proxies">
       <HintPath>..\..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
     </Reference>
@@ -124,19 +126,28 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
-      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project><Name>Tp.Plugin.Core</Name>
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
+      <Project>{fcaff2c5-aff5-454a-91d1-6e2f653f1bcb}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
-      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project><Name>Tp.SourceControl</Name>
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

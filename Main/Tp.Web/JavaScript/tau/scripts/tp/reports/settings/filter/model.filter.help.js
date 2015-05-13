@@ -1,1 +1,1 @@
-define(["Underscore","tau/core/model-base","tau/models/board.editor/board.filter.help"],function(e,t,n){return t.extend({"bus settings.changed":function(t,r){var i=this,o={data:{types:e.map(r.parameters.definition.cells.items,function(e){return e.id})}};(new n).get(o).done(function(e){i.fire("refresh.help.content",e)})}})});
+define(["Underscore","tau/models/model.filter.help.base"],function(e,t){return t.extend({"bus settings.changed":function(t,s){this._subscribeAndRefresh({data:{types:e.map(s.parameters.definition.cells.items,e.property("id"))}})}})});

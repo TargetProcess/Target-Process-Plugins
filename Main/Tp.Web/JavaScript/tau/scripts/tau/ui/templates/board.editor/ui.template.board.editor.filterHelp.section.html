@@ -1,0 +1,31 @@
+<!-- name: board.editor.filterHelp.section -->
+<% if (this.filters && this.filters.length) {%>
+    <tr class="filter-help__heading">
+        <td colspan="3"  class="filter-help__td filter-help__td__heading"><h2 class="header-h5"><%= this.sectionTitle %></h2></td>
+    </tr>
+<%} %>
+<% fn._.each(this.filters, function(filter){%>
+    <tr class="filter-help__row i-role-complex-filter-example" data-key="<%= filter.key %>" data-value="<%= filter.value %>">
+        <td class="filter-help__td filter-help__td__output">
+            <div class="filter-help__share-wrap">
+                <% if (filter.canShare) { %>
+                <% if (filter.isShared) { %>
+                <span class="tau-icon-general tau-icon-unshare i-role-unshare" title="Make private"></span>
+                <% } else { %>
+                <span class="tau-icon-general tau-icon-share i-role-share" title="Share this filter"></span>
+                <% } %>
+                <% } %>
+            </div>
+            <div class="filter-help__line i-role-output-filter <%= this.filterAdditionalClass %>"><pre class="filter-help__pre"><%= filter.value %></pre></div>
+        </td>
+        <td class="filter-help__td filter-help__td__description">
+            <% var canRename = !filter.isShared || filter.canShare; %>
+            <div class="tau-in-text i-role-description" <% if (canRename) { %>contenteditable="true"<% } %> ><%= fn.replaceTermTags(filter.label || "", "abbr") %></div>
+        </td>
+        <td class="filter-help__td">
+            <% if (filter.isEditable) { %>
+                <span class="tau-icon-general tau-icon-close-red i-role-saved-filter-delete"></span>
+            <% } %>
+        </td>
+    </tr>
+<% }, this); %>

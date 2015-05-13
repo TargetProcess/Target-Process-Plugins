@@ -1,14 +1,15 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
 
     return React.createClass({
         render: function() {
-            var buttonClasses = React.addons.classSet({
+            var buttonClasses = classNames({
                 'tau-btn-add-state': true,
                 'active': this.props.isActive
             });
 
-            var placeholderClasses =  React.addons.classSet({
+            var placeholderClasses = classNames({
                 'tau-add-state-placeholder': true,
                 'enabled': this.props.isEnabled
             });

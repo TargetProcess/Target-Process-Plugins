@@ -5,7 +5,8 @@ define(function(require) {
         _ = require('Underscore');
 
     return React.createClass({
-        displayName: 'Workflows entity type selector',
+        displayName: 'EntityTypeWorkflowSelector',
+
         render: function() {
             var workflows = _.chain(this.props.workflows)
                 .sortBy(function(workflow) {

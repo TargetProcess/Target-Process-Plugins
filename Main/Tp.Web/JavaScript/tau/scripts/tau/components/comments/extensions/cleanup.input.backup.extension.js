@@ -1,0 +1,1 @@
+define(["require","tau/components/extensions/component.extension.base","../services/comments.localStorage.service"],function(e){var n=e("tau/components/extensions/component.extension.base"),o=e("../services/comments.localStorage.service"),t=new o;return n.extend({"bus afterInit":function(){t.runCommentBackupCleanup()}})});

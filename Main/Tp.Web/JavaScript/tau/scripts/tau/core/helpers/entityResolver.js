@@ -1,0 +1,1 @@
+define(["require","jQuery"],function(e){var r=e("jQuery");return Object.create({resolve:function(e){return e.entityProvider?e.entityProvider(e).then(this._resolveEntityIfProvided.bind(this)):r.when(e.context.entity)},_resolveEntityIfProvided:function(e){return e?e:r.Deferred().reject()}})});

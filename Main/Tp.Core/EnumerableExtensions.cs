@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using Tp.Core;
 using Tp.Core.Annotations;
@@ -15,7 +16,7 @@ namespace System.Linq
 	public static class EnumerableExtensions
 	{
 		// for generic interface IEnumerable<T>
-		public static string ToString<T>(this IEnumerable<T> source,[NotNull] Func<T, string> selector, string separator)
+		public static string ToString<T>(this IEnumerable<T> source, [NotNull] Func<T, string> selector, string separator)
 		{
 			if (source == null)
 				return String.Empty;
@@ -23,7 +24,7 @@ namespace System.Linq
 			if (String.IsNullOrEmpty(separator))
 				throw new ArgumentException("Parameter separator can not be null or empty.");
 
-			return String.Join(separator,source.Where(x => !Equals(x, null)).Select(selector));
+			return String.Join(separator, source.Where(x => !Equals(x, null)).Select(selector));
 		}
 
 		public static string ToString<T>(this IEnumerable<T> source, string separator)
@@ -43,7 +44,7 @@ namespace System.Linq
 			return source.Cast<object>().ToString(separator);
 		}
 
-		
+
 		public static string ToSqlString<T>(this IEnumerable<T> values)
 		{
 			if (values.IsNullOrEmpty())
@@ -112,15 +113,15 @@ namespace System.Linq
 			}
 			else
 			{
-				var frequency = (actualCount - 1)/(double) (count - 1);
+				var frequency = (actualCount - 1) / (double)(count - 1);
 
-				var sourceWithNumbers = list.Select((x, i) => new {x, i});
+				var sourceWithNumbers = list.Select((x, i) => new { x, i });
 
 				double currentNumber = 0;
 
 				foreach (var sourceWithNumber in sourceWithNumbers)
 				{
-					if ((int) Math.Round(currentNumber) == sourceWithNumber.i)
+					if ((int)Math.Round(currentNumber) == sourceWithNumber.i)
 					{
 						yield return sourceWithNumber.x;
 						currentNumber += frequency;
@@ -134,6 +135,17 @@ namespace System.Linq
 		{
 			return Enumerable.Concat(items, additional);
 		}
+
+#if DEBUG
+		public static IEnumerable<T> TapDebug<T>(this IEnumerable<T> items, Action<T> action)
+		{
+			foreach (var item in items)
+			{
+				action(item);
+				yield return item;
+			}
+		}
+#endif
 
 		public static bool Empty<T>(this IEnumerable<T> enumerable)
 		{
@@ -187,12 +199,32 @@ namespace System.Linq
 			}
 		}
 
-		public static IEnumerable<IEnumerable<T>> Split<T>(this IList<T> source, int chunkSize)
+		public static IEnumerable<IEnumerable<T>> Split<T>(this IList<T> source, int partSize)
 		{
-			return source.Where((x, i) => i % chunkSize == 0).Select((x, i) => source.Skip(i * chunkSize).Take(chunkSize));
+			return source.Where((x, i) => i % partSize == 0).Select((x, i) => source.Skip(i * partSize).Take(partSize));
 		}
 
-		public static IEnumerable<T> SafeConcat<T>([CanBeNull] this IEnumerable<T> first, [CanBeNull] IEnumerable<T> second  )
+		public static IEnumerable<IReadOnlyList<T>> SplitArray<T>(this T[] source, int partSize)
+		{
+			if (partSize == 0)
+			{
+				yield return source;
+				yield break;
+			}
+			var arrayLength = source.Length;
+			var fullPartsCount = arrayLength / partSize;
+			for (int i = 0; i < fullPartsCount; ++i)
+			{
+				yield return new ArraySegment<T>(source, i * partSize, partSize);
+			}
+			var lastPartSize = arrayLength % partSize;
+			if (lastPartSize != 0)
+			{
+				yield return new ArraySegment<T>(source, fullPartsCount * partSize, lastPartSize);
+			}
+		}
+
+		public static IEnumerable<T> SafeConcat<T>([CanBeNull] this IEnumerable<T> first, [CanBeNull] IEnumerable<T> second)
 		{
 			if (first == null)
 				first = Enumerable.Empty<T>();
@@ -271,9 +303,9 @@ namespace System.Linq
 			return Unfold(seed, x => true, generateNextValue, generateNextState);
 		}
 
-		public static Tuple<List<T>, List<T>> Partition<T>(this IEnumerable<T> sequence, Func<T, bool> predicate)
+		public static Tuple<IEnumerable<T>, IEnumerable<T>> Partition<T>(this IEnumerable<T> sequence, Func<T, bool> predicate)
 		{
-			return Partition(sequence, predicate, (l, r) => Tuple.Create(l.ToList(), r.ToList()));
+			return sequence.Partition(predicate, Tuple.Create);
 		}
 
 		public static TResult Partition<T, TResult>(this IEnumerable<T> sequence, Func<T, bool> predicate,
@@ -287,8 +319,8 @@ namespace System.Linq
 				matches ?? Enumerable.Empty<T>(),
 				doesNotMatch ?? Enumerable.Empty<T>());
 		}
-
-		public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> xs)
+		
+		public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> xs)
 		{
 			return new ReadOnlyCollection<T>(xs.ToList());
 		}

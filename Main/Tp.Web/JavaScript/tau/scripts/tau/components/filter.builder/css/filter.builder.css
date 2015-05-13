@@ -1,0 +1,143 @@
+.filter-builder {
+    max-width: 700px;
+}
+.filter-builder-popup .tau-bubble__inner {
+    margin: 6px 0 0 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 1px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+}
+.filter-builder__state-message {
+    font-size: 13px;
+    padding: 10px 15px;
+}
+.filter-builder__body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 480px;
+}
+.filter-builder__table {
+    display: table;
+    font-size: 13px;
+}
+.filter-builder__row {
+    display: table-row;
+}
+.filter-builder__row.active {
+    background: #fff6be;
+}
+.filter-builder__cell {
+    display: table-cell;
+    vertical-align: top;
+    border-style: solid;
+    border-color: #ebebeb;
+    border-width: 0 0 1px 1px;
+    padding: 3px 0 0 3px;
+    min-width: 180px;
+}
+.filter-builder__cell:first-child {
+    max-width: 300px;
+    padding: 6px 10px;
+    border-left-width: 0;
+}
+.filter-builder__filter-list {
+    font-size: 0;
+}
+.filter-builder__filter,
+.filter-builder__filter__editable,
+.filter-builder__filter__editable-width {
+    font-size: 13px;
+}
+.filter-builder__filter {
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    border-radius: 2px;
+    vertical-align: top;
+    overflow: hidden;
+    margin: 0 3px 3px 0;
+    padding: 3px 23px 4px 7px;
+    background: #fff;
+}
+.filter-builder__filter:first-child {
+    margin-left: 0;
+}
+.filter-builder__filter .tau-icon-close-red {
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    right: 3px;
+}
+.filter-builder__filter .tau-avatar {
+    margin: -1px 3px -1px -4px;
+    vertical-align: top;
+}
+.filter-builder__filter > .tau-checkbox > .tau-checkbox__icon {
+    top: -1px;
+}
+.filter-builder__filter__editable {
+    min-width: 35px;
+    max-width: 130px;
+    display: inline-block;
+    border-color: transparent;
+    background: transparent;
+    font-family: inherit;
+    box-sizing: border-box;
+    padding: 0;
+    border-width: 0;
+}
+.filter-builder__filter__editable::-ms-clear {
+    display: none;
+}
+.filter-builder__filter__editable:focus {
+    outline: none;
+}
+.filter-builder__filter.placeholder {
+    background: transparent;
+}
+.filter-builder__filter.placeholder .tau-icon-close-red {
+    display: none;
+}
+.filter-builder__filter__editable-width {
+    visibility: hidden;
+    position: absolute;
+    z-index: -1;
+    top: -100%;
+    pointer-events: none;
+    white-space: pre;
+}
+.filter-builder__editable-part {
+    margin: 0 5px;
+    color: #007ec1;
+    text-decoration: underline;
+}
+.filter-builder__controls {
+    padding: 10px;
+    vertical-align: baseline;
+}
+.filter-builder__controls:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.filter-builder__controls > .tau-attention {
+    float: right;
+}
+.filter-builder__popup {
+    bottom: 10px;
+}
+.filter-builder__popup .tau-bubble__inner {
+    margin: 0;
+    max-height: 100%;
+    overflow: auto;
+}
+.filter-builder-autocomplete-list.tau-autocomplete__menu {
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 1px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+}
+.filter-builder-autocomplete-list.drop-down-list .drop-down-option {
+    padding: 6px 12px;
+}
+.filter-builder-autocomplete-list .objectvalue + .stringvalue {
+    border-top: 1px solid #ebebeb;
+}

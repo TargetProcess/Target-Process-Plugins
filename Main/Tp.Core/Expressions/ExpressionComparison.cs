@@ -23,7 +23,7 @@ namespace Tp.Core.Expressions
 		public ExpressionComparison(Expression firstExpression, Expression secondExpression)
 		{
 			ExpressionsAreEqual = true;
-			_comparands = new Queue<Expression>(new ExpressionCollection(secondExpression));
+			_comparands = new Queue<Expression>(secondExpression.TraversePreOrder());
 
 			Visit(firstExpression);
 

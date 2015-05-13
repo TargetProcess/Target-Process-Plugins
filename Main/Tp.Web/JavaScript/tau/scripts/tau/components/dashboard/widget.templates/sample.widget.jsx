@@ -1,4 +1,5 @@
 define(function(require) {
+    var _ = require('Underscore');
     var React = require('libs/react/react-ex');
     var SettingsContainer = require('jsx!./shared/settings.container.view');
     var SettingsItem = require('jsx!./shared/settings.list.item.view');

@@ -30,14 +30,14 @@ tau.mashups
 
 				function profileLoaded(data) {
 					// TODO: repository should return default profile?
-					var currentDate = new Date();
 					var defaultProfile = {
 						Name: '',
 						Settings: {
 							Uri: '',
 							Login: '',
 							Password: '',
-							StartRevision: 1
+							StartRevision: 1,
+							SyncInterval: 5
 						}
 					};
 

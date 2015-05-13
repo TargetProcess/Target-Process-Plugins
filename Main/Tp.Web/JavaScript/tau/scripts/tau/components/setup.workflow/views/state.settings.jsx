@@ -159,7 +159,7 @@ define(function(require) {
             return this._isInitialOrFinal() ?
                 'The initial and final states can\'t be deleted.' :
                 (this._hasInitialOrFinalSubStates() ?
-                    'The states mapped to the initial and final states of sub workflows can\'t be deleted.' : '');
+                    'The states mapped to the initial and final states of Team Workflows can\'t be deleted.' : '');
         },
 
         render: function() {
@@ -180,7 +180,7 @@ define(function(require) {
                         {this._canBePlanned() ? <PlannedView isPlannedLink={this.linkState('isPlanned')} terms={this.props.config.terms} /> : null}
                         <section className="tau-transitions-controls">
                             <ButtonView className="tau-btn tau-primary" onClick={this._onSave}>Save</ButtonView>
-                            <ButtonView className="tau-attention tau-remove-state" disabled={!this._canBeDeleted()}
+                            <ButtonView className="tau-attention tau-btn-remove" disabled={!this._canBeDeleted()}
                                 title={this._deletedTitle()} onClick={this._onDelete}>Delete State</ButtonView>
                         </section>
                     </section>

@@ -49,22 +49,56 @@ namespace System.Linq.Expressions
 		/// <returns></returns>
 		public static Expression<Func<T, TResult>> Convert<T, TResult>(this LambdaExpression e)
 		{
-			bool needFinalCast = e.Body.Type != typeof(TResult);
+			return TryConvert<T, TResult>(e).Value;
+		}
 
-			ParameterExpression oldParameter = e.Parameters[0];
+		public static Maybe<Expression<Func<T, TResult>>> TryConvert<T, TResult>(this LambdaExpression e)
+		{
+			var maybeLambdaWithParamterConverted = TryConvertLambdaParameter<T>(e);
+			return maybeLambdaWithParamterConverted.Bind<LambdaExpression, Expression<Func<T, TResult>>>(lambdaWithParamterConverted =>
+			{
+				var result = lambdaWithParamterConverted;
 
-			bool needParameterCast = oldParameter.Type != typeof(T);
+				var needResultCast = e.Body.Type != typeof(TResult);
+				if (needResultCast && !(typeof(TResult).IsAssignableFrom(e.Body.Type) || e.Body.Type.IsAssignableFrom(typeof(TResult))))
+				{
+					return Maybe.Nothing;
+				}
 
-			LambdaExpression result = needFinalCast ? Expression.Lambda(Expression.Convert(e.Body, typeof(TResult)), e.Parameters) : e;
+				if (needResultCast)
+				{
+					var newBody = Expression.Convert(result.Body, typeof(TResult));
+					result = Expression.Lambda(newBody, result.Parameters);
+				}
+
+				// e.Body.Type == TResult but e.ReturnType is some supertype of TResult
+				if (result.ReturnType != typeof(TResult))
+				{
+					return Expression.Lambda<Func<T, TResult>>(result.Body, result.Parameters);
+				}
+
+				return (Expression<Func<T, TResult>>)result;
+			});
+		}
+
+		public static Maybe<LambdaExpression> TryConvertLambdaParameter<T>(this LambdaExpression e)
+		{
+			var oldParameter = e.Parameters[0];
+
+			var needParameterCast = oldParameter.Type != typeof(T);
+			if (needParameterCast && !(typeof(T).IsAssignableFrom(oldParameter.Type) || oldParameter.Type.IsAssignableFrom(typeof(T))))
+			{
+				return Maybe.Nothing;
+			}
 
 			if (needParameterCast)
 			{
 				var newParameter = Expression.Parameter(typeof(T), oldParameter.Name);
-				var newBody = result.Body.Replace(x => x == oldParameter, Expression.Convert(newParameter, oldParameter.Type));
-				result = Expression.Lambda(newBody, newParameter);
+				var newBody = e.Body.Replace(oldParameter, Expression.Convert(newParameter, oldParameter.Type));
+				return Expression.Lambda(newBody, newParameter);
 			}
 
-			return (Expression<Func<T, TResult>>)result;
+			return e;
 		}
 
 		public static Expression<Func<TNewParam, TResult>> ReplaceLambdaParameter<TNewParam, TResult>(this LambdaExpression e, LambdaExpression replacement)
@@ -88,16 +122,16 @@ namespace System.Linq.Expressions
 
 		public static T Replace<T>(this T @in, Expression what, Expression with) where T : Expression
 		{
-			return (T)new Replacer(e => e == what, e => with).Visit(@in);
+			return Replace(@in, x => x == what, with);
 		}
-
+		
 		public static T Replace<T>(this T @in, Func<Expression, bool> predicate, Expression with) where T : Expression
 		{
-			return (T)new Replacer(predicate, e => with).Visit(@in);
+			return Replace(@in, e => predicate(e) ? Maybe.Just(with) : Maybe.Nothing);
 		}
-		public static T Replace<T>(this T @in, Func<Expression, bool> predicate, Func<Expression, Expression> with) where T : Expression
+		public static T Replace<T>(this T @in, Func<Expression, Maybe<Expression>> replacement) where T : Expression
 		{
-			return (T)new Replacer(predicate, with).Visit(@in);
+			return (T)new Replacer(replacement).Visit(@in);
 		}
 
 		public static Expression ApplyExpression(this LambdaExpression lambda, params Expression[] arguments)
@@ -302,6 +336,11 @@ namespace System.Linq.Expressions
 		{
 			return (T)(new ProtectFromDivideByZeroVisitor().Visit(expression));
 		}
+		public static T FixFloatEqualityComparison<T>(this T expression, float delta) where T : Expression
+		{
+			return (T)(new FixFloatComparisonVisitor(delta).Visit(expression));
+		}
+
 
 		public static Expression<Func<T, bool>> CombineAnd<T>(this Expression<Func<T, bool>> head, params Expression<Func<T, bool>>[] tail)
 		{
@@ -339,6 +378,18 @@ namespace System.Linq.Expressions
 		public static Expression ChangeCtorType<TBase, TDerived>(this Expression lambda) where TDerived : TBase
 		{
 			return new CtorTypeChanger<TBase, TDerived>().Visit(lambda);
+		}
+
+		public static Expression ChangeCtorType(this Expression lambda, Type baseType, Type derivedType)
+		{
+			return new CtorTypeChanger(baseType, derivedType).Visit(lambda);
+		}
+
+
+		public static IEnumerable<Expression> TraversePreOrder(this Expression expression)
+		{
+			var visitor = new PreOrderTraverseVisitor();
+			return visitor.Traverse(expression);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 /* global console */
-
 define(function(require) {
     var $ = require('jQuery');
+    var _ = require('Underscore');
     var React = require('libs/react/react-ex');
     var DOM = React.DOM;
 

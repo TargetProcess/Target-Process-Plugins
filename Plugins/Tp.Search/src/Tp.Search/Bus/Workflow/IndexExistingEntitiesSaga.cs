@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -19,13 +19,13 @@ using Tp.Search.Model.Entity;
 namespace Tp.Search.Bus.Workflow
 {
 	class IndexExistingEntitiesSaga : TpSaga<IndexExistingEntitiesSagaData>,
-	                                  IAmStartedByMessages<IndexExistingEntitiesLocalMessage>,
-			                          IHandleMessages<TargetProcessExceptionThrownMessage>,
-			                          IHandleMessages<GeneralQueryResult>,
-			                          IHandleMessages<AssignableQueryResult>,
-			                          IHandleMessages<TestCaseQueryResult>,
-			                          IHandleMessages<ImpedimentQueryResult>,
-			                          IHandleMessages<CommentQueryResult>,
+									  IAmStartedByMessages<IndexExistingEntitiesLocalMessage>,
+									  IHandleMessages<TargetProcessExceptionThrownMessage>,
+									  IHandleMessages<GeneralQueryResult>,
+									  IHandleMessages<AssignableQueryResult>,
+									  IHandleMessages<TestStepQueryResult>,
+									  IHandleMessages<ImpedimentQueryResult>,
+									  IHandleMessages<CommentQueryResult>,
 									  IHandleMessages<ReleaseProjectQueryResult>
 	{
 		private readonly IDocumentIndexProvider _documentIndexProvider;
@@ -34,7 +34,7 @@ namespace Tp.Search.Bus.Workflow
 		private readonly SagaServices _sagaServices;
 		private readonly GeneralsIndexing _generalsIndexing;
 		private readonly AssignablesIndexing _assignablesIndexing;
-		private readonly TestCasesIndexing _testCasesIndexing;
+		private readonly TestStepsIndexing _testStepsIndexing;
 		private readonly ImpedimentsIndexing _impedimentsIndexing;
 		private readonly CommentsIndexing _commentsIndexing;
 		private readonly ReleaseProjectIndexing _releaseProjectIndexing;
@@ -50,8 +50,8 @@ namespace Tp.Search.Bus.Workflow
 			_logger = logger;
 			_sagaServices = sagaServices;
 			_generalsIndexing = new GeneralsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _assignablesIndexing.Start(), q => Send(q), _logger);
-			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testCasesIndexing.Start(), q => Send(q), _logger);
-			_testCasesIndexing = new TestCasesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _impedimentsIndexing.Start(), q => Send(q), _logger);
+			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testStepsIndexing.Start(), q => Send(q), _logger);
+			_testStepsIndexing = new TestStepsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _impedimentsIndexing.Start(), q => Send(q), _logger, (dto, indexer) => indexer.AddTestStepIndex(dto, DocumentIndexOptimizeSetup.NoOptimize));
 			_impedimentsIndexing = new ImpedimentsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _releaseProjectIndexing.Start(), q => Send(q), _logger);
 			_releaseProjectIndexing = new ReleaseProjectIndexing(entityIndexer, () => Data, entityTypesProvider, d => _commentsIndexing.Start(), q => Send(q), _logger);
 			_commentsIndexing = new CommentsIndexing(entityIndexer, () => Data, entityTypesProvider, d =>
@@ -66,7 +66,7 @@ namespace Tp.Search.Bus.Workflow
 			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<GeneralQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<AssignableQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<TestCaseQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<TestStepQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<ImpedimentQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<ReleaseProjectQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
@@ -89,10 +89,10 @@ namespace Tp.Search.Bus.Workflow
 		{
 			_assignablesIndexing.Handle(message);
 		}
-
-		public void Handle(TestCaseQueryResult message)
+		
+		public void Handle(TestStepQueryResult message)
 		{
-			_testCasesIndexing.Handle(message);
+			_testStepsIndexing.Handle(message);
 		}
 
 		public void Handle(ImpedimentQueryResult message)
@@ -119,7 +119,7 @@ namespace Tp.Search.Bus.Workflow
 	}
 
 	[Serializable]
-	public class IndexExistingEntitiesSagaData : ISagaEntity, IAssignableIndexingSagaData, ICommentIndexingSagaData
+	public class IndexExistingEntitiesSagaData : ISagaEntity, IAssignableIndexingSagaData, ICommentIndexingSagaData, ITestStepIndexingSagaData
 	{
 		public Guid Id { get; set; }
 		public string Originator { get; set; }
@@ -129,14 +129,14 @@ namespace Tp.Search.Bus.Workflow
 
 		public int GeneralsRetrievedCount { get; set; }
 		public int AssignablesRetrievedCount { get; set; }
-		public int TestCasesRetrievedCount { get; set; }
+		public int TestStepsRetrievedCount { get; set; }
 		public int ReleaseProjectsRetrievedCount { get; set; }
 		public int ImpedimentsRetrievedCount { get; set; }
 		public int CommentsRetrievedCount { get; set; }
 
 		public int GeneralsCurrentDataWindowSize { get; set; }
 		public int AssignablesCurrentDataWindowSize { get; set; }
-		public int TestCasesCurrentDataWindowSize { get; set; }
+		public int TestStepsCurrentDataWindowSize { get; set; }
 		public int ReleaseProjectsCurrentDataWindowSize { get; set; }
 		public int ImpedimentsCurrentDataWindowSize { get; set; }
 		public int CommentsCurrentDataWindowSize { get; set; }

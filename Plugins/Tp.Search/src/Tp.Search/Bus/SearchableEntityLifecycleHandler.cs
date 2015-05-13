@@ -40,6 +40,9 @@ namespace Tp.Search.Bus
 																								IHandleMessages<TestCaseCreatedMessage>,
 																								IHandleMessages<TestCaseUpdatedMessage>,
 																								IHandleMessages<TestCaseDeletedMessage>,
+																								IHandleMessages<TestStepCreatedMessage>,
+																								IHandleMessages<TestStepUpdatedMessage>,
+																								IHandleMessages<TestStepDeletedMessage>,
 																								IHandleMessages<TestPlanCreatedMessage>,
 																								IHandleMessages<TestPlanUpdatedMessage>,
 																								IHandleMessages<TestPlanDeletedMessage>,
@@ -231,20 +234,35 @@ namespace Tp.Search.Bus
 		{
 			RemoveAssignableIndex(Mapper.Map<EpicDTO, AssignableDTO>(message.Dto));
 		}
-
+		
 		public void Handle(TestCaseCreatedMessage message)
 		{
-			AddTestCaseIndex(message.Dto);
+			AddGeneralIndex(Mapper.Map<TestCaseDTO, GeneralDTO>(message.Dto));
 		}
 
 		public void Handle(TestCaseUpdatedMessage message)
 		{
-			UpdateTestCaseIndex(message.Dto, message.ChangedFields);
+			UpdateGeneralIndex(Mapper.Map<TestCaseDTO, GeneralDTO>(message.Dto), GetGeneralChangedFields(message.ChangedFields));
 		}
 
 		public void Handle(TestCaseDeletedMessage message)
 		{
-			RemoveTestCaseIndex(message.Dto);
+			RemoveGeneralIndex(Mapper.Map<TestCaseDTO, GeneralDTO>(message.Dto));
+		}
+		
+		public void Handle(TestStepCreatedMessage message)
+		{
+			AddTestStepIndex(message.Dto);
+		}
+
+		public void Handle(TestStepUpdatedMessage message)
+		{
+			UpdateTestStepIndex(message.Dto, message.ChangedFields);
+		}
+
+		public void Handle(TestStepDeletedMessage message)
+		{
+			RemoveTestStepIndex(message.Dto);
 		}
 
 		public void Handle(TestPlanCreatedMessage message)
@@ -345,9 +363,9 @@ namespace Tp.Search.Bus
 			RebuildOrAction(() => _entityIndexer.AddAssignableIndex(assignableDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
-		private void AddTestCaseIndex(TestCaseDTO testCaseDto)
+		private void AddTestStepIndex(TestStepDTO testStepDto)
 		{
-			RebuildOrAction(() => _entityIndexer.AddTestCaseIndex(testCaseDto, DocumentIndexOptimizeSetup.DeferredOptimize));
+			RebuildOrAction(() => _entityIndexer.AddTestStepIndex(testStepDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
 		private void AddImpedimentIndex(ImpedimentDTO impedimentDto)
@@ -365,9 +383,9 @@ namespace Tp.Search.Bus
 			RebuildOrAction(() => _entityIndexer.UpdateAssignableIndex(assignableDto, changedAssignableFields, false, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
-		private void UpdateTestCaseIndex(TestCaseDTO testCaseDto, ICollection<TestCaseField> changedTestCaseFields)
+		private void UpdateTestStepIndex(TestStepDTO testStepDto, ICollection<TestStepField> changedTestStepFields)
 		{
-			RebuildOrAction(() => _entityIndexer.UpdateTestCaseIndex(testCaseDto, changedTestCaseFields, false, DocumentIndexOptimizeSetup.DeferredOptimize));
+			RebuildOrAction(() => _entityIndexer.UpdateTestStepIndex(testStepDto, changedTestStepFields, Maybe.Nothing, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
 		private void UpdateImpedimentIndex(ImpedimentDTO impedimentDto, ICollection<ImpedimentField> changedImpedimentFields)
@@ -389,10 +407,10 @@ namespace Tp.Search.Bus
 		{
 			RebuildOrAction(() => _entityIndexer.RemoveAssignableIndex(assignableDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
-
-		private void RemoveTestCaseIndex(TestCaseDTO testCaseDto)
+		
+		private void RemoveTestStepIndex(TestStepDTO testStepDto)
 		{
-			RebuildOrAction(() => _entityIndexer.RemoveTestCaseIndex(testCaseDto, DocumentIndexOptimizeSetup.DeferredOptimize));
+			RebuildOrAction(() => _entityIndexer.RemoveTestStepIndex(testStepDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
 		private void RemoveImpedimentIndex(ImpedimentDTO impedimentDto)

@@ -4,6 +4,7 @@
 // 
 
 using System;
+using Tp.Core.Annotations;
 
 namespace Tp.Core
 {
@@ -69,7 +70,7 @@ namespace Tp.Core
 			get { return StartDate.GetValueOrDefault().Date > CurrentDate.Value.Date; }
 		}
 
-		[Annotations.AssertionMethod]
+		[AssertionMethod]
 		private void AssertDateRangeIsValid()
 		{
 			if (_validatePeriod && !IsValidRange(StartDate, EndDate))

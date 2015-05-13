@@ -104,9 +104,9 @@ namespace System.Collections.Generic
 		public static Maybe<TVal> GetValue<TKey, TVal>(this IDictionary<TKey, TVal> d, TKey k)
 		{
 			TVal fetched;
-			if ((object)k == null)
-				return Maybe.Nothing;
-			return !d.TryGetValue(k, out fetched) ? Maybe.Nothing : Maybe.Just(fetched);
+			return k == null 
+				? Maybe.Nothing 
+				: (!d.TryGetValue(k, out fetched) ? Maybe.Nothing : Maybe.Just(fetched));
 		}
 
 		public static TVal GetValueFailingVerbose<TKey, TVal>(this IDictionary<TKey, TVal> d, TKey k)

@@ -1,0 +1,1 @@
+define(["tau/components/component.creator","tau/components/component.property.time","tau/models/model.property.planInitialEstimate"],function(e,t,n){return{create:function(e){return e=_.clone(e||{}),e.propertyName="initialEstimate",e.ModelType=n,t.create(e)}}});

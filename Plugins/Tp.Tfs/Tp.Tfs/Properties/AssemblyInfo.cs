@@ -32,7 +32,7 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.5.4.13447")]
-[assembly: AssemblyVersion("3.5.4.13447")]
-[assembly: AssemblyFileVersion("3.5.4.13447")]
+// [assembly: AssemblyVersion("3.7.0.16545")]
+[assembly: AssemblyVersion("3.7.0.16545")]
+[assembly: AssemblyFileVersion("3.7.0.16545")]
 [assembly: PluginAssembly("TFS", "Exports revisions from TFS and binds source code to TargetProcess user stories, bugs and tasks.", "Source Control", "tfs-icon.png")]

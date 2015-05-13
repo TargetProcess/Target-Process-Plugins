@@ -1,4 +1,6 @@
-﻿namespace Tp.Search.Bus.Data
+﻿using Tp.Search.Model.Query;
+
+namespace Tp.Search.Bus.Data
 {
 	public class QueryData
 	{
@@ -20,21 +22,41 @@
 		public bool IncludeNoProject { get; set; }
 		public bool IncludeNoTeam { get; set; }
 		public PageData Page { get; set; }
-
+		
 		public bool IsCommentEntityType
 		{
-			get { return EntityTypeId == 19; }
+			get { return EntityTypeId == QueryEntityTypeProvider.COMMENT_TYPE_ID; }
+		}
+
+		public bool ShouldSearchTestStep
+		{
+			get 
+			{
+				if (IsEntityStatesProvided)
+				{
+					return false;
+				}
+				return EntityTypeId == null || EntityTypeId == QueryEntityTypeProvider.TESTCASE_TYPE_ID;
+			}
 		}
 
 		public bool ShouldSearchComment
 		{
-			get 
+			get
 			{
-				if (EntityStateIds != null && EntityStateIds.Length != 0)
+				if (IsEntityStatesProvided)
 				{
 					return false;
 				}
 				return EntityTypeId == null || IsCommentEntityType;
+			}
+		}
+
+		private bool IsEntityStatesProvided
+		{
+			get
+			{
+				return EntityStateIds != null && EntityStateIds.Length != 0;
 			}
 		}
 	}

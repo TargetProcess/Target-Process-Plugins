@@ -1,0 +1,1 @@
+define(["require","./editor.adapter.default"],function(e){var a=e("./editor.adapter.default");return a.extend({adaptEditorData:function(e,a){var t=this._super(e,a);return e.hideIf&&(t.hasValue=!e.hideIf(a)),t},_initEditor:function(e,a){this._super(e,a,{savingEvent:"beforeSave",savedEvent:"afterSave",saveFailedEvent:"saveFailed",finishedEvent:"afterSave"})}})});

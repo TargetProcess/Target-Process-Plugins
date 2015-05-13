@@ -1,0 +1,1 @@
+define([],function(){return{MENU_GROUP:"menu-group",MENU_ITEM_LIST:"menu-item-list",MENU_ITEM_REPORT:"menu-item-report",MENU_ITEM_OTHER:"menu-item",PROCESS_ITEM_STATE:"process-item-state",VISUAL_ENCODING_ITEM:"visual-encoding-item",DASHBOARD_WIDGET:"dashboard-widget",attributes:function(e,t,E){return{"data-sortable-key":e,"data-sortable-type":t,draggable:E!==!1}}}});

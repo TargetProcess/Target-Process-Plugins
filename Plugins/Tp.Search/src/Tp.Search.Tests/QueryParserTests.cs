@@ -197,7 +197,6 @@ namespace Tp.Search.Tests
 			queryParserResult.Words.Should(Be.EqualTo("*us*"));
 			queryParserResult.Numbers.Should(Be.EqualTo("+22"));
 		}
-
 		private QueryParser QueryParser()
 		{
 			return ObjectFactory.GetInstance<QueryParser>();

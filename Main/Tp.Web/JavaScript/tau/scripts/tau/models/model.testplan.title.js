@@ -1,0 +1,1 @@
+define(["require","tau/models/model.title"],function(e){var n=e("tau/models/model.title");return n.extend({additionFields:{linkedGeneral:["id",{entityType:["name"]}]},getDataToBind:function(e,n,t){var i=this._super(e,n,t);return e.linkedGeneral&&(i.linkedEntityType={name:e.linkedGeneral.entityType.name}),i}})});

@@ -35,7 +35,7 @@ namespace Tp.Search.Model.Query
 
 		public Maybe<QueryPlan> Build(QueryData data, DocumentIndexTypeToken projectContextType, DocumentIndexTypeToken squadContextType, DocumentIndexTypeToken entityType)
 		{
-			var projectContextPlan = ContextPlansBuilder.BuildProjectContextPlan(data.ProjectIds, data.IncludeNoProject, projectContextType);
+			var projectContextPlan = BuildProjectContextPlan(data.ProjectIds, data.IncludeNoProject, projectContextType);
 			var squadPlan = BuildSquadPlan(data.TeamIds, data.IncludeNoTeam, squadContextType);
 			var projectAndSquad = projectContextPlan.And(squadPlan);
 			var noSquadEntityPlan = BuildNoSquadEntityProjectContextPlan(data, projectContextType, entityType);
@@ -59,7 +59,7 @@ namespace Tp.Search.Model.Query
 			Maybe<QueryPlan> result = Maybe.Nothing;
 			foreach (var projectsReachableThroughTeamData in data.TeamProjectRelations)
 			{
-				var projectContextPlan = ContextPlansBuilder.BuildProjectContextPlan(projectsReachableThroughTeamData.ProjectIds, false, projectContextType);
+				var projectContextPlan = BuildProjectContextPlan(projectsReachableThroughTeamData.ProjectIds, false, projectContextType);
 				var squadPlan = BuildSquadPlan(new[] { projectsReachableThroughTeamData.TeamId }, false, squadContextType);
 				var temp = projectContextPlan.And(squadPlan);
 				result = result.Or(temp);
@@ -67,7 +67,7 @@ namespace Tp.Search.Model.Query
 			return result;
 		}
 
-		Maybe<QueryPlan> IProjectContextQueryPlanBuilder.BuildProjectContextPlan(IEnumerable<int> projectIds, bool includeNoProject, DocumentIndexTypeToken projectIndexTypeToken)
+		public Maybe<QueryPlan> BuildProjectContextPlan(IEnumerable<int> projectIds, bool includeNoProject, DocumentIndexTypeToken projectIndexTypeToken)
 		{
 			ProjectIndexData projectIdsIndexData = projectIds != null ? new ProjectIndexData(projectIds.Cast<int?>().ToList()) : ProjectIndexData.Empty;
 			ProjectIndexData nullProjectIndexData = includeNoProject ? new ProjectIndexData(new int?[] {null}) : ProjectIndexData.Empty;
@@ -80,12 +80,7 @@ namespace Tp.Search.Model.Query
 			IDocumentIndex projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, projectIndexTypeToken);
 			return projectContextIndex.BuildExecutionPlan(new ParsedQuery(words: query), _profile.Initialized);
 		}
-
-		private IProjectContextQueryPlanBuilder ContextPlansBuilder
-		{
-			get { return this; }
-		}
-
+		
 		private Maybe<QueryPlan> BuildSquadPlan(IEnumerable<int> squadIds, bool includeNoTeam, DocumentIndexTypeToken squadContextType)
 		{
 			var queryBuf = new List<string>();
@@ -108,7 +103,7 @@ namespace Tp.Search.Model.Query
 
 		private Maybe<QueryPlan> BuildNoSquadEntityProjectContextPlan(QueryData data, DocumentIndexTypeToken project, DocumentIndexTypeToken entityType)
 		{
-			var projectContextPlan = ContextPlansBuilder.BuildProjectContextPlan(data.ProjectIds, data.IncludeNoProject, project);
+			var projectContextPlan = BuildProjectContextPlan(data.ProjectIds, data.IncludeNoProject, project);
 			if (!projectContextPlan.HasValue)
 			{
 				return Maybe.Nothing;

@@ -5,25 +5,21 @@ namespace Tp.Core.Expressions.Visitors
 {
 	class Replacer : ExpressionVisitor
 	{
-		private readonly Func<Expression, bool> _predicate;
-		private readonly Func<Expression, Expression> _with;
+		private readonly Func<Expression, Maybe<Expression>> _replacement;
 
-		internal Replacer(Func<Expression, bool> predicate, Func<Expression, Expression> with)
+		internal Replacer(Func<Expression, Maybe<Expression>> replacement)
 		{
-			_predicate = predicate;
-			_with = with;
+			_replacement = replacement;
 		}
 
 		public override Expression Visit(Expression node)
 		{
-			if (_predicate(node))
-				return base.Visit(_with(node));
-			return base.Visit(node);
+			return _replacement(node).GetOrElse(() => base.Visit(node));
 		}
 
 		protected override Expression VisitExtension(Expression node)
 		{
-			return node;
+			return _replacement(node).GetOrDefault(node);
 		}
 	}
 }

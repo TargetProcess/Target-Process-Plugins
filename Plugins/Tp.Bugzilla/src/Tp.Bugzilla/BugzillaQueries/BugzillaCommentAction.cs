@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -12,6 +12,9 @@ namespace Tp.Bugzilla.BugzillaQueries
 {
 	public class BugzillaCommentAction : IBugzillaAction
 	{
+		private static readonly Regex LineBreakTagRegEx = new Regex(@"(<br\ *\/?>)+", RegexOptions.Compiled);
+		private static readonly Regex HtmlTagsRegEx = new Regex(@"<[^>]*>", RegexOptions.Compiled);
+
 		private readonly string _bugzillaBugId;
 		private readonly string _commentText;
 		private readonly string _owner;
@@ -27,24 +30,26 @@ namespace Tp.Bugzilla.BugzillaQueries
 
 		public string Value()
 		{
-			var decoded = HttpUtility.HtmlDecode(_commentText);
-			decoded = decoded.Replace("<br>", "\r\n");
-			decoded = decoded.Replace("<br/>", "\r\n");
-			decoded = decoded.Replace("<br />", "\r\n");
+			var plainText = StripHtmlTags(_commentText);
+			var decoded = HttpUtility.HtmlDecode(plainText);
 			//remove &nbsp;
-			decoded = decoded.Replace(((char) 160).ToString(), " ");
-			var text = Regex.Replace(decoded, "<[^>]*>", string.Empty);
+			var text = decoded.Replace((char)160, ' ');
 
-			var base64String = Convert.ToBase64String(Encoding.ASCII.GetBytes(text));
+			var base64String = HttpUtility.UrlEncode(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)));
 
 			return string.Format("cmd=add_comment&bugid={0}&comment_text={1}&owner={2}&date={3}", _bugzillaBugId,
-			                     base64String,
-			                     _owner, _createDate.ToString("u"));
+													 base64String,
+													 _owner, _createDate.ToString("u"));
 		}
 
 		public string GetOperationDescription()
 		{
 			return string.Format("Add comment to bug with id '{0}' and owner '{1}'", _bugzillaBugId, _owner);
+		}
+
+		private static string StripHtmlTags(string input)
+		{
+			return HtmlTagsRegEx.Replace(LineBreakTagRegEx.Replace(input, "\r\n"), string.Empty);
 		}
 	}
 }

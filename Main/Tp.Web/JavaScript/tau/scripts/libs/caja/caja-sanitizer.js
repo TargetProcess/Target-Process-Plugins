@@ -1,1 +1,1 @@
-define(["libs/caja/html-css-sanitizer-minified"],function(){return function(n){return html_sanitize(n,function(n){return n})}});
+define(["libs/caja/html-css-sanitizer-minified"],function(){return html4.ATTRIBS["*::data-mention"]=html4.atype.NONE,function(n){return html_sanitize(n,function(n){return n})}});

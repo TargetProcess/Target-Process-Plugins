@@ -1,5 +1,6 @@
 define(function(require) {
     var $ = require('jQuery');
+    var _ = require('Underscore');
     var React = require('react');
     var Tag = require('jsx!./template.list.tag.view');
     var ScrollMixin = require('./template.list.scroll.mixin');

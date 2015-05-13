@@ -15,7 +15,7 @@ namespace Tp.Tfs
 		public Uri TfsCollectionUri { get; set; }
 		public string TeamProjectName { get; set; }
 		public int SegmentsCount { get; set; }
-		public NetworkCredential Credential { get; set; }
+		public TfsClientCredentials Credential { get; set; }
 	}
 
 	public static class TfsConnectionHelper
@@ -84,9 +84,9 @@ namespace Tp.Tfs
 			return new[] { teamProject };
 		}
 
-		public static NetworkCredential CreateCredential(ISourceControlConnectionSettingsSource settings)
+		public static TfsClientCredentials CreateCredential(ISourceControlConnectionSettingsSource settings)
 		{
-			string domen = string.Empty;
+			var domen = string.Empty;
 			string login;
 
 			if (settings.Login.IndexOf('\\') > 0)
@@ -99,7 +99,9 @@ namespace Tp.Tfs
 				login = settings.Login;
 			}
 
-			NetworkCredential credential = string.IsNullOrEmpty(domen) ? new NetworkCredential(login, settings.Password) : new NetworkCredential(login, settings.Password, domen);
+			var credential = string.IsNullOrEmpty(domen) ? 
+				new TfsClientCredentials(new BasicAuthCredential(new NetworkCredential(login, settings.Password))) : 
+				new TfsClientCredentials(new WindowsCredential(new NetworkCredential(login, settings.Password, domen)));
 
 			return credential;
 		}
@@ -119,7 +121,7 @@ namespace Tp.Tfs
 			return workItemTypes;
 		}
 
-		private static bool CheckTfsServerPath(string path, NetworkCredential credential)
+		private static bool CheckTfsServerPath(string path, TfsClientCredentials credential)
 		{
 			TfsConfigurationServer tfsServer = null;
 			try

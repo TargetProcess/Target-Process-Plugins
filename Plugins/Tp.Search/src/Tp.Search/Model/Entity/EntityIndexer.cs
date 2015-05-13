@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -87,7 +87,7 @@ namespace Tp.Search.Model.Entity
 				return new IndexResult();
 			}
 			IDocumentIndex entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
-			EntityDocument document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(releaseProject.ReleaseID));
+			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(releaseProject.ReleaseID));
 			if (document == null)
 			{
 				_log.Debug("Cannot index releaseproject {0} for release {1} and project {2}".Fmt(releaseProject.ID, releaseProject.ReleaseName, releaseProject.ProjectName));
@@ -131,6 +131,119 @@ namespace Tp.Search.Model.Entity
 				entityProjectIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
 			}
 			return new IndexResult();
+		}
+
+		public IndexResult AddTestStepIndex(TestStepDTO testStep, DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			var indexResult = new IndexResult();
+			if (testStep.TestStepID == null || testStep.TestCaseID == null)
+			{
+				return new IndexResult();
+			}
+			if (Exists<hOOt.Document>(testStep.TestStepID.Value, DocumentIndexTypeToken.TestStep))
+			{
+				_logHelper.LogTestStepCreatedMessage(testStep.TestStepID, testStep.TestCaseID);
+				return indexResult;
+			}
+			var testCaseIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var testCaseDocument = testCaseIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(testStep.TestCaseID));
+			if (testCaseDocument == null)
+			{
+				_logHelper.LogTestStepCreatedMessageIfThereIsNoTestCase(testStep.TestStepID, testStep.TestCaseID);
+				return indexResult;
+			}
+			var testStepIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStep);
+			var doc = _documentFactory.CreateTestStep(testStep);
+			if (doc == null)
+			{
+				return indexResult;
+			}
+			indexResult = testStepIndex.Index(doc, false, optimizeSetup);
+			_log.Debug(string.Format("Added Test Step #{0} to Test Case #{1}: {2}", testStep.TestStepID.GetValueOrDefault(), testStep.TestCaseID.GetValueOrDefault(), indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " no words added;"));
+			if (indexResult.DocNumber != -1 && testCaseDocument.DocNumber != -1)
+			{
+				IDocumentIndex testCaseProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+				var testCaseProjectIndexResult = testCaseProjectIndex.GetExistingIndexByNumber(testCaseDocument.DocNumber);
+				var testCaseProjectIndexData = ProjectIndexData.Parse(testCaseProjectIndexResult);
+				IDocumentIndex testStepProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStepProject);
+				testStepProjectIndex.Index(indexResult.DocNumber, testCaseProjectIndexData.ToString(), optimizeSetup);
+			}
+			return indexResult;
+		}
+
+		public IndexResult UpdateTestStepIndex(TestStepDTO testStep, ICollection<TestStepField> changedFields, Maybe<int?> projectId,
+			DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (testStep.TestStepID == null || testStep.TestCaseID == null)
+			{
+				return new IndexResult();
+			}
+			var testCaseIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var testCaseDocument = testCaseIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(testStep.TestCaseID));
+			if (testCaseDocument == null)
+			{
+				_logHelper.LogTestStepUpdateMessage(testStep.TestStepID, testStep.TestCaseID);
+				return new IndexResult();
+			}
+			var testStepIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStep);
+			var testStepDocument = testStepIndex.FindDocumentByName<hOOt.Document>(EntityDocument.CreateName(testStep.TestStepID));
+			if (testStepDocument == null)
+			{
+				_logHelper.LogTestStepUpdateMessage(testStep.TestStepID, testStep.TestCaseID);
+				return new IndexResult();
+			}
+			if (testStepDocument.DocNumber >= 0)
+			{
+				if (projectId.HasValue)
+				{
+					IDocumentIndex testCaseProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+					var testCaseProjectIndexResult = testCaseProjectIndex.GetExistingIndexByNumber(testCaseDocument.DocNumber);
+					var testCaseProjectIndexData = ProjectIndexData.Parse(testCaseProjectIndexResult);
+					IDocumentIndex testStepProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStepProject);
+					testStepProjectIndex.Update(testStepDocument.DocNumber, testCaseProjectIndexData.ToString(), optimizeSetup);
+				}
+				if (changedFields.Any(f => testStepIndex.Type.IsBelongedToIndexFields(f)))
+				{
+					var text = _documentFactory.CreateTestStep(testStep).Text;
+					var indexResult = testStepIndex.Update(testStepDocument.FileName, text, optimizeSetup);
+					_log.Debug(string.Format("Updated Test Step #{0} of Test Case #{1}:{2}{3}", testStep.TestStepID.GetValueOrDefault(), testStep.TestCaseID.GetValueOrDefault(), indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " NO WORDS ADDED;", indexResult.WordsRemoved.Any() ? string.Format(" removed words - {0};", string.Join(",", indexResult.WordsRemoved)) : " no words removed;"));
+					return indexResult;
+				}
+			}
+			return new IndexResult();
+		}
+
+		public IndexResult RemoveTestStepIndex(TestStepDTO testStep, DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (testStep.TestStepID == null || testStep.TestCaseID == null)
+			{
+				return new IndexResult();
+			}
+			var testCaseIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var testCaseDocument = testCaseIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(testStep.TestCaseID));
+			if (testCaseDocument == null)
+			{
+				_logHelper.LogTestStepDeletedMessage(testStep.TestStepID, testStep.TestCaseID);
+				return new IndexResult();
+			}
+			var testStepIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStep);
+			var testStepDocument = testStepIndex.FindDocumentByName<hOOt.Document>(EntityDocument.CreateName(testStep.TestStepID));
+			if (testStepDocument == null)
+			{
+				_logHelper.LogTestStepDeletedMessage(testStep.TestStepID, testStep.TestCaseID);
+				return new IndexResult();
+			}
+			var indexResult = testStepIndex.Rebuild(_documentFactory.CreateEmptyhOOtDocument(testStepDocument.DocNumber, EntityDocument.CreateName(testStep.TestStepID)), false, optimizeSetup);
+			_log.Debug(string.Format("Removed Test Step #{0} from Test Case #{1}", testStep.TestStepID.GetValueOrDefault(), testStep.TestCaseID.GetValueOrDefault()));
+			if (indexResult.DocNumber >= 0)
+			{
+				IDocumentIndex testStepProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStepProject);
+				testStepProjectIndex.Update(indexResult.DocNumber, string.Empty, optimizeSetup);
+			}
+			return indexResult;
 		}
 
 		public void OptimizeGeneralIndex(DocumentIndexOptimizeSetup optimizeSetup = null)
@@ -383,131 +496,6 @@ namespace Tp.Search.Model.Entity
 			return indexResult;
 		}
 
-		public IndexResult AddTestCaseIndex(TestCaseDTO testCase, DocumentIndexOptimizeSetup optimizeSetup = null)
-		{
-			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
-			if (testCase.TestCaseID == null)
-			{
-				return new IndexResult();
-			}
-			string entityTypeName = GetEntityTypeName(testCase.EntityTypeID);
-			if (Exists<EntityDocument>(testCase.TestCaseID.Value, DocumentIndexTypeToken.Entity))
-			{
-				_logHelper.LogCreatedMessage(entityTypeName, testCase.TestCaseID, testCase.Name);
-				return new IndexResult();
-			}
-			var entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
-			var doc = _documentFactory.CreateTestCase(testCase);
-			var indexResult = doc == null ? new IndexResult() : entityIndex.Index(doc, false, optimizeSetup);
-			if (indexResult.DocNumber != -1)
-			{
-				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				entityProjectIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateProjectData(testCase.ProjectID).ToString(), optimizeSetup);
-				if (testCase.EntityTypeID != null)
-				{
-					IDocumentIndex entityTypeIndices = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
-					entityTypeIndices.Index(indexResult.DocNumber, entityTypeName, optimizeSetup);
-				}
-			}
-			_log.Debug(string.Format("Added {0} #{1} - '{2}':{3}", entityTypeName, testCase.TestCaseID.GetValueOrDefault(), testCase.Name, indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " no words added;"));
-			return indexResult;
-		}
-
-		public void OptimizeTestCaseIndex(DocumentIndexOptimizeSetup optimizeSetup = null)
-		{
-			optimizeSetup = GetImmediateOptimizeIfNull(optimizeSetup);
-			var indexes = new[] { DocumentIndexTypeToken.Entity, DocumentIndexTypeToken.EntityProject, DocumentIndexTypeToken.EntityType}.Select(d => _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, d));
-			indexes.ForEach(i => i.Optimize(optimizeSetup));
-		}
-
-		public IndexResult UpdateTestCaseIndex(TestCaseDTO testCase, ICollection<TestCaseField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null)
-		{
-			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
-			if (testCase.TestCaseID == null)
-			{
-				return new IndexResult();
-			}
-			var indexes = _documentIndexProvider.GetOrCreateDocumentIndexes(_pluginContext, DocumentIndexTypeToken.Entity, DocumentIndexTypeToken.EntityProject, DocumentIndexTypeToken.EntityType);
-			if (!changedFields.Any(f => indexes.Any(i => i.Type.IsBelongedToDocumentFields(f) || i.Type.IsBelongedToIndexFields(f))))
-			{
-				return new IndexResult();
-			}
-			var entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
-			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(testCase.TestCaseID));
-			string entityTypeName = GetEntityTypeName(testCase.EntityTypeID);
-			if (document == null)
-			{
-				_logHelper.LogUpdateMessage(entityTypeName, testCase.TestCaseID, testCase.Name);
-				return new IndexResult();
-			}
-			if (changedFields.Any(f => entityIndex.Type.IsBelongedToDocumentFields(f)))
-			{
-				document.ProjectId = _documentIdFactory.CreateProjectId(testCase.ProjectID.GetValueOrDefault());
-				document.EntityTypeId = _documentIdFactory.CreateEntityTypeId(testCase.EntityTypeID.GetValueOrDefault());
-				entityIndex.SaveDocument(document, false);
-				_log.Debug(string.Format("Updated {0} #{1} - '{2}':{3}{4}", entityTypeName,
-						 testCase.TestCaseID.GetValueOrDefault(), testCase.Name,
-						 changedFields.Contains(TestCaseField.ProjectID) ? string.Format(" Project - {0};", string.Join(",", testCase.ProjectName)) : string.Empty,
-						 changedFields.Contains(TestCaseField.EntityTypeID) ? string.Format(" EntityType - {0};", string.Join(",", entityTypeName)) : string.Empty));
-			}
-			var indexResult = new IndexResult();
-			if (document.DocNumber >= 0)
-			{
-				if (changedFields.Any(f => entityIndex.Type.IsBelongedToIndexFields(f)))
-				{
-					var newText = _documentFactory.CreateTestCase(testCase).Text;
-					indexResult = entityIndex.Update(document.DocNumber, newText, optimizeSetup);
-					_log.Debug(string.Format("Updated {0} #{1} - '{2}':{3}{4}", entityTypeName, testCase.TestCaseID.GetValueOrDefault(), testCase.Name, indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " NO WORDS ADDED;", indexResult.WordsRemoved.Any() ? string.Format(" removed words - {0};", string.Join(",", indexResult.WordsRemoved)) : " no words removed;"));
-				}
-				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				if (changedFields.Any(f => entityProjectIndex.Type.IsBelongedToIndexFields(f)))
-				{
-					entityProjectIndex.Update(document.DocNumber, _indexDataFactory.CreateProjectData(testCase.ProjectID).ToString(), optimizeSetup);
-					if (!isIndexing)
-					{
-						_localBus.SendLocal(new GeneralProjectChangedLocalMessage
-							{
-								GeneralId = testCase.TestCaseID.Value,
-								ProjectId = testCase.ProjectID
-							});
-					}
-				}
-				IDocumentIndex entityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
-				if (changedFields.Any(f => entityTypeIndex.Type.IsBelongedToIndexFields(f)))
-				{
-					entityTypeIndex.Update(document.DocNumber, entityTypeName, optimizeSetup);
-				}
-			}
-			return indexResult;
-		}
-
-		public IndexResult RemoveTestCaseIndex(TestCaseDTO testCase, DocumentIndexOptimizeSetup optimizeSetup = null)
-		{
-			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
-			if (testCase.TestCaseID == null)
-			{
-				return new IndexResult();
-			}
-			var entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
-			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(testCase.TestCaseID));
-			string entityTypeName = GetEntityTypeName(testCase.EntityTypeID);
-			if (document == null)
-			{
-				_logHelper.LogDeletedMessage(entityTypeName, testCase.TestCaseID, testCase.Name);
-				return new IndexResult();
-			}
-			var indexResult = entityIndex.Rebuild(_documentFactory.CreateEmptyEntityDocument(document.DocNumber, EntityDocument.CreateName(testCase.TestCaseID)), false, optimizeSetup);
-			_log.Debug(string.Format("Removed {0} #{1} - '{2}'", entityTypeName, testCase.TestCaseID.GetValueOrDefault(), testCase.Name));
-			if (document.DocNumber >= 0)
-			{
-				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
-				entityProjectIndex.Update(document.DocNumber, string.Empty, optimizeSetup);
-				IDocumentIndex entityTypeIndices = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityType);
-				entityTypeIndices.Update(document.DocNumber, string.Empty, optimizeSetup);
-			}
-			return indexResult;
-		}
-
 		public IndexResult AddImpedimentIndex(ImpedimentDTO impediment, DocumentIndexOptimizeSetup optimizeSetup = null)
 		{
 			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
@@ -547,6 +535,15 @@ namespace Tp.Search.Model.Entity
 		{
 			optimizeSetup = GetImmediateOptimizeIfNull(optimizeSetup);
 			var indexes = new[] { DocumentIndexTypeToken.Entity, DocumentIndexTypeToken.EntityProject, DocumentIndexTypeToken.EntityType, DocumentIndexTypeToken.EntityState, DocumentIndexTypeToken.Impediment }.Select(d => _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, d));
+			indexes.ForEach(i => i.Optimize(optimizeSetup));
+		}
+
+		public void OptimizeTestStepIndex(DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetImmediateOptimizeIfNull(optimizeSetup);
+			var indexes =
+				new[] {DocumentIndexTypeToken.TestStep, DocumentIndexTypeToken.TestStepProject}.Select(
+					d => _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, d));
 			indexes.ForEach(i => i.Optimize(optimizeSetup));
 		}
 
@@ -790,7 +787,7 @@ namespace Tp.Search.Model.Entity
 				_logHelper.LogCommentDeletedMessage(comment.CommentID, comment.GeneralName, comment.GeneralID);
                 return new IndexResult();
 			}
-			var indexResult = commentIndex.Rebuild(_documentFactory.CreateEmptyCommentDocument(commentDoc.DocNumber, EntityDocument.CreateName(comment.CommentID)), false, optimizeSetup);
+			var indexResult = commentIndex.Rebuild(_documentFactory.CreateEmptyhOOtDocument(commentDoc.DocNumber, EntityDocument.CreateName(comment.CommentID)), false, optimizeSetup);
 			_log.Debug(string.Format("Removed comment #{0} from #{1} - '{2}'", comment.CommentID.GetValueOrDefault(), comment.GeneralID.GetValueOrDefault(), comment.GeneralName));
 			if (indexResult.DocNumber >= 0)
 			{
@@ -830,6 +827,7 @@ namespace Tp.Search.Model.Entity
 		private class LogHelper
 		{
 			private const string CommentTypeName = "Comment";
+			private const string TestStepTypeName = "TestStep";
 			private readonly IActivityLogger _log;
 			private readonly IProfileReadonly _profile;
 
@@ -874,6 +872,26 @@ namespace Tp.Search.Model.Entity
 				LogDeletedMessageCore(entityTypeName, entityId, name, null);
 			}
 
+			public void LogTestStepCreatedMessageIfThereIsNoTestCase(int? testStepId, int? testCaseId)
+			{
+				LogCreatedMessageCore(CommentTypeName, testStepId, null, testCaseId, ReasonType.NotAdded);
+			}
+			
+			public void LogTestStepCreatedMessage(int? testStepId, int? testCaseId = null)
+			{
+				LogCreatedMessageCore(TestStepTypeName, testStepId, null, testCaseId, ReasonType.AlreadyAdded);
+			}
+
+			public void LogTestStepUpdateMessage(int? testStepId, int? testCaseId = null)
+			{
+				LogUpdateMessageCore(TestStepTypeName, testStepId, null, testCaseId);
+			}
+
+			public void LogTestStepDeletedMessage(int? testStepId, int? testCaseId = null)
+			{
+				LogDeletedMessageCore(TestStepTypeName, testStepId, null, testCaseId);
+			}
+
 			private void LogDeletedMessageCore(string entityTypeName, int? entityId, string name, int? boundEntityId)
 			{
 				_log.DebugFormat("{0}DeletedMessage' for entity #{1} with name '{2}' was ignored. {3}. {4}", entityTypeName, entityId, name, GetReason(ReasonType.NotAdded), CreateBoundEntityIdTrace(boundEntityId));
@@ -886,14 +904,16 @@ namespace Tp.Search.Model.Entity
 
 			private void LogCreatedMessageCore(string entityTypeName, int? entityId, string name, int? boundEntityId, ReasonType reasonType)
 			{
-				if (_profile.Initialized)
-				{
-					_log.DebugFormat("'{0}CreatedMessage' for entity #{1} with name '{2}' was ignored. {3}. {4}", entityTypeName, entityId, name, GetReason(reasonType), CreateBoundEntityIdTrace(boundEntityId));
-				}
-				else
-				{
-					_log.DebugFormat("'{0}CreatedMessage' for entity #{1} with name '{2}'. {3}. {4}", entityTypeName, entityId, name, GetReason(reasonType), CreateBoundEntityIdTrace(boundEntityId));
-				}
+				_log.DebugFormat(
+					_profile.Initialized
+						? "'{0}CreatedMessage' for entity #{1}{2} was ignored. {3}. {4}"
+						: "'{0}CreatedMessage' for entity #{1}{2}. {3}. {4}",
+					entityTypeName, entityId, CreateNameTrace(name), GetReason(reasonType), CreateBoundEntityIdTrace(boundEntityId));
+			}
+
+			private string CreateNameTrace(string name = null)
+			{
+				return String.IsNullOrEmpty(name) ? String.Empty : " with name '{0}'".Fmt(name);
 			}
 
 			private string CreateBoundEntityIdTrace(int? boundEntityId = null)

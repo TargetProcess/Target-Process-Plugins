@@ -1,0 +1,1 @@
+define([],function(){return{getLinkedTestPlan:function(e){var t=e.context;return t.configurator.getStore().get(t.entity.entityType.name,{id:t.entity.id,fields:[{linkedTestPlan:["id",{entityType:["name"]}]}]}).promise().then(function(e){return e[0].data.linkedTestPlan})}}});

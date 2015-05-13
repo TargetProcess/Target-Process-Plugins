@@ -1,0 +1,1 @@
+define(["require","./ui.extension.label.entity.count"],function(e){"use strict";var n=e("./ui.extension.label.entity.count");return n.extend({_buildFilter:function(e,n){return"?"+e+".Where(id == "+n.id+")"}})});

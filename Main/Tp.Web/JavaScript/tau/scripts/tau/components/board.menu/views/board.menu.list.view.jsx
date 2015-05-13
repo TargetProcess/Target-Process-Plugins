@@ -2,13 +2,14 @@ define(function(require) {
     var _ = require('Underscore');
     var React = require('libs/react/react-ex');
     var SortableGroups = require('tau/components/board.menu/sortable-groups');
+    var SortableItem = require('tau/components/react/mixins/sortable.item');
     var Tooltips = require('tau/components/board.menu/tooltips');
     var Scrollable = require('tau/components/board.menu/views/board.menu.list.view.scrollable.mixin');
 
     return React.defineClass(
-        ['board.menu.list.section.view', 'boardSettingsService', 'boardMenuScrollService'],
+        ['board.menu.list.section.view', 'boardSettingsService', 'boardMenuScrollService', 'loggedUser'],
 
-        function(SectionView, boardSettingsService, scrollService) {
+        function(SectionView, boardSettingsService, scrollService, loggedUser) {
             return {
                 displayName: 'BoardMenuList',
 
@@ -16,6 +17,9 @@ define(function(require) {
 
                 getSortableOptions: function() {
                     return {
+                        acceptedTypes: [SortableItem.MENU_GROUP,
+                            SortableItem.MENU_ITEM_LIST, SortableItem.MENU_ITEM_REPORT, SortableItem.MENU_ITEM_OTHER],
+                        canAcceptItem: this.canAcceptItem,
                         sortItems: this.sortItems,
                         sortGroups: this.sortGroups
                     };
@@ -50,6 +54,15 @@ define(function(require) {
                     scrollService.scrollToCurrentMenuElementIfNeeded();
                 },
 
+                canAcceptItem: function(type, key) {
+                    if (type === SortableItem.MENU_GROUP) {
+                        return true;
+                    }
+
+                    var board = this.props.model.viewMenuSections.findBoardById(key);
+                    return board.getCanPrioritizeBoard(loggedUser);
+                },
+
                 sortItems: function(key, overKey, groupKey, placeAfter) {
                     this.props.model.prioritizeBoard(key, overKey, groupKey, placeAfter);
                 },
@@ -76,13 +89,7 @@ define(function(require) {
                         />);
                     }, this);
 
-                    return (
-                        <div className="t3-views-catalog"
-                            onDragStart={this.sortStart} onDragOver={this.sortDragOver}
-                            onDragEnd={this.sortEnd} onDrop={this.sortDrop}>
-                        {sectionNodes}
-                        </div>
-                    );
+                    return <div className="t3-views-catalog tau-custom-scrollbar" {...this.sortableTarget()}>{sectionNodes}</div>;
                 }
             }
         });

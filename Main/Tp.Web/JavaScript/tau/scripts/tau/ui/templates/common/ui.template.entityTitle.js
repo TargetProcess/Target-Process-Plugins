@@ -1,0 +1,1 @@
+define(["tau/core/templates-factory"],function(e){var t={name:"entity-title",markup:['<div class="ui-title__title i-role-title">',"${__name}","</div>"],dependencies:[]};return e.register(t)});

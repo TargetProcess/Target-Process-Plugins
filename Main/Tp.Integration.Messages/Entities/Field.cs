@@ -11,14 +11,16 @@ namespace Tp.Integration.Messages.Entities
 	/// <summary>
 	/// Custom field.
 	/// </summary>
-	[Serializable][DataContract]
+	[Serializable]
+	[DataContract]
 	public class Field : ICustomFieldInfo
 	{
 
 		/// <summary>
 		/// Field name as presented on the user interface.
 		/// </summary>
-		[DataMember][XmlElement(Order = 10)]
+		[DataMember]
+		[XmlElement(Order = 10)]
 		public string Name { get; set; }
 
 		/// <summary>
@@ -57,6 +59,18 @@ namespace Tp.Integration.Messages.Entities
 		[XmlElement(Order = 70)]
 		public string DefaultValue { get; set; }
 
+		[DataMember]
+		[XmlElement(Order = 80)]
+		public string CalculationModel { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 81)]
+		public string Units { get; set; }
+
+		[XmlElement(Order = 90)]
+		public int? EntityTypeID { get; set; }
+
+
 		public Field()
 		{
 			FieldType = FieldTypeEnum.None;
@@ -70,6 +84,8 @@ namespace Tp.Integration.Messages.Entities
 			Required = other.Required;
 			Value = other.Value;
 			DefaultValue = other.DefaultValue;
+			CalculationModel = other.CalculationModel;
+			Units = other.Units;
 			Items = new List<string>(other.Items);
 		}
 

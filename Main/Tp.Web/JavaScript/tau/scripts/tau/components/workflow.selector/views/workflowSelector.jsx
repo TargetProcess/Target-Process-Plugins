@@ -2,12 +2,21 @@ define(function(require) {
     'use strict';
 
     var React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         _ = require('Underscore'),
         WorkflowUtils = require('../utils/workflow.utils'),
-        EntityTypeWorkflowSelector = require('jsx!tau/components/workflow.selector/views/entityTypeWorkflowSelector');
+        EntityTypeWorkflowSelector = require('jsx!tau/components/workflow.selector/views/entityTypeWorkflowSelector'),
+        TooltipArticle = require('jsx!tau/components/react/tooltipArticle');
 
     return React.createClass({
-        displayName: 'Workflows selector',
+        displayName: 'WorkflowSelector',
+
+        propTypes: {
+            workflowHelpData: React.PropTypes.shape({
+                canSetup: React.PropTypes.bool.isRequired,
+                url: React.PropTypes.string
+            }).isRequired
+        },
 
         getDefaultWorkflow: function(entityType) {
             return WorkflowUtils.findDefaultWorkflow(this.props.workflows, entityType);
@@ -56,7 +65,7 @@ define(function(require) {
                     return {
                         entityType: entityType,
                         workflows: this.getWorkflows(entityType)
-                    }
+                    };
                 }, this)
                 .filter(function(data) {
                     return _.some(data.workflows);
@@ -80,9 +89,20 @@ define(function(require) {
                 'tau-category-items-workflow-settings': true
             };
             return (
-                <ul className={React.addons.classSet(classes)} key={'group' + this.props.group}>
-                    {entityTypes}
-                </ul>);
+                <div>
+                    <div className="tau-customize-flow-title">
+                        Team workflows:&nbsp;
+                        {this.props.workflowHelpData.canSetup ?
+                            <TooltipArticle
+                                articleId="workflow.can.be.created"
+                                dataAttributes={{'data-url': this.props.workflowHelpData.url}}
+                            /> : null }
+                    </div>
+                    <ul className={classNames(classes)}>
+                        {entityTypes}
+                    </ul>
+                </div>
+            );
         }
     });
 });

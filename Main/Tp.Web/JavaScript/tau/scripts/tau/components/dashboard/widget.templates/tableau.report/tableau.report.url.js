@@ -1,0 +1,1 @@
+define(["require"],function(){var r=/https?:\/\/.+\/views\/.+/,e=/views\/(.+)\//;return{isValidReportUrl:function(e){return r.test(e)},reportUrlExample:"http://your.server/views/Workbook/Report",extractReportNameFromUrl:function(r){var t=r.match(e);return t?t[1]:null}}});

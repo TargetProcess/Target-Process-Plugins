@@ -1,0 +1,18 @@
+<!-- name: customReport.error.common -->
+<div class="tau-customReport-message">
+    <span class="tau-icon-general <%= this.iconClass %>"></span>
+    <% var __showHelpArticle = true; %>
+    <% if (this.header) { %>
+    <h3>
+        <%= this.header %>
+        <% if (this.helpArticleId) { %>
+        <span class='tau-help i-role-tooltipArticle' data-article-id="<%= this.helpArticleId %>"></span>
+        <% __showHelpArticle = false; %>
+        <% } %>
+    </h3>
+    <% } %>
+    <%= this.message %>
+    <% if (__showHelpArticle && this.helpArticleId) { %>
+    <span class='tau-help i-role-tooltipArticle' data-article-id="<%= this.helpArticleId %>"></span>
+    <% } %>
+</div>

@@ -2,7 +2,6 @@ tau.mashups
     .addDependency("libs/jquery/jquery")
     .addModule("testMethods", function () {
 
-
         function testMethods(config) {
             this._create(config);
         }
@@ -100,6 +99,7 @@ tau.mashups
                         "Password":password,
                         "Uri":uri,
                         "StartRevision":startRevision,
+                        SyncInterval:"60",
                         UserMapping:userMapping
                     }
                 };
@@ -144,4 +144,3 @@ tau.mashups
         };
         return testConfiguration;
     });
-

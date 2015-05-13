@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
     var _ = require('Underscore');
 
     var dependencies = [
@@ -11,6 +12,8 @@ define(function(require) {
     return React.defineClass(dependencies, function(customRulesBus, CustomRulesFeedbackView, CustomRulesListView) {
 
         return {
+            displayName: 'CustomRules',
+
             getInitialState: function() {
                 return {
                     feedbackViewDisplayed: false
@@ -36,7 +39,7 @@ define(function(require) {
                     onCancel: this._toggleFeedbackView
                 });
                 var listView = React.createElement(CustomRulesListView, { customRulesList: this.props.data });
-                var feedbackButtonClasses = React.addons.classSet({
+                var feedbackButtonClasses = classNames({
                     invisible: this.state.feedbackViewDisplayed,
                     'tau-btn': true,
                     'tau-btn-big': true,
@@ -53,7 +56,10 @@ define(function(require) {
                             </div>
                             { this.state.feedbackViewDisplayed ? feedbackView : null }
                             <div className="custom-rules__description">
-                                Use these rules to change the default business logic and to automate some actions in the system.  Note that the rules are global, they are not limited to a specific project or process.   If there is a rule enabled that you feel wasn't applied, check the system log. Don't worry if the rule you need isn't here just yet; we're already working on a language for creating your own custom rules.
+                                Use these rules to change the default business logic and to automate some actions in the system.
+                                Note that the rules are global, they are not limited to a specific project or process.
+                                If there is a rule enabled that you feel wasn't applied, check the system log.
+                                Don't worry if the rule you need isn't here just yet; we're already working on a language for creating your own custom rules.
                             </div>
                         </div>
                         {listView}

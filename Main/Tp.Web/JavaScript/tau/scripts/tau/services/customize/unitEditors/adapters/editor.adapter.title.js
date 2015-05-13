@@ -1,0 +1,1 @@
+define(["require","./editor.adapter.text"],function(e){var t=e("./editor.adapter.text");return t.extend({_getEditable:function(e,t){e.on("$editable.ready",function(e,i){t.resolve(i)})},_initEditor:function(e,t){this._super(e,t),this._enableBubbleAdjustOnKeydown(t,e),e.editableText("activate"),this._focusOnText(e)}})});

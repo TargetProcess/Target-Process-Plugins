@@ -1,7 +1,8 @@
 define(function(require) {
     var React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         SettingsService = require('../services/state.item.process.settings.service'),
-        AddTeamWorkflow = require('jsx!./add.team.workflow.view');
+        SortableItem = require('tau/components/react/mixins/sortable.item');
 
     return React.createClass({
         getInitialState: function() {
@@ -86,7 +87,7 @@ define(function(require) {
         },
 
         render: function() {
-            var gridItemClasses = React.addons.classSet({
+            var gridItemClasses = classNames({
                 'process-grid__item': true,
                 'active': this.state.isRenaming
             });
@@ -98,7 +99,7 @@ define(function(require) {
             var isSortable = this.props.isSortable && !this.state.isRenaming;
             var isDraggable = isSortable && this.props.allowDrag;
             var isRenameable = this.props.isEnabled && !this.state.isRenaming;
-            var gridStateClasses = React.addons.classSet({
+            var gridStateClasses = classNames({
                 'process-grid__state': true,
                 'tau-draggable': isDraggable,
                 'tau-clickable': !isDraggable && isRenameable,
@@ -112,30 +113,25 @@ define(function(require) {
 
             var showSettings = this.props.isEnabled;
             var showLoader = this.props.isLoading;
-            var settingsClasses = React.addons.classSet({
+            var settingsClasses = classNames({
                 'tau-icon-general': showSettings || showLoader,
                 'tau-icon-settings-small-dark': showSettings,
                 'tau-icon-loading': showLoader
             });
 
-            var addTeamWorkflowButton = this.props.canAddTeamWorkflow ?
-                <AddTeamWorkflow addTeamWorkflowAction={this.props.addTeamWorkflowAction}
-                    defaultTeamWorkflowText={this.props.defaultTeamWorkflowText} /> :
-                null;
-
             var title = isSortable ?
-                (isDraggable ? '' : 'The order of the states mapped to the initial and final states of sub workflows can\'t be changed.') :
+                (isDraggable ? '' : 'The order of the states mapped to the initial and final states of Team Workflows can\'t be changed.') :
                 'The order of the initial and final states can\'t be changed.';
 
             return (
                 <div ref="container" className={gridItemClasses} style={gridItemStyle}
-                    data-sortable-key={this.props.id} data-sortable={isSortable} draggable={isDraggable}>
+                    {...SortableItem.attributes(this.props.id, SortableItem.PROCESS_ITEM_STATE, isDraggable)}
+                    data-sortable={isSortable}>
                     <div className={gridStateClasses} title={title}
                         onMouseMove={this._onMouseMove} onMouseOut={this._onMouseOut}>
                         <div ref="namePlaceholder" className="tau-in-text" onDoubleClick={actions.beginEdit}>{this.state.name}</div>
                         <span ref="settings" title="Change state settings" className={settingsClasses} onClick={actions.toggleSettings} />
                     </div>
-                    {addTeamWorkflowButton}
                 </div>
             );
         }

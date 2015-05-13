@@ -33,6 +33,8 @@ namespace Tp.Core.Features
 		OptimizeForUnknownQueryHint,
 		[Description(@"The solution to handle ""parameter sniffing"" based on assigning the stored procedure parameters to local variables and then using the local variables in the query.")]
 		QueryWithLocalVariables,
+		[ClientFeature("context.cacheresponse")]
+		CacheContextResponse,
 		Diagnostics,
 		TrackProgressInDb,
 		FlattenInnerReport,
@@ -119,12 +121,6 @@ namespace Tp.Core.Features
 		Dashboards,
 
 		/// <summary>
-		/// Toggles cross project releases support
-		/// </summary>
-		[ClientFeature("release.crossproject")]
-		CrossProjectReleases,
-
-		/// <summary>
 		/// Toggles logging for email notifications
 		/// </summary>
 		EmailNotificationsLogging,
@@ -165,6 +161,54 @@ namespace Tp.Core.Features
 		/// </summary>
 		[ClientFeature("general.quick.add.data.prefetch")]
 		GeneralQuickAddDataPrefetch,
+
+		/// <summary>
+		/// See US#95444 for details.
+		/// </summary>
+		[ClientFeature("single.signon")]
+		SingleSignOn,
+		/// <summary>
+		/// Enable visaul encoding for cards.
+		/// </summary>
+		VisualEncoding,
+
+		DoNotUseTableValueParameterInSqlQuery,
+
+		/// <summary>
+		/// Enable calculation of estimates over Test Plan hierarchy
+		/// </summary>
+		TestPlanHierarchyEstimates,
+
+		/// <summary>
+		/// Cache for a short term requests for context, teams and projects on client-side. See US#98645 for details.
+		/// </summary>
+		[ClientFeature("short.term.requests.cache")]
+		ShortTermRequestsCache,
+
+		/// <summary>
+		/// Enable Calculated Custom Fields
+		/// </summary>
+		[ClientFeature("calculated.custom.fields")]
+		CalculatedCustomFields,
+
+		/// <summary>
+		/// Enable Collections in calculated Custom Fields
+		/// </summary>
+		CalculatedCustomFieldsCollections,
+
+		LockAccountOnConvertOperation,
+		
+		/// <summary>
+		/// Enables Linked Test Plan related functionality. See F#83118 for details.
+		/// </summary>
+		[ClientFeature("linked.test.plan")]
+		LinkedTestPlan,
+
+		/// <summary>
+		/// Disables persistence of the clipboard. See US#100550 for details.
+		/// </summary>
+		[ClientFeature("disabled.clipboard.persistence")]
+		DisabledClipboardPersistence
 	}
 
 	public interface ITpFeatureList

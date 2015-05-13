@@ -1,0 +1,1 @@
+define(["require","react"],function(e){var r=e("react");return{editorContextPropTypes:r.PropTypes.shape({getCurrentValue:r.PropTypes.func.isRequired,setNewValue:r.PropTypes.func.isRequired})}});

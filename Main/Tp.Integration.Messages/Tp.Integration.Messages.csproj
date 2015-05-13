@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -55,6 +56,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -85,6 +87,10 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tp.Core.Functional">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountLifecycle\AccountAddedMessage.cs" />
@@ -256,6 +262,7 @@
     <Compile Include="EntityLifecycle\Messages\Comment.cs" />
     <Compile Include="EntityLifecycle\Messages\Company.cs" />
     <Compile Include="EntityLifecycle\Messages\Contact.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestStep.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomActivity.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomField.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomReport.cs" />
@@ -304,6 +311,7 @@
     <Compile Include="EntityLifecycle\Messages\UserStory.cs" />
     <Compile Include="EntityLifecycle\Queries\AssignableQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CommentQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\TestStepQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CustomFieldQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\EntityState.cs" />
     <Compile Include="EntityLifecycle\Queries\GeneralFollower.cs" />
@@ -334,6 +342,7 @@
     <Compile Include="Enums\ModificationTypeEnum.cs" />
     <Compile Include="Enums\RequesterSourceTypeEnum.cs" />
     <Compile Include="Enums\RequestSourceEnum.cs" />
+    <Compile Include="Enums\RichEditorTypeEnum.cs" />
     <Compile Include="Enums\RoleExtension.cs" />
     <Compile Include="Enums\SourceControlTypeEnum.cs" />
     <Compile Include="ForeignKeyAttribute.cs" />
@@ -447,7 +456,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

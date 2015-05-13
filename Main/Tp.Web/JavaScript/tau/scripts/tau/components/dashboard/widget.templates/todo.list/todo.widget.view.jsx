@@ -1,14 +1,17 @@
 define(function(require) {
+    var _ = require('Underscore');
     var React = require('react');
     var WidgetConstants = require('./todo.widget.constants');
     var OpenCardViewMixin = require('./todo.widget.open.card.view.mixin');
+    var StatusView = require('jsx!../shared/status.view');
+    var UnitInteractionMixin = require('jsx!./todo.widget.unit.interaction.mixin');
 
     return React.createClass({
         displayName: 'ToDo Widget',
 
-        mixins: [OpenCardViewMixin],
+        mixins: [OpenCardViewMixin, UnitInteractionMixin],
 
-        getInitialState: function() {
+        getInitialState() {
             return {
                 isLoaded: false,
                 hasMore: false,
@@ -16,15 +19,25 @@ define(function(require) {
             };
         },
 
-        componentWillMount: function() {
+        componentWillMount() {
+            this.props.cardsRetrieving.on(this._onCardsRetrieving, this);
             this.props.cardsRetrieved.on(this._onCardsRetrieved, this);
         },
 
-        componentWillUnmount: function() {
+        componentWillUnmount() {
+            this.props.cardsRetrieving.remove(this);
             this.props.cardsRetrieved.remove(this);
         },
 
-        _onCardsRetrieved: function(data) {
+        _onCardsRetrieving() {
+            if (this.isMounted()) {
+                this.setState({
+                    isLoaded: false
+                });
+            }
+        },
+
+        _onCardsRetrieved(data) {
             if (this.isMounted()) {
                 this.setState({
                     isLoaded: true,
@@ -36,41 +49,41 @@ define(function(require) {
             }
         },
 
-        _emptyMessage: function() {
-            return <div className="empty-message">
-            You have no assigned work
-                <br />
-            Get some rest
-            </div>;
-        },
-
-        _hasMoreMessage: function() {
+        _hasMoreMessage() {
             return this.state.hasMore ?
                 <div className="empty-message">Only the first {this.state.cards.length} cards are shown</div> :
                 null;
         },
 
-        _getStylesForItem: function(card) {
+        _getStylesForItem(card) {
             return this.props.highlighter.shouldHighlightCard(card, this.state.highlight) ?
             {backgroundColor: WidgetConstants.HIGHLIGHT_COLOR} :
             {};
         },
 
-        render: function() {
+        render() {
             if (!this.state.isLoaded) {
-                return <div className="empty-message">Loading data...</div>;
+                return <div className="tau-dashboard-widget-placeholder tau-loading--centered" />;
             }
 
-            var list = _.map(this.state.cards, function(card) {
+            var list = _.map(this.state.cards, card => {
                 var markup = this.props.renderCardAsText(card, this.state.layouts[card.type.toLowerCase()]);
                 return <div key={card.data.cardData.id} className="tau-dashboard-widget-todo-list__item"
                     dangerouslySetInnerHTML={{__html: markup}} style={this._getStylesForItem(card)}></div>;
             }, this);
 
-            return <div className="tau-dashboard-widget-todo-list">
-                {list.length ? list : this._emptyMessage()}
+            if (list.length) {
+                return <div className="tau-dashboard-widget-todo-list">
+                {list}
                 {this._hasMoreMessage()}
-            </div>;
+                </div>;
+            }
+
+            return <StatusView
+                containerClassName="tau-dashboard-widget-placeholder--success"
+                textClassName="tau-dashboard-widget-placeholder-text--success">
+                <span>You have no assigned work. Get some rest!</span>
+            </StatusView>;
         }
     });
 });

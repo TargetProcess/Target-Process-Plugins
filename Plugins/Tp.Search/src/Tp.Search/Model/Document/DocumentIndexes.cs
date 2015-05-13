@@ -20,6 +20,8 @@ namespace Tp.Search.Model.Document
 		private readonly ConcurrentDictionary<string, Lazy<IDocumentIndex>> _commentSquadIndexes;
 		private readonly ConcurrentDictionary<string, Lazy<IDocumentIndex>> _commentEntityTypes;
 		private readonly ConcurrentDictionary<string, Lazy<IDocumentIndex>> _impedimentContextIndexes;
+		private readonly ConcurrentDictionary<string, Lazy<IDocumentIndex>> _testStepIndexes;
+		private readonly ConcurrentDictionary<string, Lazy<IDocumentIndex>> _testStepProjectIndexes;
 
 		public DocumentIndexes()
 		{
@@ -33,6 +35,8 @@ namespace Tp.Search.Model.Document
 			_commentSquadIndexes = new ConcurrentDictionary<string, Lazy<IDocumentIndex>>();
 			_commentEntityTypes = new ConcurrentDictionary<string, Lazy<IDocumentIndex>>();
 			_impedimentContextIndexes = new ConcurrentDictionary<string, Lazy<IDocumentIndex>>();
+			_testStepIndexes = new ConcurrentDictionary<string, Lazy<IDocumentIndex>>();
+			_testStepProjectIndexes = new ConcurrentDictionary<string, Lazy<IDocumentIndex>>();
 		}
 
 		public ConcurrentDictionary<string, Lazy<IDocumentIndex>> this[DocumentIndexTypeToken documentIndexTypeToken]
@@ -61,6 +65,10 @@ namespace Tp.Search.Model.Document
 						return _commentEntityTypes;
 					case DocumentIndexTypeToken.Impediment:
 						return _impedimentContextIndexes;
+					case DocumentIndexTypeToken.TestStep:
+						return _testStepIndexes;
+					case DocumentIndexTypeToken.TestStepProject:
+						return _testStepProjectIndexes;
 					default:
 						throw new NotSupportedException("{0} is not supported.".Fmt(documentIndexTypeToken));
 				}

@@ -123,16 +123,16 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 
 				if (testCaseTestPlanDto != null)
 				{
-					var changedFields = new Enum[]
-					                    	{TestCaseField.LastFailureComment, TestCaseField.LastRunDate, TestCaseField.LastStatus};
+					var changedFields = new Enum[] { TestCaseField.LastFailureComment, TestCaseField.LastRunDate, TestCaseField.LastStatus, TestCaseField.LastRunStatus };
 					var testCaseDto = new TestCaseDTO
 					                  	{
 					                  		TestCaseID = testCaseTestPlanDto.TestCaseID,
 					                  		LastFailureComment = message.Dto.Comment,
 					                  		LastRunDate = message.Dto.RunDate,
 #pragma warning disable 612
-					                  		LastStatus = message.Dto.Passed
+					                  		LastStatus = message.Dto.Passed,
 #pragma warning restore 612
+					                  		LastRunStatus = message.Dto.Status
 					                  	};
 					Send(new UpdateCommand
 					     	{

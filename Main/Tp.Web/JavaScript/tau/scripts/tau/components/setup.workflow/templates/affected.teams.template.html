@@ -1,0 +1,10 @@
+<!-- name: affected.teams -->
+<p><%= this.message %></p>
+<p><a href="//guide.targetprocess.com/settings/team-workflow.html" target="_blank" class="tau-help-site-link">Read more about Team Workflow</a></p>
+<ul class="t3-process-grid--used-in-teams">
+    <% _.each(this.teams, function(team) { %>
+        <li class="t3-process-grid--used-in-teams--item">
+            <a class="t3-process-grid--used-in-teams__link t3-process__link" data-teamid="<%= team.id %>" href="<%= team.url %>"><%= team.name %></a>
+        </li>
+    <% }); %>
+</ul>

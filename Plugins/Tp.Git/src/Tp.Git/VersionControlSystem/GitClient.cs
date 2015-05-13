@@ -12,6 +12,7 @@ using NGit.Revwalk.Filter;
 using NGit.Transport;
 using Sharpen;
 using Tp.Core;
+using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
@@ -20,6 +21,7 @@ namespace Tp.Git.VersionControlSystem
 {
 	public class GitClient
 	{
+		private const string ConnectionTimeoutInSecondsSectionName = "ConnectionTimeoutInSeconds";
 		private readonly NGit.Api.Git _git;
 		private readonly ISourceControlConnectionSettingsSource _settings;
 		private readonly IStorage<GitRepositoryFolder> _folder;
@@ -202,7 +204,7 @@ namespace Tp.Git.VersionControlSystem
 			var credentialsProvider = new UsernamePasswordCredentialsProvider(_settings.Login, _settings.Password);
 
 			_git.Clean().Call();
-			_git.Fetch().SetCredentialsProvider(credentialsProvider).SetRemoveDeletedRefs(true).Call();
+			_git.Fetch().SetTimeout(PluginSettings.LoadInt(ConnectionTimeoutInSecondsSectionName, 0)).SetCredentialsProvider(credentialsProvider).SetRemoveDeletedRefs(true).Call();
 		}
 
 		private static bool IsRepositoryUriChanged(GitRepositoryFolder repositoryFolder,

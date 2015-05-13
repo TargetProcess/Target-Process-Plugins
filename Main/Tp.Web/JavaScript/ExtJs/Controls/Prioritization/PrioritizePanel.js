@@ -1,6 +1,8 @@
 Ext.ns('Tp.controls.Prioritization');
 
 Tp.controls.Prioritization.PrioritizePanel = Ext.extend(Ext.Panel, {
+    defaultHeight: 700,
+
 	constructor: function (config) {
 		var proxy = Ext.isEmpty(config.proxy) ?
                 new Ext.data.HttpProxy({ url: new Tp.WebServiceURL('/Project/Planning/Iteration/ExtJsPrioritize.aspx').toString() })
@@ -40,8 +42,11 @@ Tp.controls.Prioritization.PrioritizePanel = Ext.extend(Ext.Panel, {
 	onLayout: function () {
 		Tp.controls.Prioritization.PrioritizePanel.superclass.onLayout.apply(this, arguments);
 		if (this.autoHeight === true) {
-			this.autoHeight = false;
-			this.setHeight(this.container.parent().getHeight());
+            var parent = this.container.parent(),
+                calculatedParentHeight = parent.getHeight(), // height + border + padding + margin
+                parentHeight = parseInt(getComputedStyle(parent.dom).height, 10); // just height
+            this.autoHeight = false;
+            this.setHeight(parentHeight != 0 ? calculatedParentHeight : calculatedParentHeight + this.defaultHeight);
 		}
 	},
 

@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var _ = require('Underscore');
 
     var ImageWidget = React.createClass({
         render: function() {

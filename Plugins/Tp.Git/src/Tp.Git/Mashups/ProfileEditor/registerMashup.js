@@ -37,7 +37,8 @@ tau.mashups
 							Uri: '',
 							Login: '',
 							Password: '',
-							StartRevision: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear()
+							StartRevision: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear(),
+							SyncInterval: '60'
 						}
 					};
 

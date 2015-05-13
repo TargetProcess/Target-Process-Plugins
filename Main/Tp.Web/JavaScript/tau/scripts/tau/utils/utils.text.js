@@ -1,1 +1,1 @@
-define(["require","Underscore"],function(e){"use strict";var n=e("Underscore");return{getUniqueName:function(e,r){var i=0,t=null;do t=0===i?e:e+" "+i,++i;while(n.contains(r,t));return t}}});
+define(["require","Underscore"],function(e){"use strict";var r=e("Underscore");return{getUniqueName:function(e,n){var t=r.map(n,function(e){return e.toLowerCase()}),o=0,u=null;do u=0===o?e:e+" "+o,++o;while(r.contains(t,u.toLowerCase()));return u}}});

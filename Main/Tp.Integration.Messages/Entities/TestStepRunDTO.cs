@@ -59,6 +59,14 @@ namespace Tp.Integration.Common
 		public Boolean? Runned { get; set; }
 
 		/// <summary>
+		///     Gets or sets the Run Order. Defines the order of Test Step Runs
+		/// </summary>
+		/// <value>The Run Order.</value>
+		[DataMember]
+		[XmlElement(Order = 6)]
+		public int? RunOrder { get; set; }
+
+		/// <summary>
 		///     Gets or sets the Test Case Run ID. Reference to test case run
 		/// </summary>
 		/// <value>The Test Plan Run ID.</value>
@@ -92,6 +100,11 @@ namespace Tp.Integration.Common
 		///     Runned
 		/// </summary>
 		Runned,
+
+		/// <summary>
+		///     Run Order
+		/// </summary>
+		RunOrder,
 
 		/// <summary>
 		///     Test Case Run ID

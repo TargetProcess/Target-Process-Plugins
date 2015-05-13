@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -21,6 +21,7 @@ namespace Tp.Git
 	[DataContract]
 	public class GitPluginProfile : ConnectionSettings, ISynchronizableProfile, IValidatable
 	{
+		private const string SynchIntervalInMinutes = "SynchIntervalInMinutes";
 		public const string StartRevisionField = "StartRevision";
 
 		public GitPluginProfile()
@@ -29,10 +30,32 @@ namespace Tp.Git
 			StartRevision = GitRevisionId.UtcTimeMin.ToShortDateString();
 		}
 
+		private string _syncInterval;
+
+		[DataMember]
+		public string SyncInterval
+		{
+			get
+			{
+				int val;
+				if (!int.TryParse(_syncInterval, out val))
+				{
+					val = PluginSettings.LoadInt(SynchIntervalInMinutes, 0);
+				}
+				return Math.Max(MinimumSynchronizationIntervalInMinutes, val).ToString(CultureInfo.InvariantCulture);
+			}
+			set { _syncInterval = value; }
+		}
+
+		private const int MinimumSynchronizationIntervalInMinutes = 5;
+
 		[IgnoreDataMember]
 		public int SynchronizationInterval
 		{
-			get { return 5; }
+			get
+			{
+				return int.Parse(SyncInterval);
+			}
 			set { }
 		}
 

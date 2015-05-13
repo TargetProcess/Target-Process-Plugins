@@ -2,6 +2,7 @@ define(function(require) {
     var $ = require('jQuery');
     var React = require('react');
     var InfinityScrollList = require('jsx!tau/components/dashboard/infinity.scroll.list');
+    var StatusView = require('jsx!tau/components/dashboard/widget.templates/shared/status.view');
 
     return React.createClass({
         componentWillReceiveProps: function() {
@@ -70,6 +71,12 @@ define(function(require) {
             this.props.service.openEntityView(entityId, entityType);
         },
 
+        _getEmptyMessage: function() {
+            return (
+                <StatusView>No items to show</StatusView>
+            );
+        },
+
         render: function() {
             return (
                 <InfinityScrollList
@@ -80,6 +87,7 @@ define(function(require) {
                     loadNewInterval={600}
                     renderItem={this._renderCommentItem}
                     autoRefresh={true}
+                    emptyMessage={this._getEmptyMessage()}
                 />
             );
         }

@@ -79,6 +79,10 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tp.Core.Functional, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+    </Reference>
     <Reference Include="Tp.Service.Proxies, Version=2.15.0.15001, Culture=neutral, PublicKeyToken=ee2a1130677e5334, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
     </Reference>
@@ -95,18 +99,19 @@
     <Compile Include="Bus\Utils\SagaServices.cs" />
     <Compile Include="Bus\Workflow\AssignablesIndexing.cs" />
     <Compile Include="Bus\Workflow\CommentsIndexing.cs" />
+    <Compile Include="Bus\Workflow\TestStepsIndexing.cs" />
     <Compile Include="Bus\Workflow\DocumentIndexMemoryWatcher.cs" />
     <Compile Include="Bus\Workflow\DocumentIndexOptimizer.cs" />
     <Compile Include="Bus\Workflow\GeneralsIndexing.cs" />
     <Compile Include="Bus\Workflow\ImpedimentsIndexing.cs" />
     <Compile Include="Bus\Workflow\IndexAlgorithm.cs" />
     <Compile Include="Bus\Workflow\ReleaseProjectIndexing.cs" />
-    <Compile Include="Bus\Workflow\TestCasesIndexing.cs" />
     <Compile Include="Config\DocumentIndexSetupConfig.cs" />
     <Compile Include="Model\Document\CharactersDocumentIndexDataTypeService.cs" />
     <Compile Include="Model\Document\DigitsDocumentIndexDataTypeService.cs" />
     <Compile Include="Model\Document\DocumentIndex.cs" />
     <Compile Include="Model\Document\IIndexDataFactory.cs" />
+    <Compile Include="Model\Document\IndexAttribute\TestStepIndexAttribute.cs" />
     <Compile Include="Model\Document\IndexAttribute\ImpedimentDocumentAttribute.cs" />
     <Compile Include="Model\Document\IndexAttribute\ImpedimentIndexAttribute.cs" />
     <Compile Include="Model\Document\IndexDataFactory.cs" />
@@ -143,8 +148,6 @@
     <Compile Include="Model\Document\IndexAttribute\IDocumentFieldsProvider.cs" />
     <Compile Include="Model\Document\IndexAttribute\IIndexFieldsProvider.cs" />
     <Compile Include="Model\Document\IndexAttribute\IndexFileName.cs" />
-    <Compile Include="Model\Document\IndexAttribute\TestCaseDocumentAttribute.cs" />
-    <Compile Include="Model\Document\IndexAttribute\TestCaseIndexAttribute.cs" />
     <Compile Include="Model\Optimization\DeferredOptimizeType.cs" />
     <Compile Include="Model\Optimization\DocumentIndexOptimizeByCallsHint.cs" />
     <Compile Include="Model\Optimization\DocumentIndexOptimizeHintFactory.cs" />
@@ -361,6 +364,10 @@
       <Project>{bbfa5c9b-6c11-4b62-a9b1-e631462d333b}</Project>
       <Name>Tp.Plugin.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Tp.Utils\Tp.Utils.csproj">
+      <Project>{BF902D46-3D03-46D6-9E0B-D4246584A881}</Project>
+      <Name>Tp.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
       <Project>{fcaff2c5-aff5-454a-91d1-6e2f653f1bcb}</Project>
       <Name>Tp.Integration.Plugin.UninstallUtil</Name>
@@ -377,11 +384,12 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

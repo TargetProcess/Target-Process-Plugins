@@ -1,0 +1,1 @@
+define(["require","tau/core/extension.base","./../copyToClipboard"],function(e){var n=e("tau/core/extension.base"),o=e("./../copyToClipboard");return n.extend({"bus afterRender":function(e,n){var t=n.element,r=t.find(".i-role-trigger"),i=t.find(".i-role-content");r.tauBubble({content:i.detach(),onShow:function(){o(i)}})}})});

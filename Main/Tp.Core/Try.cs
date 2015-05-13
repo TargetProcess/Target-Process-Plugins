@@ -28,13 +28,13 @@ namespace Tp.Core
 	public interface Try<T>
 //// ReSharper restore InconsistentNaming
 	{
-		T GetOrElse(Func<T> @default);
-		Try<T> OrElse(Func<Try<T>> @default);
+		T GetOrElse([InstantHandle] Func<T> @default);
+		Try<T> OrElse([InstantHandle] Func<Try<T>> @default);
 		Maybe<T> ToMaybe();
 
-		Try<U> Select<U>(Func<T, U> selector);
-		Try<T> Where(Func<T, bool> filter);
-		Try<U> SelectMany<U>(Func<T, Try<U>> selector);
+		Try<U> Select<U>([InstantHandle] Func<T, U> selector);
+		Try<T> Where([InstantHandle] Func<T, bool> filter);
+		Try<U> SelectMany<U>([InstantHandle] Func<T, Try<U>> selector);
 
 		T Value { get; }
 		bool IsSuccess { get; }

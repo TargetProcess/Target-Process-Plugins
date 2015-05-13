@@ -7,7 +7,11 @@ namespace Tp.Core.Expressions.Visitors
 	{
 		protected override Expression VisitMember(MemberExpression memberExpression)
 		{
-			return ProtectFromNull(memberExpression, memberExpression.Expression);
+			if (memberExpression.Expression != null)
+			{
+				return ProtectFromNull(memberExpression, memberExpression.Expression);
+			}
+			return base.VisitMember(memberExpression);
 		}
 		protected override Expression VisitIndex(IndexExpression node)
 		{

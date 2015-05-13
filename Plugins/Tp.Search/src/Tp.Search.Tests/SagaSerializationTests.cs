@@ -38,5 +38,19 @@ namespace Tp.Search.Tests
 			deserialized.ProjectId.Should(Be.EqualTo(1));
 			deserialized.AssignablesRetrievedCount.Should(Be.EqualTo(0));
 		}
+
+		[Test]
+		public void DeserializeGeneralProjectChangedSagaDataAfterAddingFields()
+		{
+			const string oldSaga = @"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Type>Tp.Search.Bus.Workflow.GeneralProjectChangeSagaData, Tp.Search</Type>
+  <Version>2</Version>
+  <string>{""__type"":""GeneralProjectChangeSagaData:#Tp.Search.Bus.Workflow"",""CommentsCurrentDataWindowSize"":0,""CommentsRetrievedCount"":0,""GeneralId"":147,""Id"":""534a26de-645c-4e66-9f83-a43b0152e933"",""OriginalMessageId"":""9753de6d-3e2d-4d1b-9b60-8d449f5592cc\\3914349"",""Originator"":""Tp.Search@D-KANASHEVICH"",""ProjectId"":13}</string>
+</Value>";
+
+			var deserialized = (GeneralProjectChangeSagaData)BlobSerializer.Deserialize(XDocument.Parse(oldSaga), string.Empty);
+			deserialized.ProjectId.Should(Be.EqualTo(13));
+			deserialized.TestStepsRetrievedCount.Should(Be.EqualTo(0));
+		}
 	}
 }

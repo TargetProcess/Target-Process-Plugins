@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var _ = require('Underscore');
 
     var VerticalLine = React.createClass({
         getDefaultProps: function() {
@@ -54,7 +55,7 @@ define(function(require) {
             var BAR_WIDTH = 80;
 
             return {
-                isPresent: _.isNumber(percentage),
+                isPresent: _.isNumber(percentage) && !_.isNaN(percentage),
                 percent: percentage,
                 left: BAR_WIDTH * (1 - percentage),
                 width: BAR_WIDTH * percentage

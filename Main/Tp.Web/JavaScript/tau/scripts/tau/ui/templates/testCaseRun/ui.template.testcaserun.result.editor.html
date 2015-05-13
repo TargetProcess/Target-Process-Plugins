@@ -11,13 +11,11 @@
         <button class="tau-btn tau-btn-big tau-failed <% if (this.failed) { %>tau-checked<% } %>" data-result="<%= this.status.failed %>">
             <%= this.status.getName(this.status.failed) %>
         </button>
-        <button class="tau-btn tau-btn-big tau-skipped <% if (this.skipped) { %>tau-checked<% } %>" data-result="<%= this.status.skipped %>">
-            <%= this.status.getName(this.status.skipped) %>
+        <button class="tau-btn tau-btn-big tau-onhold <% if (this.onhold) { %>tau-checked<% } %>" data-result="<%= this.status.onhold %>">
+            <%= this.status.getName(this.status.onhold) %>
         </button>
-        <% if (fn.isFeatureEnabled('tcr.blocked.status.enabled')) { %>
-            <button class="tau-btn tau-btn-big tau-blocked <% if (this.blocked) { %>tau-checked<% } %>" data-result="<%= this.status.blocked %>">
-                <%= this.status.getName(this.status.blocked) %>
-            </button>
-        <% } %>
+        <button class="tau-btn tau-btn-big tau-blocked <% if (this.blocked) { %>tau-checked<% } %>" data-result="<%= this.status.blocked %>">
+            <%= this.status.getName(this.status.blocked) %>
+        </button>
     </span>
 </div>

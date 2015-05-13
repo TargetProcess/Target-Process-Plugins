@@ -116,6 +116,14 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 12)]
 		public DateTime? StartRunDate { get; set; }
+
+	    /// <summary>
+	    ///   Gets or sets the Status. Status of test case run
+	    /// </summary>
+	    /// <value>The Status.</value>
+	    [DataMember]
+	    [XmlElement(Order = 13)]
+	    public TestCaseRunStatusDTO Status { get; set; }
 	}
 	
 	/// <summary>
@@ -158,6 +166,10 @@ namespace Tp.Integration.Common
 		/// <summary>
 		/// Start Run Date
 		/// </summary>		
-		StartRunDate
+		StartRunDate,
+		/// <summary>
+		///   Status
+		/// </summary>
+		Status
 	}
 }

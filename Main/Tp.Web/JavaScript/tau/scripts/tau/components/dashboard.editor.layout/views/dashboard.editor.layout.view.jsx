@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('react');
+    var classNames = require('libs/classNames');
     var _ = require('Underscore');
 
     var columnSpecificPostfixes = {
@@ -23,7 +24,7 @@ define(function(require) {
                 itemClassName['tau-dashboard-page__settings-layout--' + postfix] = true;
             }
 
-            return React.addons.classSet(itemClassName);
+            return classNames(itemClassName);
         },
 
         _onApply: function() {

@@ -1,0 +1,4 @@
+<!-- name: dsl-filter, deps: [template!tau/ui/templates/board.editor/ui.template.board.editor.filter] -->
+<div class="i-role-views-dsl-filter <%=this.className%>">
+    <%= fn.sub("board.editor.filter", {name: "cells", placeholder: "type ? for advanced filter", filter: this.filter}) %>
+</div>

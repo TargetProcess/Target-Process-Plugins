@@ -79,7 +79,7 @@ namespace Tp.Search.Bus.Commands
 				{
 					GeneralIds = result.GeneralIds.ToArray(),
 					AssignableIds = result.AssignableIds.ToArray(),
-					TestCaseIds = result.TestCaseIds.ToArray(),
+					TestStepIds = result.TestStepIds.ToArray(),
 					ImpedimentIds = result.ImpedimentIds.ToArray(),
 					CommentIds = result.CommentIds,
 					QueryString = result.QueryString,
@@ -106,8 +106,8 @@ namespace Tp.Search.Bus.Commands
 						CompleteInPercents = 0
 					};
 			}
-			int allEntities = indexProgress.LastGeneralId + indexProgress.LastCommentId;
-			double completeInPercents = allEntities != 0 ? (double)((result.LastIndexedEntityId + result.LastIndexedCommentId)*100)/allEntities : 0;
+			int allEntities = indexProgress.LastGeneralId + indexProgress.LastCommentId + indexProgress.LastTestStepId;
+			double completeInPercents = allEntities != 0 ? (double)((result.LastIndexedEntityId + result.LastIndexedCommentId + result.LastIndexedTestStepId) * 100) / allEntities : 0;
 			return new IndexProgressData { CompleteInPercents = Math.Round(completeInPercents, 2) };
 		}
 

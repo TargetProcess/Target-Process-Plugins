@@ -2,6 +2,7 @@ define(function(require) {
     var $ = require('jQuery'),
         _ = require('Underscore'),
         React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         optionGroupsCreator = require('tau/components/setup.process/process.optionGroups'),
         RenameService = require('tau/services/rename.service'),
         ProcessUsageSummary = require('jsx!./process.menu.item.usage.summary');
@@ -95,7 +96,7 @@ define(function(require) {
                     }
                 }, this);
 
-                var classes = React.addons.classSet({
+                var classes = classNames({
                     't3-process__item t3-process__item--outer': true,
                     't3-active': isMenuItemActive
                 });

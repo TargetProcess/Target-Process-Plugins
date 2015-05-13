@@ -6,17 +6,18 @@
         class="<% if (!this.isEditable) { %>disabled<% } %> i-role-name tau-board-name-editor tau-extension-board-tooltip"
         data-title="Rename"><%! this.name %>
     </div>
-    <% if (this.isEditable) { %>
-        <button role="actions-button" class="tau-btn tau-actions-btn" data-collapsed-selector=".tau-checked" type="button">
-            Actions
-        </button>
-        <button role="add-widget-button" type="button" class="tau-btn tau-success tau-add-widget-btn i-role-add-widget">
-            Add widget
-        </button>
-    <% } %>
+    <div class="tau-board-header__flex-elem"></div>
     <button type="button" class="tau-btn tau-primary tau-extension-board-tooltip tau-feedback-btn i-role-feedback-btn"
         data-collapsed-selector=":not(.tau-checked)" data-title-collapsed="Give feedback about Dashboards"
         data-expanded-selector=".tau-checked" data-title-expanded="" data-feature="Dashboards">
         Give feedback
     </button>
+    <% if (this.isEditable) { %>
+        <button role="add-widget-button" type="button" class="tau-btn tau-success tau-add-widget-btn i-role-add-widget">
+            Add widget
+        </button>
+        <button role="actions-button" class="tau-btn tau-actions-btn" data-collapsed-selector=".tau-checked" type="button">
+            Actions
+        </button>
+    <% } %>
 </div>

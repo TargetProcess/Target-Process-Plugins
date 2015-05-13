@@ -20,11 +20,11 @@ namespace System.Linq.Dynamic
 		public const string NoMatchingConstructor = "No matching constructor in type '{0}'";
 		public const string AmbiguousConstructorInvocation = "Ambiguous invocation of '{0}' constructor";
 		public const string CannotConvertValue = "A value of type '{0}' cannot be converted to type '{1}'";
-		public const string NoApplicableMethod = "No applicable method '{0}' exists in type '{1}'";
+		public const string NoApplicableMethod = "Method '{0}' does not exist in '{1}'";
 		public const string MethodsAreInaccessible = "Methods on type '{0}' are not accessible";
 		public const string MethodIsVoid = "Method '{0}' in type '{1}' does not return a value";
 		public const string AmbiguousMethodInvocation = "Ambiguous invocation of method '{0}' in type '{1}'";
-		public const string UnknownPropertyOrField = "No property or field '{0}' exists in type '{1}'";
+		public const string UnknownPropertyOrField = "Property '{0}' does not exist in '{1}'"; 
 		public const string NoApplicableAggregate = "No applicable aggregate method '{0}' exists";
 		public const string CannotIndexMultiDimArray = "Indexing of multi-dimensional arrays is not supported";
 		public const string InvalidIndex = "Array index must be an integer expression";

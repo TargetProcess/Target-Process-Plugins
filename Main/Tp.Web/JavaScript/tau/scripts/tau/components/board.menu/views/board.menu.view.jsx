@@ -2,6 +2,7 @@ define(function(require) {
     var _ = require('Underscore');
     var $ = require('jQuery');
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
     var transformations = require('./../services/board.menu.transformations.service');
 
     var dependencies = [
@@ -27,6 +28,7 @@ define(function(require) {
                 getInitialState: function() {
                     return {
                         currentBoardId: '',
+                        isNewItemMenuVisible: false,
                         showHidden: false,
                         focusedBoardId: '',
                         isLoading: true
@@ -75,9 +77,17 @@ define(function(require) {
                     };
                 },
 
+                _getMenuClassName: function() {
+                    return classNames({
+                        'i-role-board-menu': true,
+                        't3-views-navigator': true,
+                        't3-views-navigator-shadowed': this.state.isNewItemMenuVisible
+                    });
+                },
+
                 render: function() {
                     if (this.state.isLoading) {
-                        return <div className="t3-views-navigator i-role-board-menu"></div>;
+                        return <div className={this._getMenuClassName()}></div>;
                     }
 
                     //TODO: move current query spec to model
@@ -85,7 +95,7 @@ define(function(require) {
                     var querySpec = this._createBoardQuerySpec();
 
                     return (
-                        <div className="t3-views-navigator i-role-board-menu">
+                        <div className={this._getMenuClassName()}>
                             <SearchView
                             viewMenuSections={this.props.viewMenuSections}
                             querySpec={querySpec}

@@ -10,11 +10,22 @@ namespace Tp.Core.Expressions
 	{
 		[Pure]
 		public static IQueryable<T> Replace<T, T1, T2>(this IQueryable<T> queryable, Expression<Func<T1, T2>> what,
-		                                               LambdaExpression with)
+													   LambdaExpression with)
 		{
 			Expression e = queryable.Expression;
 
 			var newE = ReplaceLambda(e, what, with);
+
+			return queryable.Provider.CreateQuery<T>(newE);
+		}
+
+
+		[Pure]
+		public static IQueryable<T> ProtectFromNullReference<T>(this IQueryable<T> queryable)
+		{
+			Expression e = queryable.Expression;
+
+			var newE = e.ProtectFromNullReference();
 
 			return queryable.Provider.CreateQuery<T>(newE);
 		}

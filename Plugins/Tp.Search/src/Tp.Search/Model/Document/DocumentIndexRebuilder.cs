@@ -46,8 +46,8 @@ namespace Tp.Search.Model.Document
 					var versions = type.GetVersions(_pluginContext.AccountName, _documentIndexSetup);
 					return versions.Except(new[] {type.Version}).Any();
 				});
-			var shouldRebuildIfNoFile = _documentIndexProvider.DocumentIndexTypes.All(type => type.GetVersions(_pluginContext.AccountName, _documentIndexSetup).Empty());
-			if (shouldRebuildIfNoActualVersionForAnyFile || shouldRebuildIfNoFile)
+			var shouldRebuildIfNoAnyFile = _documentIndexProvider.DocumentIndexTypes.Any(type => type.GetVersions(_pluginContext.AccountName, _documentIndexSetup).Empty());
+			if (shouldRebuildIfNoActualVersionForAnyFile || shouldRebuildIfNoAnyFile)
 			{
 				_logger.InfoFormat("Going to start rebuild becuase of {0}", shouldRebuildIfNoActualVersionForAnyFile ? "no actual version of index file" : "no actual versions of index files");
 				DoRebuild();

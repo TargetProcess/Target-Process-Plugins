@@ -1,7 +1,9 @@
 define(function(require) {
     var React = require('react'),
         _ = require('Underscore'),
-        SortableStatesMixin = require('../mixins/sortable-states');
+        SortableStatesMixin = require('../mixins/sortable-states'),
+        SortableItem = require('tau/components/react/mixins/sortable.item'),
+        sortableScroll = require('tau/components/react/mixins/sortable.scroll');
 
     var matchesParentEntityStateId = function(parentEntityStateId) {
         return function(teamState) {
@@ -33,7 +35,8 @@ define(function(require) {
                 sortableHandleSelector: '.process-grid__state',
                 onReorderStart: this.onReorderStart,
                 onReorderEnd: this.onReorderEnd,
-                onReorder: this.onReorder
+                onReorder: this.onReorder,
+                acceptedTypes: [SortableItem.PROCESS_ITEM_STATE]
             };
         },
 
@@ -82,7 +85,8 @@ define(function(require) {
                 return {
                     id: teamWorkflow.id,
                     name: teamWorkflow.name,
-                    entityStates: this._getNewTeamStates(teamWorkflow.entityStates, currentState, matches, placeAfter)
+                    entityStates: this._getNewTeamStates(teamWorkflow.entityStates, currentState, matches, placeAfter),
+                    affectedTeams: teamWorkflow.affectedTeams
                 };
             }, this);
         },
@@ -143,31 +147,14 @@ define(function(require) {
             }
         },
 
-        EDGE_TRIGGER_DISTANCE: 100,
-        SCROLL_DISTANCE: 10,
-
-        scrollOnTheEdge: function(event) {
-            var scrollable = this.props.scrollableContainerRef.getDOMNode(),
-                offset = scrollable.getBoundingClientRect(),
-                leftBorderDistance = event.pageX - offset.left,
-                rightBorderDistance = scrollable.offsetWidth + offset.left - event.pageX;
-            if (leftBorderDistance < this.EDGE_TRIGGER_DISTANCE) {
-                scrollable.scrollLeft -= this.SCROLL_DISTANCE;
-            } else if (rightBorderDistance < this.EDGE_TRIGGER_DISTANCE) {
-                scrollable.scrollLeft += this.SCROLL_DISTANCE;
-            }
-            return event;
-        },
-
         render: function() {
-            return (<div className="process-grid"
-                onDragStart={this.sortStart}
-                onDragOver={_.compose(this.sortDragOver, this.scrollOnTheEdge)}
-                onDragEnd={this.sortEnd}
-                onDrop={this.sortDrop}
-                onMouseDown={this.sortMouseDown}>
+            var sortableAttributes = sortableScroll.horizontalScroll(() => this.props.scrollableContainerRef, this);
+
+            return (
+                <div className="process-grid" {...sortableAttributes}>
                     {this.props.children}
-            </div>);
+                </div>
+            );
         }
     });
 });

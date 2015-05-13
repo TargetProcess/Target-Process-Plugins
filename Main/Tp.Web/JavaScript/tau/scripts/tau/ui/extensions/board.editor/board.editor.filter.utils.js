@@ -1,0 +1,1 @@
+define(["require"],function(){return{getFilterInputs:function(e){return e.find(".i-role-filter-control :text")},getFilterInputTypesPropertyName:function(e){var r=e.prop("name");return r?r.replace("_filter",""):null}}});

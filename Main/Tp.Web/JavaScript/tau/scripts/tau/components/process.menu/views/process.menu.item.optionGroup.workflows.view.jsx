@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         _ = require('Underscore');
 
     return React.defineClass([], function() {
@@ -15,7 +16,7 @@ define(function(require) {
                 var entityTypes = _.map(this.props.entityTypes, function(item) {
                     var entityType = item.entityType;
                     var isActive = entityType === this.props.activePage.entityType && this.props.active;
-                    var classes = React.addons.classSet({
+                    var classes = classNames({
                         't3-active': isActive,
                         't3-process__list__item': true
                     });

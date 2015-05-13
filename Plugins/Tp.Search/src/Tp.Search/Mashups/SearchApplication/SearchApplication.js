@@ -21,6 +21,7 @@ tau.mashups
                 configurator.registerService('urlBuilder', new UrlBuilder(configurator));
             }
 
+            var PAGE_NAME = 'entity component';
 
             var ROUTING_PATTERNS = [
                 {
@@ -33,18 +34,40 @@ tau.mashups
                 },
                 {
                     pattern: /(\w+)\/([0-9]+)($|\s|&)/,
-                    adapter: function (entityType, entityId, tail) {
-                        this.resolve({ id: parseInt(entityId), entity: entityType, action: 'show' });
+                    adapter: function (entityType, entityId) {
+                        this.resolve({
+                            id: parseInt(entityId),
+                            entity: {
+                                id: parseInt(entityId),
+                                type: entityType
+                            },
+                            action: 'show',
+                            handlers: {}
+                        });
                     },
-                    type: 'tau/components/component.page.entity',
+                    type: {
+                        name: PAGE_NAME,
+                        type: 'page.entity'
+                    },
                     host: 'tau/components/component.master.empty'
                 },
                 {
                     pattern: /(\w+)\/([0-9]+)\/(\w+)[&|]*.*/,
                     adapter: function (entityType, entityId, action) {
-                        this.resolve({ id: parseInt(entityId), entity: entityType, action: action });
+                        this.resolve({
+                            id: parseInt(entityId),
+                            entity: {
+                                id: parseInt(entityId),
+                                type: entityType
+                            },
+                            action: action,
+                            handlers: {}
+                        });
                     },
-                    type: 'tau/components/component.page.entity',
+                    type: {
+                        name: PAGE_NAME,
+                        type: 'page.entity'
+                    },
                     host: 'tau/components/component.master.empty'
                 }
             ];

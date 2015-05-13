@@ -22,7 +22,7 @@ namespace System.Linq.Dynamic
 			{
 				_surrogates = surrogates;
 			}
-			_methodProviders = extensionMethods ??  ObjectFactory.GetAllInstances<IMethodProvider>().SelectMany(x=>x.GetExtensionMethodInfo());
+			_methodProviders = extensionMethods ??  ObjectFactory.GetAllInstances<IMethodProvider>().SelectMany(x=>x.GetExtensionMethodInfo()).ToArray();
 		}
 
 		private readonly IEnumerable<MethodInfo> _methodProviders;
@@ -66,7 +66,7 @@ namespace System.Linq.Dynamic
 			return ClassFactory.Instance.GetDynamicClass(properties, baseType);
 		}
 
-		internal IEnumerable<DynamicOrdering> ParseOrdering(string ordering, object[] values, ParameterExpression[] parameters)
+		public IEnumerable<DynamicOrdering> ParseOrdering(string ordering, object[] values, ParameterExpression[] parameters)
 		{
 			var parser = new ExtenedExpressionParser(parameters, ordering, values, _methodProviders, _surrogates);
 			IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();

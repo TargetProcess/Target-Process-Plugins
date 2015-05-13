@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +7,15 @@ namespace Tp.Core.Diagnostics.Time
 {
 	public class TimePoints : TimePointsBase
 	{
-		private readonly ConcurrentQueue<TimePoint> _timepoints;
+		private readonly List<TimePoint> _timepoints;
 		public TimePoints()
 		{
-			_timepoints = new ConcurrentQueue<TimePoint>();
+			_timepoints = new List<TimePoint>();
 		}
 
-		protected TimePoints(TimePoints other)
+		private TimePoints(TimePoints other)
 		{
-			_timepoints = new ConcurrentQueue<TimePoint>(other._timepoints);
+			_timepoints = new List<TimePoint>(other._timepoints);
 		}
 
 		public override IEnumerable<TimePoint> Points
@@ -26,7 +25,7 @@ namespace Tp.Core.Diagnostics.Time
 
 		public override void Add(TimePoint timestamp)
 		{
-			_timepoints.Enqueue(timestamp);
+			_timepoints.Add(timestamp);
 		}
 
 		public override void AddUtcNow(string name)
@@ -39,16 +38,8 @@ namespace Tp.Core.Diagnostics.Time
 			var distances = CalculateDistances();
 			return distances.Aggregate(new StringBuilder(), (acc, distance) => acc.AppendLine(distance.ToString())).ToString();
 		}
-
-		public override void CopyFrom(ITimePoints timePoints)
-		{
-			foreach (var point in timePoints.Points)
-			{
-				Add(point);
-			}
-		}
-
-		public override ITimePoints CreateSnapshot()
+		
+		public override ITimePoints CreateFork()
 		{
 			return new TimePoints(this);
 		}

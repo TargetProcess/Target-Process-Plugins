@@ -6,15 +6,16 @@
         class="<% if (!this.isEditable) { %>disabled<% } %> i-role-name tau-board-name-editor tau-extension-board-tooltip"
         data-title="Rename"><%! this.name %>
     </div>
-    <button role="actions-button" class="tau-btn tau-actions-btn" data-collapsed-selector=".tau-checked" type="button">
-        Actions
+    <div class="tau-board-header__flex-elem"></div>
+    <button role="action-toggle-editor" class="tau-btn tau-btn-settings tau-board-settings-toggle" type="button">
+        Set up Report
     </button>
     <button type="button" class="tau-btn tau-primary tau-extension-board-tooltip tau-feedback-btn i-role-feedback-btn"
         data-collapsed-selector=":not(.tau-checked)" data-title-collapsed="Give feedback about Reports"
         data-expanded-selector=".tau-checked" data-title-expanded="" data-feature="Reports">
         Give feedback
     </button>
-    <button role="action-toggle-editor" class="tau-btn tau-btn-settings tau-board-settings-toggle" type="button">
-        Set up Report
+    <button role="actions-button" class="tau-btn tau-actions-btn" data-collapsed-selector=".tau-checked" type="button">
+        Actions
     </button>
 </div>

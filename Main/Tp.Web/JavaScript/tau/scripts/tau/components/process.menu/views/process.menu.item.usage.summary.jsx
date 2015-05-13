@@ -2,6 +2,7 @@ define(function(require) {
     var $ = require('jQuery'),
         _ = require('Underscore'),
         React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         boardBubbleTemplate = require('template!tau/components/tauBubble/templates/board.bubble'),
         affectedProjectsTemplate = require('template!tau/components/process.menu/templates/affected.projects.template');
 
@@ -81,7 +82,7 @@ define(function(require) {
         render: function() {
             var isProjectsLinkVisible = this.props.process.projects.length > 0;
 
-            var classes = React.addons.classSet({
+            var classes = classNames({
                 't3-process__text': true,
                 't3-process__link': isProjectsLinkVisible
             });

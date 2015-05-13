@@ -1,0 +1,1 @@
+define(["require","tau/const/entityType.names"],function(e){var E=e("tau/const/entityType.names");return[E.EPIC,E.FEATURE,E.US,E.TASK,E.BUG,E.BUILD,E.RELEASE,E.REQUEST,E.ITERATION,E.TEAM_ITERATION]});

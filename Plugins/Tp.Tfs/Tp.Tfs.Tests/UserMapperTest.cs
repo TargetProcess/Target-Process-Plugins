@@ -23,7 +23,6 @@ namespace Tp.Tfs.Tests
 {
 	[TestFixture]
     [Category("PartPlugins1")]
-    [Ignore]
 	public class UserMapperSpecs
 	{
 		private const string _tpName = "someone great";

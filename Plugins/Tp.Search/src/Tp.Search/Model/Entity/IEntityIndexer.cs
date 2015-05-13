@@ -19,9 +19,9 @@ namespace Tp.Search.Model.Entity
 		IndexResult AddAssignableIndex(AssignableDTO assignable, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult UpdateAssignableIndex(AssignableDTO assignable, ICollection<AssignableField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult RemoveAssignableIndex(AssignableDTO assignable, DocumentIndexOptimizeSetup optimizeSetup = null);
-		IndexResult AddTestCaseIndex(TestCaseDTO testCase, DocumentIndexOptimizeSetup optimizeSetup = null);
-		IndexResult UpdateTestCaseIndex(TestCaseDTO testCase, ICollection<TestCaseField> changedFields, bool isIndexing, DocumentIndexOptimizeSetup optimizeSetup = null);
-		IndexResult RemoveTestCaseIndex(TestCaseDTO testCase, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult AddTestStepIndex(TestStepDTO testStep, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateTestStepIndex(TestStepDTO testStep, ICollection<TestStepField> changedFields, Maybe<int?> projectId, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveTestStepIndex(TestStepDTO testStep, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult AddCommentIndex(CommentDTO comment, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult UpdateCommentIndex(CommentDTO comment, ICollection<CommentField> changedFields, Maybe<int?> projectId, Maybe<int?> squadId, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult RemoveCommentIndex(CommentDTO comment, DocumentIndexOptimizeSetup optimizeSetup = null);
@@ -35,7 +35,7 @@ namespace Tp.Search.Model.Entity
 
 		void OptimizeGeneralIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 		void OptimizeAssignableIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
-		void OptimizeTestCaseIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
+		void OptimizeTestStepIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 		void OptimizeCommentIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 		void OptimizeImpedimentIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 

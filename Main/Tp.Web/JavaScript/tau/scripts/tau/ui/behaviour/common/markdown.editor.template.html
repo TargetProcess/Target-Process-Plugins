@@ -1,0 +1,29 @@
+<!-- name: 'markdown.editor' -->
+<div class="nav-tabs">
+    <div class="nav-tabs__right">
+        <a class="nav-tabs__links" target="_blank" href="https://guide.targetprocess.com/working-with-entities/markdown.html#syntax"><span class="tau-icon-general tau-icon-help"></span>Markdown help
+        </a>
+        <!--<a class="nav-tabs__links" href="#"><span class="tau-icon-general tau-icon-fullscreen"></span>Edit in fullscreen</a>-->
+    </div>
+    <a data-item="Write" class="i-role-tab-item nav-tabs__item active">
+        Write
+    </a>
+    <a data-item="Preview" class="i-role-tab-item nav-tabs__item">
+        Preview
+    </a>
+</div>
+<div class="nav-tabs__body">
+    <div class="i-role-write markdown-editor">
+        <textarea class="i-role-textarea tau-in-text" name="editor" rows="10"><%=this.text%></textarea>
+    </div>
+    <div class="tau-hide i-role-preview markdown-editor tau-clientinput"></div>
+    <div class="i-role-tools controls-group">
+        <%if(this.saveOptions.available){%>
+        <button class="i-role-actionsave tau-btn" type="button"><%!this.saveOptions.text%></button>
+        <%}%>
+        <%if(this.cancelOptions.available){%>
+        <button class="i-role-actioncancel tau-btn" type="button"><%!this.cancelOptions.text%></button>
+        <%}%>
+        <div class="i-role-statusmessage markdown-editor__status-message"></div>
+    </div>
+</div>

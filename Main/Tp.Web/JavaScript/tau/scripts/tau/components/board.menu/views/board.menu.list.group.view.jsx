@@ -2,24 +2,43 @@ define(function(require) {
     var $ = require('jQuery');
     var _ = require('Underscore');
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
 
     var transformations = require('./../services/board.menu.transformations.service');
     var renamer = require('tau/components/board.menu/services/board.menu.item.rename.service');
 
+    //noinspection JSUnusedLocalSymbols
     var Name = require('jsx!./../views/board.menu.list.item.name.view');
+    var SortableItem = require('tau/components/react/mixins/sortable.item');
 
-    return React.defineClass(
-        ['board.menu.list.item.view', 'boardMenuViewsMenuService', 'boardContextMenuService', 'boardMenuBus'],
-        function(ListItemView, viewsMenuService, contextMenuService, bus) {
+    var GroupModel = require('tau/components/board.menu/models/board.menu.board.group');
+
+    return React.defineClass([
+            'board.menu.list.item.view',
+            'boardMenuViewsMenuService',
+            'boardContextMenuService',
+            'loggedUser',
+            'boardMenuBus'
+        ],
+        function(ListItemView, viewsMenuService, contextMenuService, loggedUser, bus) {
             return {
                 displayName: 'BoardMenuListGroup',
+
+                propTypes: {
+                    id: React.PropTypes.string.isRequired,
+                    groupModel: React.PropTypes.instanceOf(GroupModel).isRequired,
+                    querySpec: React.PropTypes.object.isRequired,
+                    currentBoardId: React.PropTypes.string.isRequired,
+                    focusedBoardId: React.PropTypes.string.isRequired,
+                    renamingId: React.PropTypes.string
+                },
 
                 _isRenamingActivated: false,
 
                 _getGroupClassName: function() {
                     var model = this.props.groupModel,
                         regularGroup = model.getIsRegularGroup();
-                    return React.addons.classSet({
+                    return classNames({
                         't3-group': true,
                         't3-hidden': model.menuIsVisible === false,
                         't3-private': model.getIsPrivate(),
@@ -33,7 +52,7 @@ define(function(require) {
                 _getGroupContainerClassName: function() {
                     var model = this.props.groupModel,
                         regularGroup = model.getIsRegularGroup();
-                    return React.addons.classSet({
+                    return classNames({
                         't3-view-list-group': true,
                         't3-view-list-regular-group': regularGroup,
                         't3-view-list-other-group': !regularGroup,
@@ -66,7 +85,7 @@ define(function(require) {
 
                     $target = $target.closest('.t3-header');
 
-                    contextMenuService.showMenuForGroup($target, this.props.groupModel);
+                    contextMenuService.showMenuForGroup($target, this.props.groupModel, this.props.currentBoardId);
 
                     event.preventDefault();
                     event.stopPropagation();
@@ -99,7 +118,8 @@ define(function(require) {
                 },
 
                 componentWillMount: function() {
-                    this.props.groupModel.isExpanded = this.props.groupModel.isExpanded || this._isGroupContainingCurrentBoard();
+                    this.props.groupModel.isExpanded = this.props.groupModel.isExpanded ||
+                        this._isGroupContainingCurrentBoard();
                 },
 
                 componentDidMount: function() {
@@ -117,7 +137,7 @@ define(function(require) {
                         isRegular = groupModel.getIsRegularGroup();
 
                     if (this.props.querySpec.filterText && isEmpty && isRegular) {
-                        return <span></span>;
+                        return (<span></span>);
                     }
 
                     var listItems = _.map(boards, function(board) {
@@ -135,9 +155,9 @@ define(function(require) {
                     if (!isRegular) {
                         return (
                             <div className={this._getGroupContainerClassName()}
-                                data-sortable-key={this._getSortableKey(groupModel)}>
+                                {...SortableItem.attributes(this._getSortableKey(groupModel), SortableItem.MENU_GROUP, false)}>
                                 <div className={this._getGroupClassName()}>
-                                {listItems}
+                                    {listItems}
                                 </div>
                                 <div className="t3-views__drop-placeholder"></div>
                             </div>
@@ -146,17 +166,15 @@ define(function(require) {
 
                     // Fix [draggable] > [contenteditable] problem in IE11
                     // Disable [draggable] when renaming of group or one of its items is in progress
-                    var groupIsDraggable = !this.props.renamingId;
-                    //var groupIsDraggable = !this.props.renamingId ||
-                    //    (!renamer.isBeingRenamed(this) && !_.findWhere(boards, {boardId: this.props.renamingId}));
+                    var groupIsDraggable = this.props.groupModel.getCanPrioritizeGroup(loggedUser) && !this.props.renamingId;
 
                     return (
                         <div className={this._getGroupContainerClassName()}
-                            draggable={groupIsDraggable} data-sortable-key={this._getSortableKey(groupModel)}>
+                            {...SortableItem.attributes(this._getSortableKey(groupModel), SortableItem.MENU_GROUP, groupIsDraggable)}>
                             <div className={this._getGroupClassName()} onContextMenu={this._showGroupContextMenu}>
                                 <Name name={groupModel.name || groupModel.groupId} onClick={this._toggleGroupExpanded}
                                     onActionClick={this._showGroupContextMenu} isGroup={true} />
-                            {listItems}
+                                {listItems}
                             </div>
                             <div className="t3-views__drop-placeholder"></div>
                         </div>

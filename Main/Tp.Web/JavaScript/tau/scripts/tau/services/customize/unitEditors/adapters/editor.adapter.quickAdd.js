@@ -1,0 +1,1 @@
+define(["require","./editor.adapter.full.context"],function(d){var e=d("./editor.adapter.full.context");return e.extend({_initEditor:function(d,e){this._super(d,e,{savingEvent:"model.data.item.adding",savedEvent:"model.data.item.did.add",saveFailedEvent:"model.data.item.did.fail.add",finishedEvent:"model.data.item.did.add"})}})});

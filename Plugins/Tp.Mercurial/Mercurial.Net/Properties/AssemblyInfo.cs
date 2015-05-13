@@ -15,8 +15,8 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 [assembly: Guid("1f769b3b-e6a0-4ad6-9d2b-2643a73ee01f")]
-[assembly: AssemblyVersion("3.5.4.13447")]
-[assembly: AssemblyFileVersion("3.5.4.13447")]
+[assembly: AssemblyVersion("3.7.0.16545")]
+[assembly: AssemblyFileVersion("3.7.0.16545")]
 [assembly: NeutralResourcesLanguage("en-US")]
 #if USE_RELEASE_KEY
 [assembly: InternalsVisibleTo("Mercurial.Net.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001006518e40197a668d30af8fa42f0227fc6d214b45eadfb8b890b39ee370394c25b80cbe2fe19a5415d33dfec6b84909df1c8685966461db6c644aa5da5f2b3c65cd837aed1513bc7ce8a9c9d7d4914ac7dd98b4318c1c112a7a2b9e8cef4540ada875b96a5a406f51175473200ba6d77435053a055c40f8301857d748910cfc2ad")]

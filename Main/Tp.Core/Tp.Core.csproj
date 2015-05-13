@@ -55,6 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU' ">
     <OutputPath>bin\FuncTests\</OutputPath>
@@ -66,6 +67,7 @@
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelegateDecompiler">
@@ -101,10 +103,14 @@
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
+    <Reference Include="Tp.Core.Functional">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotations\Annotations.cs" />
     <Compile Include="Annotations\PerformanceCriticalAttribute.cs" />
-    <Compile Include="Annotations\Resharper.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Base64Converter.cs" />
     <Compile Include="ClientId.cs" />
@@ -134,20 +140,26 @@
     <Compile Include="Diagnostics\PerformanceCounters.cs" />
     <Compile Include="Diagnostics\PerformanceCounterService.cs" />
     <Compile Include="Diagnostics\Time\ITimePoints.cs" />
+    <Compile Include="Diagnostics\Time\ITimePointsFork.cs" />
+    <Compile Include="Diagnostics\Time\ITpProfilerDataCollector.cs" />
+    <Compile Include="Diagnostics\Time\TpProfilerStatisticRecord.cs" />
+    <Compile Include="Diagnostics\Time\TpProfilerStatistics.cs" />
     <Compile Include="Diagnostics\Time\TpProfiler.cs" />
     <Compile Include="Diagnostics\Time\Source\ITimePointsSource.cs" />
     <Compile Include="Diagnostics\Time\Source\TimePointsSource.cs" />
     <Compile Include="Diagnostics\Time\TimePoint.cs" />
     <Compile Include="Diagnostics\Time\TimePoints.cs" />
     <Compile Include="Diagnostics\Time\TimePointsBase.cs" />
+    <Compile Include="Diagnostics\Time\ProfilerTarget.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="DirectoryExtensions.cs" />
-    <Compile Include="Either.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Expressions\Visitors\CaseInsensitiveVisitor.cs" />
     <Compile Include="Expressions\Visitors\CtorTypeChanger.cs" />
     <Compile Include="Expressions\InlineableAttribute.cs" />
     <Compile Include="Expressions\InlineEnvironmentAttribute.cs" />
+    <Compile Include="Expressions\Visitors\FixFloatComparisonVisitor.cs" />
     <Compile Include="Expressions\Visitors\InlineVisitor.cs" />
     <Compile Include="Expressions\Visitors\InlineApplyVisitor.cs" />
     <Compile Include="Expressions\Visitors\ProtectFromDivideByZeroVisitor.cs" />
@@ -183,7 +195,7 @@
     <Compile Include="LocalFileSystem.cs" />
     <Compile Include="Locker.cs" />
     <Compile Include="NoLock.cs" />
-    <Compile Include="NullableExtensions.cs" />
+    <Compile Include="NumberExtensions.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="PracticeSettingsManager.cs" />
     <Compile Include="PropertyBag\ErasedTypedKeyStorage.cs" />
@@ -201,7 +213,7 @@
     </Compile>
     <Compile Include="EmptyObserver.cs" />
     <Compile Include="ExceptionExtensions.cs" />
-    <Compile Include="Expressions\ExpressionCollection.cs" />
+    <Compile Include="Expressions\PreOrderTraverseVisitor.cs" />
     <Compile Include="Expressions\ExpressionComparison.cs" />
     <Compile Include="Expressions\ExpressionEnumerable.cs" />
     <Compile Include="Expressions\ExpressionEventArg.cs" />
@@ -232,11 +244,9 @@
     <Compile Include="Linq\ParseException.cs" />
     <Compile Include="Linq\Res.cs" />
     <Compile Include="Linq\Signature.cs" />
-    <Compile Include="Maybe.cs" />
     <Compile Include="InvalidDateRangeException.cs" />
     <Compile Include="MaybeConvert\MaybeConvertExtensions.cs" />
     <Compile Include="MaybeDictionary.cs" />
-    <Compile Include="MaybeExtensions.cs" />
     <Compile Include="MaybeJsonConverter.cs" />
     <Compile Include="netfx\System\Guard.cs" />
     <Compile Include="netfx\System\Reflection\GetCustomAttribute.cs" />
@@ -262,8 +272,6 @@
     <Compile Include="TpLogManager.cs" />
     <Compile Include="TpLogManagerExtensions.cs" />
     <Compile Include="TpPolicy.cs" />
-    <Compile Include="Try.cs" />
-    <Compile Include="TryExtensions.cs" />
     <Compile Include="TupleExtensions.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="PropertyBag\IPropertyBagGetter.cs" />
@@ -303,7 +311,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y /d</PostBuildEvent>

@@ -1,19 +1,16 @@
 <!-- name: customReport.editor.dataSource.template -->
 
 <div class="tau-board-settings tau-boardsettings" role="form-settings">
-    <div class="tau-board-settings-group__help">
-        <span class="tau-help i-role-tooltipArticle" data-article-id="customReport.dsl.editor">About Setup</span>
-    </div>
 
     <div class="i-role-cant-parse text-size-m <%= this.canParse ? 'tau-hide' : '' %>">
-        Can't show Report definition. Use DSL tab.
+        This report was setup in DSL tab and its settings can't be visible in UI report builder. Use DSL tab to change it.
     </div>
 
     <div class="i-role-can-parse <%= !this.canParse ? 'tau-hide' : '' %>">
         <div class="tau-board-settings-columns">
             <div class="tau-board-settings-columns__two-items">
-                <div class="tau-board-settings-cards">
-                    <h4>Select data source</h4>
+                <div class="tau-board-settings-cards tau-customReport-info">
+                    <h4 class="tau-customReport-info-select-dataSource">Select data source</h4>
                     <span class="tau-help i-role-tooltipArticle" data-article-id="customreport.editor.selectCards"></span>
 
                     <div class="tau-section-cards">
@@ -43,9 +40,10 @@
 
                 <div runas="board.editor.remember.context" data-context:general='' data-childrenContainerSelector='.i-role-output'></div>
             </div>
-            <div class="tau-board-settings-columns__two-items">
+            <div class="tau-board-settings-columns__two-items tau-customReport-info">
 
-                <h4>Setup chart</h4>
+                <h4 class="tau-customReport-info-setupChart">Setup chart</h4>
+                <span class="tau-help i-role-tooltipArticle" data-article-id="customReport.dsl.editor"></span>
 
                 <div class="tau-board-settings__setup-chart">
                     <div class="tau-board-settings__setup-chart__row">
@@ -56,7 +54,7 @@
                         </div>
                         <div class="tau-board-settings__setup-chart__value">
 
-                            <input class="tau-in-text i-role-firstX" type="text">
+                            <input class="tau-in-text i-role-firstX i-role-dimension" type="text">
                         </div>
                         <div class="tau-board-settings__setup-chart__filter">
                             <%= fn.sub("board.editor.filter", this.x1) %>
@@ -66,7 +64,7 @@
                         <div class="tau-board-settings__setup-chart__title"></div>
                         <div class="tau-board-settings__setup-chart__value">
 
-                            <input class="tau-in-text i-role-secondX" type="text">
+                            <input class="tau-in-text i-role-secondX i-role-dimension" type="text">
                         </div>
                         <div class="tau-board-settings__setup-chart__filter">
                             <%= fn.sub("board.editor.filter", this.x2) %>
@@ -80,7 +78,7 @@
                         </div>
                         <div class="tau-board-settings__setup-chart__value">
 
-                            <input class="tau-in-text i-role-firstY" type="text">
+                            <input class="tau-in-text i-role-firstY i-role-dimension" type="text">
                         </div>
                         <div class="tau-board-settings__setup-chart__filter">
                             <%= fn.sub("board.editor.filter", this.y1) %>
@@ -91,7 +89,7 @@
                         <div class="tau-board-settings__setup-chart__title"></div>
                         <div class="tau-board-settings__setup-chart__value">
 
-                            <input class="tau-in-text i-role-secondY" type="text">
+                            <input class="tau-in-text i-role-secondY i-role-dimension" type="text">
                         </div>
                         <div class="tau-board-settings__setup-chart__filter">
                             <%= fn.sub("board.editor.filter", this.y2) %>
@@ -109,7 +107,7 @@
                         </div>
                         <div class="tau-board-settings__setup-chart__value">
 
-                            <input class="tau-in-text i-role-color" type="text">
+                            <input class="tau-in-text i-role-color i-role-dimension" type="text">
                         </div>
                         <div class="tau-board-settings__setup-chart__filter">
                             <%= fn.sub("board.editor.filter", this.color) %>
@@ -126,7 +124,7 @@
                         </div>
                         <div class="tau-board-settings__setup-chart__value">
 
-                            <input class="tau-in-text i-role-size" type="text">
+                            <input class="tau-in-text i-role-size i-role-dimension" type="text">
                         </div>
                         <div class="tau-board-settings__setup-chart__filter">
                             <%= fn.sub("board.editor.filter", this.size) %>

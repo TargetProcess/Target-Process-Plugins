@@ -13,7 +13,6 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Tfs.Tests.VersionControlSystem
 {
 	[TestFixture]
-    [Ignore]
     [Category("PartPlugins1")]
 	public class TfsRevisionIdComparerSpecs
 	{

@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
 
     return React.defineClass(['termsBus', 'termProcessor'], function(termsBus, termProcessor) {
         return {
@@ -31,21 +32,20 @@ define(function(require) {
             },
 
             render: function() {
-                var cx = React.addons.classSet;
-                var labelClasses = cx({
+                var labelClasses = classNames({
                     'tau-in-text__label': true,
                     'rename-text': !this.props.term.isDefault
                 });
 
-                var rowClass = cx({
+                var rowClass = classNames({
                     spacer: this.props.term.isSpacer
                 });
 
-                var pluralClasses = cx({
+                var pluralClasses = classNames({
                     'tau-in-text': true,
                     'tau-error': this.props.term.isInvalidPlural
                 });
-                var singleClasses = cx({
+                var singleClasses = classNames({
                     'tau-in-text': true,
                     'tau-error': this.props.term.isInvalidSingle
                 });

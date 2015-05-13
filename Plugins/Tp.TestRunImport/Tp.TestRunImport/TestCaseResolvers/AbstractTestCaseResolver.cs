@@ -128,6 +128,14 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
 				{
 					found.Invoke(info.Name);
 					dto.Passed = info.IsSuccess;
+					if (dto.Passed == null)
+					{
+						dto.Status = TestCaseRunStatusDTO.NotRun;
+					}
+					else
+					{
+						dto.Status = dto.Passed == true ? TestCaseRunStatusDTO.Passed : TestCaseRunStatusDTO.Failed;
+					}
 					dto.RunDate = info.RunDate;
 					dto.Comment = (info.IsSuccess.HasValue && !info.IsSuccess.Value && !string.IsNullOrEmpty(info.Comment))
 						              ? info.Comment

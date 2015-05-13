@@ -35,7 +35,6 @@ using Tp.SourceControl.Testing.Repository.Tfs;
 namespace Tp.Tfs.Tests.VersionControlSystem
 {
 	[TestFixture]
-    [Ignore]
 	[Category("PartPlugins1")]
 	public class TfsSpecs : ISourceControlConnectionSettingsSource
 	{

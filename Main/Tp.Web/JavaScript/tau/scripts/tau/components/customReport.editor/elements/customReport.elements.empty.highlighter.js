@@ -1,0 +1,1 @@
+define([],function(){return{highlightIfEmpty:function(t){t.addClass("tau-attention"),t.animateWithCss({cssClassName:"tau-attention-shake"})}}});

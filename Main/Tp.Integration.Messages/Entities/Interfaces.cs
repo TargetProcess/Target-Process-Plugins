@@ -62,6 +62,8 @@ namespace Tp.Integration.Common
 	public interface ITestPlanRunDTO : IAssignableDTO
 	{
 		Nullable<Int32> TestPlanRunID { get; set; }
+		Nullable<Int32> BlockedCount { get; set; }
+		Nullable<Int32> OnHoldCount { get; set; }
 		Nullable<Int32> FailedCount { get; set; }
 		Nullable<Int32> PassedCount { get; set; }
 		Nullable<Int32> NotRunCount { get; set; }

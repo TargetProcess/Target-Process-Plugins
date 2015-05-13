@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Tp.Search.Model.Document;
 using hOOt;
+using Tp.Utils.Html;
 
 namespace Tp.Search.Model.Query
 {
@@ -63,9 +65,8 @@ namespace Tp.Search.Model.Query
 					CurrentQuery = query,
 					OriginQuery = query
 				}, (c, step) => step(c));
-			return new ParsedQuery(words:context.CurrentQuery, numbers:ParseNumbers(query));
+			return new ParsedQuery(words: context.CurrentQuery, numbers: ParseNumbers(query));
 		}
-
 		private string ParseNumbers(string query)
 		{
 			Dictionary<string, int> parsedDigits = _digitsTokensParser.Parse(query);

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework;
+using NUnit.Framework;
 using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
@@ -157,7 +158,8 @@ namespace Tp.TestRunImport.Tests
 				                                              		       				Passed = null,
 				                                              		       				RunDate = null,
 				                                              		       				Runned = false,
-				                                              		       				TestCaseTestPlanID = dto.TestCaseTestPlanID
+				                                              		       				TestCaseTestPlanID = dto.TestCaseTestPlanID,
+				                                              		       				Status = TestCaseRunStatusDTO.NotRun
 				                                              		       			}
 				                                              		       	},
 																	QueryResultCount = _testCaseTestPlanDtos.Count
@@ -236,6 +238,16 @@ namespace Tp.TestRunImport.Tests
 							? (bool?)null
 							: string.Compare(state.Trim(), "PASSED", StringComparison.InvariantCultureIgnoreCase) == 0;
 			((TestCaseRunDTO)(updatedDto.Dto)).Passed.Should(Be.EqualTo(passed));
+			TestCaseRunStatusDTO status;
+			if (passed == null)
+			{
+				status = TestCaseRunStatusDTO.NotRun;
+			}
+			else
+			{
+				status = passed == true ? TestCaseRunStatusDTO.Passed : TestCaseRunStatusDTO.Failed;
+			}
+			((TestCaseRunDTO) (updatedDto.Dto)).Status.Should(Is.EqualTo(status));
 			bool? executed = string.IsNullOrEmpty(runned) || string.IsNullOrEmpty(runned.Trim())
 								? (bool?)null
 								: string.Compare(runned.Trim(), "YES", StringComparison.InvariantCultureIgnoreCase) == 0;

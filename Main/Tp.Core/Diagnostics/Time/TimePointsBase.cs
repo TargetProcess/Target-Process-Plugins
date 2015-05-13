@@ -6,18 +6,10 @@ namespace Tp.Core.Diagnostics.Time
 	public abstract class TimePointsBase : ITimePoints
 	{
 		public abstract IEnumerable<TimePoint> Points { get; }
-		public long GetOrder()
-		{
-			return Points.FirstOrNothing()
-				.Select(p => p.Order)
-				.GetOrDefault(-1);
-		}
-
 		public abstract void Add(TimePoint point);
 		public abstract void AddUtcNow(string name);
 		public abstract string Dump();
-		public abstract void CopyFrom(ITimePoints timePoints);
-		public abstract ITimePoints CreateSnapshot();
+		public abstract ITimePoints CreateFork();
 
 		public void AddRange(IEnumerable<TimePoint> points)
 		{

@@ -1,1 +1,1 @@
-define(["tau/components/component.creator","tau/components/extensions/component.creator.extension","tau/ui/extensions/comments/ui.extension.commentList.editable"],function(e,n,t){return{create:function(o){var c={extensions:[n,t]};return o.name="comment.commentList",e.create(c,o)}}});
+define(["tau/components/component.creator","tau/components/extensions/component.creator.extension","tau/components/comments/extensions/editable.comment.list.extension"],function(e,n,t){return{create:function(o){var c={extensions:[n,t]};return o.name="comment.commentList",e.create(c,o)}}});

@@ -18,12 +18,11 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
                 Login: 'Login',
                 Password: 'Password',
                 StartRevision: '5',
-
+                SyncInterval: '60',
                 UserMapping: [
-                { Key: 'svnuser1', Value: { Name: this._tpUsers[0].Name, Id: this._tpUsers[0].Id} },
-                { Key: 'svnuser2', Value: { Name: this._tpUsers[1].Name, Id: this._tpUsers[1].Id} }
-            ]
-            }
+                    { Key: 'svnuser1', Value: { Name: this._tpUsers[0].Name, Id: this._tpUsers[0].Id} },
+                    { Key: 'svnuser2', Value: { Name: this._tpUsers[1].Name, Id: this._tpUsers[1].Id} }
+                ]}
             };
 
             this._createController = function () {
@@ -63,7 +62,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
                         Id: userBlock.find('.tpuser').attr('userId')
                     }
                 };
-            }
+            };
 
             this.areMappedCorrectly = function (userBlock, userMapping) {
                 var actual = this.convertToUserMapping(userBlock);
@@ -88,7 +87,6 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
         },
 
         teardown: function () {
-
         }
     });
 
@@ -157,6 +155,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
                 Login: this._model.Settings.Login,
                 Password: this._model.Settings.Password,
                 StartRevision: this._model.Settings.StartRevision,
+                SyncInterval: '60',
                 UserMapping: []
             },
             TpUsers: [
@@ -192,5 +191,4 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Git/Profile
         ok(this._placeHolder.find(".automapping-result").css('display') != 'none', 'automapping result should be visible');
         equal(this._placeHolder.find(".automapping-result .warning-message").text(), automappingResult.Comment);
     });
-
 });

@@ -1,0 +1,1 @@
+define(["require","tau/core/class"],function(e){var t=e("tau/core/class");return t.extend({init:function(e){this._termProcessor=e},name:function(e,t){return this._get(e,"name",t)},names:function(e,t){return this._get(e,"names",t)},iconSmall:function(e){return this._get(e,"iconSmall",!0)},_get:function(e,t,n){var r=this._termProcessor.getTerm(e,t);return n?r:r.toLowerCase()}})});

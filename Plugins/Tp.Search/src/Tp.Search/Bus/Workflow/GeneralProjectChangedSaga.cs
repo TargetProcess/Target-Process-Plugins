@@ -1,10 +1,12 @@
 // 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using NServiceBus;
 using NServiceBus.Saga;
 using Tp.Core;
@@ -20,14 +22,14 @@ using Tp.Search.Model.Entity;
 namespace Tp.Search.Bus.Workflow
 {
 	class GeneralProjectChangedSaga : TpSaga<GeneralProjectChangeSagaData>,
-	                                         IAmStartedByMessages<GeneralProjectChangedLocalMessage>,
-	                                         IHandleMessages<CommentQueryResult>,
-	                                         IHandleMessages<TargetProcessExceptionThrownMessage>
+		IAmStartedByMessages<GeneralProjectChangedLocalMessage>,
+		IHandleMessages<CommentQueryResult>,
+		IHandleMessages<TestStepQueryResult>,
+		IHandleMessages<TargetProcessExceptionThrownMessage>
 	{
-		private readonly IEntityIndexer _entityIndexer;
-		private readonly IEntityTypeProvider _entityTypesProvider;
 		private readonly IActivityLogger _logger;
 		private readonly CommentsIndexing _commentsIndexing;
+		private readonly TestStepsIndexing _testStepsIndexing;
 
 		public GeneralProjectChangedSaga()
 		{
@@ -35,22 +37,29 @@ namespace Tp.Search.Bus.Workflow
 
 		public GeneralProjectChangedSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider, IActivityLogger logger)
 		{
-			_entityIndexer = entityIndexer;
-			_entityTypesProvider = entityTypesProvider;
 			_logger = logger;
-			_commentsIndexing = new CommentsIndexing(_entityIndexer, () => Data, _entityTypesProvider, d => MarkAsComplete(),
+			_commentsIndexing = new CommentsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testStepsIndexing.Start(),
 										 q =>
 										 {
 											 q.GeneralId = Data.GeneralId;
 											 Send(q);
 										 }
 										 , _logger, (dto, indexer) => indexer.UpdateCommentIndex(dto, new List<CommentField>(), Maybe.Return(Data.ProjectId), Maybe.Nothing, DocumentIndexOptimizeSetup.NoOptimize));
+
+			_testStepsIndexing = new TestStepsIndexing(entityIndexer, () => Data, entityTypesProvider, d => MarkAsComplete(),
+										 q =>
+										 {
+											 q.TestCaseId = Data.GeneralId;
+											 Send(q);
+										 }
+										 , _logger, (dto, indexer) => indexer.UpdateTestStepIndex(dto, new List<TestStepField>(), Maybe.Return(Data.ProjectId), DocumentIndexOptimizeSetup.NoOptimize));
 		}
 
 		public override void ConfigureHowToFindSaga()
 		{
 			ConfigureMapping<GeneralProjectChangedLocalMessage>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<TestStepQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
 		}
 
@@ -73,23 +82,31 @@ namespace Tp.Search.Bus.Workflow
 			_commentsIndexing.Handle(message);
 		}
 
+		public void Handle(TestStepQueryResult message)
+		{
+			_testStepsIndexing.Handle(message);
+		}
+
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
-			_logger.Error("Rebuild indexes for comment failed", new Exception(message.ExceptionString));
+			_logger.Error("Rebuild indexes for Comments and Test Steps failed", new Exception(message.ExceptionString));
 			MarkAsComplete();
 		}
 	}
 
-	[Serializable]
-	public class GeneralProjectChangeSagaData : ISagaEntity, ICommentIndexingSagaData
+	public class GeneralProjectChangeSagaData : ISagaEntity, ICommentIndexingSagaData, ITestStepIndexingSagaData
 	{
 		public Guid Id { get; set; }
 		public string Originator { get; set; }
 		public string OriginalMessageId { get; set; }
-		public int? ProjectId { get; set; }
+
 		public int CommentsRetrievedCount { get; set; }
 		public int CommentsCurrentDataWindowSize { get; set; }
+		
+		public int TestStepsRetrievedCount { get; set; }
+		public int TestStepsCurrentDataWindowSize { get; set; }
 
+		public int? ProjectId { get; set; }
 		public int? GeneralId { get; set; }
 	}
 }

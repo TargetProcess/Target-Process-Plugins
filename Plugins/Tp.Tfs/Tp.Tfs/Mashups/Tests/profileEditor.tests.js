@@ -13,6 +13,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Tfs/Profile
                     "Password": "123456",
                     "Uri": "file:\/\/\/D:\/diff\/repos\/RepositoryToTestSvn",
                     "StartRevision": "0",
+                    "SyncInterval": "5",
                     UserMapping: [
                         { Key: 'svnuser1', Value: { Name: 'tpuser1', Id: '1'} },
                         { Key: 'svnuser2', Value: { Name: 'tpuser2', Id: '2'} }
@@ -42,6 +43,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Tfs/Profile
                         "Login": "testedited",
                         "Password": "123456edited",
                         "StartRevision": "5",
+                        "SyncInterval": "10",
                         "Uri": "file:\/\/\/D:\/diff\/repos\/RepositoryToTestSvn",
                         UserMapping: [
                             { Key: 'svnuser1', Value: { Name: 'tpuser1', Id: '1'} },
@@ -57,6 +59,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Tfs/Profile
                 this._placeHolder.find('#login').val(editedProfile.Settings.Login);
                 this._placeHolder.find('#password').val(editedProfile.Settings.Password);
                 this._placeHolder.find('#startRevision').val(editedProfile.Settings.StartRevision);
+                this._placeHolder.find('#syncInterval').val(editedProfile.Settings.SyncInterval);
             };
 
             this.editUserMapping = function (index, value) {
@@ -157,4 +160,3 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Tfs/Profile
         ok(this._placeHolder.find('.tpuser:eq(0)').hasClass('ui-error'), 'incorrect field should be marked as error');
     });
 })
-

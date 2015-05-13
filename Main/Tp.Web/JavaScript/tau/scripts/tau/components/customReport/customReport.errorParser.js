@@ -1,0 +1,1 @@
+define(["require","Underscore"],function(e){var n=e("Underscore");return{getMessage:function(e){try{var r=JSON.parse(e);return this._getLastMessage(r)}catch(s){return n.isString(e)?e:JSON.stringify(e,null,4)}},_getLastMessage:function(e){for(var n=e,r=e.Message;n.InnerException&&n.InnerException.Message;)n=n.InnerException,r=n.Message;return r}}});

@@ -6,7 +6,9 @@ define(function(require) {
         SortableStates = require('jsx!./sortable-states'),
         AddStateButtonView = require('jsx!./add.state.button'),
         TeamView = require('jsx!./view.team.workflow'),
-        TextUtils = require('tau/utils/utils.text');
+        AddTeamWorkflowButton = require('jsx!./add.team.workflow.button'),
+        TextUtils = require('tau/utils/utils.text'),
+        Feedback = require('jsx!tau/components/feedback/views/feedback.view');
 
     var ADD_STATE_FADE_OUT_TIME = 500;
     var addStateFadeOutTimeout = null;
@@ -82,7 +84,7 @@ define(function(require) {
             }.bind(this, side, updateState);
         },
 
-        _mkStateView: function(state, defaultTeamWorkflowText) {
+        _mkStateView: function(state) {
             return React.createElement(StateItemView, {
                 key: state.id,
                 id: state.id,
@@ -92,26 +94,32 @@ define(function(require) {
                 allowDrag: this.props.allowEditing && !state.disableDrag,
                 isEnabled: this._isInteractionEnabled(),
                 isLoading: this.props.updatingStateId === state.id,
-                canAddTeamWorkflow: state.isInitial && this.props.canAddTeamWorkflow,
                 stateSettings: this.props.stateSettings,
                 renameStateAction: this.props.renameStateAction,
                 leftTriggered: this._mkHoveredStateSetter(state.isInitial ? 'right' : 'left', state.id),
                 rightTriggered: this._mkHoveredStateSetter(state.isFinal ? 'left' : 'right', state.id),
                 outTriggered: this._mkHoveredStateSetter('none', null),
-                addTeamWorkflowAction: this.props.addTeamWorkflowAction,
-                defaultTeamWorkflowText: defaultTeamWorkflowText,
                 width: state.width + '%'
             });
         },
 
-        _generateDefaultTeamWorkflowText: function(states, teamWorkflows) {
-            var teamWorkflowParentStateIndex = states.length > 2 ? parseInt((states.length - 1) / 2, 10) : -1;
+        _generateDefaultTeamWorkflow: function(states, teamWorkflows) {
+            var teamWorkflowParentStateIndex = parseInt((states.length - 1) / 2, 10);
             var dsl = _.map(states, function(state, index) {
-                var teamWorkflow = index === teamWorkflowParentStateIndex ? ' Open, Done' : '';
-                return state.name + ':' + teamWorkflow;
+                var teamWorkflow = state.name + (index === teamWorkflowParentStateIndex ? ', Team State' : '');
+                return state.name + ': ' + teamWorkflow;
             }).join('\n');
-            var title = TextUtils.getUniqueName('Sub workflow', _.pluck(teamWorkflows, 'name'));
+            var title = TextUtils.getUniqueName('Team Workflow', _.pluck(teamWorkflows, 'name'));
             return {title: title, dsl: dsl};
+        },
+
+        _getTeamWorkflowText: function(states, teamWorkflow) {
+            var teamStates = _.groupBy(teamWorkflow.entityStates, _.complexProperty('parentEntityState.id'));
+            return _.map(states, function(state) {
+                var subStates = teamStates[state.id];
+                var teamWorkflow = subStates ? _.pluck(subStates, 'name').join(', ') : '';
+                return state.name + ': ' + teamWorkflow;
+            }).join('\n');
         },
 
         _isAdderActive: function(previous, next) {
@@ -156,7 +164,7 @@ define(function(require) {
                 }
             }.bind(this));
 
-            var defaultTeamWorkflowText = this._generateDefaultTeamWorkflowText(this.state.states, this.state.teamWorkflows);
+            var defaultTeamWorkflow = this._generateDefaultTeamWorkflow(this.state.states, this.state.teamWorkflows);
             var states = _.reduce(this.state.states, function(acc, state) {
                 if (!_.isEmpty(acc.states)) {
                     var addStateButton = React.createElement(AddStateButtonView, {
@@ -169,7 +177,7 @@ define(function(require) {
                     acc.states.push(addStateButton);
                 }
 
-                acc.states.push(this._mkStateView(state, defaultTeamWorkflowText));
+                acc.states.push(this._mkStateView(state));
                 acc.previousState = state;
 
                 return acc;
@@ -179,8 +187,18 @@ define(function(require) {
                 return React.createElement(TeamView, {
                     key: teamWorkflow.id,
                     teamWorkflow: teamWorkflow,
+                    processTeams: this.props.processTeams,
                     entityType: this.props.entityType,
-                    deleteTeamWorkflowAction: this.props.deleteTeamWorkflowAction
+                    teamWorkflowText: this._getTeamWorkflowText(this.state.states, teamWorkflow),
+                    editTeamWorkflowAction: this.props.editTeamWorkflowAction,
+                    deleteTeamWorkflowAction: this.props.deleteTeamWorkflowAction,
+                    urlBuilder: this.props.urlBuilder,
+                    openEntityViewAction: this.props.openEntityViewAction,
+                    renameStateAction: this.props.renameStateAction,
+                    stateSettings: this.props.stateSettings,
+                    isEnabled: this._isInteractionEnabled(),
+                    updatingStateId: this.props.updatingStateId,
+                    entityTerms: this.props.entityTerms
                 });
             }, this);
 
@@ -190,9 +208,16 @@ define(function(require) {
                 minHeight: '100%'
             };
 
+            var addTeamWorkflowButton = this.props.canAddTeamWorkflow ?
+                <AddTeamWorkflowButton addTeamWorkflowAction={this.props.addTeamWorkflowAction}
+                    isEnabled={this._isInteractionEnabled()}
+                    defaultTeamWorkflow={defaultTeamWorkflow} /> :
+                null;
+
             return (
                 <div ref="scrollable" className="i-role-views-workflow-container tau-workflow-contents textSelectionDisabled">
                     <div className="tau-container__title header-h3">
+                        <Feedback featureName="Workflow Setup"/>
                         {this.props.process.name}
                         <span className="tau-icon-general tau-icon-r-arrow-big"></span>
                         Workflow for <span className={'tau-entity-color tau-entity-color--' + this.props.entityType}>{this.props.entityTerms.name}</span>
@@ -213,6 +238,7 @@ define(function(require) {
                                 {states}
                             </SortableStates>
                             {teamWorkflows}
+                            {addTeamWorkflowButton}
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,1 @@
+define(["tau/core/class","Underscore","jQuery"],function(e,s){return e.extend({init:function(){this._resizeCallbacks=s.Callbacks()},resize:function(e){this._resizeCallbacks.fire(e)},onResize:function(e,s){this._resizeCallbacks.add(e,s)},unsubscribeByScope:function(e){this._resizeCallbacks.remove(e)},destroy:function(){this._resizeCallbacks.removeAll()}})});

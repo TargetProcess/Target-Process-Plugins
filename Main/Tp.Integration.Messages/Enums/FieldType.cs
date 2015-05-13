@@ -68,6 +68,11 @@ namespace Tp.Integration.Common
 		/// <summary>
 		/// 	Multiple Target Process Entities
 		/// </summary>
-		MultipleEntities = 10
+		MultipleEntities = 10,
+
+		/// <summary>
+		/// 	Money 
+		/// </summary>
+		Money = 11
 	}
 }

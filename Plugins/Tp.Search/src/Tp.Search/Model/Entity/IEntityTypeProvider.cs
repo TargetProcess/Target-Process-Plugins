@@ -8,7 +8,6 @@ namespace Tp.Search.Model.Entity
 		Maybe<string> GetEntityTypeName(int? entityTypeId);
 		bool IsQueryable(int? entityTypeId);
 		bool IsAssignable(int? entityTypeId);
-		bool IsTestCase(int? entityTypeId);
 		bool IsImpediment(int? entityTypeId);
 		IEnumerable<string> NoSquadEntityTypeNames { get; }
 		int?[] EntityTypeIds { get; }

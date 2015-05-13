@@ -9,64 +9,65 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using StructureMap;
 
 namespace Tp.Core.Diagnostics.Time
 {
-	public class TpProfiler
+	public class TpProfilerProvider
 	{
-		private readonly ConcurrentBag<TimeInterval> _timeIntervals;
-		private readonly int _threadId;
+		private TpProfilerProvider() { }
 
-		public TpProfiler()
+		public static readonly TpProfilerProvider Instance = new TpProfilerProvider();
+		public TpProfiler GetProfiler()
 		{
-			_threadId = Thread.CurrentThread.ManagedThreadId;
-			_timeIntervals = new ConcurrentBag<TimeInterval>();
-		}
-
-		public IEnumerable<TimeInterval> GetTimeIntervals()
-		{
-			return _timeIntervals.ToArray();
-		}
-
-		public TimeIntervalTracker Start(string key)
-		{
-			return new TimeIntervalTracker(timeElapsed => _timeIntervals.Add(new TimeInterval(key, timeElapsed, _threadId)));
-		}
-
-		public void Merge(TpProfiler other)
-		{
-			other._timeIntervals.ForEach(timeInterval => _timeIntervals.Add(timeInterval));
+			return ObjectFactory.GetInstance<TpProfiler>();
 		}
 	}
-
-	public class TimeIntervalTracker : IDisposable
+	/// <summary>
+	/// TpProfiler instance should be used per thread
+	/// The only cross thread interaction occurs during merging children threads profilers into parent through usage of AddData method
+	/// P.S. TpProfiler usage covers only structural parallelism !
+	/// </summary>
+	public class TpProfiler : ITpProfilerDataCollector
 	{
-		private readonly Action<TimeSpan> _onStop;
-		private readonly Stopwatch _stopWatch;
-
-		public TimeIntervalTracker(Action<TimeSpan> onStop)
+		private readonly ConcurrentStack<TimeInterval> _data;
+		public TpProfiler()
 		{
-			_onStop = onStop;
-			_stopWatch = new Stopwatch();
-			_stopWatch.Start();
+			_data = new ConcurrentStack<TimeInterval>();
 		}
 
-		public void Dispose()
+		public IEnumerable<TimeInterval> GetData()
 		{
-			_onStop(_stopWatch.Elapsed);
+			return _data.ToArray();
+		}
+
+		public void AddData(IEnumerable<TimeInterval> data)
+		{
+			_data.PushRange(data.ToArray());
+		}
+
+		public IDisposable Start(ProfilerTarget target)
+		{
+			var stopWatch = Stopwatch.StartNew();
+			return Disposable.Create(() => _data.Push(new TimeInterval(target, stopWatch.Elapsed, Thread.CurrentThread.ManagedThreadId)));
+		}
+
+		public void Clear()
+		{
+			_data.Clear();
 		}
 	}
 
 	public struct TimeInterval
 	{
-		public TimeSpan Elapsed { get; private set; }
 		public int ThreadId { get; private set; }
-		public string Key { get; private set; }
+		public TimeSpan Elapsed { get; private set; }
+		public ProfilerTarget Target { get; private set; }
 
-		public TimeInterval(string key, TimeSpan elapsed, int threadId)
+		public TimeInterval(ProfilerTarget target, TimeSpan elapsed, int threadId)
 			: this()
 		{
-			Key = key;
+			Target = target;
 			Elapsed = elapsed;
 			ThreadId = threadId;
 		}

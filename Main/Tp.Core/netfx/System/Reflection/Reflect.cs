@@ -53,6 +53,11 @@ public static partial class Reflect
 		return GetMethodInfo(method);
 	}
 
+	public static MethodInfo GetMethod<T>(Expression<Func<T, object>> method)
+	{
+		return GetMethodInfo(method);
+	}
+
 	/// <summary>
 	/// Gets the method represented by the lambda expression.
 	/// </summary>
@@ -97,6 +102,15 @@ public static partial class Reflect
 	/// <exception cref="ArgumentException">The <paramref name="property"/> is not a lambda expression or it does not represent a property access.</exception>
 	/// <returns>The property info.</returns>
 	public static PropertyInfo GetProperty<TResult>(Expression<Func<TResult>> property)
+	{
+		var info = GetMemberInfo(property) as PropertyInfo;
+		if (info == null)
+			throw new ArgumentException("Member is not a property");
+
+		return info;
+	}
+
+	public static PropertyInfo GetProperty<T>(Expression<Func<T, object>> property)
 	{
 		var info = GetMemberInfo(property) as PropertyInfo;
 		if (info == null)

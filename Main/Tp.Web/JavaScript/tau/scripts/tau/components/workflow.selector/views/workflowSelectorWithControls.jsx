@@ -7,7 +7,7 @@ define(function(require) {
         WorkflowSelector = require('jsx!./workflowSelector');
 
     return React.createClass({
-        displayName: 'Workflows selector with buttons',
+        displayName: 'WorkflowSelectorWithControls',
 
         getInitialState: function() {
             return {
@@ -37,8 +37,10 @@ define(function(require) {
                         workflows={this.props.workflows}
                         entityTypes={this.props.entityTypes}
                         terms={this.props.terms}
+                        workflowHelpData={this.props.workflowHelpData}
                         customizedWorkflows={this.state.customizedWorkflows}
-                        onWorkflowChanged={this.props.onWorkflowChanged} />
+                        onWorkflowChanged={this.props.onWorkflowChanged}
+                    />
                     <div className="tau-settings-actions">
                         <button className="tau-btn tau-primary i-role-action-submit" onClick={this.saveWorkflow}>Save</button>
                     </div>

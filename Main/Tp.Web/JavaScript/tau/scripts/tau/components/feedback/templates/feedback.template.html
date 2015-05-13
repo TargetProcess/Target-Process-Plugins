@@ -1,10 +1,8 @@
 <!-- name: feedback -->
-<div class="give-feedback">
-    <div class="give-feedback__header">
-        What do you think about <span class="give-feedback__title"><%= this.feature %></span>?
-    </div>
-    <textarea class="give-feedback__textarea"><%= this.text %></textarea>
-    <button type="button" class="tau-btn tau-btn-big i-role-actionok give-feedback__btn">
-        Send feedback
+<div class="i-role-feedback-block">
+    <button type="button" class="<%! this.buttonClass %> tau-extension-board-tooltip tau-feedback-btn i-role-feedback-btn"
+        data-collapsed-selector=":not(.tau-checked)" data-title-collapsed="Give feedback about <%! this.featureName %>"
+        data-expanded-selector=".tau-checked" data-title-expanded="" data-feature="<%! this.featureName %>">
+        Give feedback
     </button>
 </div>

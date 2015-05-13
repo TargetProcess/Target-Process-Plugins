@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using NUnit.Framework;
 using StructureMap;
 using Tp.Integration.Common;
-using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Queries;
 using Tp.Integration.Testing.Common;
 using Tp.Search.Bus;
@@ -48,7 +43,8 @@ namespace Tp.Search.Tests
 			_transport.On<AssignableQuery>().Reply(x => ReplyOnAssignableQuery(x, _assignables));
 			
 			_transport.On<CommentQuery>().Reply(x => new CommentQueryResult{Dtos = new CommentDTO[]{}, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0});
-			_transport.On<TestCaseQuery>().Reply(x => new TestCaseQueryResult{Dtos = new TestCaseDTO[]{}, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0});
+
+			_transport.On<TestStepQuery>().Reply(x => new TestStepQueryResult { Dtos = new TestStepDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 
 		}
 

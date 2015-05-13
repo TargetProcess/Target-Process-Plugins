@@ -1,6 +1,7 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
     var _ = require('Underscore');
+    var classNames = require('libs/classNames');
 
     var transformations = require('./../services/board.menu.transformations.service');
     var constants = require('./../models/board.menu.constants');
@@ -12,7 +13,7 @@ define(function(require) {
                 displayName: 'BoardMenuListSection',
 
                 _getSectionClassName: function() {
-                    return React.addons.classSet({
+                    return classNames({
                         't3-views-section': true,
                         't3-favorite-views-section i-role-favorite-views-section': this.props.section.getIsFavoritesSection(),
                         't3-other-views-section i-role-other-views-section': this.props.section.getIsOthersSection()

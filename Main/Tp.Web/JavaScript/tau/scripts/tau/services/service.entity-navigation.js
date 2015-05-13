@@ -1,1 +1,1 @@
-define(["tau/core/class"],function(n){return n.extend({navigateToEntityView:function(n,t,e){n.to("#"+e+"/"+t)}})});
+define(["tau/core/class"],function(t){return t.extend({navigateToEntityView:function(t,i,n){t.to("#"+n+"/"+i)},navigateToEntityViewWithAction:function(t,i,n,e,a){var o=i.getNewViewUrlWithAction(n,e,!0,a);"#"===o.charAt(0)&&(o=o.substr(1)),t.to(o)},navigateToEntityViewTab:function(t,i,n,e,a){var o=i.createComponentSettings({id:e});o.set({set:{generalTab:a},callback:this.navigateToEntityView.bind(this,t,n,e)})}})});

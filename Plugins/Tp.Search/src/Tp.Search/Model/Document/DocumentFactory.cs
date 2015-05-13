@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using Tp.Integration.Common;
@@ -34,32 +33,6 @@ namespace Tp.Search.Model.Document
 				};
 		}
 
-		private static string AppendCustomFields(string initialValue, Field[] customFieldsMetaInfo)
-		{
-			if (customFieldsMetaInfo == null) return initialValue;
-			var result = new StringBuilder(initialValue);
-			foreach (
-				var cfValue in
-					customFieldsMetaInfo
-						.Where(x =>
-							x.FieldType == FieldTypeEnum.Text || x.FieldType == FieldTypeEnum.RichText ||
-							x.FieldType == FieldTypeEnum.DropDown || x.FieldType == FieldTypeEnum.TemplatedURL)
-						.Where(x => !string.IsNullOrEmpty(x.Value)).Select(x => x.Value))
-			{
-				result.AppendFormat(" {0}", cfValue);
-			}
-
-			foreach (
-				var cfValue in
-					customFieldsMetaInfo.Where(x => x.FieldType == FieldTypeEnum.MultipleSelectionList)
-					                    .SelectMany(x => x.ParseMultipleSelectionListFieldValue()))
-			{
-				result.AppendFormat(" {0}", cfValue);
-			}
-
-			return result.ToString();
-		}
-
 		public EntityDocument CreateAssignable(AssignableDTO assignable)
 		{
 			var name = EntityDocument.CreateName(assignable.AssignableID);
@@ -73,21 +46,7 @@ namespace Tp.Search.Model.Document
 				DocNumber = -1
 			};
 		}
-
-		public EntityDocument CreateTestCase(TestCaseDTO testCase)
-		{
-			var description = string.IsNullOrEmpty(testCase.Description) ? string.Empty : string.Format(" {0}", testCase.Description);
-			string format = string.Format("{0}{1} ", testCase.Name, description);
-			var text = _textOperations.Prepare(AppendCustomFields(format, testCase.CustomFieldsMetaInfo));
-			return new EntityDocument(testCase.TestCaseID.Value.ToString(CultureInfo.InvariantCulture), text)
-			{
-				ProjectId = _documentIdFactory.CreateProjectId(testCase.ProjectID.GetValueOrDefault()),
-				EntityTypeId = _documentIdFactory.CreateEntityTypeId(testCase.EntityTypeID.GetValueOrDefault()),
-				SquadId = _documentIdFactory.CreateSquadId(0),
-				DocNumber = -1
-			};
-		}
-
+		
 		public EntityDocument CreateImpediment(ImpedimentDTO impediment)
 		{
 			string name = EntityDocument.CreateName(impediment.ImpedimentID);
@@ -113,6 +72,18 @@ namespace Tp.Search.Model.Document
 			};
 		}
 
+		public hOOt.Document CreateTestStep(TestStepDTO testStep)
+		{
+			var name = EntityDocument.CreateName(testStep.TestStepID);
+			var descriptionWithResult =
+				_textOperations.Prepare(string.Format("{0} {1}", testStep.Description ?? string.Empty,
+					testStep.Result ?? string.Empty));
+			return new hOOt.Document(name, descriptionWithResult)
+			{
+				DocNumber = -1
+			};
+		}
+
 		public EntityDocument CreateEmptyEntityDocument(int docNumber, string name)
 		{
 			return new EntityDocument(name, string.Empty)
@@ -124,12 +95,38 @@ namespace Tp.Search.Model.Document
 			};
 		}
 
-		public hOOt.Document CreateEmptyCommentDocument(int docNumber, string name)
+		public hOOt.Document CreateEmptyhOOtDocument(int docNumber, string name)
 		{
 			return new hOOt.Document(name, string.Empty)
 			{
 				DocNumber = docNumber
 			};
+		}
+
+		private static string AppendCustomFields(string initialValue, Field[] customFieldsMetaInfo)
+		{
+			if (customFieldsMetaInfo == null) return initialValue;
+			var result = new StringBuilder(initialValue);
+			foreach (
+				var cfValue in
+					customFieldsMetaInfo
+						.Where(x =>
+							x.FieldType == FieldTypeEnum.Text || x.FieldType == FieldTypeEnum.RichText ||
+							x.FieldType == FieldTypeEnum.DropDown || x.FieldType == FieldTypeEnum.TemplatedURL)
+						.Where(x => !string.IsNullOrEmpty(x.Value)).Select(x => x.Value))
+			{
+				result.AppendFormat(" {0}", cfValue);
+			}
+
+			foreach (
+				var cfValue in
+					customFieldsMetaInfo.Where(x => x.FieldType == FieldTypeEnum.MultipleSelectionList)
+						.SelectMany(x => x.ParseMultipleSelectionListFieldValue()))
+			{
+				result.AppendFormat(" {0}", cfValue);
+			}
+
+			return result.ToString();
 		}
 	}
 }

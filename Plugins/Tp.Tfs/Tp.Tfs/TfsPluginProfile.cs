@@ -21,6 +21,7 @@ namespace Tp.Tfs
 	{
 		public const string StartRevisionField = "StartRevision";
 		public const string StartWorkItemField = "StartWorkItem";
+		public const string SynchronizationIntervalField = "SynchronizationInterval";
 
 		public TfsPluginProfile()
 		{
@@ -33,16 +34,26 @@ namespace Tp.Tfs
 			StartWorkItem = "1";
 		}
 
+		[DataMember]
+		public string SyncInterval { get; set; }
+
+		private const int MinimumSynchronizationIntervalInMinutes = 5;
+
 		[IgnoreDataMember]
 		public int SynchronizationInterval
 		{
-			get { return 5; }
+			get
+			{
+				int value;
+				int.TryParse(SyncInterval, out value);
+				return Math.Max(MinimumSynchronizationIntervalInMinutes, value);
+			}
 			set { }
 		}
 
 		#region Validation
 
-		public bool ValidateStartRevision(PluginProfileErrorCollection errors)
+		public void ValidateStartRevision(PluginProfileErrorCollection errors)
 		{
 			Int32 startRevision;
 			if (!Int32.TryParse(StartRevision, out startRevision) || startRevision < 1)
@@ -53,13 +64,10 @@ namespace Tp.Tfs
 					Message = string.Format("Specify a start revision number in the range of 1 - 2147483647"),
 					Status = PluginProfileErrorStatus.WrongRevisionNumberError
 				});
-				return false;
 			}
-
-			return true;
 		}
 
-		public bool ValidateStartWorkItem(PluginProfileErrorCollection errors)
+		public void ValidateStartWorkItem(PluginProfileErrorCollection errors)
 		{
 			Int32 startWorkItem;
 			if (!Int32.TryParse(StartWorkItem, out startWorkItem) || startWorkItem < 1)
@@ -70,10 +78,7 @@ namespace Tp.Tfs
 					Message = string.Format("Specify a start workitem number in the range of 1 - 2147483647"),
 					Status = PluginProfileErrorStatus.WrongRevisionNumberError
 				});
-				return false;
 			}
-
-			return true;
 		}
 
 		public void Validate(PluginProfileErrorCollection errors)

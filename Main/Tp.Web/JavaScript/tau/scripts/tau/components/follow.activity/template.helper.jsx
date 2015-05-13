@@ -1,11 +1,15 @@
 define(function(require) {
+    var _ = require('Underscore');
     var React = require('react');
     var Class = require('tau/core/class');
     var ModificationType = require('./modification.type');
     var ModificationFieldType = require('./modification.field.type');
     var DateUtils = require('tau/utils/utils.date');
+    var TermProcessor = require('tau/core/termProcessor');
+    var termProcessor = new TermProcessor();
 
     var hashCode = function(str) {
+        /*jshint -W016*/
         var hash = 0;
         if (str.length === 0) {
             return hash;
@@ -25,7 +29,7 @@ define(function(require) {
 
         getTemplate: function(modification, hideHeader) {
             var entityId = modification.general.id;
-            var entityType = modification.general.type.toLowerCase().replace('tp.businessobjects.', '');
+            var entityType = this._normalizeEntityType(modification.general.type);
             var entityTitleClass = 'tau-text_type_' + entityType;
 
             return (
@@ -33,20 +37,49 @@ define(function(require) {
                     {hideHeader ? null :
                         <div className="follow-title">
                             <a href="#" className={entityTitleClass} onClick={this._openEntityView.bind(this, entityId, entityType)}>
-                                {modification.general.name}
+                                {modification.general.name}&nbsp;
+                                <span className={'tau-text ' + entityTitleClass} href="#">{this._getEntityAbbreviation(entityType) + ' ' + entityId}</span>
                             </a>
                         </div>
                         }
-                    <div className="follow-content">
-                        {this._getContainerTemplate(modification)}
-                        {this._getByBlock(modification)}
-                    </div>
+                    {this._getContent(modification)}
                 </div>
-                );
+            );
         },
 
         _getModificationKey: function(modification) {
             return hashCode(modification.general.id + modification.field + modification.timestamp);
+        },
+
+        _getContent: function(modification) {
+            var isFieldSimple = this._isFieldSimple(modification);
+
+            return (
+                <div className="follow-content">
+                    {isFieldSimple ? this._getModificationDateBlock(modification) : null}
+                    {this._getContainerTemplate(modification)}
+                    {isFieldSimple ? this._getByBlock(modification) : null}
+                </div>
+            );
+        },
+
+        _isFieldSimple: function(modification) {
+            if (modification.fieldValue === null) {
+                return true;
+            }
+
+            switch (modification.modificationFieldType) {
+                case ModificationFieldType.Comment:
+                case ModificationFieldType.Attachment:
+                case ModificationFieldType.GeneralEntity:
+                    return false;
+                case ModificationFieldType.Assignment:
+                    return true;
+                default:
+                    return !(modification.modificationType === ModificationType.ChildRemoved ||
+                    modification.modificationType === ModificationType.ChildUpdated ||
+                    modification.modificationType === ModificationType.ChildAdded);
+            }
         },
 
         _getContainerTemplate: function(modification) {
@@ -70,9 +103,9 @@ define(function(require) {
                 case ModificationFieldType.GeneralEntity:
                     return this._getEntityPropertyContainer(modification);
                 default :
-                    if (modification.modificationType === ModificationType.ChildRemoved
-                        || modification.modificationType === ModificationType.ChildUpdated
-                        || modification.modificationType === ModificationType.ChildAdded) {
+                    if (modification.modificationType === ModificationType.ChildRemoved ||
+                        modification.modificationType === ModificationType.ChildUpdated ||
+                        modification.modificationType === ModificationType.ChildAdded) {
                         return this._getChildContainer(modification);
                     }
 
@@ -186,7 +219,7 @@ define(function(require) {
         _getUrlCustomTemplate: function(modification) {
             return <div className="follow-description">Changed {this._getFieldName(modification)} to&nbsp;
                 <a className="follow-description__to-value follow-description__link"
-                href={modification.fieldValue.value} target="_blank">{modification.fieldValue.title}</a>
+                    href={modification.fieldValue.value} target="_blank">{modification.fieldValue.title}</a>
             </div>;
         },
 
@@ -194,8 +227,8 @@ define(function(require) {
             var urls = modification.fieldValue.value.split(',');
             var urlItems = _.map(urls, function(url, index) {
                 return <a className="follow-description__to-value follow-description__link"
-                key={index}
-                href={modification.fieldValue.template.replace('{0}', url)} target="_blank">{url}</a>
+                    key={index}
+                    href={modification.fieldValue.template.replace('{0}', url)} target="_blank">{url}</a>
             });
 
             return <div className="follow-description">
@@ -217,12 +250,13 @@ define(function(require) {
                 Changed {this._getFieldName(modification)} to&nbsp;
                     <span className="follow-description__to-value">No {this._getFieldName(modification)}</span>
                 </div>
-                );
+            );
         },
 
         _getEntityTemplate: function(modification) {
+            var fieldName = modification.fieldValue.type == 'Priority' ? 'Business Value' : modification.fieldValue.type;
             return <div className="follow-description">
-            Changed {modification.fieldValue.type} to&nbsp;
+            Changed {fieldName} to&nbsp;
                 <span className="follow-description__to-value">{modification.fieldValue.name}</span>
             </div>;
         },
@@ -231,7 +265,7 @@ define(function(require) {
             return <div className="follow-description">
             Assigned&nbsp;
                 <a className="follow-description__to-value" href="#" onClick={this._openEntityView.bind(this, modification.fieldValue.id, 'user')}>
-                    <img className="tau-user-avatar" src={this._urlBuilder.getAvatarUrl(modification.fieldValue.id, 15)} />
+                    <img className="tau-user-avatar" src={this._urlBuilder.getAvatarUrl(modification.fieldValue.id, 32)} />
                 &nbsp;{modification.fieldValue.name}
                 </a>
             &nbsp;as a {modification.fieldValue.type}
@@ -246,7 +280,7 @@ define(function(require) {
 
         _getProjectSquadContainer: function(modification) {
             var entityId = modification.fieldValue.id;
-            var entityType = modification.fieldValue.type.replace('Tp.BusinessObjects.', '').toLowerCase();
+            var entityType = this._normalizeEntityType(modification.fieldValue.type);
 
             return <div className="follow-description">
             Changed {modification.fieldValue.type} to&nbsp;
@@ -258,63 +292,79 @@ define(function(require) {
 
         _getEntityPropertyContainer: function(modification) {
             var entityId = modification.fieldValue.id;
-            var entityType = modification.fieldValue.type.replace('Tp.BusinessObjects.', '').toLowerCase();
-            var entityIconClass = 'entity-card entity-card__' + entityType;
+            var entityType = this._normalizeEntityType(modification.fieldValue.type);
+            var entityIconClass = 'tau-entity-icon tau-entity-icon-follow tau-entity-color--' + entityType + ' tau-entity-border--' + entityType;
 
             return (
-                <div className="notification__entity-wrap-container">
-                    <div className="notification__text">
-                    Set {this._getFieldName(modification)} to&nbsp;
+                <div>
+                    {this._getModificationDateBlock(modification)}
+                    <div className="follow-description notification__text">
+                        {this._getPersonBlock(modification)}&nbsp;set {this._getFieldName(modification)} to&nbsp;
                     </div>
                     <div className="notification__entity-wrap">
-                        <a href="#" className={entityIconClass} onClick={this._openEntityView.bind(this, entityId, entityType)}>
-                        {modification.fieldValue.name}
+                        <a href="#" className="notification__entity-link" onClick={this._openEntityView.bind(this, entityId, entityType)}>
+                            <em className={entityIconClass}>{this._getEntityAbbreviation(entityType)}</em>
+                        &nbsp;{modification.fieldValue.name}
                         </a>
                     </div>
                 </div>
-                );
+            );
         },
 
         _getChildContainer: function(modification) {
             var entityId = modification.fieldValue.id;
-            var entityType = modification.fieldValue.type.replace('Tp.BusinessObjects.', '').toLowerCase();
-            var entityIconClass = 'entity-card entity-card__' + entityType;
+            var entityType = this._normalizeEntityType(modification.fieldValue.type);
+            var entityIconClass = 'tau-entity-icon tau-entity-icon-follow tau-entity-color--' + entityType + ' tau-entity-border--' + entityType;
 
             return (
-                <div className="notification__entity-wrap-container">
-                    <div className="notification__text">
-                        {this._getAction(modification.modificationType)} related entity
+                <div>
+                    {this._getModificationDateBlock(modification)}
+                    <div className="follow-description notification__text">
+                        {this._getPersonBlock(modification)}&nbsp;{this._getAction(modification.modificationType)} related entity:
                     </div>
                     <div className="notification__entity-wrap">
-                        <a href="#" className={entityIconClass} onClick={this._openEntityView.bind(this, entityId, entityType)}>
-                        {modification.fieldValue.name}
+                        <a href="#" className="notification__entity-link" onClick={this._openEntityView.bind(this, entityId, entityType)}>
+                            <em className={entityIconClass}>{this._getEntityAbbreviation(entityType)}</em>
+                        &nbsp;{modification.fieldValue.name}
                         </a>
                     </div>
                 </div>
-                );
+            );
         },
 
         _getCommentContainer: function(modification) {
             return (
-                <div className="notification__comment">
-                    <div className="notification__comment__user">
-                        {modification.fieldValue.name}
+                <div>
+                    {this._getModificationDateBlock(modification)}
+                    <div className="follow-description notification__text">
+                        {this._getPersonBlock(modification)}&nbsp;left a comment:
+                    </div>
+                    <div className="notification__comment">
+                        <div className="notification__comment__user">
+                            {modification.fieldValue.name}
+                        </div>
                     </div>
                 </div>
-                );
+            );
         },
 
         _getAttachmentContainer: function(modification) {
             var attachUrl = this._configurator.getApplicationPath() + '/Attachment.aspx?AttachmentID=' + modification.fieldValue.id;
             return (
-                <ul className = "notification__attached-data">
-                    <li className="notification__attached-data__item">
-                        <a className="notification__attached-data__link" target="_blank" href={attachUrl}>
-                        {modification.fieldValue.name}
-                        </a>
-                    </li>
-                </ul>
-                );
+                <div>
+                    {this._getModificationDateBlock(modification)}
+                    <div className="follow-description">
+                        {this._getPersonBlock(modification)}&nbsp;attached file:
+                    </div>
+                    <ul className = "notification__attached-data">
+                        <li className="notification__attached-data__item">
+                            <a className="notification__attached-data__link" target="_blank" href={attachUrl}>
+                                {modification.fieldValue.name}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            );
         },
 
         _getAssignmentContainer: function(modification) {
@@ -322,22 +372,23 @@ define(function(require) {
                 <div className="follow-description">
                         {this._getAssignedAction(modification.modificationType)}&nbsp;
                     <a className="follow-description__to-value" href="#" onClick={this._openEntityView.bind(this, modification.fieldValue.id, 'user')}>
-                        <img className="tau-user-avatar" src={this._urlBuilder.getAvatarUrl(modification.fieldValue.id, 15)} />
+                        <img className="tau-user-avatar" src={this._urlBuilder.getAvatarUrl(modification.fieldValue.id, 32)} />
                     &nbsp;{modification.fieldValue.name}
                     </a>
                 &nbsp;as a {modification.fieldValue.type}
                 </div>
-                );
+            );
         },
 
         _getStateContainer: function(modification) {
             var entityId = modification.fieldValue.target.id;
-            var entityType = modification.field.replace('Tp.BusinessObjects.', '').toLowerCase();
-            var entityIconClass = 'entity-card entity-card__' + entityType;
+            var entityType = this._normalizeEntityType(modification.field);
+            var entityIconClass = 'tau-entity-icon tau-entity-icon-follow tau-entity-color--' + entityType + ' tau-entity-border--' + entityType;
 
             return (
-                <div className="notification__entity-wrap-container">
-                    <div className="notification__text">
+                <div>
+                    {this._getModificationDateBlock(modification)}
+                    <div className="follow-description notification__text">
                         <span>Changed State from {modification.oldFieldValue.state.name}</span>
                     &nbsp;
                         <span className="tau-icon-general tau-icon-l-arrow"></span>
@@ -346,49 +397,56 @@ define(function(require) {
                     &nbsp;in
                     </div>
                     <div className="notification__entity-wrap">
-                        <a href="#" className={entityIconClass} onClick={this._openEntityView.bind(this, entityId, entityType)}>
-                        {modification.fieldValue.target.name}
+                        <a href="#" className="notification__entity-link" onClick={this._openEntityView.bind(this, entityId, entityType)}>
+                            <em className={entityIconClass}>{this._getEntityAbbreviation(entityType)}</em>
+                        &nbsp;{modification.fieldValue.target.name}
                         </a>
                     </div>
                 </div>
-                );
+            );
         },
 
         _getByBlock: function(modification) {
-            var dateObj = DateUtils.parse(modification.timestamp);
-            var author = modification.author.firstName + ' ' + modification.author.lastName;
             return (
                 <div className="notification__information">by&nbsp;
-                    <a href="#" className="gray-link" onClick={this._openEntityView.bind(this, modification.author.iD, 'user')}>{author}</a>
-                &nbsp;
-                        {this._getModificationDateText(dateObj)}
+                    <a href="#" className="gray-link" onClick={this._openEntityView.bind(this, modification.author.iD, 'user')}>
+                        {modification.author.firstName + ' ' + modification.author.lastName}
+                    </a>
                 </div>
-                );
+            );
+        },
+
+        _getPersonBlock: function(modification) {
+            return (
+                <a className="gray-link follow-description__person" href="#" onClick={this._openEntityView.bind(this, modification.author.iD, 'user')}>
+                    {modification.author.firstName + ' ' + modification.author.lastName}
+                </a>
+            );
+        },
+
+        _getModificationDateBlock: function(modification) {
+            var dateObj = DateUtils.parse(modification.timestamp);
+            return <span className="follow-description__date-time">{this._getModificationDateText(dateObj)}</span>
         },
 
         _getModificationDateText: function(dateObj) {
-            if (DateUtils.getDiffInDays(new Date(), dateObj) === 1) {
-                var age = DateUtils.getAge(dateObj, new Date());
-                if (age.unit === 'sec') {
-                    return '1 min ago';
-                }
-
-                return age.toString();
+            if (DateUtils.sameDay(new Date(), dateObj)) {
+                return DateUtils.formatAs(dateObj, 'HH:mm');
             }
 
-            return DateUtils.formatAs(dateObj, 'on MMM dd a\\t HH:mm');
+            return DateUtils.formatAs(dateObj, 'MMM dd');
         },
 
         _getAction: function(modificationType) {
             switch (modificationType) {
                 case ModificationType.ChildAdded:
-                    return 'Added';
+                    return 'added';
                 case ModificationType.ChildRemoved:
-                    return 'Removed';
+                    return 'removed';
                 case ModificationType.ChildUpdated:
-                    return 'Changed';
+                    return 'changed';
                 default:
-                    return 'Set';
+                    return 'set';
             }
         },
 
@@ -414,6 +472,14 @@ define(function(require) {
 
         _getFieldName: function(modification) {
             return _.titleize(_.underscored(modification.field).replace(/_/g, ' '));
+        },
+
+        _normalizeEntityType: function(rawEntityType) {
+            return rawEntityType.replace('Tp.BusinessObjects.', '').toLowerCase();
+        },
+
+        _getEntityAbbreviation: function(entityType) {
+            return termProcessor.getTerms(entityType).iconSmall;
         }
     });
 });

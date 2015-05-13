@@ -585,6 +585,10 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order = 99)]
 		public virtual string SquadIterationName { get; set; }
+
+		[DataMember]
+		[XmlElement(Order = 100)]
+		public Decimal? CalculatedEstimate { get; set; }
 	}
 	
 	
@@ -973,6 +977,10 @@ namespace Tp.Integration.Common
 		/// <summary>
 		/// Progress
 		/// </summary>		
-		Progress
+		Progress,
+		/// <summary>
+		/// Calculated Estimate
+		/// </summary>		
+		CalculatedEstimate
 	}
 }

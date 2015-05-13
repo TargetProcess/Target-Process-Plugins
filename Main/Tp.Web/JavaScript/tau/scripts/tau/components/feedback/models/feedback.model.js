@@ -1,0 +1,1 @@
+define(["require","tau/core/extension.base"],function(e){var n=e("tau/core/extension.base");return n.extend({"bus afterInit":function(e,n){this.fire("dataBind",n.config.feedbackConfig)}})});

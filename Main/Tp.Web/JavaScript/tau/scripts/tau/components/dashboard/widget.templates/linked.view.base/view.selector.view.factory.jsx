@@ -18,12 +18,13 @@ define(function(require) {
                         key: React.PropTypes.string.isRequired,
                         name: React.PropTypes.string
                     })),
-                    selectedViewId: React.PropTypes.string,
+                    initialSelectedViewId: React.PropTypes.string,
                     onChange: React.PropTypes.func
                 },
 
                 getDefaultProps: _.constant({
-                    views: []
+                    views: [],
+                    onChange: _.constant()
                 }),
 
                 getInitialState: function() {
@@ -33,7 +34,7 @@ define(function(require) {
                 },
 
                 componentDidUpdate: function(prevProps, prevState) {
-                    if (this.state.selectedViewId !== prevState.selectedViewId && _.isFunction(this.props.onChange)) {
+                    if (this.state.selectedViewId !== prevState.selectedViewId) {
                         this.props.onChange(this.state.selectedViewId);
                     }
                 },
@@ -50,7 +51,7 @@ define(function(require) {
                 render: function() {
                     var selectedViewId = _.any(this.props.views, _.matches({
                         key: this.state.selectedViewId
-                    })) ? this.state.selectedViewId : null;
+                    })) ? this.state.selectedViewId : '';
 
                     var viewNodes = _.map(this.props.views, view =>
                         <option key={view.key} value={view.key}>{view.name}</option>

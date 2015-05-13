@@ -1,0 +1,20 @@
+<!-- name: customField-money-editor -->
+<div class="ui-customfield <% if (this.value === null) { %> ui-customfield_empty_true <% } %>">
+    <table>
+        <tbody>
+        <tr>
+            <td class="ui-customfield__label"><%= this.name %></td>
+            <td class="ui_custom_field_value_container">
+                           <span class="ui-customfield__container">
+                           <span class="ui-customfield__value"><%= this.value %></span>
+                           <span class="ui-customfield__measure-unit">
+                               <% if (this.units && (this.value !== null && this.value !== '')) { %>
+                                  <%= this.units %>
+                               <% } %>
+                           </span>
+                       </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -15,8 +15,8 @@ using hOOt;
 
 namespace Tp.Search.Model.Document
 {
-	[DocumentIndex(indexAttributeTypes: new[] { typeof(GeneralIndexAttribute), typeof(AssignableIndexAttribute), typeof(TestCaseIndexAttribute), typeof(ImpedimentIndexAttribute), typeof(CommentIndexAttribute) },
-								documentAttributeTypes: new[] { typeof(GeneralDocumentAttribute), typeof(AssignableDocumentAttribute), typeof(TestCaseDocumentAttribute), typeof(ImpedimentDocumentAttribute) },
+	[DocumentIndex(indexAttributeTypes: new[] { typeof(GeneralIndexAttribute), typeof(AssignableIndexAttribute), typeof(TestStepIndexAttribute), typeof(ImpedimentIndexAttribute), typeof(CommentIndexAttribute) },
+								documentAttributeTypes: new[] { typeof(GeneralDocumentAttribute), typeof(AssignableDocumentAttribute), typeof(ImpedimentDocumentAttribute) },
 								versionAttributeType: typeof(DocumentIndexVersionAttribute),
 								dataTypeTokenAttributeType: typeof(DocumentIndexDataTypeAttribute))]
 	class DocumentIndexType

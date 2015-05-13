@@ -10,7 +10,7 @@ namespace Tp.Search.Bus.Workflow
 	class ReleaseProjectIndexing : IndexAlgorithm<ReleaseProjectDTO, IndexExistingEntitiesSagaData, ReleaseProjectQuery>
 	{
 		public ReleaseProjectIndexing(IEntityIndexer entityIndexer, Func<IndexExistingEntitiesSagaData> data, IEntityTypeProvider entityTypesProvider, Action<IndexExistingEntitiesSagaData> onComplete, Action<QueryBase> sendQuery, IActivityLogger logger)
-			: base(entityIndexer, data, entityTypesProvider, onComplete, sendQuery, logger, "testCase")
+			: base(entityIndexer, data, entityTypesProvider, onComplete, sendQuery, logger, "releaseProject")
 		{
 		}
 

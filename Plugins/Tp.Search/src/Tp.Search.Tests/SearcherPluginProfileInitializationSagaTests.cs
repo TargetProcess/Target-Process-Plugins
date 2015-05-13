@@ -20,7 +20,7 @@ namespace Tp.Search.Tests
 		private GeneralDTO[] _generals;
 		private CommentDTO[] _comments;
 		private AssignableDTO[] _assignables;
-		private TestCaseDTO[] _testCases;
+		private TestStepDTO[] _testSteps;
 
 		protected override void OnSetup()
 		{
@@ -28,9 +28,9 @@ namespace Tp.Search.Tests
 			_transport = TransportMock.CreateWithoutStructureMapClear(typeof(SearcherProfile).Assembly, new[] { typeof(SearcherProfile).Assembly }, new Assembly[] { });
 			_generals = new[]
 				{
-					new GeneralDTO {ID = 1, Name = "First general", EntityTypeID = 4, ParentProjectID = 1}, 
-					new GeneralDTO {ID = 2, Name = "Second general", EntityTypeID = QueryEntityTypeProvider.USERSTORY_TYPE_ID, ParentProjectID = 1},
-					new GeneralDTO {ID = 3, Name = "Third general", EntityTypeID = QueryEntityTypeProvider.BUG_TYPE_ID, ParentProjectID = 1},
+					new GeneralDTO {ID = 1, Name = "First general assignable", EntityTypeID = QueryEntityTypeProvider.USERSTORY_TYPE_ID, ParentProjectID = 1}, 
+					new GeneralDTO {ID = 2, Name = "Second general assignable", EntityTypeID = QueryEntityTypeProvider.USERSTORY_TYPE_ID, ParentProjectID = 1},
+					new GeneralDTO {ID = 3, Name = "Third general assignable", EntityTypeID = QueryEntityTypeProvider.BUG_TYPE_ID, ParentProjectID = 1},
 					new GeneralDTO {ID = 4, Name = "Fourth general", EntityTypeID = QueryEntityTypeProvider.TESTCASE_TYPE_ID, ParentProjectID = 1}
 				};
 
@@ -45,14 +45,19 @@ namespace Tp.Search.Tests
 					new AssignableDTO {ID = 2, EntityStateID = 11, SquadID = 10, ProjectID = 1, EntityTypeID = QueryEntityTypeProvider.USERSTORY_TYPE_ID},
 					new AssignableDTO {ID = 3, EntityStateID = 12, SquadID = 11, ProjectID = 1, EntityTypeID = QueryEntityTypeProvider.BUG_TYPE_ID}
 				};
-			_testCases = new[] { new TestCaseDTO { ID = 4, Description = "Test Case Description", ProjectID = 1, EntityTypeID=QueryEntityTypeProvider.TESTCASE_TYPE_ID } };
+
+			_testSteps = new[]
+				{
+					new TestStepDTO {ID = 1, TestCaseID = 4, Description = "First Test Step Description"},
+					new TestStepDTO {ID = 2, TestCaseID = 4, Result = "Second Test Step Result"}
+				};
 
 			_transport.On<GeneralQuery>().Reply(x => ReplyOnEntityQuery<GeneralQuery, GeneralDTO, GeneralQueryResult>(x, _generals));
-			_transport.On<CommentQuery>().Reply(x => ReplyOnEntityQuery<CommentQuery, CommentDTO, CommentQueryResult>(x, _comments));
-			_transport.On<TestCaseQuery>().Reply(x => ReplyOnEntityQuery<TestCaseQuery, TestCaseDTO, TestCaseQueryResult>(x, _testCases));
+			_transport.On<CommentQuery>().Reply(x => ReplyOnEntityQuery<CommentQuery, CommentDTO, CommentQueryResult>(x, _comments));			
 			_transport.On<ImpedimentQuery>().Reply(x => new ImpedimentQueryResult { Dtos = new ImpedimentDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<ReleaseProjectQuery>().Reply(x => new ReleaseProjectQueryResult { Dtos = new ReleaseProjectDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<AssignableQuery>().Reply(x => ReplyOnAssignableQuery(x, _assignables));
+			_transport.On<TestStepQuery>().Reply(x => ReplyOnEntityQuery<TestStepQuery, TestStepDTO, TestStepQueryResult>(x, _testSteps));
 		}
 
 		[Test]
@@ -67,7 +72,8 @@ namespace Tp.Search.Tests
 			CheckOnlyOneEntity("FirstDescription");
 			CheckOnlyOneEntity("SecondDescription");
 			
-			CheckOnlyOneEntity("Test Case Description");
+			CheckOnlyOneEntity("First Test Step Description");
+			CheckOnlyOneEntity("Second Test Step Result");
 
 			CheckNothing("Nothing");
 
@@ -75,9 +81,9 @@ namespace Tp.Search.Tests
 			CheckByState("general", 12, new[] { 1 });
 			CheckByState("general", 13, new[] { 1 }, resultCount:0);
 
-			CheckBySquad("general", 10);
-			CheckBySquad("general", 11);
-			CheckBySquad("general", 12, resultCount:0);
+			CheckBySquad("assignable", 10);
+			CheckBySquad("assignable", 11);
+			CheckBySquad("assignable", 12, resultCount: 0);
 		}
 
 		private void CheckNothing(string queryString)

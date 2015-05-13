@@ -1,1 +1,1 @@
-define(["Underscore","tau/ui/extensions/customField/ui.extension.customField.editable"],function(e,n){var i=n.extend({"bus preRefreshRow":function(){}});return i});
+define(["tau/ui/extensions/customField/ui.extension.customField.editable"],function(e){return e.extend({"bus preRefreshRow":function(){}})});

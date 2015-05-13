@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         _ = require('Underscore');
 
     return React.defineClass(['item.view', 'process.context.menu.service'], function(MenuItemView,
@@ -82,7 +83,7 @@ define(function(require) {
                     />;
                 }, this);
 
-                var navigatorClasses = React.addons.classSet({
+                var navigatorClasses = classNames({
                     't3-views-navigator': true,
                     't3-processes-navigator': true,
                     't3-processes-update-overlay': this.state.isUpdating

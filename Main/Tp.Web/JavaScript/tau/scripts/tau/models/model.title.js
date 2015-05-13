@@ -1,1 +1,1 @@
-define(["Underscore","tau/models/model.text.base"],function(e,t){return t.extend({textField:"name",getDataToBind:function(e,t,n){var r=this._super(e,t,n);return r.entity={name:e.name},r.url=t.getUrlBuilder().getNewViewUrl(r.id,r.entityType.name,!0),r}})});
+define(["tau/models/model.text.base"],function(e){return e.extend({getDataToBind:function(e,t,n){var i=this._super(e,t,n);return i.entity={name:e.name},i.url=t.getUrlBuilder().getNewViewUrl(i.id,i.entityType.name,!0),i}})});

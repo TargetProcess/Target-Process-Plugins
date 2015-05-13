@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace System.Linq.Dynamic
 {
-	internal class DynamicOrdering
+	public class DynamicOrdering
 	{
 		public bool Ascending;
 		public Expression Selector;

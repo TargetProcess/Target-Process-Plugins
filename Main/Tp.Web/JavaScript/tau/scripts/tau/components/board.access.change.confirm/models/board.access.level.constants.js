@@ -1,0 +1,1 @@
+define(["require"],function(){return{PUBLIC:"PUBLIC",PRIVATE:"PRIVATE",CUSTOM:"CUSTOM"}});

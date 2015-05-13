@@ -16,7 +16,7 @@ namespace Tp.Search.Bus.Data
 		public string[] AssignableIds { get; set; }
 
 		[DataMember]
-		public string[] TestCaseIds { get; set; }
+		public string[] TestStepIds { get; set; }
 
 		[DataMember]
 		public string[] ImpedimentIds { get; set; }
@@ -36,7 +36,7 @@ namespace Tp.Search.Bus.Data
 			b.AppendFormat("QueryString = {0}", QueryString).AppendLine()
 			 .AppendFormat("GeneralIds = {0}", string.Join(",", GeneralIds)).AppendLine()
 			 .AppendFormat("AssignableIds = {0}", string.Join(",", AssignableIds)).AppendLine()
-			 .AppendFormat("TestCaseIds = {0}", string.Join(",", TestCaseIds)).AppendLine()
+			 .AppendFormat("TestStepIds = {0}", string.Join(",", TestStepIds)).AppendLine()
 			 .AppendFormat("ImpedimentIds = {0}", string.Join(",", ImpedimentIds)).AppendLine()
 			 .AppendFormat("CommentIds = {0}", string.Join(",", CommentIds)).AppendLine()
 			 .AppendFormat("IndexingProgress = {0}", IndexProgressData).AppendLine();

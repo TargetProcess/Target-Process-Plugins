@@ -7,7 +7,8 @@ define(function(require) {
         TermProcessor = require('tau/core/termProcessor');
 
     return React.createClass({
-        displayName: 'Workflows selectors',
+        displayName: 'WorkflowSelectors',
+
         getInitialState: function() {
             return {
                 customizedWorkflows: {}
@@ -31,29 +32,35 @@ define(function(require) {
                 this.props.onWorkflowChanged(data);
             }
         },
+
         onWorkflowChanged: function(data) {
             this.state.customizedWorkflows[data.group] = data.customizedWorkflows;
             this.setState({customizedWorkflows: this.state.customizedWorkflows});
-            var data = {
+            var eventData = {
                 group: data.group,
                 customizedWorkflows: _.pluck(_.values(data.customizedWorkflows), 'id')
             };
-            this.props.onWorkflowChanged([data]);
+            this.props.onWorkflowChanged([eventData]);
         },
+
         render: function() {
             var termProcessor = new TermProcessor(this.props.process.terms);
             if (!this.props.selectedGroupId) {
                 return <div />;
             }
 
-            return (<WorkflowSelector
-                key={this.props.selectedGroupId}
-                group={this.props.selectedGroupId}
-                workflows={this.props.process.workflows}
-                entityTypes={this.props.entityTypes}
-                terms={termProcessor}
-                customizedWorkflows={this.state.customizedWorkflows[this.props.selectedGroupId] || {}}
-                onWorkflowChanged={this.onWorkflowChanged} />);
+            return (
+                <WorkflowSelector
+                    key={this.props.selectedGroupId}
+                    group={this.props.selectedGroupId}
+                    workflows={this.props.process.workflows}
+                    entityTypes={this.props.entityTypes}
+                    terms={termProcessor}
+                    workflowHelpData={this.props.workflowHelpData}
+                    customizedWorkflows={this.state.customizedWorkflows[this.props.selectedGroupId] || {}}
+                    onWorkflowChanged={this.onWorkflowChanged}
+                />
+            );
         }
     });
 });

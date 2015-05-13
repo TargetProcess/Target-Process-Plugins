@@ -1,6 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.CodeDom;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
+using Tp.Core;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.Entities;
 using Tp.Search.Bus.Data;
@@ -13,7 +16,7 @@ namespace Tp.Search.Tests
 	[TestFixture]
     [Category("PartPlugins1")]
 	public class SearchTests : SearchTestBase
-		{
+	{
 		[Test]
 		public void SearchUserStoryByNameAndDescription()
 		{
@@ -1148,12 +1151,12 @@ namespace Tp.Search.Tests
 		{
 			var indexer = GetInstance<IEntityIndexer>();
 			int testCaseTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID;
-			indexer.AddTestCaseIndex(new TestCaseDTO
+			indexer.AddGeneralIndex(new GeneralDTO
 			{
 				ID = 1,
 				Name = "qwerty asdfg",
 				EntityTypeID = testCaseTypeId,
-				ProjectID = 1
+				ParentProjectID = 1
 			});
 			var queryRunner = GetInstance<QueryRunner>();
 			var result = queryRunner.Run(new QueryData
@@ -1164,19 +1167,19 @@ namespace Tp.Search.Tests
 				IncludeNoTeam = true
 			});
 			result.Total.Should(Be.EqualTo(1));
-			result.TestCaseIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
 		}
 
 		[Test]
 		public void SearchCommentForTestCase()
 		{
 			var indexer = GetInstance<IEntityIndexer>();
-			indexer.AddTestCaseIndex(new TestCaseDTO
+			indexer.AddGeneralIndex(new GeneralDTO
 			{
 				ID = 1,
 				Name = "qwerty asdfg",
 				EntityTypeID = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
-				ProjectID = 1
+				ParentProjectID = 1
 			});
 			indexer.AddCommentIndex(new CommentDTO
 			{
@@ -1201,12 +1204,12 @@ namespace Tp.Search.Tests
 		public void SearchCommentForTestCaseForProjectNotFromContext()
 		{
 			var indexer = GetInstance<IEntityIndexer>();
-			indexer.AddTestCaseIndex(new TestCaseDTO
+			indexer.AddGeneralIndex(new GeneralDTO
 			{
 				ID = 1,
 				Name = "qwerty asdfg",
 				EntityTypeID = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
-				ProjectID = 1
+				ParentProjectID = 1
 			});
 			indexer.AddCommentIndex(new CommentDTO
 			{
@@ -1346,7 +1349,7 @@ namespace Tp.Search.Tests
 		public void SearchTestCasesWithoutProject()
 		{
 			var indexer = GetInstance<IEntityIndexer>();
-			indexer.AddTestCaseIndex(new TestCaseDTO
+			indexer.AddGeneralIndex(new GeneralDTO
 			{
 				ID = 1,
 				Name = "qwerty",
@@ -1360,7 +1363,7 @@ namespace Tp.Search.Tests
 				IncludeNoProject = true
 			});
 			result.Total.Should(Be.EqualTo(1));
-			result.TestCaseIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
 		}
 
 		[Test]
@@ -2107,25 +2110,25 @@ namespace Tp.Search.Tests
 		public void ShouldUpdateIndexOnEntityUpdate()
 		{
 			var indexer = GetInstance<IEntityIndexer>();
-			indexer.AddTestCaseIndex(new TestCaseDTO
+			indexer.AddGeneralIndex(new GeneralDTO
 			{
 				ID = 1,
 				Name = "testcase",
 				Description = string.Empty,
 				EntityTypeID = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
-				ProjectID = 1,
+				ParentProjectID = 1,
 				CustomFieldsMetaInfo = new[] {new Field {FieldType = FieldTypeEnum.Text, Value = "cfvaluea"}}
 			});
-			indexer.UpdateTestCaseIndex(new TestCaseDTO
+			indexer.UpdateGeneralIndex(new GeneralDTO
 				{
 					ID = 1,
 					Name = "testcase",
 					Description = string.Empty,
 					EntityTypeID = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
 					EntityTypeName = "TestCase",
-					ProjectID = 1,
+					ParentProjectID = 1,
 					CustomFieldsMetaInfo = new[] {new Field {FieldType = FieldTypeEnum.Text, Value = "cfvalueb"}}
-				}, new Collection<TestCaseField> {TestCaseField.CustomField1}, false);
+				}, new Collection<GeneralField> { GeneralField.CustomField1 });
 
 			var queryRunner = GetInstance<QueryRunner>();
 			var result = queryRunner.Run(new QueryData
@@ -2136,7 +2139,7 @@ namespace Tp.Search.Tests
 			});
 
 			result.Total.Should(Be.EqualTo(1));
-			result.TestCaseIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { "1" }));
 		}
 
 		[Test]
@@ -2360,6 +2363,201 @@ namespace Tp.Search.Tests
 			});
 			result.Total.Should(Be.EqualTo(1));
 			result.CommentIds.Should(Be.EquivalentTo(new[] { commentId.ToString() }));
+		}
+
+		[Test]
+		public void SearchUserStoryByNameAndDescriptionWithHtmlFormatting()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			var id = 1;
+			const string description = "&lt;table border=\"0\" style=\"width:100%\"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=\"width:50%\"&gt;&lt;strong&gt;Steps&lt;/strong&gt;&lt;/td&gt;&lt;td style=\"width:50%\"&gt;&lt;strong&gt;Success&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=\"vertical-align: top;\"&gt;1.   Log into the Box.&lt;br&gt;&lt;div&gt;         2.   Validate Database Connection set properly as per Technical Specification Document.&lt;br&gt;&lt;br&gt;        3.   Execute Database Script for PGL amd GPL&lt;br&gt;&lt;br&gt;Make sure the bothe script executes successfully&lt;/div&gt;&lt;p&gt;        4. Validate and make sure the Log file has no Errors.&lt;/p&gt;&lt;div&gt; &lt;/div&gt;&lt;/td&gt;&lt;td style=\"vertical-align: top;\"&gt;Expected Results&amp;#58;&lt;br&gt;&lt;br&gt;1.   Logged in to the Box Successfully.&lt;div&gt; &lt;/div&gt;&lt;div&gt;         2.   Data Connection values are properly set.&lt;/div&gt;&lt;p&gt;         3.   Job executed with no error.&lt;/p&gt;&lt;p&gt;         4.   No error in log files.&lt;/p&gt;&lt;div&gt; &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;";
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = id,
+				Name = "zagzag",
+				Description = description,
+				EntityTypeID = 4,
+				ParentProjectID = 1
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "+executed +with +no +error",
+				ProjectIds = new[] { 1 }
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+		}
+
+		[Test]
+		public void SearchUserStoryByNameAndDescriptionWithHtmlFormattingNegativeCase()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			var id = 1;
+			const string description = "&lt;table border=\"0\" style=\"width:100%\"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=\"width:50%\"&gt;&lt;strong&gt;Steps&lt;/strong&gt;&lt;/td&gt;&lt;td style=\"width:50%\"&gt;&lt;strong&gt;Success&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=\"vertical-align: top;\"&gt;1.   Log into the Box.&lt;br&gt;&lt;div&gt;         2.   Validate Database Connection set properly as per Technical Specification Document.&lt;br&gt;&lt;br&gt;        3.   Execute Database Script for PGL amd GPL&lt;br&gt;&lt;br&gt;Make sure the bothe script executes successfully&lt;/div&gt;&lt;p&gt;        4. Validate and make sure the Log file has no Errors.&lt;/p&gt;&lt;div&gt; &lt;/div&gt;&lt;/td&gt;&lt;td style=\"vertical-align: top;\"&gt;Expected Results&amp;#58;&lt;br&gt;&lt;br&gt;1.   Logged in to the Box Successfully.&lt;div&gt; &lt;/div&gt;&lt;div&gt;         2.   Data Connection values are properly set.&lt;/div&gt;&lt;p&gt;         3.   Job executed with no error.&lt;/p&gt;&lt;p&gt;         4.   No error in log files.&lt;/p&gt;&lt;div&gt; &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;";
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = id,
+				Name = "zagzag",
+				Description = description,
+				EntityTypeID = 4,
+				ParentProjectID = 1
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "+table",
+				ProjectIds = new[] { 1 }
+			});
+			result.Total.Should(Be.EqualTo(0));
+		}
+
+		[Test]
+		public void ShouldFindTestStep()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int testCaseTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = 1,
+				Name = "Searchable Test Case Name",
+				EntityTypeID = testCaseTypeId,
+				ParentProjectID = 1
+			});
+			indexer.AddTestStepIndex(new TestStepDTO
+			{
+				ID = 1,
+				Description = "Searchable Test Step Description",
+				Result = "Searchable Test Step Result",
+				TestCaseID = 1
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "Searchable Test Step",
+				ProjectIds = new[] { 1 },
+				EntityTypeId = testCaseTypeId
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+		}
+
+		[Test]
+		public void ShouldFindTestStepAfterIndexIsUpdated()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int testCaseTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = 1,
+				Name = "Searchable Test Case Name",
+				EntityTypeID = testCaseTypeId,
+				ParentProjectID = 1
+			});
+			indexer.AddTestStepIndex(new TestStepDTO
+			{
+				ID = 1,
+				Description = "Searchable Test Step Description",
+				Result = "Searchable Test Step Result",
+				TestCaseID = 1
+			});
+			indexer.UpdateTestStepIndex(new TestStepDTO
+			{
+				ID = 1,
+				Result = "Updated Searchable Test Step Result",
+				TestCaseID = 1
+			}, new[] { TestStepField.Result }, Maybe.Nothing);
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "Updated",
+				ProjectIds = new[] { 1 },
+				EntityTypeId = testCaseTypeId
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+		}
+
+		[Test]
+		public void ShouldNotFindTestStepAfterIndexIsRemoved()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int testCaseTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = 1,
+				Name = "Searchable Test Case Name",
+				EntityTypeID = testCaseTypeId,
+				ParentProjectID = 1
+			});
+			indexer.AddTestStepIndex(new TestStepDTO
+			{
+				ID = 1,
+				Description = "Searchable Test Step Description",
+				Result = "Searchable Test Step Result",
+				TestCaseID = 1
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var queryData = new QueryData
+			{
+				Query = "Searchable Test Step",
+				ProjectIds = new[] {1},
+				EntityTypeId = testCaseTypeId
+			};
+			var result = queryRunner.Run(queryData);
+			result.Total.Should(Be.EqualTo(1));
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+			indexer.RemoveTestStepIndex(new TestStepDTO
+			{
+				ID = 1,
+				TestCaseID = 1
+			});
+			var resultAfterRemove = queryRunner.Run(queryData);
+			resultAfterRemove.Total.Should(Be.EqualTo(0));
+		}
+
+		[Test]
+		public void ShouldFilterTestStepsByTestCaseProject()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int testCaseTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID;
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = 1,
+				Name = "Searchable Test Case Name",
+				EntityTypeID = testCaseTypeId,
+				ParentProjectID = 1
+			});
+			indexer.AddGeneralIndex(new GeneralDTO
+			{
+				ID = 2,
+				Name = "Searchable Test Case 2 Name",
+				EntityTypeID = testCaseTypeId,
+				ParentProjectID = 2
+			});
+			indexer.AddTestStepIndex(new TestStepDTO
+			{
+				ID = 1,
+				Description = "Searchable Test Step 1 Description",
+				Result = "Searchable Test Step 1 Result",
+				TestCaseID = 1
+			});
+			indexer.AddTestStepIndex(new TestStepDTO
+			{
+				ID = 2,
+				Description = "Searchable Test Step 2 Description",
+				Result = "Searchable Test Step 2 Result",
+				TestCaseID = 2
+			});
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "Searchable Test Step",
+				ProjectIds = new[] { 2 },
+				EntityTypeId = testCaseTypeId
+			});
+			result.Total.Should(Be.EqualTo(1));
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
 		}
 	}
 }

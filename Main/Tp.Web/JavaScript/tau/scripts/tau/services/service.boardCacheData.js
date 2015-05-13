@@ -1,1 +1,1 @@
-define(["tau/core/class"],function(t){var n={},e=t.extend({setData:function(t){n=t},getData:function(){return n},evict:function(){n={}}});return e});
+define(["tau/core/class"],function(t){var n={};return t.extend({setData:function(t){n=t},getData:function(){return n},evict:function(){n={}}})});

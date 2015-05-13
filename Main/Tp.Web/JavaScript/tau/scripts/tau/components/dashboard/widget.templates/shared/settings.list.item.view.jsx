@@ -2,7 +2,14 @@ define(function(require) {
     var React = require('react');
 
     return React.createClass({
-        render: function() {
+        displayName: 'widget.settings.list.item.view',
+
+        propTypes: {
+            labelClassName: React.PropTypes.string,
+            title: React.PropTypes.string
+        },
+
+        render() {
             return (
                 <li className="tau-widget-settings-list__item">
                     <label className={this.props.labelClassName}>

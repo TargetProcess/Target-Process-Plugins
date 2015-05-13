@@ -46,13 +46,14 @@ namespace Tp.Search.Model.Query
 				{
 					GeneralIds = result.GeneralIds.ToArray(),
 					AssignableIds = result.AssignableIds.ToArray(),
-					TestCaseIds = result.TestCaseIds.ToArray(),
+					TestStepIds = queryResult.TestSteps.Select(i => i.FileName).ToArray(),
 					ImpedimentIds =  result.ImpedimentIds.ToArray(),
 					CommentIds = queryResult.Comments.Select(i => i.FileName).ToArray(),
 					QueryString = queryData.Query,
-					Total = queryResult.EntitiesTotalCount + queryResult.CommentsTotalCount,
+					Total = queryResult.EntitiesTotalCount + queryResult.TestStepsTotalCount + queryResult.CommentsTotalCount,
 					LastIndexedEntityId = queryResult.LastIndexedEntityId,
-					LastIndexedCommentId = queryResult.LastIndexedCommentId
+					LastIndexedCommentId = queryResult.LastIndexedCommentId,
+					LastIndexedTestStepId = queryResult.LastIndexedTestStepId
 				};
 			return searchResult;
 		}

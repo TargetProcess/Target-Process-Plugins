@@ -12,7 +12,6 @@ using Tp.Tfs.VersionControlSystem;
 namespace Tp.Tfs.Tests.VersionControlSystem
 {
 	[TestFixture]
-    [Ignore]
     [Category("PartPlugins1")]
 	public class TfsRevisionIdSpecs
 	{

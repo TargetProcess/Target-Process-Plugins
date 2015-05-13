@@ -1,4 +1,5 @@
 define(function(require) {
+    var _ = require('Underscore');
     var React = require('react');
     var InfinityScroll = require('libs/react/react-infinity-scroll');
 
@@ -40,7 +41,7 @@ define(function(require) {
         },
 
         _getLoader: function() {
-            return this.props.loader || <div className="loader">Loading&hellip;</div>;
+            return this.props.loader || <div className="tau-dashboard-widget-placeholder tau-loading--centered" />;
         },
 
         _getEmptyMessage: function() {

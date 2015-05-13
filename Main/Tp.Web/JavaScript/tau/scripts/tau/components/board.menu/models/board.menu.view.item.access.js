@@ -1,0 +1,1 @@
+define(["require","tau/core/class"],function(t){var e=t("tau/core/class");return e.extend({getIsPrivate:function(){return!this.isShared},getIsCustomShared:function(){return this.isShared&&this.customSharedData&&this.customSharedData.isActive},getIsPublic:function(){return!this.getIsPrivate()&&!this.getIsCustomShared()}})});

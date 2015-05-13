@@ -9,5 +9,7 @@ namespace Tp.Search.Model
 		public int LastGeneralId { get; set; }
 		[DataMember]
 		public int LastCommentId { get; set; }
+		[DataMember]
+		public int LastTestStepId { get; set; }
 	}
 }

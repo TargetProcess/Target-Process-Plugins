@@ -1,8 +1,10 @@
 define(function(require) {
     var $ = require('jQuery');
+    var _ = require('Underscore');
     var React = require('libs/react/react-ex');
     var ActionsMenuItem = require('./board.menu.actions.menu.item');
     var IntegrationMixin = require('./board.menu.actions.integration.mixin');
+    var classNames = require('libs/classNames');
 
     return React.defineClass(
         ['boardMenuBus', 'settingsService', 'boardsOperationsService', 'integrationService', 'featuresService'],
@@ -24,8 +26,9 @@ define(function(require) {
                     settingsService.getShowHiddenBoards().then(this._setShowHidden);
 
                     $('body').on('click.viewMenuActions', function(event) {
-                        if (!$(event.target).closest('.i-role-add-board-button').length) {
+                        if (this.state.isNewItemMenuVisible && !$(event.target).closest('.i-role-add-board-button').length) {
                             this.setState({isNewItemMenuVisible: false});
+                            bus.fire('board.menu.toggle.new.item.menu', false);
                         }
                     }.bind(this));
                 },
@@ -35,7 +38,7 @@ define(function(require) {
                 },
 
                 _getAddViewTriggerClassName: function() {
-                    return React.addons.classSet({
+                    return classNames({
                         't3-add-view-trigger': true,
                         'i-role-add-board-button': true,
                         't3-pressed': this.state.isNewItemMenuVisible
@@ -43,14 +46,14 @@ define(function(require) {
                 },
 
                 _getToggleHiddenBoardsButtonClassName: function() {
-                    return React.addons.classSet({
+                    return classNames({
                         't3-show-hidden-views-trigger': true,
                         't3-pressed': this.props.showHidden
                     });
                 },
 
                 _getNewItemMenuClassName: function() {
-                    return React.addons.classSet({
+                    return classNames({
                         't3-add-view-options-list': true,
                         't3-active': this.state.isNewItemMenuVisible
                     });
@@ -63,7 +66,9 @@ define(function(require) {
                 },
 
                 _onShowOptionsClick: function() {
-                    this.setState({isNewItemMenuVisible: !this.state.isNewItemMenuVisible});
+                    var newItemMenuVisible = !this.state.isNewItemMenuVisible;
+                    this.setState({isNewItemMenuVisible: newItemMenuVisible});
+                    bus.fire('board.menu.toggle.new.item.menu', newItemMenuVisible);
                 },
 
                 _resetMenuLook: function() {
@@ -122,18 +127,18 @@ define(function(require) {
                 },
 
                 _getNewItemMenu: function() {
-                    var customItems = _.reduce(integrationService.getCustomActionsMenuItems(), (acc, item, index) => {
+                    var customItems = _.reduce(integrationService.getCustomActionsMenuItems().reverse(), (acc, item, index) => {
                         acc['customItem' + index] = item;
                         return acc;
                     }, {});
 
                     return (
                         <div className={this._getNewItemMenuClassName()}>
+                            {customItems}
                             {this._getNewMenuItem('Group', 't3-group i-role-create-group-menu-item', this._onCreateGroup)}
                             {this._getNewDashboardItem()}
                             {this._getNewReportItem()}
                             {this._getNewMenuItem('View', 't3-view t3-grid i-role-create-view-menu-item', this._onCreateView)}
-                            {customItems}
                         </div>
                     );
                 },

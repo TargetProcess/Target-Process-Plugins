@@ -30,11 +30,13 @@ namespace Tp.Search.Model.Query
 		public QueryPlanFull Build(QueryData data, ParsedQuery parsedQuery)
 		{
 			Maybe<QueryPlan> entityPlan = CreateEntityPlan(data, parsedQuery);
+			Maybe<QueryPlan> testStepPlan = CreateTestStepPlan(data, parsedQuery);
 			Maybe<QueryPlan> commentPlan = CreateCommentPlan(data, parsedQuery);
 			return new QueryPlanFull
 				{
 					Query = parsedQuery,
 					EntityPlan = entityPlan,
+					TestStepPlan = testStepPlan,
 					CommentPlan = commentPlan
 				};
 		}
@@ -53,6 +55,22 @@ namespace Tp.Search.Model.Query
 			var commentIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Comment);
 			var plan = commentIndex.BuildExecutionPlan(parsedQuery, _profile.Initialized);
 			return And(plan, contextPlan);
+		}
+
+		private Maybe<QueryPlan> CreateTestStepPlan(QueryData data, ParsedQuery parsedQuery)
+		{
+			if (!data.ShouldSearchTestStep)
+			{
+				return Maybe.Nothing;
+			}
+			var projectContextPlan = _contextQueryPlanBuilder.BuildProjectContextPlan(data.ProjectIds, data.IncludeNoProject, DocumentIndexTypeToken.TestStepProject);
+			if (!projectContextPlan.HasValue)
+			{
+				return Maybe.Nothing;
+			}
+			var commentIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStep);
+			var plan = commentIndex.BuildExecutionPlan(parsedQuery, _profile.Initialized);
+			return And(plan, projectContextPlan);
 		}
 
 		private Maybe<QueryPlan> CreateEntityPlan(QueryData queryData, ParsedQuery parsedQuery)

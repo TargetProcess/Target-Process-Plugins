@@ -46,6 +46,7 @@ tau.mashups
                 '				<p class="label pt-20">' +
                 '					Export all the revisions starting from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
                 '						style="width: 97px;" /><span class="error" name="StartRevisionErrorLabel"></span></p>' +
+                '				<p class="label pt-20">Sync every <input id="syncInterval" name="SyncInterval" value="${Settings.SyncInterval}" type="text" class="input" style="width: 97px;" /> minutes<span class="error" name="SyncIntervalErrorLabel"></span></p>' +
                 '			</div>' +
                 '			<div class="check-block">' +
                 '				<p class="message-error pb-10" style="display: none;">' +
@@ -121,6 +122,9 @@ tau.mashups
                 rendered.find('#uriExamplesLink').click(function () {
                     $('#uriExamplesContent').animate({ opacity: 'toggle', height: 'toggle' }, 'slow');
                 });
+                var $syncIntervalField = rendered.find('#syncInterval');
+                $syncIntervalField.blur(this._limitSyncInterval.bind(this, $syncIntervalField));
+                this._limitSyncInterval($syncIntervalField);
 
                 this._disableNameIfNecessary();
 
@@ -135,6 +139,14 @@ tau.mashups
                 this.placeHolder.find('#startRevision').datepicker({minDate: "01/01/1970", maxDate: "01/19/2038"});
 
                 new profileControlsBlock({ placeholder: rendered }).render();
+            },
+            
+            _limitSyncInterval: function ($syncIntervalField) {
+            	var value = parseInt($syncIntervalField.val(), 10) || 0;
+            	var minimumSyncInterval = 5;
+            	if (value < minimumSyncInterval) {
+            		$syncIntervalField.val(minimumSyncInterval);
+            	}
             },
 
             _disableNameIfNecessary: function () {
@@ -198,6 +210,7 @@ tau.mashups
                         Login: this._find('#login').val(),
                         Password: this._find('#password').val(),
                         StartRevision: this._find('#startRevision').val(),
+                        SyncInterval: this._find("#syncInterval").val(),
                         UserMapping: this.UserMappingEditor.getUserMappings()
                     }
                 };

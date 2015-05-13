@@ -1,6 +1,7 @@
 define(function(require) {
     var $ = require('jQuery');
     var React = require('react');
+    var classNames = require('libs/classNames');
 
     return React.createClass({
         getInitialState: function() {
@@ -39,7 +40,7 @@ define(function(require) {
         },
 
         render: function() {
-            var className = React.addons.classSet({
+            var className = classNames({
                 'i-role-dashboard-widget-settings-toggle': true,
                 'tau-dashboard-widget__settings': true,
                 'tau-dashboard-widget__settings--loading': this.state.isLoadingSettingsContent,

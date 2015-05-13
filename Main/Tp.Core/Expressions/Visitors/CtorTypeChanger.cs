@@ -1,34 +1,62 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Tp.Core.Expressions.Visitors
 {
-	class CtorTypeChanger<TBase, TDerived> : ExpressionVisitor where TDerived : TBase
+	class CtorTypeChanger : ExpressionVisitor
 	{
+		private readonly Type _baseType;
+		private readonly Type _derivedType;
+
+		public CtorTypeChanger(Type baseType, Type derivedType)
+		{
+			_baseType = baseType;
+			_derivedType = derivedType;
+		}
+
 		protected override Expression VisitNew(NewExpression node)
 		{
-			if (node.Type == typeof(TBase))
+			if (node.Type == _baseType)
 			{
-				var constructor = FindApropriateCtor(node.Constructor);
-				if (node.Members != null)
-				{
-					return Expression.New(constructor, node.Arguments, node.Members);
-				}
-				else
-				{
-					return Expression.New(constructor, node.Arguments);
-				}
+				return ReplaceConstructor(node, _derivedType);
+			}
+			if (node.Type.IsConstructedGenericType && _baseType.IsGenericType && node.Type.GetGenericTypeDefinition() == _baseType)
+			{
+				return ReplaceConstructor(node, _derivedType.MakeGenericType(node.Type.GenericTypeArguments));
+			}
+			return base.VisitNew(node);
+		}
+
+		private Expression CreateNewConstructor(NewExpression node, ConstructorInfo constructor)
+		{
+			if (node.Members != null)
+			{
+				return Expression.New(constructor, node.Arguments, node.Members);
 			}
 			else
 			{
-				return base.VisitNew(node);
+				return Expression.New(constructor, node.Arguments);
 			}
 		}
 
-		private ConstructorInfo FindApropriateCtor(ConstructorInfo constructor)
+		private Expression ReplaceConstructor(NewExpression node, Type type)
 		{
-			return typeof(TDerived).GetConstructor(constructor.GetParameters().Select(x => x.ParameterType).ToArray());
+			var constructor = FindApropriateCtor(node.Constructor, type);
+			return CreateNewConstructor(node, constructor);
+		}
+
+		private ConstructorInfo FindApropriateCtor(ConstructorInfo constructor, Type type)
+		{
+			return type.GetConstructor(constructor.GetParameters().Select(x => x.ParameterType).ToArray());
+		}
+	}
+
+	class CtorTypeChanger<TBase, TDerived> : CtorTypeChanger
+	{
+		public CtorTypeChanger() : base(typeof(TBase), typeof(TDerived))
+		{
 		}
 	}
 

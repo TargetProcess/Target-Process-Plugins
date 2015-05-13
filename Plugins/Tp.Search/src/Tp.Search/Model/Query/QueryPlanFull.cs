@@ -6,6 +6,7 @@ namespace Tp.Search.Model.Query
 	{
 		public ParsedQuery Query { get; set; }
 		public Maybe<QueryPlan> EntityPlan { get; set; }
+		public Maybe<QueryPlan> TestStepPlan { get; set; }
 		public Maybe<QueryPlan> CommentPlan { get; set; }
 	}
 }

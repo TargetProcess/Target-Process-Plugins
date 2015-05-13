@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
     var _ = require('Underscore');
     var $ = require('jQuery');
 
@@ -42,7 +43,7 @@ define(function(require) {
             },
 
             render: function() {
-                var buttonClassName = React.addons.classSet({
+                var buttonClassName = classNames({
                     'tau-btn': true,
                     'tau-btn-big': true,
                     'tau-btn-loader': this.state.inProgress,

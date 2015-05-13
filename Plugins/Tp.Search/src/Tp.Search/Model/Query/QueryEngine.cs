@@ -53,20 +53,32 @@ namespace Tp.Search.Model.Query
 		private QueryRunResult DoRun(QueryPlanFull planFull, Page page)
 		{
 			Maybe<QueryPlanResult> entityPlan = Maybe.Nothing;
+			Maybe<QueryPlanResult> testStepPlan = Maybe.Nothing;
 			Maybe<QueryPlanResult> commentPlan = Maybe.Nothing;
-			Parallel.Invoke(() => entityPlan = planFull.EntityPlan.Select(p => p.Eval()), () => commentPlan = planFull.CommentPlan.Select(p => p.Eval()));
+			Parallel.Invoke(
+				() => entityPlan = planFull.EntityPlan.Select(p => p.Eval()),
+				() => testStepPlan = planFull.TestStepPlan.Select(p => p.Eval()),
+				() => commentPlan = planFull.CommentPlan.Select(p => p.Eval()));
 		    int entitiesTotalCount;
+			int testStepsTotalCount;
 			int commentsTotalCount;
 			var entityDocuments = FindEntities(entityPlan, page, out entitiesTotalCount);
-			var commentDocuments = FindComments(commentPlan, page, entityDocuments.Documents.Count(), entitiesTotalCount, out commentsTotalCount);
+			int documentCount = entityDocuments.Documents.Count();
+			var testStepDocuments = FindTestSteps(testStepPlan, page, documentCount, entitiesTotalCount, out testStepsTotalCount);
+			documentCount += testStepDocuments.Documents.Count();
+			var commentDocuments = FindComments(commentPlan, page, documentCount, entitiesTotalCount + testStepsTotalCount, out commentsTotalCount);
+			
 			return new QueryRunResult
 				{
 					Entities = entityDocuments.Documents,
 					Comments = commentDocuments.Documents,
+					TestSteps =  testStepDocuments.Documents,
 					EntitiesTotalCount = entitiesTotalCount,
 					CommentsTotalCount = commentsTotalCount,
+					TestStepsTotalCount = testStepsTotalCount,
 					LastIndexedEntityId = entityDocuments.LastIndexedId,
-					LastIndexedCommentId = commentDocuments.LastIndexedId
+					LastIndexedCommentId = commentDocuments.LastIndexedId,
+					LastIndexedTestStepId = testStepDocuments.LastIndexedId
 				};
 		}
 
@@ -99,6 +111,37 @@ namespace Tp.Search.Model.Query
 					Documents = found,
 					LastIndexedId = lastDocument != null ? int.Parse(lastDocument.FileName) : 0
 				};
+		}
+
+		private QueryResult<hOOt.Document> FindTestSteps(Maybe<QueryPlanResult> plan, Page page, int entityDocumentsCountOnPage, int entitiesTotalCount, out int testStepsTotalCount)
+		{
+			if (!plan.HasValue)
+			{
+				testStepsTotalCount = 0;
+				return new QueryResult<hOOt.Document>
+				{
+					Documents = Enumerable.Empty<hOOt.Document>(),
+					LastIndexedId = 0
+				};
+			}
+			var testStepIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.TestStep);
+			if (entityDocumentsCountOnPage == page.Size)
+			{
+				testStepIndex.Find<hOOt.Document>(plan.Value, -1, -1, 0, out testStepsTotalCount);
+				return new QueryResult<hOOt.Document>
+				{
+					Documents = Enumerable.Empty<hOOt.Document>(),
+					LastIndexedId = 0
+				};
+			}
+			Page newPage = CalculatePage(entitiesTotalCount, page.Number, page.Size);
+			IEnumerable<hOOt.Document> found = testStepIndex.Find<hOOt.Document>(plan.Value, newPage.Number, newPage.Size, newPage.PositionWithin, out testStepsTotalCount);
+			var lastDocument = testStepIndex.GetLastDocument<hOOt.Document>();
+			return new QueryResult<hOOt.Document>
+			{
+				Documents = found,
+				LastIndexedId = lastDocument != null ? int.Parse(lastDocument.FileName) : 0
+			};
 		}
 
 		private QueryResult<EntityDocument> FindEntities(Maybe<QueryPlanResult> plan, Page page, out int entitiesTotalCount)

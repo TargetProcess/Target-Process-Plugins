@@ -1,0 +1,21 @@
+<!-- name: board.editor.filter, deps: [template!tau/ui/templates/board.editor/ui.template.board.editor.filterHelp] -->
+<div class="boardsettings-filter">
+    <div class="boardsettings-filter__contener i-role-filter-control">
+        <button class="tau-btn i-role-filter-toggle tau-extension-board-tooltip boardsettings-filter__toggle" type="button"
+                data-expanded-selector=".tau-checked" data-title-expanded="Turn filter off"
+                data-title="Turn filter on">Filter
+            <span class="boardsettings-filter__status boardsettings-filter__status--on">on </span>
+            <span class="boardsettings-filter__status boardsettings-filter__status--off">off</span>
+        </button>
+        <input type="checkbox" class="boardsettings-filter__checkbox i-role-useFilter" name="<%= this.name %>_useFilter" <% if (this.useFilter) { %>checked<% } %> />
+        <div class="boardsettings-filter__wraper i-role-filter">
+            <input type="text" name="<%= this.name %>_filter" placeholder="<%= this.placeholder || 'type ? for advanced filter' %>" spellcheck="false"
+             class="i-role-filter-input boardsettings-filter__input tau-in-text" value="<%! this.filter %>" />
+            <button type="button" tabindex="-1" class="tau-btn-show-more i-role-help"></button>
+            <div class="tau-help-content i-role-help-content">
+                <%= fn.sub("board.editor.filterHelp", fn._.extend({name: this.name}, this.filters)) %>
+            </div>
+        </div>
+        <span class="tau-icon-general tau-icon-help i-role-tooltipArticle" data-article-id="board.editor.filter"></span>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+define(["require","./filter.builder.suggestion.service"],function(e){var r=e("./filter.builder.suggestion.service");return r.extend({_generateQueryScript:function(e,r){return"?"+e+".Where(It is '"+r}})});

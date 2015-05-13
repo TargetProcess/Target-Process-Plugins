@@ -1,5 +1,7 @@
 define(function(require) {
     var React = require('react');
+    var _ = require('Underscore');
+    var classNames = require('libs/classNames');
 
     return React.createClass({
         getDefaultProps: _.constant({
@@ -7,7 +9,7 @@ define(function(require) {
         }),
 
         render: function() {
-            var className = React.addons.classSet({
+            var className = classNames({
                 'tau-widget-settings-list': true,
                 'tau-widget-settings-list--col': this.props.labelsOnTop
             });

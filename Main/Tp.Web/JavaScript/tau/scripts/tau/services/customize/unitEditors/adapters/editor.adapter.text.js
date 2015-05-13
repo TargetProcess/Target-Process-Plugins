@@ -1,0 +1,1 @@
+define(["require","./editor.adapter.default"],function(e){var t=e("./editor.adapter.default");return t.extend({_initEditor:function(e,t){this._super(e,t,{savingEvent:"beforeSave",savedEvent:"afterSave",finishedEvent:"afterSave"}),e.on("blur",function(){t.tauBubble("hide")})}})});

@@ -78,7 +78,7 @@ namespace Tp.Integration.Common
 
 
 	/// <summary>
-	///     Test Step Run fields
+	///     Test Step fields
 	/// </summary>
 	public enum TestStepField
 	{

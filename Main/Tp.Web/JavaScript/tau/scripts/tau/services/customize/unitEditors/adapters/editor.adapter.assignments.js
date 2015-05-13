@@ -1,0 +1,1 @@
+define(["require","Underscore","./editor.adapter.default"],function(e){var t=e("Underscore"),n=e("./editor.adapter.default");return n.extend({_initEditor:function(e,n){this._super(e,n,{savingEvent:"assignment.editor.saving",savedEvent:"assignment.editor.saved"}),t.delay(function(){e.toggleClass("tau-assignments_state_loaded",!0),this._focusOnText(e)}.bind(this),200)}})});

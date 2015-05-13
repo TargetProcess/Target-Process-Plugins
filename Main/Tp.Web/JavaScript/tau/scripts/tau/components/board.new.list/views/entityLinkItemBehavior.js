@@ -1,0 +1,1 @@
+define(["require","tau/components/board.new.list/views/linkItemBehavior"],function(e){var n=e("tau/components/board.new.list/views/linkItemBehavior");return n.extend({lookupTriggerComponentName:"entity.new.list.lookup.trigger",_shouldShowTrigger:function(){return!0}})});

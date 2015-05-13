@@ -4,16 +4,19 @@
 // 
 
 using System;
+using log4net;
 
 namespace Tp.Core.Diagnostics
 {
 	internal class PerformanceCounter : IPerformanceCounter
 	{
 		private readonly System.Diagnostics.PerformanceCounter _source;
+		private readonly ILog _log;
 
-		public PerformanceCounter(System.Diagnostics.PerformanceCounter source)
+		public PerformanceCounter(System.Diagnostics.PerformanceCounter source, ILog log)
 		{
 			_source = source;
+			_log = log;
 		}
 
 		public void Increment()
@@ -60,8 +63,9 @@ namespace Tp.Core.Diagnostics
 			{
 				return func(_source);
 			}
-			catch
+			catch(Exception ex)
 			{
+				_log.Error("Error occured", ex);
 				return default(T);
 			}
 		}

@@ -1,8 +1,10 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
+    var classNames = require('libs/classNames');
     var $ = require('jQuery');
     var Name = require('jsx!./dashboard.widget.name.view');
     var SettingsTrigger = require('jsx!./dashboard.widget.settings.trigger');
+    var SortableItem = require('tau/components/react/mixins/sortable.item');
 
     var settingsUtils = require('./dashboard.widget.settings.view.utils');
 
@@ -12,16 +14,11 @@ define(function(require) {
      */
     var DashboardWidgetContainerView = React.createClass({
         displayName: 'WidgetContainer',
-        statics: {
-            loadingTemplateMessage: 'Loading widget template...',
-            loadingWidgetMessage: 'Loading widget...'
-        },
 
         getInitialState: function() {
             return {
                 isBeingRenamed: false,
-                isLoaded: false,
-                statusText: DashboardWidgetContainerView.loadingTemplateMessage
+                isLoaded: false
             };
         },
 
@@ -61,12 +58,9 @@ define(function(require) {
                 return;
             }
 
-            var $container = $(this._findPlaceholder());
-            $container.empty();
-            $container.append(args.placeholder);
+            $(this._findPlaceholder()).empty().append(args.placeholder);
 
             this.setState({
-                statusText: DashboardWidgetContainerView.loadingWidgetMessage,
                 isLoaded: false
             });
         },
@@ -77,7 +71,6 @@ define(function(require) {
             }
 
             this.setState({
-                statusText: '',
                 isLoaded: true
             });
         },
@@ -90,7 +83,7 @@ define(function(require) {
             this.props.column.removeWidget(this.props.widget);
         },
 
-        _onDeleteClicked: function(e) {
+        _onDeleteClicked: function() {
             var $deleteBtn = $(this.getDOMNode()).find('.i-role-dashboard-delete-widget');
             if (!$deleteBtn.tauConfirm('instance')) {
                 var $container = $deleteBtn.closest('.i-role-dashboard-layout');
@@ -141,31 +134,37 @@ define(function(require) {
             this.setState({isBeingRenamed: false});
         },
 
-        _constructContentWrapperStyle: function(sizes) {
-            var outerStyle = {
+        _getPlaceholderStyle: function(sizes) {
+            var placeholderStyle = {
                 minHeight: sizes.minHeight,
                 maxHeight: sizes.maxHeight
             };
 
             if (sizes.aspectRatio) {
-                outerStyle.paddingTop = (100 / sizes.aspectRatio) + '%';
+                placeholderStyle.paddingTop = (100 / sizes.aspectRatio) + '%';
+                placeholderStyle.minHeight = '0';
             } else {
                 // Either AR or fixed height technique should be used, not both.
-                outerStyle.height = sizes.height;
+                placeholderStyle.height = sizes.height;
             }
 
-            if (outerStyle.minHeight || outerStyle.maxHeight || outerStyle.height) {
-                outerStyle.overflowY = 'auto';
+            if (placeholderStyle.minHeight || placeholderStyle.maxHeight || placeholderStyle.height) {
+                placeholderStyle.overflowY = 'auto';
             }
 
-            return outerStyle;
+            return placeholderStyle;
         },
 
-        _constructContentWrapperClassName: function(sizes) {
-            return React.addons.classSet({
+        _getContentStyle: function(sizes) {
+            return this.state.isLoaded ? this._getPlaceholderStyle(sizes) : {};
+        },
+
+        _getContentClassName: function(sizes) {
+            return classNames({
                 'tau-dashboard-widget-content': true,
                 'tau-dashboard-widget-content--ratio': !!sizes.aspectRatio, // stretch content when widget has fixed AR
-                'tau-dashboard-widget-content--fill': !!sizes.height // stretch content when widget has fixed height
+                'tau-dashboard-widget-content--fill': !!sizes.height, // stretch content when widget has fixed height,
+                'tau-dashboard-widget-content--loading': !this.state.isLoaded
             });
         },
 
@@ -174,8 +173,7 @@ define(function(require) {
 
             return (
                 <div className="i-role-dashboard-widget tau-dashboard-widget"
-                    draggable={isDraggable}
-                    data-sortable-key={this.props.id}>
+                    {...SortableItem.attributes(this.props.id, SortableItem.DASHBOARD_WIDGET, isDraggable)}>
                     {this._renderHeader()}
                     {this._renderContent()}
                     <div className="tau-dashboard-widget__drop-placeholder"></div>
@@ -200,10 +198,12 @@ define(function(require) {
 
             return (
                 <div className="tau-dashboard-widget-header textSelectionDisabled">
-                    <Name name={this.props.widget.getName()}
-                        isEditable={canRename} contentEditable={this.state.isBeingRenamed}
-                        onEditStart={this._onNameEditStart} onEditDone={this._onNameEditDone}
-                        onEditCancel={this._onNameEditCancel} />
+                    <div className="tau-dashboard-widget__drag-handle">
+                        <Name name={this.props.widget.getName()}
+                            isEditable={canRename} contentEditable={this.state.isBeingRenamed}
+                            onEditStart={this._onNameEditStart} onEditDone={this._onNameEditDone}
+                            onEditCancel={this._onNameEditCancel} />
+                    </div>
                     <div className="tau-dashboard-widget__buttons">
                         {settingsButton}
                         {deleteButton}
@@ -215,25 +215,19 @@ define(function(require) {
         _renderContent: function() {
             var sizes = this.props.widget.getSizes();
 
-            var status = this.state.isLoaded ?
-                null :
-                <div className="tau-dashboard-widget-status">{this.state.statusText}</div>;
-
-            var contentWrapperClassName = React.addons.classSet({
-                'tau-dashboard-widget-content-wrapper': true,
-                'i-role-dashboard-widget-content': true,
-                'tau-dashboard-widget-content-wrapper--loading': !this.state.isLoaded
-            });
-
             return (
-                <div className={this._constructContentWrapperClassName(sizes)}
-                    style={this._constructContentWrapperStyle(sizes)}>
-                    {status}
-                    <div
-                        ref="contentPlaceholder"
-                        className={contentWrapperClassName}/>
+                <div className={this._getContentClassName(sizes)}
+                    style={this._getContentStyle(sizes)}>
+                    {this.state.isLoaded ? null : this._renderLoader(sizes)}
+                    <div className="tau-dashboard-widget-content-wrapper i-role-dashboard-widget-content"
+                        ref="contentPlaceholder"/>
                 </div>
             );
+        },
+
+        _renderLoader: function(sizes) {
+            return <div className="tau-dashboard-widget-placeholder tau-loading--centered"
+                style={this._getPlaceholderStyle(sizes)}/>;
         }
     });
 

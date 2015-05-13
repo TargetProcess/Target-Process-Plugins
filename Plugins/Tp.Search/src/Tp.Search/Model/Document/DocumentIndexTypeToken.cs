@@ -13,11 +13,9 @@ namespace Tp.Search.Model.Document
 		[IndexFileName("Entity")]
 		[GeneralIndex(new[] { GeneralField.Description, GeneralField.Name })]
 		[AssignableIndex(new[] { AssignableField.Description, AssignableField.Name })]
-		[TestCaseIndex(new[] { TestCaseField.Description, TestCaseField.Name })]
 		[ImpedimentIndex(new[] { ImpedimentField.Description, ImpedimentField.Name })]
 		[GeneralDocument(new[] { GeneralField.ParentProjectID, GeneralField .EntityTypeID})]
 		[AssignableDocument(new[] { AssignableField.ProjectID, AssignableField.EntityTypeID, AssignableField.SquadID })]
-		[TestCaseDocument(new[] { TestCaseField.ProjectID, TestCaseField.EntityTypeID })]
 		[ImpedimentDocument(new[] { ImpedimentField.ProjectID, ImpedimentField.EntityTypeID })]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters, DocumentIndexDataTypeToken.Digits })]
 		[DocumentIndexVersion(6)]
@@ -32,7 +30,6 @@ namespace Tp.Search.Model.Document
 		[IndexFileName("EntityProject")]
 		[GeneralIndex(new[] { GeneralField.ParentProjectID })]
 		[AssignableIndex(new[] { AssignableField.ProjectID })]
-		[TestCaseIndex(new[] { TestCaseField.ProjectID })]
 		[ImpedimentIndex(new[] { ImpedimentField.ProjectID })]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
 		[DocumentIndexVersion(6)]
@@ -46,7 +43,6 @@ namespace Tp.Search.Model.Document
 		[IndexFileName("EntityType")]
 		[GeneralIndex(new[] { GeneralField.EntityTypeID })]
 		[AssignableIndex(new[] { AssignableField.EntityTypeID })]
-		[TestCaseIndex(new[] { TestCaseField.EntityTypeID })]
 		[ImpedimentIndex(new[] { ImpedimentField.EntityTypeID })]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
 		[DocumentIndexVersion(5)]
@@ -80,5 +76,16 @@ namespace Tp.Search.Model.Document
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
 		[DocumentIndexVersion(5)]
 		Impediment,
+
+		[IndexFileName("TestStep")]
+		[TestStepIndex(new[] { TestStepField.Description, TestStepField.Result })]
+		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters, DocumentIndexDataTypeToken.Digits })]
+		[DocumentIndexVersion(1)]
+		TestStep,
+
+		[IndexFileName("TestStepProject")]
+		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
+		[DocumentIndexVersion(1)]
+		TestStepProject,
 	}
 }

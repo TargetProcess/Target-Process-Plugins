@@ -22,12 +22,10 @@ namespace Tp.Search.Model.Query
 			{
 				GeneralIds = new List<string>();
 				AssignableIds = new List<string>();
-				TestCaseIds = new List<string>();
 				ImpedimentIds = new List<string>();
 			}
 			public List<string> GeneralIds { get; private set; }
 			public List<string> AssignableIds { get; private set; }
-			public List<string> TestCaseIds { get; private set; }
 			public List<string> ImpedimentIds { get; private set; }
 		}
 
@@ -36,7 +34,6 @@ namespace Tp.Search.Model.Query
 		private readonly Dictionary<string, int> _assignableTypeIds;
 		private readonly Dictionary<int?, string> _entityTypeNames;
 		private readonly List<string> _noSquadEntityTypeNames;
-		private readonly string _testCaseType;
 		private readonly string _impedimentType;
 
 		private readonly IDocumentIdFactory _documentIdFactory;
@@ -47,7 +44,6 @@ namespace Tp.Search.Model.Query
 			_generalTypeIds = new Dictionary<string, int>();
 			_assignableTypeIds = new Dictionary<string, int>();
 			_documentIdFactory = documentIdFactory;
-			_testCaseType = documentIdFactory.CreateEntityTypeId(TESTCASE_TYPE_ID);
 			_impedimentType = documentIdFactory.CreateEntityTypeId(IMPEDIMENT_TYPE_ID);
 			_entityTypeIds.Add(RELEASE_TYPE_ID);
 			_entityTypeIds.Add(ITERATION_TYPE_ID);
@@ -210,11 +206,6 @@ namespace Tp.Search.Model.Query
 					result.ImpedimentIds.Add(doc.FileName);
 					continue;
 				}
-				if (IsTestCase(doc))
-				{
-					result.TestCaseIds.Add(doc.FileName);
-					continue;
-				}
 				if (IsGeneral(doc))
 				{
 					result.GeneralIds.Add(doc.FileName);
@@ -237,12 +228,7 @@ namespace Tp.Search.Model.Query
 		{
 			return _assignableTypeIds.ContainsKey(entityDocument.EntityTypeId);
 		}
-
-		private bool IsTestCase(EntityDocument entityDocument)
-		{
-			return entityDocument.EntityTypeId == _testCaseType;
-		}
-
+		
 		private bool IsImpediment(EntityDocument entityDocument)
 		{
 			return entityDocument.EntityTypeId == _impedimentType;

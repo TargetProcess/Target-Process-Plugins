@@ -1,0 +1,1 @@
+define(["require","Underscore","./component.linkedTestPlan.base"],function(e){var n=e("Underscore"),r=e("./component.linkedTestPlan.base");return{create:function(e){var t={createContainerChildren:[{type:"linkedTestPlan.create"}]};return r.create(n.extend(e,t))}}});

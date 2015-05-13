@@ -180,6 +180,8 @@ namespace System.Linq.Dynamic
 		private interface IEnumerableAggregateSignatures
 		{
 			void Where(bool predicate);
+			void First();
+			void First(bool predicate);
 			void Any();
 			void Any(bool predicate);
 			void All(bool predicate);

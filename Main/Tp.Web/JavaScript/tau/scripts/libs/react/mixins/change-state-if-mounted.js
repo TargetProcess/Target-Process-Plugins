@@ -1,0 +1,1 @@
+define([],function(){return{setStateIfMounted:function(t,e){this.isMounted()&&this.setState(t,e)},replaceStateIfMounted:function(t,e){this.isMounted()&&this.replaceState(t,e)}}});

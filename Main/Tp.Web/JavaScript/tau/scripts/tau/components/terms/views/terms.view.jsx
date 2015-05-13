@@ -52,7 +52,7 @@ define(function(require) {
                         <div className="tau-table-forms__wrapper">
                             <button disabled={!this.state.isChanged || !this.state.isValid} type='button'
                                 onClick={this.saveTerms} className="tau-btn tau-primary tau-btn-big">Save changes</button>
-                            <span dangerouslySetInnerHTML={{__html: this.state.errorMessage}} className="tau-message-error">
+                            <span dangerouslySetInnerHTML={{__html: this.state.errorMessage || ''}} className="tau-message-error">
                             </span>
                             <span className="tau-message-success">
                                 {this.state.successMessage}

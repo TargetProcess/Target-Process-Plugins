@@ -2,6 +2,7 @@ define(function(require) {
     var React = require('react');
     var InfinityScrollList = require('jsx!tau/components/dashboard/infinity.scroll.list');
     var TemplateHelper = require('jsx!./template.helper');
+    var StatusView = require('jsx!tau/components/dashboard/widget.templates/shared/status.view');
 
     return React.createClass({
         componentWillMount: function() {
@@ -53,12 +54,11 @@ define(function(require) {
 
         _getEmptyMessage: function() {
             return (
-                <div className="empty-message">
-                    <span>There is nothing to show</span>
-                    <br />
-                    <span>This widget aggregates changes for all entities you&nbsp;</span>
-                    <a href="https://guide.targetprocess.com/working-with-entities/follow-entity.html" target="_blank">follow</a>
-                </div>
+                <StatusView textClassName="tau-dashboard-widget-placeholder-text--follow">
+                    <span>There is nothing to show.&nbsp;
+                        <a href="https://guide.targetprocess.com/working-with-entities/follow-entity.html" target="_blank">Follow</a>
+                    &nbsp;an entity to see changes!</span>
+                </StatusView>
             );
         },
 

@@ -9,5 +9,10 @@ namespace Tp.Core
 		{
 			return logManager.GetLog(type.FullName);
 		}
+
+		public static ILog PerformanceCounterLog(this ITpLogManager logManager)
+		{
+			return logManager.GetLog("PerformanceCounter");
+		}
 	}
 }

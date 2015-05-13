@@ -1,0 +1,1 @@
+define(["require","./editor.adapter.default"],function(e){var i=e("./editor.adapter.default");return i.extend({_initEditor:function(e,i){this._super(e,i,{savingEvent:"tags.inline.changing",savedEvent:"tags.inline.changed",finishedEvent:"tags.inline.edit.finished"}),this._focusOnText(e)}})});

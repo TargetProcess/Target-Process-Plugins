@@ -1,0 +1,14 @@
+<!-- name: board.editor.filterHelp, deps: [template!tau/ui/templates/board.editor/ui.template.board.editor.filterHelp.section] -->
+<div class="filter-help cm-s-default" role="<%= this.name%>_help">
+    <table class="filter-help__table i-role-filters-table">
+        <tbody>
+            <%= fn.sub("board.editor.filterHelp.section", {sectionTitle: "Private filters", filters: this.privateFilters, filterAdditionalClass: "i-role-private-filter"}) %>
+            <%= fn.sub("board.editor.filterHelp.section", {sectionTitle: "Shared filters", filters: this.sharedFilters, filterAdditionalClass: "i-role-shared-filter"}) %>
+            <% if ((!this.privateFilters || !this.privateFilters.length) && (!this.sharedFilters || !this.sharedFilters.length)) { %>
+                <tr class="filter-help__heading">
+                    <td colspan="3" class="filter-help__td filter-help__td__heading"><div  class="filter-help__message">There is no saved filters</div></td>
+                </tr>
+            <%} %>
+        </tbody>
+    </table>
+</div>

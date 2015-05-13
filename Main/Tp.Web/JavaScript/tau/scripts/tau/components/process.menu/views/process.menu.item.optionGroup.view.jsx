@@ -1,5 +1,6 @@
 define(function(require) {
     var React = require('libs/react/react-ex'),
+        classNames = require('libs/classNames'),
         _ = require('Underscore');
 
     return React.defineClass([], function() {
@@ -13,7 +14,7 @@ define(function(require) {
             },
 
             render: function() {
-                var classes = React.addons.classSet({
+                var classes = classNames({
                     't3-process__item': true,
                     't3-active': this.props.active
                 });

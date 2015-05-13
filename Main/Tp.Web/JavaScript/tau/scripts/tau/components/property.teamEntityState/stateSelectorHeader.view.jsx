@@ -1,11 +1,13 @@
 define(function(require) {
     var React = require('libs/react/react-ex');
     var TeamIcon = require('jsx!./teamIcon.view');
+    var classNames = require('libs/classNames');
 
     var StateSelectorHeader = React.createClass({
         displayName: 'StateSelectorHeader',
         propTypes: {
             onClick: React.PropTypes.func.isRequired,
+            onMouseEnter: React.PropTypes.func,
             isLoading: React.PropTypes.bool
         },
         _getTeamStateInfo: function() {
@@ -17,7 +19,7 @@ define(function(require) {
             return (
                 <div className="multiple-team-state-select-team-state-info">
                     <div className="multiple-team-state-select-sub-state">
-                        <span className="i-role-name">{teamState.state.name}</span> for
+                        <span className="i-role-name">{teamState.state.name}</span> for&nbsp;
                     </div>
                     <div className="multiple-team-state-select-team">
                         <span className="tau-checkbox-label">
@@ -29,12 +31,20 @@ define(function(require) {
             );
         },
         render: function() {
+            var triggerClasses = classNames({
+                'multiple-team-state-select-trigger': true,
+                'tau-icon-loading': this.props.isLoading
+            });
             return (
-                <div className="multiple-team-state-select__item" onClick={this.props.isLoading ? null : this.props.onClick}>
+                <div
+                    className="multiple-team-state-select__item"
+                    onClick={this.props.isLoading ? null : this.props.onClick}
+                    onMouseEnter={this.props.isLoading ? null : this.props.onMouseEnter}
+                >
                     <div className="multiple-team-state-select__item-content">
                         <div className="multiple-team-state-select-state">{this.props.parentState.name}</div>
                         {this._getTeamStateInfo(this.props.teamState)}
-                        <div className="multiple-team-state-select-trigger"></div>
+                        <div className={triggerClasses}></div>
                     </div>
                 </div>
             );

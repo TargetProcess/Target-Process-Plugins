@@ -1,0 +1,1 @@
+define([],function(){return{UNIT_BUSY_CLASS_NAME:"tau-unit-state-busy",toggleElementBusyIndicator:function(t,n){t.toggleClass(this.UNIT_BUSY_CLASS_NAME,Boolean(n))},unitHasBusyState:function(t){return t.hasClass(this.UNIT_BUSY_CLASS_NAME)}}});

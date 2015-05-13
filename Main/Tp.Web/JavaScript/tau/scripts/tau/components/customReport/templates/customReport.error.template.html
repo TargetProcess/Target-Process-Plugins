@@ -1,0 +1,9 @@
+<!-- name: customReport.error -->
+<div class="tau-customReport-message">
+    <% var adapted = this.message.replace(/'(.*?)'/g, "<strong>$1</strong>"); %>
+    <% adapted = adapted.replace(/"(.*?)"/g, "<strong>$1</strong>"); %>
+    <% adapted = adapted.replace("`1", ""); %>
+    <% adapted = this.isFilterError ? 'The specified filter is incorrect.<br>' + adapted : adapted; %>
+    <span class="tau-icon-general tau-icon-message-error"></span>
+    <%= adapted %>
+</div>

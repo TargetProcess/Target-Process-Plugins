@@ -1,0 +1,1 @@
+define([],function(){return function e(){for(var t,r="",n=0;n<arguments.length;n++)if(t=arguments[n])if("string"==typeof t||"number"==typeof t)r+=" "+t;else if("[object Array]"===Object.prototype.toString.call(t))r+=" "+e.apply(null,t);else if("object"==typeof t)for(var o in t)t.hasOwnProperty(o)&&t[o]&&(r+=" "+o);return r.substr(1)}});

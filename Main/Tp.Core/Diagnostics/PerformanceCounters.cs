@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using log4net;
 
 namespace Tp.Core.Diagnostics
 {
@@ -7,10 +9,12 @@ namespace Tp.Core.Diagnostics
 	{
 		private readonly IPerformanceCountersCategoryInfo _category;
 		private readonly IDictionary<string, IPerformanceCounter> _counters;
+		private readonly ILog _log;
 
 		protected PerformanceCounters(IPerformanceCountersCategoryInfo category)
 		{
 			_category = category;
+			_log = TpLogManager.Instance.PerformanceCounterLog();
 			_counters = _category.CreationData.ToDictionary(c => c.CounterName, c => GetPerformanceCounter(_category.CategoryName, c.CounterName, false));
 		}
 
@@ -27,15 +31,16 @@ namespace Tp.Core.Diagnostics
 			get { return _counters.GetOrAdd(counterName, name => GetPerformanceCounter(_category.CategoryName, counterName, false)); }
 		}
 
-		private static IPerformanceCounter GetPerformanceCounter(string categoryName, string counterName, bool isReadOny)
+		private IPerformanceCounter GetPerformanceCounter(string categoryName, string counterName, bool isReadOnly)
 		{
 			try
 			{
-				var performanceCounter = new System.Diagnostics.PerformanceCounter(categoryName, counterName, isReadOny);
-				return new PerformanceCounter(performanceCounter);
+				var performanceCounter = new System.Diagnostics.PerformanceCounter(categoryName, counterName, isReadOnly);
+				return new PerformanceCounter(performanceCounter, _log);
 			}
-			catch
+			catch(Exception ex)
 			{
+				_log.Error("Error occured during getting performance counter: category = {0}, counter = {1}".Fmt(categoryName, counterName), ex);
 				return new NullSafePerformanceCounter();
 			}
 		}

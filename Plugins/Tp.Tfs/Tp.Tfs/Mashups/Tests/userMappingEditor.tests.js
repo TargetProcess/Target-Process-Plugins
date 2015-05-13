@@ -18,6 +18,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Tfs/Profile
                 Login: 'Login',
                 Password: 'Password',
                 StartRevision: '5',
+                SyncInterval: '5',
 
                 UserMapping: [
                 { Key: 'svnuser1', Value: { Name: this._tpUsers[0].Name, Id: this._tpUsers[0].Id} },
@@ -157,6 +158,7 @@ require(["tp/plugins/vcs/SubversionProfileEditorDefaultController", "Tfs/Profile
                 Login: this._model.Settings.Login,
                 Password: this._model.Settings.Password,
                 StartRevision: this._model.Settings.StartRevision,
+                SyncInterval: this._model.Settings.SyncInterval,
                 UserMapping: []
             },
             TpUsers: [
