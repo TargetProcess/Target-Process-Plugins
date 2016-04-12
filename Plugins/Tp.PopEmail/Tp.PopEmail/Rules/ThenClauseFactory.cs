@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -15,9 +15,9 @@ namespace Tp.PopEmailIntegration.Rules
 		public ThenClauseFactory()
 		{
 			_thenClauses[TokenType.AttachToProjectClause] = ThenAttachToProjectClause.Create;
-			_thenClauses[TokenType.CreateRequestClause] = ThenCreateRequestClause.Create;
-			_thenClauses[TokenType.CreatePrivateRequestClause] = ThenCreatePrivateRequestClause.Create;
-			_thenClauses[TokenType.CreatePublicRequestClause] = ThenCreatePublicRequestClause.Create;
+			_thenClauses[TokenType.CreateRequestClause] = ThenCreateRequestClause.CreatePrivateRequest;
+			_thenClauses[TokenType.CreatePrivateRequestClause] = ThenCreateRequestClause.CreatePrivateRequest;
+			_thenClauses[TokenType.CreatePublicRequestClause] = ThenCreateRequestClause.CreatePublicRequest;
 		}
 
 		public ThenClauseComposite CreateBy(ParseNode clauseSubtree)
@@ -35,7 +35,6 @@ namespace Tp.PopEmailIntegration.Rules
 			}
 			return result;
 		}
-
 
 		private readonly Dictionary<TokenType, Func<ParseNode, IThenClause>>
 			_thenClauses = new Dictionary<TokenType, Func<ParseNode, IThenClause>>();

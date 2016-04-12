@@ -15,8 +15,8 @@ namespace System
 		public static Type ResultType(this MemberInfo memberInfo)
 		{
 			var resultType = memberInfo.MaybeAs<PropertyInfo>().Select(x => x.PropertyType)
-			                           .OrElse(() => memberInfo.MaybeAs<MethodInfo>().Select(x => x.ReturnType))
-			                           .OrElse(() => memberInfo.MaybeAs<FieldInfo>().Select(x => x.FieldType)).Value;
+				.OrElse(() => memberInfo.MaybeAs<MethodInfo>().Select(x => x.ReturnType))
+				.OrElse(() => memberInfo.MaybeAs<FieldInfo>().Select(x => x.FieldType)).Value;
 			return resultType;
 		}
 
@@ -46,6 +46,43 @@ namespace System
 					yield return propertyInfo;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Same as Type.GetMember but return members from base interfaces
+		/// E.g. typeof(ICollection).GetMember("GetEnumerator") returns [] while typeof(ICollection).GetMemberInterfacewise("GetEnumerator")
+		/// returns MemberInfo of IEnumerable.GetEnumerator
+		/// </summary>
+		public static MemberInfo[] GetMemberInterfacewise(this Type type, string name)
+		{
+			if (!type.IsInterface)
+			{
+				return type.GetMember(name);
+			}
+			return type.GetMember(name).Concat(type.GetInterfaces().SelectMany(i => i.GetMember(name))).ToArray();
+		}
+
+		public static Maybe<Type> GetCommonBaseInterfaceType(IEnumerable<Type> types)
+		{
+			return
+				types.Select(t => t.GetInterfaces().Concat(t))
+					.Aggregate((a, b) => a.Intersect(b))
+					.OrderBy(x => x, LambdaComparer<Type>.Comparer(((a, b) =>
+					{
+						if (a != b)
+						{
+							if (a.IsAssignableFrom(b))
+							{
+								return 1;
+							}
+							if (b.IsAssignableFrom(a))
+							{
+								return -1;
+							}
+						}
+						return 0;
+					})))
+					.FirstOrNothing();
 		}
 	}
 }

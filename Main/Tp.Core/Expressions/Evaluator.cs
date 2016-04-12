@@ -150,10 +150,10 @@ namespace Tp.Core
 		public static Maybe<object> SimpleEval(Expression lambdaContainer)
 		{
 			Maybe<object> lambda = from methodCallExpression in lambdaContainer.MaybeAs<MethodCallExpression>()
-			                       from @object in methodCallExpression.Object.MaybeAs<ConstantExpression>(nullMeansNothing: false)
-			                       from parameters in GetParameters(methodCallExpression)
-			                       from lambdaExpression in Maybe.Just(methodCallExpression.Method.Invoke(@object == null ? null : @object.Value, parameters.ToArray()))
-			                       select lambdaExpression;
+				from @object in methodCallExpression.Object.MaybeAs<ConstantExpression>(nullMeansNothing: false)
+				from parameters in GetParameters(methodCallExpression)
+				from lambdaExpression in Maybe.Just(methodCallExpression.Method.Invoke(@object == null ? null : @object.Value, parameters.ToArray()))
+				select lambdaExpression;
 
 			Maybe<object> maybe = lambda.OrElse(() => Evaluate(lambdaContainer));
 			return maybe;
@@ -173,19 +173,18 @@ namespace Tp.Core
 				}
 			}
 			return values;
-
 		}
 
 		public static Maybe<object> Evaluate(Expression argument)
 		{
 			var value = argument.MaybeAs<ConstantExpression>().Select(x => x.Value)
 				.OrElse(() =>
-				        from memberExpression in argument.MaybeAs<MemberExpression>()
-				        from @object in memberExpression.Expression.MaybeAs<ConstantExpression>(nullMeansNothing: false)
-				        from computedValue in
-					        memberExpression.Member.MaybeAs<PropertyInfo>().Select(x => x.GetValue(@object.Value, null))
-					        .OrElse(() => memberExpression.Member.MaybeAs<FieldInfo>().Select(x => x.GetValue(@object.Value)))
-				        select computedValue
+					from memberExpression in argument.MaybeAs<MemberExpression>()
+					from @object in memberExpression.Expression.MaybeAs<ConstantExpression>(nullMeansNothing: false)
+					from computedValue in
+						memberExpression.Member.MaybeAs<PropertyInfo>().Select(x => x.GetValue(@object.Value, null))
+							.OrElse(() => memberExpression.Member.MaybeAs<FieldInfo>().Select(x => x.GetValue(@object.Value)))
+					select computedValue
 				);
 			return value;
 		}

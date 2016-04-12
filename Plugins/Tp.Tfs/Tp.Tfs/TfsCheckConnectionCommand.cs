@@ -160,7 +160,7 @@ namespace Tp.Tfs
 					catch (ChangesetNotFoundException) { }
 				}
 
-				throw new ChangesetNotFoundException(string.Format("There’s no such revision: {0}", settings.StartRevision));
+				throw new ChangesetNotFoundException($"There’s no such revision: {settings.StartRevision}");
 			}
 
 			var projectChangeset = versionControl.QueryHistory(
@@ -176,7 +176,7 @@ namespace Tp.Tfs
 					false).Cast<Changeset>().FirstOrDefault();
 
 			if (projectChangeset == null)
-				throw new ChangesetNotFoundException(string.Format("There’s no such revision: {0}", settings.StartRevision));
+				throw new ChangesetNotFoundException($"There’s no such revision: {settings.StartRevision}");
 		}
 	}
 }

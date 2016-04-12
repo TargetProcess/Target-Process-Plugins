@@ -1,8 +1,4 @@
-﻿//
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-//
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -21,76 +17,76 @@ namespace Tp.Utils.Html
 		/// Tags whose outer html to be suppressed. In other words, entire tag with its content will be suppressed.
 		/// </summary>
 		protected readonly HashSet<string> ExcludeTags = new HashSet<string>
-		                                              	{
-		                                              		"head",
-		                                              		"base",
-		                                              		"basefont",
-		                                              		"meta",
-		                                              		"link",
-		                                              		"title",
-		                                              		"style",
-		                                              		"script",
-		                                              		"input",
-		                                              		"isindex",
-		                                              		"textarea",
-		                                              		"button",
-		                                              		"option",
-		                                              		"select",
-		                                              		"frameset",
-		                                              		"frame",
-		                                              		"iframe",
-		                                              		"object",
-		                                              		"embed",
-		                                              		"applet",
-		                                              		"bgsound",
-		                                              	};
+		{
+			"head",
+			"base",
+			"basefont",
+			"meta",
+			"link",
+			"title",
+			"style",
+			"script",
+			"input",
+			"isindex",
+			"textarea",
+			"button",
+			"option",
+			"select",
+			"frameset",
+			"frame",
+			"iframe",
+			"object",
+			"embed",
+			"applet",
+			"bgsound",
+		};
 
 		/// <summary>
 		/// Overrides suppression caused by the tags above, enables outer html.
 		/// </summary>
 		protected readonly HashSet<string> IncludeTags = new HashSet<string>
-		                                              	{
-		                                              		"body",
-		                                              	};
+		{
+			"body",
+		};
 
 		/// <summary>
 		/// Write inner instead of outer html for these tags. In other words, write tag content without tag.
 		/// </summary>
 		protected readonly HashSet<string> IgnoreTags = new HashSet<string>
-		                                             	{
-		                                             		"html",
-		                                             		"body",
-		                                             		"form",
-		                                             		"blink",
-		                                             		"plaintext",
-		                                             	};
+		{
+			"html",
+			"body",
+			"form",
+			"blink",
+			"plaintext",
+		};
 
 		/// <summary>
 		/// These tags need not be closed explicitly.
 		/// </summary>
 		protected readonly HashSet<string> EmptyTags = new HashSet<string>
-		                                            	{
-		                                            		"base",
-		                                            		"basefont",
-		                                            		"meta",
-		                                            		"link",
-		                                            		"br",
-		                                            		"hr",
-		                                            		"input",
-		                                            		"isindex",
-		                                            		"img",
-		                                            		"col",
-		                                            		"frame",
-		                                            		"param",
-		                                            	};
+		{
+			"base",
+			"basefont",
+			"meta",
+			"link",
+			"br",
+			"hr",
+			"input",
+			"isindex",
+			"img",
+			"col",
+			"frame",
+			"param",
+		};
 
 		/// <summary>
 		/// These tags may not be explicitly closed, but presense of a new open tag automaticaly closes the previously open but not closed tag.
 		/// </summary>
 		protected readonly HashSet<string> AutoClosedTags = new HashSet<string>
-		                                                 	{
-		                                                 		"p",
-		                                                 	};
+		{
+			"p",
+		};
 
 		/// <summary>
 		/// Rewrite some (obsolete, deprecated) tags to another tags.
@@ -101,41 +97,41 @@ namespace Tp.Utils.Html
 		/// Attributes to be suppressed.
 		/// </summary>
 		protected readonly HashSet<string> EventAttributes = new HashSet<string>
-		                                                  	{
-		                                                  		"onabort",
-		                                                  		"onblur",
-		                                                  		"onchange",
-		                                                  		"onclick",
-		                                                  		"ondblclick",
-		                                                  		"ondragdrop",
-		                                                  		"onerror",
-		                                                  		"onfocus",
-		                                                  		"onkeydown",
-		                                                  		"onkeypress",
-		                                                  		"onkeyup",
-		                                                  		"onload",
-		                                                  		"onmousedown",
-		                                                  		"onmousemove",
-		                                                  		"onmouseout",
-		                                                  		"onmouseover",
-		                                                  		"onmouseup",
-		                                                  		"onmove",
-		                                                  		"onreset",
-		                                                  		"onresize",
-		                                                  		"onselect",
-		                                                  		"onsubmit",
-		                                                  		"onunload"
-		                                                  	};
+		{
+			"onabort",
+			"onblur",
+			"onchange",
+			"onclick",
+			"ondblclick",
+			"ondragdrop",
+			"onerror",
+			"onfocus",
+			"onkeydown",
+			"onkeypress",
+			"onkeyup",
+			"onload",
+			"onmousedown",
+			"onmousemove",
+			"onmouseout",
+			"onmouseover",
+			"onmouseup",
+			"onmove",
+			"onreset",
+			"onresize",
+			"onselect",
+			"onsubmit",
+			"onunload"
+		};
 
 		/// <summary>
 		/// Untouchable attributes.
 		/// </summary>
 		protected readonly HashSet<string> UntouchableAttributes = new HashSet<string>
-		                                                        	{
-		                                                        		"style",
-		                                                        		"src",
-																		"data-mention"
-		                                                        	};
+		{
+			"style",
+			"src",
+			"data-mention"
+		};
 
 		public Sanitizer()
 		{
@@ -187,7 +183,6 @@ namespace Tp.Utils.Html
 
 		public string Process(string input)
 		{
-			
 			if (string.IsNullOrEmpty(input) || IsMarkdown(input))
 			{
 				return input;
@@ -201,20 +196,27 @@ namespace Tp.Utils.Html
 			return resultWriter.ToString();
 		}
 
-		public static Boolean IsMarkdown(string input)
+		private const string _markdownTag = "<!--markdown-->";
+
+		public static bool IsMarkdown(string input)
 		{
-			return input.StartsWith("<!--markdown-->");
+			return input.StartsWith(_markdownTag);
+		}
+
+		public static string ClearMarkdownTag(string input)
+		{
+			return IsMarkdown(input) ? input.Substring(_markdownTag.Length) : input;
 		}
 
 		public void Sanitize(TextReader input, TextWriter result)
 		{
 			if (input == null)
 			{
-				throw new ArgumentNullException("input");
+				throw new ArgumentNullException(nameof(input));
 			}
 			if (result == null)
 			{
-				throw new ArgumentNullException("result");
+				throw new ArgumentNullException(nameof(result));
 			}
 			using (var htmlReader = new HtmlReader(input))
 			{
@@ -543,7 +545,6 @@ namespace Tp.Utils.Html
 
 		#endregion
 
-
 		public static string FormatComment(string text)
 		{
 			if (text == null)
@@ -573,35 +574,35 @@ namespace Tp.Utils.Html
 
 			//Outlook 2007 Remove Replies
 			string newText = Regex.Replace(text, regExpOutlook2007, "",
-										   RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Outlook 2003 Remove Replies
 			newText = Regex.Replace(newText, regExpOutlook2003, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Outlook Express Remove Replies
 			newText = Regex.Replace(newText, regExpOutlookExpress, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Gmail Remove Replies
 			newText = Regex.Replace(newText, regExpGmail, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Mac Remove Replies
 			newText = Regex.Replace(newText, regExpMac, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Mac Plain Text Remove Replies
 			newText = Regex.Replace(newText, regExpMacPlain, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Unknown1 Remove Replies
 			newText = Regex.Replace(newText, regUnknown1, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			//Unknown2 Remove Replies
 			newText = Regex.Replace(newText, regUnknown2, "",
-									RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+				RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 			return newText;
 		}

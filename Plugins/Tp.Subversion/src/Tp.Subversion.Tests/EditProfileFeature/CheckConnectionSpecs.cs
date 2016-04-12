@@ -126,7 +126,7 @@ namespace Tp.Subversion.EditProfileFeature
 			@"Given unsaved plugin profile
 				And profile repository path is 'http://unknownhost'
 			When checked connection
-			Then error should occur for Uri: ""Could not connect to server. See plugin log for details.|Timeout while connecting to svn repository http://unknownhost. See plugin log for details.""
+			Then error should occur for Uri: ""Could not connect to server. See plugin log for details.|Unable to connect to a repository at URL 'http://unknownhost'. See plugin log for details.""
 			"
 				.Execute(In.Context<CommandActionSteps>());
 		}
@@ -160,7 +160,7 @@ namespace Tp.Subversion.EditProfileFeature
 			@"Given unsaved plugin profile
 				And profile repository path is 'https://localhost:443/nosuchrepo'
 			When checked connection
-			Then error should occur for Uri: ""Invalid path to repository. See plugin log for details.""
+			Then error should occur for Uri: ""Could not connect to server. See plugin log for details.""
 			"
 				.Execute(In.Context<CommandActionSteps>());
 		}
@@ -172,7 +172,7 @@ namespace Tp.Subversion.EditProfileFeature
 				And profile repository path is 'https://localhost:443/svn/IntegrationTest'
 				And profile login is 'nosuchlogin'
 			When checked connection
-			Then error should occur for Login: ""Authorization failed. See plugin log for details.""
+			Then error should occur for Login: ""Authentication failed. See plugin log for details.""
 				And error should occur for Password
 				And no errors should occur for Uri
 				And no errors should occur for StartRevision
@@ -188,7 +188,7 @@ namespace Tp.Subversion.EditProfileFeature
 				And profile login is 'office\testuser'
 				And profile password is '123456'
 			When checked connection
-			Then error should occur for Login: ""Authorization failed. See plugin log for details.""
+			Then error should occur for Login: ""Authentication failed. See plugin log for details.""
 				And error should occur for Password
 				And no errors should occur for Uri
 				And no errors should occur for StartRevision

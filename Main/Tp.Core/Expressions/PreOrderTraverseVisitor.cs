@@ -1,16 +1,11 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Tp.Core.Expressions
 {
 	/// <summary>
-	/// Provides an <see cref="IEnumerable{Expression}"/> created by walking through an expression
+	/// Provides an <see cref="IEnumerable{T}"/> created by walking through an expression
 	/// tree.
 	/// </summary>
 	internal sealed class PreOrderTraverseVisitor : ExpressionVisitor
@@ -25,8 +20,9 @@ namespace Tp.Core.Expressions
 			}
 			return node;
 		}
+
 		internal IEnumerable<Expression> Traverse(Expression node)
- 		{
+		{
 			_children = new List<Expression>();
 
 			yield return node;
@@ -37,7 +33,7 @@ namespace Tp.Core.Expressions
 			{
 				yield return descendant;
 			}
- 		}
+		}
 
 		protected override Expression VisitExtension(Expression node)
 		{

@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Globalization;
 
@@ -43,7 +38,7 @@ namespace Tp.Components
 			if (value is DateTime)
 				return ((DateTime) value).ToString("dd-MMM-yyyy");
 
-			if (value is decimal || value is float || value is int || value is Single)
+			if (value is decimal || value is float || value is int || value is double)
 				return FormatDecimal(value);
 
 			return value.ToString();

@@ -122,19 +122,25 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Comments\DSL\VcsCommentParserLangDefinition.tpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

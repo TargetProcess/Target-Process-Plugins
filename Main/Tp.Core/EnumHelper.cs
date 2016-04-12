@@ -9,6 +9,23 @@ namespace System
 {
 	public static class EnumHelper
 	{
+		private static EnumCache<TEnum> CreateEnumCache<TEnum, TAttribute>(Func<FieldInfo, Attribute, string> valueProvider)
+			where TEnum : struct
+			where TAttribute : Attribute
+		{
+			return new EnumCache<TEnum>(e =>
+			{
+				string s = EnumStringCache<TEnum>.Cache.GetValue(e);
+				FieldInfo f = typeof(TEnum).GetField(s, BindingFlags.Public | BindingFlags.Static);
+				if (f == null)
+				{
+					throw new ArgumentException("Cannot find {0} enum member in {1} enum".Fmt(s, typeof(TEnum).Name));
+				}
+				var attr = Attribute.GetCustomAttribute(f, typeof(TAttribute));
+				return valueProvider(f, attr);
+			});
+		}
+
 		private static class EnumStringCache<TEnum> where TEnum : struct
 		{
 			public static readonly EnumCache<TEnum> Cache = new EnumCache<TEnum>(e => e.ToString());
@@ -16,30 +33,28 @@ namespace System
 
 		private static class EnumDescriptionCache<TEnum> where TEnum : struct
 		{
-			public static readonly EnumCache<TEnum> Cache = new EnumCache<TEnum>(e =>
-				{
-					string s = EnumStringCache<TEnum>.Cache.GetValue(e);
-					FieldInfo f = typeof (TEnum).GetField(s, BindingFlags.Public | BindingFlags.Static);
-					if (f == null)
-					{
-						throw new ArgumentException("Cannot find {0} enum member in {1} enum".Fmt(s, typeof (TEnum).Name));
-					}
-					var descAttr = Attribute.GetCustomAttribute(f, typeof (DescriptionAttribute)) as DescriptionAttribute;
-					return descAttr != null ? descAttr.Description : f.Name;
-				});
+			public static readonly EnumCache<TEnum> Instance =
+				CreateEnumCache<TEnum, DescriptionAttribute>(
+					(f, attr) => { return attr.MaybeAs<DescriptionAttribute>().Select(x => x.Description).GetOrDefault(f.Name); });
 		}
 
-		private class EnumCache<TEnum>:IEnumerable<KeyValuePair<TEnum, string>> where TEnum : struct
+		private static class EnumMetadataCache<TEnum, TAttribute> where TEnum : struct where TAttribute : Attribute, ITextProvider
+		{
+			public static readonly EnumCache<TEnum> Instance =
+				CreateEnumCache<TEnum, TAttribute>((f, attr) => { return attr.MaybeAs<ITextProvider>().Select(x => x.GetText()).GetOrDefault(f.Name); });
+		}
+
+		private class EnumCache<TEnum> : IEnumerable<KeyValuePair<TEnum, string>> where TEnum : struct
 		{
 			private readonly IDictionary<TEnum, string> _values;
 
 			public EnumCache(Func<TEnum, string> valueProvider)
 			{
-				if (!typeof (TEnum).IsEnum)
+				if (!typeof(TEnum).IsEnum)
 				{
-					throw new ArgumentException(string.Format("Type {0} is not an enumeration.", typeof (TEnum)));
+					throw new ArgumentException(string.Format("Type {0} is not an enumeration.", typeof(TEnum)));
 				}
-				_values = ((TEnum[]) Enum.GetValues(typeof (TEnum))).ToDictionary(e => e, valueProvider);
+				_values = ((TEnum[]) Enum.GetValues(typeof(TEnum))).ToDictionary(e => e, valueProvider);
 			}
 
 			public string GetValue(TEnum @enum)
@@ -70,12 +85,26 @@ namespace System
 
 		public static string GetDescription<TEnum>(this TEnum @enum) where TEnum : struct
 		{
-			return EnumDescriptionCache<TEnum>.Cache.GetValue(@enum);
+			return EnumDescriptionCache<TEnum>.Instance.GetValue(@enum);
 		}
 
 		public static IEnumerable<string> GetDescriptions<TEnum>() where TEnum : struct
 		{
-			return EnumDescriptionCache<TEnum>.Cache.GetValues();
+			return EnumDescriptionCache<TEnum>.Instance.GetValues();
+		}
+
+		public static string GetMetadata<TEnum, TAttribute>(this TEnum @enum)
+			where TEnum : struct
+			where TAttribute : Attribute, ITextProvider
+		{
+			return EnumMetadataCache<TEnum, TAttribute>.Instance.GetValue(@enum);
+		}
+
+		public static IEnumerable<string> GetMetadatas<TEnum, TAttribute>()
+			where TEnum : struct
+			where TAttribute : Attribute, ITextProvider
+		{
+			return EnumMetadataCache<TEnum, TAttribute>.Instance.GetValues();
 		}
 
 		public static string AsString<TEnum>(this TEnum @enum) where TEnum : struct
@@ -99,17 +128,17 @@ namespace System
 		{
 			RaiseErrorIfNotEnum<TEnum>();
 			return TryParseEnum<TEnum>(val)
-				.GetOrThrow(() => new InvalidCastException("Could not parse value '{0}' for enum '{1}'".Fmt(val, typeof (TEnum))));
+				.GetOrThrow(() => new InvalidCastException("Could not parse value '{0}' for enum '{1}'".Fmt(val, typeof(TEnum))));
 		}
 
 		public static bool TryParse(this string s, Type enumType, bool ignoreCase, out object parsed)
 		{
 			parsed = null;
 			RaiseErrorIfNotEnum(enumType);
-			if(ignoreCase)
+			if (ignoreCase)
 			{
 				string candidate = s.ToLower();
-				if(Enum.GetNames(enumType).Select(n => n.ToLower()).All(n => n != candidate))
+				if (Enum.GetNames(enumType).Select(n => n.ToLower()).All(n => n != candidate))
 				{
 					return false;
 				}
@@ -129,7 +158,7 @@ namespace System
 
 		private static void RaiseErrorIfNotEnum<TEnum>()
 		{
-			RaiseErrorIfNotEnum(typeof (TEnum));
+			RaiseErrorIfNotEnum(typeof(TEnum));
 		}
 
 		private static void RaiseErrorIfNotEnum(Type enumType)
@@ -140,10 +169,10 @@ namespace System
 			}
 		}
 
-		public static Maybe<TEnum> TryGetByDescription<TEnum>(string description) where TEnum:struct 
+		public static Maybe<TEnum> TryGetByDescription<TEnum>(string description) where TEnum : struct
 		{
 			RaiseErrorIfNotEnum<TEnum>();
-			return EnumDescriptionCache<TEnum>.Cache.FirstOrNothing(x => x.Value.EqualsIgnoreCase(description)).Select(x => x.Key);
+			return EnumDescriptionCache<TEnum>.Instance.FirstOrNothing(x => x.Value.EqualsIgnoreCase(description)).Select(x => x.Key);
 		}
 
 		public static Exception CreateUnexpectedEnumError<TEnum>(TEnum val)

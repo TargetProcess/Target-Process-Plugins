@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 
 using System;
@@ -34,6 +34,11 @@ namespace Tp.Subversion.Subversion
 			if (e is SvnAuthorizationException)
 			{
 				errors.Add(ErrorFor(ConnectionSettings.LoginField, "Authorization failed"));
+				errors.Add(ErrorFor(ConnectionSettings.PasswordField));
+			}
+			else if (e is SvnAuthenticationException || e.RootCause is SvnAuthenticationException)
+			{
+				errors.Add(ErrorFor(ConnectionSettings.LoginField, "Authentication failed"));
 				errors.Add(ErrorFor(ConnectionSettings.PasswordField));
 			}
 			else if (e.Message.Contains("200 OK"))

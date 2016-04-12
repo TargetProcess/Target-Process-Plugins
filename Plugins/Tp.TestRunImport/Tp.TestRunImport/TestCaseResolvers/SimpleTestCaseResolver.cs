@@ -42,29 +42,32 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
 		{
 			TestCaseTestPlanDTO[] testCases;
 
-			if (_testCasesByName.TryGetValue(NormalizeName(testName), out testCases))
+			if (!string.IsNullOrEmpty(testName))
 			{
-				foreach (var testCase in testCases)
+				if (_testCasesByName.TryGetValue(NormalizeName(testName), out testCases))
 				{
-					yield return testCase;
+					foreach (var testCase in testCases)
+					{
+						yield return testCase;
+					}
+					yield break;
 				}
-				yield break;
-			}
 
-			var shortName = testName;
-			var dotIndex = testName.LastIndexOf('.');
-			if (dotIndex != -1)
-			{
-				shortName = testName.Substring(dotIndex + 1);
-			}
-
-			if (_testCasesByName.TryGetValue(NormalizeName(shortName), out testCases))
-			{
-				foreach (var testCase in testCases)
+				var shortName = testName;
+				var dotIndex = testName.LastIndexOf('.');
+				if (dotIndex != -1)
 				{
-					yield return testCase;
+					shortName = testName.Substring(dotIndex + 1);
 				}
-				yield break;
+
+				if (_testCasesByName.TryGetValue(NormalizeName(shortName), out testCases))
+				{
+					foreach (var testCase in testCases)
+					{
+						yield return testCase;
+					}
+					yield break;
+				}
 			}
 		}
 

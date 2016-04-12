@@ -30,7 +30,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		{
 			_account.Profiles.Add(new ProfileCreationArgs("Profile", new SampleJiraProfile {JiraLogin = "JiraLogin"}));
 			ExecuteConcurrently(UpdateProfile, ReadProfile);
-			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1));
+			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
 		}
 		
 		[Test]
@@ -38,7 +38,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		{
 			_account.Profiles.Add(new ProfileCreationArgs("Profile", new SampleJiraProfile { JiraLogin = "JiraLogin" }));
 			ExecuteConcurrently(ReadProfile, ReadProfile);
-			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1));
+			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
 		}
 
 		[Test, Ignore]
@@ -63,7 +63,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		private void ReadProfile()
 		{
 			var profile = _account.Profiles["Profile"];
-			profile.GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.StringContaining("JiraLogin"));
+			profile.GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.StringContaining("JiraLogin"), "profile.GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.StringContaining(\"JiraLogin\"))");
 		}
 	}
 }

@@ -1,7 +1,3 @@
-// 
-// Copyright (c) 2005-2008 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System;
 using System.Collections;
 using System.Globalization;
@@ -59,7 +55,7 @@ namespace Tp.Utils.Mime
 			}
 
 			// Split the two parts of the Mime Content Type
-			string[] parts = name.Split(new[] {SEPARATOR[0]}, 2);
+			string[] parts = name.Split(new[] { SEPARATOR[0] }, 2);
 
 			// Checks validity of the parts
 			if (parts.Length != 2)
@@ -212,7 +208,7 @@ namespace Tp.Utils.Mime
 		{
 			bool match = false;
 			int index = url.LastIndexOf('.');
-			if ((index != - 1) && (index < url.Length - 1))
+			if ((index != -1) && (index < url.Length - 1))
 			{
 				// There's an extension, so try to find if it matches mines
 				match = _extensions.Contains(url.Substring(index + 1));
@@ -348,10 +344,9 @@ namespace Tp.Utils.Mime
 				{
 					string part = magic.Substring(i, 2);
 
-					data[i/2] = byte.Parse(part, NumberStyles.HexNumber);
+					data[i / 2] = byte.Parse(part, NumberStyles.HexNumber);
 				}
 				return data;
-
 			}
 
 			public override string ToString()

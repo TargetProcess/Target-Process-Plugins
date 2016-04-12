@@ -114,27 +114,27 @@ namespace Tp.TestRunImport.Tests.Commands
 		{
 			// TODO: remove select when updated sdk with beautiful ToString version
 			var errors = GetSuccessfullResponse().ResponseData.Deserialize<PluginProfileErrorCollection>().Select(x => x.Message).ToList();
-			errors.Should(Be.Empty);
+			errors.Should(Be.Empty, "errors.Should(Be.Empty)");
 		}
 
 		[Then(@"error should occur for $fieldName: ""$errorMessage""")]
 		public void ErrorShouldOccur(string fieldName, string errorMessage)
 		{
 			var errors = GetSuccessfullResponse().ResponseData.Deserialize<PluginProfileErrorCollection>();
-			new[] { errorMessage }.Should(Be.SubsetOf(errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList()));
+			new[] { errorMessage }.Should(Be.SubsetOf(errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList()), "new[] { errorMessage }.Should(Be.SubsetOf(errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList()))");
 		}
 
 		[Then("error should occur for $fieldName")]
 		public void ErrorShouldOccur(string fieldName)
 		{
 			var errors = GetSuccessfullResponse().ResponseData.Deserialize<PluginProfileErrorCollection>();
-			errors.Where(x => x.FieldName == fieldName).Should(Be.Not.Empty);
+			errors.Where(x => x.FieldName == fieldName).Should(Be.Not.Empty, "errors.Where(x => x.FieldName == fieldName).Should(Be.Not.Empty)");
 		}
 
 		private PluginCommandResponseMessage GetSuccessfullResponse()
 		{
 			var response = Context.Transport.TpQueue.GetMessages<PluginCommandResponseMessage>().Single();
-			response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed));
+			response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed), "response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed))");
 			return response;
 		}
 

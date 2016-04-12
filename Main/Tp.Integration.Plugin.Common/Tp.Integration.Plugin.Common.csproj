@@ -40,36 +40,19 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU'">
-    <OutputPath>bin\FuncTests\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Tp.Integration.Plugin.Common.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
-      <HintPath>$(SolutionDir)packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net">
-      <HintPath>$(SolutionDir)packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="Interop.MSMQ">
       <HintPath>..\..\Libs\NServiceBus\binaries\Interop.MSMQ.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>$(SolutionDir)packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\Libs\NServiceBus\binaries\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -110,8 +93,13 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Tp.Core.Functional">
-      <HintPath>..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+    <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Tp.I18n.Interfaces, Version=0.1.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.I18n.Interfaces.0.1.1\lib\net45\Tp.I18n.Interfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Tp.Service.Proxies">
       <HintPath>..\..\Libs\Tp.Service.Proxies.dll</HintPath>
@@ -159,6 +147,8 @@
     <Compile Include="Domain\ISpecificStorage.cs" />
     <Compile Include="Domain\IStorageRepository.cs" />
     <Compile Include="Domain\PluginContext.cs" />
+    <Compile Include="Extensions\CustomFieldConfigHolderDto.cs" />
+    <Compile Include="Extensions\CustomFieldExtensions.cs" />
     <Compile Include="FileStorage\IProfileFileStorage.cs" />
     <Compile Include="FileStorage\ProfileFileStorage.cs" />
     <Compile Include="FileStorage\ProfileFileStorageSafeNull.cs" />
@@ -314,7 +304,7 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -338,6 +328,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>

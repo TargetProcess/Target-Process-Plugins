@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using Tp.Core.Annotations;
 
@@ -70,20 +65,29 @@ namespace Tp.Core
 			get { return StartDate.GetValueOrDefault().Date > CurrentDate.Value.Date; }
 		}
 
+		public bool IsValid
+		{
+			get { return IsValidRange(StartDate, EndDate); }
+		}
+
 		[AssertionMethod]
 		private void AssertDateRangeIsValid()
 		{
 			if (_validatePeriod && !IsValidRange(StartDate, EndDate))
 			{
-				throw new InvalidDateRangeException("Start Date must be less than or equal to End Date");
+				throw new InvalidDateRangeException("Start Date must be less than or equal to End Date.".Localize());
 			}
 		}
 
-		public DateRange GetIntersection(DateRange other)
+		public DateRange GetIntersection(DateRange other, bool strict = true)
 		{
 			if (!Intersects(other))
 			{
-				throw new InvalidOperationException("DateRanges do not intersect");
+				if (strict)
+				{
+					throw new InvalidOperationException("DateRanges do not intersect");
+				}
+				return Empty;
 			}
 			return new DateRange(GetLaterStartDate(other.StartDate), GetEarlierEndDate(other.EndDate));
 		}
@@ -143,7 +147,7 @@ namespace Tp.Core
 		public bool Intersects(DateRange other)
 		{
 			return (!StartDate.HasValue || !other.EndDate.HasValue || StartDate <= other.EndDate) &&
-			       (!EndDate.HasValue || !other.StartDate.HasValue || EndDate >= other.StartDate);
+				(!EndDate.HasValue || !other.StartDate.HasValue || EndDate >= other.StartDate);
 		}
 
 		public bool Equals(DateRange other)
@@ -157,7 +161,7 @@ namespace Tp.Core
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (DateRange)) return false;
+			if (obj.GetType() != typeof(DateRange)) return false;
 			return Equals((DateRange) obj);
 		}
 
@@ -165,8 +169,8 @@ namespace Tp.Core
 		{
 			unchecked
 			{
-				return ((_startDate.HasValue ? _startDate.Value.GetHashCode() : 0)*397) ^
-				       (_endDate.HasValue ? _endDate.Value.GetHashCode() : 0);
+				return ((_startDate.HasValue ? _startDate.Value.GetHashCode() : 0) * 397) ^
+					(_endDate.HasValue ? _endDate.Value.GetHashCode() : 0);
 			}
 		}
 

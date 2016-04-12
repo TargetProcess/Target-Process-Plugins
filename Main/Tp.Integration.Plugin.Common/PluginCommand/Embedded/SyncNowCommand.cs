@@ -5,6 +5,7 @@
 
 using System;
 using StructureMap;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -27,7 +28,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 			_profileCollection = profileCollection;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			if (_pluginContext.ProfileName.IsEmpty)
 			{

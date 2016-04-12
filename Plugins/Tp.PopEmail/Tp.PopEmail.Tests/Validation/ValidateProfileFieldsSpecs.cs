@@ -183,7 +183,7 @@ namespace Tp.PopEmailIntegration.Validation
 			var errorCollection = errorCollection1;
 			var fieldValidationError = errorCollection.Where(x => x.FieldName == field);
 
-			new[] {error}.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()));
+			new[] {error}.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()), "new[] {error}.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()))");
 		}
 
 		[Then("no validation errors should exist")]
@@ -191,7 +191,7 @@ namespace Tp.PopEmailIntegration.Validation
 		{
 			_transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Where(
 				x => x.PluginCommandStatus == PluginCommandStatus.Fail)
-				.Should(Be.Empty);
+				.Should(Be.Empty, "_transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Where(x => x.PluginCommandStatus == PluginCommandStatus.Fail).Should(Be.Empty)");
 		}
 
 		private void CreateProfileInitialization(ProjectEmailProfile settings, string profileName)

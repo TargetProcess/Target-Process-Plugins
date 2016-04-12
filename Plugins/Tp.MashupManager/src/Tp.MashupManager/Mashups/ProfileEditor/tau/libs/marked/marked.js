@@ -4,7 +4,7 @@
  * https://github.com/chjj/marked
  */
 
-;(function() {
+tau.mashups.addModule('tau/mashup.manager/libs/marked/marked', function() {
 
 /**
  * Block-Level Grammar
@@ -1138,14 +1138,5 @@ marked.inlineLexer = InlineLexer.output;
 
 marked.parse = marked;
 
-if (typeof exports === 'object') {
-  module.exports = marked;
-} else if (typeof define === 'function' && define.amd) {
-  define(function() { return marked; });
-} else {
-  this.marked = marked;
-}
-
-}).call(function() {
-  return this || (typeof window !== 'undefined' ? window : global);
-}());
+return marked;
+  });

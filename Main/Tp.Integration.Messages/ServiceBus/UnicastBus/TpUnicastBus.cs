@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Principal;
+using System.Text;
 using System.Threading;
+using log4net;
 using NServiceBus;
+using NServiceBus.MessageInterfaces;
 using NServiceBus.Messages;
+using NServiceBus.ObjectBuilder;
+using NServiceBus.Saga;
 using NServiceBus.Unicast;
 using NServiceBus.Unicast.Subscriptions;
 using NServiceBus.Unicast.Transport;
-using NServiceBus.ObjectBuilder;
-using NServiceBus.MessageInterfaces;
-using NServiceBus.Saga;
-using System.Text;
-using System.Linq;
-using System.Net;
 using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport;
 using Tp.Integration.Messages.Ticker;
-using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 {
@@ -31,7 +30,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// <summary>
 		/// to reduce log file size, we need to skip some messages that are sent frequently.
 		/// </summary>
-		private IEnumerable<Type> _messageTypesNotToLog = new List<Type> {typeof (CheckIntervalElapsedMessage)};
+		private readonly IEnumerable<Type> _messageTypesNotToLog = new List<Type> { typeof(CheckIntervalElapsedMessage) };
 
 		/// <summary>
 		/// Header entry key for the given message type that is being subscribed to, when message intent is subscribe or unsubscribe.
@@ -45,7 +44,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		#region config properties
 
-		private bool autoSubscribe = true;
+		private bool _autoSubscribe = true;
 
 		public string Proxy { get; set; }
 
@@ -57,8 +56,8 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </summary>
 		public bool AutoSubscribe
 		{
-			get { return autoSubscribe; }
-			set { autoSubscribe = value; }
+			get { return _autoSubscribe; }
+			set { _autoSubscribe = value; }
 		}
 
 		private bool disableMessageHandling;
@@ -114,10 +113,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </summary>
 		public virtual ISubscriptionStorage SubscriptionStorage
 		{
-			set
-			{
-				subscriptionStorage = value;
-			}
+			set { subscriptionStorage = value; }
 		}
 
 		/// <summary>
@@ -210,6 +206,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				ConfigureMessageOwners(value);
 			}
 		}
+
 		private IDictionary messageOwners;
 
 		/// <summary>
@@ -222,7 +219,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			{
 				var types = new List<Type>();
 				foreach (Assembly a in value)
+				{
 					types.AddRange(a.GetTypes());
+				}
 
 				MessageHandlerTypes = types;
 			}
@@ -240,9 +239,12 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				messageHandlerTypes = value;
 
 				foreach (Type t in value)
+				{
 					IfTypeIsMessageHandlerThenLoad(t);
+				}
 			}
 		}
+
 		private IEnumerable<Type> messageHandlerTypes;
 
 		public IEnumerable<Type> SagaMessageHandlerTypes
@@ -253,9 +255,12 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				sagaMessageHandlerTypes = value;
 
 				foreach (Type t in value)
+				{
 					IfTypeIsSagaMessageHandlerThenLoad(t);
+				}
 			}
 		}
+
 		private IEnumerable<Type> sagaMessageHandlerTypes;
 
 
@@ -273,7 +278,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </summary>
 		public void StopSendingReadyMessages()
 		{
-			canSendReadyMessages = false;
+			_canSendReadyMessages = false;
 		}
 
 		/// <summary>
@@ -281,7 +286,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </summary>
 		public void ContinueSendingReadyMessages()
 		{
-			canSendReadyMessages = true;
+			_canSendReadyMessages = true;
 		}
 
 		/// <summary>
@@ -387,8 +392,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		private void PublishInternal<T>(IList<string> subscribers, params T[] messages) where T : IMessage
 		{
 			if (subscribers.Count == 0)
-				if (NoSubscribersForMessage != null)
-					NoSubscribersForMessage(this, new MessageEventArgs(messages[0]));
+			{
+				NoSubscribersForMessage?.Invoke(this, new MessageEventArgs(messages[0]));
+			}
 
 			SendMessage(subscribers, null, MessageIntentEnum.Publish, messages as IMessage[]);
 		}
@@ -422,11 +428,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			var p = new Predicate<IMessage>(m =>
 			{
 				if (m is T)
-					return condition((T)m);
+					return condition((T) m);
 
 				return true;
 			}
-			);
+				);
 
 			Subscribe(typeof(T), p);
 		}
@@ -446,13 +452,15 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			var destination = GetDestinationForMessageType(messageType);
 
 			if (destination == null)
-				throw new InvalidOperationException(string.Format("No destination could be found for message type {0}. Check the <MessageEndpointMapping> section of the configuration of this endpoint for an entry either for this specific message type or for its assembly.", messageType));
+				throw new InvalidOperationException(
+					$"No destination could be found for message type {messageType}. " +
+						"Check the <MessageEndpointMapping> section of the configuration of this endpoint for an entry either for this specific message type or for its assembly.");
 
 			Log.Info("Subscribing to " + messageType.AssemblyQualifiedName + " at publisher queue " + destination);
 
-			((IBus)this).OutgoingHeaders[SubscriptionMessageType] = messageType.AssemblyQualifiedName;
+			((IBus) this).OutgoingHeaders[SubscriptionMessageType] = messageType.AssemblyQualifiedName;
 			SendMessage(destination, null, MessageIntentEnum.Subscribe, new CompletionMessage());
-			((IBus)this).OutgoingHeaders.Remove(SubscriptionMessageType);
+			((IBus) this).OutgoingHeaders.Remove(SubscriptionMessageType);
 		}
 
 		/// <summary>
@@ -473,13 +481,15 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			var destination = GetDestinationForMessageType(messageType);
 
 			if (destination == null)
-				throw new InvalidOperationException(string.Format("No destination could be found for message type {0}. Check the <MessageEndpointMapping> section of the configuration of this endpoint for an entry either for this specific message type or for its assembly.", messageType));
+				throw new InvalidOperationException(
+					$"No destination could be found for message type {messageType}. " +
+						"Check the <MessageEndpointMapping> section of the configuration of this endpoint for an entry either for this specific message type or for its assembly.");
 
 			Log.Info("Unsubscribing from " + messageType.AssemblyQualifiedName + " at publisher queue " + destination);
 
-			((IBus)this).OutgoingHeaders[SubscriptionMessageType] = messageType.AssemblyQualifiedName;
+			((IBus) this).OutgoingHeaders[SubscriptionMessageType] = messageType.AssemblyQualifiedName;
 			SendMessage(destination, null, MessageIntentEnum.Unsubscribe, new CompletionMessage());
-			((IBus)this).OutgoingHeaders.Remove(SubscriptionMessageType);
+			((IBus) this).OutgoingHeaders.Remove(SubscriptionMessageType);
 		}
 
 		/// <summary>
@@ -492,7 +502,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			if (string.IsNullOrEmpty(queueName)) return null;
 
 			var q = MsmqUtilities.GetQueueNameFromLogicalName(queueName);
-			return queueName.Replace(q, string.Format("{0}UI", q));
+			return queueName.Replace(q, $"{q}UI");
 		}
 
 		public static bool IsUiQueue(string queueName)
@@ -524,12 +534,12 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		void IBus.Reply<T>(Action<T> messageConstructor)
 		{
-			((IBus)this).Reply(CreateInstance(messageConstructor));
+			((IBus) this).Reply(CreateInstance(messageConstructor));
 		}
 
 		void IBus.Return(int errorCode)
 		{
-			((IBus)this).Reply(new CompletionMessage { ErrorCode = errorCode });
+			((IBus) this).Reply(new CompletionMessage { ErrorCode = errorCode });
 		}
 
 		void IBus.HandleCurrentMessageLater()
@@ -554,8 +564,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// ThreadStatic variable indicating if the current message was already
 		/// marked to be handled later so we don't do this more than once.
 		/// </summary>
-		[ThreadStatic]
-		private static bool _handleCurrentMessageLaterWasCalled;
+		[ThreadStatic] private static bool _handleCurrentMessageLaterWasCalled;
 
 		void IBus.SendLocal<T>(Action<T> messageConstructor)
 		{
@@ -607,7 +616,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		ICallback IBus.Send<T>(Action<T> messageConstructor)
 		{
-			return ((IBus)this).Send(CreateInstance(messageConstructor));
+			return ((IBus) this).Send(CreateInstance(messageConstructor));
 		}
 
 		private string ProcessByProxy(string destination)
@@ -617,26 +626,26 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				return destination;
 			}
 
-			if (((IBusExtended)this).OutgoingHeaders.ContainsKey("ReturnAddress"))
+			if (((IBusExtended) this).OutgoingHeaders.ContainsKey("ReturnAddress"))
 			{
 				// Proxy is alreadfy initialized.
 				return destination;
 			}
 
-			((IBusExtended)this).OutgoingHeaders.Add("ReturnAddress", destination);
-			((IBusExtended)this).OutgoingHeaders.Add("ReturnAddressWasSetByProxy", null);
+			((IBusExtended) this).OutgoingHeaders.Add("ReturnAddress", destination);
+			((IBusExtended) this).OutgoingHeaders.Add("ReturnAddressWasSetByProxy", null);
 
 			if (IsUiQueue(destination))
 			{
-				return GetUiQueueName(this.Proxy);
+				return GetUiQueueName(Proxy);
 			}
 
-			return this.Proxy;
+			return Proxy;
 		}
 
 		private void CleanUpProxyHeader()
 		{
-			if (((IBusExtended)this).OutgoingHeaders.ContainsKey("ReturnAddressWasSetByProxy"))
+			if (((IBusExtended) this).OutgoingHeaders.ContainsKey("ReturnAddressWasSetByProxy"))
 			{
 				((IBusExtended) this).OutgoingHeaders.Remove("ReturnAddressWasSetByProxy");
 				((IBusExtended) this).OutgoingHeaders.Remove("ReturnAddress");
@@ -688,14 +697,13 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			if (destination == null)
 			{
 				var tm = messages[0] as TimeoutMessage;
-				if (tm != null)
-					if (tm.ClearTimeout)
-						return null;
-			}
+				if (tm != null && tm.ClearTimeout)
+					return null;
 
-			if (destination == null)
 				throw new InvalidOperationException(
-					string.Format("No destination specified for message {0}. Message cannot be sent. Check the UnicastBusConfig section in your config file and ensure that a MessageEndpointMapping exists for the message type.", messages[0].GetType().FullName));
+					$"No destination specified for message {messages[0].GetType().FullName}. Message cannot be sent. " +
+						"Check the UnicastBusConfig section in your config file and ensure that a MessageEndpointMapping exists for the message type.");
+			}
 
 			destination = ProcessByProxy(destination);
 			foreach (var id in SendMessage(new List<string> { destination }, correlationId, messageIntent, messages))
@@ -711,8 +719,8 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				var result = new Callback(id);
 				result.Registered += delegate(object sender, BusAsyncResultEventArgs args)
 				{
-					lock (messageIdToAsyncResultLookup)
-						messageIdToAsyncResultLookup[args.MessageId] = args.Result;
+					lock (_messageIdToAsyncResultLookup)
+						_messageIdToAsyncResultLookup[args.MessageId] = args.Result;
 				};
 				CleanUpProxyHeader();
 				return result;
@@ -722,15 +730,16 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			return null;
 		}
 
-		private ICollection<string> SendMessage(IEnumerable<string> destinations, string correlationId, MessageIntentEnum messageIntent, params IMessage[] messages)
+		private ICollection<string> SendMessage(IEnumerable<string> destinations, string correlationId, MessageIntentEnum messageIntent,
+			params IMessage[] messages)
 		{
 			AssertBusIsStarted();
 
 			var result = new List<string>();
 
-			((IBus)this).OutgoingHeaders[EnclosedMessageTypes] = SerializeEnclosedMessageTypes(messages);
+			((IBus) this).OutgoingHeaders[EnclosedMessageTypes] = SerializeEnclosedMessageTypes(messages);
 			var toSend = GetTransportMessageFor(messages);
-			((IBus)this).OutgoingHeaders[EnclosedMessageTypes] = null;
+			((IBus) this).OutgoingHeaders[EnclosedMessageTypes] = null;
 
 			toSend.CorrelationId = correlationId;
 			toSend.MessageIntent = messageIntent;
@@ -742,15 +751,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				transport.Send(toSend, destination);
 
 				if (Log.IsDebugEnabled)
-					Log.Debug(string.Format("Sending message {0} with ID {1} to destination {2}.\n" +
-											"ToString() of the message yields: {3}\n" +
-											"Message headers:\n{4}",
-						messages[0].GetType().AssemblyQualifiedName,
-						toSend.Id,
-						destination,
-						messages[0],
-						string.Join(", ", ((IBus)this).OutgoingHeaders.Select(h => h.Key + ":" + h.Value).ToArray())
-						));
+					Log.Debug($"Sending message {messages[0].GetType().AssemblyQualifiedName} with ID {toSend.Id} to destination {destination}.\n"
+						+ $"ToString() of the message yields: {messages[0]}\n"
+						+ $"Message headers:\n{string.Join(", ", ((IBus) this).OutgoingHeaders.Select(h => h.Key + ":" + h.Value).ToArray())}");
 
 				result.Add(toSend.Id);
 			}
@@ -801,9 +804,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				types.Add(s);
 
 				foreach (var t in m.GetType().GetInterfaces())
+				{
 					if (typeof(IMessage).IsAssignableFrom(t) && t != typeof(IMessage))
 						if (!types.Contains(t.AssemblyQualifiedName))
 							types.Add(t.AssemblyQualifiedName);
+				}
 			}
 
 			return types;
@@ -821,18 +826,17 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		IBus IStartableBus.Start(Action startupAction)
 		{
-			if (started)
+			if (_started)
 				return this;
 
-			lock (startLocker)
+			lock (_startLocker)
 			{
-				if (started)
+				if (_started)
 					return this;
 
-				starting = true;
+				_starting = true;
 
-				if (startupAction != null)
-					startupAction();
+				startupAction?.Invoke();
 
 				AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
 
@@ -840,12 +844,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				if (mods != null)
 					modules.AddRange(mods);
 
-				if (subscriptionStorage != null)
-					subscriptionStorage.Init();
+				subscriptionStorage?.Init();
 
 				transport.Start();
 
-				if (autoSubscribe)
+				if (_autoSubscribe)
 				{
 					foreach (var messageType in GetMessageTypesHandledOnThisEndpoint())
 					{
@@ -873,11 +876,10 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 				SendReadyMessage(true);
 
-				started = true;
+				_started = true;
 			}
 
-			if (Started != null)
-				Started(this, null);
+			Started?.Invoke(this, null);
 
 			return this;
 		}
@@ -901,7 +903,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			if (DistributorControlAddress == null)
 				return;
 
-			if (!canSendReadyMessages)
+			if (!_canSendReadyMessages)
 				return;
 
 			IMessage[] messages;
@@ -949,32 +951,15 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			_doNotContinueDispatchingCurrentMessageToHandlers = true;
 		}
 
-		[ThreadStatic]
-		private static bool _doNotContinueDispatchingCurrentMessageToHandlers;
+		[ThreadStatic] private static bool _doNotContinueDispatchingCurrentMessageToHandlers;
 
-		[ThreadStatic]
-		private static IDictionary<string, string> _outgoingHeaders = new Dictionary<string, string>();
+		[ThreadStatic] private static IDictionary<string, string> _outgoingHeaders = new Dictionary<string, string>();
 
 		//private static IDictionary<string, string> OutgoingHeaders 
 
-		IDictionary<string, string> IBus.OutgoingHeaders
-		{
-			get
-			{
-				if (_outgoingHeaders == null)
-					_outgoingHeaders = new Dictionary<string, string>();
+		IDictionary<string, string> IBus.OutgoingHeaders => _outgoingHeaders ?? (_outgoingHeaders = new Dictionary<string, string>());
 
-				return _outgoingHeaders;
-			}
-		}
-
-		IMessageContext IBus.CurrentMessageContext
-		{
-			get
-			{
-				return _messageBeingHandled == null ? null : new MessageContext(_messageBeingHandled);
-			}
-		}
+		IMessageContext IBus.CurrentMessageContext => _messageBeingHandled == null ? null : new MessageContext(_messageBeingHandled);
 
 		public const string SourceQueue = "SourceQueue";
 
@@ -1023,7 +1008,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				{
 					if (condition(toHandle)) continue;
 
-					Log.Debug(string.Format("Condition {0} failed for message {1}", condition, toHandle.GetType().Name));
+					Log.Debug($"Condition {condition} failed for message {toHandle.GetType().Name}");
 					canDispatch = false;
 					break;
 				}
@@ -1033,7 +1018,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			}
 
 			LogMessage("TpUnicastBus : end calling handlers on message {0}".Fmt(m.Id), messageType);
-			
+
 			ExtensionMethods.CurrentMessageBeingHandled = null;
 			CleanupOutgoingHeaders();
 		}
@@ -1051,10 +1036,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 		private void OnUnhandledExceptionCaught(Exception exception)
 		{
-			if (UnhandledExceptionCaught != null)
-			{
-				UnhandledExceptionCaught(this, new NServiceBus.Unicast.UnhandledExceptionEventArgs(exception));
-			}
+			UnhandledExceptionCaught?.Invoke(this, new NServiceBus.Unicast.UnhandledExceptionEventArgs(exception));
 		}
 
 		/// <summary>
@@ -1104,18 +1086,17 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		{
 			return (o =>
 			{
-				var messageTypesToMethods = handlerToMessageTypeToHandleMethodMap[o.GetType()];
+				var messageTypesToMethods = _handlerToMessageTypeToHandleMethodMap[o.GetType()];
 				foreach (var messageType in messageTypesToMethods.Keys)
+				{
 					if (messageType.IsInstanceOfType(message))
 						messageTypesToMethods[messageType].Invoke(o, new object[] { message });
+				}
 
 				var disposable = o as IDisposable;
-				if (disposable != null)
-				{
-					disposable.Dispose();
-				}
+				disposable?.Dispose();
 			}
-			);
+				);
 		}
 
 		/// <summary>
@@ -1130,7 +1111,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		{
 			var result = e;
 			while (result.InnerException != null)
+			{
 				result = result.InnerException;
+			}
 
 			return result;
 		}
@@ -1147,22 +1130,23 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 			BusAsyncResult busAsyncResult;
 
-			lock (messageIdToAsyncResultLookup)
+			lock (_messageIdToAsyncResultLookup)
 			{
-				messageIdToAsyncResultLookup.TryGetValue(msg.CorrelationId, out busAsyncResult);
-				messageIdToAsyncResultLookup.Remove(msg.CorrelationId);
+				_messageIdToAsyncResultLookup.TryGetValue(msg.CorrelationId, out busAsyncResult);
+				_messageIdToAsyncResultLookup.Remove(msg.CorrelationId);
 			}
 
 			if (busAsyncResult != null)
-				if (msg.Body != null)
-					if (msg.Body.Length == 1)
-					{
-						var cm = msg.Body[0] as CompletionMessage;
-						if (cm != null)
-							busAsyncResult.Complete(cm.ErrorCode, null);
-						else
-							busAsyncResult.Complete(int.MinValue, msg.Body);
-					}
+			{
+				if (msg.Body?.Length == 1)
+				{
+					var cm = msg.Body[0] as CompletionMessage;
+					if (cm != null)
+						busAsyncResult.Complete(cm.ErrorCode, null);
+					else
+						busAsyncResult.Complete(int.MinValue, msg.Body);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1192,8 +1176,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				var messageType = GetSubscriptionMessageTypeFrom(msg);
 
 				if (msg.MessageIntent == MessageIntentEnum.Subscribe)
-					if (ClientSubscribed != null)
-						ClientSubscribed(this, new SubscriptionEventArgs { MessageType = messageType, SubscriberAddress = msg.ReturnAddress });
+				{
+					ClientSubscribed?.Invoke(this, new SubscriptionEventArgs { MessageType = messageType, SubscriberAddress = msg.ReturnAddress });
+				}
 
 				return;
 			}
@@ -1204,8 +1189,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			_messageBeingHandled = msg;
 			_handleCurrentMessageLaterWasCalled = false;
 
-			if (MessageReceived != null)
-				MessageReceived(msg);
+			MessageReceived?.Invoke(msg);
 
 			if (!disableMessageHandling)
 				HandleMessage(msg, msg.Body[0].GetType());
@@ -1216,8 +1200,10 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		private static string GetSubscriptionMessageTypeFrom(TransportMessage msg)
 		{
 			foreach (var header in msg.Headers)
+			{
 				if (header.Key == SubscriptionMessageType)
 					return header.Value;
+			}
 
 			return null;
 		}
@@ -1230,18 +1216,20 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// <param name="subscriptionStorage"></param>
 		/// <param name="subscriptionAuthorizer"></param>
 		/// <returns></returns>
-		public static bool HandledSubscriptionMessage(TransportMessage msg, ISubscriptionStorage subscriptionStorage, IAuthorizeSubscriptions subscriptionAuthorizer)
+		public static bool HandledSubscriptionMessage(TransportMessage msg, ISubscriptionStorage subscriptionStorage,
+			IAuthorizeSubscriptions subscriptionAuthorizer)
 		{
 			string messageType = GetSubscriptionMessageTypeFrom(msg);
 
 			Action warn = () =>
 			{
-				var warning = string.Format("Subscription message from {0} arrived at this endpoint, yet this endpoint is not configured to be a publisher.", msg.ReturnAddress);
+				var warning =
+					$"Subscription message from {msg.ReturnAddress} arrived at this endpoint, yet this endpoint is not configured to be a publisher.";
 
 				Log.Warn(warning);
 
 				if (Log.IsDebugEnabled) // only under debug, so that we don't expose ourselves to a denial of service
-					throw new InvalidOperationException(warning);  // and cause message to go to error queue by throwing an exception
+					throw new InvalidOperationException(warning); // and cause message to go to error queue by throwing an exception
 			};
 
 			if (msg.MessageIntent == MessageIntentEnum.Subscribe)
@@ -1249,10 +1237,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				{
 					bool goAhead = true;
 					if (subscriptionAuthorizer != null)
-						if (!subscriptionAuthorizer.AuthorizeSubscribe(messageType, msg.ReturnAddress, msg.WindowsIdentityName, new HeaderAdapter(msg.Headers)))
+						if (
+							!subscriptionAuthorizer.AuthorizeSubscribe(messageType, msg.ReturnAddress, msg.WindowsIdentityName, new HeaderAdapter(msg.Headers)))
 						{
 							goAhead = false;
-							Log.Info(string.Format("Subscription request from {0} on message type {1} was refused.", msg.ReturnAddress, messageType));
+							Log.Info($"Subscription request from {msg.ReturnAddress} on message type {messageType} was refused.");
 						}
 
 					if (goAhead)
@@ -1274,10 +1263,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 					bool goAhead = true;
 
 					if (subscriptionAuthorizer != null)
-						if (!subscriptionAuthorizer.AuthorizeUnsubscribe(messageType, msg.ReturnAddress, msg.WindowsIdentityName, new HeaderAdapter(msg.Headers)))
+						if (
+							!subscriptionAuthorizer.AuthorizeUnsubscribe(messageType, msg.ReturnAddress, msg.WindowsIdentityName, new HeaderAdapter(msg.Headers)))
 						{
 							goAhead = false;
-							Log.Debug(string.Format("Unsubscribe request from {0} on message type {1} was refused.", msg.ReturnAddress, messageType));
+							Log.Debug($"Unsubscribe request from {msg.ReturnAddress} on message type {messageType} was refused.");
 						}
 
 					if (goAhead)
@@ -1315,6 +1305,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			var exceptionThrown = false;
 
 			foreach (var module in modules)
+			{
 				try
 				{
 					Log.Debug("Calling 'HandleError' on " + module.GetType().FullName);
@@ -1325,9 +1316,11 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 					Log.Error("Module " + module.GetType().FullName + " failed when handling error.", ex);
 					exceptionThrown = true;
 				}
+			}
 
 			if (exceptionThrown)
-				throw new Exception("Could not handle the failed message processing correctly. Check for prior error messages in the log for more information.");
+				throw new Exception(
+					"Could not handle the failed message processing correctly. Check for prior error messages in the log for more information.");
 		}
 
 		private void TransportStartedMessageProcessing(object sender, EventArgs e)
@@ -1396,7 +1389,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				{
 					var a = Assembly.Load(key);
 					foreach (var t in a.GetTypes())
+					{
 						RegisterMessageType(t, de.Value.ToString(), true);
+					}
 				}
 				catch (Exception ex)
 				{
@@ -1440,17 +1435,17 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				if (MustNotOverrideExistingConfiguration(messageType, configuredByAssembly))
 					return;
 
-				messageTypeToDestinationLookup[messageType] = destination;
+				_messageTypeToDestinationLookup[messageType] = destination;
 
 				Log.Debug("Message " + messageType.FullName + " has been allocated to endpoint " + destination + ".");
 
 				if (messageType.GetCustomAttributes(typeof(ExpressAttribute), true).Length == 0)
-					recoverableMessageTypes.Add(messageType);
+					_recoverableMessageTypes.Add(messageType);
 
 				foreach (TimeToBeReceivedAttribute a in messageType.GetCustomAttributes(typeof(TimeToBeReceivedAttribute), true))
-					timeToBeReceivedPerMessageType[messageType] = a.TimeToBeReceived;
-
-				return;
+				{
+					_timeToBeReceivedPerMessageType[messageType] = a.TimeToBeReceived;
+				}
 			}
 		}
 
@@ -1465,7 +1460,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// <returns>true if it is acceptable to override the configuration, otherwise false.</returns>
 		private bool MustNotOverrideExistingConfiguration(Type messageType, bool configuredByAssembly)
 		{
-			return messageTypeToDestinationLookup.ContainsKey(messageType) && configuredByAssembly;
+			return _messageTypeToDestinationLookup.ContainsKey(messageType) && configuredByAssembly;
 		}
 
 		/// <summary>
@@ -1490,7 +1485,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 			foreach (var message in messages)
 			{
-				if (recoverableMessageTypes.Contains(message.GetType()))
+				if (_recoverableMessageTypes.Contains(message.GetType()))
 					result.Recoverable = true;
 
 				var span = GetTimeToBeReceivedForMessageType(message.GetType());
@@ -1506,45 +1501,45 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		{
 			var result = TimeSpan.MaxValue;
 
-			timeToBeReceivedPerMessageTypeLocker.EnterReadLock();
-			if (timeToBeReceivedPerMessageType.ContainsKey(messageType))
+			_timeToBeReceivedPerMessageTypeLocker.EnterReadLock();
+			if (_timeToBeReceivedPerMessageType.ContainsKey(messageType))
 			{
-				result = timeToBeReceivedPerMessageType[messageType];
-				timeToBeReceivedPerMessageTypeLocker.ExitReadLock();
+				result = _timeToBeReceivedPerMessageType[messageType];
+				_timeToBeReceivedPerMessageTypeLocker.ExitReadLock();
 				return result;
 			}
 
 			var options = new List<TimeSpan>();
 			foreach (var interfaceType in messageType.GetInterfaces())
 			{
-				if (timeToBeReceivedPerMessageType.ContainsKey(interfaceType))
-					options.Add(timeToBeReceivedPerMessageType[interfaceType]);
+				if (_timeToBeReceivedPerMessageType.ContainsKey(interfaceType))
+					options.Add(_timeToBeReceivedPerMessageType[interfaceType]);
 			}
 
-			timeToBeReceivedPerMessageTypeLocker.ExitReadLock();
+			_timeToBeReceivedPerMessageTypeLocker.ExitReadLock();
 
 			if (options.Count > 0)
 				result = options.Min();
 
-			timeToBeReceivedPerMessageTypeLocker.EnterWriteLock();
-			timeToBeReceivedPerMessageType[messageType] = result;
-			timeToBeReceivedPerMessageTypeLocker.ExitWriteLock();
+			_timeToBeReceivedPerMessageTypeLocker.EnterWriteLock();
+			_timeToBeReceivedPerMessageType[messageType] = result;
+			_timeToBeReceivedPerMessageTypeLocker.ExitWriteLock();
 
 			return result;
 		}
 
-		private string GetReturnAddressFor(string destination, Func<string, string> GetAddress)
+		private string GetReturnAddressFor(string destination, Func<string, string> getAddress)
 		{
-			var result = GetAddress(transport.Address);
+			var result = getAddress(transport.Address);
 
 			// if we're a worker
-			if (GetAddress(DistributorDataAddress) != null)
+			if (getAddress(DistributorDataAddress) != null)
 			{
-				result = GetAddress(DistributorDataAddress);
+				result = getAddress(DistributorDataAddress);
 
 				//if we're sending a message to the control bus, then use our own address
-				if (destination == GetAddress(DistributorControlAddress))
-					result = GetAddress(transport.Address);
+				if (destination == getAddress(DistributorControlAddress))
+					result = getAddress(transport.Address);
 			}
 
 			return result;
@@ -1561,13 +1556,13 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			{
 				foreach (var messageType in GetMessageTypesIfIsMessageHandler(t))
 				{
-					if (!sagaHandlerList.ContainsKey(t))
-						sagaHandlerList.Add(t, new List<Type>());
+					if (!_sagaHandlerList.ContainsKey(t))
+						_sagaHandlerList.Add(t, new List<Type>());
 
-					if (!(sagaHandlerList[t].Contains(messageType)))
+					if (!(_sagaHandlerList[t].Contains(messageType)))
 					{
-						sagaHandlerList[t].Add(messageType);
-						Log.Debug(string.Format("Associated '{0}' message with '{1}' saga handler", messageType, t));
+						_sagaHandlerList[t].Add(messageType);
+						Log.Debug($"Associated '{messageType}' message with '{t}' saga handler");
 					}
 				}
 			}
@@ -1584,20 +1579,20 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 			foreach (var messageType in GetMessageTypesIfIsMessageHandler(t))
 			{
-				if (!handlerList.ContainsKey(t))
-					handlerList.Add(t, new List<Type>());
+				if (!_handlerList.ContainsKey(t))
+					_handlerList.Add(t, new List<Type>());
 
-				if (!(handlerList[t].Contains(messageType)))
+				if (!(_handlerList[t].Contains(messageType)))
 				{
-					handlerList[t].Add(messageType);
-					Log.Debug(string.Format("Associated '{0}' message with '{1}' handler", messageType, t));
+					_handlerList[t].Add(messageType);
+					Log.Debug($"Associated '{messageType}' message with '{t}' handler");
 				}
 
-				if (!handlerToMessageTypeToHandleMethodMap.ContainsKey(t))
-					handlerToMessageTypeToHandleMethodMap.Add(t, new Dictionary<Type, MethodInfo>());
+				if (!_handlerToMessageTypeToHandleMethodMap.ContainsKey(t))
+					_handlerToMessageTypeToHandleMethodMap.Add(t, new Dictionary<Type, MethodInfo>());
 
-				if (!(handlerToMessageTypeToHandleMethodMap[t].ContainsKey(messageType)))
-					handlerToMessageTypeToHandleMethodMap[t].Add(messageType, t.GetMethod("Handle", new[] { messageType }));
+				if (!(_handlerToMessageTypeToHandleMethodMap[t].ContainsKey(messageType)))
+					_handlerToMessageTypeToHandleMethodMap[t].Add(messageType, t.GetMethod("Handle", new[] { messageType }));
 			}
 		}
 
@@ -1633,13 +1628,17 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// <returns>The list of handler types associated with the message type.</returns>
 		private IEnumerable<Type> GetHandlerTypes(Type messageType)
 		{
-			foreach (var handlerType in handlerList.Keys)
-				foreach (var msgTypeHandled in handlerList[handlerType])
+			foreach (var handlerType in _handlerList.Keys)
+			{
+				foreach (var msgTypeHandled in _handlerList[handlerType])
+				{
 					if (msgTypeHandled.IsAssignableFrom(messageType))
 					{
 						yield return handlerType;
 						break;
 					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -1648,13 +1647,21 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// <returns></returns>
 		private IEnumerable<Type> GetMessageTypesHandledOnThisEndpoint()
 		{
-			foreach (var handlerType in handlerList.Keys)
-				foreach (var msgTypeHandled in handlerList[handlerType])
+			foreach (var handlerType in _handlerList.Keys)
+			{
+				foreach (var msgTypeHandled in _handlerList[handlerType])
+				{
 					yield return msgTypeHandled;
+				}
+			}
 
-			foreach (var handlerType in sagaHandlerList.Keys)
-				foreach (var msgTypeHandled in sagaHandlerList[handlerType])
+			foreach (var handlerType in _sagaHandlerList.Keys)
+			{
+				foreach (var msgTypeHandled in _sagaHandlerList[handlerType])
+				{
 					yield return msgTypeHandled;
+				}
+			}
 		}
 
 		/// <summary>
@@ -1666,15 +1673,15 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		{
 			string destination;
 
-			lock (messageTypeToDestinationLookup)
+			lock (_messageTypeToDestinationLookup)
 			{
-				if (!messageTypeToDestinationLookup.TryGetValue(messageType, out destination))
+				if (!_messageTypeToDestinationLookup.TryGetValue(messageType, out destination))
 				{
 					if (messageType.IsGenericType)
 					{
-						messageTypeToDestinationLookup.TryGetValue(messageType.GetGenericTypeDefinition(), out destination);
+						_messageTypeToDestinationLookup.TryGetValue(messageType.GetGenericTypeDefinition(), out destination);
 					}
-				};
+				}
 			}
 
 			if (destination == string.Empty)
@@ -1685,12 +1692,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 				if (messageType.IsInterface)
 					return null;
 
-				if (messageMapper != null)
-				{
-					var t = messageMapper.GetMappedTypeFor(messageType);
-					if (t != null && t != messageType)
-						return GetDestinationForMessageType(t);
-				}
+				var t = messageMapper?.GetMappedTypeFor(messageType);
+				if (t != null && t != messageType)
+					return GetDestinationForMessageType(t);
 			}
 
 			return destination;
@@ -1701,7 +1705,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </summary>
 		protected void AssertBusIsStarted()
 		{
-			if (starting == false)
+			if (_starting == false)
 				throw new InvalidOperationException("The bus is not started yet, call Bus.Start() before attempting to use the bus.");
 		}
 
@@ -1718,7 +1722,6 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 
 			return new GenericPrincipal(new GenericIdentity(windowsIdentityName), new string[0]);
 		}
-
 
 		#endregion
 
@@ -1739,42 +1742,44 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		/// </summary>
 		protected readonly List<IMessageModule> modules = new List<IMessageModule>();
 
-		private readonly IDictionary<Type, List<Type>> handlerList = new Dictionary<Type, List<Type>>();
-		private readonly IDictionary<Type, List<Type>> sagaHandlerList = new Dictionary<Type, List<Type>>();
-		private readonly IDictionary<Type, IDictionary<Type, MethodInfo>> handlerToMessageTypeToHandleMethodMap = new Dictionary<Type, IDictionary<Type, MethodInfo>>();
-		private readonly IDictionary<string, BusAsyncResult> messageIdToAsyncResultLookup = new Dictionary<string, BusAsyncResult>();
-		private readonly IList<Type> recoverableMessageTypes = new List<Type>();
+		private readonly IDictionary<Type, List<Type>> _handlerList = new Dictionary<Type, List<Type>>();
+		private readonly IDictionary<Type, List<Type>> _sagaHandlerList = new Dictionary<Type, List<Type>>();
 
-		private readonly IDictionary<Type, TimeSpan> timeToBeReceivedPerMessageType = new Dictionary<Type, TimeSpan>();
-		private readonly ReaderWriterLockSlim timeToBeReceivedPerMessageTypeLocker = new ReaderWriterLockSlim();
+		private readonly IDictionary<Type, IDictionary<Type, MethodInfo>> _handlerToMessageTypeToHandleMethodMap =
+			new Dictionary<Type, IDictionary<Type, MethodInfo>>();
+
+		private readonly IDictionary<string, BusAsyncResult> _messageIdToAsyncResultLookup = new Dictionary<string, BusAsyncResult>();
+		private readonly IList<Type> _recoverableMessageTypes = new List<Type>();
+
+		private readonly IDictionary<Type, TimeSpan> _timeToBeReceivedPerMessageType = new Dictionary<Type, TimeSpan>();
+		private readonly ReaderWriterLockSlim _timeToBeReceivedPerMessageTypeLocker = new ReaderWriterLockSlim();
 
 		/// <remarks>
 		/// Accessed by multiple threads - needs appropriate locking
 		/// </remarks>
-		private readonly IDictionary<Type, string> messageTypeToDestinationLookup = new Dictionary<Type, string>();
+		private readonly IDictionary<Type, string> _messageTypeToDestinationLookup = new Dictionary<Type, string>();
 
 		/// <remarks>
 		/// ThreadStatic
 		/// </remarks>
-		[ThreadStatic]
-		static TransportMessage _messageBeingHandled;
+		[ThreadStatic] private static TransportMessage _messageBeingHandled;
 
 		/// <summary>
 		/// Accessed by multiple threads.
 		/// </summary>
-		private volatile bool canSendReadyMessages = true;
+		private volatile bool _canSendReadyMessages = true;
 
 		/// <summary>
 		/// ThreadStatic
 		/// </summary>
-		[ThreadStatic]
-		private static bool _skipSendingReadyMessageOnce;
+		[ThreadStatic] private static bool _skipSendingReadyMessageOnce;
 
-		private volatile bool started;
-		private volatile bool starting;
-		private readonly object startLocker = new object();
+		private volatile bool _started;
+		private volatile bool _starting;
+		private readonly object _startLocker = new object();
 
-		private readonly static ILog Log = LogManager.GetLogger(typeof(TpUnicastBus));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(TpUnicastBus));
+
 		#endregion
 	}
 }

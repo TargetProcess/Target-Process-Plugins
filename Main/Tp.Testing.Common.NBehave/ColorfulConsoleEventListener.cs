@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +34,9 @@ namespace Tp.Testing.Common.NBehave
 			WriteColorString(narrative, ConsoleColor.DarkCyan);
 		}
 
-		void IEventListener.ScenarioCreated(string scenarioTitle) {}
+		void IEventListener.ScenarioCreated(string scenarioTitle)
+		{
+		}
 
 		void IEventListener.RunFinished()
 		{
@@ -69,13 +67,18 @@ namespace Tp.Testing.Common.NBehave
 		}
 
 
-		void IEventListener.ThemeStarted(string name) {}
+		void IEventListener.ThemeStarted(string name)
+		{
+		}
 
-		void IEventListener.ThemeFinished() {}
+		void IEventListener.ThemeFinished()
+		{
+		}
 
 		void IEventListener.ScenarioResult(ScenarioResult scenarioResult)
 		{
-			WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));
+			WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(),
+				GetColorForResult(scenarioResult.Result));
 			_allResults.Add(scenarioResult);
 			foreach (var stepResult in scenarioResult.ActionStepResults)
 			{

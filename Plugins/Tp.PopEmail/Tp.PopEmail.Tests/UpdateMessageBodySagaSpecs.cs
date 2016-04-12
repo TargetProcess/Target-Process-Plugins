@@ -3,10 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NBehave.Narrator.Framework;
 using NServiceBus.Saga;
 using NUnit.Framework;
@@ -15,7 +13,6 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.TargetProcessLifecycle;
-using Tp.Integration.Plugin.Common.SagaPersister;
 using Tp.Integration.Testing.Common.Persisters;
 using Tp.Plugin.Core;
 using Tp.PopEmailIntegration.Sagas;
@@ -25,7 +22,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.PopEmailIntegration
 {
 	[TestFixture, ActionSteps]
-    [Category("PartPlugins0")]
+	[Category("PartPlugins0")]
 	public class UpdateMessageBodySagaSpecs
 	{
 		private const string EXCEPTION_STRING = "Exception";
@@ -136,37 +133,37 @@ namespace Tp.PopEmailIntegration
 		[Then(@"message body should be updated to '$messageBodyUpdated'")]
 		public void MessageBodyShouldBeUpdated(string messageBodyUpdated)
 		{
-			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1));
+			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1))");
 
 			var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
-			message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated));
-			message.SagaId.Should(Be.EqualTo(Context.OuterSagaId));
+			message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated), "message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated))");
+			message.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "message.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
 		}
 
 		[Then(@"message body should remain '$messageBody'")]
 		public void MessageBodyShouldNotBeUpdated(string messageBody)
 		{
-			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty)");
 
 			var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
-			message.MessageDto.Body.Should(Be.EqualTo(messageBody));
-			message.SagaId.Should(Be.EqualTo(Context.OuterSagaId));
+			message.MessageDto.Body.Should(Be.EqualTo(messageBody), "message.MessageDto.Body.Should(Be.EqualTo(messageBody))");
+			message.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "message.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
 		}
 
 		[Then("exception message should be sent")]
 		public void ExceptionShouldBeSent()
 		{
 			var exceptionMessage = Context.Transport.LocalQueue.GetMessages<ExceptionThrownLocalMessage>().First();
-			exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING));
-			exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId));
+			exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING), "exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING))");
+			exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
 		}
 
 		[Then("body should not be updated")]
 		public void BodyShouldNotBeUpdated()
 		{
-			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty)");
 			var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
-			message.MessageDto.Body.Should(Be.EqualTo(null));
+			message.MessageDto.Body.Should(Be.EqualTo(null), "message.MessageDto.Body.Should(Be.EqualTo(null))");
 			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Should(Be.Empty, "Saga is not completed");
 		}
 	}

@@ -165,7 +165,7 @@ namespace Tp.Bugzilla.Tests.Integration
 				Console.WriteLine("ConnectionShouldBeSuccessful errors:");
 				Console.WriteLine(sb);
 			}
-			_errors.Should(Be.Empty);
+			_errors.Should(Be.Empty, "_errors.Should(Be.Empty)");
 		}
 
 		[Then("authentication should be failed")]
@@ -188,7 +188,7 @@ namespace Tp.Bugzilla.Tests.Integration
 
 		private void CheckErrorFields(IEnumerable<string> errorFields)
 		{
-			_errors.Select(e => e.FieldName).ToList().Should(Be.EquivalentTo(errorFields));
+			_errors.Select(e => e.FieldName).ToList().Should(Be.EquivalentTo(errorFields), "_errors.Select(e => e.FieldName).ToList().Should(Be.EquivalentTo(errorFields))");
 		}
 	}
 }

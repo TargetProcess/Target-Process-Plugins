@@ -176,19 +176,19 @@ namespace Tp.PopEmailIntegration.BusinessScenarios
 		public void ProfileShouldContainUid(string messageUid)
 		{
 			ObjectFactory.GetInstance<MessageUidRepository>().GetUids().Count(x => x == messageUid).Should(
-				Be.EqualTo(1));
+				Be.EqualTo(1), "ObjectFactory.GetInstance<MessageUidRepository>().GetUids().Count(x => x == messageUid).Should(Be.EqualTo(1))");
 
 			var profile = ObjectFactory.GetInstance<IStorageRepository>().GetProfile<ProjectEmailProfile>();
 			var profileServerAndLogin =
 				ObjectFactory.GetInstance<IStorageRepository>().Get<ProfileServerAndLogin>().FirstOrDefault();
-			profileServerAndLogin.Login.Should(Be.EqualTo(profile.Login));
-			profileServerAndLogin.MailServer.Should(Be.EqualTo(profile.MailServer));
+			profileServerAndLogin.Login.Should(Be.EqualTo(profile.Login), "profileServerAndLogin.Login.Should(Be.EqualTo(profile.Login))");
+			profileServerAndLogin.MailServer.Should(Be.EqualTo(profile.MailServer), "profileServerAndLogin.MailServer.Should(Be.EqualTo(profile.MailServer))");
 		}
 
 		[Then("profile should not contain UID '$messageUid'")]
 		public void ProfileShouldNotContainUid(string messageUid)
 		{
-			ObjectFactory.GetInstance<MessageUidRepository>().GetUids().Where(x => x == messageUid).Should(Be.Empty);
+			ObjectFactory.GetInstance<MessageUidRepository>().GetUids().Where(x => x == messageUid).Should(Be.Empty, "ObjectFactory.GetInstance<MessageUidRepository>().GetUids().Where(x => x == messageUid).Should(Be.Empty)");
 		}
 
 		[Then("UIDs should not be reloaded")]

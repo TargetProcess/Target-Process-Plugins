@@ -8,6 +8,7 @@ namespace Tp.Core
 	{
 		private readonly int _startInclusive;
 		private readonly int _endExclusive;
+
 		private Range(int startInclusive, int endExclusive)
 		{
 			_startInclusive = startInclusive;
@@ -43,7 +44,7 @@ namespace Tp.Core
 		{
 			get { return Length == 0; }
 		}
-		
+
 		public static bool operator ==(Range self, Range other)
 		{
 			return self.Equals(other);
@@ -78,6 +79,5 @@ namespace Tp.Core
 		{
 			return new Range(skip, skip + take);
 		}
-
 	}
 }

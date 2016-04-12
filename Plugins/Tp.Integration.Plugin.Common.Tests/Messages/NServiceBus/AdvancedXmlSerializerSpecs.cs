@@ -60,10 +60,10 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var bytesEncoded = Convert.ToBase64String(message.Bytes);
 
 			var serialized = _serializer.Serialize(message);
-			serialized.InnerText.Should(Is.StringContaining(bytesEncoded));
+			serialized.InnerText.Should(Is.StringContaining(bytesEncoded), "serialized.InnerText.Should(Is.StringContaining(bytesEncoded))");
 
 			var deserialized = (SampleMessage) _deserializer.Deserialize(serialized);
-			deserialized.Bytes.Should(Is.EquivalentTo(message.Bytes));
+			deserialized.Bytes.Should(Is.EquivalentTo(message.Bytes), "deserialized.Bytes.Should(Is.EquivalentTo(message.Bytes))");
 		}
 
 		[Test]
@@ -76,8 +76,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var serialized = _serializer.Serialize(new[] {message1, message2});
 
 			var deserialized = (CreateCommand[]) _deserializer.Deserialize(serialized);
-			deserialized[0].Dto.Should(Is.Not.Null);
-			deserialized[1].Dto.Should(Is.Not.Null);
+			deserialized[0].Dto.Should(Is.Not.Null, "deserialized[0].Dto.Should(Is.Not.Null)");
+			deserialized[1].Dto.Should(Is.Not.Null, "deserialized[1].Dto.Should(Is.Not.Null)");
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 
 				Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
 				var deserialized = (MessageWithDates) _deserializer.Deserialize(serialized);
-				deserialized.MyDate.Should(Be.EqualTo(message.MyDate));
+				deserialized.MyDate.Should(Be.EqualTo(message.MyDate), "deserialized.MyDate.Should(Be.EqualTo(message.MyDate))");
 			}
 			finally
 			{
@@ -120,8 +120,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var serialized = _serializer.Serialize(message);
 
 			var deserialized = (MyMessage) _deserializer.Deserialize(serialized);
-			deserialized.Should(Is.Not.Null);
-			deserialized.Msg.Should(Is.Null);
+			deserialized.Should(Is.Not.Null, "deserialized.Should(Is.Not.Null)");
+			deserialized.Msg.Should(Is.Null, "deserialized.Msg.Should(Is.Null)");
 		}
 
 		public class DateTimeMessage : IMessage
@@ -139,7 +139,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			memoryStream.Seek(0, SeekOrigin.Begin);
 
 			var deserialized = new AdvancedXmlSerializer().Deserialize(memoryStream);
-			((DateTimeMessage) deserialized[0]).CreateDate.ToString().Should(Be.EqualTo(dateTime.ToString()));
+			((DateTimeMessage) deserialized[0]).CreateDate.ToString().Should(Be.EqualTo(dateTime.ToString()), "((DateTimeMessage) deserialized[0]).CreateDate.ToString().Should(Be.EqualTo(dateTime.ToString()))");
 		}
 
 		[Test]
@@ -151,7 +151,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			new AdvancedXmlSerializer().Serialize(new IMessage[] {sampleMessage}, memoryStrem);
 			memoryStrem.Seek(0, SeekOrigin.Begin);
 			var res = new AdvancedXmlSerializer().Deserialize(memoryStrem)[0] as SampleMessage;
-			res.Name.Should(Be.Not.Empty);
+			res.Name.Should(Be.Not.Empty, "res.Name.Should(Be.Not.Empty)");
 		}
 
 		[Test]
@@ -159,7 +159,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 		{
 			const string oldSerializedMessage = @"<?xml version=""1.0"" encoding=""utf-8""?><object name="""" type=""TK0"" assembly=""""><!-- Data section : Don't edit any attributes ! --><items><item name=""0"" type=""TK1"" assembly=""""><properties><property name=""Dto"" type=""TK2"" assembly=""""><properties><property name=""Name"" type=""TK3"" assembly="""">US Name</property></properties></property><property name=""SagaId"" type=""TK4"" assembly="""">00000000-0000-0000-0000-000000000000</property></properties></item></items><!-- TypeDictionary : Don't edit anything in this section at all ! --><typedictionary name="""" type=""System.Collections.Hashtable"" assembly=""mscorlib""><items><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK0</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages.EntityLifecycle.Messages.UserStoryCreatedMessage[]</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK3</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.String</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK1</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages.EntityLifecycle.Messages.UserStoryCreatedMessage</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK2</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Common.UserStoryDTO</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Messages</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK4</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.Guid</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item></items></typedictionary></object>";
 			var deserialized = _deserializer.Deserialize(new XmlDocument {InnerXml = oldSerializedMessage});
-			((UserStoryCreatedMessage[])deserialized).Single().Dto.CustomFieldsMetaInfo.Should(Be.Null);
+			((UserStoryCreatedMessage[])deserialized).Single().Dto.CustomFieldsMetaInfo.Should(Be.Null, "((UserStoryCreatedMessage[])deserialized).Single().Dto.CustomFieldsMetaInfo.Should(Be.Null)");
 		}
 
 		[Test]
@@ -174,7 +174,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var serialized = _serializer.Serialize(message);
 			var deserialized = _deserializer.Deserialize(serialized);
 			var meta = ((UserStoryCreatedMessage) deserialized).Dto.CustomFieldsMetaInfo;
-			meta.Single().FieldType.Should(Be.EqualTo(FieldTypeEnum.Text));
+			meta.Single().FieldType.Should(Be.EqualTo(FieldTypeEnum.Text), "meta.Single().FieldType.Should(Be.EqualTo(FieldTypeEnum.Text))");
 		}
 
 		[Given("sample message with name '$sampleMessageName'")]
@@ -196,7 +196,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var deserializer = new XmlDeserializer();
 
 			var deserialized = (SampleMessage) deserializer.Deserialize(_serialized);
-			deserialized.Name.Should(Is.EqualTo(sampleMessageName));
+			deserialized.Name.Should(Is.EqualTo(sampleMessageName), "deserialized.Name.Should(Is.EqualTo(sampleMessageName))");
 		}
 
 		[Then("deserialized from xml sample message saga id is equal to sample message saga id")]
@@ -205,7 +205,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var deserializer = new XmlDeserializer();
 
 			var deserialized = (SampleMessage) deserializer.Deserialize(_serialized);
-			deserialized.SagaId.Should(Is.EqualTo(_message.SagaId));
+			deserialized.SagaId.Should(Is.EqualTo(_message.SagaId), "deserialized.SagaId.Should(Is.EqualTo(_message.SagaId))");
 		}
 	}
 }

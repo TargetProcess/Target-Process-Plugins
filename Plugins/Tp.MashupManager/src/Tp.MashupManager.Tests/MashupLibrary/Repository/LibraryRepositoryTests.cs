@@ -152,11 +152,11 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
 			string tp3RepositoryPath = Path.Combine(LibraryPath, Tp3RepositoryName);
 			string testMashupPath = Path.Combine(tp3RepositoryPath, TestMashupName);
 
-			Directory.Exists(tp3RepositoryPath).Should(Is.True);
-			Directory.Exists(testMashupPath).Should(Is.True);
+			Directory.Exists(tp3RepositoryPath).Should(Is.True, "Directory.Exists(tp3RepositoryPath).Should(Is.True)");
+			Directory.Exists(testMashupPath).Should(Is.True, "Directory.Exists(testMashupPath).Should(Is.True)");
 			foreach (string fileName in fileNames)
 			{
-				File.Exists(Path.Combine(testMashupPath, fileName)).Should(Is.True);
+				File.Exists(Path.Combine(testMashupPath, fileName)).Should(Is.True, "File.Exists(Path.Combine(testMashupPath, fileName)).Should(Is.True)");
 			}
 		}
 
@@ -183,8 +183,8 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
 			InitRemoteRepository(_remoteRepository);
 			CommitRemoteRepository(_remoteRepository);
 			LibraryRepository.Refresh();
-			GetTestMashupPackage().BaseInfo.ShortDescription.Should(Be.EqualTo(TestMashupBaseInfoUpdatedDescription));
-			GetTestMashupPackage().BaseInfo.CompatibleTpVersion.Minimum.Should(Be.EqualTo(TestMashupBaseInfoUpdatedCompatibleTpVersionMinimum));
+			GetTestMashupPackage().BaseInfo.ShortDescription.Should(Be.EqualTo(TestMashupBaseInfoUpdatedDescription), "GetTestMashupPackage().BaseInfo.ShortDescription.Should(Be.EqualTo(TestMashupBaseInfoUpdatedDescription))");
+			GetTestMashupPackage().BaseInfo.CompatibleTpVersion.Minimum.Should(Be.EqualTo(TestMashupBaseInfoUpdatedCompatibleTpVersionMinimum), "GetTestMashupPackage().BaseInfo.CompatibleTpVersion.Minimum.Should(Be.EqualTo(TestMashupBaseInfoUpdatedCompatibleTpVersionMinimum))");
 		}
 
 		[Test]
@@ -211,15 +211,15 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
 			LibraryRepository.Refresh();
 			string name = GetTestMashupPackage().Name;
 			var mashup = LibraryRepository.GetPackageMashup(name);
-			mashup.Name.Should(Be.EqualTo(name));
-			mashup.Placeholders.ToLower().Should(Be.EqualTo(DefaultPlaceholders.ToLower()));
+			mashup.Name.Should(Be.EqualTo(name), "mashup.Name.Should(Be.EqualTo(name))");
+			mashup.Placeholders.ToLower().Should(Be.EqualTo(DefaultPlaceholders.ToLower()), "mashup.Placeholders.ToLower().Should(Be.EqualTo(DefaultPlaceholders.ToLower()))");
 		}
 
 		[Test]
 		public void GetPackageDetailed()
 		{
 			LibraryRepository.Refresh();
-			LibraryRepository.GetPackageDetailed(TestMashupName).ReadmeMarkdown.Should(Is.EqualTo(TestMashupMkdFileContent));
+			LibraryRepository.GetPackageDetailed(TestMashupName).ReadmeMarkdown.Should(Is.EqualTo(TestMashupMkdFileContent), "LibraryRepository.GetPackageDetailed(TestMashupName).ReadmeMarkdown.Should(Is.EqualTo(TestMashupMkdFileContent))");
 		}
 
 		private LibraryPackage GetTestMashupPackage()
@@ -229,8 +229,8 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
 
 		private void TestDefaultBaseInfo(LibraryPackageBaseInfo baseInfo)
 		{
-			baseInfo.ShortDescription.Should(Is.EqualTo(TestMashupBaseInfoDescription));
-			baseInfo.CompatibleTpVersion.Minimum.Should(Is.EqualTo(TestMashupBaseInfoCompatibleTpVersionMinimum));
+			baseInfo.ShortDescription.Should(Is.EqualTo(TestMashupBaseInfoDescription), "baseInfo.ShortDescription.Should(Is.EqualTo(TestMashupBaseInfoDescription))");
+			baseInfo.CompatibleTpVersion.Minimum.Should(Is.EqualTo(TestMashupBaseInfoCompatibleTpVersionMinimum), "baseInfo.CompatibleTpVersion.Minimum.Should(Is.EqualTo(TestMashupBaseInfoCompatibleTpVersionMinimum))");
 		}
 	}
 }

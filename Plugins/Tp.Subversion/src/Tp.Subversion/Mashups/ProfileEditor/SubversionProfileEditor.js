@@ -2,8 +2,7 @@ tau.mashups
 	.addDependency("Subversion/UserMappingEditor")
 	.addDependency("tp/bus")
 	.addDependency("tp/plugins/profileControlsBlock")
-	.addDependency("tp/jquery.utils")
-	.addDependency("libs/jquery/jquery.tmpl")
+	.addDependency("libs/jquery/jquery")
 	.addModule("Subversion/SubversionProfileEditor", function (UserMappingEditor, Bus, profileControlsBlock) {
 
 	    function SubversionProfileEditor(config) {

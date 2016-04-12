@@ -54,7 +54,7 @@ namespace Tp.TestRunImport.Tests
 
 			var profile = Context.Transport.AddProfile("Profile_1", _profileSettings);
 
-			profile.Initialized.Should(Be.True);
+			profile.Initialized.Should(Be.True, "profile.Initialized.Should(Be.True)");
 			AssertUserExistInProfile(CaseTestPlanDto1, profile);
 			AssertUserExistInProfile(CaseTestPlanDto2, profile);
 			AssertUserExistInProfile(CaseTestPlanDto3, profile);
@@ -62,7 +62,7 @@ namespace Tp.TestRunImport.Tests
 
 		private static void AssertUserExistInProfile(TestCaseTestPlanDTO testCaseTestPlanDto, IStorageRepository storageRepository)
 		{
-			storageRepository.Get<TestCaseTestPlanDTO>(testCaseTestPlanDto.ID.ToString()).SingleOrDefault().Should(Be.Not.Null);
+			storageRepository.Get<TestCaseTestPlanDTO>(testCaseTestPlanDto.ID.ToString()).SingleOrDefault().Should(Be.Not.Null, "storageRepository.Get<TestCaseTestPlanDTO>(testCaseTestPlanDto.ID.ToString()).SingleOrDefault().Should(Be.Not.Null)");
 		}
 
 		public TestRunImportPluginContext Context

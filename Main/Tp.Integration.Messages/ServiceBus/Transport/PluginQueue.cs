@@ -1,14 +1,8 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Messaging;
 using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
-using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport
 {
@@ -74,7 +68,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 				queue.Delete();
 				return true;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				log.Warn(LoggerContext.New(queueName), "Failed to delete queue {0}. Queue does not exist or no permissions".Fmt(queueName), e);
 				return false;

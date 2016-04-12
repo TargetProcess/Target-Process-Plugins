@@ -1,5 +1,7 @@
 using System.Data;
 
+// ReSharper disable once CheckNamespace
+
 namespace System
 {
 	[AttributeUsage(AttributeTargets.Method)]
@@ -46,5 +48,15 @@ namespace System
 		Millisecond,
 		Microsecond,
 		Nanosecond
+	}
+
+	public class TableValuedSqlFunctionAttribute : SqlFunctionAttribute
+	{
+		public string ResultColumnName { get; set; }
+
+		public TableValuedSqlFunctionAttribute(string name, string resultColumnName, DbType dbType) : base(name, dbType)
+		{
+			ResultColumnName = resultColumnName;
+		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 				Given profile created for account 'Account1'
 				When handle AddMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":""Default"", ""Files"":[{""FileName"":""script.js"",""Content"":""alert(123)""}]}'
 				Then 1 mashups should be sent to TP
-					And mashup 'Account1 mashup1' with accounts 'Account1' and placeholders 'Default' and script 'alert(123)' should be sent to TP
+					And mashup 'mashup1' with accounts 'Account1' and placeholders 'Default' and script 'alert(123)' should be sent to TP
 					And 1 mashup should be in profile storage
 					And mashup 'mashup1' with placeholders 'Default' and script 'alert(123)' should be in profile storage
 			".Execute();

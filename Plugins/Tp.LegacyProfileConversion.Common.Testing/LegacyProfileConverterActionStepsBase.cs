@@ -239,7 +239,7 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		public void PluginShouldHaveAccount(string pluginName, string accountName)
 		{
 			var accounts =AccountRepository.GetAll().Where(x => x.Name == accountName).Select(y => y.Name.Value).ToArray();
-			accounts.Should(Be.EquivalentTo(new[] {accountName}));
+			accounts.Should(Be.EquivalentTo(new[] {accountName}), "accounts.Should(Be.EquivalentTo(new[] {accountName}))");
 		}
 
 		[Then("'$profileName' plugin profile should be created")]
@@ -253,20 +253,20 @@ namespace Tp.LegacyProfileConversion.Common.Testing
 		{
 			var profiles =
 				(from profile in Account.Profiles select profile.Name.Value).ToArray();
-			profiles.Should(Be.EquivalentTo(pluginProfileNames));
+			profiles.Should(Be.EquivalentTo(pluginProfileNames), "profiles.Should(Be.EquivalentTo(pluginProfileNames))");
 		}
 
 		[Then("plugin profile names should be unique")]
 		public void PluginProfileNamesShouldBeUnique()
 		{
 			var profileNames = Account.Profiles.Select(x => x.Name.Value).ToArray();
-			profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames));
+			profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames), "profileNames.Distinct().ToArray().Should(Be.EquivalentTo(profileNames))");
 		}
 
 		[Then("sync interval should be predefined $minutes")]
 		public void SyncIntervalShouldBeSpecified(int minutes)
 		{
-			Account.Profiles.Cast<ISynchronizableProfile>().Single().SynchronizationInterval.Should(Be.EqualTo(minutes));
+			Account.Profiles.Cast<ISynchronizableProfile>().Single().SynchronizationInterval.Should(Be.EqualTo(minutes), "Account.Profiles.Cast<ISynchronizableProfile>().Single().SynchronizationInterval.Should(Be.EqualTo(minutes))");
 		}
 
 		protected static IAccount Account

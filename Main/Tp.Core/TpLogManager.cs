@@ -1,13 +1,10 @@
-﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
-using System.Configuration;
+﻿using System.Configuration;
+using System.IO;
+using System.Linq;
 using System.Xml;
 using log4net;
 using log4net.Config;
+using log4net.Util;
 
 namespace Tp.Core
 {
@@ -18,28 +15,30 @@ namespace Tp.Core
 
 		static TpLogManager()
 		{
-			var config = (XmlElement) ConfigurationManager.GetSection("log4net");
-			XmlConfigurator.Configure(config);
+			string[] configFiles = { "log4net.generated.config", "log4net.config" };
+
+			var fileInfo = configFiles
+				.Select(SystemInfo.ConvertToFullPath)
+				.Select(x => new FileInfo(x))
+				.Where(x => x.Exists)
+				.FirstOrNothing();
+
+			fileInfo.Do(XmlConfigurator.ConfigureAndWatch, () =>
+			{
+				var config = (XmlElement) ConfigurationManager.GetSection("log4net");
+				XmlConfigurator.Configure(config);
+				Instance.DefaultLog.Warn("Could not fnd log4net config files - use app config");
+			});
 		}
 
-		public static ILog GetLogger(Type type)
-		{
-			return LogManager.GetLogger(type);
-		}
 
-		public static TpLogManager Instance
-		{
-			get { return _instance ?? (_instance = new TpLogManager()); }
-		}
+		public static TpLogManager Instance => _instance ?? (_instance = new TpLogManager());
 
 		public ILog GetLog(string loggerName)
 		{
 			return LogManager.GetLogger(loggerName);
 		}
 
-		public ILog DefaultLog
-		{
-			get { return _defaultLog ?? (_defaultLog = LogManager.GetLogger("General")); }
-		}
+		public ILog DefaultLog => _defaultLog ?? (_defaultLog = LogManager.GetLogger("General"));
 	}
 }

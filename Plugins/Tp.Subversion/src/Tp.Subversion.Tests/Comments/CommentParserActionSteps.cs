@@ -45,7 +45,7 @@ namespace Tp.Subversion.Comments
 		public void EntityIdFoundMessageShouldBeCreated(int id)
 		{
 			_parsedActions.OfType<AssignRevisionToEntityAction>()
-				.SingleOrDefault(x => x.EntityId == id).Should(Be.Not.Null);
+				.SingleOrDefault(x => x.EntityId == id).Should(Be.Not.Null, "_parsedActions.OfType<AssignRevisionToEntityAction>().SingleOrDefault(x => x.EntityId == id).Should(Be.Not.Null)");
 		}
 	}
 }

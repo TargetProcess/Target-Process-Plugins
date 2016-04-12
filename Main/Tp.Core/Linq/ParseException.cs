@@ -1,28 +1,29 @@
+using Tp.I18n;
+
 namespace System.Linq.Dynamic
 {
-	public sealed class ParseException : Exception
+	public sealed class ParseException : Exception, IFormattedMessageContainer
 	{
-		private readonly int _position;
-
-		public ParseException(string message, int position)
-			: base(message)
+		public ParseException(IFormattedMessage message, int position)
+			: base(message.Value)
 		{
-			_position = position;
+			Position = position;
+			FormattedMessage = message;
 		}
 
 		public ParseException(Exception innerException, int position) : base(innerException.Message, innerException)
 		{
-			_position = position;
+			Position = position;
+			FormattedMessage = innerException.Message.AsLocalized();
 		}
 
-		public int Position
-		{
-			get { return _position; }
-		}
+		public int Position { get; }
 
 		public override string ToString()
 		{
-			return string.Format(Res.ParseExceptionFormat, Message, _position);
+			return $"{Message} (at index {Position})";
 		}
+
+		public IFormattedMessage FormattedMessage { get; }
 	}
 }

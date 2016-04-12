@@ -38,12 +38,12 @@ namespace Tp.Integration.Messages
 			byte[] buffer = Encoding.UTF8.GetBytes(content);
 			return
 				serializer.ReadObject(JsonReaderWriterFactory.CreateJsonReader(buffer, 0, buffer.Length, Encoding.UTF8,
-																			   XmlDictionaryReaderQuotas.Max, null));
+					XmlDictionaryReaderQuotas.Max, null));
 		}
 
 		public static T Deserialize<T>(this string content, params Type[] knownTypes)
 		{
-			return (T)content.Deserialize(typeof(T), knownTypes);
+			return (T) content.Deserialize(typeof(T), knownTypes);
 		}
 	}
 }

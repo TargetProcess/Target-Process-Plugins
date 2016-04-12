@@ -1,10 +1,9 @@
-// 
+//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using Microsoft.Web.Services3;
-using NServiceBus;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using Tp.AssignableServiceProxy;
@@ -15,6 +14,7 @@ using Tp.BugServiceProxy;
 using Tp.BuildServiceProxy;
 using Tp.CommentServiceProxy;
 using Tp.Core;
+using Tp.Core.Internationalization;
 using Tp.CustomActivityServiceProxy;
 using Tp.CustomFieldServiceProxy;
 using Tp.EntityStateServiceProxy;
@@ -28,7 +28,6 @@ using Tp.Integration.Messages.ServiceBus.Transport.Router;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Events.Aggregator;
-using Tp.Integration.Plugin.Common.FileStorage;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.PluginCommand;

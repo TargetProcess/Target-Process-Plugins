@@ -26,9 +26,13 @@ namespace Tp.Core.Expressions.Visitors
 				return maybe.OfType<LambdaExpression>()
 					.GetOrThrow(() => new Exception("Could not Simplify expression " + node))
 					.Apply(node.Arguments.Skip(1));
-
 			}
 			return base.VisitMethodCall(node);
+		}
+
+		protected override Expression VisitExtension(Expression node)
+		{
+			return node;
 		}
 	}
 }

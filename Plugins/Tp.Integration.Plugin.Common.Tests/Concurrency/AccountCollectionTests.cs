@@ -20,7 +20,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		public void WriteWrite()
 		{
 			ExecuteConcurrently(() => AddAccount("account1"), () => AddAccount("account2"));
-			AccountCollection.Count().Should(Be.EqualTo(2));
+			AccountCollection.Count().Should(Be.EqualTo(2), "AccountCollection.Count().Should(Be.EqualTo(2))");
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 			AddAccount("account1");
 			AddAccount("account2");
 			ExecuteConcurrently(ReadAccounts, ReadAccounts);
-			AccountCollection.Count().Should(Be.EqualTo(2));
+			AccountCollection.Count().Should(Be.EqualTo(2), "AccountCollection.Count().Should(Be.EqualTo(2))");
 		}
 		
 		[Test]
@@ -37,7 +37,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		{
 			AddAccount("account1");
 			ExecuteConcurrently(ReadAccounts, () => AddAccount("account2"));
-			AccountCollection.Count().Should(Be.EqualTo(2));
+			AccountCollection.Count().Should(Be.EqualTo(2), "AccountCollection.Count().Should(Be.EqualTo(2))");
 		}
 
 		[Test]
@@ -46,7 +46,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 			AddAccount("account1");
 			ExecuteConcurrently(ReadAccounts, () => AddAccount("account2"));
 			ExecuteConcurrently(() => AddAccount("account3"), () => RemoveAccount("account2"));
-			AccountCollection.Count().Should(Be.EqualTo(2));
+			AccountCollection.Count().Should(Be.EqualTo(2), "AccountCollection.Count().Should(Be.EqualTo(2))");
 		}
 		
 		[Test]
@@ -64,10 +64,10 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 			{
 				if (Interlocked.Increment(ref afterAccountAdded) == 2)
 				{
-					AccountCollection.Count().Should(Be.EqualTo(2));
+					AccountCollection.Count().Should(Be.EqualTo(2), "AccountCollection.Count().Should(Be.EqualTo(2))");
 				}
 			});
-			AccountCollection.Count().Should(Be.EqualTo(2));
+			AccountCollection.Count().Should(Be.EqualTo(2), "AccountCollection.Count().Should(Be.EqualTo(2))");
 		}
 
 		[Test, Ignore]
@@ -98,7 +98,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		{
 			foreach (var account in AccountCollection)
 			{
-				account.Name.Value.Should(Be.Not.Empty);
+				account.Name.Value.Should(Be.Not.Empty, "account.Name.Value.Should(Be.Not.Empty)");
 			}
 		}
 

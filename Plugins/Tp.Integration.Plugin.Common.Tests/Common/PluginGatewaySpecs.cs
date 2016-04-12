@@ -158,8 +158,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			{
 				var bus = ObjectFactory.GetInstance<IBus>();
 				bus.AssertWasCalled(x => x.SendLocal(_profileSpecificPluginMessage));
-				bus.OutgoingHeaders[BusExtensions.PROFILENAME_KEY].Should(Be.EqualTo(profileName));
-				bus.OutgoingHeaders[BusExtensions.ACCOUNTNAME_KEY].Should(Be.EqualTo(_account.Name.Value));
+				bus.OutgoingHeaders[BusExtensions.PROFILENAME_KEY].Should(Be.EqualTo(profileName), "bus.OutgoingHeaders[BusExtensions.PROFILENAME_KEY].Should(Be.EqualTo(profileName))");
+				bus.OutgoingHeaders[BusExtensions.ACCOUNTNAME_KEY].Should(Be.EqualTo(_account.Name.Value), "bus.OutgoingHeaders[BusExtensions.ACCOUNTNAME_KEY].Should(Be.EqualTo(_account.Name.Value))");
 			}
 
 			[Then(@"no message should be sent to profiles: (?<profileNames>([^,]+,?\s*)+)")]

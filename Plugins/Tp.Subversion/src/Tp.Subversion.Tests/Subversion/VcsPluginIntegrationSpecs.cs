@@ -75,7 +75,7 @@ namespace Tp.Subversion.Subversion
 		[Then("revisions should be created in TP")]
 		public void RevisionsShoulBeCreated()
 		{
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().Should(Be.Not.Empty);
+			Context.Transport.TpQueue.GetMessages<CreateCommand>().Should(Be.Not.Empty, "Context.Transport.TpQueue.GetMessages<CreateCommand>().Should(Be.Not.Empty)");
 		}
 	}
 }

@@ -6,6 +6,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Plugin.Common.Domain;
@@ -51,9 +52,9 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 		{
 			_transport.HandleMessageFromTp(_userStoryCreatedMessage);
 
-			var taskDto = _transport.TpQueue.GetMessages<CreateCommand>().Last().Dto as TaskDTO;
-			taskDto.UserStoryID.Should(Be.EqualTo(_userStoryCreatedMessage.Dto.UserStoryID));
-			taskDto.Name.Should(Be.EqualTo(_profileInstance.GetProfile<TaskCreatorProfile>().TasksList));
+			var taskDto = _transport.TpQueue.GetMessages<CreateTaskForUserStoryWithTeamCommand>().Last();
+			taskDto.UserStoryID.Should(Be.EqualTo(_userStoryCreatedMessage.Dto.UserStoryID), "Task assigned to UserStory");
+			taskDto.Name.Should(Be.EqualTo(_profileInstance.GetProfile<TaskCreatorProfile>().TasksList), "Task has name from plugin configration");
 		}
 	}
 }

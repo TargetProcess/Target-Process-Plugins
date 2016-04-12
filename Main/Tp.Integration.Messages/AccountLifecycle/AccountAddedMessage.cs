@@ -1,7 +1,7 @@
-﻿namespace Tp.Integration.Messages.AccountLifecycle
-{
-	using System;
+﻿using System;
 
+namespace Tp.Integration.Messages.AccountLifecycle
+{
 	[Serializable]
 	public sealed class AccountAddedMessage
 		: IAccountLifecycleMessage

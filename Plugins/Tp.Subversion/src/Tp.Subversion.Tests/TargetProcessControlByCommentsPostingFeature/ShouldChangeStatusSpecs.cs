@@ -138,12 +138,12 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 
 		private static void AssertCommand(int entityId, string status, string tpuser, ChangeEntityStateCommand command)
 		{
-			command.EntityId.Should(Be.EqualTo(entityId));
+			command.EntityId.Should(Be.EqualTo(entityId), "command.EntityId.Should(Be.EqualTo(entityId))");
 
 			var user = Context.GetTpUserByName(tpuser);
 
-			command.UserID.Should(Be.EqualTo(user.Id));
-			command.State.Should(Be.EqualTo(status));
+			command.UserID.Should(Be.EqualTo(user.Id), "command.UserID.Should(Be.EqualTo(user.Id))");
+			command.State.Should(Be.EqualTo(status), "command.State.Should(Be.EqualTo(status))");
 		}
 
 		[Then("entity $entityId status should be changed to '$status.*?' with comment '$comment.*?' by the '$tpuser'")]
@@ -152,7 +152,7 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			var command = Context.Transport.TpQueue.GetMessages<ChangeEntityStateCommand>().Where(x => x.EntityId == entityId).Single();
 
 			AssertCommand(entityId, status, tpuser, command);
-			command.Comment.Should(Be.EqualTo(comment));
+			command.Comment.Should(Be.EqualTo(comment), "command.Comment.Should(Be.EqualTo(comment))");
 		}
 
 		[Then("entity $entityId status should be changed to '$status.*?' with default comment '$comment.*?' by the '$tpuser'")
@@ -162,13 +162,13 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			var command = Context.Transport.TpQueue.GetMessages<ChangeEntityStateCommand>().Where(x => x.EntityId == entityId).Single();
 
 			AssertCommand(entityId, status, tpuser, command);
-			command.Comment.Should(Be.Null);
+			command.Comment.Should(Be.Null, "command.Comment.Should(Be.Null)");
 		}
 
 		[Then("status should not be changed")]
 		public void StatusShouldNotBeChanged()
 		{
-			Context.Transport.TpQueue.GetMessages<ChangeEntityStateCommand>().ToArray().Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<ChangeEntityStateCommand>().ToArray().Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<ChangeEntityStateCommand>().ToArray().Should(Be.Empty)");
 		}
 
 		private static VcsPluginContext Context

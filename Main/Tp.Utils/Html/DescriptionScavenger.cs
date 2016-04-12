@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Tp.Utils.Html
@@ -14,7 +10,7 @@ namespace Tp.Utils.Html
 		public DescriptionScavenger()
 		{
 			//Tag <pre> converts into <p>
-			RewriteTags = new Dictionary<string, string> {{"pre", "p"},};
+			RewriteTags = new Dictionary<string, string> { { "pre", "p" }, };
 			MaxWordLength = 100;
 		}
 
@@ -56,12 +52,12 @@ namespace Tp.Utils.Html
 
 		public new static string Sanitize(string input)
 		{
-			return new DescriptionScavenger {RequiredHtmlEncode = false}.Process(input);
+			return new DescriptionScavenger { RequiredHtmlEncode = false }.Process(input);
 		}
 
 		public static string Sanitize(string input, int maxWordLength)
 		{
-			return new DescriptionScavenger {MaxWordLength = maxWordLength}.Process(input);
+			return new DescriptionScavenger { MaxWordLength = maxWordLength }.Process(input);
 		}
 	}
 }

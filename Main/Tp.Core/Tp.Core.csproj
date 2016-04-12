@@ -44,8 +44,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,27 +54,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU' ">
-    <OutputPath>bin\FuncTests\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelegateDecompiler">
-      <HintPath>$(SolutionDir)packages\DelegateDecompiler.0.8.1.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
+      <HintPath>..\..\packages\DelegateDecompiler.0.17.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>$(SolutionDir)packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    <Reference Include="Jeffijoe.MessageFormat, Version=1.0.2.29990, Culture=neutral, PublicKeyToken=cb396c58e8ae2045, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MessageFormat.1.0.2\lib\portable-net45+sl5+wp8+win8+wpa81+MonoTouch1+MonoAndroid1\Jeffijoe.MessageFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -82,11 +75,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Reflection">
-      <HintPath>$(SolutionDir)packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SolutionDir)packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
@@ -99,20 +88,41 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
-    <Reference Include="Tp.Core.Functional">
-      <HintPath>..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+    <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Tp.I18n, Version=0.1.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.I18n.0.1.0\lib\net45\Tp.I18n.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Tp.I18n.Interfaces, Version=0.1.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.I18n.Interfaces.0.1.1\lib\net45\Tp.I18n.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Annotations\Annotations.cs" />
     <Compile Include="Annotations\PerformanceCriticalAttribute.cs" />
+    <Compile Include="Argument.cs" />
     <Compile Include="AssemblyExtensions.cs" />
-    <Compile Include="Base64Converter.cs" />
+    <Compile Include="Chrono.cs" />
+    <Compile Include="Diagnostics\Time\HttpHeaderAttribute.cs" />
+    <Compile Include="ITextProvider.cs" />
+    <Compile Include="Features\ITpFeatureList.cs" />
+    <Compile Include="Features\TpFeature.cs" />
+    <Compile Include="Features\TpFeatureListExtensions.cs" />
+    <Compile Include="Internationalization\MessageLocalizer.cs" />
+    <Compile Include="Internationalization\LocalizationScopeAttribute.cs" />
+    <Compile Include="Linq\SpecificExtensionMethodsProvider.cs" />
+    <Compile Include="LocalizedInvalidOperationException.cs" />
+    <Compile Include="LocalizedNotImplementedException.cs" />
+    <Compile Include="LocalizedNotSupportedException.cs" />
     <Compile Include="ClientId.cs" />
     <Compile Include="CompositeDisposable.cs" />
     <Compile Include="Configuration\CustomConfigurationFileReader.cs" />
@@ -130,7 +140,6 @@
     <Compile Include="DateRangeContainsResult.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Delta.cs" />
-    <Compile Include="Diagnostics\Diagnostics.cs" />
     <Compile Include="Diagnostics\DiagnosticsRegistry.cs" />
     <Compile Include="Diagnostics\IPerformanceCounter.cs" />
     <Compile Include="Diagnostics\IPerformanceCounters.cs" />
@@ -144,7 +153,7 @@
     <Compile Include="Diagnostics\Time\ITpProfilerDataCollector.cs" />
     <Compile Include="Diagnostics\Time\TpProfilerStatisticRecord.cs" />
     <Compile Include="Diagnostics\Time\TpProfilerStatistics.cs" />
-    <Compile Include="Diagnostics\Time\TpProfiler.cs" />
+    <Compile Include="Diagnostics\Time\Profiler.cs" />
     <Compile Include="Diagnostics\Time\Source\ITimePointsSource.cs" />
     <Compile Include="Diagnostics\Time\Source\TimePointsSource.cs" />
     <Compile Include="Diagnostics\Time\TimePoint.cs" />
@@ -154,7 +163,9 @@
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="DirectoryExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Expressions\Visitors\BooleanEvaluator.cs" />
     <Compile Include="Expressions\Visitors\CaseInsensitiveVisitor.cs" />
     <Compile Include="Expressions\Visitors\CtorTypeChanger.cs" />
     <Compile Include="Expressions\InlineableAttribute.cs" />
@@ -174,6 +185,8 @@
     <Compile Include="FileSystemWatcherImpl.cs" />
     <Compile Include="Func.cs" />
     <Compile Include="HierarchyStructureNode.cs" />
+    <Compile Include="IErrorResolution.cs" />
+    <Compile Include="IErrorResolutionContainer.cs" />
     <Compile Include="IDetailedException.cs" />
     <Compile Include="IExecutor.cs" />
     <Compile Include="IFileSystem.cs" />
@@ -188,22 +201,31 @@
     <Compile Include="ITransactionScope.cs" />
     <Compile Include="ITransactionScopeProvider.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="Linq\AllExtensionMethodsProvider.cs" />
     <Compile Include="Linq\DynamicExpressionAliasAttribute.cs" />
-    <Compile Include="Linq\ExtenedExpressionParser.cs" />
+    <Compile Include="Linq\ExtendedExpressionParser.cs" />
     <Compile Include="Linq\IMethodProvider.cs" />
+    <Compile Include="Linq\ISurrogateMethod.cs" />
+    <Compile Include="Linq\ITypeProvider.cs" />
+    <Compile Include="Linq\Parser.cs" />
+    <Compile Include="Linq\ParseTree.cs" />
+    <Compile Include="Linq\Scanner.cs" />
+    <Compile Include="Linq\UntypedQueryable.cs" />
     <Compile Include="Lock.cs" />
     <Compile Include="LocalFileSystem.cs" />
     <Compile Include="Locker.cs" />
+    <Compile Include="IPresentationErrorItem.cs" />
+    <Compile Include="MoreLinqExtensions.cs" />
     <Compile Include="NoLock.cs" />
     <Compile Include="NumberExtensions.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="PracticeSettingsManager.cs" />
     <Compile Include="PropertyBag\ErasedTypedKeyStorage.cs" />
     <Compile Include="PropertyBag\IPropertyBagSetter.cs" />
+    <Compile Include="PublicNameAttribute.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="SerializableStringDictionary.cs" />
-    <Compile Include="ServerErrorCode.cs" />
-    <Compile Include="ServerExceptionAttribute.cs" />
+    <Compile Include="ErrorResolutionType.cs" />
     <Compile Include="ServiceManager.cs" />
     <Compile Include="Services\EmptyService.cs" />
     <Compile Include="EqualityHelpers.cs" />
@@ -221,7 +243,6 @@
     <Compile Include="Expressions\LambdaSubstituter.cs" />
     <Compile Include="Expressions\QueryableHelper.cs" />
     <Compile Include="Features\StructureMapExtensions.cs" />
-    <Compile Include="Features\TpFeatureList.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="ITpLogManager.cs" />
@@ -247,7 +268,6 @@
     <Compile Include="InvalidDateRangeException.cs" />
     <Compile Include="MaybeConvert\MaybeConvertExtensions.cs" />
     <Compile Include="MaybeDictionary.cs" />
-    <Compile Include="MaybeJsonConverter.cs" />
     <Compile Include="netfx\System\Guard.cs" />
     <Compile Include="netfx\System\Reflection\GetCustomAttribute.cs" />
     <Compile Include="netfx\System\Reflection\Reflect.cs" />
@@ -267,6 +287,7 @@
     <Compile Include="StringBuilderExtensions.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="StringLocalizationExtensions.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TpLogManager.cs" />
@@ -305,13 +326,19 @@
       <LastGenOutput>Reflect.Overloads.cs</LastGenOutput>
     </None>
     <None Include="netfx\System\Reflection\TargetFramework.ttinclude" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="TpPublic.snk" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y /d</PostBuildEvent>
   </PropertyGroup>

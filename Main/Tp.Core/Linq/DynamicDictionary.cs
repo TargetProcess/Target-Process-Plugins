@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using Tp.Core;
 using Tp.Core.Annotations;
@@ -16,14 +11,14 @@ namespace System.Linq.Dynamic
 	internal class DynamicDictionary
 	{
 		public static bool TryGetExpression(Type type, Expression instance, int errorPos, string name,
-		                                    out Expression expression)
+			out Expression expression)
 		{
 			var dictInterface = TypeIsDictionaryWithStringKey(type)
-			                    	? type
-			                    	: type.GetInterfaces().FirstOrDefault(
-			                    		x =>
-			                    		x.IsGenericType && x.GetGenericTypeDefinition() == typeof (IDictionary<,>) &&
-			                    		x.GetGenericArguments().First() == typeof (string));
+				? type
+				: type.GetInterfaces().FirstOrDefault(
+					x =>
+						x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>) &&
+							x.GetGenericArguments().First() == typeof(string));
 
 			if (dictInterface != null)
 			{
@@ -42,7 +37,8 @@ namespace System.Linq.Dynamic
 			if (methodExpression != null)
 			{
 				var declaringType = methodExpression.Method.DeclaringType;
-				if (declaringType != null && declaringType.IsGenericType && declaringType.GetGenericTypeDefinition() == typeof(DictionaryValueAccessor<>))
+				if (declaringType != null && declaringType.IsGenericType
+					&& declaringType.GetGenericTypeDefinition() == typeof(DictionaryValueAccessor<>))
 				{
 					var constExpression = methodExpression.Arguments[1] as ConstantExpression;
 					if (constExpression != null)
@@ -60,17 +56,17 @@ namespace System.Linq.Dynamic
 		private static Expression GenerateDictionaryMemberAccess(Expression instance, string name, Type valueType)
 		{
 			var expression =
-				Expression.Call(typeof (DictionaryValueAccessor<>).MakeGenericType(valueType).GetMethod("GetDictionaryValue"),
-				                instance,
-				                Expression.Constant(name));
+				Expression.Call(typeof(DictionaryValueAccessor<>).MakeGenericType(valueType).GetMethod("GetDictionaryValue"),
+					instance,
+					Expression.Constant(name));
 
 			return expression;
 		}
 
 		private static bool TypeIsDictionaryWithStringKey(Type type)
 		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IDictionary<,>) &&
-			       type.GetGenericArguments().First() == typeof (string);
+			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>) &&
+				type.GetGenericArguments().First() == typeof(string);
 		}
 
 		public static Maybe<string> GetAlias(Expression expr, int exprPos)

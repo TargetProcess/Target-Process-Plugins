@@ -106,10 +106,10 @@ namespace Tp.Git.Tests.VersionControlSystem
 			{
 				var revisionRange = git.GetFromTillHead(CreateGitRevisionId(GitRevisionId.UtcTimeMin), 100).Single();
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-02 1:57:19 PM")));
+				fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-02 1:57:19 PM")), "fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2011-11-02 1:57:19 PM\")))");
 
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")));
+				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")), "toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2011-11-04 11:32:04 AM\")))");
 			}
 		}
 
@@ -126,7 +126,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 			}
 			catch (Exception ex)
 			{
-				ex.Message.Should(Be.EqualTo("invalid uri or insufficient access rights"));
+				ex.Message.Should(Be.EqualTo("invalid uri or insufficient access rights"), "ex.Message.Should(Be.EqualTo(\"invalid uri or insufficient access rights\"))");
 			}
 		}
 
@@ -143,10 +143,10 @@ namespace Tp.Git.Tests.VersionControlSystem
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 				
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time));
+				fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time), "fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time))");
 
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")));
+				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04 AM")), "toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2011-11-04 11:32:04 AM\")))");
 			}
 		}
 
@@ -164,10 +164,10 @@ namespace Tp.Git.Tests.VersionControlSystem
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
 
 				GitRevisionId fromExpected = CreateGitRevisionId(DateTime.Parse("2011-11-04 11:30:19"));
-				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
+				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time), "fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time))");
 
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04")));
+				toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2011-11-04 11:32:04")), "toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2011-11-04 11:32:04\")))");
 			}
 		}
 
@@ -187,12 +187,12 @@ namespace Tp.Git.Tests.VersionControlSystem
 				GitRevisionId fromChangeSet = revisionRange.FromChangeset;
 
 				GitRevisionId fromExpected = CreateGitRevisionId(DateTime.Parse("2011-11-04 8:41:11 AM"));
-				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
+				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time), "fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time))");
 
 
 				GitRevisionId toExpected = CreateGitRevisionId(DateTime.Parse("2011-11-04 11:31:19 AM"));
 				GitRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Time.Should(Be.EqualTo(toExpected.Time));
+				toChangeSet.Time.Should(Be.EqualTo(toExpected.Time), "toChangeSet.Time.Should(Be.EqualTo(toExpected.Time))");
 			}
 		}
 
@@ -203,7 +203,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 			{
 				var authors = git.RetrieveAuthors(new DateRange(GitRevisionId.UtcTimeMin, DateTime.UtcNow));
 
-				authors.Should(Be.EquivalentTo(new[] {"Valentine Palazkov"}));
+				authors.Should(Be.EquivalentTo(new[] {"Valentine Palazkov"}), "authors.Should(Be.EquivalentTo(new[] {\"Valentine Palazkov\"}))");
 			}
 		}
 
@@ -281,13 +281,13 @@ namespace Tp.Git.Tests.VersionControlSystem
 
 		private static void AssertEqual(IList<RevisionEntryInfo> actual, IList<RevisionEntryInfo> expected)
 		{
-			actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()));
-			actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()));
+			actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()), "actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()))");
+			actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()), "actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()))");
 
 			for (int i = 0; i < actual.Count; i++)
 			{
-				actual[i].Action.Should(Be.EqualTo(expected[i].Action));
-				actual[i].Path.Should(Be.EqualTo(expected[i].Path));
+				actual[i].Action.Should(Be.EqualTo(expected[i].Action), "actual[i].Action.Should(Be.EqualTo(expected[i].Action))");
+				actual[i].Path.Should(Be.EqualTo(expected[i].Path), "actual[i].Path.Should(Be.EqualTo(expected[i].Path))");
 			}
 		}
 
@@ -300,8 +300,8 @@ namespace Tp.Git.Tests.VersionControlSystem
 				var revisionRange = git.GetFromTillHead(startRevisionId, 100).Single();
 
 				var revisions = git.GetRevisions(revisionRange);
-				revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits));
-				revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] {"Valentine Palazkov"}));
+				revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits), "revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits))");
+				revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] {"Valentine Palazkov"}), "revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] {\"Valentine Palazkov\"}))");
 			}
 		}
 
@@ -313,7 +313,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 				GitRevisionId correctRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMin);
 				var errors = new PluginProfileErrorCollection();
 				git.CheckRevision(correctRevisionId, errors);
-				errors.Should(Be.Empty);
+				errors.Should(Be.Empty, "errors.Should(Be.Empty)");
 			}
 		}
 
@@ -325,7 +325,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 				GitRevisionId correctRevisionId = CreateGitRevisionId(GitRevisionId.UtcTimeMax.AddYears(1));
 				var errors = new PluginProfileErrorCollection();
 				git.CheckRevision(correctRevisionId, errors);
-				errors.Single().ToString().Should(Be.EqualTo("Revision: should be between 1/1/1970 and 1/19/2038"));
+				errors.Single().ToString().Should(Be.EqualTo("Revision: should be between 1/1/1970 and 1/19/2038"), "errors.Single().ToString().Should(Be.EqualTo(\"Revision: should be between 1/1/1970 and 1/19/2038\"))");
 			}
 		}
 
@@ -365,7 +365,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 
 				transportMock.HandleLocalMessage(profile, new NewRevisionRangeDetectedLocalMessage {Range = revisionRange});
 
-				transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1));
+				transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1), "transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1))");
 			}
 		}
 
@@ -391,7 +391,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 
 				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
 
-				ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null);
+				ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null, "ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null)");
 			}
 		}
 
@@ -412,7 +412,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 
 				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
 
-				ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False);
+				ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False, "ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False)");
 			}
 		}
 

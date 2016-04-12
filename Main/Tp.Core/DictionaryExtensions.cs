@@ -100,12 +100,18 @@ namespace System.Collections.Generic
 				return GetEnumerator();
 			}
 		}
-		
-		public static Maybe<TVal> GetValue<TKey, TVal>(this IDictionary<TKey, TVal> d, TKey k)
+
+		public static Maybe<TVal> GetValue<TKey, TVal>(this Dictionary<TKey, TVal> d, TKey k)
+		{
+			IDictionary<TKey, TVal> typed = d;
+			return typed.GetValue(k);
+		}
+
+		public static Maybe<TVal> GetValue<TKey, TVal>(this IReadOnlyDictionary<TKey, TVal> d, TKey k)
 		{
 			TVal fetched;
-			return k == null 
-				? Maybe.Nothing 
+			return k == null
+				? Maybe.Nothing
 				: (!d.TryGetValue(k, out fetched) ? Maybe.Nothing : Maybe.Just(fetched));
 		}
 
@@ -135,7 +141,7 @@ namespace System.Collections.Generic
 			return new DefaultDictionary<TKey, TValue>(dictionary, defaultValue);
 		}
 
-		public static IReadOnlyDictionary<TKey,TValue> ToReadonly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+		public static IReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
 		{
 			return new ReadOnlyDictionary<TKey, TValue>(dictionary);
 		}

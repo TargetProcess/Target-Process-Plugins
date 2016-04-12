@@ -4,6 +4,7 @@
 // 
 
 using System.Linq;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -20,7 +21,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 			_profileCollection = profileCollection;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			var profileDtos = _profileCollection.Select(x => x.ConvertToDto()).ToArray();
 

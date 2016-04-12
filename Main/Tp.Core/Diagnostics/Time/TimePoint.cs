@@ -6,6 +6,7 @@ namespace Tp.Core.Diagnostics.Time
 	public struct TimePoint : IComparable<TimePoint>
 	{
 		private static long _globalOrder;
+
 		private TimePoint(string name, DateTimeOffset timestamp) : this(name, timestamp, Interlocked.Increment(ref _globalOrder))
 		{
 		}

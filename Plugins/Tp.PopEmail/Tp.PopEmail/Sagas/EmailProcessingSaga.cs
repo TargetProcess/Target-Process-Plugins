@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -66,6 +66,14 @@ namespace Tp.PopEmailIntegration.Sagas
 				}
 			}
 
+			if (emailMessage.Mail.ReplyTo != null)
+			{
+				foreach (var replyToAddress in emailMessage.Mail.ReplyTo)
+				{
+					ProcessAddress(replyToAddress, requestersDtoToCreate);
+				}
+			}
+
 			if (requestersDtoToCreate.Empty())
 			{
 				var fromRequester = GetRequesterByAddress(fromAddress.Address);
@@ -122,14 +130,17 @@ namespace Tp.PopEmailIntegration.Sagas
 
 		private IEnumerable<int> GetRequestersForEmail(EmailMessage emailMessage)
 		{
-			var requesterAddresses = new List<string>();
-			requesterAddresses.Add(emailMessage.FromAddress);
+			var requesterAddresses = new List<string> {emailMessage.FromAddress};
+			if (emailMessage.ReplyTo != null)
+			{
+				requesterAddresses.AddRange(emailMessage.ReplyTo.Select(replyToAddress => replyToAddress.Address));
+			}
 			if (emailMessage.CC != null) 
 			{
 				requesterAddresses.AddRange(emailMessage.CC.Select(ccAddress => ccAddress.Address));
 			}
 
-			foreach (var requesterAddress in requesterAddresses)
+			foreach (var requesterAddress in requesterAddresses.Distinct())
 			{
 				var users = ObjectFactory.GetInstance<UserRepository>().GetByEmail(requesterAddress);
 				var user = users.OrderBy(x => x.UserType).FirstOrDefault();
@@ -186,7 +197,7 @@ namespace Tp.PopEmailIntegration.Sagas
 			if (!MatchedRule.IsNull || MessageContainsTicket(messageDto.Body))
 			{
 				messageDto.FromID = fromUserId;
-				Log().Info(string.Format("Creating message with subject {0} in tp ", messageDto.Subject));
+				Log().Info($"Creating message with subject {messageDto.Subject} in tp ");
 				Send(new CreateMessageCommand(messageDto));
 			}
 			else
@@ -208,7 +219,7 @@ namespace Tp.PopEmailIntegration.Sagas
 		public void Handle(MessageCreatedMessage message)
 		{
 			Data.MessageDto = message.Dto;
-			Log().Info(string.Format("Creating attachments for message with id {0}", message.Dto.ID));
+			Log().Info($"Creating attachments for message with id {message.Dto.ID}");
 			SendLocal(new PushAttachmentsToTpCommandInternal
 			          	{
 			          		OuterSagaId = Data.Id,
@@ -219,7 +230,7 @@ namespace Tp.PopEmailIntegration.Sagas
 
 		public void Handle(AttachmentsPushedToTPMessageInternal message)
 		{
-			Log().Info(string.Format("Updating body for message with id {0}", Data.MessageDto.ID));
+			Log().Info($"Updating body for message with id {Data.MessageDto.ID}");
 			Data.Attachments = message.AttachmentDtos;
 			SendLocal(new UpdateMessageBodyCommandInternal
 			          	{MessageDto = Data.MessageDto, AttachmentDtos = message.AttachmentDtos, OuterSagaId = Data.Id});
@@ -232,7 +243,7 @@ namespace Tp.PopEmailIntegration.Sagas
 			var ticketID = FindTicketID(Data.MessageDto.Body);
 			if (ticketID > 0 && !IsMessageFromTargetProcess && !IsMessageFromProject)
 			{
-				Log().Info(string.Format("Creating comment from message {0} to general {1}", Data.MessageDto.ID, ticketID));
+				Log().Info($"Creating comment from message {Data.MessageDto.ID} to general {ticketID}");
 				var commentDto = new CommentDTO
 				                 	{
 				                 		OwnerID = Data.MessageDto.FromID,
@@ -296,7 +307,7 @@ namespace Tp.PopEmailIntegration.Sagas
 
 		public void Handle(CommentCreatedMessageInternal message)
 		{
-			Log().Info(string.Format("Adding attachments to general {0}", message.Comment.GeneralID));
+			Log().Info($"Adding attachments to general {message.Comment.GeneralID}");
 			SendLocal(new AddAttachmentsToGeneralCommandInternal
 			          	{Attachments = Data.Attachments, GeneralId = message.Comment.GeneralID, OuterSagaId = Data.Id});
 		}
@@ -316,8 +327,7 @@ namespace Tp.PopEmailIntegration.Sagas
 
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
-			Log().Error(string.Format("Failed to create message with subject {0}",
-			                  Data.EmailReceivedMessage.Mail.Subject), message.GetException());
+			Log().Error($"Failed to create message with subject {Data.EmailReceivedMessage.Mail.Subject}", message.GetException());
 			CompleteSaga();
 		}
 

@@ -68,14 +68,14 @@ namespace Tp.PopEmailIntegration
 		[Then("connection should be resolved as valid")]
 		public void CheckConnectionIsValid()
 		{
-			_errors.Any().Should(Be.False);
+			_errors.Any().Should(Be.False, "_errors.Any().Should(Be.False)");
 		}
 
 		[Then("server should not login")]
 		public void ShouldNotLogin()
 		{
-			_errors.Count().Should(Be.EqualTo(2));
-			_errors.Select(e => e.FieldName).Should(Be.EquivalentTo(new []{"Login", "Password"}));
+			_errors.Count().Should(Be.EqualTo(2), "_errors.Count().Should(Be.EqualTo(2))");
+			_errors.Select(e => e.FieldName).Should(Be.EquivalentTo(new []{"Login", "Password"}), "_errors.Select(e => e.FieldName).Should(Be.EquivalentTo(new []{\"Login\", \"Password\"}))");
 		}
 	}
 }

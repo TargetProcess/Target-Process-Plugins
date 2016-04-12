@@ -10,9 +10,8 @@ namespace Tp.Core.Diagnostics
 	{
 		public DiagnosticsRegistry()
 		{
-			For<Diagnostics>().HybridHttpOrThreadLocalScoped().Use<Diagnostics>();
 			For<IService>().Singleton().IfFeatureEnabled(TpFeature.Diagnostics).Use<PerformanceCounterService>().ElseUse<EmptyService>();
-			For<TpProfiler>().HybridHttpOrThreadLocalScoped().Use<TpProfiler>();
+			For<Profiler>().HybridHttpOrThreadLocalScoped().Use<Profiler>();
 			For<ITimePointsSource>().Singleton().Use<TimePointsSource>();
 		}
 	}

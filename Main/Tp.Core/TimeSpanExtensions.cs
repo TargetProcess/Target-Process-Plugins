@@ -1,4 +1,3 @@
-// ReSharper disable once CheckNamespace
 namespace System
 {
 	public static class TimeSpanExtensions
@@ -27,6 +26,7 @@ namespace System
 		{
 			return timeSpan.Select(x => x.TotalSeconds);
 		}
+
 		public static double? TotalMonths(this TimeSpan? timeSpan)
 		{
 			return timeSpan.Select(x => x.TotalDays / 30);

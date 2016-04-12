@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +11,7 @@ namespace Tp.Utils.Html
 
 		public AttributeScavenger(params string[] keepElements)
 		{
-			RewriteTags = new Dictionary<string, string> {{"pre", "p"},};
+			RewriteTags = new Dictionary<string, string> { { "pre", "p" }, };
 			_keepElements = keepElements ?? new string[0];
 		}
 

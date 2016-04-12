@@ -24,14 +24,14 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			RevisionId revisionIdDto = revisionId;
             TfsRevisionId restoredRevisionId = revisionIdDto;
 
-			restoredRevisionId.Time.Should(Be.EqualTo(initialTime));
+			restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
 		}
 
 		[Test]
 		public void ShouldSupportMinTime()
 		{
             TfsRevisionId revisionId = new RevisionId { Time = DateTime.MinValue, Value = Guid.NewGuid().ToString() };
-            revisionId.Time.Should(Be.EqualTo(TfsRevisionId.UtcTimeMin));
+            revisionId.Time.Should(Be.EqualTo(TfsRevisionId.UtcTimeMin), "revisionId.Time.Should(Be.EqualTo(TfsRevisionId.UtcTimeMin))");
 		}
 	}
 }

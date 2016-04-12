@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -21,7 +16,7 @@ namespace Tp.Utils.Html
 	public static class Encoder
 	{
 		/// <summary>
-		/// 	Encodes the specified <paramref name = "input" /> 
+		/// 	Encodes the specified <paramref name = "input" />
 		/// 	and writes encoded text for use in HTML to the specified <paramref name = "output" />.
 		/// </summary>
 		/// <param name = "input">
@@ -38,7 +33,7 @@ namespace Tp.Utils.Html
 		{
 			if (output == null)
 			{
-				throw new ArgumentNullException("output");
+				throw new ArgumentNullException(nameof(output));
 			}
 			if (string.IsNullOrEmpty(input))
 			{
@@ -54,7 +49,7 @@ namespace Tp.Utils.Html
 		}
 
 		/// <summary>
-		/// 	Reads text from the specified <paramref name = "input" /> 
+		/// 	Reads text from the specified <paramref name = "input" />
 		/// 	and writes encoded text for use in HTML to the specified <paramref name = "output" />.
 		/// </summary>
 		/// <param name = "input">
@@ -74,11 +69,11 @@ namespace Tp.Utils.Html
 		{
 			if (input == null)
 			{
-				throw new ArgumentNullException("input");
+				throw new ArgumentNullException(nameof(input));
 			}
 			if (output == null)
 			{
-				throw new ArgumentNullException("output");
+				throw new ArgumentNullException(nameof(output));
 			}
 			int ch;
 			var builder = new StringBuilder();
@@ -109,7 +104,7 @@ namespace Tp.Utils.Html
 				return input;
 			}
 			var output = new StringWriter();
-			output.GetStringBuilder().EnsureCapacity(input.Length*2);
+			output.GetStringBuilder().EnsureCapacity(input.Length * 2);
 			HtmlEncode(input, output);
 			return output.ToString();
 		}
@@ -131,7 +126,7 @@ namespace Tp.Utils.Html
 		{
 			if (output == null)
 			{
-				throw new ArgumentNullException("output");
+				throw new ArgumentNullException(nameof(output));
 			}
 			if (string.IsNullOrEmpty(input))
 			{
@@ -163,11 +158,11 @@ namespace Tp.Utils.Html
 		{
 			if (input == null)
 			{
-				throw new ArgumentNullException("input");
+				throw new ArgumentNullException(nameof(input));
 			}
 			if (output == null)
 			{
-				throw new ArgumentNullException("output");
+				throw new ArgumentNullException(nameof(output));
 			}
 			int ch;
 			while ((ch = input.Read()) != -1)
@@ -197,14 +192,14 @@ namespace Tp.Utils.Html
 				return "";
 			}
 			var output = new StringWriter();
-			output.GetStringBuilder().EnsureCapacity(input.Length*2);
+			output.GetStringBuilder().EnsureCapacity(input.Length * 2);
 			HtmlAttributeEncode(input, output);
 			return output.ToString();
 		}
 
 		private static void HtmlEncode(int ch, StringBuilder builder)
 		{
-			if (Char.IsWhiteSpace((char)ch))
+			if (Char.IsWhiteSpace((char) ch))
 			{
 				var unicodeCategory = Char.GetUnicodeCategory((char) ch);
 				if (unicodeCategory != UnicodeCategory.LineSeparator && unicodeCategory != UnicodeCategory.ParagraphSeparator)
@@ -212,9 +207,9 @@ namespace Tp.Utils.Html
 					builder.Append((char) ch);
 				}
 			}
-			else if (Char.IsLetterOrDigit((char)ch) || Char.GetUnicodeCategory((char)ch) == UnicodeCategory.CurrencySymbol)
+			else if (Char.IsLetterOrDigit((char) ch) || Char.GetUnicodeCategory((char) ch) == UnicodeCategory.CurrencySymbol)
 			{
-				builder.Append((char)ch);
+				builder.Append((char) ch);
 			}
 			else if (ch == '<')
 			{
@@ -230,9 +225,9 @@ namespace Tp.Utils.Html
 			}
 			else if (
 				(ch > '`' && ch < '{')
-				|| (ch > '@' && ch < '[')
-				|| (ch > '/' && ch < ':')
-				|| (ch == '.' || ch == '-' || ch == '_')
+					|| (ch > '@' && ch < '[')
+					|| (ch > '/' && ch < ':')
+					|| (ch == '.' || ch == '-' || ch == '_')
 				)
 			{
 				builder.Append((char) ch);
@@ -264,9 +259,9 @@ namespace Tp.Utils.Html
 				output.Write("&quot;");
 			}
 			else if ((ch > '`' && ch < '{')
-			         || (ch > '@' && ch < '[')
-			         || (ch > '/' && ch < ':')
-			         || (ch == '.' || ch == ',' || ch == '-' || ch == '_')
+				|| (ch > '@' && ch < '[')
+				|| (ch > '/' && ch < ':')
+				|| (ch == '.' || ch == ',' || ch == '-' || ch == '_')
 				)
 			{
 				output.Write((char) ch);

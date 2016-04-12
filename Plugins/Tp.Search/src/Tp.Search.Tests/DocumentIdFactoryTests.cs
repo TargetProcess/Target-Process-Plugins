@@ -15,7 +15,7 @@ namespace Tp.Search.Tests
 			const int projectId = 200;
 			string s = f.CreateProjectId(projectId);
 			int parsed = f.ParseProjectId(s);
-			parsed.Should(Be.EqualTo(projectId));
+			parsed.Should(Be.EqualTo(projectId), "parsed.Should(Be.EqualTo(projectId))");
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace Tp.Search.Tests
 			const int projectId = 0;
 			string s = f.CreateProjectId(projectId);
 			int parsed = f.ParseProjectId(s);
-			parsed.Should(Be.EqualTo(projectId));
+			parsed.Should(Be.EqualTo(projectId), "parsed.Should(Be.EqualTo(projectId))");
 		}
 	}
 }

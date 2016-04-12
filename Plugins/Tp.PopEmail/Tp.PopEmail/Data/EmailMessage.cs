@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -21,13 +21,14 @@ namespace Tp.PopEmailIntegration.Data
 		public string FromAddress { get; set; }
 		public string FromDisplayName { get; set; }
 		public string Recipients { get; set; }
-		public List<MailAddressLite> CC { get; set; } 
+		public List<MailAddressLite> CC { get; set; }
 		public string Subject { get; set; }
 		public ContentTypeEnum ContentType { get; set; }
 		public string Body { get; set; }
 		public DateTime SendDate { get; set; }
 		public List<LocalStoredAttachment> EmailAttachments { get; set; }
 		public MessageUidDTO MessageUidDto { get; set; }
+		public List<MailAddressLite> ReplyTo { get; set; }
 
 		public MessageDTO Convert()
 		{

@@ -6,6 +6,7 @@ tau.mashups
 	.addDependency("tp/plugins/vcs/SubversionProfileEditorDefaultController")
 	.addDependency("tp/plugins/profileRepository")
 	.addDependency("tp/plugins/vcs/ui.widgets")
+	.addDependency("libs/jquery/jquery")
 	.addModule("Git/registerMashup",
 
 	function (tpUsersPopoverWidget,
@@ -13,7 +14,8 @@ tau.mashups
 		commandGateway,
 		SubversionProfileEditorDefaultController,
 		profileRepository,
-		globalAnimation) {
+		globalAnimation,
+		$) {
 
 		function SubversionRenderer(config) {
 			this._ctor(config);
@@ -72,7 +74,8 @@ tau.mashups
 
 tau.mashups
 	.addDependency("Git/registerMashup")
-	.addMashup(function(subversionRenderer, config) {
+	.addDependency("libs/jquery/jquery")
+	.addMashup(function(subversionRenderer, $, config) {
 		var placeholder = $('#' + config.placeholderId);
 
 		new subversionRenderer({ placeholder: placeholder }).renderAll();

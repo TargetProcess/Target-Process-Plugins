@@ -181,7 +181,7 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 		{
 			commandBusMock.CreateCommands.Count.Should(Is.EqualTo(1),
 			                                           "1 create command should be sent");
-			commandBusMock.CreateCommands[0].Should(Is.InstanceOf(typeof (T)));
+			commandBusMock.CreateCommands[0].Should(Is.InstanceOf(typeof (T)), "commandBusMock.CreateCommands[0].Should(Is.InstanceOf(typeof (T)))");
 			predicates.ToList().ForEach(x => x(commandBusMock.CreateCommands[0] as T));
 		}
 
@@ -190,7 +190,7 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 		{
 			commandBusMock.UpdateCommands.Count.Should(Is.EqualTo(1),
 			                                           "1 create command should be sent");
-			commandBusMock.UpdateCommands[0].Should(Is.InstanceOf(typeof (T)));
+			commandBusMock.UpdateCommands[0].Should(Is.InstanceOf(typeof (T)), "commandBusMock.UpdateCommands[0].Should(Is.InstanceOf(typeof (T)))");
 			predicates.ToList().ForEach(x => x(commandBusMock.UpdateCommands[0] as T));
 		}
 
@@ -199,7 +199,7 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 		{
 			commandBusMock.SentCommands.Count.Should(Is.EqualTo(1),
 			                                         "1 message should be sent");
-			commandBusMock.SentCommands[0].Should(Is.InstanceOf(typeof (T)));
+			commandBusMock.SentCommands[0].Should(Is.InstanceOf(typeof (T)), "commandBusMock.SentCommands[0].Should(Is.InstanceOf(typeof (T)))");
 			predicates.ToList().ForEach(x => x(commandBusMock.SentCommands[0] as T));
 		}
 
@@ -208,7 +208,7 @@ namespace Tp.Integration.Plugin.TaskCreator.Tests
 		{
 			localBusMock.LocalMessages.Count.Should(Is.EqualTo(1),
 			                                        "1 local message should be sent");
-			localBusMock.LocalMessages[0].Should(Is.InstanceOf(typeof (T)));
+			localBusMock.LocalMessages[0].Should(Is.InstanceOf(typeof (T)), "localBusMock.LocalMessages[0].Should(Is.InstanceOf(typeof (T)))");
 			predicates.ToList().ForEach(x => x(localBusMock.LocalMessages[0] as T));
 		}
 	}

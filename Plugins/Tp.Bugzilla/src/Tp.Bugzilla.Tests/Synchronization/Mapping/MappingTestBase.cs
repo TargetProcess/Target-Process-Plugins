@@ -32,7 +32,7 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 			var commandResult = Context.CommandResponse.ResponseData.Deserialize<Mappings>();
 
 			GetFromMappings(commandResult).Where(x => x.Key == key && LookupsEquals(x.Value, tpValue)).Count().Should(
-				Be.EqualTo(1));
+				Be.EqualTo(1), "GetFromMappings(commandResult).Where(x => x.Key == key && LookupsEquals(x.Value, tpValue)).Count().Should(Be.EqualTo(1))");
 		}
 
 		protected void MapBase()
@@ -44,7 +44,7 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 		protected void CheckMappingsItemsCountBase()
 		{
 			var mappingContainer = Context.CommandResponse.ResponseData.Deserialize<Mappings>();
-			Source.ThirdPartyItems.Count.Should(Be.EqualTo(GetFromMappings(mappingContainer).Count));
+			Source.ThirdPartyItems.Count.Should(Be.EqualTo(GetFromMappings(mappingContainer).Count), "Source.ThirdPartyItems.Count.Should(Be.EqualTo(GetFromMappings(mappingContainer).Count))");
 		}
 
 		private bool LookupsEquals(MappingLookup left, MappingLookup right)

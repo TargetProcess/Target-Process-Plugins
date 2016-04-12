@@ -1,4 +1,5 @@
-﻿using Tp.Integration.Messages;
+﻿using Tp.Integration.Common;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -15,7 +16,7 @@ namespace Tp.Search.Bus.Commands
 		private readonly IProfile _profile;
 		private readonly IPluginContext _pluginContext;
 		private readonly IPluginMetadata _pluginMetadata;
-			
+
 		public BuildSearchIndexesCommand(ITpBus bus, IProfileCollection profileCollection, IProfile profile, IPluginContext pluginContext, IPluginMetadata pluginMetadata)
 		{
 			_bus = bus;
@@ -25,7 +26,7 @@ namespace Tp.Search.Bus.Commands
 			_pluginMetadata = pluginMetadata;
 		}
 
-		public PluginCommandResponseMessage Execute(string _)
+		public PluginCommandResponseMessage Execute(string _, UserDTO user = null)
 		{
 			bool wasNoProfile = _pluginContext.ProfileName.IsEmpty;
 			var c = new AddOrUpdateProfileCommand(_bus, _profileCollection, _pluginContext, _pluginMetadata);
@@ -46,15 +47,15 @@ namespace Tp.Search.Bus.Commands
 		private PluginProfileDto BuildProfileDto()
 		{
 			return _profile.IsNull
-				       ? new PluginProfileDto
-					       {
-						       Name = SearcherProfile.Name
-					       }
-				       : new PluginProfileDto
-					       {
+					   ? new PluginProfileDto
+						   {
+							   Name = SearcherProfile.Name
+						   }
+					   : new PluginProfileDto
+						   {
 							   Name = _profile.Name.Value,
-						       Settings = _profile.Settings
-					       };
+							   Settings = _profile.Settings
+						   };
 		}
 	}
 }

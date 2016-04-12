@@ -195,7 +195,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		public void CheckCommentsCount(string bugName, int commentsCount)
 		{
 			TransportMock.TpQueue.GetMessages<CreateCommand>().Where(c => c.Dto is CommentDTO).Count()
-				.Should(Be.EqualTo(commentsCount));
+				.Should(Be.EqualTo(commentsCount), "TransportMock.TpQueue.GetMessages<CreateCommand>().Where(c => c.Dto is CommentDTO).Count().Should(Be.EqualTo(commentsCount))");
 		}
 
 		[Then(
@@ -227,7 +227,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(c => c.CreateDate == DateTime.Parse(createdDate).ToLocalTime())
 				.Where(c => c.OwnerID == ownerId)
 				.Where(c => c.GeneralID == Context.TpBugs.Single(b => b.Name == bugName).ID)
-				.Any().Should(Be.True);
+				.Any().Should(Be.True, "Context.TpComments.Where(c => c.Description == commmentText).Where(c => c.CreateDate == DateTime.Parse(createdDate).ToLocalTime()).Where(c => c.OwnerID == ownerId).Where(c => c.GeneralID == Context.TpBugs.Single(b => b.Name == bugName).ID).Any().Should(Be.True)");
 		}
 	}
 }

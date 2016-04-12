@@ -12,7 +12,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 	{
 		protected IRouterChildTagsSource RouterChildTagsSource;
 
-		public MsmqMessageRouter(IMessageSource<MessageEx> messageSource, IProducerConsumerFactory<MessageEx> producerConsumerFactory, Func<MessageEx, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
+		public MsmqMessageRouter(IMessageSource<MessageEx> messageSource, IProducerConsumerFactory<MessageEx> producerConsumerFactory,
+			Func<MessageEx, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
 			: base(messageSource, producerConsumerFactory, tagMessageProvider, scheduler, log)
 		{
 			RouterChildTagsSource = ObjectFactory.GetInstance<IRouterChildTagsSource>();

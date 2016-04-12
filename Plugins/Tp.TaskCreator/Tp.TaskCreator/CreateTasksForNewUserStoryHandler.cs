@@ -7,10 +7,10 @@ using System.IO;
 using System.Linq;
 using NServiceBus;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Plugin.Common;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.TaskCreator
@@ -18,15 +18,13 @@ namespace Tp.Integration.Plugin.TaskCreator
 	public class CreateTasksForNewUserStoryHandler : IHandleMessages<UserStoryCreatedMessage>,
 	                                                 IHandleMessages<UserStoryUpdatedMessage>
 	{
-		private readonly ICommandBus _bus;
-		private readonly IStorageRepository _storage;
+		private readonly ITpBus _bus;
 		private readonly TaskCreatorProfileWrapper _profile;
 
-		public CreateTasksForNewUserStoryHandler(ICommandBus bus, IStorageRepository storage)
+		public CreateTasksForNewUserStoryHandler(ITpBus bus, IStorageRepository storage)
 		{
 			_bus = bus;
-			_storage = storage;
-			_profile = new TaskCreatorProfileWrapper(_storage.GetProfile<TaskCreatorProfile>());
+			_profile = new TaskCreatorProfileWrapper(storage.GetProfile<TaskCreatorProfile>());
 		}
 
 		public void Handle(UserStoryCreatedMessage message)
@@ -82,12 +80,12 @@ namespace Tp.Integration.Plugin.TaskCreator
 
 		private void CreateTask(string taskName, UserStoryDTO userStoryDto)
 		{
-			_bus.Send(new CreateTaskCommand(new TaskDTO
-			                                	{
-			                                		UserStoryID = userStoryDto.UserStoryID,
-			                                		Name = taskName,
-			                                		OwnerID = userStoryDto.OwnerID
-			                                	}));
+			_bus.Send(new CreateTaskForUserStoryWithTeamCommand
+			{
+				UserStoryID = userStoryDto.UserStoryID,
+				Name = taskName,
+				OwnerID = userStoryDto.OwnerID
+			});
 		}
 	}
 }

@@ -1,10 +1,9 @@
 tau.mashups
+    .addDependency("jQuery")
     .addDependency("Subversion/UserMappingEditor")
     .addDependency("tp/bus")
     .addDependency("tp/plugins/profileControlsBlock")
-    .addDependency("tp/jquery.utils")
-    .addDependency("libs/jquery/jquery.tmpl")
-    .addModule("Tfs/ProfileEditor", function (UserMappingEditor, Bus, profileControlsBlock) {
+    .addModule("Tfs/ProfileEditor", function ($, UserMappingEditor, Bus, profileControlsBlock) {
 
         function ProfileEditor(config) {
             this._create(config);
@@ -225,7 +224,7 @@ tau.mashups
                         Login: this._find('#login').val(),
                         Password: this._find('#password').val(),
                         StartRevision: this._find('#startRevision').val(),
-                        SyncInterval: this._find("#syncInterval").val(),
+                        SyncInterval: this._find('#syncInterval').val(),
                         UserMapping: this.UserMappingEditor.getUserMappings()
                     }
                 };
@@ -275,7 +274,7 @@ tau.mashups
             checkConnectionErrors: function (errors) {
                 this.showErrors(errors);
 
-                if ($(errors).length == 0) {
+                if (!$(errors).length) {
                     this.checkConnectionBtn.success();
                 }
             }

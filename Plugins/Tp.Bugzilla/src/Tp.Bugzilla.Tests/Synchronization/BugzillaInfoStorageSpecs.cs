@@ -243,43 +243,43 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("bugzilla bug with id $bugzillaBugId not retrieved")]
 		public void ShouldCheckTpBugNotConnectedToBugzillaBug(int bugzillaBugId)
 		{
-			Context.BugzillaBugInfos.Where(x => x.Id == bugzillaBugId.ToString()).Should(Be.Empty);
+			Context.BugzillaBugInfos.Where(x => x.Id == bugzillaBugId.ToString()).Should(Be.Empty, "Context.BugzillaBugInfos.Where(x => x.Id == bugzillaBugId.ToString()).Should(Be.Empty)");
 		}
 
 		[Then("bugzilla bug with id $bugzillaBugId retrieved")]
 		public void ShouldCheckTpBugConnectedToBugzillaBug(int bugzillaBugId)
 		{
-			Context.BugzillaBugInfos.Where(x => x.Id == bugzillaBugId.ToString()).Should(Be.Not.Empty);
+			Context.BugzillaBugInfos.Where(x => x.Id == bugzillaBugId.ToString()).Should(Be.Not.Empty, "Context.BugzillaBugInfos.Where(x => x.Id == bugzillaBugId.ToString()).Should(Be.Not.Empty)");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have component '$component'")]
 		public void ShouldCheckComponent(int bugzillaBugId, string component)
 		{
-			GetBugzillaBug(bugzillaBugId).Component.Should(Be.EqualTo(component));
+			GetBugzillaBug(bugzillaBugId).Component.Should(Be.EqualTo(component), "GetBugzillaBug(bugzillaBugId).Component.Should(Be.EqualTo(component))");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have version '$version'")]
 		public void ShouldCheckVersion(int bugzillaBugId, string version)
 		{
-			GetBugzillaBug(bugzillaBugId).Version.Should(Be.EqualTo(version));
+			GetBugzillaBug(bugzillaBugId).Version.Should(Be.EqualTo(version), "GetBugzillaBug(bugzillaBugId).Version.Should(Be.EqualTo(version))");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have platform '$platform'")]
 		public void ShouldCheckPlatform(int bugzillaBugId, string platform)
 		{
-			GetBugzillaBug(bugzillaBugId).Platform.Should(Be.EqualTo(platform));
+			GetBugzillaBug(bugzillaBugId).Platform.Should(Be.EqualTo(platform), "GetBugzillaBug(bugzillaBugId).Platform.Should(Be.EqualTo(platform))");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have operating system '$os'")]
 		public void ShouldCheckOs(int bugzillaBugId, string os)
 		{
-			GetBugzillaBug(bugzillaBugId).OS.Should(Be.EqualTo(os));
+			GetBugzillaBug(bugzillaBugId).OS.Should(Be.EqualTo(os), "GetBugzillaBug(bugzillaBugId).OS.Should(Be.EqualTo(os))");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have classification '$classification'")]
 		public void ShouldCheckClassification(int bugzillaBugId, string classification)
 		{
-			GetBugzillaBug(bugzillaBugId).Classification.Should(Be.EqualTo(classification));
+			GetBugzillaBug(bugzillaBugId).Classification.Should(Be.EqualTo(classification), "GetBugzillaBug(bugzillaBugId).Classification.Should(Be.EqualTo(classification))");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have custom field '$fieldName' with value '$fieldValue'")]
@@ -287,7 +287,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			GetBugzillaBug(bugzillaBugId).CustomFields
 				.Single(f => f.Name == fieldName)
-				.Values.Should(Be.EquivalentTo(new[] {fieldValue}));
+				.Values.Should(Be.EquivalentTo(new[] {fieldValue}), "GetBugzillaBug(bugzillaBugId).CustomFields.Single(f => f.Name == fieldName).Values.Should(Be.EquivalentTo(new[] {fieldValue}))");
 		}
 
 		[Then(
@@ -298,7 +298,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			GetBugzillaBug(bugzillaBugId).CustomFields
 				.Single(f => f.Name == fieldName)
 				.Values
-				.Should(Be.EquivalentTo(fieldValue));
+				.Should(Be.EquivalentTo(fieldValue), "GetBugzillaBug(bugzillaBugId).CustomFields.Single(f => f.Name == fieldName).Values.Should(Be.EquivalentTo(fieldValue))");
 		}
 
 		[Then("connected bugzilla bug $bugzillaBugId should have url '$url'")]
@@ -308,7 +308,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(x => x.Id == bugzillaBugId.ToString())
 				.Single();
 
-			bug.Url.Should(Be.EqualTo(url));
+			bug.Url.Should(Be.EqualTo(url), "bug.Url.Should(Be.EqualTo(url))");
 		}
 
 		private BugzillaBugInfo GetBugzillaBug(int bugzillaBugId)

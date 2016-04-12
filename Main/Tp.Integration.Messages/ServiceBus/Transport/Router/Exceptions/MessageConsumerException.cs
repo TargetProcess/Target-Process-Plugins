@@ -8,11 +8,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Exceptions
 		{
 		}
 
-		public MessageConsumerException(string message): base(message)
+		public MessageConsumerException(string message) : base(message)
 		{
 		}
 
-		public MessageConsumerException(string message, Exception innerException): base(message, innerException)
+		public MessageConsumerException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
 	}

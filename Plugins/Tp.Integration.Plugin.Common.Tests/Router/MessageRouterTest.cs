@@ -22,7 +22,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 				router.Consume(TestRouterHelper.HandleMessage);
 				waiter.Wait(true);
 				// we compare to 55, not 50, because each source has stop message at the end.
-				((TestMessageRouter) router).ReceiveCallCount.Should(Be.EqualTo(55)); 
+				((TestMessageRouter) router).ReceiveCallCount.Should(Be.EqualTo(55), "((TestMessageRouter) router).ReceiveCallCount.Should(Be.EqualTo(55))"); 
 			}
 		}
 
@@ -40,9 +40,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 				router.Consume(message => messagesHandled++);
 				waiter.Wait(true);
 
-				messagesHandled.Should(Be.EqualTo(6));
+				messagesHandled.Should(Be.EqualTo(6), "messagesHandled.Should(Be.EqualTo(6))");
 				//Do not receive message from queue, if router handles message by itself. Let the handle logic do this.
-				((TestMessageRouter)router).ReceiveCallCount.Should(Be.EqualTo(0));
+				((TestMessageRouter)router).ReceiveCallCount.Should(Be.EqualTo(0), "((TestMessageRouter)router).ReceiveCallCount.Should(Be.EqualTo(0))");
 			}
 		}
 	}

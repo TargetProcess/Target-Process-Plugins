@@ -39,7 +39,7 @@ namespace Tp.Subversion.UserMappingFeature
 		{
 			var user = Context.GetTpUserByName(tpUserName);
 			var revision = Context.Transport.TpQueue.GetCreatedDtos<RevisionDTO>().Single(x => x.SourceControlID == revisionId);
-			revision.AuthorID.Should(Be.EqualTo(user.Id));
+			revision.AuthorID.Should(Be.EqualTo(user.Id), "revision.AuthorID.Should(Be.EqualTo(user.Id))");
 		}
 
 		[When("tp user with name '$userName', login '$userLogin' and id $userId")]

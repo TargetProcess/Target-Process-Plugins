@@ -56,6 +56,7 @@ tau.mashups
 '<tr><td colspan="2"><br><b>Possible actions</b></td></tr>' +
 '<tr><td nowrap><span class="rules-actions">attach to project PROJECT ID</span></td><td>email message will be attached to project</td></tr>' +
 '<tr><td nowrap><span class="rules-actions">create request in project PROJECT ID</span></td><td>private request will be created from email for a given project</td></tr>' +
+'<tr><td nowrap><span class="rules-actions">attach request to team TEAM ID</span></td><td>request created in previous step will be attached to a given team</td></tr>' +
 '</table>' +
 '<br><br>' +
 '<p class="label">Example</p>' +
@@ -64,7 +65,7 @@ tau.mashups
 '<p>We can set the following 3 rules in the profile:</p><br>' +
 '<div class="rules-block">when <span class="rules-conditions">subject contains \'Targetprocess, tp\'</span> and <span class="rules-conditions">company matched to project 2</span> then <span class="rules-actions">attach to project 2</span> and <span class="rules-actions">create public request in project 2</span>' +
 '<br>when <span class="rules-conditions">company matched to project 2</span> then <span class="rules-actions">attach to project 2</span>' +
-'<br>then <span class="rules-actions">attach to project 1</span> and <span class="rules-actions">create private request in project 1</span></div>' +
+'<br>then <span class="rules-actions">attach to project 1</span> and <span class="rules-actions">create private request in project 1</span> and <span class="rules-actions">attach request to team 37</span></div>' +
 '<br>'+
 'Rules are checked from top to bottom. Let\'s see how these rules are applied to messages.'+
 '<ol>'+

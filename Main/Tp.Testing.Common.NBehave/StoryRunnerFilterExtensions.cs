@@ -23,7 +23,7 @@ namespace Tp.Testing.Common.NBehave
 			var dslClasses =
 				Assembly.Load("Tp.Testing.Common.ActionSteps").GetTypes().Where(x => x.Namespace == dslNamespace).Select(x => x.Name);
 			var dslClassesAsString = string.Join("|", dslClasses.ToArray());
-			
+
 			return new StoryRunnerFilter(dslNamespace, dslClassesAsString, ".*");
 		}
 	}
@@ -32,7 +32,7 @@ namespace Tp.Testing.Common.NBehave
 	{
 		public static StoryRunnerFilter Context<TActionStepsClass>(this StoryRunnerFilter filter)
 		{
-			var type = typeof (TActionStepsClass);
+			var type = typeof(TActionStepsClass);
 			var classFilterValue = filter.ClassNameFilter.UpdateWith(type.Name);
 			var namespaceFilter = filter.NamespaceFilter.UpdateWith(type.Namespace);
 			return new StoryRunnerFilter(namespaceFilter, classFilterValue, filter.MethodNameFiler.ToString());

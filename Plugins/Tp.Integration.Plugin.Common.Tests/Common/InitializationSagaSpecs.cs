@@ -60,7 +60,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var assemblyScannerRegistry = new AssemblyScannerMockRegistry(typeof (BugInitializationSaga).Assembly);
 			ObjectFactory.Initialize(x => x.AddRegistry(assemblyScannerRegistry));
 			var profile = new Profile();
-			profile.Initialized.Should(Be.False);
+			profile.Initialized.Should(Be.False, "profile.Initialized.Should(Be.False)");
 		}
 
 		[Test]
@@ -75,7 +75,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			new BugInitializationSaga().Handle(new ProfileAddedMessage());
 
-			BugInitializationSaga.CallCount.Should(Be.EqualTo(0));
+			BugInitializationSaga.CallCount.Should(Be.EqualTo(0), "BugInitializationSaga.CallCount.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -90,7 +90,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			profile.MarkAsInitialized();
 			profile.Save();
 
-			profile.Initialized.Should(Be.True);
+			profile.Initialized.Should(Be.True, "profile.Initialized.Should(Be.True)");
 		}
 
 		[Test]
@@ -107,7 +107,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			UpdateProfile(transportMock, profile);
 
 			var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(AccountName.Empty);
-			account.Profiles["Profile"].Initialized.Should(Be.EqualTo(false));
+			account.Profiles["Profile"].Initialized.Should(Be.EqualTo(false), "account.Profiles[\"Profile\"].Initialized.Should(Be.EqualTo(false))");
 		}
 
 		private static void UpdateProfile(TransportMock transportMock, IProfileReadonly profile)
@@ -137,7 +137,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			UpdateProfile(transportMock, profile);
 
 			var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(AccountName.Empty);
-			account.Profiles["Profile"].Initialized.Should(Be.EqualTo(true));
+			account.Profiles["Profile"].Initialized.Should(Be.EqualTo(true), "account.Profiles[\"Profile\"].Initialized.Should(Be.EqualTo(true))");
 		}
 
 		private static void StubPluginMetadataWithNoInitializationSagas()
@@ -174,13 +174,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Then("profile should be marked as initialized")]
 		public void ProfileShouldBeInitialized()
 		{
-			_profile.Initialized.Should(Be.True);
+			_profile.Initialized.Should(Be.True, "_profile.Initialized.Should(Be.True)");
 		}
 
 		[Then("profile should remained not initialized")]
 		public void ProfileShouldBeNotInitialized()
 		{
-			_profile.Initialized.Should(Be.False);
+			_profile.Initialized.Should(Be.False, "_profile.Initialized.Should(Be.False)");
 		}
 
 		#region TestSaga

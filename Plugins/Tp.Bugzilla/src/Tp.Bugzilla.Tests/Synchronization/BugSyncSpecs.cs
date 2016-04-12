@@ -303,25 +303,25 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("bug in TargetProcess with name '$bugName' should have description '$bugDescription'")]
 		public void CheckBugDescription(string bugName, string bugDescription)
 		{
-			GetBug(bugName).Description.Should(Be.EqualTo(bugDescription));
+			GetBug(bugName).Description.Should(Be.EqualTo(bugDescription), "GetBug(bugName).Description.Should(Be.EqualTo(bugDescription))");
 		}
 
 		[Then("$bugsCount bugs should be created in TargetProcess")]
 		public void BugsShouldBeCreated(int bugsCount)
 		{
-			TransportMock.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is BugDTO).Count().Should(Be.EqualTo(bugsCount));
+			TransportMock.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is BugDTO).Count().Should(Be.EqualTo(bugsCount), "TransportMock.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is BugDTO).Count().Should(Be.EqualTo(bugsCount))");
 		}
 
 		[Then("$count bugs should be updated in TargetProcess")]
 		public void BugsShouldBeUpdated(int count)
 		{
-			TransportMock.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is BugDTO).Count().Should(Be.EqualTo(count));
+			TransportMock.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is BugDTO).Count().Should(Be.EqualTo(count), "TransportMock.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is BugDTO).Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should be in project $projectId")]
 		public void CheckProject(string bugName, int projectId)
 		{
-			GetBug(bugName).ProjectID.Should(Be.EqualTo(projectId));
+			GetBug(bugName).ProjectID.Should(Be.EqualTo(projectId), "GetBug(bugName).ProjectID.Should(Be.EqualTo(projectId))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have state '$bugState'")]
@@ -329,7 +329,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var state = Context.EntityStates.Single(s => s.Name == bugState);
 
-			GetBug(bugName).EntityStateID.Should(Be.EqualTo(state.ID));
+			GetBug(bugName).EntityStateID.Should(Be.EqualTo(state.ID), "GetBug(bugName).EntityStateID.Should(Be.EqualTo(state.ID))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have severity '$severityName'")]
@@ -337,7 +337,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var severity = Context.Severities.Single(s => s.Name == severityName);
 
-			GetBug(bugName).SeverityID.Should(Be.EqualTo(severity.ID));
+			GetBug(bugName).SeverityID.Should(Be.EqualTo(severity.ID), "GetBug(bugName).SeverityID.Should(Be.EqualTo(severity.ID))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have priority '$priorityName'")]
@@ -345,37 +345,37 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var priority = Context.Priorities.Single(s => s.Name == priorityName);
 
-			GetBug(bugName).PriorityID.Should(Be.EqualTo(priority.ID));
+			GetBug(bugName).PriorityID.Should(Be.EqualTo(priority.ID), "GetBug(bugName).PriorityID.Should(Be.EqualTo(priority.ID))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have creation date '$creationDate'")]
 		public void CheckCreationDate(string bugName, string creationDate)
 		{
-			GetBug(bugName).CreateDate.Should(Be.EqualTo(DateTime.Parse(creationDate).ToLocalTime()));
+			GetBug(bugName).CreateDate.Should(Be.EqualTo(DateTime.Parse(creationDate).ToLocalTime()), "GetBug(bugName).CreateDate.Should(Be.EqualTo(DateTime.Parse(creationDate).ToLocalTime()))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have comment on changing state '$comment'")]
 		public void CheckComment(string bugName, string comment)
 		{
-			GetBug(bugName).CommentOnChangingState.Should(Be.EqualTo(comment));
+			GetBug(bugName).CommentOnChangingState.Should(Be.EqualTo(comment), "GetBug(bugName).CommentOnChangingState.Should(Be.EqualTo(comment))");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have no owner")]
 		public void ShouldCheckThatOwnerDoesntSet(string bugName)
 		{
-			GetBug(bugName).OwnerID.Should(Be.Null);
+			GetBug(bugName).OwnerID.Should(Be.Null, "GetBug(bugName).OwnerID.Should(Be.Null)");
 		}
 
 		[Then("bug in TargetProcess with name '$bugName' should have owner '$ownerLogin'")]
 		public void CheckBugOwner(string bugName, string ownerLogin)
 		{
-			GetBug(bugName).OwnerID.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID));
+			GetBug(bugName).OwnerID.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID), "GetBug(bugName).OwnerID.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID))");
 		}
 
 		[Then("message sent to TargetProcess with name '$bugName' should not contain state")]
 		public void CheckState(string bugName)
 		{
-			GetBug(bugName).EntityStateID.Should(Be.Null);
+			GetBug(bugName).EntityStateID.Should(Be.Null, "GetBug(bugName).EntityStateID.Should(Be.Null)");
 		}
 	}
 }

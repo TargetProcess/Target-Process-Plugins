@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport
 {
@@ -44,7 +39,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 		private static string GetWindowsIdentityName(string label)
 		{
 			if (string.IsNullOrEmpty(label) || !label.Contains(WINDOWSIDENTITYNAME)) return null;
-			
+
 			var winStartIndex = label.IndexOf(String.Format("<{0}>", WINDOWSIDENTITYNAME)) + WINDOWSIDENTITYNAME.Length + 2;
 			var winCount = label.IndexOf(String.Format("</{0}>", WINDOWSIDENTITYNAME)) - winStartIndex;
 
@@ -54,7 +49,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 		private static string GetIdForCorrelation(string label)
 		{
 			if (string.IsNullOrEmpty(label) || !label.Contains(IDFORCORRELATION)) return null;
-			
+
 			var idStartIndex = label.IndexOf(String.Format("<{0}>", IDFORCORRELATION)) + IDFORCORRELATION.Length + 2;
 			var idCount = label.IndexOf(String.Format("</{0}>", IDFORCORRELATION)) - idStartIndex;
 

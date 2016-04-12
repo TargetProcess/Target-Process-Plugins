@@ -89,12 +89,12 @@ namespace Tp.MashupManager.Tests.Profile
 		[Then("error message '$errorMessage' should be looged")]
 		public void CheckLoggedError(string errorMessage)
 		{
-			Logger.Messages[Level.Error].Messages.Should(Contains.Item(errorMessage));
+			Logger.Messages[Level.Error].Messages.Should(Contains.Item(errorMessage), "Logger.Messages[Level.Error].Messages.Should(Contains.Item(errorMessage))");
 		}
 
 		private void CheckReturnedProfile(PluginProfileDto profileDto)
 		{
-			_response.ResponseData.Should(Be.EqualTo(profileDto.Serialize()));
+			_response.ResponseData.Should(Be.EqualTo(profileDto.Serialize()), "_response.ResponseData.Should(Be.EqualTo(profileDto.Serialize()))");
 		}
 	}
 }

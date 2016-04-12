@@ -142,8 +142,8 @@ namespace Tp.Subversion
 
 			revisionDto.Should(Be.Not.Null, "Revision {0} was not created in TP", commit);
 
-			revisionDto.Description.Should(Be.EqualTo(revisionEtalon.Description));
-			revisionDto.CommitDate.Should(Be.EqualTo(revisionEtalon.CommitDate));
+			revisionDto.Description.Should(Be.EqualTo(revisionEtalon.Description), "revisionDto.Description.Should(Be.EqualTo(revisionEtalon.Description))");
+			revisionDto.CommitDate.Should(Be.EqualTo(revisionEtalon.CommitDate), "revisionDto.CommitDate.Should(Be.EqualTo(revisionEtalon.CommitDate))");
 
 			var revisionCreated = Context.Transport.LocalQueue.GetMessages<RevisionCreatedMessage>()
 				.Select(x => x.Dto)
@@ -154,8 +154,8 @@ namespace Tp.Subversion
 				.ToList();
 
 			revisionFileDtos.Select(x => x.FileAction).Should(
-				Be.EquivalentTo(revisionEtalon.RevisionFiles.Select(x => x.FileAction)));
-			revisionFileDtos.Select(x => x.FileName).Should(Be.EquivalentTo(revisionEtalon.RevisionFiles.Select(x => x.FileName)));
+				Be.EquivalentTo(revisionEtalon.RevisionFiles.Select(x => x.FileAction)), "revisionFileDtos.Select(x => x.FileAction).Should(Be.EquivalentTo(revisionEtalon.RevisionFiles.Select(x => x.FileAction)))");
+			revisionFileDtos.Select(x => x.FileName).Should(Be.EquivalentTo(revisionEtalon.RevisionFiles.Select(x => x.FileName)), "revisionFileDtos.Select(x => x.FileName).Should(Be.EquivalentTo(revisionEtalon.RevisionFiles.Select(x => x.FileName)))");
 		}
 
 		[Given(@"plugin started up")]
@@ -176,7 +176,7 @@ namespace Tp.Subversion
 		public void RevisionsShouldBeDetected(int revisionsCount)
 		{
 			Context.Transport.TpQueue.GetCreatedDtos<RevisionDTO>()
-				.Count().Should(Be.EqualTo(revisionsCount));
+				.Count().Should(Be.EqualTo(revisionsCount), "Context.Transport.TpQueue.GetCreatedDtos<RevisionDTO>().Count().Should(Be.EqualTo(revisionsCount))");
 		}
 
 		[AfterScenario]

@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 
 namespace Tp.Integration.Messages.PluginLifecycle
@@ -14,6 +9,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		public PluginName PluginName { get; set; }
 		public string[] Placeholders { get; set; }
 		public string MashupName { get; set; }
+		public AccountName AccountName { get; set; }
 	}
 
 	[Serializable]

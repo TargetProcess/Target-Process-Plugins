@@ -3,9 +3,8 @@ tau.mashups
     .addDependency("Tfs/EntityMappingEditor")
     .addDependency("tp/bus")
     .addDependency("tp/plugins/profileControlsBlock")
-    .addDependency("tp/jquery.utils")
     .addDependency("libs/jquery/jquery.tmpl")
-    .addModule("Tfs/ProfileEditor", function (UserMappingEditor, EntityMappingEditor, Bus, profileControlsBlock) {
+    .addModule("Tfs/ProfileEditor", function (UserMappingEditor, EntityMappingEditor, Bus, profileControlsBlock, $) {
 
         function ProfileEditor(config) {
             this._create(config);

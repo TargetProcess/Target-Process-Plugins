@@ -8,8 +8,8 @@ namespace Tp.Utils.Csv
 {
 	public class CsvRenderer
 	{
-		private char _delimiter;
-		private TextWriter _textWriter;
+		private readonly char _delimiter;
+		private readonly TextWriter _textWriter;
 		private bool _newLineWritten = true;
 
 		/// <summary>
@@ -22,7 +22,7 @@ namespace Tp.Utils.Csv
 		{
 			if (textWriter == null)
 			{
-				throw new ArgumentNullException("textWriter");
+				throw new ArgumentNullException(nameof(textWriter));
 			}
 			_delimiter = delimiter;
 			_textWriter = textWriter;
@@ -70,7 +70,7 @@ namespace Tp.Utils.Csv
 		{
 			if (value == null)
 			{
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 			}
 			if (!_newLineWritten)
 			{

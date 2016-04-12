@@ -1,0 +1,52 @@
+//Tiny Parser Generator v1.3
+//Copyright © Herre Kuijpers 2008-2012
+
+
+<% @TinyPG Namespace="System.Linq.Dynamic" %>
+
+QUESTION -> @"\?";
+COLON -> ":";
+ANY -> "[a-z]+";
+OR -> @"\|\||or";
+AND -> @"&&|and";
+COMPARISON -> @"<|<=|>|>=|==|!=";
+ADDITIVE -> "[-+&]";
+MULTIPLICATIVE -> @"[*/%]|mod|div";
+UNARY -> "-|!|not";
+DOT -> @"\.";
+IDENTIFIER -> "[a-zA-Z_][a-zA-Z_0-9]*";
+SEMICOLONNAME-> "[a-zA-Z_][a-zA-Z_0-9]*:";
+ASNAME -> "as ([a-zA-Z_][a-zA-Z_0-9]*)";
+STRING -> @"([""'])[^""\\\r\n]*(?:\\.[^""\\\r\n]*)*\1";
+INTEGER     	-> @"[0-9]+";
+REAL 		-> @"[0-9]*\.[0-9]+";
+OPENPAREN -> @"\(";
+CLOSEPAREN -> @"\)";
+OPENCURLY -> @"\{";
+CLOSECURLY -> @"}";
+IN -> "in";
+COMMA -> ",";
+OPENSQUARE -> @"\[";
+CLOSESQUARE -> @"]";
+NEW -> "new";
+EOF               	-> @"^$";
+
+[Skip]
+WHITESPACE        	-> @"\s+";
+
+Start -> Expression EOF;
+Expression -> LogicalOr (QUESTION Expression COLON Expression)?;
+LogicalOr -> LogicalAnd (OR LogicalAnd)*;
+LogicalAnd -> Comparison (AND Comparison)*;
+Comparison -> Additive ((COMPARISON Additive)+ | IN OPENSQUARE ValueList CLOSESQUARE)?;
+ValueList -> Expression (COMMA Expression)*;
+Additive -> Multiplicative (ADDITIVE Multiplicative)*;
+Multiplicative -> Unary (MULTIPLICATIVE Unary)*;
+Unary -> UNARY? Primary;
+Primary -> Statement | NewJson | Value | OPENPAREN Expression CLOSEPAREN;
+Value -> STRING | INTEGER | REAL;
+NewJson -> (OPENCURLY Field (COMMA Field)* CLOSECURLY) | NEW OPENPAREN Field (COMMA Field)* CLOSEPAREN;
+Field -> SEMICOLONNAME? Expression ASNAME?;
+
+Statement -> IDENTIFIER (Call)? (DOT Statement)?;
+Call -> (OPENPAREN ValueList? CLOSEPAREN) | (OPENSQUARE ValueList CLOSESQUARE );

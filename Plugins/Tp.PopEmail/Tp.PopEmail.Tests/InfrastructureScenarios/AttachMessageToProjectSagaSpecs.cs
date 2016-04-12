@@ -27,7 +27,6 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		}
 	}
 
-
 	[TestFixture, ActionSteps]
     [Category("PartPlugins0")]
 	public class AttachMessageToProjectSagaSpecs
@@ -64,8 +63,8 @@ namespace Tp.PopEmailIntegration.InfrastructureScenarios
 		public void MessageShouldBeAttachedToProject(int projectId)
 		{
 			var message = Context.Transport.TpQueue.GetMessages<AttachMessageToGeneralCommand>().First();
-			message.MessageId.Should(Be.EqualTo(Context.Message.ID));
-			message.GeneralId.Should(Be.EqualTo(projectId));
+			message.MessageId.Should(Be.EqualTo(Context.Message.ID), "message.MessageId.Should(Be.EqualTo(Context.Message.ID))");
+			message.GeneralId.Should(Be.EqualTo(projectId), "message.GeneralId.Should(Be.EqualTo(projectId))");
 		}
 	}
 }

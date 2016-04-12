@@ -31,7 +31,7 @@ namespace Tp.Core.Expressions
 		{
 			if (node.Member.MemberType == MemberTypes.Property)
 			{
-				var propertyInfo = ((PropertyInfo)node.Member);
+				var propertyInfo = ((PropertyInfo) node.Member);
 
 				var inlinableAttribute = propertyInfo.GetCustomAttribute<InlineableAttribute>();
 
@@ -52,7 +52,8 @@ namespace Tp.Core.Expressions
 			return base.VisitMember(node);
 		}
 
-		private Expression InlineExpression(Expression thisExpression, MethodInfo targetMethod, Maybe<InlineableAttribute> inlinableAttribute, ReadOnlyCollection<Expression> targetArguments)
+		private Expression InlineExpression(Expression thisExpression, MethodInfo targetMethod, Maybe<InlineableAttribute> inlinableAttribute,
+			ReadOnlyCollection<Expression> targetArguments)
 		{
 			var inlineExpression = FindMethodToInline(targetMethod, inlinableAttribute.Value.InlineMethodName)
 				.Select(methodInfo =>
@@ -60,17 +61,19 @@ namespace Tp.Core.Expressions
 					var values = GetParameterValuesToInline(targetMethod, targetArguments, methodInfo, _inlineEnvironment);
 					return (LambdaExpression) methodInfo.Invoke(null, values);
 				})
-				.Recover(exception => Try.Create<LambdaExpression>(targetMethod.Decompile).Recover(_ => new Failure<LambdaExpression>(exception)));
+				.Recover(exception => Try.Create(targetMethod.Decompile).Recover(_ => new Failure<LambdaExpression>(exception)));
 
 			var argumentsForInlined = thisExpression == null ? targetArguments : new[] { thisExpression }.Concat(targetArguments);
 
 			return inlineExpression.Value.Splice(argumentsForInlined);
 		}
 
-		private static object[] GetParameterValuesToInline(MethodInfo targetMethod, ReadOnlyCollection<Expression> targetArguments, MethodInfo methodToInline, IEnumerable<object> inlineEnvironments)
+		private static object[] GetParameterValuesToInline(MethodInfo targetMethod, ReadOnlyCollection<Expression> targetArguments,
+			MethodInfo methodToInline, IEnumerable<object> inlineEnvironments)
 		{
-			var targetParameters = targetMethod.GetParameters().Select((parameter, index) => new { value = targetArguments[index], parameter }).ToArray();
-			var inlineParameters = methodToInline.GetParameters().Select((parameter, index) => new {index, parameter}).ToArray();
+			var targetParameters =
+				targetMethod.GetParameters().Select((parameter, index) => new { value = targetArguments[index], parameter }).ToArray();
+			var inlineParameters = methodToInline.GetParameters().Select((parameter, index) => new { index, parameter }).ToArray();
 
 			var values = from inlineParam in inlineParameters
 				join targetParam in targetParameters on inlineParam.parameter.Name equals targetParam.parameter.Name
@@ -90,7 +93,8 @@ namespace Tp.Core.Expressions
 			var maybeConst = expression as ConstantExpression;
 			if (maybeConst == null)
 			{
-				throw new NotSupportedException("Only constant arguments can be passed to inline method {0}.{1}".Fmt(methodToInline.DeclaringType, methodToInline.Name));
+				throw new NotSupportedException("Only constant arguments can be passed to inline method {0}.{1}".Fmt(methodToInline.DeclaringType,
+					methodToInline.Name));
 			}
 
 			return maybeConst.Value;
@@ -101,12 +105,15 @@ namespace Tp.Core.Expressions
 			var values = inlineEnvironments.Where(parameterType.IsInstanceOfType).ToArray();
 			if (values.Length == 0)
 			{
-				throw new InvalidOperationException("There is no overload of inlinable method {0}.{1}.".Fmt(methodToInline.DeclaringType, methodToInline.Name));
+				throw new InvalidOperationException("There is no overload of inlinable method {0}.{1}.".Fmt(methodToInline.DeclaringType,
+					methodToInline.Name));
 			}
 
 			if (values.Length > 1)
 			{
-				throw new InvalidOperationException("It's more then 1 elemnt of type {0} in inline environment. Inline method {1}.{2} can't be called.".Fmt(parameterType, methodToInline.DeclaringType, methodToInline.Name));
+				throw new InvalidOperationException(
+					"It's more then 1 elemnt of type {0} in inline environment. Inline method {1}.{2} can't be called.".Fmt(parameterType,
+						methodToInline.DeclaringType, methodToInline.Name));
 			}
 
 			return values.Single();
@@ -126,12 +133,12 @@ namespace Tp.Core.Expressions
 			else
 			{
 				var targetParams = method.GetParameters()
-					.Select(x => new {x.Name, x.ParameterType}).ToArray();
+					.Select(x => new { x.Name, x.ParameterType }).ToArray();
 
 				matchByParameters = candidateMethod => candidateMethod
 					.GetParameters()
 					.Where(x => !x.GetCustomAttribute<InlineEnvironmentAttribute>().HasValue)
-					.Select(candidateParam => new {candidateParam.Name, candidateParam.ParameterType})
+					.Select(candidateParam => new { candidateParam.Name, candidateParam.ParameterType })
 					.All(targetParams.Contains);
 
 				if (method.IsGenericMethod)
@@ -150,7 +157,7 @@ namespace Tp.Core.Expressions
 
 			var candidates = member.DeclaringType
 				.GetMethods()
-				.Where(x => x.Name == methodName && typeof (Expression).IsAssignableFrom(x.ReturnType))
+				.Where(x => x.Name == methodName && typeof(Expression).IsAssignableFrom(x.ReturnType))
 				.Where(matchByParameters)
 				.Where(matchByGenericArguments)
 				.ToArray();

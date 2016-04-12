@@ -1,8 +1,4 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 
 namespace Tp.Integration.Messages.PluginLifecycle.PluginCommand
@@ -16,8 +12,9 @@ namespace Tp.Integration.Messages.PluginLifecycle.PluginCommand
 		/// Executes the command and returns the result.
 		/// </summary>
 		/// <param name="args">Arguments passed to the command from UI.</param>
+		/// <param name="user">User who requests command execution</param>
 		/// <returns>Command result. Result status is always Fail if some unhandled exception occurs.</returns>
-		PluginCommandResponseMessage Execute(string args);
+		PluginCommandResponseMessage Execute(string args, UserDTO user = null);
 
 		/// <summary>
 		/// Command name. Should be unique for plugin.

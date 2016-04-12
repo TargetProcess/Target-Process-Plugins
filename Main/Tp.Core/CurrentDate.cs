@@ -1,11 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
-using System.ComponentModel;
-using StructureMap;
-using IContext = Tp.Core.Interfaces.IContext;
+﻿using System;
 
 namespace Tp.Core
 {
@@ -27,19 +20,13 @@ namespace Tp.Core
 				return timeKeeper.Now;
 			}
 		}
-		
+
 		static private ITimeKeeper _timeKeeper = CurrentTimeKeeper.Instance;
 
 		private static ITimeKeeper TimeKeeper
 		{
-			get
-			{
-				return _timeKeeper;
-			}
-			set
-			{
-				_timeKeeper = value;
-			}
+			get { return _timeKeeper; }
+			set { _timeKeeper = value; }
 		}
 
 		/// <summary>
@@ -50,7 +37,7 @@ namespace Tp.Core
 		{
 			var oldKeeper = TimeKeeper;
 			TimeKeeper = getter == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(getter);
-			return Disposable.Create(()=>TimeKeeper=oldKeeper);
+			return Disposable.Create(() => TimeKeeper = oldKeeper);
 		}
 
 		public static IDisposable Setup(DateTime date)
@@ -65,7 +52,9 @@ namespace Tp.Core
 
 		private class CurrentTimeKeeper : ITimeKeeper
 		{
-			private CurrentTimeKeeper() { }
+			private CurrentTimeKeeper()
+			{
+			}
 
 			public DateTime Now
 			{
@@ -89,6 +78,5 @@ namespace Tp.Core
 				get { return _time(); }
 			}
 		}
-
 	}
 }

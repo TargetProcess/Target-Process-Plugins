@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StructureMap;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Plugin.Common;
@@ -247,20 +248,20 @@ Task 2"
 		[Then("task '$taskName' should be created for user story $userStoryId with owner $ownerId")]
 		public void TaskShouldBeCreated(string taskName, int userStoryId, int ownerId)
 		{
-			ObjectFactory.GetInstance<TpBusMock>().CreateCommands.Any(x =>
-			                                                          	{
-			                                                          		if (!(x.Dto is TaskDTO)) return false;
-			                                                          		var taskDto = x.Dto as TaskDTO;
-			                                                          		return taskDto.Name == taskName &&
-			                                                          		       taskDto.UserStoryID == userStoryId &&
-			                                                          		       taskDto.OwnerID == ownerId;
-			                                                          	}).Should(Be.True);
+			ObjectFactory.GetInstance<TpBusMock>().SentCommands.Any(x =>
+			{
+				var command = x as CreateTaskForUserStoryWithTeamCommand;
+				if (command == null) return false;
+				return command.Name == taskName &&
+				       command.UserStoryID == userStoryId &&
+				       command.OwnerID == ownerId;
+			}).Should(Is.True, "Create task message was sent");
 		}
 
 		[Then("no tasks should be created")]
 		public void NoTasksShouldBeCreated()
 		{
-			ObjectFactory.GetInstance<TpBusMock>().CreateCommands.Should(Be.Empty);
+			ObjectFactory.GetInstance<TpBusMock>().CreateCommands.Should(Be.Empty, "ObjectFactory.GetInstance<TpBusMock>().CreateCommands.Should(Be.Empty)");
 		}
 
 		[Then("user story name should be updated to '$userStoryNameUpdated'")]
@@ -274,7 +275,7 @@ Task 2"
 		[Then("user story name should not be updated")]
 		public void UserStoryNameShouldBeUpdated()
 		{
-			ObjectFactory.GetInstance<TpBusMock>().UpdateCommands.Should(Be.Empty);
+			ObjectFactory.GetInstance<TpBusMock>().UpdateCommands.Should(Be.Empty, "ObjectFactory.GetInstance<TpBusMock>().UpdateCommands.Should(Be.Empty)");
 		}
 	}
 }

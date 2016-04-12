@@ -163,18 +163,18 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("bug $bugId in bugzilla should have $count comments")]
 		public void CheckCommentsCount(int bugId, int count)
 		{
-			Context.BugzillaBugs.GetById(bugId).long_descCollection.Count.Should(Be.EqualTo(count + 1));
+			Context.BugzillaBugs.GetById(bugId).long_descCollection.Count.Should(Be.EqualTo(count + 1), "Context.BugzillaBugs.GetById(bugId).long_descCollection.Count.Should(Be.EqualTo(count + 1))");
 		}
 
 		[Then("bug $bugId in bugzilla should have comment '$commentText' created by '$ownerEmail'")]
 		public long_desc CheckBugComment(int bugId, string commentText, string ownerEmail)
 		{
 			Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Where(c => c.thetext == commentText).ToList().Should
-				(Be.Not.Empty);
+				(Be.Not.Empty, "Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Where(c => c.thetext == commentText).ToList().Should(Be.Not.Empty)");
 
 			var comment =
 				Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Single(c => c.thetext == commentText);
-			comment.who.Should(Be.EqualTo(ownerEmail));
+			comment.who.Should(Be.EqualTo(ownerEmail), "comment.who.Should(Be.EqualTo(ownerEmail))");
 
 			return comment;
 		}
@@ -190,7 +190,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var comment = CheckBugComment(bugId, commentText, ownerEmail);
 
-			comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString("u")));
+			comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString("u")), "comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString(\"u\")))");
 		}
 
 		private void CreateCommentInTargetProcess(string commentText, string owner, int? bugId, DateTime createDate)

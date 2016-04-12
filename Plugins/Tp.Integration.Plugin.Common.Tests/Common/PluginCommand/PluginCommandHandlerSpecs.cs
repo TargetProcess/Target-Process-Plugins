@@ -10,6 +10,7 @@ using NBehave.Narrator.Framework;
 using NServiceBus.Unicast.Transport;
 using NUnit.Framework;
 using StructureMap;
+using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
@@ -149,9 +150,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 
 			var command = ObjectFactory.GetInstance<PluginCommandMockRepository>().Where(x => x.Name == commandName).Single() as
 			              TestPluginCustomCommand;
-			command.ResponseMessage.ResponseData.Should(Is.EqualTo(customCommandResponse.ResponseData));
-			command.Arguments.Should(Is.EqualTo(arguments));
-			customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed));
+			command.ResponseMessage.ResponseData.Should(Is.EqualTo(customCommandResponse.ResponseData), "command.ResponseMessage.ResponseData.Should(Is.EqualTo(customCommandResponse.ResponseData))");
+			command.Arguments.Should(Is.EqualTo(arguments), "command.Arguments.Should(Is.EqualTo(arguments))");
+			customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed), "customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed))");
 		}
 
 		private PluginCommandResponseMessage GetResponseMessage()
@@ -163,21 +164,21 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		public void PluginCommandResponseMessageShouldBeSend(string data)
 		{
 			var customCommandResponse = GetResponseMessage();
-			customCommandResponse.ResponseData.Should(Is.EquivalentTo(data));
-			customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed));
+			customCommandResponse.ResponseData.Should(Is.EquivalentTo(data), "customCommandResponse.ResponseData.Should(Is.EquivalentTo(data))");
+			customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed), "customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed))");
 		}
 
 		[Then("response message with Error status should be sent")]
 		public void CheckExceptionWasThrown()
 		{
 			var customCommandResponse = GetResponseMessage();
-			customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Error));
+			customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Error), "customCommandResponse.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Error))");
 		}
 	}
 
 	public class PluginCommandWithException : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			throw new ApplicationException("Exception");
 		}
@@ -192,7 +193,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 
 	public class TestPluginCustomCommand : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string arguments)
+		public PluginCommandResponseMessage Execute(string arguments, UserDTO user)
 		{
 			Arguments = arguments;
 			var pluginCustomCommandResponse = new PluginCommandResponseMessage {ResponseData = "Some Response"};

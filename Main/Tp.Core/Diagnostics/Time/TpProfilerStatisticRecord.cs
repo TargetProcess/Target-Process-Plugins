@@ -4,6 +4,6 @@ namespace Tp.Core.Diagnostics.Time
 	{
 		public ProfilerTarget Target { get; set; }
 		public string Name { get; set; }
-		public string Data { get;set; }
+		public string Data { get; set; }
 	}
 }

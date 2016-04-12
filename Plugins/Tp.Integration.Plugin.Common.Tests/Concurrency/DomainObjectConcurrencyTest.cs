@@ -34,7 +34,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 			thread.Start();
 			secondAction();
 			thread.Join();
-			threadException.Should(Be.Null);
+			threadException.Should(Be.Null, "threadException.Should(Be.Null)");
 		}
 	}
 }

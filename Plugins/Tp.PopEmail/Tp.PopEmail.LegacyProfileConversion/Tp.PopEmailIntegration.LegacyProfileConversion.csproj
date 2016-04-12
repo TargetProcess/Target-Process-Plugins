@@ -67,28 +67,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|x86'">
-    <OutputPath>bin\FuncTests\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Tp.PopEmailIntegration.LegacyProfileConversion.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU'">
-    <OutputPath>bin\FuncTests\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Tp.PopEmailIntegration.LegacyProfileConversion.Program</StartupObject>
   </PropertyGroup>
@@ -132,19 +110,24 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
-      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project><Name>Tp.LegacyProfileConversion.Common</Name>
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
+      <Name>Tp.LegacyProfileConversion.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.PopEmail\Tp.PopEmailIntegration.csproj">
-      <Project>{EC3D077F-495A-4C8B-934B-518C258076F4}</Project><Name>Tp.PopEmailIntegration</Name>
+      <Project>{EC3D077F-495A-4C8B-934B-518C258076F4}</Project>
+      <Name>Tp.PopEmailIntegration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +148,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
   </PropertyGroup>

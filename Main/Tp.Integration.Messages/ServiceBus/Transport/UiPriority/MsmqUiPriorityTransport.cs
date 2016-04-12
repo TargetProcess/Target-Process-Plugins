@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,16 +9,14 @@ using System.Security.Principal;
 using System.Threading;
 using System.Transactions;
 using System.Xml.Serialization;
+using log4net;
 using NServiceBus;
 using NServiceBus.Serialization;
-using NServiceBus.Unicast;
 using NServiceBus.Unicast.Transport;
 using NServiceBus.Unicast.Transport.Msmq;
 using NServiceBus.Utils;
 using Tp.Integration.Messages.ServiceBus.Transport.Router;
-using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
 using Tp.Integration.Messages.ServiceBus.UnicastBus;
-using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 {
@@ -80,6 +73,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		public bool PurgeOnStartup { get; set; }
 
 		public RoutableTransportMode RoutableTransportMode { get; set; }
+
 		public void ReceiveMessageLater(TransportMessage m, string address)
 		{
 			if (!string.IsNullOrEmpty(address))
@@ -414,13 +408,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				}
 				catch (MessageQueueException ex)
 				{
-					
 					if (ex.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					{
 						throw new ConfigurationErrorsException("The destination queue '" + destination +
-						                                       "' could not be found. " +
-						                                       "It may also be the case that the given queue just hasn't been created yet, or has been deleted."
-						                                       , ex);
+							"' could not be found. " +
+							"It may also be the case that the given queue just hasn't been created yet, or has been deleted."
+							, ex);
 					}
 
 					throw;
@@ -459,11 +452,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				workerThreads.Add(result);
 
 				result.Stopped += delegate(object sender, EventArgs e)
-				                  	{
-				                  		var wt = sender as WorkerThread;
-				                  		lock (workerThreads)
-				                  			workerThreads.Remove(wt);
-				                  	};
+				{
+					var wt = sender as WorkerThread;
+					lock (workerThreads)
+						workerThreads.Remove(wt);
+				};
 
 				return result;
 			}
@@ -529,7 +522,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				//in case AbortHandlingCurrentMessage was called
 				return;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Logger.Warn("Failed to process message.", e);
 				if (IsTransactional)
@@ -576,10 +569,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			if (sourceHeader == null)
 			{
 				result.Headers.Add(new HeaderInfo
-						{
-							Key = TpUnicastBus.SourceQueue,
-							Value = queue.IndependentAddressForQueue
-						});
+				{
+					Key = TpUnicastBus.SourceQueue,
+					Value = queue.IndependentAddressForQueue
+				});
 			}
 			else
 			{
@@ -630,7 +623,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 			failuresPerMessageLocker.EnterReadLock();
 
 			if (failuresPerMessage.ContainsKey(messageId) &&
-			    (failuresPerMessage[messageId] >= maxRetries))
+				(failuresPerMessage[messageId] >= maxRetries))
 			{
 				failuresPerMessageLocker.ExitReadLock();
 				failuresPerMessageLocker.EnterWriteLock();
@@ -706,12 +699,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				}
 
 				if (mqe.MessageQueueErrorCode == MessageQueueErrorCode.ServiceNotAvailable ||
-				    mqe.MessageQueueErrorCode == MessageQueueErrorCode.OperationCanceled)
+					mqe.MessageQueueErrorCode == MessageQueueErrorCode.OperationCanceled)
 				{
 					//this exceptions occur after windows restart. This is normal situation.
 					Logger.Warn(
 						"Problem in peeking a message from queue: " +
-						Enum.GetName(typeof (MessageQueueErrorCode), mqe.MessageQueueErrorCode), mqe);
+							Enum.GetName(typeof(MessageQueueErrorCode), mqe.MessageQueueErrorCode), mqe);
 
 					Thread.Sleep(100);
 				}
@@ -719,7 +712,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 				{
 					Logger.Error(
 						"Problem in peeking a message from queue: " +
-						Enum.GetName(typeof (MessageQueueErrorCode), mqe.MessageQueueErrorCode), mqe);
+							Enum.GetName(typeof(MessageQueueErrorCode), mqe.MessageQueueErrorCode), mqe);
 				}
 
 				return false;
@@ -765,7 +758,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 
 				Logger.Error(
 					"Problem in receiving message from queue: " +
-					Enum.GetName(typeof (MessageQueueErrorCode), mqe.MessageQueueErrorCode), mqe);
+						Enum.GetName(typeof(MessageQueueErrorCode), mqe.MessageQueueErrorCode), mqe);
 				return null;
 			}
 			catch (ObjectDisposedException)
@@ -788,8 +781,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		protected void MoveToErrorQueue(Message m, IPluginQueue queue)
 		{
 			m.Label = m.Label +
-			          string.Format("<{0}>{1}</{0}><{2}>{3}<{2}>", FAILEDQUEUE,
-			                        queue.IndependentAddressForQueue, ORIGINALID, m.Id);
+				string.Format("<{0}>{1}</{0}><{2}>{3}<{2}>", FAILEDQUEUE,
+					queue.IndependentAddressForQueue, ORIGINALID, m.Id);
 
 			if (errorQueue != null)
 			{
@@ -813,21 +806,21 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		public TransportMessage Convert(Message m)
 		{
 			var result = new TransportMessage
-			             	{
-			             		Id = m.Id,
-			             		CorrelationId =
-			             			(m.CorrelationId == "00000000-0000-0000-0000-000000000000\\0"
-			             			 	? null
-			             			 	: m.CorrelationId),
-			             		Recoverable = m.Recoverable,
-			             		TimeToBeReceived = m.TimeToBeReceived,
-			             		TimeSent = m.SentTime,
-			             		ReturnAddress = MsmqUtilities.GetIndependentAddressForQueue(m.ResponseQueue),
-			             		MessageIntent =
-			             			Enum.IsDefined(typeof (MessageIntentEnum), m.AppSpecific)
-			             				? (MessageIntentEnum) m.AppSpecific
-			             				: MessageIntentEnum.Send
-			             	};
+			{
+				Id = m.Id,
+				CorrelationId =
+					(m.CorrelationId == "00000000-0000-0000-0000-000000000000\\0"
+						? null
+						: m.CorrelationId),
+				Recoverable = m.Recoverable,
+				TimeToBeReceived = m.TimeToBeReceived,
+				TimeSent = m.SentTime,
+				ReturnAddress = MsmqUtilities.GetIndependentAddressForQueue(m.ResponseQueue),
+				MessageIntent =
+					Enum.IsDefined(typeof(MessageIntentEnum), m.AppSpecific)
+						? (MessageIntentEnum) m.AppSpecific
+						: MessageIntentEnum.Send
+			};
 
 			FillIdForCorrelationAndWindowsIdentity(result, m);
 
@@ -925,7 +918,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		private static void FillLabel(Message toSend, TransportMessage m)
 		{
 			toSend.Label = string.Format("<{0}>{2}</{0}><{1}>{3}</{1}>", IDFORCORRELATION, WINDOWSIDENTITYNAME,
-			                             m.IdForCorrelation, m.WindowsIdentityName);
+				m.IdForCorrelation, m.WindowsIdentityName);
 		}
 
 		/// <summary>
@@ -1040,9 +1033,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 
 		[ThreadStatic] private static volatile string _messageId;
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (MsmqTransport));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(MsmqTransport));
 
-		private readonly XmlSerializer headerSerializer = new XmlSerializer(typeof (List<HeaderInfo>));
+		private readonly XmlSerializer headerSerializer = new XmlSerializer(typeof(List<HeaderInfo>));
 
 		#endregion
 
@@ -1065,5 +1058,4 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.UiPriority
 		const int SendAttemptCount = 5;
 		const int SendAttemptSleepIfFault = 500;
 	}
-
-	}
+}

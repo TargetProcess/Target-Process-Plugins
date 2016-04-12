@@ -16,8 +16,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.ServiceBus
 		[Test]
 		public void PopulateUiQueueFromFullQueueName()
 		{
-			UnicastBus.GetUiQueueName("input@truhtanov").Should(Be.EqualTo("inputUI@truhtanov"));
-			UnicastBus.GetUiQueueName("input").Should(Be.EqualTo("inputUI"));
+			UnicastBus.GetUiQueueName("input@truhtanov").Should(Be.EqualTo("inputUI@truhtanov"), "UnicastBus.GetUiQueueName(\"input@truhtanov\").Should(Be.EqualTo(\"inputUI@truhtanov\"))");
+			UnicastBus.GetUiQueueName("input").Should(Be.EqualTo("inputUI"), "UnicastBus.GetUiQueueName(\"input\").Should(Be.EqualTo(\"inputUI\"))");
 		}
 	}
 }

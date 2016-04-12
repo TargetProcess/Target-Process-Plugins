@@ -13,7 +13,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
 
 		public static LoggerContext New(string queueName, TransportMessage message = null)
 		{
-			return new LoggerContext{QueueName = queueName, Message = message};
+			return new LoggerContext { QueueName = queueName, Message = message };
 		}
 
 		public string ToString(bool fullContext)
@@ -21,11 +21,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
 			var buf = new StringBuilder();
 			Begin(buf);
 			PutKeyValueInto(buf, "queue", QueueName);
-			if(Message != null)
+			if (Message != null)
 			{
 				AddMessage(buf);
 			}
-			if(fullContext)
+			if (fullContext)
 			{
 				AddThreadPoolInfo(buf);
 			}
@@ -70,7 +70,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
 			buf.AppendFormat("{0}={1},", key, value);
 			return;
 		}
-		
+
 		private static string GetMessageType(TransportMessage message)
 		{
 			if (message.Body == null || message.Body.Length == 0)
@@ -78,9 +78,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
 				return string.Empty;
 			}
 			IMessage firstBody = message.Body[0];
-			return firstBody == null 
-					? string.Empty 
-					: firstBody.GetType().FullName;
+			return firstBody == null
+				? string.Empty
+				: firstBody.GetType().FullName;
 		}
 	}
 }

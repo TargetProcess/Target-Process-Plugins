@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System.Text.RegularExpressions;
 
 namespace Tp.Integration.Messages.SerializationPatches
@@ -21,7 +16,7 @@ namespace Tp.Integration.Messages.SerializationPatches
 		public bool NeedToApply(string text)
 		{
 			return Regex.IsMatch(text, BACKING_FIELD_PATTERN) &&
-			       Regex.IsMatch(_keyType, "Tp.Integration.Common.(.*?), Tp.Integration.Messages");
+				Regex.IsMatch(_keyType, "Tp.Integration.Common.(.*?), Tp.Integration.Messages");
 		}
 
 		public string Apply(string text)

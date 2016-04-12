@@ -1,4 +1,3 @@
-// ReSharper disable CheckNamespace
 namespace System.IO
 // ReSharper restore CheckNamespace
 {
@@ -25,6 +24,18 @@ namespace System.IO
 			}
 
 			Directory.Delete(path, false);
+		}
+
+		public static bool HasParentChildRelation(this DirectoryInfo expectedParent, DirectoryInfo maybeOrphan)
+		{
+			for (var current = maybeOrphan; current != null; current = current.Parent)
+			{
+				if (expectedParent.FullName.Equals(current.FullName, StringComparison.InvariantCultureIgnoreCase))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

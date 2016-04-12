@@ -120,7 +120,8 @@ namespace Tp.Integration.Plugin.Common.PluginLifecycle
 					                   		PluginMashupScripts = pluginMashup.GetScripts(),
 					                   		PluginName = Context.PluginName,
                                             Placeholders = pluginMashup.Placeholders,
-					                   		MashupName = pluginMashup.MashupName
+					                   		MashupName = pluginMashup.MashupName,
+											AccountName = AccountName.Empty
 					                   	});
 				}
 				else

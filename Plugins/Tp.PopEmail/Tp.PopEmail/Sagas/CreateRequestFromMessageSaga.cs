@@ -62,6 +62,7 @@ namespace Tp.PopEmailIntegration.Sagas
 														ProjectID = message.ProjectId,
 														SourceType = RequestSourceEnum.Email,
 														IsPrivate = message.IsPrivate,
+														SquadID = message.SquadId
 													};
 				Send(new CreateRequestCommand(requestDto));
 			}

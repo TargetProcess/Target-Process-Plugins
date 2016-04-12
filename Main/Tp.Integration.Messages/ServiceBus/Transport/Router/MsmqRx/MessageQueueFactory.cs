@@ -11,10 +11,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 		public static MessageQueue GetOrCreateMessageQueue(string name)
 		{
 			CheckedQueues.GetOrAdd(name, n =>
-				{
-					MsmqUtilities.CreateQueueIfNecessary(name);
-					return null;
-				});
+			{
+				MsmqUtilities.CreateQueueIfNecessary(name);
+				return null;
+			});
 
 			var q = new MessageQueue(MsmqUtilities.GetFullPath(name), false, true);
 			var filter = new MessagePropertyFilter();

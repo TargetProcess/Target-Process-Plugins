@@ -65,14 +65,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tp.Core.Functional, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+    <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentIdFactoryTests.cs" />
     <Compile Include="DocumentIndexTypeTest.cs" />
+    <Compile Include="AssignableSquadChangedSagaTest.cs" />
     <Compile Include="GeneralProjectChangedSagaTest.cs" />
     <Compile Include="HootTests.cs" />
     <Compile Include="DigitsTokensParserTests.cs" />
@@ -129,6 +130,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -279,25 +279,25 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("bug $bugId status in bugzilla should be '$status'")]
 		public void CheckBugzillaStatus(int bugId, string status)
 		{
-			Context.BugzillaBugs.GetById(bugId).bug_status.Should(Be.EqualTo(status));
+			Context.BugzillaBugs.GetById(bugId).bug_status.Should(Be.EqualTo(status), "Context.BugzillaBugs.GetById(bugId).bug_status.Should(Be.EqualTo(status))");
 		}
 
 		[Then("bug $bugId resolution in bugzilla should be '$resolution'")]
 		public void CheckResolution(int bugId, string resolution)
 		{
-			Context.BugzillaBugs.GetById(bugId).resolution.Should(Be.EqualTo(resolution));
+			Context.BugzillaBugs.GetById(bugId).resolution.Should(Be.EqualTo(resolution), "Context.BugzillaBugs.GetById(bugId).resolution.Should(Be.EqualTo(resolution))");
 		}
 
 		[Then("bug $bugId duplicate id in bugzilla should be $duplicateBugId")]
 		public void CheckDuplicateId(int bugId, string duplicateBugId)
 		{
-			Context.BugzillaBugs.GetById(bugId).dup_id.Should(Be.EqualTo(duplicateBugId));
+			Context.BugzillaBugs.GetById(bugId).dup_id.Should(Be.EqualTo(duplicateBugId), "Context.BugzillaBugs.GetById(bugId).dup_id.Should(Be.EqualTo(duplicateBugId))");
 		}
 
 		[Then("bug $bugId should not be updated in Bugzilla")]
 		public void BugShouldNotBeUpdated(string bugId)
 		{
-			ObjectFactory.GetInstance<BugzillaServiceMock>().BugUpdateCalls.ContainsKey(bugId).Should(Be.False);
+			ObjectFactory.GetInstance<BugzillaServiceMock>().BugUpdateCalls.ContainsKey(bugId).Should(Be.False, "ObjectFactory.GetInstance<BugzillaServiceMock>().BugUpdateCalls.ContainsKey(bugId).Should(Be.False)");
 		}
 	}
 }

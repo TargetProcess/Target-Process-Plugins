@@ -26,6 +26,7 @@ namespace Tp.Tfs.WorkItemsIntegration.FeatureToggling
 		private readonly string _sourceControlMashupsPhysicalPath;
 		private readonly string _profileEditorPhysicalPath;
 		private readonly ILog _log;
+		private readonly object _gate = new object();
 
 		public TfsPluginMashupRepository()
 		{
@@ -41,26 +42,31 @@ namespace Tp.Tfs.WorkItemsIntegration.FeatureToggling
 		{
 			get
 			{
-				bool state = ConfigHelper.GetWorkItemsState();
-
-				CopyScripts(state);
-
-				var mashupCollection = new MashupCollection(_mashupsPhysicalPath);
-				var result = mashupCollection.
-						Where(mashup => mashup.MashupName != ProfileEditorMashupName.ProfileEditorMashupPrefix).
-						Select(mashup => new PluginMashup(mashup.MashupName, mashup.MashupFilePaths, new string[] { })).ToList();
-
-				var profileEditorMashup = mashupCollection.FirstOrDefault(mashup => mashup.MashupName == ProfileEditorMashupName.ProfileEditorMashupPrefix);
-
-				if (profileEditorMashup != null)
+				lock (_gate)
 				{
-					var profileEditor = new PluginProfileEditorMashup(
-							profileEditorMashup.MashupFilePaths.Where(path => !path.Contains("WorkItemsIntegration") && !path.Contains("SourceControl")));
+					bool state = ConfigHelper.GetWorkItemsState();
 
-					result.Add(profileEditor);
+					CopyScripts(state);
+
+					var mashupCollection = new MashupCollection(_mashupsPhysicalPath);
+					var result = mashupCollection.
+						Where(mashup => mashup.MashupName != ProfileEditorMashupName.ProfileEditorMashupPrefix).
+						Select(mashup => new PluginMashup(mashup.MashupName, mashup.MashupFilePaths, new string[] {})).ToList();
+
+					var profileEditorMashup =
+						mashupCollection.FirstOrDefault(mashup => mashup.MashupName == ProfileEditorMashupName.ProfileEditorMashupPrefix);
+
+					if (profileEditorMashup != null)
+					{
+						var profileEditor = new PluginProfileEditorMashup(
+							profileEditorMashup.MashupFilePaths.Where(
+								path => !path.Contains("WorkItemsIntegration") && !path.Contains("SourceControl")));
+
+						result.Add(profileEditor);
+					}
+
+					return result.ToArray();
 				}
-
-				return result.ToArray();
 			}
 		}
 

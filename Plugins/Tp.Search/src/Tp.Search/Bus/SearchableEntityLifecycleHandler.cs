@@ -60,7 +60,10 @@ namespace Tp.Search.Bus
 																								IHandleMessages<CommentDeletedMessage>,
 																								IHandleMessages<ProjectUpdatedMessage>,
 																								IHandleMessages<ReleaseProjectCreatedMessage>,
-																								IHandleMessages<ReleaseProjectDeletedMessage>
+																								IHandleMessages<ReleaseProjectDeletedMessage>,
+																								IHandleMessages<AssignableSquadCreatedMessage>,
+																								IHandleMessages<AssignableSquadUpdatedMessage>,
+																								IHandleMessages<AssignableSquadDeletedMessage>
 	{
 		private readonly IEntityIndexer _entityIndexer;
 		private readonly DocumentIndexRebuilder _documentIndexRebuilder;
@@ -340,6 +343,21 @@ namespace Tp.Search.Bus
 			RemoveCommentIndex(message.Dto);
 		}
 
+		public void Handle(AssignableSquadCreatedMessage message)
+		{
+			AddAssignableSquadIndex(message.Dto);
+		}
+
+		public void Handle(AssignableSquadUpdatedMessage message)
+		{
+			UpdateAssignableSquadIndex(message.Dto, message.OriginalDto, message.ChangedFields);
+		}
+
+		public void Handle(AssignableSquadDeletedMessage message)
+		{
+			RemoveAssignableSquadIndex(message.Dto);
+		}
+
 		public void Handle(ProjectUpdatedMessage message)
 		{
 			if (message.ChangedFields.Contains(ProjectField.ProcessID))
@@ -425,12 +443,27 @@ namespace Tp.Search.Bus
 
 		private void UpdateCommentIndex(CommentDTO commentDto, ICollection<CommentField> changedCommentFields)
 		{
-			RebuildOrAction(() => _entityIndexer.UpdateCommentIndex(commentDto, changedCommentFields, Maybe.Nothing, Maybe.Nothing, DocumentIndexOptimizeSetup.DeferredOptimize));
+			RebuildOrAction(() => _entityIndexer.UpdateCommentIndex(commentDto, changedCommentFields, false, false, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
 		private void RemoveCommentIndex(CommentDTO commentDto)
 		{
 			RebuildOrAction(() => _entityIndexer.RemoveCommentIndex(commentDto, DocumentIndexOptimizeSetup.DeferredOptimize));
+		}
+
+		private void AddAssignableSquadIndex(AssignableSquadDTO assignableSquadDto)
+		{
+			RebuildOrAction(() => _entityIndexer.AddAssignableSquadIndex(assignableSquadDto, DocumentIndexOptimizeSetup.DeferredOptimize));
+		}
+
+		private void UpdateAssignableSquadIndex(AssignableSquadDTO assignableSquadDto, AssignableSquadDTO originalAssignableSquadDto, ICollection<AssignableSquadField> assignableSquadFields)
+		{
+			RebuildOrAction(() => _entityIndexer.UpdateAssignableSquadIndex(assignableSquadDto, originalAssignableSquadDto, assignableSquadFields, DocumentIndexOptimizeSetup.DeferredOptimize));
+		}
+
+		private void RemoveAssignableSquadIndex(AssignableSquadDTO assignableSquadDto)
+		{
+			RebuildOrAction(() => _entityIndexer.RemoveAssignableSquadIndex(assignableSquadDto, DocumentIndexOptimizeSetup.DeferredOptimize));
 		}
 
 

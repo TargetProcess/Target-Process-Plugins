@@ -24,12 +24,11 @@ namespace System
 			if (baseMethod == method && baseMethod.DeclaringType == baseMethod.ReflectedType)
 				return propertyInfo;
 
-			var allProperties = BindingFlags.Instance | BindingFlags.Public| BindingFlags.NonPublic | BindingFlags.Static;
+			var allProperties = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
 
 			var arguments = propertyInfo.GetIndexParameters().Select(p => p.ParameterType).ToArray();
 
 			return baseMethod.DeclaringType.GetProperty(propertyInfo.Name, allProperties, null, propertyInfo.PropertyType, arguments, null);
-
 		}
 
 		public static bool IsExtensionMethod(this MethodInfo methodInfo)
@@ -37,7 +36,8 @@ namespace System
 			return methodInfo.GetCustomAttribute<ExtensionAttribute>().HasValue;
 		}
 
-		public static Maybe<PropertyInfo> FindPropertyInHierarchy(this Type type, string name, BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance)
+		public static Maybe<PropertyInfo> FindPropertyInHierarchy(this Type type, string name,
+			BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance)
 		{
 			return type.GetProperty(name, flags)
 				.NothingIfNull()

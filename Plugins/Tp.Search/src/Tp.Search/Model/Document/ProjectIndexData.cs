@@ -4,43 +4,34 @@ using hOOt;
 
 namespace Tp.Search.Model.Document
 {
-	public class ProjectIndexData
+	public class ProjectIndexData : IdsIndexData
 	{
 		public static readonly ProjectIndexData Empty = new ProjectIndexData(Enumerable.Empty<int?>());
 
-		private readonly IEnumerable<int?> _projectIds;
+		private const string Prefix = "Project";
 
-		public ProjectIndexData(IEnumerable<int?> projectIds)
+		public ProjectIndexData(IEnumerable<int?> projectIds) : base(Prefix, projectIds)
 		{
-			_projectIds = projectIds;
 		}
 
 		public IEnumerable<int?> ProjectIds
 		{
-			get { return _projectIds; }
-		}
-
-		public override string ToString()
-		{
-			return IndexDataStringServices.OfParts(_projectIds.Select(x => IndexDataStringServices.EncodeStringId(x, "Project")));
+			get { return Ids; }
 		}
 
 		public static ProjectIndexData Sum(ProjectIndexData left, ProjectIndexData right)
 		{
-			var result = left.ProjectIds.Concat(right.ProjectIds).Distinct().ToList();
-			return new ProjectIndexData(result);
+			return new ProjectIndexData(IdsIndexData.Sum(left, right));
 		}
 
 		public static ProjectIndexData Substract(ProjectIndexData left, ProjectIndexData right)
 		{
-			var result = left.ProjectIds.Except(right.ProjectIds).Distinct().ToList();
-			return new ProjectIndexData(result);
+			return new ProjectIndexData(IdsIndexData.Substract(left, right));
 		}
 
 		public static ProjectIndexData Parse(IndexData indexData)
 		{
-			var ids = indexData.Words.Select(x => IndexDataStringServices.DecodeStringId(x, "Project")).ToList();
-			return new ProjectIndexData(ids);
+			return new ProjectIndexData(IdsIndexData.Parse(Prefix, indexData));
 		}
 	}
 }

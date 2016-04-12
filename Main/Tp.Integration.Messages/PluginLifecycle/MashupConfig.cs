@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,8 +40,8 @@ namespace Tp.Integration.Messages.PluginLifecycle
 			return new string[] { };
 		}
 
-		public List<AccountName> Accounts { get; private set; }
-		public List<string> Placeholders { get; private set; }
+		public List<AccountName> Accounts { get; }
+		public List<string> Placeholders { get; }
 
 		public bool Matches(MashupPlaceholder mashupPlaceHolderValue, AccountName accountName)
 		{
@@ -54,12 +50,12 @@ namespace Tp.Integration.Messages.PluginLifecycle
 
 		public bool AccountMatches(AccountName accountName)
 		{
-			return (Accounts.Contains(accountName.Value.ToLower()) || Accounts.IsNullOrEmpty());
+			return Accounts.Contains(accountName.Value.ToLower()) || Accounts.Empty();
 		}
 
 		public bool PlaceholderMatches(MashupPlaceholder mashupPlaceHolderValue)
 		{
-			return Placeholders.Any(x => x.Equals(mashupPlaceHolderValue.Value,StringComparison.InvariantCultureIgnoreCase));
+			return Placeholders.Any(x => x.Equals(mashupPlaceHolderValue.Value, StringComparison.InvariantCultureIgnoreCase));
 		}
 	}
 }

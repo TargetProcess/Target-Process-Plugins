@@ -29,13 +29,17 @@ CreatePublicRequestClause -> CreatePublicRequestKeyword NUMBER;
 CompanyMatchedKeyword -> @"company matched to project";
 CompanyMatchedClause -> CompanyMatchedKeyword NUMBER;
 
+AttachRequestToTeamKeyword -> @"attach request to team";
+AttachRequestToTeamClause -> AttachRequestToTeamKeyword NUMBER;
+
 AndKeyword -> @"and";
+
+AttachRequestToTeamPart -> (AttachRequestToTeamClause AndKeyword?)+;
 
 WhenStatement -> (SubjectContainsClause AndKeyword?) | (CompanyMatchedClause AndKeyword?);
 WhenPart -> WhenKeyword WhenStatement+;
 
-ThenStatement -> (AttachToProjectClause AndKeyword?) | (CreateRequestClause AndKeyword?) | (CreatePrivateRequestClause AndKeyword?) | (CreatePublicRequestClause AndKeyword?);
+ThenStatement -> (AttachToProjectClause AndKeyword?) | (CreateRequestClause AndKeyword? AttachRequestToTeamPart?) | (CreatePrivateRequestClause AndKeyword? AttachRequestToTeamPart?) | (CreatePublicRequestClause AndKeyword? AttachRequestToTeamPart?);
 ThenPart -> ThenKeyword ThenStatement+;
-
 
 Start -> (WhenPart ThenPart) | (ThenPart) EOF;

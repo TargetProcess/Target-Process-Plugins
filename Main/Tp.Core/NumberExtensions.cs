@@ -13,7 +13,7 @@ namespace System
 		{
 			if (!i.HasValue)
 			{
-				throw new ArgumentNullException("i");
+				throw new ArgumentNullException(nameof(i));
 			}
 			return i.Value.ToStringInvariant();
 		}

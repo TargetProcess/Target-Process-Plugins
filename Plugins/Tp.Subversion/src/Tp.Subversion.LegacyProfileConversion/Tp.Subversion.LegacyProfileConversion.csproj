@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,22 +66,28 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
-      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project><Name>Tp.LegacyProfileConversion.Common</Name>
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
+      <Name>Tp.LegacyProfileConversion.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
-      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project><Name>Tp.SourceControl</Name>
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.Subversion\Tp.Subversion.csproj">
-      <Project>{FBC9EDC9-DD35-4590-8D25-E4B978F57DF1}</Project><Name>Tp.Subversion</Name>
+      <Project>{FBC9EDC9-DD35-4590-8D25-E4B978F57DF1}</Project>
+      <Name>Tp.Subversion</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +95,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

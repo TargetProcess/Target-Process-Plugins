@@ -34,7 +34,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 					And profile mashups are: mashup1, mashup2
 				When handle DeleteMashupCommand command with args '{""Name"":""mashup1"", ""Placeholders"":"""", ""Files"":[]}'
 				Then mashup 'mashup1' should be cleared in profile
-					And mashup 'Account1 mashup1' should be cleared in TP
+					And mashup 'mashup1' should be cleared in TP
 					And profile should have following mashups: mashup2
 			".Execute();
 		}

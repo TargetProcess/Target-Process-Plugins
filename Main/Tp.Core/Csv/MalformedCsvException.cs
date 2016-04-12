@@ -1,10 +1,4 @@
-// 
-// Copyright (c) 2005-2008 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tp.Utils.Csv
 {
@@ -37,7 +31,9 @@ namespace Tp.Utils.Csv
 		/// <param name="line">The row index of the line.</param>
 		/// <param name="column">The column index of the position at which the error occured.</param>
 		public MalformedCsvException(string message, int line, int column)
-			: this(message, line, column, null) {}
+			: this(message, line, column, null)
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the MalformedCsvException class.

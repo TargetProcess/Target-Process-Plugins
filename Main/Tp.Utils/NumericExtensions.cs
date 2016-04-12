@@ -1,5 +1,4 @@
-﻿// ReSharper disable CheckNamespace
-namespace System
+﻿namespace System
 // ReSharper restore CheckNamespace
 {
 	public static class NumericExtensions
@@ -20,12 +19,12 @@ namespace System
 		{
 			if (bytes == null)
 			{
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 			}
 
 			if (bytes.Length != 4)
 			{
-				throw new ArgumentException("Input byte array should have 4 bytes", "bytes");
+				throw new ArgumentException("Input byte array should have 4 bytes", nameof(bytes));
 			}
 
 			var result = 0;

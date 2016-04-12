@@ -24,14 +24,14 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 			RevisionId revisionIdDto = revisionId;
             MercurialRevisionId restoredRevisionId = revisionIdDto;
 
-			restoredRevisionId.Time.Should(Be.EqualTo(initialTime));
+			restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
 		}
 
 		[Test]
 		public void ShouldSupportMinTime()
 		{
             MercurialRevisionId revisionId = new RevisionId { Time = DateTime.MinValue, Value = Guid.NewGuid().ToString() };
-            revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin));
+            revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin), "revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin))");
 		}
 	}
 }

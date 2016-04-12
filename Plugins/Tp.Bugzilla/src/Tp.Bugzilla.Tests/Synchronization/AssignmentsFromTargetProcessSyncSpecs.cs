@@ -204,19 +204,19 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("bug $bugId in bugzilla should have reporter '$email'")]
 		public void CheckReporter(string bugId, string email)
 		{
-			Context.BugzillaBugs.Single(b => b.bug_id == bugId).reporter.Should(Be.EqualTo(email));
+			Context.BugzillaBugs.Single(b => b.bug_id == bugId).reporter.Should(Be.EqualTo(email), "Context.BugzillaBugs.Single(b => b.bug_id == bugId).reporter.Should(Be.EqualTo(email))");
 		}
 
 		[Then("bug $bugId in bugzilla should have assignee '$email'")]
 		public void CheckAssignee(string bugId, string email)
 		{
-			Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.EqualTo(email));
+			Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.EqualTo(email), "Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.EqualTo(email))");
 		}
 
 		[Then("bug $bugId in bugzilla should have default assignee")]
 		public void CheckDefaultReporter(string bugId)
 		{
-			Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.Null.Or.Empty);
+			Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.Null.Or.Empty, "Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.Null.Or.Empty)");
 		}
 	}
 }

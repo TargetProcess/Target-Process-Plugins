@@ -1,7 +1,7 @@
 tau.mashups
 	.addDependency("libs/jquery/jquery")
 	.addModule("TestRunImport/jquery/numeric",
-		function () {
+		function (jQuery) {
 		/*
 		*
 		* Copyright (c) 2006-2011 Sam Collett (http://www.texotela.co.uk)

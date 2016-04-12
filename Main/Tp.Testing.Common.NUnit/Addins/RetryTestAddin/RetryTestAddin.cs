@@ -1,9 +1,8 @@
-﻿using System.Reflection;
-//using NUnit.Core;
+﻿ //using NUnit.Core;
 //using NUnit.Core.Extensibility;
 
 namespace Tp.Testing.Common.NUnit.Addins.RetryTestAddin
-{/*
+{ /*
     [NUnitAddin(Description = "Retry to run test", Type = ExtensionType.Core)]
     public class RetryTestAddin : IAddin,  ITestDecorator
     {
@@ -45,4 +44,5 @@ namespace Tp.Testing.Common.NUnit.Addins.RetryTestAddin
 
         #endregion
     }
-*/}
+*/
+}

@@ -89,15 +89,15 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			var revisionIds =
 				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<RevisionDTO>().Select(x => x.SourceControlID).
 					ToArray();
-			revisionIds.Should(Be.EquivalentTo(new[] {sourceControlId}));
+			revisionIds.Should(Be.EquivalentTo(new[] {sourceControlId}), "revisionIds.Should(Be.EquivalentTo(new[] {sourceControlId}))");
 		}
 
 		[Then("revision (?<sourceControlId>\\d+) with description '$description' should be created in TP")]
 		public void RevisionWithDescriptionShouldBeCreatedInTp(string sourceControlId, string description)
 		{
 			var revision = ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<RevisionDTO>().Single();
-			revision.SourceControlID.Should(Be.EqualTo(sourceControlId));
-			revision.Description.Should(Be.EqualTo(description));
+			revision.SourceControlID.Should(Be.EqualTo(sourceControlId), "revision.SourceControlID.Should(Be.EqualTo(sourceControlId))");
+			revision.Description.Should(Be.EqualTo(description), "revision.Description.Should(Be.EqualTo(description))");
 		}
 
 		[Then("no other actions should be taken")]
@@ -106,7 +106,7 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			var commands = ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<ITargetProcessCommand>();
 
 			commands.Where(IsNotCreateCommand<RevisionDTO>).Where(IsNotCreateCommand<RevisionAssignableDTO>).Where(x => !(x is RetrieveAllUsersQuery)).ToArray().Should(
-				Be.Empty);
+				Be.Empty, "commands.Where(IsNotCreateCommand<RevisionDTO>).Where(IsNotCreateCommand<RevisionAssignableDTO>).Where(x => !(x is RetrieveAllUsersQuery)).ToArray().Should(Be.Empty)");
 		}
 
 		private static bool IsNotCreateCommand<TEntityDto>(ITargetProcessCommand command)

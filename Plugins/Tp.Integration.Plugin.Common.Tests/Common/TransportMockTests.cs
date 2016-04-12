@@ -49,8 +49,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			_transport.RaiseTransportMessageReceived();
 
 			//Post-Conditions
-			_handled.Should(Be.True);
-			_replyMessage.SagaId.Should(Be.EqualTo(sagaId));
+			_handled.Should(Be.True, "_handled.Should(Be.True)");
+			_replyMessage.SagaId.Should(Be.EqualTo(sagaId), "_replyMessage.SagaId.Should(Be.EqualTo(sagaId))");
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			_transport.RaiseTransportMessageReceived();
 
 			//Post-Conditions
-			_handled.Should(Be.True);
+			_handled.Should(Be.True, "_handled.Should(Be.True)");
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			_transport.RaiseTransportMessageReceived();
 
 			//Post-Conditions
-			_handled.Should(Be.False);
+			_handled.Should(Be.False, "_handled.Should(Be.False)");
 		}
 
 		[Test]
@@ -96,7 +96,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			//Post-Conditions
 			var tpMessage = _transport.TpQueue.GetMessages<RequestCreatedMessage>().Single();
-			tpMessage.Should(Be.Not.EqualTo(message));
+			tpMessage.Should(Be.Not.EqualTo(message), "tpMessage.Should(Be.Not.EqualTo(message))");
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			_transport.RaiseTransportMessageReceived();
 
 			//Post-Conditions
-			_transport.LocalQueue.GetMessages<ReplyMessage>().Should(Be.Not.Empty);
+			_transport.LocalQueue.GetMessages<ReplyMessage>().Should(Be.Not.Empty, "_transport.LocalQueue.GetMessages<ReplyMessage>().Should(Be.Not.Empty)");
 		}
 
 		public void Handle(ReplyMessage message)

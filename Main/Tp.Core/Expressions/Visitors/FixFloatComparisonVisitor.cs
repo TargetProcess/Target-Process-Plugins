@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace Tp.Core.Expressions.Visitors
 {
-
 	// replace `a==b` with `Math.Abs(a-b) < e`
 	class FixFloatComparisonVisitor : ExpressionVisitor
 	{
@@ -26,7 +25,6 @@ namespace Tp.Core.Expressions.Visitors
 
 		private bool Compare(float a, float? b)
 		{
-
 			return b.HasValue && Compare(a, b.Value);
 		}
 
@@ -48,6 +46,7 @@ namespace Tp.Core.Expressions.Visitors
 		{
 			return a.HasValue && Compare(a.Value, b);
 		}
+
 		private bool Compare(double a, double? b)
 		{
 			return b.HasValue && Compare(a, b.Value);
@@ -56,7 +55,6 @@ namespace Tp.Core.Expressions.Visitors
 
 		private bool Compare(double? a, double? b)
 		{
-
 			if (a.HasValue && b.HasValue)
 			{
 				return Compare(a.Value, b.Value);
@@ -67,40 +65,40 @@ namespace Tp.Core.Expressions.Visitors
 
 		private bool Compare(decimal a, decimal b)
 		{
-
-			return Math.Abs(a - b) < (decimal)_deltaFloat;
+			return Math.Abs(a - b) < (decimal) _deltaFloat;
 		}
 
 		private bool Compare(decimal? a, decimal b)
 		{
-
 			return a.HasValue && Compare(a.Value, b);
 		}
 
 		private bool Compare(decimal a, decimal? b)
 		{
-
 			return b.HasValue && Compare(a, b.Value);
 		}
 
 		private bool Compare(decimal? a, decimal? b)
 		{
-
 			if (a.HasValue && b.HasValue)
 			{
 				return Compare(a.Value, b.Value);
 			}
 			return !a.HasValue && !b.HasValue;
 		}
+
 		// ReSharper restore UnusedMember.Local
 
 		static FixFloatComparisonVisitor()
 		{
-			_compareMethods = typeof(FixFloatComparisonVisitor).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.Name == "Compare").ToDictionary(x =>
-			{
-				var patameters = x.GetParameters();
-				return Tuple.Create(patameters[0].ParameterType, patameters[1].ParameterType);
-			});
+			_compareMethods =
+				typeof(FixFloatComparisonVisitor).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
+					.Where(x => x.Name == "Compare")
+					.ToDictionary(x =>
+					{
+						var patameters = x.GetParameters();
+						return Tuple.Create(patameters[0].ParameterType, patameters[1].ParameterType);
+					});
 		}
 
 		public FixFloatComparisonVisitor(float delta)

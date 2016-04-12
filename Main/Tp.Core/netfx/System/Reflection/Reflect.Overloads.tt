@@ -1,9 +1,8 @@
 ﻿<#@ Template Debug="True" Hostspecific="True" Language="C#" #>
 <#@ Assembly Name="System.Core" #>
-<#@ Import Namespace="System.Linq" #>
 <#@ Output Extension=".cs" #>
 <#@ Include File="TargetFramework.ttinclude" #><#
-var maxTypeArgs = this.TargetFramework.Version.Major < 4 ? 4 : 16;
+	var maxTypeArgs = this.TargetFramework.Version.Major < 4 ? 4 : 16;
 #>
 #region BSD License
 /* 
@@ -157,9 +156,9 @@ for (var typeCount = 1; typeCount <= maxTypeArgs; typeCount++)
 internal static partial class Reflect<TTarget>
 { <#
 // TTarget on Reflect<> already consumes one of the type args from the max.
-for (var typeCount = 1; typeCount < maxTypeArgs; typeCount++)
-{
-	var typeList = GetGenericList(typeCount, GenericTypeFormat);
+	for (var typeCount = 1; typeCount < maxTypeArgs; typeCount++)
+	{
+		var typeList = GetGenericList(typeCount, GenericTypeFormat);
 #>
 
 	/// <summary>
@@ -182,7 +181,7 @@ for (var typeCount = 1; typeCount < maxTypeArgs; typeCount++)
 		return GetMethodInfo(method);
 	}
 <#
-}
+	}
 
 for (var typeCount = 1; typeCount < maxTypeArgs; typeCount++)
 {
@@ -268,17 +267,22 @@ for (var typeCount = 1; typeCount < maxTypeArgs; typeCount++)
 }<#+
 // Helpers.
 
-private const string GenericTypeFormat = "T{0}";
-private static readonly string[] ordinalNumbers = new[] { "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth" };
+	private const string GenericTypeFormat = "T{0}";
 
-public static string ConvertToOrdinal(int number)
-{
-	return ordinalNumbers[number - 1];
-}
+	private static readonly string[] ordinalNumbers = new[]
+	{
+		"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth", "eleventh", "twelfth", "thirteenth",
+		"fourteenth", "fifteenth", "sixteenth"
+	};
 
-private static string GetGenericList(int typeCount, string format, string separator = ", ")
-{
-	return string.Join(separator, Enumerable.Range(1, typeCount).Select(n => string.Format(format, n)).ToArray());
-}
+	public static string ConvertToOrdinal(int number)
+	{
+		return ordinalNumbers[number - 1];
+	}
+
+	private static string GetGenericList(int typeCount, string format, string separator = ", ")
+	{
+		return string.Join(separator, Enumerable.Range(1, typeCount).Select(n => string.Format(format, n)).ToArray());
+	}
 
 #>

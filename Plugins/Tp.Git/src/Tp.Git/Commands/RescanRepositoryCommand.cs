@@ -4,6 +4,7 @@
 // 
 
 using Tp.Git.Workflow;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common;
@@ -22,7 +23,7 @@ namespace Tp.Git.Commands
 			_pluginContext = pluginContext;
 		}
 
-		public PluginCommandResponseMessage Execute(string _)
+		public PluginCommandResponseMessage Execute(string _, UserDTO user)
 		{
 			_bus.SendLocalWithContext(_pluginContext.ProfileName, _pluginContext.AccountName, new RepositoryRescanInitiatedMessage());
 

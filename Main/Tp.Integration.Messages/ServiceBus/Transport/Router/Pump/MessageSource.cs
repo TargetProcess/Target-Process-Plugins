@@ -16,7 +16,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			_observables = observables;
 		}
 
-		public string Name { get { return _name; } }
+		public string Name
+		{
+			get { return _name; }
+		}
 
 		public IEnumerator<IObservable<TMessage>> GetEnumerator()
 		{

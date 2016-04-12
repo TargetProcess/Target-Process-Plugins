@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2009 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -17,42 +13,52 @@ namespace Tp.Utils.Html
 		/// This is returned by the <see cref="HtmlReader"/> if the Read <see cref="HtmlReader.Read"/> method has not been called.
 		/// </summary>
 		None,
+
 		/// <summary>
 		/// The XML declaration (for example, <code>&lt;?xml version='1.0'?&gt;</code>).
 		/// </summary>
 		XmlDeclaration,
+
 		/// <summary>
 		/// The XML namespace (for example, <code>&lt;?xml:namespace ns ="urn:schemas-microsoft-com:office:office"/&gt;</code>).
 		/// </summary>
 		XmlNamespace,
+
 		/// <summary>
 		/// The document type declaration, indicated by the following tag (for example, <code>&lt;!DOCTYPE...&gt;</code>).
 		/// </summary>
 		DocumentType,
+
 		/// <summary>
 		/// An element (for example, <code>&lt;item name=&quot;root&quot;&gt;</code>).
 		/// </summary>
 		Element,
+
 		/// <summary>
 		/// An end element tag (for example, <code>&lt;/item&gt;</code>).
 		/// </summary>
 		EndElement,
+
 		/// <summary>
 		/// The text content of a node.
 		/// </summary>
 		Text,
+
 		/// <summary>
 		/// A CDATA section (for example, <code>&lt;![CDATA[my escaped text]]&gt;</code>).
 		/// </summary>
 		CDATA,
+
 		/// <summary>
 		/// White space between markup.
 		/// </summary>
 		Whitespace,
+
 		/// <summary>
 		/// A processing instruction (for example, <code>&lt;?pi test?&gt;</code>).
 		/// </summary>
 		ProcessingInstruction,
+
 		/// <summary>
 		/// A comment (for example, <code>&lt;!-- my comment --&gt;</code>).
 		/// </summary>
@@ -63,8 +69,8 @@ namespace Tp.Utils.Html
 	/// A very loose HTML parser.
 	/// </summary>
 	/// <remarks>
-	/// See also <a href="http://code.google.com/p/twintsam/">twintsam project</a> 
-	/// for an alternative and more capable implementation of HtmlReader compatible 
+	/// See also <a href="http://code.google.com/p/twintsam/">twintsam project</a>
+	/// for an alternative and more capable implementation of HtmlReader compatible
 	/// with .NET framework XML readers.
 	/// </remarks>
 	public class HtmlReader : IDisposable
@@ -110,7 +116,7 @@ namespace Tp.Utils.Html
 		{
 			if (textReader == null)
 			{
-				throw new ArgumentNullException("textReader");
+				throw new ArgumentNullException(nameof(textReader));
 			}
 			_reader = new PushBackTextReader(textReader);
 		}
@@ -560,7 +566,7 @@ namespace Tp.Utils.Html
 		{
 			if (elementName == null)
 			{
-				throw new ArgumentNullException("elementName");
+				throw new ArgumentNullException(nameof(elementName));
 			}
 			while (Read())
 			{

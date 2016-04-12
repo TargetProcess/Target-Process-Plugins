@@ -1,13 +1,7 @@
-// 
-// Copyright (c) 2005-2008 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Xml;
 
 namespace Tp.Utils.Mime
@@ -21,14 +15,13 @@ namespace Tp.Utils.Mime
 		{
 			var mimeTypes = new MimeTypes();
 
-			MimeType mimeType; 
+			MimeType mimeType;
 
 			using (var fileStream = new FileStream(filePath, FileMode.Open))
 			{
 				mimeType = mimeTypes.GetMimeTypeByContent(fileStream);
 			}
 
-			
 
 			if (mimeType == null)
 			{

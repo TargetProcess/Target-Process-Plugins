@@ -105,16 +105,16 @@ namespace Tp.Subversion.EditProfileFeature
 		[Then("mapping result info should be: $mappingResult")]
 		public void MappingResultShouldBe(string mappingResult)
 		{
-			_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed));
+			_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed), "_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed))");
 			var message = _response.ResponseData.Deserialize<AutomapVcsToTpUsersCommandResponse>();
-			message.Comment.Should(Be.EqualTo(mappingResult));
+			message.Comment.Should(Be.EqualTo(mappingResult), "message.Comment.Should(Be.EqualTo(mappingResult))");
 		}
 
 		[Then("users should be mapped this way:")]
 		public void AssertUserMapping(string svnuser, string tpuser)
 		{
 			var userMapping = _response.ResponseData.Deserialize<AutomapVcsToTpUsersCommandResponse>().UserLookups;
-			userMapping[svnuser].Name.Should(Be.EqualTo(tpuser));
+			userMapping[svnuser].Name.Should(Be.EqualTo(tpuser), "userMapping[svnuser].Name.Should(Be.EqualTo(tpuser))");
 		}
 
 		[Given("current date is $currentDate")]
@@ -150,7 +150,7 @@ namespace Tp.Subversion.EditProfileFeature
 		{
 			// TODO: remove select when updated sdk with beautiful ToString version
 			var errors = _errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList();
-			errors.Should(Be.Empty);
+			errors.Should(Be.Empty, "errors.Should(Be.Empty)");
 		}
 
 		[Then("no errors should occur")]
@@ -158,7 +158,7 @@ namespace Tp.Subversion.EditProfileFeature
 		{
 			// TODO: remove select when updated sdk with beautiful ToString version
 			var errors = _errors.Select(x => x.Message).ToList();
-			errors.Should(Be.Empty);
+			errors.Should(Be.Empty, "errors.Should(Be.Empty)");
 		}
 
 		[Then(@"error should occur for Uri: ""$errorMessage""")]
@@ -168,7 +168,7 @@ namespace Tp.Subversion.EditProfileFeature
 			var errorMessages = errorMessage.Split(new []{"|"}, StringSplitOptions.RemoveEmptyEntries);
 			foreach (var message in messages)
 			{
-				errorMessages.Should(Contains.Item(message));
+				errorMessages.Should(Contains.Item(message), "errorMessages.Should(Contains.Item(message))");
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace Tp.Subversion.EditProfileFeature
 		public void ErrorShouldOccur(string fieldName, string errorMessage)
 		{
 			IEnumerable<string> messages = _errors.Where(x => x.FieldName == fieldName).Select(x => x.Message).ToList();
-			messages.Should(Contains.Item(errorMessage));
+			messages.Should(Contains.Item(errorMessage), "messages.Should(Contains.Item(errorMessage))");
 		}
 
 		[Then("error should occur for $fieldName")]
@@ -189,7 +189,7 @@ namespace Tp.Subversion.EditProfileFeature
 		public void UsersShouldBeMapped(int mappedUsersAmount)
 		{
 			var userMapping = _response.ResponseData.Deserialize<AutomapVcsToTpUsersCommandResponse>().UserLookups;
-			userMapping.Count.Should(Be.EqualTo(mappedUsersAmount));
+			userMapping.Count.Should(Be.EqualTo(mappedUsersAmount), "userMapping.Count.Should(Be.EqualTo(mappedUsersAmount))");
 		}
 
 

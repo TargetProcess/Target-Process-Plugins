@@ -1,4 +1,3 @@
-using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace System
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 			return IsBetween(Type.GetTypeCode(type), TypeCode.SByte, TypeCode.Decimal);
 		}
@@ -23,7 +22,7 @@ namespace System
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 			return IsBetween(Type.GetTypeCode(type), TypeCode.Boolean, TypeCode.String);
 		}
@@ -32,7 +31,7 @@ namespace System
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 			return Nullable.GetUnderlyingType(type) != null;
 		}
@@ -59,19 +58,21 @@ namespace System
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
-			return Nullable.GetUnderlyingType(type)??type;
+			return Nullable.GetUnderlyingType(type) ?? type;
 		}
 
 		public static Maybe<Type> GetElementTypeIfTypeImplementsEnumerableOfT(this Type type)
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 
-			Type maybeFoundIEnumerable = new[]{type}.Concat(type.GetInterfaces()).FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			Type maybeFoundIEnumerable =
+				new[] { type }.Concat(type.GetInterfaces())
+					.FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 			return maybeFoundIEnumerable != null ? Maybe.Just(maybeFoundIEnumerable.GetGenericArguments()[0]) : Maybe.Nothing;
 		}
 
@@ -93,18 +94,18 @@ namespace System
 
 
 		public static IEnumerable<IGrouping<Type, TAttribute>> GetTypesWith<TAttribute>(bool inherit = false, params Assembly[] assembly)
-									  where TAttribute : Attribute
+			where TAttribute : Attribute
 		{
 			Assembly[] assemblies = assembly.Any()
-			                        	? assembly 
-			                        	: AppDomain.CurrentDomain.GetAssemblies();
+				? assembly
+				: AppDomain.CurrentDomain.GetAssemblies();
 
 			return from a in assemblies
-			       from type in a.GetTypes()
-			       let attributes = Attribute.GetCustomAttributes(type).OfType<TAttribute>()
-			       where attributes.Any()
-			       from at in attributes
-			       group at by type;
+				from type in a.GetTypes()
+				let attributes = Attribute.GetCustomAttributes(type).OfType<TAttribute>()
+				where attributes.Any()
+				from at in attributes
+				group at by type;
 		}
 
 		public static bool IsDirectlyImplementsInterface(this Type type, Type @interface)
@@ -118,6 +119,15 @@ namespace System
 				return false;
 			}
 			return type.GetInterfaces().Contains(@interface) && (type.BaseType == null || !type.BaseType.GetInterfaces().Contains(@interface));
+		}
+
+		public static IEnumerable<Type> GetBaseTypes(this Type type)
+		{
+			while (type != null)
+			{
+				yield return type;
+				type = type.BaseType;
+			}
 		}
 	}
 }

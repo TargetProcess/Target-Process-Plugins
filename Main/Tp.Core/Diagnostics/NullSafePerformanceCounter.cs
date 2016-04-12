@@ -15,6 +15,7 @@
 		}
 
 		public long RawValue { get; set; }
+
 		public void Dispose()
 		{
 		}

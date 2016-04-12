@@ -2,9 +2,8 @@ tau.mashups
     .addDependency("Subversion/UserMappingEditor")
     .addDependency("tp/bus")
     .addDependency("tp/plugins/profileControlsBlock")
-    .addDependency("tp/jquery.utils")
-    .addDependency("libs/jquery/jquery.tmpl")
-    .addModule("Mercurial/ProfileEditor", function (UserMappingEditor, Bus, profileControlsBlock) {
+    .addDependency("libs/jquery/jquery")
+    .addModule("Mercurial/ProfileEditor", function (UserMappingEditor, Bus, profileControlsBlock, $) {
 
         function ProfileEditor(config) {
             this._create(config);

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace Tp.Testing.Common.NUnit
 {
@@ -7,5 +8,6 @@ namespace Tp.Testing.Common.NUnit
 	/// </summary>
 	public class Have : Has
 	{
+		public static ResolvableConstraintExpression Value => new ConstraintExpression().Value();
 	}
 }

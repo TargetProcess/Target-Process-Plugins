@@ -15,7 +15,8 @@ namespace Tp.Core.Diagnostics
 		{
 			_category = category;
 			_log = TpLogManager.Instance.PerformanceCounterLog();
-			_counters = _category.CreationData.ToDictionary(c => c.CounterName, c => GetPerformanceCounter(_category.CategoryName, c.CounterName, false));
+			_counters = _category.CreationData.ToDictionary(c => c.CounterName,
+				c => GetPerformanceCounter(_category.CategoryName, c.CounterName, false));
 		}
 
 		public void Dispose()
@@ -38,7 +39,7 @@ namespace Tp.Core.Diagnostics
 				var performanceCounter = new System.Diagnostics.PerformanceCounter(categoryName, counterName, isReadOnly);
 				return new PerformanceCounter(performanceCounter, _log);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_log.Error("Error occured during getting performance counter: category = {0}, counter = {1}".Fmt(categoryName, counterName), ex);
 				return new NullSafePerformanceCounter();

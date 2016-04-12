@@ -166,21 +166,21 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 			var errorCollection = exceptionResponseMsg.ResponseData.Deserialize<PluginProfileErrorCollection>();
 			var fieldValidationError = errorCollection.Where(x => x.FieldName == fieldName);
 
-			new[] { errorMsg }.Should(Be.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()));
+			new[] { errorMsg }.Should(Be.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()), "new[] { errorMsg }.Should(Be.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()))");
 		}
 
 		[Then("profile '$profileName' should have StringValue '$stringValue' for account '$accountName'")]
 		public void ProfileShouldHaveStringValue(string profileName, string stringValue, string accountName)
 		{
 			var profile = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(accountName).Profiles[profileName];
-			((SampleProfileSerialized) profile.ConvertToDto().Settings).StringValue.Should(Be.EqualTo(stringValue));
+			((SampleProfileSerialized) profile.ConvertToDto().Settings).StringValue.Should(Be.EqualTo(stringValue), "((SampleProfileSerialized) profile.ConvertToDto().Settings).StringValue.Should(Be.EqualTo(stringValue))");
 		}
 
 		[Then(@"account '$accountName' should contain profiles:(?<profileNames>([^,]+,?\s*)+)")]
 		public void AccountShouldContainProfiles(string accountName, string[] profileNames)
 		{
 			ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(accountName).Profiles.Select(x => x.Name.Value).Should(
-				Be.EquivalentTo(profileNames));
+				Be.EquivalentTo(profileNames), "ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(accountName).Profiles.Select(x => x.Name.Value).Should(Be.EquivalentTo(profileNames))");
 		}
 	}
 }

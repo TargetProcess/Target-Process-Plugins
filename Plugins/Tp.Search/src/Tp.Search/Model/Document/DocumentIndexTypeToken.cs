@@ -58,12 +58,12 @@ namespace Tp.Search.Model.Document
 		[IndexFileName("EntitySquad")]
 		[AssignableIndex(new[] { AssignableField.SquadID })]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
-		[DocumentIndexVersion(5)]
+		[DocumentIndexVersion(6)]
 		EntitySquad,
 
 		[IndexFileName("CommentSquad")]
 		[DocumentIndexDataType(new[] { DocumentIndexDataTypeToken.Characters })]
-		[DocumentIndexVersion(5)]
+		[DocumentIndexVersion(6)]
 		CommentSquad,
 
 		[IndexFileName("CommentEntityType")]

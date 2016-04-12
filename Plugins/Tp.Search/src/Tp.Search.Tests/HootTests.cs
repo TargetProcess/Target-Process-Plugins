@@ -16,7 +16,7 @@ namespace Tp.Search.Tests
 				var h = new Hoot(Directory.GetCurrentDirectory(), "Fake", _ => { }, _ => { }, new CharacterTokensParser());
 				const string key = "project";
 				var d = h.GenerateWordFreq(key);
-				d.ContainsKey(key).Should(Be.True);
+				d.ContainsKey(key).Should(Be.True, "d.ContainsKey(key).Should(Be.True)");
 				h.Shutdown();
 			}
 
@@ -38,7 +38,7 @@ namespace Tp.Search.Tests
 					h.Index(i, key);
 				}
 				var rowsBeforeOptimize = h.FindRows(key);
-				rowsBeforeOptimize.Count().Should(Be.EqualTo(11000));
+				rowsBeforeOptimize.Count().Should(Be.EqualTo(11000), "rowsBeforeOptimize.Count().Should(Be.EqualTo(11000))");
 
 				h.OptimizeIndex(true);
 				var rowsAfterOptimize = h.FindRows(key);
@@ -50,7 +50,7 @@ namespace Tp.Search.Tests
 					File.Delete(file);
 				}
 
-				rowsAfterOptimize.Count().Should(Be.EqualTo(11000));
+				rowsAfterOptimize.Count().Should(Be.EqualTo(11000), "rowsAfterOptimize.Count().Should(Be.EqualTo(11000))");
 			}
 
 			[Test]
@@ -59,8 +59,8 @@ namespace Tp.Search.Tests
 				var h = new Hoot(Directory.GetCurrentDirectory(), "Fake", _ => { }, _ => { }, new CharacterTokensParser());
 				const string key = "project squad";
 				var d = h.GenerateWordFreq(key);
-				d.ContainsKey("project").Should(Be.True);
-				d.ContainsKey("squad").Should(Be.True);
+				d.ContainsKey("project").Should(Be.True, "d.ContainsKey(\"project\").Should(Be.True)");
+				d.ContainsKey("squad").Should(Be.True, "d.ContainsKey(\"squad\").Should(Be.True)");
 				h.Shutdown();
 			}
 
@@ -70,7 +70,7 @@ namespace Tp.Search.Tests
 				var h = new Hoot(Directory.GetCurrentDirectory(), "Fake", _ => { }, _ => { }, new CharacterTokensParser());
 				const string key = "project                    ";
 				var d = h.GenerateWordFreq(key);
-				d.ContainsKey("project").Should(Be.True);
+				d.ContainsKey("project").Should(Be.True, "d.ContainsKey(\"project\").Should(Be.True)");
 				h.Shutdown();
 			}
     }

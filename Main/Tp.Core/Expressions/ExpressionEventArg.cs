@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Tp.Core.Expressions
 {
-	internal class ExpressionEventArg<T> : EventArgs where T:Expression
+	internal class ExpressionEventArg<T> : EventArgs where T : Expression
 	{
 		public T Expression { get; set; }
 		public Expression Result { get; set; }

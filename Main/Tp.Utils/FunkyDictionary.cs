@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tp.Components
 {
@@ -25,7 +24,7 @@ namespace Tp.Components
 		{
 			if (data == null)
 			{
-				throw new ArgumentNullException("data");
+				throw new ArgumentNullException(nameof(data));
 			}
 			_data = data;
 		}
@@ -74,14 +73,12 @@ namespace Tp.Components
 
 		public int Count
 		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return _data.Count; }
+			[System.Diagnostics.DebuggerStepThrough] get { return _data.Count; }
 		}
 
 		public bool IsReadOnly
 		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return _data.IsReadOnly; }
+			[System.Diagnostics.DebuggerStepThrough] get { return _data.IsReadOnly; }
 		}
 
 		[System.Diagnostics.DebuggerStepThrough]
@@ -109,29 +106,25 @@ namespace Tp.Components
 		}
 
 		/// <summary>
-		/// Instead of throwing exception, will return <c>null</c> in getter 
+		/// Instead of throwing exception, will return <c>null</c> in getter
 		/// if key not found.
 		/// </summary>
 		/// <param name="key">Key whose value to look up.</param>
 		/// <returns>Value for the specified key, or <c>null</c> if key not found.</returns>
 		public V this[K key]
 		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return _data.ContainsKey(key) ? _data[key] : null; }
-			[System.Diagnostics.DebuggerStepThrough]
-			set { _data[key] = value; }
+			[System.Diagnostics.DebuggerStepThrough] get { return _data.ContainsKey(key) ? _data[key] : null; }
+			[System.Diagnostics.DebuggerStepThrough] set { _data[key] = value; }
 		}
 
 		public ICollection<K> Keys
 		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return _data.Keys; }
+			[System.Diagnostics.DebuggerStepThrough] get { return _data.Keys; }
 		}
 
 		public ICollection<V> Values
 		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return _data.Values; }
+			[System.Diagnostics.DebuggerStepThrough] get { return _data.Values; }
 		}
 	}
 }

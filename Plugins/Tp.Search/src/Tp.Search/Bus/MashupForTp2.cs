@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
+using Tp.Integration.Messages;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common;
@@ -51,7 +52,8 @@ namespace Tp.Search.Bus
 				PluginMashupScripts = GetMashupScripts().ToArray(),
 				PluginName = "Search",
 				Placeholders = new[] { "tp2placeholder" },
-				MashupName = "SearchTP2Enabler"
+				MashupName = "SearchTP2Enabler",
+				AccountName = AccountName.Empty
 			};
 
 			_bus.Send(pluginMessage);

@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -25,12 +25,12 @@ using Tp.SourceControl.Comments;
 using Tp.SourceControl.Diff;
 using Tp.SourceControl.RevisionStorage;
 using Tp.SourceControl.Settings;
+using Tp.SourceControl.Testing.Repository.Tfs;
 using Tp.SourceControl.VersionControlSystem;
 using Tp.SourceControl.Workflow.Workflow;
 using Tp.Testing.Common.NUnit;
 using Tp.Tfs.StructureMap;
 using Tp.Tfs.VersionControlSystem;
-using Tp.SourceControl.Testing.Repository.Tfs;
 
 namespace Tp.Tfs.Tests.VersionControlSystem
 {
@@ -50,22 +50,22 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			ObjectFactory.Initialize(x => x.AddRegistry<TfsRegistry>());
 			ObjectFactory.Configure(
 				x =>
-								x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(
-										typeof(TfsPluginProfile).Assembly,
-						new List<Assembly> { typeof(Command).Assembly })));
+					x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(
+						typeof (TfsPluginProfile).Assembly,
+						new List<Assembly> {typeof (Command).Assembly})));
 
 			_testRepository = new TfsTestRepository();
 			_tfsRepoUri = _testRepository.Uri.ToString();
 
 			_profile = ObjectFactory.GetInstance<TransportMock>().AddProfile(
-								"Profile",
-								new TfsPluginProfile
-					{
-						Uri = _tfsRepoUri,
-						Login = _testRepository.Login,
-						Password = _testRepository.Password,
-						StartRevision = "1"
-					});
+				"Profile",
+				new TfsPluginProfile
+				{
+					Uri = _tfsRepoUri,
+					Login = _testRepository.Login,
+					Password = _testRepository.Password,
+					StartRevision = "1"
+				});
 		}
 
 		[TearDown]
@@ -74,20 +74,11 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			_testRepository.Dispose();
 		}
 
-		string ISourceControlConnectionSettingsSource.Uri
-		{
-			get { return _tfsRepoUri; }
-		}
+		string ISourceControlConnectionSettingsSource.Uri => _tfsRepoUri;
 
-		string ISourceControlConnectionSettingsSource.Login
-		{
-			get { return _testRepository.Login; }
-		}
+		string ISourceControlConnectionSettingsSource.Login => _testRepository.Login;
 
-		string ISourceControlConnectionSettingsSource.Password
-		{
-			get { return _testRepository.Password; }
-		}
+		string ISourceControlConnectionSettingsSource.Password => _testRepository.Password;
 
 		string ISourceControlConnectionSettingsSource.StartRevision
 		{
@@ -111,15 +102,16 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				int revisionValue = GetValidRevision(_testRepository);
 
 				var revisionRange = tfs.GetFromTillHead(
-						CreateTfsRevisionId(revisionValue.ToString()), ConfigHelper.Instance.PageSize).First();
+					CreateTfsRevisionId(revisionValue.ToString()), ConfigHelper.Instance.PageSize).First();
 
 				TfsRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Value.Should(Be.EqualTo(revisionValue.ToString()));
+				fromChangeSet.Value.Should(Be.EqualTo(revisionValue.ToString()),
+					"fromChangeSet.Value.Should(Be.EqualTo(revisionValue.ToString()))");
 
 				string maxChengesetId = _testRepository.GetLatestRevision();
 
 				TfsRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(maxChengesetId));
+				toChangeSet.Value.Should(Be.EqualTo(maxChengesetId), "toChangeSet.Value.Should(Be.EqualTo(maxChengesetId))");
 			}
 		}
 
@@ -150,12 +142,13 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				var revisionRange = tfs.GetFromTillHead(startRevisionId, ConfigHelper.Instance.PageSize).First();
 
 				TfsRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Value.Should(Be.EqualTo(startRevisionId.Value));
+				fromChangeSet.Value.Should(Be.EqualTo(startRevisionId.Value),
+					"fromChangeSet.Value.Should(Be.EqualTo(startRevisionId.Value))");
 
 				string maxChangesetId = _testRepository.GetLatestRevision();
 
 				TfsRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(maxChangesetId));
+				toChangeSet.Value.Should(Be.EqualTo(maxChangesetId), "toChangeSet.Value.Should(Be.EqualTo(maxChangesetId))");
 			}
 		}
 
@@ -165,9 +158,9 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 
 			int revisionValue;
 			if (int.Parse(maxChangeSetId) >= ConfigHelper.Instance.PageSize)
-				revisionValue = int.Parse(maxChangeSetId) - ConfigHelper.Instance.PageSize / 2;
+				revisionValue = int.Parse(maxChangeSetId) - ConfigHelper.Instance.PageSize/2;
 			else
-				revisionValue = int.Parse(maxChangeSetId) / 2;
+				revisionValue = int.Parse(maxChangeSetId)/2;
 
 			return revisionValue;
 		}
@@ -185,16 +178,17 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				TfsRevisionId fromChangeSet = revisionRange.FromChangeset;
 
 				TfsRevisionId fromExpected = CreateTfsRevisionId((revisionValue + 1).ToString(CultureInfo.InvariantCulture));
-				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value));
+				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value),
+					"fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value))");
 
 				TfsRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(maxChangeSetId));
+				toChangeSet.Value.Should(Be.EqualTo(maxChangeSetId), "toChangeSet.Value.Should(Be.EqualTo(maxChangeSetId))");
 			}
 		}
 
 		private static TfsRevisionId CreateTfsRevisionId(string value)
 		{
-			return new TfsRevisionId { Value = value, Time = DateTime.MinValue.ToUniversalTime() };
+			return new TfsRevisionId {Value = value, Time = DateTime.MinValue.ToUniversalTime()};
 		}
 
 		[Test]
@@ -203,15 +197,16 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			using (var tfs = CreateTfs())
 			{
 				var revisionRange =
-										tfs.GetFromAndBefore(CreateTfsRevisionId("12"), CreateTfsRevisionId("18"), ConfigHelper.Instance.PageSize).Single();
+					tfs.GetFromAndBefore(CreateTfsRevisionId("12"), CreateTfsRevisionId("18"), ConfigHelper.Instance.PageSize).Single();
 				TfsRevisionId fromChangeSet = revisionRange.FromChangeset;
 
 				TfsRevisionId fromExpected = CreateTfsRevisionId("12");
-				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value));
+				fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value),
+					"fromChangeSet.Value.Should(Be.EqualTo(fromExpected.Value))");
 
 				TfsRevisionId toExpected = CreateTfsRevisionId("18");
 				TfsRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Value.Should(Be.EqualTo(toExpected.Value));
+				toChangeSet.Value.Should(Be.EqualTo(toExpected.Value), "toChangeSet.Value.Should(Be.EqualTo(toExpected.Value))");
 			}
 		}
 
@@ -228,7 +223,9 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				//else
 				//    login = string.Concat(ConfigHelper.Instance.Domen, "\\", ConfigHelper.Instance.Login);
 
-				authors.FirstOrDefault(x => string.Equals(x, "artgroup\\msuhinin", StringComparison.OrdinalIgnoreCase)).Should(Be.Not.Null);
+				authors.FirstOrDefault(x => string.Equals(x, "artgroup\\msuhinin", StringComparison.OrdinalIgnoreCase))
+					.Should(Be.Not.Null,
+						"authors.FirstOrDefault(x => string.Equals(x, \"artgroup\\\\msuhinin\", StringComparison.OrdinalIgnoreCase)).Should(Be.Not.Null)");
 			}
 		}
 
@@ -236,9 +233,12 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 		public void ShouldGetRevisions()
 		{
 			AssertCommits(
-								new[] { "first commit", "", "first commit", "second commit", "first commit to branch 1", 
-                    "first commit to branch 2", "second commit to branch 1", "second commit to branch 2" },
-								"12", "19");
+				new[]
+				{
+					"first commit", "", "first commit", "second commit", "first commit to branch 1",
+					"first commit to branch 2", "second commit to branch 1", "second commit to branch 2"
+				},
+				"12", "19");
 		}
 
 		[Test]
@@ -251,7 +251,8 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 
 				var revision = tfs.GetRevisions(revisionRange).OrderBy(x => int.Parse(x.Id.Value)).First();
 
-				AssertEqual(revision.Entries, new[] { new RevisionEntryInfo { Path = "$/TeamProject1/TestProject/Class1.cs", Action = FileActionEnum.Modify } });
+				AssertEqual(revision.Entries,
+					new[] {new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Class1.cs", Action = FileActionEnum.Modify}});
 			}
 		}
 
@@ -267,12 +268,12 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 
 				AssertEqual(revision.Entries, new[]
 				{
-                    new RevisionEntryInfo {Path = "$/TeamProject1/TestProject", Action = FileActionEnum.Add}, // tfs auxiliary file
-				    new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Class1.cs", Action = FileActionEnum.Add},
-				    new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Properties", Action = FileActionEnum.Add},
-				    new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/TestProject.csproj", Action = FileActionEnum.Add},
-				    new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/TestProject.sln", Action = FileActionEnum.Add},
-                    new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Properties/AssemblyInfo.cs", Action = FileActionEnum.Add}
+					new RevisionEntryInfo {Path = "$/TeamProject1/TestProject", Action = FileActionEnum.Add}, // tfs auxiliary file
+					new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Class1.cs", Action = FileActionEnum.Add},
+					new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Properties", Action = FileActionEnum.Add},
+					new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/TestProject.csproj", Action = FileActionEnum.Add},
+					new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/TestProject.sln", Action = FileActionEnum.Add},
+					new RevisionEntryInfo {Path = "$/TeamProject1/TestProject/Properties/AssemblyInfo.cs", Action = FileActionEnum.Add}
 				});
 			}
 		}
@@ -290,23 +291,37 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				var revision = tfs.GetRevisions(revisionRange).OrderByDescending(x => int.Parse(x.Id.Value)).First();
 
 				AssertEqual(revision.Entries,
-										new[]
-                        {
-                            new RevisionEntryInfo {Path = "$/TestRepositoryWithFileDeleted/ProjectWithDeletedFile-branch1/Class2.cs", Action = FileActionEnum.Delete},
-                            new RevisionEntryInfo {Path = "$/TestRepositoryWithFileDeleted/ProjectWithDeletedFile-branch1/ProjectWithDeletedFile.csproj", Action = FileActionEnum.Modify},
-                        });
+					new[]
+					{
+						new RevisionEntryInfo
+						{
+							Path = "$/TestRepositoryWithFileDeleted/ProjectWithDeletedFile-branch1/Class2.cs",
+							Action = FileActionEnum.Delete
+						},
+						new RevisionEntryInfo
+						{
+							Path = "$/TestRepositoryWithFileDeleted/ProjectWithDeletedFile-branch1/ProjectWithDeletedFile.csproj",
+							Action = FileActionEnum.Modify
+						},
+					});
 			}
 		}
 
 		private static void AssertEqual(IList<RevisionEntryInfo> actual, IList<RevisionEntryInfo> expected)
 		{
-			actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()));
-			actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()));
+			actual.Select(x => x.Action)
+				.ToArray()
+				.Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()),
+					"actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()))");
+			actual.Select(x => x.Path)
+				.ToArray()
+				.Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()),
+					"actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()))");
 
 			for (int i = 0; i < actual.Count; i++)
 			{
-				actual[i].Action.Should(Be.EqualTo(expected[i].Action));
-				actual[i].Path.Should(Be.EqualTo(expected[i].Path));
+				actual[i].Action.Should(Be.EqualTo(expected[i].Action), "actual[i].Action.Should(Be.EqualTo(expected[i].Action))");
+				actual[i].Path.Should(Be.EqualTo(expected[i].Path), "actual[i].Path.Should(Be.EqualTo(expected[i].Path))");
 			}
 		}
 
@@ -319,8 +334,14 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				var revisionRange = tfs.GetFromAndBefore(startRevisionId, endRevision, ConfigHelper.Instance.PageSize).Single();
 
 				var revisions = tfs.GetRevisions(revisionRange);
-				revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits));
-				revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] { "ARTGROUP\\msuhinin" }));
+				revisions.Select(x => x.Comment)
+					.ToArray()
+					.Should(Be.EquivalentTo(commits), "revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits))");
+				revisions.Select(x => x.Author)
+					.Distinct()
+					.ToArray()
+					.Should(Be.EquivalentTo(new[] {"ARTGROUP\\msuhinin"}),
+						"revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] { \"ARTGROUP\\\\msuhinin\" }))");
 			}
 		}
 
@@ -332,7 +353,7 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				TfsRevisionId correctRevisionId = CreateTfsRevisionId("12");
 				var errors = new PluginProfileErrorCollection();
 				tfs.CheckRevision(correctRevisionId, errors);
-				errors.Should(Be.Empty);
+				errors.Should(Be.Empty, "errors.Should(Be.Empty)");
 			}
 		}
 
@@ -346,7 +367,9 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				tfs.CheckRevision(correctRevisionId, errors);
 
 				string localizedMessage = "Revision: Specify a start revision number in the range of 1 - 2147483647.";
-				errors.Single().ToString().Should(Be.EqualTo(localizedMessage));
+				errors.Single()
+					.ToString()
+					.Should(Be.EqualTo(localizedMessage), "errors.Single().ToString().Should(Be.EqualTo(localizedMessage))");
 			}
 		}
 
@@ -360,7 +383,7 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 			var testRepo = new TfsTestRepositoryWithMergeCommit();
 			_tfsRepoUri = testRepo.Uri.ToString();
 
-			AssertCommits(new[] { "first commit", "second commit", "third commit" }, "5", "7");
+			AssertCommits(new[] {"first commit", "second commit", "third commit"}, "5", "7");
 		}
 
 		[Test]
@@ -384,9 +407,12 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				var startRevisionId = CreateTfsRevisionId(revisionValue.ToString());
 				var revisionRange = tfs.GetFromTillHead(startRevisionId, ConfigHelper.Instance.PageSize).First();
 
-				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
+				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage {Range = revisionRange});
 
-				ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null);
+				ObjectFactory.GetInstance<IRevisionStorageRepository>()
+					.GetRevisionId(tpId)
+					.Should(Be.Not.Null,
+						"ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null)");
 			}
 		}
 
@@ -405,9 +431,12 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 				var startRevisionId = CreateTfsRevisionId("1");
 				var revisionRange = tfs.GetFromTillHead(startRevisionId, ConfigHelper.Instance.PageSize).First();
 
-				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
+				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage {Range = revisionRange});
 
-				ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False);
+				ObjectFactory.GetInstance<IStorageRepository>()
+					.Get<bool>()
+					.FirstOrDefault()
+					.Should(Be.False, "ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False)");
 			}
 		}
 
@@ -421,10 +450,10 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 		private TfsVersionControlSystem CreateTfs(ISourceControlConnectionSettingsSource settings)
 		{
 			return new TfsVersionControlSystem(
-					settings,
-					ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
-					ObjectFactory.GetInstance<IActivityLogger>(),
-					ObjectFactory.GetInstance<IDiffProcessor>());
+				settings,
+				ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
+				ObjectFactory.GetInstance<IActivityLogger>(),
+				ObjectFactory.GetInstance<IDiffProcessor>());
 		}
 
 		#endregion

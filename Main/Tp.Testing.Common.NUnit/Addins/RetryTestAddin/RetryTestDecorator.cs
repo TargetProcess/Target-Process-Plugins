@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-//using NUnit.Core;
-using NUnit.Framework;
+﻿//using NUnit.Core;
 
 namespace Tp.Testing.Common.NUnit.Addins.RetryTestAddin
-{/*
+{ /*
     [TestFixture]
     public class Tests
     {
@@ -121,4 +117,5 @@ namespace Tp.Testing.Common.NUnit.Addins.RetryTestAddin
         }
     }
 
-*/}
+*/
+}

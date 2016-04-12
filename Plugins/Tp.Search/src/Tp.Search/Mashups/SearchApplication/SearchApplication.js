@@ -1,15 +1,15 @@
 tau.mashups
-.addDependency('jQuery')
-.addDependency('application.creator')
-.addDependency('tau/core/event')
-.addDependency('tau/core/class')
-.addDependency('tau/core/bus.reg')
-.addDependency('tau/services/service.search')
-.addDependency('tau/service.container')
-.addDependency('libs/jquery/jquery.ui.tauBubble')
-.addDependency('libs/parseUri')
-.addDependency('tau/utils/utils.urlBuilder.service.tp2')
-.addModule('Searcher/SearchApplication', function ($, AppCreator, Event, Class, busRegistry, ServiceSearch, serviceContainerClass, buble, parseUri, UrlBuilder) {
+    .addDependency('jQuery')
+    .addDependency('application.creator')
+    .addDependency('tau/core/event')
+    .addDependency('tau/core/class')
+    .addDependency('tau/core/bus.reg')
+    .addDependency('tau/services/service.search')
+    .addDependency('tau/service.container')
+    .addDependency('libs/jquery/jquery.ui.tauBubble')
+    .addDependency('libs/parseUri')
+    .addDependency('tau/utils/utils.urlBuilder.service.tp2')
+    .addModule('Searcher/SearchApplication', function ($, AppCreator, Event, Class, busRegistry, ServiceSearch, serviceContainerClass, buble, parseUri, UrlBuilder) {
 
         var appCreator = function(configurator) {
 
@@ -72,6 +72,19 @@ tau.mashups
                 }
             ];
 
+            var integrationConfig = {
+                disableProgressIndicator: true,
+                showInCoverView: true,
+                keepAlive: false,
+                cssClass: (appIdSeedUrl === 'search' ? 'tau-search-popup' : '')
+            };
+
+            if (configurator.isBoardEdition) {
+                integrationConfig.showInCoverView = true;
+            } else {
+                integrationConfig.showInPopup = true;
+            }
+
             var appConfig = {
                 name: 'application board',
                 applicationId:APP_ID,
@@ -81,14 +94,9 @@ tau.mashups
                     routing: {
                         silent: true
                     },
-                    comet: { enabled: true }
+                    comet: {enabled: true}
                 },
-                integration: {
-                    disableProgressIndicator: true,
-                    showInPopup: true,
-                    keepAlive: false,
-                    cssClass: (appIdSeedUrl === 'search' ? 'tau-search-popup' : '')
-                }
+                integration: integrationConfig
             };
 
             return AppCreator
@@ -102,7 +110,7 @@ tau.mashups
                         var searchParam = configurator.getExternal().getHashParam(APP_ID).toLowerCase();
                         var isSearch = ('search' === searchParam);
 
-                        var $popupRoleNode = $el.parents('.ui-popup');
+                        var $popupRoleNode = $el.parents('.tau-cover-view_page');
 
                         if (isSearch) {
                             $popupRoleNode.addClass('tau-search-popup');
@@ -119,4 +127,4 @@ tau.mashups
                 });
         };
         return appCreator;
-});
+    });

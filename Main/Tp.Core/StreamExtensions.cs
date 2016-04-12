@@ -10,9 +10,9 @@ namespace Tp.Core
 		{
 			if (!stream.CanSeek)
 			{
-				throw new ArgumentException("Stream must support seeking.", "stream");
+				throw new ArgumentException("Stream must support seeking.", nameof(stream));
 			}
-			using(Disposable.Create(() => stream.Position = 0))
+			using (Disposable.Create(() => stream.Position = 0))
 			{
 				var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
 				return reader.ReadToEnd();

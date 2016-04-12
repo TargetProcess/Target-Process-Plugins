@@ -1,7 +1,7 @@
 tau.mashups
     .addDependency("libs/jquery/jquery")
     .addModule("emailIntegration/jquery/numeric",
-function() {
+function(jQuery) {
 
     /*
     *

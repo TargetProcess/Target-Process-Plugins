@@ -4,7 +4,7 @@ using Tp.Integration.Common;
 namespace Tp.Integration.Messages.EntityLifecycle
 {
 	[Serializable]
-	public class EntityMessage<TEntityDto> : SagaMessage 
+	public class EntityMessage<TEntityDto> : SagaMessage
 		where TEntityDto : DataTransferObject, new()
 	{
 		public EntityMessage()
@@ -14,5 +14,6 @@ namespace Tp.Integration.Messages.EntityLifecycle
 
 		public TEntityDto Dto { get; set; }
 		public GeneralUserDTO Author { get; set; }
+		public DateTime? CreateDate { get; set; }
 	}
 }

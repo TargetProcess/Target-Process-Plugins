@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<entities xmlns="urn:nhibernate-mapping-2.2">
+	<class name="Attachment">
+		<property name="GeneralType" type="string" />
+		<property name="FileSize" type="long" />
+	</class>
+	<class name="Assignable">
+		<property name="CommentOnChangingState" type="string" />
+	</class>
+	<class name="AssignableSquad">
+		<property name="AssignableType" type="string" />
+	</class>
+	<class name="Build">
+		<many-to-one name="Project" class="Tp.BusinessObjects.Project, Tp.BusinessObjects" />
+	</class>
+	<class name="Comment">
+		<property name="GeneralType" type="string" />
+	</class>
+	<class name="Contact">
+		<id name="UserID" type="int" />
+		<many-to-one name="ContactOwner" class="Tp.BusinessObjects.GeneralUser, Tp.BusinessObjects" />
+	</class>
+	<class name="General">
+		<property name="CustomFieldsMetaInfo" type="Field[]" />
+	</class>
+	<class name="GeneralFieldExtension">
+		<property name="CustomFieldsMetaInfo" type="Field[]" />
+	</class>
+	<class name="GeneralUser">
+		<property name="IsAdministrator" type="bool" />
+		<property name="CustomFieldsMetaInfo" type="Field[]" />
+	</class>
+	<class name="GeneralRelation">
+		<many-to-one name="GeneralRelationType" class="Tp.BusinessObjects.GeneralRelationType, Tp.BusinessObjects" />
+	</class>
+	<class name="Impediment">
+		<property name="ResponsibleName" type="string" />
+	</class>
+	<class name="Message">
+		<property name="MessageUidDto" type="MessageUidDTO" />
+	</class>
+	<class name="Process">
+		<property name="UnitAbbreviation" type="string" />
+	</class>
+	<class name="Requester">
+		<id name="UserID" type="int" />
+	</class>
+	<class name="RuleEngineUser">
+		<id name="UserID" type="int" />
+	</class>
+	<class name="SystemUser">
+		<id name="UserID" type="int" />
+	</class>
+	<class name="Time">
+		<property name="CustomFieldsMetaInfo" type="Field[]" />
+	</class>
+	<class name="Team">
+		<property name="AssignableType" type="string" />
+	</class>
+	<class name="TestCaseRun">
+		<property name="RunDate" type="DateTime" />
+	</class>
+	<class name="TpEvent">
+		<many-to-one name="EntityState" class="Tp.BusinessObjects.EntityState, Tp.BusinessObjects" />
+	</class>
+	<class name="TpProfile">
+		<many-to-one name="User" class="Tp.BusinessObjects.GeneralUser, Tp.BusinessObjects" />
+	</class>
+	<class name="TpSession">
+		<many-to-one name="User" class="Tp.BusinessObjects.GeneralUser, Tp.BusinessObjects" />
+	</class>
+	<class name="User">
+		<id name="UserID" type="int" />
+		<many-to-one name="Role" class="Tp.BusinessObjects.Role, Tp.BusinessObjects" />
+	</class>
+</entities>

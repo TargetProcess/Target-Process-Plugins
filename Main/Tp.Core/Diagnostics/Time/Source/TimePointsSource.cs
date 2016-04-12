@@ -5,7 +5,7 @@ namespace Tp.Core.Diagnostics.Time.Source
 		public ITimePoints Create(params TimePoint[] points)
 		{
 			var timePoints = new TimePoints();
-			
+
 			foreach (var point in points)
 			{
 				timePoints.Add(point);

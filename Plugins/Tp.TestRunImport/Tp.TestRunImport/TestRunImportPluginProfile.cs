@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 using System;
@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Validation;
+using Tp.Integration.Plugin.TestRunImport.Streams;
 using Tp.Integration.Plugin.TestRunImport.TestRunImport;
 
 namespace Tp.Integration.Plugin.TestRunImport
@@ -149,18 +150,41 @@ namespace Tp.Integration.Plugin.TestRunImport
 						{
 							var ftpWebRequest = (FtpWebRequest) request;
 							ftpWebRequest.UsePassive = PassiveMode;
-							request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
-							var response = (FtpWebResponse) request.GetResponse();
-							response.Close();
+							ftpWebRequest.Method = WebRequestMethods.Ftp.GetFileSize;
+							ftpWebRequest.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+
+							using (var fileSizeResponse = ftpWebRequest.GetResponse())
+							{
+								if (fileSizeResponse.ContentLength <= 0)
+								{
+									errors.Add(new PluginProfileError
+										{
+											FieldName = "ResultsFilePath",
+											Message = string.Format("The specified file is empty")
+										});
+									return;
+								}
+
+								var ftpRequest = (FtpWebRequest) WebRequest.Create(ftpWebRequest.RequestUri);
+								ftpRequest.UsePassive = ftpWebRequest.UsePassive;
+								ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+								using (var downloadFileResponse = ftpRequest.GetResponse())
+								{
+									using (var responseStream = downloadFileResponse.GetResponseStream())
+									{
+										SimpleStreamFactory.CopyTo(responseStream, new MemoryStream());
+									}
+								}
+							}
 						}
 					}
 					else
 					{
 						errors.Add(new PluginProfileError
-									{
-										FieldName = "ResultsFilePath",
-										Message = string.Format("Unsupported resource \"{0}\"", request.RequestUri)
-									});
+							{
+								FieldName = "ResultsFilePath",
+								Message = string.Format("Unsupported resource \"{0}\"", request.RequestUri)
+							});
 					}
 				}
 				catch (Exception ex)

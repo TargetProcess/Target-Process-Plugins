@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-namespace Tp.Integration.Common
+﻿namespace Tp.Integration.Common
 {
 	/// <summary>
 	/// 	Describes the type of the Custom Field
@@ -71,7 +66,7 @@ namespace Tp.Integration.Common
 		MultipleEntities = 10,
 
 		/// <summary>
-		/// 	Money 
+		/// 	Money
 		/// </summary>
 		Money = 11
 	}

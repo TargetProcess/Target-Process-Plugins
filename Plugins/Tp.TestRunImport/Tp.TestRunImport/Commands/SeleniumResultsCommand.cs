@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Web;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common;
@@ -32,7 +33,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Commands
 			_log = log;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			return new PluginCommandResponseMessage
 			{

@@ -5,6 +5,6 @@ namespace Tp.Core
 {
 	public interface IFileSystemWatcher
 	{
-		IDisposable Subscribe(string path, Action<FileSystemEventArgs> handler);
+		IObservable<FileSystemEventArgs> Watch(string path);
 	}
 }

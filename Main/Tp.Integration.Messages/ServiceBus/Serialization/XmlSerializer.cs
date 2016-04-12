@@ -1,26 +1,28 @@
-﻿// -----------------------------------------------------------------------------------
-// Use it as you please, but keep this header.
-// Author : Marcus Deecke, 2006
-// Web    : www.yaowi.com
-// Email  : code@yaowi.com
-// -----------------------------------------------------------------------------------
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml;
 
 namespace Tp.Integration.Messages.ServiceBus.Serialization
 {
 	/// <summary>
-	/// Serializes arbitrary objects to XML.
+	///     Serializes arbitrary objects to XML.
 	/// </summary>
 	public class XmlSerializer : IDisposable
 	{
+		private static readonly ConcurrentDictionary<Type, string> _typesToAssemblyNamesCache = new ConcurrentDictionary<Type, string>();
+
+		private static readonly ConcurrentDictionary<PropertyInfo, Func<object, object>> _propertyGettersCache =
+			new ConcurrentDictionary<PropertyInfo, Func<object, object>>();
+
+		private static readonly ConcurrentDictionary<Type, Type> _binaryCtorTypesCache = new ConcurrentDictionary<Type, Type>();
+
 		#region Members
 
 		private IXmlSerializationTag taglib = new XmlSerializationTag();
@@ -42,8 +44,9 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the attribute that, when applied to a property enable its serialization. If null every property is serialized.
-		/// Even "Type" does not specialize the kind of Type it is obvious that only Attributes can be applied to properties.
+		///     Gets or sets the attribute that, when applied to a property enable its serialization. If null every property is
+		///     serialized.
+		///     Even "Type" does not specialize the kind of Type it is obvious that only Attributes can be applied to properties.
 		/// </summary>
 		[Description("Gets or sets Attribute Type which marks a property to be ignored.")]
 		public Type SerializationIgnoredAttributeType
@@ -53,13 +56,13 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Gets or sets whether errors during serialisation shall be ignored.
+		///     Gets or sets whether errors during serialisation shall be ignored.
 		/// </summary>
 		[Description("Gets or sets whether errors during serialisation shall be ignored.")]
 		public bool IgnoreSerialisationErrors { get; set; }
 
 		/// <summary>
-		/// Gets or sets the dictionary of XML-tags.
+		///     Gets or sets the dictionary of XML-tags.
 		/// </summary>
 		[Description("Gets or sets the dictionary of XML-tags.")]
 		public IXmlSerializationTag TagLib
@@ -69,7 +72,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Gets or sets whether a type dictionary is used to store Type information.
+		///     Gets or sets whether a type dictionary is used to store Type information.
 		/// </summary>
 		[Description("Gets or sets whether a type dictionary is used to store Type information.")]
 		public bool UseTypeDictionary
@@ -79,10 +82,10 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Gets or sets whether the ISerializable Attribute is ignored.
+		///     Gets or sets whether the ISerializable Attribute is ignored.
 		/// </summary>
 		/// <remarks>
-		/// Set this property only to true if you know about side effects.
+		///     Set this property only to true if you know about side effects.
 		/// </remarks>
 		[Description("Gets or sets whether the ISerializable Attribute is ignored.")]
 		public bool IgnoreSerializableAttribute { get; set; }
@@ -92,7 +95,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		#region Serialize
 
 		/// <summary>
-		/// Serializes an Object to a file.
+		///     Serializes an Object to a file.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="filename"></param>
@@ -104,7 +107,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Serializes an Object to a new XmlDocument.
+		///     Serializes an Object to a new XmlDocument.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -120,7 +123,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Serializes an Object and appends it to root (DocumentElement) of the specified XmlDocument.
+		///     Serializes an Object and appends it to root (DocumentElement) of the specified XmlDocument.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="name"></param>
@@ -141,7 +144,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 			else
 				doc.DocumentElement.AppendChild(root);
 
-			Type ctortype = TypeInfo.GetBinaryConstructorType(obj.GetType());
+			Type ctortype = GetBinaryConstructorType(obj.GetType());
 
 			if (ctortype != null)
 			{
@@ -156,7 +159,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Serializes an Object and appends it to the specified XmlNode.
+		///     Serializes an Object and appends it to the specified XmlNode.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="name"></param>
@@ -175,7 +178,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
 			SetObjectInfoAttributes(name, obj.GetType(), root);
 
-			Type ctortype = TypeInfo.GetBinaryConstructorType(obj.GetType());
+			Type ctortype = GetBinaryConstructorType(obj.GetType());
 
 			if (ctortype != null)
 			{
@@ -194,18 +197,23 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		#region ObjectInfo
 
 		/// <summary>
-		/// Returns an ObjectInfo filled with the values of Name, Type, and Assembly.
+		///     Returns an ObjectInfo filled with the values of Name, Type, and Assembly.
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
 		private ObjectInfo GetObjectInfo(string name, Type type)
 		{
-			return new ObjectInfo {Name = name, Type = type.FullName, Assembly = type.Assembly.GetName().Name};
+			return new ObjectInfo
+			{
+				Name = name,
+				Type = type.FullName,
+				Assembly = _typesToAssemblyNamesCache.GetOrAdd(type, tpe => tpe.Assembly.GetName().Name)
+			};
 		}
 
 		/// <summary>
-		/// Sets the property attributes of a Property to an XmlNode.
+		///     Sets the property attributes of a Property to an XmlNode.
 		/// </summary>
 		/// <param name="propertyName"></param>
 		/// <param name="type"></param>
@@ -262,7 +270,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		#region Properties
 
 		/// <summary>
-		/// Returns wether the Property has to be serialized or not (depending on SerializationIgnoredAttributeType).
+		///     Returns wether the Property has to be serialized or not (depending on SerializationIgnoredAttributeType).
 		/// </summary>
 		/// <param name="pi"></param>
 		/// <returns></returns>
@@ -276,7 +284,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Serializes the properties an Object and appends them to the specified XmlNode.
+		///     Serializes the properties an Object and appends them to the specified XmlNode.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="parent"></param>
@@ -307,7 +315,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Sets a property.
+		///     Sets a property.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="pi"></param>
@@ -316,7 +324,10 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		{
 			objlist.Add(obj);
 
-			object val = pi.GetValue(obj, null);
+			var getter = GetGetter(pi);
+
+			var val = getter(obj);
+
 			// If the value there's nothing to do
 			if (val == null)
 				return;
@@ -332,15 +343,42 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 			objlist.Remove(val);
 		}
 
+		public delegate object GenericGetter(object target);
+
+		private static Func<object, object> GetGetter(PropertyInfo propertyInfo)
+		{
+			return _propertyGettersCache.GetOrAdd(propertyInfo, CreateGetter);
+		}
+
+		/// Creates a dynamic getter for the property
+		private static Func<object, object> CreateGetter(PropertyInfo propertyInfo)
+		{
+			/*
+			* If there's no getter return null
+			*/
+			var param = Expression.Parameter(typeof(object), "e");
+			var convertedParam = Expression.Convert(param, propertyInfo.DeclaringType);
+			var prop = Expression.Property(convertedParam, propertyInfo);
+			var convertedPropValue = Expression.Convert(prop, typeof(object));
+			var lambda = Expression.Lambda<Func<object, object>>(convertedPropValue, param);
+
+			return lambda.Compile();
+		}
+
+		private static Type GetBinaryConstructorType(Type tpe)
+		{
+			return _binaryCtorTypesCache.GetOrAdd(tpe, TypeInfo.GetBinaryConstructorType);
+		}
+
 		/// <summary>
-		/// Sets a property.
+		///     Sets a property.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="value"></param>
 		/// <param name="pi"></param>
 		/// <param name="parent"></param>
 		/// <remarks>
-		/// This is the central method which is called recursivly!
+		///     This is the central method which is called recursivly!
 		/// </remarks>
 		protected void SetProperty(object obj, object value, PropertyInfo pi, XmlNode parent)
 		{
@@ -358,7 +396,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
 				// Check whether this property can be serialized and deserialized
 				if (CheckPropertyHasToBeSerialized(pi) && (pt.IsSerializable || IgnoreSerializableAttribute) && (pi.CanWrite) &&
-				    ((pt.IsPublic) || (pt.IsEnum)))
+					((pt.IsPublic) || (pt.IsEnum)))
 				{
 					XmlElement prop = parent.OwnerDocument.CreateElement(taglib.PROPERTY_TAG);
 
@@ -366,7 +404,8 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
 					// Try to find a constructor for binary data.
 					// If found remember the parameter's Type.
-					Type binctortype = TypeInfo.GetBinaryConstructorType(pt);
+
+					Type binctortype = GetBinaryConstructorType(pt);
 
 					if (binctortype != null) // a binary contructor was found
 					{
@@ -374,7 +413,9 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 						 * b. Trying to handle binary data
 						 */
 
-						SerializeBinaryObject(pi.GetValue(obj, null), binctortype, prop);
+						var getter = GetGetter(pi);
+
+						SerializeBinaryObject(getter(obj), binctortype, prop);
 					}
 					else if (TypeInfo.IsCollection(pt))
 					{
@@ -407,14 +448,14 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		protected void SetXmlElementFromBasicPropertyValue(XmlElement prop, Type pt, object value, XmlNode parent)
 		{
 			// If possible, convert this property to a string
-			if (pt.IsAssignableFrom(typeof (string)))
+			if (pt.IsAssignableFrom(typeof(string)))
 			{
 				prop.InnerText = value.ToString();
 				return;
 			}
-			
+
 			TypeConverter tc = TypeDescriptor.GetConverter(pt);
-			if (tc.CanConvertFrom(typeof (string)) && tc.CanConvertTo(typeof (string)))
+			if (tc.CanConvertFrom(typeof(string)) && tc.CanConvertTo(typeof(string)))
 			{
 				prop.InnerText = tc.ConvertToInvariantString(value);
 				return;
@@ -433,7 +474,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 				PropertyInfo pi2 = piarr2[j];
 				// Check whether this property can be serialized and deserialized
 				if (CheckPropertyHasToBeSerialized(pi2) && (pi2.PropertyType.IsSerializable || IgnoreSerializableAttribute) &&
-				    (pi2.CanWrite) && ((pi2.PropertyType.IsPublic) || (pi2.PropertyType.IsEnum)))
+					(pi2.CanWrite) && ((pi2.PropertyType.IsPublic) || (pi2.PropertyType.IsEnum)))
 				{
 					// Seems to be a complex type
 					complexclass = true;
@@ -459,7 +500,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Serializes binary data to a XmlNode.
+		///     Serializes binary data to a XmlNode.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="ctorParamType"></param>
@@ -473,12 +514,12 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 			{
 				// If the objact is a Stream or can be converted to a byte[]...
 				TypeConverter tc = TypeDescriptor.GetConverter(obj.GetType());
-				if (tc.CanConvertTo(typeof (byte[])) || typeof (Stream).IsAssignableFrom(obj.GetType()))
+				if (tc.CanConvertTo(typeof(byte[])) || typeof(Stream).IsAssignableFrom(obj.GetType()))
 				{
 					byte[] barr = null;
 
 					// Convert to byte[]
-					if (typeof (Stream).IsAssignableFrom(obj.GetType()))
+					if (typeof(Stream).IsAssignableFrom(obj.GetType()))
 					{
 						// Convert a Stream to byte[]
 						var bctc = new BinaryContainerTypeConverter();
@@ -487,7 +528,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 					else
 					{
 						// Convert the object to a byte[]
-						barr = (byte[]) tc.ConvertTo(obj, typeof (byte[]));
+						barr = (byte[]) tc.ConvertTo(obj, typeof(byte[]));
 					}
 
 					// Create a constructor node
@@ -502,7 +543,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 					proplist.AppendChild(bindata);
 
 					// Set info about the binary data type as attributes (currently it's always byte[]) 
-					SetObjectInfoAttributes("0", typeof (byte[]), bindata);
+					SetObjectInfoAttributes("0", typeof(byte[]), bindata);
 
 					// Convert the byte array to a string so it's easy to store it in XML
 					val = Convert.ToBase64String(barr, 0, barr.Length);
@@ -524,13 +565,13 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		#region SetCollectionItems
 
 		/// <summary>
-		/// Sets the items on a collection.
+		///     Sets the items on a collection.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="value"></param>
 		/// <param name="parent"></param>
 		/// <remarks>
-		/// This method could be simplified since it's mainly the same code you can find in SetProperty()
+		///     This method could be simplified since it's mainly the same code you can find in SetProperty()
 		/// </remarks>
 		protected void SetCollectionItems(object obj, ICollection value, XmlNode parent)
 		{
@@ -628,15 +669,15 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		#region Misc
 
 		/// <summary>
-		/// Builds the Hashtable that will be written to XML as the type dictionary.
-		/// TODO: Why Hashtable? Better use a typesafe generic Dictionary. Maybe filesize can be decreased.
+		///     Builds the Hashtable that will be written to XML as the type dictionary.
+		///     TODO: Why Hashtable? Better use a typesafe generic Dictionary. Maybe filesize can be decreased.
 		/// </summary>
 		/// <returns></returns>
 		/// <remarks>
-		/// While serialization the key of the type dictionary is the Type so it's easy to determine
-		/// whether a Type is registered already. For deserialization the order is reverse: find a Type
-		/// for a given key. 
-		/// This methods creates a reversed Hashtable with the Types information stored in TypeInfo instances.
+		///     While serialization the key of the type dictionary is the Type so it's easy to determine
+		///     whether a Type is registered already. For deserialization the order is reverse: find a Type
+		///     for a given key.
+		///     This methods creates a reversed Hashtable with the Types information stored in TypeInfo instances.
 		/// </remarks>
 		protected Hashtable BuildSerializeableTypeDictionary()
 		{
@@ -655,8 +696,8 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Gets the key of a Type from the type dictionary.
-		/// If the Type is not registered, yet, it will be registered here.
+		///     Gets the key of a Type from the type dictionary.
+		///     If the Type is not registered, yet, it will be registered here.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns>If the given Object is null, null, otherwise the Key of the Objects Type.</returns>
@@ -669,8 +710,8 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Gets the key of a Type from the type dictionary.
-		/// If the Type is not registered, yet, it will be registered here.
+		///     Gets the key of a Type from the type dictionary.
+		///     If the Type is not registered, yet, it will be registered here.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns>If the given Type is null, null, otherwise the Key of the Type.</returns>
@@ -688,7 +729,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Writes the TypeDictionary to XML.
+		///     Writes the TypeDictionary to XML.
 		/// </summary>
 		/// <param name="parentNode"></param>
 		protected void WriteTypeDictionary(XmlNode parentNode)
@@ -729,7 +770,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Clears the Collections.
+		///     Clears the Collections.
 		/// </summary>
 		public void Reset()
 		{
@@ -741,7 +782,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		/// <summary>
-		/// Dispose, release references.
+		///     Dispose, release references.
 		/// </summary>
 		public void Dispose()
 		{

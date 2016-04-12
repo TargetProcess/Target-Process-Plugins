@@ -84,35 +84,35 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		[Then(@"synchronization should be started for profile '$profileName'")]
 		public void SyncShouldBeStarted(string profileName)
 		{
-			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Count().Should(Be.EqualTo(1));
+			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Count().Should(Be.EqualTo(1), "ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Count().Should(Be.EqualTo(1))");
 			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Single(
-				x => x.ProfileName == profileName).Should(Be.Not.Null);
+				x => x.ProfileName == profileName).Should(Be.Not.Null, "ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Single(x => x.ProfileName == profileName).Should(Be.Not.Null)");
 		}
 
 		[Then(@"synchronization should not be started for any profile")]
 		public void SyncShouldNotBeStarted()
 		{
-			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Count().Should(Be.EqualTo(0));
+			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Count().Should(Be.EqualTo(0), "ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Count().Should(Be.EqualTo(0))");
 		}
 
 		[Then("command should be executed successfully")]
 		public void CheckSuccessStatus()
 		{
 			ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PluginCommandResponseMessage>().Last().
-				PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed));
+				PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed), "ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PluginCommandResponseMessage>().Last().PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed))");
 		}
 
 		[Then("command should fail")]
 		public void CheckFailStatus()
 		{
 			ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PluginCommandResponseMessage>().Last().
-				PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Error));
+				PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Error), "ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<PluginCommandResponseMessage>().Last().PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Error))");
 		}
 
 		[Then("last sync date should be updated for profile '$profileName'")]
 		public void CheckLastSyncDate(string profileName)
 		{
-			ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().First().Should(Be.Not.Null);
+			ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().First().Should(Be.Not.Null, "ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().First().Should(Be.Not.Null)");
 		}
 	}
 }

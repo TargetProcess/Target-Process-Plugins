@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NServiceBus;
 
@@ -81,7 +77,7 @@ namespace Tp.Integration.Messages.ServiceBus
 
 		public static ProfileName GetInProfileName(this IBus bus)
 		{
-			if(bus.CurrentMessageContext == null)
+			if (bus.CurrentMessageContext == null)
 				return string.Empty;
 
 			var profileName = bus.CurrentMessageContext.Headers[PROFILENAME_KEY];

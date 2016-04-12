@@ -23,13 +23,12 @@ namespace Tp.Core
 		public static T InlineMatch<T>(this T e) where T : Expression
 		{
 			var visitor = new ReplaceVisitor();
-			return (T)visitor.Visit(e);
+			return (T) visitor.Visit(e);
 		}
 
 		public static IQueryable<T> InlineMatch<T>(this IQueryable<T> e)
 		{
-			var visitor = new ReplaceVisitor();
-			return e.Provider.CreateQuery<T>(visitor.Visit(e.Expression));
+			return e.TransformExpression(InlineMatch);
 		}
 
 
@@ -58,14 +57,14 @@ namespace Tp.Core
 				return this;
 			}
 
-			public CaseClause<T, TResult> Case<T1>([InstantHandle]Func<T1, TResult> func)
+			public CaseClause<T, TResult> Case<T1>([InstantHandle] Func<T1, TResult> func)
 			{
-				return Case(x => x is T1, x => func((T1)(object)x));
+				return Case(x => x is T1, x => func((T1) (object) x));
 			}
 
 			public CaseClause<T, TResult> Case<T1>(Func<T1, bool> predicate, Func<T1, TResult> func)
 			{
-				return Case(x => x is T1 && predicate((T1)(object)x), x => func((T1)(object)x));
+				return Case(x => x is T1 && predicate((T1) (object) x), x => func((T1) (object) x));
 			}
 
 			public TResult End([InstantHandle] Func<T, TResult> @default)
@@ -87,6 +86,11 @@ namespace Tp.Core
 			public TResult EndExhaustive()
 			{
 				return End(_ => { throw new ArgumentException("No Case clause matched input"); });
+			}
+
+			public TResult End(TResult @default)
+			{
+				return End().GetOrDefault(@default);
 			}
 		}
 
@@ -124,9 +128,11 @@ namespace Tp.Core
 					throw new NotSupportedException("Could not inline Match expression without default End value");
 				}
 
-				var endLambda = node.Arguments[0] as LambdaExpression;
+				var argument = node.Arguments[0];
 
-				Expression newBody = endLambda.ApplyExpression(_argument);
+				Expression newBody = argument.MaybeAs<LambdaExpression>()
+					.Select(x => x.ApplyExpression(_argument))
+					.GetOrDefault(argument);
 
 				_elseExpression = newBody;
 
@@ -139,7 +145,6 @@ namespace Tp.Core
 				var toType = node.Method.GetGenericArguments()[0];
 				if (_argument.Type.IsAssignableFrom(toType) || toType.IsAssignableFrom(_argument.Type))
 				{
-
 					var conditionBody = Expression.TypeIs(_argument, toType);
 					var casted = Expression.Convert(_argument, toType);
 
@@ -148,7 +153,6 @@ namespace Tp.Core
 					var funcBody = lambda.ApplyExpression(casted);
 
 					_elseExpression = Expression.Condition(conditionBody, funcBody, _elseExpression);
-
 				}
 				return base.VisitMethodCall(node);
 			}
@@ -159,7 +163,7 @@ namespace Tp.Core
 				var result = node.Arguments[1];
 				if (result is LambdaExpression)
 				{
-					var endLambda = (LambdaExpression)result;
+					var endLambda = (LambdaExpression) result;
 					result = endLambda.ApplyExpression(_argument);
 				}
 
@@ -191,7 +195,13 @@ namespace Tp.Core
 
 			private static bool IsMethodFromCase(MethodInfo method)
 			{
-				return method.DeclaringType.IsGenericType && method.DeclaringType.GetGenericTypeDefinition() == typeof(CaseClause<object, object>).GetGenericTypeDefinition();
+				return method.DeclaringType.IsGenericType
+					&& method.DeclaringType.GetGenericTypeDefinition() == typeof(CaseClause<object, object>).GetGenericTypeDefinition();
+			}
+
+			protected override Expression VisitExtension(Expression node)
+			{
+				return node;
 			}
 		}
 
@@ -206,30 +216,26 @@ namespace Tp.Core
 			return new CaseE<LambdaExpression, LambdaExpression>();
 		}
 
-		static readonly MethodInfo MatchMethodInfo = Reflect.GetMethod<object>(x => x.Match(default(object))).GetGenericMethodDefinition();
+		private static readonly MethodInfo MatchMethodInfo = Reflect.GetMethod<object>(x => x.Match(default(object))).GetGenericMethodDefinition();
 
 
 		public class CaseE<TCondition, TResult>
 			where TCondition : LambdaExpression
 			where TResult : LambdaExpression
 		{
-
-
-
-			protected readonly CaseE<TCondition, TResult> _previousCase;
-			public TCondition Condition { get; private set; }
-			public TResult Result { get; private set; }
+			protected readonly CaseE<TCondition, TResult> PreviousCase;
+			public TCondition Condition { get; }
+			public TResult Result { get; }
 
 			public CaseE(CaseE<TCondition, TResult> previousCase, TCondition condition, TResult result)
 			{
-				_previousCase = previousCase;
+				PreviousCase = previousCase;
 				Condition = condition;
 				Result = result;
 			}
 
 			public CaseE()
 			{
-
 			}
 
 
@@ -241,7 +247,7 @@ namespace Tp.Core
 
 			protected IEnumerable<CaseE<TCondition, TResult>> AllCases()
 			{
-				for (var @case = this; @case._previousCase != null; @case = @case._previousCase)
+				for (var @case = this; @case.PreviousCase != null; @case = @case.PreviousCase)
 				{
 					yield return @case;
 				}
@@ -266,22 +272,21 @@ namespace Tp.Core
 					fromSourceToResultFuncType,
 				});
 
-				var forCaseExpression = cases.Aggregate(start.Body, (current, @case) => Expression.Call(current, caseMethod, @case.Condition, @case.Result));
+				var forCaseExpression = cases.Aggregate(start.Body,
+					(current, @case) => Expression.Call(current, caseMethod, @case.Condition, @case.Result));
 
-				var endMethodInfo = caseCaluseType.GetMethod("End", new[] {fromSourceToResultFuncType });
+				var endMethodInfo = caseCaluseType.GetMethod("End", new[] { fromSourceToResultFuncType });
 
 
 				Expression e = Expression.Call(forCaseExpression, endMethodInfo, func);
 				var result = Expression.Lambda(e, start.Parameters);
-				return (TResult)result;
+				return (TResult) result;
 			}
-
 		}
 
 
 		public class TypedCaseE<T, TResult> : CaseE<Expression<Func<T, bool>>, Expression<Func<T, TResult>>>
 		{
-
 			internal TypedCaseE(TypedCaseE<T, TResult> previousCase, Expression<Func<T, bool>> condition, Expression<Func<T, TResult>> result)
 				: base(previousCase, condition, result)
 			{
@@ -299,7 +304,7 @@ namespace Tp.Core
 
 			public TypedCaseE<T, TResult> Case<T1>(Expression<Func<T1, TResult>> func1)
 			{
-				Expression<Func<T, TResult>> expression = x => func1.Apply((T1)(object)x);
+				Expression<Func<T, TResult>> expression = x => func1.Apply((T1) (object) x);
 				return new TypedCaseE<T, TResult>(this, x => x is T1, expression.InlineApply());
 			}
 
@@ -310,18 +315,36 @@ namespace Tp.Core
 
 
 				ParameterExpression p1 = Expression.Parameter(typeof(T));
-				var selector = expression.Body.Replace(expression.Parameters[0],
-												  Expression.Convert(p1, t1));
+				var selector = expression.Body.Replace(x => x == expression.Parameters[0], Expression.Convert(p1, t1));
 				var selectorLambda = Expression.Lambda(Expression.Convert(selector, typeof(TResult)), p1);
 
 
-				return new TypedCaseE<T, TResult>(this, lambda, (Expression<Func<T, TResult>>)selectorLambda);
+				return new TypedCaseE<T, TResult>(this, lambda, (Expression<Func<T, TResult>>) selectorLambda);
 			}
 
 			public Expression<Func<T, TResult>> End(Expression<Func<T, TResult>> end)
 			{
 				return base.End(end, typeof(T), typeof(TResult));
 			}
+		}
+
+		public static LambdaExpression GenerateMatchCaseExpression(Type resultType, IEnumerable<LambdaExpression> filterExpressions,
+			IEnumerable<LambdaExpression> valueExpressions, ParameterExpression cellsParameter)
+		{
+			var cases = filterExpressions.Zip<LambdaExpression, LambdaExpression, Tuple<LambdaExpression, LambdaExpression>>(valueExpressions,
+				Tuple.Create);
+			return GenerateMatchCaseExpression(resultType, cellsParameter, cases);
+		}
+
+		public static LambdaExpression GenerateMatchCaseExpression(Type resultType, ParameterExpression parameter,
+			IEnumerable<Tuple<LambdaExpression, LambdaExpression>> cases)
+		{
+			var seed = MatchE();
+			var aggrergated = cases
+				.Aggregate(seed, (@case, caseModel) => @case.Case(caseModel.Item1, caseModel.Item2));
+			var endExpression = Expression.Lambda(Expression.Constant(resultType.DefaultValue(), resultType), parameter);
+
+			return aggrergated.End(endExpression, parameter.Type, resultType);
 		}
 	}
 }

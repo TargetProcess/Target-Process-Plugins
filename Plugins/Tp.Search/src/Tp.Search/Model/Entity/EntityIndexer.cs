@@ -95,11 +95,12 @@ namespace Tp.Search.Model.Entity
 			}
 			if (document.DocNumber != -1)
 			{
-				IDocumentIndex projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+				var projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 				var indexData = projectContextIndex.GetExistingIndexByNumber(document.DocNumber);
 				var currentProjectData = ProjectIndexData.Parse(indexData);
 				var result = ProjectIndexData.Sum(currentProjectData, new ProjectIndexData(new[] {releaseProject.ProjectID}));
 				projectContextIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+				_localBus.SendLocal(new GeneralProjectChangedLocalMessage {GeneralId = releaseProject.ReleaseID.Value, ProjectId = releaseProject.ProjectID });
 				return new IndexResult
 				{
 					DocNumber = document.DocNumber
@@ -122,13 +123,105 @@ namespace Tp.Search.Model.Entity
 				_log.Debug("ReleaseProject {0} for release {1} and project {2} has been already deleted".Fmt(releaseProject.ID, releaseProject.ReleaseName, releaseProject.ProjectName));
 				return new IndexResult();
 			}
-			if (document.DocNumber != 0)
+			if (document.DocNumber != -1)
 			{
 				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 				var indexData = entityProjectIndex.GetExistingIndexByNumber(document.DocNumber);
 				var currentProjectData = ProjectIndexData.Parse(indexData);
 				var result = ProjectIndexData.Substract(currentProjectData, new ProjectIndexData(new[] {releaseProject.ProjectID}));
 				entityProjectIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+				_localBus.SendLocal(new GeneralProjectChangedLocalMessage { GeneralId = releaseProject.ReleaseID.Value, ProjectId = releaseProject.ProjectID });
+			}
+			return new IndexResult();
+		}
+
+		public IndexResult AddAssignableSquadIndex(AssignableSquadDTO assignableSquad, DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (assignableSquad.SquadID == null || assignableSquad.AssignableID == null)
+			{
+				return new IndexResult();
+			}
+			var entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(assignableSquad.AssignableID));
+			if (document == null)
+			{
+				_log.Debug("Cannot index assignablesquad {0} for assignable {1} and squad {2}".Fmt(assignableSquad.ID, assignableSquad.AssignableName, assignableSquad.SquadName));
+				return new IndexResult();
+			}
+			if (document.DocNumber != -1)
+			{
+				var squadContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
+				var indexData = squadContextIndex.GetExistingIndexByNumber(document.DocNumber);
+				var currentSquadData = SquadIndexData.Parse(indexData);
+				var result = SquadIndexData.Sum(currentSquadData, new SquadIndexData(new[] { assignableSquad.SquadID }));
+				squadContextIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+				_localBus.SendLocal(new AssignableSquadChangedLocalMessage { AssignableId = assignableSquad.AssignableID.Value, SquadId = assignableSquad.SquadID });
+				return new IndexResult
+				{
+					DocNumber = document.DocNumber
+				};
+			}
+			return new IndexResult();
+		}
+
+		public IndexResult UpdateAssignableSquadIndex(AssignableSquadDTO assignableSquad, AssignableSquadDTO originalAssignableSquad, ICollection<AssignableSquadField> changedFields, DocumentIndexOptimizeSetup optimizeSetup)
+		{
+			if (!changedFields.Contains(AssignableSquadField.SquadID))
+			{
+				return new IndexResult();
+			}
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (assignableSquad.SquadID == null || assignableSquad.AssignableID == null)
+			{
+				return new IndexResult();
+			}
+			var entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(assignableSquad.AssignableID));
+			if (document == null)
+			{
+				_log.Debug("Cannot index assignablesquad {0} for assignable {1} and squad {2}".Fmt(assignableSquad.ID, assignableSquad.AssignableName, assignableSquad.SquadName));
+				return new IndexResult();
+			}
+			if (document.DocNumber != -1)
+			{
+				var squadContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
+				var indexData = squadContextIndex.GetExistingIndexByNumber(document.DocNumber);
+				var currentSquadData = SquadIndexData.Parse(indexData);
+				var withoutOldSquad = SquadIndexData.Substract(currentSquadData, new SquadIndexData(new[] { originalAssignableSquad.SquadID }));
+				var result = SquadIndexData.Sum(withoutOldSquad, new SquadIndexData(new[] { assignableSquad.SquadID }));
+				squadContextIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+				_localBus.SendLocal(new AssignableSquadChangedLocalMessage { AssignableId = assignableSquad.AssignableID.Value, SquadId = assignableSquad.SquadID });
+				return new IndexResult
+				{
+					DocNumber = document.DocNumber
+				};
+			}
+			return new IndexResult();
+		}
+
+		public IndexResult RemoveAssignableSquadIndex(AssignableSquadDTO assignableSquad, DocumentIndexOptimizeSetup optimizeSetup = null)
+		{
+			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
+			if (assignableSquad.SquadID == null || assignableSquad.AssignableID == null)
+			{
+				return new IndexResult();
+			}
+			var entityIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.Entity);
+			var document = entityIndex.FindDocumentByName<EntityDocument>(EntityDocument.CreateName(assignableSquad.AssignableID));
+			if (document == null)
+			{
+				_log.Debug("AssignableSquad {0} for assignable {1} and squad {2} has been already deleted".Fmt(assignableSquad.ID, assignableSquad.AssignableName, assignableSquad.SquadName));
+				return new IndexResult();
+			}
+			if (document.DocNumber != -1)
+			{
+				var entitySquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
+				var indexData = entitySquadIndex.GetExistingIndexByNumber(document.DocNumber);
+				var currentSquadData = SquadIndexData.Parse(indexData);
+				var result = SquadIndexData.Substract(currentSquadData, new SquadIndexData(new[] { assignableSquad.SquadID }));
+				entitySquadIndex.Update(document.DocNumber, result.ToString(), optimizeSetup);
+				_localBus.SendLocal(new AssignableSquadChangedLocalMessage { AssignableId = assignableSquad.AssignableID.Value, SquadId = assignableSquad.SquadID });
 			}
 			return new IndexResult();
 		}
@@ -370,7 +463,7 @@ namespace Tp.Search.Model.Entity
 					entityStateIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateEntityStateData(assignable.EntityStateID.Value), optimizeSetup);
 				}
 				IDocumentIndex squadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
-				squadIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateSquadData(assignable.SquadID), optimizeSetup);
+				squadIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateSquadData(assignable.SquadID).ToString(), optimizeSetup);
 			}
 			_log.Debug(string.Format("Added {0} #{1} - '{2}':{3}", entityTypeName, assignable.AssignableID.GetValueOrDefault(), assignable.Name, indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " no words added;"));
 			return indexResult;
@@ -452,14 +545,20 @@ namespace Tp.Search.Model.Entity
 						entityStateIndex.Update(document.DocNumber, _indexDataFactory.CreateEntityStateData(assignable.EntityStateID.Value), optimizeSetup);
 					}
 				}
-				IDocumentIndex entitySquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
+				var entitySquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
 				if (changedFields.Any(f => entitySquadIndex.Type.IsBelongedToIndexFields(f)))
 				{
-					entitySquadIndex.Update(document.DocNumber, _indexDataFactory.CreateSquadData(assignable.SquadID), optimizeSetup);
-					if (!isIndexing)
+					var indexData = entitySquadIndex.GetExistingIndexByNumber(document.DocNumber);
+					var currentSquadIndexData = SquadIndexData.Parse(indexData);
+					if (currentSquadIndexData.SquadIds.Empty())
 					{
-						_localBus.SendLocal(new AssignableSquadChangedLocalMessage { AssignableId = assignable.AssignableID.Value, SquadId = assignable.SquadID });
-					}
+						// update entity squad index only if not exists (rebuild index for assignable without assignable squads)
+						entitySquadIndex.Update(document.DocNumber, _indexDataFactory.CreateSquadData(assignable.SquadID).ToString(), optimizeSetup);
+						if (!isIndexing)
+						{
+							_localBus.SendLocal(new AssignableSquadChangedLocalMessage { AssignableId = assignable.AssignableID.Value, SquadId = assignable.SquadID });
+						}
+					}					
 				}
 			}
 			return indexResult;
@@ -687,24 +786,20 @@ namespace Tp.Search.Model.Entity
 			_log.Debug(string.Format("Added comment #{0} to #{1} - '{2}':{3}", comment.CommentID.GetValueOrDefault(), comment.GeneralID.GetValueOrDefault(), comment.GeneralName, indexResult.WordsAdded.Any() ? string.Format(" added words - {0};", string.Join(",", indexResult.WordsAdded.Keys)) : " no words added;"));
 			if (indexResult.DocNumber != -1 && commentEntity.DocNumber != -1)
 			{
-				IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+				var entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 				var entityProjectIndexResult = entityProjectIndex.GetExistingIndexByNumber(commentEntity.DocNumber);
 				var entityProjectIndexData = ProjectIndexData.Parse(entityProjectIndexResult);
-				IDocumentIndex commentProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentProject);
+				var commentProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentProject);
 				commentProjectIndex.Index(indexResult.DocNumber, entityProjectIndexData.ToString(), optimizeSetup);
-				int? squadId = null;
-				if (commentEntity.SquadId != null)
-				{
-					int squadIdValue;
-					if (int.TryParse(commentEntity.SquadId, out squadIdValue))
-					{
-						squadId = squadIdValue == 0 ? null : (int?)squadIdValue;
-					}
-				}
-				IDocumentIndex commentSquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentSquad);
-				commentSquadIndex.Index(indexResult.DocNumber, _indexDataFactory.CreateSquadData(squadId), optimizeSetup);
-				IDocumentIndex commentEntityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentEntityType);
-				Maybe<string> maybeEntityTypeName = _entityTypeProvider.GetEntityTypeName(int.Parse(commentEntity.EntityTypeId));
+
+				var entitySquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
+				var entitySquadIndexResult = entitySquadIndex.GetExistingIndexByNumber(commentEntity.DocNumber);
+				var entitySquadIndexData = SquadIndexData.Parse(entitySquadIndexResult);
+				var commentSquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentSquad);
+				commentSquadIndex.Index(indexResult.DocNumber, entitySquadIndexData.ToString(), optimizeSetup);
+
+				var commentEntityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentEntityType);
+				var maybeEntityTypeName = _entityTypeProvider.GetEntityTypeName(int.Parse(commentEntity.EntityTypeId));
 				string entityTypeName = maybeEntityTypeName.GetOrThrow(() => new ApplicationException("No entity type name for {0}".Fmt(commentEntity.EntityTypeId)));
 				commentEntityTypeIndex.Index(indexResult.DocNumber, entityTypeName, optimizeSetup);
 			}
@@ -718,7 +813,7 @@ namespace Tp.Search.Model.Entity
 			indexes.ForEach(i => i.Optimize(optimizeSetup));
 		}
 
-		public IndexResult UpdateCommentIndex(CommentDTO comment, ICollection<CommentField> changedFields, Maybe<int?> projectId, Maybe<int?> squadId, DocumentIndexOptimizeSetup optimizeSetup = null)
+		public IndexResult UpdateCommentIndex(CommentDTO comment, ICollection<CommentField> changedFields, bool shouldIndexProjects, bool shouldIndexSquads, DocumentIndexOptimizeSetup optimizeSetup = null)
 		{
 			optimizeSetup = GetNoOptimizeIfNull(optimizeSetup);
 			if (comment.CommentID == null || comment.GeneralID == null)
@@ -741,19 +836,22 @@ namespace Tp.Search.Model.Entity
 			}
 			if (commentDocument.DocNumber >= 0)
 			{
-				if (projectId.HasValue)
+				if (shouldIndexProjects)
 				{
-					IDocumentIndex entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
+					var entityProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntityProject);
 					var entityProjectIndexResult = entityProjectIndex.GetExistingIndexByNumber(commentEntityDocument.DocNumber);
 					var entityProjectIndexData = ProjectIndexData.Parse(entityProjectIndexResult);
-					IDocumentIndex commentProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentProject);
+					var commentProjectIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentProject);
 					commentProjectIndex.Update(commentDocument.DocNumber, entityProjectIndexData.ToString(), optimizeSetup);
 				}
-				if (squadId.HasValue)
+				if (shouldIndexSquads)
 				{
-					IDocumentIndex commentSquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentSquad);
-					int? squadIdValue = squadId.Value;
-					commentSquadIndex.Update(commentDocument.DocNumber, _indexDataFactory.CreateSquadData(squadIdValue), optimizeSetup);
+
+					var entitySquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.EntitySquad);
+					var entitySquadIndexResult = entitySquadIndex.GetExistingIndexByNumber(commentEntityDocument.DocNumber);
+					var entitySquadIndexData = SquadIndexData.Parse(entitySquadIndexResult);
+					var commentSquadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, DocumentIndexTypeToken.CommentSquad);
+					commentSquadIndex.Update(commentDocument.DocNumber, entitySquadIndexData.ToString(), optimizeSetup);
 				}
 				if (changedFields.Any(f => commentIndex.Type.IsBelongedToIndexFields(f)))
 				{

@@ -80,7 +80,7 @@ namespace Tp.Mercurial.Tests
 
 			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = vcsEmail});
 
-			lookup.Name.Should(Be.EqualTo(_tpName));
+			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace Tp.Mercurial.Tests
 
 			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Author = vcsName});
 
-			lookup.Name.Should(Be.EqualTo(_tpName));
+			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
 		}
 
 		[Test]
@@ -102,7 +102,7 @@ namespace Tp.Mercurial.Tests
 
 			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = vcsEmail});
 
-			lookup.Name.Should(Be.EqualTo(_tpName));
+			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace Tp.Mercurial.Tests
 
 			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = "other@mail.com", Author = vcsName});
 
-			lookup.Name.Should(Be.EqualTo(_tpName));
+			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
 		}
 
 		[Test]
@@ -122,7 +122,7 @@ namespace Tp.Mercurial.Tests
 
 			var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
 
-			lookup.Name.Should(Be.EqualTo(_tpName));
+			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
 		}
 	}
 }

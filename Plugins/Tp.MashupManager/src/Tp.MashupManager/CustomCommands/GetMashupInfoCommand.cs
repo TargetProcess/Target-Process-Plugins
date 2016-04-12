@@ -5,6 +5,7 @@
 
 using System.Runtime.Serialization;
 using StructureMap;
+using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -15,7 +16,7 @@ namespace Tp.MashupManager.CustomCommands
 {
 	public class GetMashupInfoCommand : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
 		{
 			var name = args.Deserialize<MashupName>();
 

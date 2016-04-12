@@ -12,7 +12,6 @@ Tp.controls.grid.InnerListConfigurationFactory = Ext.extend(Tp.controls.grid.Con
         return config;
     },
 
-
     createView: function(columnModel) {
         return new Tp.controls.grid.SummaryGroupingView({
             enableGrouping: false,
@@ -24,5 +23,4 @@ Tp.controls.grid.InnerListConfigurationFactory = Ext.extend(Tp.controls.grid.Con
     getPageSize: function() {
         return this.pageSize;
     }
-
 });

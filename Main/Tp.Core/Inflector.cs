@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2008 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -87,6 +82,7 @@ namespace Tp.Core
 			AddUnknownCountRule("fish");
 			AddUnknownCountRule("sheep");
 		}
+
 		private static void AddSingularRule(string rule, string replacement)
 		{
 			_singulars.Add(new InflectorRule(rule, replacement));
@@ -185,7 +181,6 @@ namespace Tp.Core
 			}
 
 			return s.Split(' ').Select(x => x.Substring(0, 1).ToUpper() + x.Substring(1).ToLower()).ToString(" ");
-
 		}
 
 		/// <summary>
@@ -292,7 +287,6 @@ namespace Tp.Core
 		/// <param name="s"></param>
 		/// <returns></returns>
 		public static string Pluralize(this string s)
-
 		{
 			if (s == null)
 			{
@@ -324,8 +318,13 @@ namespace Tp.Core
 			return s;
 		}
 
+		public static string Pluralize(this string s, int count)
+		{
+			return count == 1 ? s : s.Pluralize();
+		}
+
 		/// <summary>
-		/// The reverse of <see cref="Pluralize"/>, returns the singular form of a word in a string.
+		/// The reverse of <see cref="Pluralize(string)"/>, returns the singular form of a word in a string.
 		/// </summary>
 		/// <remarks>
 		/// A <c>null</c> input string returns <c>null</c>.

@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,8 +61,13 @@
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn">
-      <HintPath>..\..\libs\SharpSvn\32\SharpSvn.dll</HintPath>
+    <Reference Include="SharpSvn, Version=1.9000.3710.36, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\SharpSvn.1.9-x86.1.9002.3747.59\lib\net20\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI, Version=1.9000.3710.36, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\SharpSvn.1.9-x86.1.9002.3747.59\lib\net20\SharpSvn.UI.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
@@ -108,65 +112,61 @@
       <Link>App.config</Link>
     </None>
     <None Include="Install.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Mashups\ViewDiff\placeholders.cfg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="PluginSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
     <None Include="Uninstall.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Update.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mashups\ViewDiff\RegisterMashup.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="subversion-icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mashups\ProfileEditor\registerMashup.js" />
     <Content Include="Mashups\ProfileEditor\SubversionProfileEditor.js" />
     <Content Include="Mashups\ProfileEditor\UserMappingEditor.js" />
-    <Content Include="Mashups\Tests\checkConnection.tests.js" />
-    <Content Include="Mashups\Tests\index.html" />
-    <Content Include="Mashups\Tests\Mocks\commandGatewayMock.js" />
-    <Content Include="Mashups\Tests\Mocks\navigatorMock.js" />
-    <Content Include="Mashups\Tests\Mocks\profilenamesourcemock.js" />
-    <Content Include="Mashups\Tests\Mocks\profilerepositorymock.js" />
-    <Content Include="Mashups\Tests\Mocks\restServiceMock.js" />
-    <Content Include="Mashups\Tests\plugins.css" />
-    <Content Include="Mashups\Tests\profileEditor.tests.js" />
-    <Content Include="Mashups\Tests\testConfiguration.js" />
-    <Content Include="Mashups\Tests\userMappingEditor.tests.js" />
-    <Content Include="Mashups\Tests\userMappingLine.tests.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
-      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project><Name>Tp.Integration.Plugin.UninstallUtil</Name>
+      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.SourceControl\Tp.SourceControl.csproj">
-      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project><Name>Tp.SourceControl</Name>
+      <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>
+      <Name>Tp.SourceControl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\*.*  $(TargetDir)Mashups\*.* /Y /E /D
 

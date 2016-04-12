@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -21,13 +16,17 @@ namespace Tp.Core
 	/// </summary>
 	public static class StringUtils
 	{
-		public static readonly string[] LineBreaks = new[] { "\r\n", "\r", "\n" };
+		public static readonly string[] LineBreaks = { "\r\n", "\r", "\n" };
 
 
 		/// <summary>
 		/// A regular expression to validate email addresses.
 		/// </summary>
-		public static readonly Regex EmailRegex = new Regex(@"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$", RegexOptions.IgnoreCase);
+		public static readonly Regex EmailRegex =
+			new Regex(
+				@"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$",
+				RegexOptions.IgnoreCase);
+
 		/// <summary>
 		/// Verify whether string is a valid email address.
 		/// </summary>
@@ -35,7 +34,7 @@ namespace Tp.Core
 		/// <returns><code>true</code> if valid email address, <code>false</code> otherwise.</returns>
 		public static bool IsEmail(this string value)
 		{
-			return !String.IsNullOrEmpty(value) && EmailRegex.IsMatch(value);
+			return !string.IsNullOrEmpty(value) && EmailRegex.IsMatch(value);
 		}
 
 		/// <summary>
@@ -58,7 +57,7 @@ namespace Tp.Core
 		/// </returns>
 		public static bool IsBlank(this string value)
 		{
-			return String.IsNullOrEmpty(value) || value.All(Char.IsWhiteSpace);
+			return string.IsNullOrWhiteSpace(value);
 		}
 
 		/// <summary>
@@ -123,20 +122,20 @@ namespace Tp.Core
 		[SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")]
 		public static string TrimToEmpty(this string value)
 		{
-			return IsBlank(value) ? String.Empty : value.Trim();
+			return IsBlank(value) ? string.Empty : value.Trim();
 		}
 
 		public static List<int> ToIntList(this IList<string> ids)
 		{
 			if (ids == null)
 			{
-				throw new ArgumentNullException("ids");
+				throw new ArgumentNullException(nameof(ids));
 			}
 			var result = new List<int>(ids.Count);
-			foreach (string id in ids)
+			foreach (var id in ids)
 			{
 				int n;
-				if (Int32.TryParse(id, out n))
+				if (int.TryParse(id, out n))
 				{
 					result.Add(n);
 				}
@@ -148,7 +147,7 @@ namespace Tp.Core
 		{
 			if (ids == null)
 			{
-				throw new ArgumentNullException("ids");
+				throw new ArgumentNullException(nameof(ids));
 			}
 			var result = new List<string>(ids.Count);
 			result.AddRange(ids.Select(id => Convert.ToString(id, CultureInfo.InvariantCulture)));
@@ -157,12 +156,12 @@ namespace Tp.Core
 
 		public static string GetLastWord(string name)
 		{
-			if (String.IsNullOrEmpty(name))
+			if (string.IsNullOrEmpty(name))
 			{
-				return String.Empty;
+				return string.Empty;
 			}
 
-			int whiteSpaceIndex = name.LastIndexOf(" ");
+			var whiteSpaceIndex = name.LastIndexOf(" ");
 
 			return whiteSpaceIndex < 0 ? name : name.Substring(whiteSpaceIndex + 1);
 		}
@@ -171,10 +170,10 @@ namespace Tp.Core
 		{
 			if (tags == null)
 			{
-				throw new ArgumentNullException("tags");
+				throw new ArgumentNullException(nameof(tags));
 			}
 			var result = new StringBuilder();
-			for (int i = 0; i < tags.Length; i++)
+			for (var i = 0; i < tags.Length; i++)
 			{
 				if (i > 0)
 				{
@@ -210,10 +209,10 @@ namespace Tp.Core
 			}
 
 			var result = new char[value.Length];
-			int off = 0;
-			foreach (char c in value.Where(Char.IsLetterOrDigit))
+			var off = 0;
+			foreach (var c in value.Where(char.IsLetterOrDigit))
 			{
-				result[off++] = Char.ToLowerInvariant(c);
+				result[off++] = char.ToLowerInvariant(c);
 			}
 			return off > 0 ? new string(result, 0, off) : null;
 		}
@@ -257,7 +256,7 @@ namespace Tp.Core
 
 		public static string ComputeMD5Hash(this string value, Encoding encoding)
 		{
-			using (MD5 md5 = MD5.Create())
+			using (var md5 = MD5.Create())
 			{
 				var encodedBytes = md5.ComputeHash(encoding.GetBytes(value));
 				var hash = BitConverter.ToString(encodedBytes).Replace("-", "");
@@ -270,16 +269,17 @@ namespace Tp.Core
 			// Convert Base64 String to byte[]
 			var imageBytes = Convert.FromBase64String(base64String);
 			var ms = new MemoryStream(imageBytes, 0,
-									  imageBytes.Length);
+				imageBytes.Length);
 
 			// Convert byte[] to Image
 			ms.Write(imageBytes, 0, imageBytes.Length);
 			var image = Image.FromStream(ms, true);
 			return image;
 		}
+
 		public static bool IsManyWords(string text, char delimiter = ' ')
 		{
-			return !String.IsNullOrEmpty(text) && text.Contains(delimiter);
+			return !string.IsNullOrEmpty(text) && text.Contains(delimiter);
 		}
 
 		public static string[] GetWords(string text, char delimiter = ' ')
@@ -302,7 +302,7 @@ namespace Tp.Core
 			else
 			{
 				var result = GetLastWord(text);
-				return result == String.Empty ? String.Empty : result[0].ToString();
+				return result == string.Empty ? string.Empty : result[0].ToString();
 			}
 		}
 
@@ -316,7 +316,12 @@ namespace Tp.Core
 			{
 				return false;
 			}
-			return String.Equals(a.Replace(" ", ""), b.Replace(" ", ""), comparison);
+			return string.Equals(a.Replace(" ", ""), b.Replace(" ", ""), comparison);
+		}
+
+		public static string Truncate(this string originString, int maxLength)
+		{
+			return (!string.IsNullOrEmpty(originString) && originString.Length > maxLength) ? originString.Substring(0, maxLength) : originString;
 		}
 	}
 }

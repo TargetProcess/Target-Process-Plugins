@@ -133,9 +133,9 @@ namespace Tp.Subversion.SerializationPatches
 
 			var newRevisionRangeDetectedLocalMessage = Deserialize(oldMessage);
 			((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.FromChangeset.Value.Should(
-				Be.EqualTo("1"));
+				Be.EqualTo("1"), "((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.FromChangeset.Value.Should(Be.EqualTo(\"1\"))");
 			((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.ToChangeset.Value.Should(
-				Be.EqualTo("2"));
+				Be.EqualTo("2"), "((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.ToChangeset.Value.Should(Be.EqualTo(\"2\"))");
 		}
 
 		[Test]
@@ -151,8 +151,8 @@ namespace Tp.Subversion.SerializationPatches
 			var result =
 				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(RevisionRange)).Value) as
 				RevisionRange;
-			result.FromChangeset.Value.Should(Be.EqualTo("1"));
-			result.ToChangeset.Value.Should(Be.EqualTo("2"));
+			result.FromChangeset.Value.Should(Be.EqualTo("1"), "result.FromChangeset.Value.Should(Be.EqualTo(\"1\"))");
+			result.ToChangeset.Value.Should(Be.EqualTo("2"), "result.ToChangeset.Value.Should(Be.EqualTo(\"2\"))");
 		}
 
 		[Test]
@@ -321,11 +321,11 @@ namespace Tp.Subversion.SerializationPatches
 
 			var newRevisionDetectedLocalMessage = Deserialize(oldMessage);
 			var revisionInfo = ((NewRevisionDetectedLocalMessage) newRevisionDetectedLocalMessage[0]).Revision;
-			revisionInfo.Author.Should(Be.EqualTo("author"));
-			revisionInfo.Comment.Should(Be.EqualTo("comment"));
-			revisionInfo.Id.Value.Should(Be.EqualTo("1"));
-			revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add));
-			revisionInfo.Entries[0].Path.Should(Be.EqualTo("path"));
+			revisionInfo.Author.Should(Be.EqualTo("author"), "revisionInfo.Author.Should(Be.EqualTo(\"author\"))");
+			revisionInfo.Comment.Should(Be.EqualTo("comment"), "revisionInfo.Comment.Should(Be.EqualTo(\"comment\"))");
+			revisionInfo.Id.Value.Should(Be.EqualTo("1"), "revisionInfo.Id.Value.Should(Be.EqualTo(\"1\"))");
+			revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add), "revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add))");
+			revisionInfo.Entries[0].Path.Should(Be.EqualTo("path"), "revisionInfo.Entries[0].Path.Should(Be.EqualTo(\"path\"))");
 		}
 
 		private static IPluginLocalMessage[] Deserialize(string oldMessage)
@@ -408,7 +408,7 @@ namespace Tp.Subversion.SerializationPatches
 </object>";
 			var revisionCreatedLocalMessage = Deserialize(oldMessage);
 			var dto = ((RevisionCreatedLocalMessage) revisionCreatedLocalMessage[0]).Dto;
-			dto.ID.Should(Be.EqualTo(1));
+			dto.ID.Should(Be.EqualTo(1), "dto.ID.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -581,16 +581,16 @@ namespace Tp.Subversion.SerializationPatches
 
 			var revisionCreatedLocalMessage = Deserialize(oldMessage);
 			var assignRevisionToEntityAction = revisionCreatedLocalMessage[0] as AssignRevisionToEntityAction;
-			assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1));
+			assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1), "assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1))");
 
-			assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>());
-			((ChangeStatusAction)assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo("status"));
+			assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>(), "assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>())");
+			((ChangeStatusAction)assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo("status"), "((ChangeStatusAction)assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo(\"status\"))");
 
-			assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>());
-			((PostCommentAction)assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo("comment"));
+			assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>(), "assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>())");
+			((PostCommentAction)assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo("comment"), "((PostCommentAction)assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo(\"comment\"))");
 
-			assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>());
-			((PostTimeAction)assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10));
+			assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>(), "assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>())");
+			((PostTimeAction)assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10), "((PostTimeAction)assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10))");
 		}
 
 		[Test]
@@ -606,11 +606,11 @@ namespace Tp.Subversion.SerializationPatches
 			var result =
 				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(CreateRevisionSagaData)).Value) as
 				CreateRevisionSagaData;
-			result.Id.ToString().Should(Be.EqualTo("baf1a9ae-b874-44ea-827d-9fb400b48a78"));
-			result.RevisionId.Should(Be.EqualTo(0));
-			result.RevisionFilesCreated.Should(Be.EqualTo(0));
-			result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify));
-			result.RevisionEntries[0].Path.Should(Be.EqualTo(@"/New/test.txt"));
+			result.Id.ToString().Should(Be.EqualTo("baf1a9ae-b874-44ea-827d-9fb400b48a78"), "result.Id.ToString().Should(Be.EqualTo(\"baf1a9ae-b874-44ea-827d-9fb400b48a78\"))");
+			result.RevisionId.Should(Be.EqualTo(0), "result.RevisionId.Should(Be.EqualTo(0))");
+			result.RevisionFilesCreated.Should(Be.EqualTo(0), "result.RevisionFilesCreated.Should(Be.EqualTo(0))");
+			result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify), "result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify))");
+			result.RevisionEntries[0].Path.Should(Be.EqualTo(@"/New/test.txt"), "result.RevisionEntries[0].Path.Should(Be.EqualTo(@\"/New/test.txt\"))");
 		}
 
 		[Test, Ignore]
@@ -626,8 +626,8 @@ namespace Tp.Subversion.SerializationPatches
 			var result =
 				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(AttachToEntitySagaData)).Value) as
 				AttachToEntitySagaData;
-			result.Id.ToString().Should(Be.EqualTo("c2afc097-6ea3-4a0e-8170-9fb400bb8bbe"));
-			result.RevisionDto.ID.Should(Be.EqualTo(1));
+			result.Id.ToString().Should(Be.EqualTo("c2afc097-6ea3-4a0e-8170-9fb400bb8bbe"), "result.Id.ToString().Should(Be.EqualTo(\"c2afc097-6ea3-4a0e-8170-9fb400bb8bbe\"))");
+			result.RevisionDto.ID.Should(Be.EqualTo(1), "result.RevisionDto.ID.Should(Be.EqualTo(1))");
 		}
 	}
 }

@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -22,7 +17,7 @@ namespace Tp.Utils.Html
 		{
 			if (baseUri == null)
 			{
-				throw new ArgumentNullException("baseUri");
+				throw new ArgumentNullException(nameof(baseUri));
 			}
 			_baseUri = baseUri.TrimEnd('/');
 			var regex = new Regex(@"((?#protocol)https?://)((?#domain)[-\w.]+(?:(?#port):\d{1,5})?)(/.*)?", RegexOptions.IgnoreCase);
@@ -68,7 +63,7 @@ namespace Tp.Utils.Html
 			var result = src;
 
 			if (!src.StartsWith("http://", true, CultureInfo.InvariantCulture) &&
-			    !src.StartsWith("https://", true, CultureInfo.InvariantCulture))
+				!src.StartsWith("https://", true, CultureInfo.InvariantCulture))
 			{
 				if (!src.StartsWith("/"))
 				{

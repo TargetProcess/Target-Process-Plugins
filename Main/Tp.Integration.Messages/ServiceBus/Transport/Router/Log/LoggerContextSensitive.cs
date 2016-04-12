@@ -28,16 +28,16 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
 		public void Error(LoggerContext context, string message, Exception error = null)
 		{
 			Log(context, message, (l, m) =>
-			                      	{
-			                      		if (error != null)
-			                      		{
-			                      			l.Error(m, error);
-			                      		}
-			                      		else
-			                      		{
-			                      			l.Error(m);
-			                      		}
-			                      	}
+			{
+				if (error != null)
+				{
+					l.Error(m, error);
+				}
+				else
+				{
+					l.Error(m);
+				}
+			}
 				);
 		}
 

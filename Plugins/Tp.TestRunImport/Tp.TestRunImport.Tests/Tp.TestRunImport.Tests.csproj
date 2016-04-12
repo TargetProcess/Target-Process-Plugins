@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,6 +84,14 @@
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\Libs\Rhino.Mocks.dll</HintPath>
     </Reference>
+    <Reference Include="Spring.Aop, Version=1.3.1.40711, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Spring.Aop.1.3.1\lib\Net40\Spring.Aop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Spring.Core, Version=1.3.1.40711, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Spring.Core.1.3.1\lib\Net40\Spring.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -131,37 +138,48 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NBehave\Tp.Testing.Common.NBehave.csproj">
-      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project><Name>Tp.Testing.Common.NBehave</Name>
+      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project>
+      <Name>Tp.Testing.Common.NBehave</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Main\Tp.Testing.Common.NUnit\Tp.Testing.Common.NUnit.csproj">
-      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project><Name>Tp.Testing.Common.NUnit</Name>
+      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project>
+      <Name>Tp.Testing.Common.NUnit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
-      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project><Name>Tp.Integration.Plugin.UninstallUtil</Name>
+      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
-      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project><Name>Tp.Integration.Testing.Common</Name>
+      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
+      <Name>Tp.Integration.Testing.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.LegacyProfileConversion.Common.Testing\Tp.LegacyProfileConversion.Common.Testing.csproj">
-      <Project>{05A1F4C0-E8E5-4310-A655-20F98DFD2921}</Project><Name>Tp.LegacyProfileConversion.Common.Testing</Name>
+      <Project>{05A1F4C0-E8E5-4310-A655-20F98DFD2921}</Project>
+      <Name>Tp.LegacyProfileConversion.Common.Testing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
-      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project><Name>Tp.LegacyProfileConversion.Common</Name>
+      <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
+      <Name>Tp.LegacyProfileConversion.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.TestRunImport.LegacyProfileConversion\Tp.TestRunImport.LegacyProfileConversion.csproj">
-      <Project>{CB373D97-3125-4F2E-A9DF-D3BAB4303C25}</Project><Name>Tp.TestRunImport.LegacyProfileConversion</Name>
+      <Project>{CB373D97-3125-4F2E-A9DF-D3BAB4303C25}</Project>
+      <Name>Tp.TestRunImport.LegacyProfileConversion</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.TestRunImport\Tp.TestRunImport.csproj">
-      <Project>{4EB59583-F2D3-47C9-83E3-23EDDF818E94}</Project><Name>Tp.TestRunImport</Name>
+      <Project>{4EB59583-F2D3-47C9-83E3-23EDDF818E94}</Project>
+      <Name>Tp.TestRunImport</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -171,50 +189,51 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="NUnit\SimpleTestCaseTestResult.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="NUnit\TestIdRegExpTestCaseTestResult.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="NUnit\TestNameRegExpTestCaseTestResult.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Selenium\SimpleSeleniumTestResult.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Selenium\TestIdRegExpSeleniumTestResult.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Selenium\TestNameRegExpSeleniumTestResult.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="JUnit\TestIdRegExpTestCaseTestResult.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="JUnit\SimpleTestCaseTestResult.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="JUnit\TestNameRegExpTestCaseTestResult.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +242,9 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -231,43 +231,43 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		[Then("InboundMailProtocol email plugin profile should be '$protocol'")]
 		public void AssertInboundMailProtocol(string protocol)
 		{
-			Profile.Protocol.Should(Be.EqualTo(protocol));
+			Profile.Protocol.Should(Be.EqualTo(protocol), "Profile.Protocol.Should(Be.EqualTo(protocol))");
 		}
 
 		[Then("InboundMailServer email plugin profile should be '$server'")]
 		public void AssertInboundMailServer(string server)
 		{
-			Profile.MailServer.Should(Be.EqualTo(server));
+			Profile.MailServer.Should(Be.EqualTo(server), "Profile.MailServer.Should(Be.EqualTo(server))");
 		}
 
 		[Then("InboundMailLogin email plugin profile should be '$login'")]
 		public void AssertInboundMailLogin(string login)
 		{
-			Profile.Login.Should(Be.EqualTo(login));
+			Profile.Login.Should(Be.EqualTo(login), "Profile.Login.Should(Be.EqualTo(login))");
 		}
 
 		[Then("InboundMailPort email plugin profile should be $port")]
 		public void AssertInboundMailPort(int port)
 		{
-			Profile.Port.Should(Be.EqualTo(port));
+			Profile.Port.Should(Be.EqualTo(port), "Profile.Port.Should(Be.EqualTo(port))");
 		}
 
 		[Then("InboundMailUseSSL email plugin profile should be $useSsl")]
 		public void AssertInboundMailUseSSL(bool useSsl)
 		{
-			Profile.UseSSL.Should(Be.EqualTo(useSsl));
+			Profile.UseSSL.Should(Be.EqualTo(useSsl), "Profile.UseSSL.Should(Be.EqualTo(useSsl))");
 		}
 
 		[Then("InboundMailPassword email plugin profile should be '$password'")]
 		public void AssertInboundMailPassword(string password)
 		{
-			Profile.Password.Should(Be.EqualTo(password));
+			Profile.Password.Should(Be.EqualTo(password), "Profile.Password.Should(Be.EqualTo(password))");
 		}
 
 		[Then("SyncInterval email plugin profile should be $interval'")]
 		public void AssertSyncInterval(int interval)
 		{
-			Profile.SynchronizationInterval.Should(Be.EqualTo(interval));
+			Profile.SynchronizationInterval.Should(Be.EqualTo(interval), "Profile.SynchronizationInterval.Should(Be.EqualTo(interval))");
 		}
 
 		[Then("$profileAmount plugin profile should be created")]
@@ -275,7 +275,7 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		{
 			var profiles =
 				(from profile in Account.Profiles select profile.GetProfile<ProjectEmailProfile>()).ToArray();
-			profiles.Length.Should(Be.EqualTo(profileAmount));
+			profiles.Length.Should(Be.EqualTo(profileAmount), "profiles.Length.Should(Be.EqualTo(profileAmount))");
 		}
 
 		protected override string SettingsXmlNode
@@ -292,46 +292,46 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 		public void ProfileStorageShouldContainUser(string userLogin)
 		{
 			Account.Profiles.First().Get<UserLite>().First(x => x.Login == userLogin && x.UserType == UserType.User).Should(
-				Be.Not.Null);
+				Be.Not.Null, "Account.Profiles.First().Get<UserLite>().First(x => x.Login == userLogin && x.UserType == UserType.User).Should(Be.Not.Null)");
 		}
 
 		[Then("profile storage should contain requester '$requesterLogin'")]
 		public void ProfileStorageShouldContainRequester(string requesterLogin)
 		{
 			Account.Profiles.First().Get<UserLite>().First(x => x.Login == requesterLogin && x.UserType == UserType.Requester).
-				Should(Be.Not.Null);
+				Should(Be.Not.Null, "Account.Profiles.First().Get<UserLite>().First(x => x.Login == requesterLogin && x.UserType == UserType.Requester).Should(Be.Not.Null)");
 		}
 
 		[Then("profile storage should contain project '$projectAbbr'")]
 		public void ProfileStorageShouldContainProject(string projectAbbr)
 		{
-			Account.Profiles.First().Get<ProjectDTO>().First(x => x.Abbreviation == projectAbbr).Should(Be.Not.Null);
+			Account.Profiles.First().Get<ProjectDTO>().First(x => x.Abbreviation == projectAbbr).Should(Be.Not.Null, "Account.Profiles.First().Get<ProjectDTO>().First(x => x.Abbreviation == projectAbbr).Should(Be.Not.Null)");
 		}
 
 		[Then("profile storage should contain messageUid with uid '$uid' for server '$server' and login '$login'")]
 		public void ProfileStorageShouldContainUid(string uid, string server, string login)
 		{
-			Account.Profiles.First().Get<MessageUidCollection>().First().Where(x => x == uid).Should(Be.Not.Null);
+			Account.Profiles.First().Get<MessageUidCollection>().First().Where(x => x == uid).Should(Be.Not.Null, "Account.Profiles.First().Get<MessageUidCollection>().First().Where(x => x == uid).Should(Be.Not.Null)");
 		}
 
 		[Then("profile storage should not contain messageUid with uid '$uid'")]
 		public void ProfileStorageShouldNotContainUid(string uid)
 		{
-			Account.Profiles.First().Get<MessageUidDTO>().Any(x => x.UID == uid).Should(Be.False);
+			Account.Profiles.First().Get<MessageUidDTO>().Any(x => x.UID == uid).Should(Be.False, "Account.Profiles.First().Get<MessageUidDTO>().Any(x => x.UID == uid).Should(Be.False)");
 		}
 
 		[Then("email plugin profile should have exact rule : '$rule' where ProjectId is id of project '$projectAbbr'")]
 		public void EmailPluginProfileShouldHaveRule(string rule, string projectAbbr)
 		{
 			var projectId = Context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
-			Profile.Rules.Should(Be.EqualTo(rule.Replace("ProjectId", projectId.ToString())));
+			Profile.Rules.Should(Be.EqualTo(rule.Replace("ProjectId", projectId.ToString())), "Profile.Rules.Should(Be.EqualTo(rule.Replace(\"ProjectId\", projectId.ToString())))");
 		}
 
 		[Then("email plugin profile should contains rule : '$rule' where ProjectId is id of project '$projectAbbr'")]
 		public void EmailPluginProfileShouldContainsRule(string rule, string projectAbbr)
 		{
 			var projectId = Context.Projects.First(x => x.Abbreviation == projectAbbr).ProjectID;
-			Profile.Rules.Should(Be.StringContaining(rule.Replace("ProjectId", projectId.ToString())));
+			Profile.Rules.Should(Be.StringContaining(rule.Replace("ProjectId", projectId.ToString())), "Profile.Rules.Should(Be.StringContaining(rule.Replace(\"ProjectId\", projectId.ToString())))");
 		}
 
 		private static ProjectEmailProfile Profile

@@ -9,7 +9,7 @@ namespace System.IO
 		private int _positionChunk;
 		private int _positionOffset;
 		private long _position;
-		private const int MAX_CHUNK_SIZE = 64*1024;
+		private const int MAX_CHUNK_SIZE = 64 * 1024;
 
 		public override bool CanRead
 		{
@@ -26,7 +26,9 @@ namespace System.IO
 			get { return true; }
 		}
 
-		public override void Flush() { }
+		public override void Flush()
+		{
+		}
 
 		public override long Length
 		{
@@ -35,10 +37,7 @@ namespace System.IO
 
 		public override long Position
 		{
-			get
-			{
-				return _position;
-			}
+			get { return _position; }
 			set
 			{
 				_position = value;
@@ -113,7 +112,7 @@ namespace System.IO
 			if (count > MAX_CHUNK_SIZE)
 			{
 				Write(buffer, offset, MAX_CHUNK_SIZE);
-				Write(buffer, offset + MAX_CHUNK_SIZE, count-MAX_CHUNK_SIZE);
+				Write(buffer, offset + MAX_CHUNK_SIZE, count - MAX_CHUNK_SIZE);
 				return;
 			}
 

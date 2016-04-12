@@ -6,12 +6,14 @@ namespace Tp.Core.Expressions.Visitors
 {
 	public class CaseInsensitiveVisitor : ExpressionVisitor
 	{
-		private static readonly MethodInfo _equalsIgnoreCase = Reflect.GetMethod(() => string.Equals(default(string), default(string), default(StringComparison)));
-		private static readonly MethodInfo _contains = Reflect<string>.GetMethod(x=>x.Contains(default(string)));
+		private static readonly MethodInfo _equalsIgnoreCase =
+			Reflect.GetMethod(() => string.Equals(default(string), default(string), default(StringComparison)));
+
+		private static readonly MethodInfo _contains = Reflect<string>.GetMethod(x => x.Contains(default(string)));
 		private static readonly MethodInfo _contains2 = Reflect<string>.GetMethod(x => x.Contains(default(string), default(StringComparison)));
-		private static readonly MethodInfo _startsWith = Reflect<string>.GetMethod(x=>x.StartsWith(default(string)));
+		private static readonly MethodInfo _startsWith = Reflect<string>.GetMethod(x => x.StartsWith(default(string)));
 		private static readonly MethodInfo _startsWith2 = Reflect<string>.GetMethod(x => x.StartsWith(default(string), default(StringComparison)));
-		private static readonly MethodInfo _endsWith = Reflect<string>.GetMethod(x=>x.EndsWith(default(string)));
+		private static readonly MethodInfo _endsWith = Reflect<string>.GetMethod(x => x.EndsWith(default(string)));
 		private static readonly MethodInfo _endsWith2 = Reflect<string>.GetMethod(x => x.EndsWith(default(string), default(StringComparison)));
 		private static readonly Expression _stringComparison = Expression.Constant(StringComparison.InvariantCultureIgnoreCase);
 
@@ -36,7 +38,6 @@ namespace Tp.Core.Expressions.Visitors
 
 		protected override Expression VisitMethodCall(MethodCallExpression node)
 		{
-
 			Maybe<Expression> f = Maybe.Nothing;
 			if (node.Arguments.Count == 1)
 			{
@@ -46,7 +47,7 @@ namespace Tp.Core.Expressions.Visitors
 					() => ReplaceMethod(node, _endsWith, _endsWith2));
 			}
 
-			return f.GetOrElse(()=>base.VisitMethodCall(node));
+			return f.GetOrElse(() => base.VisitMethodCall(node));
 		}
 
 		private static Maybe<Expression> ReplaceMethod(MethodCallExpression node, MethodInfo source, MethodInfo target)

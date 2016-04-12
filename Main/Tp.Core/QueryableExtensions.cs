@@ -2,55 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using Tp.Core.Annotations;
 
 namespace System.Linq
 {
 	public static class QueryableExtensions
 	{
 		public static IQueryable<GroupWithCount<TKey>> CountBy<T, TKey>(this IQueryable<T> source,
-		                                                                Expression<Func<T, TKey>> keySelector)
+			Expression<Func<T, TKey>> keySelector)
 		{
 			var q = source.Provider.CreateQuery<GroupWithCount<TKey>>(
 				Expression.Call(
 					null,
-					((MethodInfo) MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof (T), typeof (TKey)),
-					new[] {source.Expression, Expression.Quote(keySelector)}
+					((MethodInfo) MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TKey)),
+					new[] { source.Expression, Expression.Quote(keySelector) }
 					));
 
 			return q;
 		}
 
 		public static IQueryable<IGrouping<TKey, TResult>> PartitionBy<T, TKey, TResult>(this IQueryable<T> source,
-		                                                                                 Expression<Func<T, TKey>> keySelector,
-		                                                                                 Expression<Func<T, TResult>>
-			                                                                                 elementSelector, int skip, int take)
+			Expression<Func<T, TKey>> keySelector,
+			Expression<Func<T, TResult>>
+				elementSelector, int skip, int take)
 		{
 			var q = source.Provider.CreateQuery<IGrouping<TKey, TResult>>(
 				Expression.Call(
 					null,
-					((MethodInfo) MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof (T), typeof (TKey), typeof (TResult)),
+					((MethodInfo) MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TKey), typeof(TResult)),
 					new[]
-						{
-							source.Expression,
-							Expression.Quote(keySelector),
-							Expression.Quote(elementSelector),
-							Expression.Constant(skip),
-							Expression.Constant(take)
-						}
+					{
+						source.Expression,
+						Expression.Quote(keySelector),
+						Expression.Quote(elementSelector),
+						Expression.Constant(skip),
+						Expression.Constant(take)
+					}
 					));
 
 			return q;
 		}
 
 		public static IQueryable<IGrouping<TKey, T>> PartitionBy<T, TKey>(this IQueryable<T> source,
-		                                                                  Expression<Func<T, TKey>> keySelector, int skip,
-		                                                                  int take)
+			Expression<Func<T, TKey>> keySelector, int skip,
+			int take)
 		{
 			return source.PartitionBy(keySelector, x => x, skip, take);
 		}
 
 		public static IEnumerable<T> Page<T>(this IQueryable<T> items, int? skip, int? take, out bool hasNextPage,
-		                                     int defaultTake = 25)
+			int defaultTake = 25)
 		{
 			if (take == null && skip == null)
 			{
@@ -82,7 +83,8 @@ namespace System.Linq
 		}
 
 
-		public static IEnumerable<IGrouping<TKey, T>> PartitionBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector, int skip, int take)
+		public static IEnumerable<IGrouping<TKey, T>> PartitionBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector, int skip,
+			int take)
 		{
 			return source.PartitionBy(keySelector, x => x, skip, take);
 		}
@@ -98,7 +100,7 @@ namespace System.Linq
 			if (typeof(TKey).GetInterface("IComparable") != null)
 				q = q.OrderBy(g => g.Key);
 
-			q = q.Select(g => (IGrouping<TKey, TElement>)new Group<TKey, TElement>(g, skip, take)).Where(g => g.Any());
+			q = q.Select(g => (IGrouping<TKey, TElement>) new Group<TKey, TElement>(g, skip, take)).Where(g => g.Any());
 
 			return q;
 		}
@@ -136,6 +138,10 @@ namespace System.Linq
 			}
 		}
 
-	}
 
+		public static IQueryable<T> TransformExpression<T>(this IQueryable<T> query, [InstantHandle] Func<Expression, Expression> transform)
+		{
+			return query.Provider.CreateQuery<T>(transform(query.Expression));
+		}
+	}
 }

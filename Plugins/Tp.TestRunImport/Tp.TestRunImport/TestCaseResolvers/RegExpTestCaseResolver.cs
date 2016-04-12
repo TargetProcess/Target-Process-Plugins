@@ -37,7 +37,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
 
 		protected override IEnumerable<TestCaseTestPlanDTO> ResolveTestCases(string testName)
 		{
-			if (_rx != null)
+			if (_rx != null && !string.IsNullOrEmpty(testName))
 			{
 				MatchCollection matches = _rx.Matches(testName);
 				foreach (Match match in matches)

@@ -1,7 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -16,15 +12,15 @@ namespace Tp.Utils
 	public static class DateUtils
 	{
 		private static readonly string[] _formats =
-			{
-				// these 2 time formats are used in Bugzilla
-				"yyyy'-'MM'-'dd HH':'mm",
-				"yyyy'-'MM'-'dd HH':'mm':'ss",
-				"dd MMM yyyy HH':'mm",
-				"dd MMM yyyy HH':'mm':'ss",
-				"ddd, dd MMM yyyy HH':'mm",
-				"ddd, dd MMM yyyy HH':'mm':'ss",
-			};
+		{
+			// these 2 time formats are used in Bugzilla
+			"yyyy'-'MM'-'dd HH':'mm",
+			"yyyy'-'MM'-'dd HH':'mm':'ss",
+			"dd MMM yyyy HH':'mm",
+			"dd MMM yyyy HH':'mm':'ss",
+			"ddd, dd MMM yyyy HH':'mm",
+			"ddd, dd MMM yyyy HH':'mm':'ss",
+		};
 
 		private static readonly ILog _log = LogManager.GetLogger(typeof(DateUtils));
 		private static readonly StringDictionary _phpDateformat;
@@ -33,21 +29,21 @@ namespace Tp.Utils
 		static DateUtils()
 		{
 			_phpDateformat = new StringDictionary
-			                 	{
-			                 		{"d", "j"},
-			                 		{"%d", "j"},
-			                 		{"dd", "d"},
-			                 		{"ddd", "D"},
-			                 		{"dddd", "l"},
-			                 		{"M", "n"},
-			                 		{"%M", "n"},
-			                 		{"MM", "m"},
-			                 		{"MMM", "M"},
-			                 		{"MMMM", "F"},
-			                 		{"&y", "y"},
-			                 		{"yy", "y"},
-			                 		{"yyyy", "Y"}
-			                 	};
+			{
+				{ "d", "j" },
+				{ "%d", "j" },
+				{ "dd", "d" },
+				{ "ddd", "D" },
+				{ "dddd", "l" },
+				{ "M", "n" },
+				{ "%M", "n" },
+				{ "MM", "m" },
+				{ "MMM", "M" },
+				{ "MMMM", "F" },
+				{ "&y", "y" },
+				{ "yy", "y" },
+				{ "yyyy", "Y" }
+			};
 		}
 
 		public static bool Is12HoursFormat
@@ -55,7 +51,7 @@ namespace Tp.Utils
 			get
 			{
 				return !String.IsNullOrEmpty(CultureInfo.CurrentCulture.DateTimeFormat.AMDesignator) ||
-					   !String.IsNullOrEmpty(CultureInfo.CurrentCulture.DateTimeFormat.PMDesignator);
+					!String.IsNullOrEmpty(CultureInfo.CurrentCulture.DateTimeFormat.PMDesignator);
 			}
 		}
 
@@ -222,6 +218,13 @@ namespace Tp.Utils
 			return 0;
 		}
 
+		public static int GetWorkingDaysCount(DateRange dateRange)
+		{
+			return !dateRange.Equals(DateRange.Empty)
+				? GetWorkingDaysCount(dateRange.StartDate.Value, dateRange.EndDate.Value)
+				: 0;
+		}
+
 		public static int GetWorkingDaysCount(DateTime startDate, DateTime endDate)
 		{
 			startDate = startDate.Date;
@@ -255,11 +258,11 @@ namespace Tp.Utils
 		{
 			_workingDays = new List<DayOfWeek>(
 				new[]
-					{
-						DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday,
-						DayOfWeek.Saturday
-						, DayOfWeek.Sunday
-					});
+				{
+					DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday,
+					DayOfWeek.Saturday
+					, DayOfWeek.Sunday
+				});
 			if (!String.IsNullOrEmpty(notWorkingDays))
 			{
 				var days = notWorkingDays.Split(new[] { ',' });
@@ -268,7 +271,7 @@ namespace Tp.Utils
 				{
 					try
 					{
-						var day = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), dayStr);
+						var day = (DayOfWeek) Enum.Parse(typeof(DayOfWeek), dayStr);
 						_workingDays.Remove(day);
 					}
 					catch
@@ -287,7 +290,7 @@ namespace Tp.Utils
 		public static DateTime ParseFromUniversalTime(this string input)
 		{
 			if (input == null)
-				throw new ArgumentNullException("input");
+				throw new ArgumentNullException(nameof(input));
 
 			var zzz = 0; // time zone offset stored as HH * 100 + MM
 
@@ -487,19 +490,19 @@ namespace Tp.Utils
 						break; // International Date Line East
 
 					default:
+					{
+						if (
+							!Int32.TryParse(zone, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out zzz))
 						{
-							if (
-								!Int32.TryParse(zone, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out zzz))
-							{
-								zzz = 0;
-							}
-							break;
+							zzz = 0;
 						}
+						break;
+					}
 				}
 			}
 
 			var time = DateTime.ParseExact(input, _formats, CultureInfo.InvariantCulture,
-										   DateTimeStyles.AllowInnerWhite);
+				DateTimeStyles.AllowInnerWhite);
 
 			var offset = new TimeSpan(zzz / 100, zzz % 100, 0);
 			var dateTime = time.Subtract(offset).ToLocalTime();
@@ -523,6 +526,15 @@ namespace Tp.Utils
 				currentDate = currentDate.AddDays(1);
 			}
 			return result;
+		}
+
+		public static DateTime? Max(DateTime? dateTime1, DateTime? dateTime2)
+		{
+			if (dateTime1 == null || dateTime2 == null)
+			{
+				return null;
+			}
+			return dateTime1 > dateTime2 ? dateTime1 : dateTime2;
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Tp.Search.Model.Document
 
 		public string CreateSquadId(int squadId)
 		{
-			return Convert.ToString(squadId).PadLeft(_int32Width, '0');
+			return Convert.ToString(squadId).PadLeft(_int64Width, '0');
 		}
 
 		public string CreateEntityStateId(int entityStateId)

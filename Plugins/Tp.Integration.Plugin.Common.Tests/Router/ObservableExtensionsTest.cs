@@ -57,7 +57,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 																												Console.WriteLine("Observer: completed");
 																											}))
 			{
-				ev.WaitOne(TimeSpan.FromSeconds(5)).Should(Be.True);
+				ev.WaitOne(TimeSpan.FromSeconds(5)).Should(Be.True, "ev.WaitOne(TimeSpan.FromSeconds(5)).Should(Be.True)");
 			}
 		}
 	}

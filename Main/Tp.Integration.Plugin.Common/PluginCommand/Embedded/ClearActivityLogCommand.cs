@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
@@ -21,7 +22,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 			_profile = profile;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			var filter = args.Deserialize<ActivityFilter>();
 

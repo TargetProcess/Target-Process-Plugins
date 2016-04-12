@@ -28,7 +28,7 @@ namespace Tp.Tfs.StructureMap
 
 			For<IWorkItemsStore>().Use<TfsWorkItemsStore>();
 			For<IWorkItemsComparer>().Use<TfsWorkItemsComparer>();
-			For<IPluginMashupRepository>().Use<TfsPluginMashupRepository>();
+			For<IPluginMashupRepository>().Singleton().Use<TfsPluginMashupRepository>();
 		}
 
 		protected override void ConfigureCheckConnectionErrorResolver()

@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using log4net;
 
 namespace Tp.Core.Diagnostics
@@ -51,10 +46,10 @@ namespace Tp.Core.Diagnostics
 		private void Try(Action<System.Diagnostics.PerformanceCounter> action)
 		{
 			TryGet(c =>
-				{
-					action(c);
-					return true;
-				});
+			{
+				action(c);
+				return true;
+			});
 		}
 
 		private T TryGet<T>(Func<System.Diagnostics.PerformanceCounter, T> func)
@@ -63,7 +58,7 @@ namespace Tp.Core.Diagnostics
 			{
 				return func(_source);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_log.Error("Error occured", ex);
 				return default(T);

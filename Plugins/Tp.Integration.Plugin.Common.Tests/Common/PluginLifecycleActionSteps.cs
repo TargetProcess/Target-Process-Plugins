@@ -52,7 +52,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Then("PluginInfoMessage should not be published")]
 		public void PluginInfoMessageShouldNotBePublished()
 		{
-			_sentMessages.OfType<PluginInfoMessage>().Should(Is.Empty);
+			_sentMessages.OfType<PluginInfoMessage>().Should(Is.Empty, "_sentMessages.OfType<PluginInfoMessage>().Should(Is.Empty)");
 		}
 
 		[Then(@"account '$accountName' should have profiles: (?<profileNames>([^,]+,?\s*)+)")]
@@ -60,7 +60,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		{
 			var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(accountName);
 			account.Profiles.Select(x => x.Name.Value)
-				.ToArray().Should(Is.EquivalentTo(profileNames));
+				.ToArray().Should(Is.EquivalentTo(profileNames), "account.Profiles.Select(x => x.Name.Value).ToArray().Should(Is.EquivalentTo(profileNames))");
 			account.Profiles.Where(x => x.GetProfile<SampleJiraProfile>( /*Profile.CreateDefaultProfile().GetType()*/) == null).
 				ToArray().Should(Is.Empty,
 				                 "Profile property should not be null");
@@ -72,7 +72,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var accounts = ObjectFactory.GetInstance<IAccountRepository>().GetAll().ToList().FindAll(x => x.Name == accountName);
 			foreach (var account in accounts)
 			{
-				account.Profiles.Should(Is.Empty);
+				account.Profiles.Should(Is.Empty, "account.Profiles.Should(Is.Empty)");
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void ProfileShouldHaveStringValue(string profileName, string stringValue)
 		{
 			var profile = PluginSqlPersisterSpecs.GetProfile(profileName);
-			profile.Get<string>().First().Should(Is.EqualTo(stringValue));
+			profile.Get<string>().First().Should(Is.EqualTo(stringValue), "profile.Get<string>().First().Should(Is.EqualTo(stringValue))");
 		}
 
 		private readonly List<IMessage> _sentMessages = new List<IMessage>();
@@ -186,7 +186,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 		private static bool IsValid(IMessage[] messages)
 		{
-			messages.Length.Should(Is.EqualTo(1));
+			messages.Length.Should(Is.EqualTo(1), "messages.Length.Should(Is.EqualTo(1))");
 			return messages[0] is PluginInfoMessage;
 		}
 
@@ -216,7 +216,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			profile.JiraUrl = jiraUrl;
 
 			var updatedProfileDto = new PluginProfileDto {Name = context.ProfileName.Value, Settings = profile};
-			ObjectFactory.GetInstance<AddOrUpdateProfileCommand>().Execute(updatedProfileDto.Serialize());
+			ObjectFactory.GetInstance<AddOrUpdateProfileCommand>().Execute(updatedProfileDto.Serialize(), null);
 		}
 
 		[Given("file added to account '$accountName' profile '$profileName' file storage")]
@@ -248,13 +248,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Then("$messageCount PluginAccountMessage messages should be published")]
 		public void AmountOfPluginAccountMessagesShouldBeSent(int messageCount)
 		{
-			_sentMessages.OfType<PluginAccountMessageSerialized>().Count().Should(Is.EqualTo(messageCount));
+			_sentMessages.OfType<PluginAccountMessageSerialized>().Count().Should(Is.EqualTo(messageCount), "_sentMessages.OfType<PluginAccountMessageSerialized>().Count().Should(Is.EqualTo(messageCount))");
 		}
 
 		[Then("empty PluginAccountMessage message should be published")]
 		public void EmptyPluginAccountMessagesShouldBeSent()
 		{
-			_sentMessages.OfType<PluginAccountMessageSerialized>().ForEach(x => x.GetAccounts().Should(Be.Empty));
+			_sentMessages.OfType<PluginAccountMessageSerialized>().ForEach(x => x.GetAccounts().Should(Be.Empty, "x.GetAccounts().Should(Be.Empty)"));
 		}
 
 		private static IProfileCollection Repository
@@ -272,7 +272,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 					Last();
 			pluginLifecycleMessage.GetAccounts().First(x => x.Name == accountName).PluginProfiles.Select(x => x.Name.Value).
 				ToArray().Should(
-					Is.EquivalentTo(profileNames));
+					Is.EquivalentTo(profileNames), "pluginLifecycleMessage.GetAccounts().First(x => x.Name == accountName).PluginProfiles.Select(x => x.Name.Value).ToArray().Should(Is.EquivalentTo(profileNames))");
 		}
 
 		[Then("PluginInfoMessage should be published ")]
@@ -280,7 +280,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		{
 			var messages = _sentMessages.OfType<PluginInfoMessage>();
 			messages.FirstOrDefault(x => x.Info.Name == ObjectFactory.GetInstance<IPluginContext>().PluginName).Should(
-				Be.Not.Null);
+				Be.Not.Null, "messages.FirstOrDefault(x => x.Info.Name == ObjectFactory.GetInstance<IPluginContext>().PluginName).Should(Be.Not.Null)");
 		}
 
 		[Then("PluginAccountMessage should be published with account '$accountName' and profile '$profileName'")]
@@ -293,18 +293,18 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 					x.GetAccounts().First().Name == accountName &&
 					x.GetAccounts().First().PluginProfiles.Any(y => y.Name == profileName));
 
-			message.GetAccounts().First().PluginProfiles.SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null);
+			message.GetAccounts().First().PluginProfiles.SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null, "message.GetAccounts().First().PluginProfiles.SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null)");
 
 			ObjectFactory.GetInstance<PluginContextMock>().AccountName = accountName;
-			ObjectFactory.GetInstance<IProfileCollection>().SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null);
+			ObjectFactory.GetInstance<IProfileCollection>().SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null, "ObjectFactory.GetInstance<IProfileCollection>().SingleOrDefault(x => x.Name == profileName).Should(Is.Not.Null)");
 		}
 
 		[Then("PluginAccountMessage should be published with account '$accountName' and no profiles")]
 		public void ShouldPublishPluginInfoMessageWithNoProfiles(string accountName)
 		{
 			var message = _sentMessages.OfType<PluginAccountMessageSerialized>().Last();
-			message.Should(Is.Not.Null);
-			message.GetAccounts().First().PluginProfiles.Should(Is.Empty);
+			message.Should(Is.Not.Null, "message.Should(Is.Not.Null)");
+			message.GetAccounts().First().PluginProfiles.Should(Is.Empty, "message.GetAccounts().First().PluginProfiles.Should(Is.Empty)");
 		}
 
 		[Then(
@@ -318,7 +318,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			sentMashup.PluginMashupScripts.Select(x => x.ScriptContent).ToArray().Contains(
 				Convert.ToBase64String(Encoding.ASCII.GetBytes(scriptContent)));
 			sentMashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Contains(scriptFile);
-			sentMashup.PluginName.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName));
+			sentMashup.PluginName.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName), "sentMashup.PluginName.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName))");
 		}
 
 
@@ -330,9 +330,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var bus = ObjectFactory.GetInstance<IBus>();
 			var sentScripts = bus.GetCallsMadeOn<IBus, PluginMashupMessage>(x => x.SendToUi()).ToArray();
 			var sentMashup = sentScripts.First().First(x => x.MashupName == mashupName);
-			sentMashup.PluginMashupScripts.Select(x => x.ScriptContent).ToArray().Should(Is.EquivalentTo(new[] {scriptContent}));
-			sentMashup.PluginName.Value.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName.Value));
-			sentMashup.Placeholders.Should(Is.EquivalentTo(new[] {placeholderName}));
+			sentMashup.PluginMashupScripts.Select(x => x.ScriptContent).ToArray().Should(Is.EquivalentTo(new[] {scriptContent}), "sentMashup.PluginMashupScripts.Select(x => x.ScriptContent).ToArray().Should(Is.EquivalentTo(new[] {scriptContent}))");
+			sentMashup.PluginName.Value.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName.Value), "sentMashup.PluginName.Value.Should(Is.EqualTo(ObjectFactory.GetInstance<IPluginContext>().PluginName.Value))");
+			sentMashup.Placeholders.Should(Is.EquivalentTo(new[] {placeholderName}), "sentMashup.Placeholders.Should(Is.EquivalentTo(new[] {placeholderName}))");
 		}
 
 		[Then("no script should be sent to TargetProcess")]
@@ -340,27 +340,27 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		{
 			var bus = ObjectFactory.GetInstance<IBus>();
 			var sentScripts = bus.GetCallsMadeOn<IBus, PluginMashupMessage>(x => x.SendToUi()).ToArray();
-			sentScripts.Count().Should(Is.EqualTo(0));
+			sentScripts.Count().Should(Is.EqualTo(0), "sentScripts.Count().Should(Is.EqualTo(0))");
 		}
 
 		[Then("PluginInfoMessage should be published with plugin input queue '$pluginInputQueue'")]
 		public void InfoChangedMessageWithPluginInputQueueShouldBePublished(string pluginInputQueue)
 		{
 			var message = _sentMessages.OfType<PluginInfoMessage>().Single();
-			message.Info.PluginInputQueue.Should(Is.EqualTo(pluginInputQueue));
+			message.Info.PluginInputQueue.Should(Is.EqualTo(pluginInputQueue), "message.Info.PluginInputQueue.Should(Is.EqualTo(pluginInputQueue))");
 		}
 
 		[Then("file storage for account '$account' and profile '$profile' should be deleted")]
 		public void FileStorageShouldBeRemoved(string account, string profile)
 		{
 			var folder = Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, account, profile);
-			Directory.Exists(folder).Should(Be.False);
+			Directory.Exists(folder).Should(Be.False, "Directory.Exists(folder).Should(Be.False)");
 		}
 
 		[Then("file storage for account '$accountName' and profile '$profileName' should return file '$fileName'")]
 		public void FileStorageShouldReturnFile(string accountName, string profileName, string fileName)
 		{
-			File.Exists(AttachmentFolder.GetAttachmentFileFullPath(new FileId(Guid.Parse(fileName)))).Should(Be.True);
+			File.Exists(AttachmentFolder.GetAttachmentFileFullPath(new FileId(Guid.Parse(fileName)))).Should(Be.True, "File.Exists(AttachmentFolder.GetAttachmentFileFullPath(new FileId(Guid.Parse(fileName)))).Should(Be.True)");
 		}
 	}
 

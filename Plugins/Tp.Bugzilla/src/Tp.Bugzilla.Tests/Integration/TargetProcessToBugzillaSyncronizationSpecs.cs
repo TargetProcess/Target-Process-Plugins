@@ -129,20 +129,20 @@ namespace Tp.Bugzilla.Tests.Integration
 		[Then("bugzilla should return successful message")]
 		public void CheckBugzillaReturnSuccess()
 		{
-			_bugzillaResponse.Should(Be.EqualTo("OK"));
+			_bugzillaResponse.Should(Be.EqualTo("OK"), "_bugzillaResponse.Should(Be.EqualTo(\"OK\"))");
 		}
 
 		[Then("bugzilla should return fail message")]
 		public void CheckBugzillaReturnedFail()
 		{
-			_bugzillaResponse.Should(Be.Not.EqualTo("OK"));
-			_bugzillaResponse.Contains("Invalid User").Should(Be.False);
+			_bugzillaResponse.Should(Be.Not.EqualTo("OK"), "_bugzillaResponse.Should(Be.Not.EqualTo(\"OK\"))");
+			_bugzillaResponse.Contains("Invalid User").Should(Be.False, "_bugzillaResponse.Contains(\"Invalid User\").Should(Be.False)");
 		}
 
 		[Then("bugzilla should return Invalid User message")]
 		public void CheckBugzillaReturnedInvalidUser()
 		{
-			_bugzillaResponse.Contains("Invalid User").Should(Be.True);
+			_bugzillaResponse.Contains("Invalid User").Should(Be.True, "_bugzillaResponse.Contains(\"Invalid User\").Should(Be.True)");
 		}
 	}
 }

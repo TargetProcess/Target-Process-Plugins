@@ -8,7 +8,6 @@ using Tp.Integration.Messages.EntityLifecycle.Queries;
 using Tp.Integration.Testing.Common;
 using Tp.Search.Bus;
 using Tp.Search.Bus.Data;
-using Tp.Search.Messages;
 using Tp.Search.Model.Query;
 using Tp.Testing.Common.NUnit;
 
@@ -54,6 +53,7 @@ namespace Tp.Search.Tests
 			_transport.On<AssignableQuery>().Reply(x => ReplyOnAssignableQuery(x, new AssignableDTO[]{}));
 			_transport.On<ImpedimentQuery>().Reply(x => new ImpedimentQueryResult { Dtos = new ImpedimentDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<ReleaseProjectQuery>().Reply(x => new ReleaseProjectQueryResult { Dtos = new ReleaseProjectDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
+			_transport.On<RetrieveAllAssignableSquadsQuery>().Reply(x => new AssignableSquadQueryResult { Dtos = new AssignableSquadDTO[] { }, QueryResultCount = 0, TotalQueryResultCount = 0, FailedDtosCount = 0 });
 			_transport.On<CommentQuery>().Reply(x => ReplyOnEntityQuery<CommentQuery, CommentDTO, CommentQueryResult>(x, _comments));
 			_transport.On<TestStepQuery>().Reply(x => ReplyOnEntityQuery<TestStepQuery, TestStepDTO, TestStepQueryResult>(x, _testSteps));
 		}
@@ -69,7 +69,7 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 			
 			var generalDto = _generals.First();
 			const int newProjectId = 2;
@@ -84,15 +84,13 @@ namespace Tp.Search.Tests
 				ChangedFields = new[] { UserStoryField.ProjectID}
 			});
 
-			_transport.HandleLocalMessage(profile, new GeneralProjectChangedLocalMessage { ProjectId = newProjectId, GeneralId = generalDto.ID.GetValueOrDefault() });
-
 			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
 			queryRunner.Run(new QueryData
 			{
 				Query = "Description",
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
 				ProjectIds = new[] { 1 }
-			}).Total.Should(Be.EqualTo(0));
+			}).Total.Should(Be.EqualTo(0), "queryRunner.Run(new QueryData{Query = \"Description\",EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,ProjectIds = new[] { 1 }}).Total.Should(Be.EqualTo(0))");
 
 			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
 			queryRunner.Run(new QueryData
@@ -100,7 +98,7 @@ namespace Tp.Search.Tests
 				Query = "Description",
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
 				ProjectIds = new[] { 2 }
-			}).Total.Should(Be.EqualTo(1));
+			}).Total.Should(Be.EqualTo(1), "queryRunner.Run(new QueryData{Query = \"Description\",EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,ProjectIds = new[] { 2 }}).Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -114,7 +112,7 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 
 			var testCase = _generals.First(g => g.EntityTypeID == QueryEntityTypeProvider.TESTCASE_TYPE_ID);
 			const int newProjectId = 2;
@@ -129,16 +127,13 @@ namespace Tp.Search.Tests
 				ChangedFields = new[] { TestCaseField.ProjectID }
 			});
 
-			_transport.HandleLocalMessage(profile,
-				new GeneralProjectChangedLocalMessage {ProjectId = newProjectId, GeneralId = testCase.ID.GetValueOrDefault()});
-
 			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
 			queryRunner.Run(new QueryData
 			{
 				Query = "First Test Step",
 				EntityTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
 				ProjectIds = new[] { 1 }
-			}).Total.Should(Be.EqualTo(0));
+			}).Total.Should(Be.EqualTo(0), "queryRunner.Run(new QueryData{Query = \"First Test Step\",EntityTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID,ProjectIds = new[] { 1 }}).Total.Should(Be.EqualTo(0))");
 
 			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
 			queryRunner.Run(new QueryData
@@ -146,7 +141,69 @@ namespace Tp.Search.Tests
 				Query = "First Test Step",
 				EntityTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID,
 				ProjectIds = new[] { 2 }
-			}).Total.Should(Be.EqualTo(1));
+			}).Total.Should(Be.EqualTo(1), "queryRunner.Run(new QueryData{Query = \"First Test Step\",EntityTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID,ProjectIds = new[] { 2 }}).Total.Should(Be.EqualTo(1))");
+		}
+
+		[Test]
+		public void ShouldUpdateCommentProjectIndexWhenAssignChangeReleaseProject()
+		{
+			var profile = _transport.AddProfile("Test", new SearcherProfile());
+			var queryRunner = ObjectFactory.GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "Description",
+				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
+				ProjectIds = new[] { 1 }
+			});
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+
+			var generalDto = _generals.First();
+			const int newProjectId = 2;
+			// Assign Release to new project should update projects index for comments
+			_transport.HandleMessageFromTp(profile, new ReleaseProjectCreatedMessage
+			{
+				Dto = new ReleaseProjectDTO
+				{
+					ID = 1,
+					ReleaseID = generalDto.ID,
+					ProjectID = newProjectId
+				}
+			});
+
+			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
+			queryRunner.Run(new QueryData
+			{
+				Query = "Description",
+				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
+				ProjectIds = new[] { 1 }
+			}).Total.Should(Be.EqualTo(1), "queryRunner.Run(new QueryData{Query = \"Description\",EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,ProjectIds = new[] { 1 }}).Total.Should(Be.EqualTo(1))");
+
+			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
+			queryRunner.Run(new QueryData
+			{
+				Query = "Description",
+				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
+				ProjectIds = new[] { 2 }
+			}).Total.Should(Be.EqualTo(1), "queryRunner.Run(new QueryData{Query = \"Description\",EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,ProjectIds = new[] { 2 }}).Total.Should(Be.EqualTo(1))");
+
+			// Unassign Release from project should update projects index for comments
+			_transport.HandleMessageFromTp(profile, new ReleaseProjectDeletedMessage
+			{
+				Dto = new ReleaseProjectDTO
+				{
+					ID = 1,
+					ReleaseID = generalDto.ID,
+					ProjectID = newProjectId
+				}
+			});
+
+			queryRunner = ObjectFactory.GetInstance<QueryRunner>();
+			queryRunner.Run(new QueryData
+			{
+				Query = "Description",
+				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
+				ProjectIds = new[] { 2 }
+			}).Total.Should(Be.EqualTo(0), "queryRunner.Run(new QueryData{Query = \"Description\",EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,ProjectIds = new[] { 2 }}).Total.Should(Be.EqualTo(0))");
 		}
 	}
 }

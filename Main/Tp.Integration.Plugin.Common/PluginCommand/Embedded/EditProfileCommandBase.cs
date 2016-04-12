@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -24,7 +25,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 			_pluginMetadata = pluginMetadata;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
 		{
 			var profileDto = args.DeserializeProfile();
 			return OnExecute(profileDto);

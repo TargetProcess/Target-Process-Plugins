@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2008 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -19,19 +15,25 @@ namespace Tp.Utils.Csv
 		private readonly List<string> _fields = new List<string>();
 
 		public CsvReader(TextReader reader)
-			: this(reader, ',') {}
+			: this(reader, ',')
+		{
+		}
 
 		public CsvReader(TextReader reader, char delimiter)
-			: this(reader, delimiter, false) {}
+			: this(reader, delimiter, false)
+		{
+		}
 
 		public CsvReader(TextReader reader, bool parseHeader)
-			: this(reader, ',', parseHeader) {}
+			: this(reader, ',', parseHeader)
+		{
+		}
 
 		public CsvReader(TextReader reader, char delimiter, bool parseHeader)
 		{
 			if (reader == null)
 			{
-				throw new ArgumentNullException("reader");
+				throw new ArgumentNullException(nameof(reader));
 			}
 			_reader = reader;
 			_delimiter = delimiter;
@@ -191,20 +193,20 @@ namespace Tp.Utils.Csv
 		}
 
 		/// <summary>
-        /// Get field at the specified position.
-        /// </summary>
-        /// <param name="index">
-        /// Field position, starting from zero.
-        /// </param>
-        /// <returns>
-        /// Field value at the specified position.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// If <paramref name="index"/> is negative.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// If <paramref name="index"/> is larger than number of columns in header.
-        /// </exception>
+		/// Get field at the specified position.
+		/// </summary>
+		/// <param name="index">
+		/// Field position, starting from zero.
+		/// </param>
+		/// <returns>
+		/// Field value at the specified position.
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// If <paramref name="index"/> is negative.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// If <paramref name="index"/> is larger than number of columns in header.
+		/// </exception>
 		public string this[int index]
 		{
 			get
@@ -213,10 +215,10 @@ namespace Tp.Utils.Csv
 				{
 					throw new ArgumentOutOfRangeException();
 				}
-                if (_columns.Count > 0 && index > _columns.Count - 1)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
+				if (_columns.Count > 0 && index > _columns.Count - 1)
+				{
+					throw new ArgumentOutOfRangeException();
+				}
 				if (index < _fields.Count)
 				{
 					return _fields[index];
@@ -225,36 +227,36 @@ namespace Tp.Utils.Csv
 			}
 		}
 
-        /// <summary>
-        /// Get field of the column of the specified name,
-        /// </summary>
-        /// <param name="column">
-        /// Column name.
-        /// </param>
-        /// <returns>
-        /// Field value of the specified column.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="column"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// If header has not been read.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="column"/> specifies unknown column.
-        /// </exception>
+		/// <summary>
+		/// Get field of the column of the specified name,
+		/// </summary>
+		/// <param name="column">
+		/// Column name.
+		/// </param>
+		/// <returns>
+		/// Field value of the specified column.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">
+		/// If <paramref name="column"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="InvalidOperationException">
+		/// If header has not been read.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// If <paramref name="column"/> specifies unknown column.
+		/// </exception>
 		public string this[string column]
 		{
 			get
 			{
 				if (column == null)
 				{
-					throw new ArgumentNullException("column");
+					throw new ArgumentNullException(nameof(column));
 				}
-                if (_columns.Count == 0)
-                {
-                    throw new InvalidOperationException("Header has not been read");
-                }
+				if (_columns.Count == 0)
+				{
+					throw new InvalidOperationException("Header has not been read");
+				}
 				if (_columns.ContainsKey(column))
 				{
 					int index = _columns[column];

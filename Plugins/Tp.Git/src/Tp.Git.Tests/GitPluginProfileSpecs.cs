@@ -32,8 +32,8 @@ namespace Tp.Git.Tests
 			_profile.Validate(_errors);
 
 			var startRevisionError = _errors.Single();
-			startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"));
-			startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be not before 1/1/1970"));
+			startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"), "startRevisionError.FieldName.Should(Be.EqualTo(\"StartRevision\"))");
+			startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be not before 1/1/1970"), "startRevisionError.Message.Should(Be.EqualTo(\"Start Revision Date should be not before 1/1/1970\"))");
 		}
 
 		[Test]
@@ -43,8 +43,8 @@ namespace Tp.Git.Tests
 			_profile.Validate(_errors);
 
 			var startRevisionError = _errors.Single();
-			startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"));
-			startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be not behind 1/19/2038"));
+			startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"), "startRevisionError.FieldName.Should(Be.EqualTo(\"StartRevision\"))");
+			startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be not behind 1/19/2038"), "startRevisionError.Message.Should(Be.EqualTo(\"Start Revision Date should be not behind 1/19/2038\"))");
 		}
 
 		[Test]
@@ -54,8 +54,8 @@ namespace Tp.Git.Tests
 			_profile.Validate(_errors);
 
 			var startRevisionError = _errors.Single();
-			startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"));
-			startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be specified in mm/dd/yyyy format"));
+			startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"), "startRevisionError.FieldName.Should(Be.EqualTo(\"StartRevision\"))");
+			startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be specified in mm/dd/yyyy format"), "startRevisionError.Message.Should(Be.EqualTo(\"Start Revision Date should be specified in mm/dd/yyyy format\"))");
 		}
 
 		[Test]
@@ -171,7 +171,7 @@ namespace Tp.Git.Tests
 		{
 			_profile.Uri = uri;
 			_profile.Validate(_errors);
-			_errors.Should(Be.Empty);
+			_errors.Should(Be.Empty, "_errors.Should(Be.Empty)");
 		}
 
 		private void ValidateWrongUri(string uri, string errorMessage)
@@ -181,8 +181,8 @@ namespace Tp.Git.Tests
 
 			var startRevisionError = _errors.Single();
 
-			startRevisionError.FieldName.Should(Be.EqualTo("Uri"));
-			startRevisionError.Message.Should(Be.EqualTo(errorMessage));
+			startRevisionError.FieldName.Should(Be.EqualTo("Uri"), "startRevisionError.FieldName.Should(Be.EqualTo(\"Uri\"))");
+			startRevisionError.Message.Should(Be.EqualTo(errorMessage), "startRevisionError.Message.Should(Be.EqualTo(errorMessage))");
 		}
 	}
 }

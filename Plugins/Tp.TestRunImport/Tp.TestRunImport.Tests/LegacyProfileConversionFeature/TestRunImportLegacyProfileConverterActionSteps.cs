@@ -70,28 +70,28 @@ namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 		[Then("test result file path should be '$testResultFilePath'")]
 		public void TestResultsFilePathShouldBe(string testResultFilePath)
 		{
-			Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(false));
-			Profile.ResultsFilePath.Should(Be.EqualTo(testResultFilePath));
+			Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(false), "Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(false))");
+			Profile.ResultsFilePath.Should(Be.EqualTo(testResultFilePath), "Profile.ResultsFilePath.Should(Be.EqualTo(testResultFilePath))");
 		}
 
 		[Then("sync interval should be $syncInterval")]
 		public void SyncIntervalShouldBe(int syncInterval)
 		{
-			Profile.SynchronizationInterval.Should(Be.EqualTo(syncInterval));
+			Profile.SynchronizationInterval.Should(Be.EqualTo(syncInterval), "Profile.SynchronizationInterval.Should(Be.EqualTo(syncInterval))");
 		}
 
 		[Then("project should be '$projectAbbr'")]
 		public void ProjectShouldBe(string projectAbbr)
 		{
 			Project project = Context.Projects.First(x => x.Abbreviation == projectAbbr);
-			Profile.Project.Should(Be.EqualTo(project.ProjectID));
+			Profile.Project.Should(Be.EqualTo(project.ProjectID), "Profile.Project.Should(Be.EqualTo(project.ProjectID))");
 		}
 
 		[Then("test plan should be '$testPlanName'")]
 		public void CreateTestPlanForProject(string testPlanName)
 		{
 			TestPlan testPlan = Context.TestPlans.First(x => x.General.Name == testPlanName);
-			Profile.TestPlan.Should(Be.EqualTo(testPlan.TestPlanID));
+			Profile.TestPlan.Should(Be.EqualTo(testPlan.TestPlanID), "Profile.TestPlan.Should(Be.EqualTo(testPlan.TestPlanID))");
 		}
 
 		[Then("passive mode should be turned ON")]
@@ -108,27 +108,27 @@ namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 
 		private void PassiveModeShouldBe(bool mode)
 		{
-			Profile.PassiveMode.Should(Be.EqualTo(mode));
+			Profile.PassiveMode.Should(Be.EqualTo(mode), "Profile.PassiveMode.Should(Be.EqualTo(mode))");
 		}
 
 		[Then("regular expression to find test names should be '$regexp'")]
 		public void RegExpShouldBe(string regexp)
 		{
-			Profile.RegExp.Should(Be.EqualTo(regexp));
+			Profile.RegExp.Should(Be.EqualTo(regexp), "Profile.RegExp.Should(Be.EqualTo(regexp))");
 		}
 
 		[Then("correct test run import framework type should de detected")]
 		public void CorrectTestRunImportFrameworkTypeShouldBeDetected()
 		{
-			Profile.FrameworkType.Should(Be.EqualTo(FrameworkType));
+			Profile.FrameworkType.Should(Be.EqualTo(FrameworkType), "Profile.FrameworkType.Should(Be.EqualTo(FrameworkType))");
 		}
 
 		[Then("last detected modification of test result file in profile storage should be '$modifyTime'")]
 		public void ProfileStorageShouldContainLastModifyTimeUtc(DateTime modifyTime)
 		{
 			var lastModifyResult = Account.Profiles.First().Get<LastModifyResult>().First();
-			lastModifyResult.Should(Be.Not.Null);
-			modifyTime.ToUniversalTime().Should(Be.EqualTo(new DateTime(lastModifyResult.ModifyTimeUtcsTicks)));
+			lastModifyResult.Should(Be.Not.Null, "lastModifyResult.Should(Be.Not.Null)");
+			modifyTime.ToUniversalTime().Should(Be.EqualTo(new DateTime(lastModifyResult.ModifyTimeUtcsTicks)), "modifyTime.ToUniversalTime().Should(Be.EqualTo(new DateTime(lastModifyResult.ModifyTimeUtcsTicks)))");
 		}
 
 		protected static TestRunImportPluginProfile Profile

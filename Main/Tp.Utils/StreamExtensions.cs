@@ -4,7 +4,7 @@ namespace System.IO
 	{
 		public static void CopyTo(this Stream source, Stream destination)
 		{
-			source.CopyTo(destination, new byte[64*1024], ()=> { });
+			source.CopyTo(destination, new byte[64 * 1024], () => { });
 		}
 
 		public static void CopyTo(this Stream source, Stream destination, byte[] buffer, Action chunkAction)
@@ -25,7 +25,7 @@ namespace System.IO
 		{
 			MemoryStream memoryStream;
 			if (stream is MemoryStream)
-				memoryStream = (MemoryStream)stream;
+				memoryStream = (MemoryStream) stream;
 			else
 			{
 				memoryStream = new MemoryStream();
@@ -33,6 +33,7 @@ namespace System.IO
 			}
 			return memoryStream.ToArray();
 		}
+
 		public static Stream ToStream(this byte[] body)
 		{
 			return new MemoryStream(body);

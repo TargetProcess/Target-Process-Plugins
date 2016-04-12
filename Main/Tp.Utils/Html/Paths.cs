@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -15,8 +11,8 @@ namespace Tp.Utils.Html
 			try
 			{
 				return Regex.Replace(input, @"(<img)([^>]*src=['""])(&#126;&#47;|~/)([^""']*?['""][^>]*?>)",
-				                     String.Format("$1 $2{0}$4", VirtualPathUtility.ToAbsolute("~/")),
-				                     RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+					$"$1 $2{VirtualPathUtility.ToAbsolute("~/")}$4",
+					RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 			}
 			catch (HttpException)
 			{
@@ -31,10 +27,8 @@ namespace Tp.Utils.Html
 				if (String.IsNullOrEmpty(input))
 					return input;
 				return Regex.Replace(input, @"(<img)([^>]*src=['""])(&#126;&#47;|~/)([^""']*?['""][^>]*?>)",
-				                     String.Format("$1 rel='{0}' style='display:{1}' $2{2}$4",
-				                                   customResize ? "" : "mayNeedToResize", displayImage ? "block" : "none",
-				                                   VirtualPathUtility.ToAbsolute("~/")),
-				                     RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+					$"$1 rel='{(customResize ? "" : "mayNeedToResize")}' style='display:{(displayImage ? "block" : "none")}' $2{VirtualPathUtility.ToAbsolute("~/")}$4",
+					RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 			}
 			catch (HttpException)
 			{
@@ -57,11 +51,11 @@ namespace Tp.Utils.Html
 			try
 			{
 				var result = Regex.Replace(input, @"(<img[^>]*src=['""])(&#126;&#47;|~/)([^""']*?['""][^>]*?>)",
-				                           "$1" + VirtualPathUtility.ToAbsolute("~/") + "$3",
-				                           RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+					"$1" + VirtualPathUtility.ToAbsolute("~/") + "$3",
+					RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
 				return Regex.Replace(result, @"(<img)([^>]*src=['""])([^""']*)(['""][^>]*?>)",
-				                     "<a id='aa_lnk' href=\"$3\">$1 id='a_thumb' $2$3$4</a>"); //style='dispaly:none'
+					"<a id='aa_lnk' href=\"$3\">$1 id='a_thumb' $2$3$4</a>"); //style='dispaly:none'
 			}
 			catch (HttpException)
 			{
@@ -74,10 +68,10 @@ namespace Tp.Utils.Html
 			try
 			{
 				return Regex.Replace(input,
-				                     @"(<img[^>]*src=['""])(" + VirtualPathUtility.ToAbsolute("~/") +
-				                     @")([^""']*?['""][^>]*?>)",
-				                     "$1" + "~/" + "$3",
-				                     RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
+					@"(<img[^>]*src=['""])(" + VirtualPathUtility.ToAbsolute("~/") +
+						@")([^""']*?['""][^>]*?>)",
+					"$1" + "~/" + "$3",
+					RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 			}
 			catch (HttpException)
 			{

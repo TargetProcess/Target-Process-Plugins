@@ -37,7 +37,7 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 					And profile mashups are: mashup1, mashup2
 				When handle UpdateMashupCommand command with args '{""Name"":""mashup1"", ""OldName"":""mashup1"", ""Placeholders"":""Default, NewPlaceholder"", ""Files"":[{""FileName"":""mashup1.js"",""Content"":""alert(1234567)""}]}'
 				Then 1 mashups should be sent to TP
-					And mashup 'Account1 mashup1' with accounts 'Account1' and placeholders 'Default,NewPlaceholder' and script 'alert(1234567)' should be sent to TP
+					And mashup 'mashup1' with accounts 'Account1' and placeholders 'Default,NewPlaceholder' and script 'alert(1234567)' should be sent to TP
 					And 2 mashup should be in profile storage
 					And mashup 'mashup1' with placeholders 'Default,NewPlaceholder' and script 'alert(1234567)' should be in profile storage
 					And default mashup 'mashup2' should be in profile storage
@@ -87,9 +87,9 @@ namespace Tp.MashupManager.Tests.Mashups.CRUD
 					And profile mashups are: mashup1, mashup2
 				When handle UpdateMashupCommand command with args '{""Name"":""mashup3"", ""OldName"":""mashup1"", ""Placeholders"":""Default, NewPlaceholder"", ""Files"":[{""FileName"":""mashup1.js"",""Content"":""alert(1234567)""}]}'
 				Then 2 mashups should be sent to TP
-					And mashup 'Account1 mashup1' should be cleared in TP
+					And mashup 'mashup1' should be cleared in TP
 					And mashup 'mashup1' should be cleared in profile
-					And mashup 'Account1 mashup3' with accounts 'Account1' and placeholders 'Default,NewPlaceholder' and script 'alert(1234567)' should be sent to TP
+					And mashup 'mashup3' with accounts 'Account1' and placeholders 'Default,NewPlaceholder' and script 'alert(1234567)' should be sent to TP
 					And 2 mashup should be in profile storage
 					And mashup 'mashup3' with placeholders 'Default,NewPlaceholder' and script 'alert(1234567)' should be in profile storage
 					And default mashup 'mashup2' should be in profile storage

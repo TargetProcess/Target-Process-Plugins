@@ -32,8 +32,8 @@ namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 		[Then("test run results should be posted to the remote Url")]
 		public void ShouldPostResultsToRemoteUrl()
 		{
-			Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true));
-			Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty));
+			Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true), "Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true))");
+			Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty), "Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty))");
 		}
 	}
 }

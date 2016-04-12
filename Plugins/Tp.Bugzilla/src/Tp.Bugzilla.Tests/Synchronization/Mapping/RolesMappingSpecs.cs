@@ -180,13 +180,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 		[Then("resulting mapping is the following:")]
 		public void CheckMappingResults(string key, string value)
 		{
-			Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value));
+			Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value), "Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value))");
 		}
 
 		[Then("resulting mapping count should be equal to bugzilla roles count")]
 		public void CheckMappingsItemsCount()
 		{
-			Profile.GetProfile<BugzillaProfile>().RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count));
+			Profile.GetProfile<BugzillaProfile>().RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count), "Profile.GetProfile<BugzillaProfile>().RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count))");
 		}
 	}
 }

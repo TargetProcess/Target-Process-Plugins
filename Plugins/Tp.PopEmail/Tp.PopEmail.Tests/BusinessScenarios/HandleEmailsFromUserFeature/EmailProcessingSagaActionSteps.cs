@@ -12,7 +12,6 @@ using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
 using Tp.Integration.Messages.TargetProcessLifecycle;
-using Tp.Integration.Plugin.Common.SagaPersister;
 using Tp.Integration.Testing.Common;
 using Tp.Integration.Testing.Common.Persisters;
 using Tp.PopEmailIntegration.Data;
@@ -335,11 +334,11 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		private static void AssertRequesterMadeAlive(UserLite requester)
 		{
 			var updateCommand = Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is RequesterDTO).First();
-			updateCommand.ChangedFields.Should(Be.EquivalentTo(new[] {RequesterField.DeleteDate.ToString()}));
+			updateCommand.ChangedFields.Should(Be.EquivalentTo(new[] {RequesterField.DeleteDate.ToString()}), "updateCommand.ChangedFields.Should(Be.EquivalentTo(new[] {RequesterField.DeleteDate.ToString()}))");
 			var requesterDto = (RequesterDTO) updateCommand.Dto;
-			requesterDto.DeleteDate.Should(Be.Null);
+			requesterDto.DeleteDate.Should(Be.Null, "requesterDto.DeleteDate.Should(Be.Null)");
 
-			requesterDto.ID.Should(Be.EqualTo(requester.Id));
+			requesterDto.ID.Should(Be.EqualTo(requester.Id), "requesterDto.ID.Should(Be.EqualTo(requester.Id))");
 		}
 
 		[Then("requester with name '$requesterName' should be made alive")]
@@ -357,7 +356,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 				Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Select(
 					x => x.Dto as RequestDTO).Single();
 			var user = Context.Storage.Get<UserLite>().Single(x => x.FirstName == userName && x.UserType == UserType.User);
-			request.OwnerID.Should(Be.EqualTo(user.Id));
+			request.OwnerID.Should(Be.EqualTo(user.Id), "request.OwnerID.Should(Be.EqualTo(user.Id))");
 		}
 
 		[Then(
@@ -370,9 +369,9 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 					y => y.Dto as RequesterDTO);
 
 			var requester = requesters.First();
-			requester.Email.Should(Be.EqualTo(requesterMail));
-			requester.FirstName.Should(Be.EqualTo(firstName));
-			requester.LastName.Should(Be.EqualTo(lastName));
+			requester.Email.Should(Be.EqualTo(requesterMail), "requester.Email.Should(Be.EqualTo(requesterMail))");
+			requester.FirstName.Should(Be.EqualTo(firstName), "requester.FirstName.Should(Be.EqualTo(firstName))");
+			requester.LastName.Should(Be.EqualTo(lastName), "requester.LastName.Should(Be.EqualTo(lastName))");
 		}
 
 		[Then("requester with email '$requesterMail' and empty first name and emtpy last name should be created")]
@@ -385,8 +384,8 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		public void RequesterEmailShouldBe(string requesterMail)
 		{
 			var user = Context.Storage.Get<UserLite>().First(x => x.Email == requesterMail && x.UserType == UserType.Requester);
-			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1));
-			Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id));
+			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1))");
+			Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id), "Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id))");
 		}
 
 		[Then(@"the message from requester '$requesterName' should be created")]
@@ -406,79 +405,91 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 
 		private static void AssertMessageCreatedBy(UserLite user)
 		{
-			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1));
+			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1))");
 			Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id), "Message was created on behalf of wrong user");
 		}
 
 		[Then("the message should have subject '$messageSubject'")]
 		public void TheMessageSubjectShouldBe(string messageSubject)
 		{
-			Context.CreatedMessageDtos.Single().Subject.Should(Be.EqualTo(messageSubject));
+			Context.CreatedMessageDtos.Single().Subject.Should(Be.EqualTo(messageSubject), "Context.CreatedMessageDtos.Single().Subject.Should(Be.EqualTo(messageSubject))");
 		}
-
 
 		[Then("the message should be attached to project $projectId")]
 		public void TheMessageShouldBeAttachedToProject(int projectId)
 		{
 			var command = Context.Transport.LocalQueue.GetMessages<AttachMessageToProjectCommand>().First();
-			command.MessageDto.ID.Should(Be.EqualTo(EmailProcessingSagaContext.CREATED_MESSAGE_DTO_ID));
-			command.ProjectId.Should(Be.EqualTo(projectId));
-			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<EmailProcessingSagaData>().Should(Be.Empty);
-			Context.Storage.Get<EmailReceivedMessage>().Should(Be.Empty);
+			command.MessageDto.ID.Should(Be.EqualTo(EmailProcessingSagaContext.CREATED_MESSAGE_DTO_ID), "command.MessageDto.ID.Should(Be.EqualTo(EmailProcessingSagaContext.CREATED_MESSAGE_DTO_ID))");
+			command.ProjectId.Should(Be.EqualTo(projectId), "command.ProjectId.Should(Be.EqualTo(projectId))");
+			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<EmailProcessingSagaData>().Should(Be.Empty, "ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<EmailProcessingSagaData>().Should(Be.Empty)");
+			Context.Storage.Get<EmailReceivedMessage>().Should(Be.Empty, "Context.Storage.Get<EmailReceivedMessage>().Should(Be.Empty)");
 		}
 
 		[Then("the message should not be attached to project")]
 		public void NoMessageShouldBeAttachedToProject()
 		{
-			Context.Transport.LocalQueue.GetMessages<AttachMessageToProjectCommand>().Should(Be.Empty);
+			Context.Transport.LocalQueue.GetMessages<AttachMessageToProjectCommand>().Should(Be.Empty, "Context.Transport.LocalQueue.GetMessages<AttachMessageToProjectCommand>().Should(Be.Empty)");
 		}
 
 		[Then("email should not be processed")]
 		public void MailShouldNotBeProcessed()
 		{
-			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Should(Be.Empty)");
 		}
 
 		[Then("request in project $projectId should be created from the message")]
 		public void RequestShouldBeCreatedFromTheMessage(int projectId)
 		{
-			var command = Context.Transport.LocalQueue.GetMessages<CreateRequestFromMessageCommand>().First();
-			command.MessageDto.ID.Should(Be.EqualTo(EmailProcessingSagaContext.CREATED_MESSAGE_DTO_ID));
-			command.ProjectId.Should(Be.EqualTo(projectId));
+			RequestShouldBeCreatedFromTheMessageForProjectAndTeam(projectId);
+		}
 
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Count().Should(Be.EqualTo(1));
+		[Then("public request with team $teamId in project $projectId should be created from the message")]
+		public void RequestWithTeamShouldBeCreatedFromTheMessage(int teamId, int projectId)
+		{
+			RequestShouldBeCreatedFromTheMessageForProjectAndTeam(projectId, teamId, false);
+		}
+
+		private void RequestShouldBeCreatedFromTheMessageForProjectAndTeam(int projectId, int? teamId = null, bool isPrivate = true)
+		{
+			var command = Context.Transport.LocalQueue.GetMessages<CreateRequestFromMessageCommand>().First();
+			command.MessageDto.ID.Should(Be.EqualTo(EmailProcessingSagaContext.CREATED_MESSAGE_DTO_ID), "command.MessageDto.ID.Should(Be.EqualTo(EmailProcessingSagaContext.CREATED_MESSAGE_DTO_ID))");
+			command.ProjectId.Should(Be.EqualTo(projectId), "command.ProjectId.Should(Be.EqualTo(projectId))");
+			command.SquadId.Should(Be.EqualTo(teamId), "command.SquadId.Should(Be.EqualTo(teamId))");
+			command.IsPrivate.Should(Be.EqualTo(isPrivate), "command.IsPrivate.Should(Be.EqualTo(isPrivate))");
+
+			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Count().Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Count().Should(Be.EqualTo(1))");
 		}
 
 		[Then("no request should be created from the message")]
 		public void NoRequestShouldBeCreatedFromTheMessage()
 		{
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Should(Be.Empty)");
 		}
 
 		[Then("comment for general $generalId should be created")]
 		public void CommentForGeneralShouldBeCreated(int generalId)
 		{
-			CreatedComment().GeneralID.Should(Be.EqualTo(generalId));
+			CreatedComment().GeneralID.Should(Be.EqualTo(generalId), "CreatedComment().GeneralID.Should(Be.EqualTo(generalId))");
 		}
 
 		[Then("the comment should have owner '$ownerEmail'")]
 		public void TheCommentShouldHaveOwner(string ownerEmail)
 		{
 			var owner = Context.Storage.Get<UserLite>().Where(x => x.Email == ownerEmail).First();
-			CreatedComment().OwnerID.Should(Be.EqualTo(owner.Id));
+			CreatedComment().OwnerID.Should(Be.EqualTo(owner.Id), "CreatedComment().OwnerID.Should(Be.EqualTo(owner.Id))");
 		}
 
 		[Then("the comment owner should be user '$userName'")]
 		public void AssertCommentOwnerUserName(string userName)
 		{
 			var owner = Context.Storage.Get<UserLite>().Where(x => x.FirstName == userName).First();
-			CreatedComment().OwnerID.Should(Be.EqualTo(owner.Id));
+			CreatedComment().OwnerID.Should(Be.EqualTo(owner.Id), "CreatedComment().OwnerID.Should(Be.EqualTo(owner.Id))");
 		}
 
 		[Then("the comment should have description '$commentDescription'")]
 		public void TheCommentShouldHaveDescription(string commentDescription)
 		{
-			CreatedComment().Description.Should(Be.EqualTo(commentDescription));
+			CreatedComment().Description.Should(Be.EqualTo(commentDescription), "CreatedComment().Description.Should(Be.EqualTo(commentDescription))");
 		}
 
 		[Then("general $generalId should have attachment '$fileName'")]
@@ -487,7 +498,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 			Context.Transport.TpQueue.GetMessages<CloneAttachmentCommand>().FirstOrDefault(
 				x => x.Dto.GeneralID == generalId &&
 				     x.Dto.OriginalFileName == fileName &&
-				     x.Dto.AttachmentFileID == fileName.GetHashCode()).Should(Be.Not.Null);
+				     x.Dto.AttachmentFileID == fileName.GetHashCode()).Should(Be.Not.Null, "Context.Transport.TpQueue.GetMessages<CloneAttachmentCommand>().FirstOrDefault(x => x.Dto.GeneralID == generalId && x.Dto.OriginalFileName == fileName && x.Dto.AttachmentFileID == fileName.GetHashCode()).Should(Be.Not.Null)");
 		}
 
 		private static CommentDTO CreatedComment()
@@ -499,7 +510,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		[Then("$messageCount messages should be created")]
 		public void SeveralMessagesShouldBeCreated(int messageCount)
 		{
-			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(2));
+			Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(2), "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(2))");
 		}
 
 		[Given("target process is not able to create comment")]
@@ -511,13 +522,13 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 		[Then("no comments should be created")]
 		public void NoCommentsShouldBeCreated()
 		{
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is CommentDTO).ToArray().Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is CommentDTO).ToArray().Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is CommentDTO).ToArray().Should(Be.Empty)");
 		}
 
 		[Then("there should be no messages to process")]
 		public void CheckNoMessagesToProcess()
 		{
-			Context.Storage.Get<EmailReceivedMessage>().Count().Should(Be.EqualTo(0));
+			Context.Storage.Get<EmailReceivedMessage>().Count().Should(Be.EqualTo(0), "Context.Storage.Get<EmailReceivedMessage>().Count().Should(Be.EqualTo(0))");
 		}
 
 		#endregion

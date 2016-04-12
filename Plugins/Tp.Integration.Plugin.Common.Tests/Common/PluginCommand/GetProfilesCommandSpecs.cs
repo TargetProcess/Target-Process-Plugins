@@ -59,23 +59,23 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		public void GetProfilesCommandReceived(string accountName)
 		{
 			ObjectFactory.GetInstance<PluginContextMock>().AccountName = accountName;
-			_response = ObjectFactory.GetInstance<GetProfilesCommand>().Execute(string.Empty);
+			_response = ObjectFactory.GetInstance<GetProfilesCommand>().Execute(string.Empty, null);
 		}
 
 		[When("GetProfile command received for acccount '$accountName' for profile '$profileName'")]
 		public void GetProfileCommandReceived(string accountName, string profileName)
 		{
 			ObjectFactory.GetInstance<PluginContextMock>().AccountName = accountName;
-			_response = ObjectFactory.GetInstance<GetProfileCommand>().Execute(profileName);
+			_response = ObjectFactory.GetInstance<GetProfileCommand>().Execute(profileName, null);
 		}
 
 		[Then(@"the following serialized profiles should be returned: (?<profileNames>([^,]+,?\s*)+)")]
 		public void ProfilesShouldBeReturned(string[] profileNames)
 		{
-			_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed));
+			_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed), "_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Succeed))");
 			foreach (var profileName in profileNames)
 			{
-				_response.ResponseData.Should(Be.StringContaining(profileName));
+				_response.ResponseData.Should(Be.StringContaining(profileName), "_response.ResponseData.Should(Be.StringContaining(profileName))");
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 		{
 			foreach (var profileName in profileNames)
 			{
-				_response.ResponseData.Should(Be.Not.StringContaining(profileName));
+				_response.ResponseData.Should(Be.Not.StringContaining(profileName), "_response.ResponseData.Should(Be.Not.StringContaining(profileName))");
 			}
 		}
 	}

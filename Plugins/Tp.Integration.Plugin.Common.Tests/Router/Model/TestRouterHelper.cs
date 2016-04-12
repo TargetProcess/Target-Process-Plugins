@@ -12,7 +12,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Router.Model
 		public const string SourceName = "src";
 		public static void CheckOrder(this IEnumerable<TestMessage> result, IEnumerable<string> expectedOrder)
 		{
-			result.Select(m => m.Body).SequenceEqual(expectedOrder).Should(Be.True);
+			result.Select(m => m.Body).SequenceEqual(expectedOrder).Should(Be.True, "result.Select(m => m.Body).SequenceEqual(expectedOrder).Should(Be.True)");
 		}
 
 		public static IEnumerable<string> SequenceExcluding(int start, int count, int excludeIndex)

@@ -44,15 +44,17 @@ namespace Tp.MashupManager
 			{
 				dto.Name = GetUniqueMashupName(dto.Name);
 			}
-
 			var errors = dto.ValidateAdd(ManagerProfile);
 			if (errors.Any())
 			{
 				return errors;
 			}
-
+			var saveErrors = MashupScriptStorageOperations.Save(_scriptStorage, dto);
+			if (saveErrors.Any())
+			{
+				return saveErrors;
+			}
 			AddMashupNameToPlugin(dto.Name);
-			_scriptStorage.SaveMashup(dto);
 			_bus.Send(dto.CreatePluginMashupMessage());
 			_log.InfoFormat("Add mashup command sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
 			return errors;
@@ -82,8 +84,12 @@ namespace Tp.MashupManager
 
 		public PluginProfileErrorCollection Delete(string name)
 		{
+			var errors = MashupScriptStorageOperations.Delete(_scriptStorage, name);
+			if (errors.Any())
+			{
+				return errors;
+			}
 			DeleteMashupNameToPlugin(name);
-			_scriptStorage.DeleteMashup(name);
 			var dto = new Mashup {Name = name};
 			_bus.Send(dto.CreatePluginMashupMessage());
 			_log.InfoFormat("Clean mashup commnad sent to TP (Mashup '{0}' for account '{1}')", dto.Name, _context.AccountName.Value);
@@ -129,7 +135,11 @@ namespace Tp.MashupManager
 				return errors;
 			}
 			CompleteWithNotChangedOriginFiles(commandArg);
-			_scriptStorage.SaveMashup(commandArg);
+			var saveErrors = MashupScriptStorageOperations.Save(_scriptStorage, commandArg);
+			if (saveErrors.Any())
+			{
+				return saveErrors;
+			}
 			_bus.Send(commandArg.CreatePluginMashupMessage());
 			_log.InfoFormat("Update mashup commnad sent to TP (Mashup '{0}' for account '{1}')", commandArg.Name, _context.AccountName.Value);
 			return new PluginProfileErrorCollection();
@@ -143,7 +153,7 @@ namespace Tp.MashupManager
 				Name = ProfileName,
 				Settings = managerProfile
 			};
-			addOrUpdateProfileCommand.Execute(profileDto.Serialize());
+			addOrUpdateProfileCommand.Execute(profileDto.Serialize(), null);
 		}
 
 		private void CompleteWithNotChangedOriginFiles(UpdateMashupCommandArg commandArg)

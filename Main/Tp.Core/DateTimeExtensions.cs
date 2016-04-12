@@ -1,27 +1,32 @@
-//  
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System.Data;
 using System.Linq.Dynamic;
 using Tp.Core;
+using Tp.Core.Internationalization;
+using Tp.I18n;
 
 // ReSharper disable CheckNamespace
+
 namespace System
 // ReSharper restore CheckNamespace
 {
+	[LocalizationScope("field-names")]
 	public static class DateTimeExtensions
 	{
-		public const string NO_DATE = "No date";
-		public const string FUTURE = "Future";
-		public const string PAST = "Past";
+		private static IFormattedMessage NoDate => "No date".Localize();
+		public static IFormattedMessage Future => "Future".Localize();
+		public static IFormattedMessage Past => "Past".Localize();
 		private const string FORMATE_DATE_STRING = "dd MMM";
 
-		public static string GetDateName(this DateTime date)
+		public static DateTime Truncate(this DateTime dateTime, TimeSpan timeSpan)
 		{
-			return date.ToString(FORMATE_DATE_STRING);
+			if (timeSpan == TimeSpan.Zero)
+			{
+				return dateTime;
+			}
+			return dateTime.AddTicks(-(dateTime.Ticks % timeSpan.Ticks));
 		}
+
+		public static string GetDateName(this DateTime date) => date.ToString(FORMATE_DATE_STRING);
 
 		public static DateTime GetWeekFirstDay(this DateTime date)
 		{
@@ -36,21 +41,14 @@ namespace System
 		}
 
 		public static string GetPartWeekName(this DateTime weekStartDate, DateTime weekEndDate)
-		{
-			return String.Format("{0} - {1}", weekStartDate.ToString(FORMATE_DATE_STRING),
-				weekEndDate.ToString(FORMATE_DATE_STRING));
-		}
+			=> $"{weekStartDate.ToString(FORMATE_DATE_STRING)} - {weekEndDate.ToString(FORMATE_DATE_STRING)}";
 
-		public static string GetWeekName(this DateTime date)
-		{
-			return GetPartWeekName(date.GetWeekFirstDay(), date.GetWeekLastDay());
-		}
+		public static string GetWeekName(this DateTime date) => GetPartWeekName(date.GetWeekFirstDay(), date.GetWeekLastDay());
 
-		public static string ToJavascriptDate(this DateTime date)
+		public static long ToJavascriptDate(this DateTime date)
 		{
-			var milliseconds = Convert.ToInt64(
+			return Convert.ToInt64(
 				date.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
-			return "new Date({0})".Fmt(milliseconds);
 		}
 
 		public static TimeSpan Days(this int days)
@@ -71,11 +69,7 @@ namespace System
 
 		[SqlFunction("dbo.f_Date", DbType.Date)]
 		[DynamicExpressionAlias("Day")]
-		public static DateTime? Date(this DateTime? date)
-		{
-			return date.Select(x => x.Date);
-		}
-
+		public static DateTime? Date(this DateTime? date) => date.Select(x => x.Date);
 
 		[SqlFunction("dbo.f_ForecastEndDate", DbType.Date)]
 		public static DateTime? ForecastEndDate(this DateTime? startDate, DateTime now, decimal? progress)
@@ -106,43 +100,35 @@ namespace System
 			return (int) (otherDate - date).GetValueOrDefault().TotalSeconds;
 		}
 
-		public static DateTime? AddDays(this DateTime? date, double days)
-		{
-			return date.Select(x => x.AddDays(days));
-		}
+		public static DateTime? AddDays(this DateTime? date, double days) => date?.AddDays(days);
 
-		public static DateTime? Subtract(this DateTime? date, TimeSpan timeSpan)
-		{
-			return date.Select(x => x.Subtract(timeSpan));
-		}
+		public static DateTime? Subtract(this DateTime? date, TimeSpan timeSpan) => date?.Subtract(timeSpan);
 
-		public static DateTime? TrimMilliseconds(this DateTime? dateTime)
-		{
-			return dateTime.Select(x => x.TrimMilliseconds());
-		}
+		public static DateTime? TrimMilliseconds(this DateTime? dateTime) => dateTime?.TrimMilliseconds();
 
 		public static DateTime TrimMilliseconds(this DateTime dateTime)
-		{
-			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Kind);
-		}
+			=> new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Kind);
 
 		public static DateTime TrimHours(this DateTime dateTime)
-		{
-			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind);
-		}
+			=> new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind);
 
-		public static string HumanFormat(this DateTime? dateTime)
+        public static DateTime TrimTicks(this DateTime dateTime) => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Millisecond, dateTime.Kind);
+
+        public static IFormattedMessage HumanFormat(this DateTime? dateTime)
 		{
 			if (dateTime != null)
 			{
 				if (dateTime.Value == MinDateValue)
-					return PAST;
+					return Past;
 				if (dateTime.Value == MaxDateValue)
-					return FUTURE;
+					return Future;
 
-				return ((dateTime.Value.Date == CurrentDate.Value.Date) ? "Today ({0})" : "{0}").Fmt(dateTime.Value.ToString("MMM d"));
+				var date = dateTime.Value.ToString("MMM d");
+				return dateTime.Value.Date == CurrentDate.Value.Date
+					? "Today ({date})".Localize(new { date })
+					: date.AsLocalized();
 			}
-			return NO_DATE;
+			return NoDate;
 		}
 
 		public static readonly DateTime MaxDateValue = new DateTime(9999, 12, 31);
@@ -151,31 +137,40 @@ namespace System
 
 		[DynamicExpressionAlias("Year")]
 		[SqlFunction("dbo.f_FloorYear", DbType.DateTime)]
-		public static DateTime? FloorYear(this DateTime? date)
+		public static DateTime FloorYear(this DateTime date) => new DateTime(date.Year, 1, 1, 0, 0, 0, date.Kind);
+
+		[DynamicExpressionAlias("Year")]
+		[SqlFunction("dbo.f_FloorYear", DbType.DateTime)]
+		public static DateTime? FloorYear(this DateTime? date) => date.Select(FloorYear);
+
+		[DynamicExpressionAlias("Quarter")]
+		[SqlFunction("dbo.f_FloorQuarter", DbType.DateTime)]
+		public static DateTime FloorQuarter(this DateTime date)
 		{
-			return date.Select(x => new DateTime(x.Year, 1, 1, 0, 0, 0, x.Kind));
+			return new DateTime(date.Year, (((date.Month - 1) / 3) * 3 + 1), 1, 0, 0, 0, date.Kind);
 		}
 
 		[DynamicExpressionAlias("Quarter")]
 		[SqlFunction("dbo.f_FloorQuarter", DbType.DateTime)]
-		public static DateTime? FloorQuarter(this DateTime? date)
-		{
-			return date.Select(x => new DateTime(x.Year, (((x.Month - 1) / 3) * 3 + 1), 1, 0, 0, 0, x.Kind));
-		}
+		public static DateTime? FloorQuarter(this DateTime? date) => date.Select(FloorQuarter);
 
 		[DynamicExpressionAlias("Month")]
 		[SqlFunction("dbo.f_FloorMonth", DbType.DateTime)]
-		public static DateTime? FloorMonth(this DateTime? date)
-		{
-			return date.Select(x => new DateTime(x.Year, x.Month, 1, 0, 0, 0, x.Kind));
-		}
+		public static DateTime FloorMonth(this DateTime date) => new DateTime(date.Year, date.Month, 1, 0, 0, 0, date.Kind);
+
+		[DynamicExpressionAlias("Month")]
+		[SqlFunction("dbo.f_FloorMonth", DbType.DateTime)]
+		public static DateTime? FloorMonth(this DateTime? date) => date.Select(FloorMonth);
 
 		[DynamicExpressionAlias("Week")]
 		[SqlFunction("dbo.f_FloorWeek", DbType.DateTime)]
-		public static DateTime? FloorWeek(this DateTime? date)
-		{
-			return date.Select(x => new DateTime(x.Year, x.Month, x.Day, 0, 0, 0, x.Kind).AddDays(-(int) x.DayOfWeek));
-		}
+		public static DateTime? FloorWeek(this DateTime? date) => date.Select(FloorWeek);
 
+		[DynamicExpressionAlias("Week")]
+		[SqlFunction("dbo.f_FloorWeek", DbType.DateTime)]
+		private static DateTime FloorWeek(DateTime dateTime)
+		{
+			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind).AddDays(-(int) dateTime.DayOfWeek);
+		}
 	}
 }

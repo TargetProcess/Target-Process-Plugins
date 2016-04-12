@@ -208,7 +208,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("entity states storage should contain $count items")]
 		public void CheckEntityStatesCount(int count)
 		{
-			Profile.Get<EntityStateDTO>().Count().Should(Be.EqualTo(count));
+			Profile.Get<EntityStateDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<EntityStateDTO>().Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("entity states storage should contain item '$name' with id $id and process id $processId")]
@@ -219,7 +219,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.EntityStateID == id)
 				.Where(s => s.ProcessID == processId)
 				.Any(s => s.Name == name)
-				.Should(Be.True);
+				.Should(Be.True, "Profile.Get<EntityStateDTO>().Where(s => s.ID == id).Where(s => s.EntityStateID == id).Where(s => s.ProcessID == processId).Any(s => s.Name == name).Should(Be.True)");
 		}
 
 		[Then("entity states storage should contain item '$name' with id $id")]
@@ -229,13 +229,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.Name == name)
 				.Where(s => s.ID == id)
 				.Any(s => s.EntityStateID == id)
-				.Should(Be.True);
+				.Should(Be.True, "Profile.Get<EntityStateDTO>().Where(s => s.Name == name).Where(s => s.ID == id).Any(s => s.EntityStateID == id).Should(Be.True)");
 		}
 
 		[Then("priorities storage should contain $count items")]
 		public void CheckPrioritiesCount(int count)
 		{
-			Profile.Get<PriorityDTO>().Count().Should(Be.EqualTo(count));
+			Profile.Get<PriorityDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<PriorityDTO>().Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("priorities storage should contain item with id $id and name '$name'")]
@@ -245,13 +245,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.ID == id)
 				.Where(s => s.PriorityID == id)
 				.Any(s => s.Name == name)
-				.Should(Be.True);
+				.Should(Be.True, "Profile.Get<PriorityDTO>().Where(s => s.ID == id).Where(s => s.PriorityID == id).Any(s => s.Name == name).Should(Be.True)");
 		}
 
 		[Then("projects storage should contain $count items")]
 		public void CheckProjectsCount(int count)
 		{
-			Profile.Get<ProjectDTO>().Count().Should(Be.EqualTo(count));
+			Profile.Get<ProjectDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<ProjectDTO>().Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("projects storage should contain item with id $id and name '$name'")]
@@ -261,7 +261,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.ID == id)
 				.Where(s => s.ProjectID == id)
 				.Any(s => s.Name == name)
-				.Should(Be.True);
+				.Should(Be.True, "Profile.Get<ProjectDTO>().Where(s => s.ID == id).Where(s => s.ProjectID == id).Any(s => s.Name == name).Should(Be.True)");
 		}
 
 		[Then("projects storage should contain item with id $id and process $processId")]
@@ -271,13 +271,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.ID == id)
 				.Where(s => s.ProjectID == id)
 				.Any(s => s.ProcessID == processId)
-				.Should(Be.True);
+				.Should(Be.True, "Profile.Get<ProjectDTO>().Where(s => s.ID == id).Where(s => s.ProjectID == id).Any(s => s.ProcessID == processId).Should(Be.True)");
 		}
 
 		[Then("severities storage should contain $count items")]
 		public void CheckSeveritiesCount(int count)
 		{
-			Profile.Get<SeverityDTO>().Count().Should(Be.EqualTo(count));
+			Profile.Get<SeverityDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<SeverityDTO>().Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("severities storage should contain item with id $id and name '$name'")]
@@ -287,7 +287,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				.Where(s => s.ID == id)
 				.Where(s => s.SeverityID == id)
 				.Any(s => s.Name == name)
-				.Should(Be.True);
+				.Should(Be.True, "Profile.Get<SeverityDTO>().Where(s => s.ID == id).Where(s => s.SeverityID == id).Any(s => s.Name == name).Should(Be.True)");
 		}
 
 		[Then(@"bugs with following names should be created in TargetProcess: (?<bugNames>([^,]+,?\s*)+)")]
@@ -297,7 +297,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is BugDTO).Select(
 					x => ((BugDTO) x.Dto).Name).
 					ToList();
-			bugs.Should(Be.EquivalentTo(bugNames));
+			bugs.Should(Be.EquivalentTo(bugNames), "bugs.Should(Be.EquivalentTo(bugNames))");
 		}
 
 		[Then(@"bugs with following names should be updated in TargetProcess: (?<bugNames>([^,]+,?\s*)+)")]
@@ -307,7 +307,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				ObjectFactory.GetInstance<TransportMock>().TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is BugDTO).Select(
 					x => ((BugDTO) x.Dto).Name).
 					ToList();
-			bugs.Should(Be.EquivalentTo(bugNames));
+			bugs.Should(Be.EquivalentTo(bugNames), "bugs.Should(Be.EquivalentTo(bugNames))");
 		}
 
 		[Then("no bugs should be added in TargetProcess")]
@@ -318,7 +318,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					x => ((BugDTO) x.Dto).Name).
 					ToList();
 
-			created.Any().Should(Be.False);
+			created.Any().Should(Be.False, "created.Any().Should(Be.False)");
 		}
 
 		[Then("no bugs should be updated in TargetProcess")]
@@ -329,13 +329,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					x => ((BugDTO) x.Dto).Name).
 					ToList();
 
-			updated.Any().Should(Be.False);
+			updated.Any().Should(Be.False, "updated.Any().Should(Be.False)");
 		}
 
 		[Then("import should be completed")]
 		public void ImportShouldBeCompleted()
 		{
-			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Should(Be.Empty);
+			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Should(Be.Empty, "ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Should(Be.Empty)");
 		}
 	}
 }

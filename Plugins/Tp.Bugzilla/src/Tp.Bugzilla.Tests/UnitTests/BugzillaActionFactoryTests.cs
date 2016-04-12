@@ -73,7 +73,7 @@ namespace Tp.Bugzilla.Tests.UnitTests
 
 			var queryString = HttpUtility.ParseQueryString(action.Value());
 
-			queryString["owner"].Should(Be.EqualTo(ownerEmail));
+			queryString["owner"].Should(Be.EqualTo(ownerEmail), "queryString[\"owner\"].Should(Be.EqualTo(ownerEmail))");
 		}
 	}
 }

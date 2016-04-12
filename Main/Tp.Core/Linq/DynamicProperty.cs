@@ -7,8 +7,8 @@ namespace System.Linq.Dynamic
 
 		public DynamicProperty(string name, Type type)
 		{
-			if (name == null) throw new ArgumentNullException("name");
-			if (type == null) throw new ArgumentNullException("type");
+			if (name == null) throw new ArgumentNullException(nameof(name));
+			if (type == null) throw new ArgumentNullException(nameof(type));
 			_name = name;
 			_type = type;
 		}
@@ -23,7 +23,7 @@ namespace System.Linq.Dynamic
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != this.GetType()) return false;
-			return Equals((DynamicProperty)obj);
+			return Equals((DynamicProperty) obj);
 		}
 
 		public override int GetHashCode()

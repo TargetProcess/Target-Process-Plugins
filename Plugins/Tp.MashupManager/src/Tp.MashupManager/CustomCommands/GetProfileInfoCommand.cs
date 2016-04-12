@@ -4,6 +4,7 @@
 // 
 
 using StructureMap;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -14,7 +15,7 @@ namespace Tp.MashupManager.CustomCommands
 {
 	public class GetProfileInfoCommand : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user=null)
 		{
 			IProfile profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
 
@@ -29,7 +30,7 @@ namespace Tp.MashupManager.CustomCommands
 		private PluginCommandResponseMessage GetResponseMessage(IProfile profile)
 		{
 			var command = ObjectFactory.GetInstance<GetProfileCommand>();
-			return command.Execute(profile.Name.Value);
+			return command.Execute(profile.Name.Value, null);
 		}
 
 		private PluginCommandResponseMessage GetEmptyResponseMessage()

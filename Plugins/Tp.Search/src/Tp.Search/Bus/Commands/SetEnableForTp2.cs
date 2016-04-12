@@ -10,6 +10,7 @@ using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using System.Linq;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Domain;
 
@@ -34,7 +35,7 @@ namespace Tp.Search.Bus.Commands
 			_bus = bus;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			bool enable = false;
 			if (args != null && !bool.TryParse(args, out enable)) // null means false

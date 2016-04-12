@@ -23,11 +23,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Router
 			var factory = new TestRouterFactory(waiter, messages =>{});
 			using (IMessageConsumer<TestMessage> consumer = factory.CreateConsumer(source))
 			{
-				consumer.IsRunning.Should(Be.False);
+				consumer.IsRunning.Should(Be.False, "consumer.IsRunning.Should(Be.False)");
 				consumer.Consume(TestRouterHelper.HandleMessage);
-				consumer.IsRunning.Should(Be.True);
+				consumer.IsRunning.Should(Be.True, "consumer.IsRunning.Should(Be.True)");
 				waiter.Wait();
-				consumer.IsRunning.Should(Be.True);
+				consumer.IsRunning.Should(Be.True, "consumer.IsRunning.Should(Be.True)");
 			}
 		}
 

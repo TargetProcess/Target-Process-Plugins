@@ -57,7 +57,7 @@ namespace Tp.Search.Bus.Workflow
 		{
 			foreach (var comment in message.Dtos)
 			{
-				_entityIndexer.UpdateCommentIndex(comment, new List<CommentField>(), Maybe.Nothing, Maybe.Return(Data.SquadId), DocumentIndexOptimizeSetup.NoOptimize);
+				_entityIndexer.UpdateCommentIndex(comment, new List<CommentField>(), false, true, DocumentIndexOptimizeSetup.NoOptimize);
 			}
 			_entityIndexer.OptimizeCommentIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
 			MarkAsComplete();

@@ -15,7 +15,7 @@ namespace Tp.Search.Tests
 			int targetId = 200;
 			string encoded = IndexDataStringServices.EncodeStringId(targetId, prefix);
 			int? decoded = IndexDataStringServices.DecodeStringId(encoded, prefix);
-			targetId.Should(Be.EqualTo(decoded));
+			targetId.Should(Be.EqualTo(decoded), "targetId.Should(Be.EqualTo(decoded))");
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace Tp.Search.Tests
 			int? targetId = null;
 			string encoded = IndexDataStringServices.EncodeStringId(targetId, prefix);
 			int? decoded = IndexDataStringServices.DecodeStringId(encoded, prefix);
-			targetId.Should(Be.EqualTo(decoded));
+			targetId.Should(Be.EqualTo(decoded), "targetId.Should(Be.EqualTo(decoded))");
 		}
 	}
 }

@@ -162,7 +162,7 @@ namespace Tp.Bugzilla.Tests.Handlers
 		[Then("users storage should contain $count items")]
 		public void ChechStorageCount(int count)
 		{
-			Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count));
+			Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("users storage should contain following items:")]
@@ -171,12 +171,12 @@ namespace Tp.Bugzilla.Tests.Handlers
 			Profile.Get<UserDTO>(id.ToString())
 				.Where(u => u.Login == login)
 				.Where(u => u.Email == email)
-				.SingleOrDefault().Should(Be.Not.Null);
+				.SingleOrDefault().Should(Be.Not.Null, "Profile.Get<UserDTO>(id.ToString()).Where(u => u.Login == login).Where(u => u.Email == email).SingleOrDefault().Should(Be.Not.Null)");
 
 			Profile.Get<UserDTO>(email)
 				.Where(u => u.Login == login)
 				.Where(u => u.ID == id)
-				.SingleOrDefault().Should(Be.Not.Null);
+				.SingleOrDefault().Should(Be.Not.Null, "Profile.Get<UserDTO>(email).Where(u => u.Login == login).Where(u => u.ID == id).SingleOrDefault().Should(Be.Not.Null)");
 		}
 	}
 }

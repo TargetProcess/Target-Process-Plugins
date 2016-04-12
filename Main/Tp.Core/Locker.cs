@@ -27,13 +27,13 @@ namespace Tp.Core
 		public bool TryAcquireLockAndExecute(string key, Action action, int timeout = TIMEOUT)
 		{
 			return TryAcquireLockAndExecute(key,
-			                   () =>
-				                   {
-					                   action();
-					                   return true;
-				                   },
-			                   false,
-							   timeout);
+				() =>
+				{
+					action();
+					return true;
+				},
+				false,
+				timeout);
 		}
 
 		/// <summary>

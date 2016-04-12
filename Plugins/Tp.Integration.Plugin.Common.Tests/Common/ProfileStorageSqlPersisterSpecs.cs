@@ -37,7 +37,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			var retrieved = _persister.FindBy(_profile.Id).Single();
 
-			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare));
+			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare), "retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare))");
 		}
 
 		[Test]
@@ -46,7 +46,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var profileStorages = CreateProfileStorages();
 
 			var retrieved = _persister.FindBy(_profile.Id).ToArray();
-			retrieved.Should(Be.EquivalentTo(profileStorages).Using<ProfileStorage>(Compare));
+			retrieved.Should(Be.EquivalentTo(profileStorages).Using<ProfileStorage>(Compare), "retrieved.Should(Be.EquivalentTo(profileStorages).Using<ProfileStorage>(Compare))");
 		}
 
 		[Test]
@@ -57,7 +57,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var profileStorage = profileStorages[1];
 			var retrieved = _persister.FindBy(_profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey)).Single();
 
-			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare));
+			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare), "retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare))");
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			var profileStorage = profileStorages[1];
 			var retrieved = _persister.FindBy(_profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.Name).Single();
-			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare));
+			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare), "retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare))");
 		}
 
 		[Test]
@@ -77,10 +77,10 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			var profileStorage = profileStorages[1];
 			var retrieved = _persister.FindBy(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue());
-			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare));
+			retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare), "retrieved.Should(Be.EqualTo(profileStorage).Using<ProfileStorage>(Compare))");
 
 			_persister.FindBy(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue() + "123").Should(
-				Be.Null);
+				Be.Null, "_persister.FindBy(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue() + \"123\").Should(Be.Null)");
 		}
 
 		[Test]
@@ -89,10 +89,10 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var profileStorages = CreateProfileStorages();
 
 			var profileStorage = profileStorages[1];
-			_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(Be.True);
+			_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(Be.True, "_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(Be.True)");
 
 			_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorages[0].ValueKey), profileStorage.GetValue()).Should(
-				Be.False);
+				Be.False, "_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorages[0].ValueKey), profileStorage.GetValue()).Should(Be.False)");
 		}
 
 		[Test]
@@ -103,7 +103,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var profileStorage = profileStorages[1];
 			_persister.Delete(_profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.Name);
 			_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(
-				Be.False);
+				Be.False, "_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(Be.False)");
 		}
 
 		[Test]
@@ -115,7 +115,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 
 			_persister.Delete(_profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.Name);
 			_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(
-				Be.False);
+				Be.False, "_persister.Contains(profileStorage.Name, _profile.Id, new TypeNameWithoutVersion(profileStorage.ValueKey), profileStorage.GetValue()).Should(Be.False)");
 		}
 
 		private ProfileStorage[] CreateProfileStorages()

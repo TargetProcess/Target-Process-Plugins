@@ -7,6 +7,7 @@ using Tp.Core;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Exceptions;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Interfaces;
 using Tp.Integration.Messages.ServiceBus.Transport.Router.Log;
+
 namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 {
 	public class MessageConsumer<TMessage> : IMessageConsumer<TMessage> where TMessage : class
@@ -57,7 +58,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		protected virtual void ConsumeCore(Action<TMessage> handleMessage)
 		{
 			var @while = While ?? (_ => true);
-			Func<IObservable<TMessage>> takeWhile = () => _messageSource.Iterate(handleMessage, _scheduler, s => _log.Info(LoggerContext.New(Name), s)).TakeWhile(m => @while(m));
+			Func<IObservable<TMessage>> takeWhile =
+				() => _messageSource.Iterate(handleMessage, _scheduler, s => _log.Info(LoggerContext.New(Name), s)).TakeWhile(m => @while(m));
 			_observable = takeWhile.ToSelfRepairingHotObservable(e => { });
 			_subscription = _observable.Subscribe(new CompositeObserver(_observers));
 		}
@@ -104,10 +106,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		protected virtual void OnDispose()
 		{
 		}
-		
+
 		private class CompositeObserver : IObserver<TMessage>
 		{
 			private readonly List<IObserver<TMessage>> _observers;
+
 			public CompositeObserver(List<IObserver<TMessage>> observers)
 			{
 				_observers = observers;

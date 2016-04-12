@@ -5,11 +5,11 @@ using System.Xml.Serialization;
 
 namespace Tp.Core
 {
-
-	[XmlRootAttribute("stringDictionary")]
+	[XmlRoot("stringDictionary")]
 	public class XmlSerializableStringDictionary
 	{
 		#region Construction and Initialization
+
 		public XmlSerializableStringDictionary(Dictionary<string, string> original)
 		{
 			_original = original;
@@ -25,6 +25,7 @@ namespace Tp.Core
 		#endregion
 
 		#region The Proxy List
+
 		/// <summary>
 		/// Holds the keys and values
 		/// </summary>
@@ -32,6 +33,7 @@ namespace Tp.Core
 		{
 			[XmlAttribute("key")]
 			public string Key { get; set; }
+
 			[XmlAttribute("value")]
 			public string Value { get; set; }
 		}
@@ -70,6 +72,7 @@ namespace Tp.Core
 				return _list;
 			}
 		}
+
 		#endregion
 
 		/// <summary>

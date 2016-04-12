@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -157,7 +152,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		/// 
 		/// To change the number of worker threads at runtime, call <see cref="ChangeNumberOfWorkerThreads"/>.
 		/// </summary>
-		public int NumberOfWorkerThreads { get; set; } 
+		public int NumberOfWorkerThreads { get; set; }
 
 		/// <summary>
 		/// Event raised when a message has been received in the input queue.
@@ -197,7 +192,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				ThreadPool.SetMaxThreads(100 * Environment.ProcessorCount, ioThreads);
 				ThreadPool.SetMinThreads(50, 50);
 			}
-			
+
 			CheckConfiguration();
 			CreateQueuesIfNecessary();
 			if (ErrorQueue != null)
@@ -215,8 +210,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				}
 				Logger.Info(LoggerContext.New(inputQueue.Name), "starting...");
 				Logger.Info(LoggerContext.New(commandQueue.Name), "starting...");
-				
-				var factory = new MsmqRouterFactory(Logger, TimeSpan.FromSeconds(SecondsToWaitForMessage), GetTransactionTypeForSend, GetTransactionTypeForReceive());
+
+				var factory = new MsmqRouterFactory(Logger, TimeSpan.FromSeconds(SecondsToWaitForMessage), GetTransactionTypeForSend,
+					GetTransactionTypeForReceive());
 				_inputQueueRouter = CreateAndStartMainMessageConsumer(factory);
 				_uiQueueRouter = CreateAndStartUiMessageConsumer(factory);
 				Logger.Info(LoggerContext.New(inputQueue.Name), "started.");
@@ -290,7 +286,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 					consumer.Consume(HandleAsync);
 					break;
 			}
-			
+
 			return consumer;
 		}
 
@@ -423,11 +419,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 					if (ex.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					{
 						throw new ConfigurationErrorsException("The destination queue '" + destination +
-						                                       "' could not be found. You may have misconfigured the destination for this kind of message (" +
-						                                       m.Body[0].GetType().FullName +
-						                                       ") in the MessageEndpointMappings of the UnicastBusConfig section in your configuration file." +
-						                                       "It may also be the case that the given queue just hasn't been created yet, or has been deleted."
-						                                       , ex);
+							"' could not be found. You may have misconfigured the destination for this kind of message (" +
+							m.Body[0].GetType().FullName +
+							") in the MessageEndpointMappings of the UnicastBusConfig section in your configuration file." +
+							"It may also be the case that the given queue just hasn't been created yet, or has been deleted."
+							, ex);
 					}
 
 					throw;
@@ -439,6 +435,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 
 		const int SendAttemptCount = 5;
 		const int SendAttemptSleepIfFault = 500;
+
 		#endregion
 
 		#region helper methods
@@ -447,17 +444,17 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		{
 			_messageId = string.Empty;
 			ReceiveFromQueue(message, m => ThreadPool.QueueUserWorkItem(state =>
+			{
+				try
 				{
-					try
-					{
-						ProcessMessage(m);
-					}
-					catch(Exception e)
-					{
-						Logger.Warn(LoggerContext.New(message.MessageOrigin.Name), "Failed to process message.", e);
-						OnFailedMessageProcessing(message);
-					}
-				}));
+					ProcessMessage(m);
+				}
+				catch (Exception e)
+				{
+					Logger.Warn(LoggerContext.New(message.MessageOrigin.Name), "Failed to process message.", e);
+					OnFailedMessageProcessing(message);
+				}
+			}));
 		}
 
 		private void Handle(MessageEx message)
@@ -481,7 +478,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				//in case AbortHandlingCurrentMessage was called
 				return;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Logger.Warn(LoggerContext.New(message.MessageOrigin.Name), "Failed to process message.", e);
 				if (IsTransactional)
@@ -514,7 +511,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 				if (HandledMaxRetries(m.Id))
 				{
 					Logger.Error(LoggerContext.New(message.MessageOrigin.Name),
-					             string.Format("Message has failed the maximum number of times allowed, ID={0}.", m.Id));
+						string.Format("Message has failed the maximum number of times allowed, ID={0}.", m.Id));
 					MoveToErrorQueue(message);
 					return;
 				}
@@ -570,7 +567,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			_failuresPerMessageLocker.EnterReadLock();
 
 			if (_failuresPerMessage.ContainsKey(messageId) &&
-			    (_failuresPerMessage[messageId] >= maxRetries))
+				(_failuresPerMessage[messageId] >= maxRetries))
 			{
 				_failuresPerMessageLocker.ExitReadLock();
 				_failuresPerMessageLocker.EnterWriteLock();
@@ -650,21 +647,21 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		public TransportMessage Convert(Message m)
 		{
 			var result = new TransportMessage
-			             	{
-			             		Id = m.Id,
-			             		CorrelationId =
-			             			(m.CorrelationId == "00000000-0000-0000-0000-000000000000\\0"
-			             			 	? null
-			             			 	: m.CorrelationId),
-			             		Recoverable = m.Recoverable,
-			             		TimeToBeReceived = m.TimeToBeReceived,
-			             		TimeSent = m.SentTime,
-			             		ReturnAddress = MsmqUtilities.GetIndependentAddressForQueue(m.ResponseQueue),
-			             		MessageIntent =
-			             			Enum.IsDefined(typeof (MessageIntentEnum), m.AppSpecific)
-			             				? (MessageIntentEnum) m.AppSpecific
-			             				: MessageIntentEnum.Send
-			             	};
+			{
+				Id = m.Id,
+				CorrelationId =
+					(m.CorrelationId == "00000000-0000-0000-0000-000000000000\\0"
+						? null
+						: m.CorrelationId),
+				Recoverable = m.Recoverable,
+				TimeToBeReceived = m.TimeToBeReceived,
+				TimeSent = m.SentTime,
+				ReturnAddress = MsmqUtilities.GetIndependentAddressForQueue(m.ResponseQueue),
+				MessageIntent =
+					Enum.IsDefined(typeof(MessageIntentEnum), m.AppSpecific)
+						? (MessageIntentEnum) m.AppSpecific
+						: MessageIntentEnum.Send
+			};
 
 			FillIdForCorrelationAndWindowsIdentity(result, m);
 
@@ -766,8 +763,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 		private MessageQueueTransactionType GetTransactionTypeForSend()
 		{
 			return (IsTransactional && Transaction.Current != null)
-			       	? MessageQueueTransactionType.Automatic
-			       	: MessageQueueTransactionType.Single;
+				? MessageQueueTransactionType.Automatic
+				: MessageQueueTransactionType.Single;
 		}
 
 		private bool OnFinishedMessageProcessing(MessageEx message)
@@ -800,7 +797,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
 			}
 			catch (Exception e)
 			{
-				Logger.Warn(LoggerContext.New(origin.MessageOrigin.Name, msg), "Failed raising 'transport message received' event for message with ID=" + msg.Id, e);
+				Logger.Warn(LoggerContext.New(origin.MessageOrigin.Name, msg),
+					"Failed raising 'transport message received' event for message with ID=" + msg.Id, e);
 				return false;
 			}
 			return true;

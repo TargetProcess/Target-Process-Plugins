@@ -1,9 +1,4 @@
-﻿//
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-//
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,69 +11,49 @@ namespace Tp.Utils.Html
 		private HtmlNodeType _prevNodeType = HtmlNodeType.None;
 
 		protected readonly Iesi.Collections.Generic.ISet<string> KeepAttributeElements = new HashedSet<string>
-																							{
-																								"img",
-																								"a",
-																								"span",
-																								"table",
-																								"td"
-																							};
+		{
+			"img",
+			"a",
+			"span",
+			"table",
+			"td"
+		};
 
 		protected readonly Iesi.Collections.Generic.ISet<string> KeepElements = new HashedSet<string>
-																					{
-																						"p",
-																						"br",
-																						"a",
-																						"img",
-																						"div",
-																						"span",
-																						"ul",
-																						"li",
-																						"ol",
-																						"b",
-																						"i",
-																						"em",
-																						"strong",
-																						"strike",
-																						"u",
-																						"s",
-																						"span",
-																						"pre",
-																						"table",
-																						"thead",
-																						"tbody",
-																						"td",
-																						"th",
-																						"tr",
-																						"caption",
-																						"colgroup",
-																						"col",
-																						"tfoot"
-																					};
-		#region RegexBuddy
-		// (?:data-mention=[""'](?<email>\S+?)['""]|(?:\B)(?:@|&#64;)(?<email>\S+))
-		// 
-		// Match the regular expression below «(?:data-mention=[""'](?<email>\S+?)['""]|(?:\B)(?:@|&#64;)(?<email>\S+))»
-		//    Match either the regular expression below (attempting the next alternative only if this one fails) «data-mention=[""'](?<email>\S+?)['""]»
-		//       Match the characters “data-mention=” literally «data-mention=»
-		//       Match a single character present in the list “"'” «[""']»
-		//       Match the regular expression below and capture its match into backreference with name “email” «(?<email>\S+?)»
-		//          Match a single character that is a “non-whitespace character” «\S+?»
-		//             Between one and unlimited times, as few times as possible, expanding as needed (lazy) «+?»
-		//       Match a single character present in the list “'"” «['""]»
-		//    Or match regular expression number 2 below (the entire group fails if this one fails to match) «(?:\B)(?:@|&#64;)(?<email>\S+)»
-		//       Match the regular expression below «(?:\B)»
-		//          Assert position not at a word boundary «\B»
-		//       Match the regular expression below «(?:@|&#64;)»
-		//          Match either the regular expression below (attempting the next alternative only if this one fails) «@»
-		//             Match the character “@” literally «@»
-		//          Or match regular expression number 2 below (the entire group fails if this one fails to match) «&#64;»
-		//             Match the characters “&#64;” literally «&#64;»
-		//       Match the regular expression below and capture its match into backreference with name “email” «(?<email>\S+)»
-		//          Match a single character that is a “non-whitespace character” «\S+»
-		//             Between one and unlimited times, as many times as possible, giving back as needed (greedy) «+»
-		#endregion
-		private static readonly Regex _mentionRegex = new Regex(@"(?:data-mention=[""'](?<email>\S+?)['""]|(?:\B)(?:@|&#64;)(?<email>\S+))", RegexOptions.Compiled);
+		{
+			"p",
+			"br",
+			"a",
+			"img",
+			"div",
+			"span",
+			"ul",
+			"li",
+			"ol",
+			"b",
+			"i",
+			"em",
+			"strong",
+			"strike",
+			"u",
+			"s",
+			"span",
+			"pre",
+			"table",
+			"thead",
+			"tbody",
+			"td",
+			"th",
+			"tr",
+			"caption",
+			"colgroup",
+			"col",
+			"tfoot"
+		};
+
+
+		public static readonly Regex HtmlMentionRegex = new Regex(@"data-mention=[""'](?<email>\S+?)['""]", RegexOptions.Compiled);
+		public static readonly Regex MarkdownMentionRegex = new Regex(@"\B(@|&#64;)(?<email>\S+)", RegexOptions.Compiled);
 
 		public CommentHtmlProcessor()
 			: this(false)
@@ -92,12 +67,11 @@ namespace Tp.Utils.Html
 
 		public IEnumerable<string> GetMentions(string input)
 		{
-			var matches = _mentionRegex.Matches(input);
-
-			return from Match match in matches
-				   select match.Groups["email"] into gr
-				   where gr.Success
-				   select gr.Value.Replace("&#64;", "@");
+			return from match in HtmlMentionRegex.Matches(input).OfType<Match>().Union(MarkdownMentionRegex.Matches(input).OfType<Match>())
+				select match.Groups["email"]
+				into gr
+				where gr.Success
+				select gr.Value.Replace("&#64;", "@");
 		}
 
 		protected override bool IsValidAttribute(string name, string key, string value)

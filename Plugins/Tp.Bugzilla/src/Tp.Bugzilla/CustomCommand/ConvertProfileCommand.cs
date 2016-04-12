@@ -6,6 +6,7 @@
 using System.Runtime.Serialization;
 using StructureMap;
 using Tp.Bugzilla.LegacyProfileConversion;
+using Tp.Integration.Common;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common;
@@ -16,7 +17,7 @@ namespace Tp.Bugzilla.CustomCommand
 {
 	public class ConvertProfileCommand : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			var logger = ObjectFactory.GetInstance<ILogManager>();
 			var log = logger.GetLogger(GetType());

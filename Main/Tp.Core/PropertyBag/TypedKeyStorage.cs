@@ -21,9 +21,9 @@ namespace Tp.Core.PropertyBag
 		{
 			TypedKey erasedKey = key;
 			Maybe<TItemBase> result = MaybeGetItem(erasedKey);
-			if(result.HasValue)
+			if (result.HasValue)
 			{
-				return Maybe.Return((TItem)result.Value);
+				return Maybe.Return((TItem) result.Value);
 			}
 			return Maybe.Nothing;
 		}

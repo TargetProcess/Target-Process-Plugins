@@ -10,6 +10,5 @@
 	// ReSharper disable once UnusedTypeParameter
 	public interface IApiType<TActual>
 	{
-		
 	}
 }

@@ -1,20 +1,18 @@
 tau.mashups
-        .addDependency('jQuery')
-        .addDependency('application.creator')
-        .addDependency('tau/core/event')
-        .addDependency('tau/core/class')
-        .addDependency('tau/core/bus.reg')
-        .addDependency('tau/services/service.search')
-        .addDependency('tau/services/service.navigator')
+    .addDependency('jQuery')
+    .addDependency('application.creator')
+    .addDependency('tau/core/event')
+    .addDependency('tau/core/class')
+    .addDependency('tau/core/bus.reg')
+    .addDependency('tau/services/service.search')
+    .addDependency('tau/services/service.navigator')
 
-        .addDependency('tau/service.container')
-        .addDependency('libs/jquery/jquery.ui.tauBubble')
-        .addDependency('tau/models/model.search-resolver')
-        .addDependency('Searcher/SearchApplication')
-        .addDependency('tp/plugins/profileRepository')
-        .addCSS('../../tau/css/tau.widgets.css')
-        .addCSS('../../tau/css.ui/ui.attachmentsPreview.css')
-        .addCSS('../../tau/css.board/tau.board.search.css')
+    .addDependency('tau/service.container')
+    .addDependency('libs/jquery/jquery.ui.tauBubble')
+    .addDependency('tau/models/model.search-resolver')
+    .addDependency('Searcher/SearchApplication')
+    .addDependency('tp/plugins/profileRepository')
+    .addDependency('jquery.notifyBar')
     .addModule('Searcher/SearchTP2', function($, AppCreator, Event, Class, busRegistry, ServiceSearch, ServiceNavigator, serviceContainerClass, buble, SearchResolverUtil, searchApp) {
         var APP_ID = 'sp';
     var Processor = Class.extend({
@@ -163,7 +161,7 @@ tau.mashups
                                 $trigger.prop('disabled', false);
 
                                 $('body').notifyBar({
-                                    className: 'tau-system-message-error',
+                                    className: 'tau-system-message--error',
                                     html: '<h3>' + message + '</h3>',
                                     disableAutoClose: true
                                 });
@@ -185,6 +183,7 @@ tau.mashups
                 });
             };
             subscribe($('#topSearch input[type=image]'), $('#topSearch input[type=text]'));
+            $('#topSearch').addClass('i-role-new-search');
 
             var $mainSearchPopup = $('.mainSearchPopup .search input[type=text]');
             subscribe($('.mainSearchPopup .search input[type=image]'), $mainSearchPopup);

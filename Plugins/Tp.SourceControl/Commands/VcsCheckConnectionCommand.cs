@@ -5,6 +5,7 @@
 
 using System;
 using StructureMap;
+using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -18,7 +19,7 @@ namespace Tp.SourceControl.Commands
 	public abstract class VcsCheckConnectionCommand<TVcsPluginProfile> : IPluginCommand
 		where TVcsPluginProfile : ISourceControlConnectionSettingsSource
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			return new PluginCommandResponseMessage
 			       	{ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed};

@@ -6,6 +6,7 @@ namespace Tp.Core.Features
 	public class MashupAttribute : Attribute
 	{
 		private readonly string _mashupName;
+
 		public MashupAttribute(string mashupName)
 		{
 			_mashupName = mashupName;

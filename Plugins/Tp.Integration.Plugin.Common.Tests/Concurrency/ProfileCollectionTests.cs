@@ -30,7 +30,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		{
 			AddAccountProfile(ACCOUNT_NAME, "profile1");
 			ExecuteConcurrently(() => ReadAccountProfiles(ACCOUNT_NAME), () => AddAccountProfile(ACCOUNT_NAME, "profile2"));
-			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(2));
+			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(2), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(2))");
 		}
 		
 		[Test]
@@ -38,7 +38,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 		{
 			AddAccountProfile(ACCOUNT_NAME, "profile1");
 			ExecuteConcurrently(() => ReadAccountProfiles(ACCOUNT_NAME), () => ReadAccountProfiles(ACCOUNT_NAME));
-			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1));
+			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
 		}
 		
 		[Test]
@@ -62,19 +62,19 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 				if (Interlocked.Increment(ref beforeProfileAdd) == 1)
 				{
 					sameVersion = (accountFirstVersion == accountSecondVersion);
-					sameVersion.Should(Be.True);
+					sameVersion.Should(Be.True, "sameVersion.Should(Be.True)");
 				}
 				if (Interlocked.Increment(ref afterProfileAdded) == 2)
 				{
 					IAccount latestAccountVersion = AccountCollection.GetOrCreate(account1Name);
-					latestAccountVersion.Profiles.Count().Should(Be.EqualTo(1));
+					latestAccountVersion.Profiles.Count().Should(Be.EqualTo(1), "latestAccountVersion.Profiles.Count().Should(Be.EqualTo(1))");
 					if (sameVersion)
 					{
-						(latestAccountVersion == accountFirstVersion).Should(Be.False);
+						(latestAccountVersion == accountFirstVersion).Should(Be.False, "(latestAccountVersion == accountFirstVersion).Should(Be.False)");
 					}
 				}
 			});
-			AccountCollection.GetOrCreate(account1Name).Profiles.Count().Should(Be.EqualTo(1));
+			AccountCollection.GetOrCreate(account1Name).Profiles.Count().Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(account1Name).Profiles.Count().Should(Be.EqualTo(1))");
 		}
 
 		[Test, Ignore]
@@ -105,7 +105,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 			var account = AccountCollection.GetOrCreate(accountName);
 			foreach (var profile in account.Profiles)
 			{
-				profile.Name.Value.Should(Be.StringContaining("profile"));
+				profile.Name.Value.Should(Be.StringContaining("profile"), "profile.Name.Value.Should(Be.StringContaining(\"profile\"))");
 			}
 		}
 	}

@@ -83,7 +83,7 @@ namespace Tp.Subversion.Subversion
 			var svnRevisionId = new SvnRevisionId(1000000);
 			var endRevision = vcs.GetFromTillHead(svnRevisionId, 50);
 			var result = vcs.GetRevisions(endRevision.Last());
-			result.Should(Be.Not.Empty);
+			result.Should(Be.Not.Empty, "result.Should(Be.Not.Empty)");
 		}
 
 		[Test]
@@ -104,8 +104,8 @@ namespace Tp.Subversion.Subversion
 			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var revisions = subversion.GetAfterTillHead(new SvnRevisionId(8), 50).ToArray();
-				revisions.Single().FromChangeset.Value.Should(Be.EqualTo(9.ToString()));
-				revisions.Single().ToChangeset.Value.Should(Be.EqualTo(9.ToString()));
+				revisions.Single().FromChangeset.Value.Should(Be.EqualTo(9.ToString()), "revisions.Single().FromChangeset.Value.Should(Be.EqualTo(9.ToString()))");
+				revisions.Single().ToChangeset.Value.Should(Be.EqualTo(9.ToString()), "revisions.Single().ToChangeset.Value.Should(Be.EqualTo(9.ToString()))");
 			}
 		}
 
@@ -117,7 +117,7 @@ namespace Tp.Subversion.Subversion
 				var revisions = subversion.GetRevisions(subversion.GetFromTillHead(new SvnRevisionId(0), 100).Single()).OrderBy(x => x.Time);
 
 				var authors = subversion.RetrieveAuthors(new DateRange(revisions.First().Time, revisions.Last().Time));
-				authors.Should(Be.EquivalentTo(revisions.Select(x => x.Author).Distinct().ToArray()));
+				authors.Should(Be.EquivalentTo(revisions.Select(x => x.Author).Distinct().ToArray()), "authors.Should(Be.EquivalentTo(revisions.Select(x => x.Author).Distinct().ToArray()))");
 			}
 		}
 
@@ -127,15 +127,15 @@ namespace Tp.Subversion.Subversion
 			using (var subversion = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var revisionRanges = subversion.GetFromTillHead(new SvnRevisionId(2), 3);
-				revisionRanges.Count().Should(Be.EqualTo(3));
-				revisionRanges[0].FromChangeset.Value.Should(Be.EqualTo(2.ToString()));
-				revisionRanges[0].ToChangeset.Value.Should(Be.EqualTo(4.ToString()));
+				revisionRanges.Count().Should(Be.EqualTo(3), "revisionRanges.Count().Should(Be.EqualTo(3))");
+				revisionRanges[0].FromChangeset.Value.Should(Be.EqualTo(2.ToString()), "revisionRanges[0].FromChangeset.Value.Should(Be.EqualTo(2.ToString()))");
+				revisionRanges[0].ToChangeset.Value.Should(Be.EqualTo(4.ToString()), "revisionRanges[0].ToChangeset.Value.Should(Be.EqualTo(4.ToString()))");
 
-				revisionRanges[1].FromChangeset.Value.Should(Be.EqualTo(5.ToString()));
-				revisionRanges[1].ToChangeset.Value.Should(Be.EqualTo(7.ToString()));
+				revisionRanges[1].FromChangeset.Value.Should(Be.EqualTo(5.ToString()), "revisionRanges[1].FromChangeset.Value.Should(Be.EqualTo(5.ToString()))");
+				revisionRanges[1].ToChangeset.Value.Should(Be.EqualTo(7.ToString()), "revisionRanges[1].ToChangeset.Value.Should(Be.EqualTo(7.ToString()))");
 
-				revisionRanges[2].FromChangeset.Value.Should(Be.EqualTo(8.ToString()));
-				revisionRanges[2].ToChangeset.Value.Should(Be.EqualTo(9.ToString()));
+				revisionRanges[2].FromChangeset.Value.Should(Be.EqualTo(8.ToString()), "revisionRanges[2].FromChangeset.Value.Should(Be.EqualTo(8.ToString()))");
+				revisionRanges[2].ToChangeset.Value.Should(Be.EqualTo(9.ToString()), "revisionRanges[2].ToChangeset.Value.Should(Be.EqualTo(9.ToString()))");
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace Tp.Subversion.Subversion
 			{
 				var range = sourceControlService.GetFromTillHead(0.ToString(), 100).Single();
 				var revisionsFromRepo = sourceControlService.GetRevisions(range).Select(x => long.Parse(x.Id.Value)).ToArray();
-				revisionsFromRepo.Should(Be.EquivalentTo(revisionIds));
+				revisionsFromRepo.Should(Be.EquivalentTo(revisionIds), "revisionsFromRepo.Should(Be.EquivalentTo(revisionIds))");
 			}
 		}
 
@@ -174,7 +174,7 @@ namespace Tp.Subversion.Subversion
 			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = s.GetFromTillHead(0.ToString(), 100).Single();
-				s.GetRevisions(range).Should(Be.Not.Empty);
+				s.GetRevisions(range).Should(Be.Not.Empty, "s.GetRevisions(range).Should(Be.Not.Empty)");
 			}
 		}
 
@@ -184,7 +184,7 @@ namespace Tp.Subversion.Subversion
 			using (var s = new Subversion(GetLocalRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = s.GetFromTillHead(0.ToString(), 100).Single();
-				s.GetRevisions(range).Should(Be.Not.Empty);
+				s.GetRevisions(range).Should(Be.Not.Empty, "s.GetRevisions(range).Should(Be.Not.Empty)");
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace Tp.Subversion.Subversion
 			using (var s = new Subversion(GetEmptyRepositorySettings(), ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(), ObjectFactory.GetInstance<IActivityLogger>(), ObjectFactory.GetInstance<IDiffProcessor>()))
 			{
 				var range = s.GetFromTillHead(0.ToString(), 100).Single();
-				s.GetRevisions(range).Should(Be.Empty);
+				s.GetRevisions(range).Should(Be.Empty, "s.GetRevisions(range).Should(Be.Empty)");
 			}
 		}
 

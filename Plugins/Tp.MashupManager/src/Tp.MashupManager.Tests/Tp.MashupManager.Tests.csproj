@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,34 +124,44 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
-      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project><Name>Tp.Core</Name>
+      <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
+      <Name>Tp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
-      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project><Name>Tp.Integration.Messages</Name>
+      <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
+      <Name>Tp.Integration.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
-      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project><Name>Tp.Integration.Plugin.Common</Name>
+      <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
-      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project><Name>Tp.Plugin.Core</Name>
+      <Project>{BBFA5C9B-6C11-4B62-A9B1-E631462D333B}</Project>
+      <Name>Tp.Plugin.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Testing.Common.NBehave\Tp.Testing.Common.NBehave.csproj">
-      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project><Name>Tp.Testing.Common.NBehave</Name>
+      <Project>{280E38DB-5689-4926-96FF-F4634EF0F550}</Project>
+      <Name>Tp.Testing.Common.NBehave</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Main\Tp.Testing.Common.NUnit\Tp.Testing.Common.NUnit.csproj">
-      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project><Name>Tp.Testing.Common.NUnit</Name>
+      <Project>{9DE78131-AEAF-4ADA-AC83-04EFAD764DD2}</Project>
+      <Name>Tp.Testing.Common.NUnit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.Common.Tests\Tp.Integration.Plugin.Common.Tests.csproj">
-      <Project>{187F5B55-6AFD-4838-B107-F7E7AD641BBF}</Project><Name>Tp.Integration.Plugin.Common.Tests</Name>
+      <Project>{187F5B55-6AFD-4838-B107-F7E7AD641BBF}</Project>
+      <Name>Tp.Integration.Plugin.Common.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
-      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project><Name>Tp.Integration.Plugin.UninstallUtil</Name>
+      <Project>{FCAFF2C5-AFF5-454A-91D1-6E2F653F1BCB}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.Integration.Testing.Common\Tp.Integration.Testing.Common.csproj">
-      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project><Name>Tp.Integration.Testing.Common</Name>
+      <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
+      <Name>Tp.Integration.Testing.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tp.MashupManager\Tp.MashupManager.csproj">
-      <Project>{A8BEBA8D-1C63-4FEB-B7DC-45BCCECB2BB9}</Project><Name>Tp.MashupManager</Name>
+      <Project>{A8BEBA8D-1C63-4FEB-B7DC-45BCCECB2BB9}</Project>
+      <Name>Tp.MashupManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +169,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

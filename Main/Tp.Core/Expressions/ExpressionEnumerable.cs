@@ -9,7 +9,9 @@ namespace Tp.Core.Expressions
 		private ExpressionEnumerable()
 		{
 		}
+
 		private readonly List<Expression> _children = new List<Expression>();
+
 		public override Expression Visit(Expression node)
 		{
 			_children.Add(node);
@@ -29,8 +31,8 @@ namespace Tp.Core.Expressions
 
 			var nestedVisitor = new ExpressionEnumerable();
 			foreach (var descendant in from child in _children
-			                           from descendants in nestedVisitor.AllInternal(child)
-			                           select descendants)
+				from descendants in nestedVisitor.AllInternal(child)
+				select descendants)
 			{
 				yield return descendant;
 			}

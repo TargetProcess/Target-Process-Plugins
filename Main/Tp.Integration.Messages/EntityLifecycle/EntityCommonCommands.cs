@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Messages.EntityLifecycle
@@ -23,11 +19,12 @@ namespace Tp.Integration.Messages.EntityLifecycle
 	{
 		public UpdateCommand()
 		{
-			ChangedFields = new string[] {};
+			ChangedFields = new string[] { };
 		}
 
 		public DataTransferObject Dto { get; set; }
 		public string[] ChangedFields { get; set; }
+
 		public override string ToString()
 		{
 			return "{0}:{1}".Fmt(base.ToString(), Dto.ToString());
@@ -39,6 +36,7 @@ namespace Tp.Integration.Messages.EntityLifecycle
 	{
 		public int Id { get; set; }
 		public DtoType DtoType { get; set; }
+
 		public override string ToString()
 		{
 			return "{0}:{1}({2})".Fmt(base.ToString(), DtoType.ToString(), Id);

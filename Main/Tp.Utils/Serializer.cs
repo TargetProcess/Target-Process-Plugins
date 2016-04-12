@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Collections;
 using System.IO;
@@ -24,7 +19,7 @@ namespace Tp.Components
 		/// <returns>Object deserialized from XML document read from the text reader.</returns>
 		public static T Deserialize<T>(TextReader textReader)
 		{
-			return (T) Deserialize(typeof (T), textReader);
+			return (T) Deserialize(typeof(T), textReader);
 		}
 
 		/// <summary>
@@ -35,7 +30,7 @@ namespace Tp.Components
 		/// <returns>Object deserialized from the XML document.</returns>
 		public static T Deserialize<T>(string xml)
 		{
-			return (T) Deserialize(typeof (T), xml);
+			return (T) Deserialize(typeof(T), xml);
 		}
 
 		/// <summary>
@@ -47,7 +42,7 @@ namespace Tp.Components
 		/// <param name = "textWriter">Text writer into which XML document to be written.</param>
 		public static void Serialize<T>(T item, TextWriter textWriter)
 		{
-			Serialize(typeof (T), item, textWriter);
+			Serialize(typeof(T), item, textWriter);
 		}
 
 		/// <summary>
@@ -58,7 +53,7 @@ namespace Tp.Components
 		/// <returns>XML document containing serialized object representation.</returns>
 		public static string Serialize<T>(T item)
 		{
-			return Serialize(typeof (T), item);
+			return Serialize(typeof(T), item);
 		}
 
 		/// <summary>
@@ -81,8 +76,8 @@ namespace Tp.Components
 		/// <returns>Object deserialized from XML document read from the text reader.</returns>
 		public static object Deserialize(Type type, TextReader textReader)
 		{
-			bool isHashTable = type.FullName == typeof (Hashtable).FullName;
-			Type typeToSerialize = isHashTable ? typeof (ArrayList) : type;
+			bool isHashTable = type.FullName == typeof(Hashtable).FullName;
+			Type typeToSerialize = isHashTable ? typeof(ArrayList) : type;
 
 			var xmlSerializer = new XmlSerializer(typeToSerialize);
 			object objectToReturn = xmlSerializer.Deserialize(textReader);
@@ -126,8 +121,8 @@ namespace Tp.Components
 		/// <param name = "textWriter">Text writer into which XML document to be written.</param>
 		public static void Serialize(Type type, object item, TextWriter textWriter)
 		{
-			bool isHashTable = type.FullName == typeof (Hashtable).FullName;
-			Type typeToSerialize = isHashTable ? typeof (ArrayList) : type;
+			bool isHashTable = type.FullName == typeof(Hashtable).FullName;
+			Type typeToSerialize = isHashTable ? typeof(ArrayList) : type;
 
 			var xmlSerializer = new XmlSerializer(typeToSerialize);
 

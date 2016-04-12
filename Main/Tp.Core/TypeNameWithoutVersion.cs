@@ -1,13 +1,8 @@
-// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+using System;
+using System.Text.RegularExpressions;
 
 namespace Tp.Core
 {
-	using System;
-	using System.Text.RegularExpressions;
-
 	public class TypeNameWithoutVersion
 		: IEquatable<TypeNameWithoutVersion>
 	{
@@ -15,7 +10,7 @@ namespace Tp.Core
 		{
 			if (value == null)
 			{
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 			}
 
 			Value = Regex.Replace(value, @", Version=\d+.\d+.\d+.\d+", string.Empty);

@@ -80,25 +80,19 @@ namespace Tp.Search.Model.Query
 			IDocumentIndex projectContextIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, projectIndexTypeToken);
 			return projectContextIndex.BuildExecutionPlan(new ParsedQuery(words: query), _profile.Initialized);
 		}
-		
+
 		private Maybe<QueryPlan> BuildSquadPlan(IEnumerable<int> squadIds, bool includeNoTeam, DocumentIndexTypeToken squadContextType)
 		{
-			var queryBuf = new List<string>();
-			if (squadIds != null)
-			{
-				queryBuf.AddRange(squadIds.Select(squadId => _indexDataFactory.CreateSquadData(squadId)));
-			}
-			if (includeNoTeam)
-			{
-				queryBuf.Add(_indexDataFactory.CreateSquadData(null));
-			}
-			if (!queryBuf.Any())
+			var squadIdsIndexData = squadIds != null ? squadIds.Cast<int?>().ToArray() : new int?[0];
+			var nullSquadIndexData = includeNoTeam ? new int?[] {null} : new int?[0];
+			var squadIndexData = new SquadIndexData(squadIdsIndexData.Concat(nullSquadIndexData).Distinct());
+			var query = squadIndexData.ToString();
+			if (string.IsNullOrEmpty(query))
 			{
 				return Maybe.Nothing;
 			}
-			string query = String.Join(" ", queryBuf.ToArray());
-			IDocumentIndex squadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, squadContextType);
-			return squadIndex.BuildExecutionPlan(new ParsedQuery(words:query), _profile.Initialized);
+			var squadIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext, squadContextType);
+			return squadIndex.BuildExecutionPlan(new ParsedQuery(words: query), _profile.Initialized);
 		}
 
 		private Maybe<QueryPlan> BuildNoSquadEntityProjectContextPlan(QueryData data, DocumentIndexTypeToken project, DocumentIndexTypeToken entityType)

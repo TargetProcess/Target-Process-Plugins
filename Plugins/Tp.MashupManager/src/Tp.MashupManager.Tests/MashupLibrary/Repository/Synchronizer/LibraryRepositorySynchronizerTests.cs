@@ -83,7 +83,7 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository.Synchronizer
 			tasks.ForEach(x=> x.Start());
 			Task.WaitAll(tasks);
 
-			_unexpectedSymultaneousThreadTotal.Should(Be.EqualTo(0));
+			_unexpectedSymultaneousThreadTotal.Should(Be.EqualTo(0), "_unexpectedSymultaneousThreadTotal.Should(Be.EqualTo(0))");
 		}
 	}
 }

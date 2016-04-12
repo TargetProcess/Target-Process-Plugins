@@ -139,41 +139,41 @@ namespace Tp.PopEmailIntegration
 		public void StoreUserForProfile(int userId, string userType)
 		{
 			var user = Storage.Get<UserLite>().Where(x => x.Id == userId).First();
-			user.FirstName.Should(Be.EqualTo(FIRST_NAME));
-			user.LastName.Should(Be.EqualTo(LAST_NAME));
-			user.Email.Should(Be.EqualTo(EMAIL));
-			user.Login.Should(Be.EqualTo(LOGIN));
-			user.IsActive.Should(Be.EqualTo(IS_ACTIVE));
-			user.DeleteDate.Should(Be.EqualTo(_deleteDate));
-			user.CompanyId.Should(Be.Null);
-			user.UserType.Should(Be.EqualTo((UserType) Enum.Parse(typeof (UserType), userType)));
+			user.FirstName.Should(Be.EqualTo(FIRST_NAME), "user.FirstName.Should(Be.EqualTo(FIRST_NAME))");
+			user.LastName.Should(Be.EqualTo(LAST_NAME), "user.LastName.Should(Be.EqualTo(LAST_NAME))");
+			user.Email.Should(Be.EqualTo(EMAIL), "user.Email.Should(Be.EqualTo(EMAIL))");
+			user.Login.Should(Be.EqualTo(LOGIN), "user.Login.Should(Be.EqualTo(LOGIN))");
+			user.IsActive.Should(Be.EqualTo(IS_ACTIVE), "user.IsActive.Should(Be.EqualTo(IS_ACTIVE))");
+			user.DeleteDate.Should(Be.EqualTo(_deleteDate), "user.DeleteDate.Should(Be.EqualTo(_deleteDate))");
+			user.CompanyId.Should(Be.Null, "user.CompanyId.Should(Be.Null)");
+			user.UserType.Should(Be.EqualTo((UserType) Enum.Parse(typeof (UserType), userType)), "user.UserType.Should(Be.EqualTo((UserType) Enum.Parse(typeof (UserType), userType)))");
 		}
 
 		[Then("user with id $userId and type '$userType' and company $companyId should be stored for profile")]
 		public void StoreRequesterForProfile(int userId, string userType, int companyId)
 		{
 			var user = Storage.Get<UserLite>().Where(x => x.Id == userId).First();
-			user.FirstName.Should(Be.EqualTo(FIRST_NAME));
-			user.LastName.Should(Be.EqualTo(LAST_NAME));
-			user.Email.Should(Be.EqualTo(EMAIL));
-			user.Login.Should(Be.EqualTo(LOGIN));
-			user.IsActive.Should(Be.EqualTo(IS_ACTIVE));
-			user.DeleteDate.Should(Be.EqualTo(_deleteDate));
-			user.CompanyId.Should(Be.EqualTo(companyId));
-			user.UserType.Should(Be.EqualTo((UserType) Enum.Parse(typeof (UserType), userType)));
+			user.FirstName.Should(Be.EqualTo(FIRST_NAME), "user.FirstName.Should(Be.EqualTo(FIRST_NAME))");
+			user.LastName.Should(Be.EqualTo(LAST_NAME), "user.LastName.Should(Be.EqualTo(LAST_NAME))");
+			user.Email.Should(Be.EqualTo(EMAIL), "user.Email.Should(Be.EqualTo(EMAIL))");
+			user.Login.Should(Be.EqualTo(LOGIN), "user.Login.Should(Be.EqualTo(LOGIN))");
+			user.IsActive.Should(Be.EqualTo(IS_ACTIVE), "user.IsActive.Should(Be.EqualTo(IS_ACTIVE))");
+			user.DeleteDate.Should(Be.EqualTo(_deleteDate), "user.DeleteDate.Should(Be.EqualTo(_deleteDate))");
+			user.CompanyId.Should(Be.EqualTo(companyId), "user.CompanyId.Should(Be.EqualTo(companyId))");
+			user.UserType.Should(Be.EqualTo((UserType) Enum.Parse(typeof (UserType), userType)), "user.UserType.Should(Be.EqualTo((UserType) Enum.Parse(typeof (UserType), userType)))");
 		}
 
 		[Then("user with id $userId should have first name '$firstNameUpdated' in profile storage")]
 		public void StorageShouldContainUpdatedUser(int userId, string firstNameUpdated)
 		{
 			var user = Storage.Get<UserLite>().Where(x => x.Id == userId).First();
-			user.FirstName.Should(Be.EqualTo(firstNameUpdated));
+			user.FirstName.Should(Be.EqualTo(firstNameUpdated), "user.FirstName.Should(Be.EqualTo(firstNameUpdated))");
 		}
 
 		[Then("no users should be stored for profile")]
 		public void NoUsersShouldBeStoredForProfile()
 		{
-			Storage.Get<UserLite>().Should(Be.Empty);
+			Storage.Get<UserLite>().Should(Be.Empty, "Storage.Get<UserLite>().Should(Be.Empty)");
 		}
 	}
 }

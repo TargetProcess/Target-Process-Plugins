@@ -10,6 +10,7 @@ namespace Tp.Core.Expressions
 		{
 			return LambdaSubstituter.ReplaceParameters(e, newExpr);
 		}
+
 		public static Expression Splice(this LambdaExpression e, IEnumerable<Expression> newExpr)
 		{
 			return LambdaSubstituter.ReplaceParameters(e, newExpr);
@@ -20,7 +21,7 @@ namespace Tp.Core.Expressions
 	{
 		public static Expression ReplaceParameters(LambdaExpression @in, params Expression[] with)
 		{
-			return ReplaceParameters(@in, (IEnumerable<Expression>)with);
+			return ReplaceParameters(@in, (IEnumerable<Expression>) with);
 		}
 
 		public static Expression ReplaceParameters(LambdaExpression @in, IEnumerable<Expression> with)
@@ -31,7 +32,7 @@ namespace Tp.Core.Expressions
 
 			if (withList.Count() == @in.Parameters.Count)
 			{
-				e = @in.Parameters.Zip(withList, (parameter, replace) => new {parameter, replace})
+				e = @in.Parameters.Zip(withList, (parameter, replace) => new { parameter, replace })
 					.Aggregate(e, (current, expression) => Rewrite(current, expression.parameter, expression.replace));
 			}
 			else
@@ -52,12 +53,12 @@ namespace Tp.Core.Expressions
 
 		internal static Expression Rewrite(Expression @in, ParameterExpression what, Expression with)
 		{
-			if (what.Type != with.Type  && !what.Type.IsAssignableFrom(with.Type))
+			if (what.Type != with.Type && !what.Type.IsAssignableFrom(with.Type))
 				with = Expression.Convert(with, what.Type);
 			var visitor = new LambdaSubstituter(what, with);
 			return visitor.Visit(@in);
 		}
-			
+
 		private readonly ParameterExpression _what;
 		private readonly Expression _with;
 

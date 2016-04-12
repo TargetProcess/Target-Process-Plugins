@@ -105,7 +105,8 @@ namespace Tp.MashupManager
 		{
 			return new PluginMashupMessage
 			{
-				MashupName = GetMashupName(accountName),
+				AccountName = accountName,
+				MashupName = Name,
 				Placeholders = GetPlaceholders(),
 				PluginMashupScripts = GetMashupScripts(accountName),
 				PluginName = string.Empty
@@ -115,13 +116,6 @@ namespace Tp.MashupManager
 		#endregion
 
 		#region Private methods
-
-		private string GetMashupName(AccountName accountName)
-		{
-			return accountName == AccountName.Empty
-				? Name
-				: string.Format("{0} {1}", accountName.Value, Name);
-		}
 
 		private string[] GetPlaceholders()
 		{

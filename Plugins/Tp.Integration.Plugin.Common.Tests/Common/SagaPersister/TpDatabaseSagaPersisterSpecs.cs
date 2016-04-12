@@ -138,14 +138,14 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.SagaPersister
 		{
 			ObjectFactory.GetInstance<IBus>().CurrentMessageContext.Headers[BusExtensions.PROFILENAME_KEY] = profileName;
 			ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(_sagaId).TestValue.Should(
-				Be.EqualTo(sagaDataValue));
+				Be.EqualTo(sagaDataValue), "ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(_sagaId).TestValue.Should(Be.EqualTo(sagaDataValue))");
 		}
 
 		[Then("saga persister should contain no sagas for profile '$profileName'")]
 		public void SagaPersisterShouldNotContainSagaForProfile(string profileName)
 		{
 			ObjectFactory.GetInstance<IBus>().CurrentMessageContext.Headers[BusExtensions.PROFILENAME_KEY] = profileName;
-			ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(_sagaId).Should(Be.Null);
+			ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(_sagaId).Should(Be.Null, "ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(_sagaId).Should(Be.Null)");
 		}
 
 		[Then(
@@ -155,7 +155,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.SagaPersister
 		{
 			ObjectFactory.GetInstance<IBus>().CurrentMessageContext.Headers[BusExtensions.PROFILENAME_KEY] = profileName;
 			ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(propertyName, propertyValue).Should(
-				Be.Not.Null);
+				Be.Not.Null, "ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(propertyName, propertyValue).Should(Be.Not.Null)");
 		}
 
 		[Then(
@@ -165,19 +165,19 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.SagaPersister
 		{
 			ObjectFactory.GetInstance<IBus>().CurrentMessageContext.Headers[BusExtensions.PROFILENAME_KEY] = profileName;
 			ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>("Id", new Guid(propertyValue)).Should(
-				Be.Not.Null);
+				Be.Not.Null, "ObjectFactory.GetInstance<TpDatabaseSagaPersister>().Get<TestSagaData>(\"Id\", new Guid(propertyValue)).Should(Be.Not.Null)");
 		}
 
 		[Test]
 		public void BlobSerializerTest()
 		{
 			var res = BlobSerializer.Serialize(new TestSagaData {TestValue = "testValue"});
-			res.Should(Be.Not.Null);
+			res.Should(Be.Not.Null, "res.Should(Be.Not.Null)");
 
 			var des = BlobSerializer.Deserialize(res, typeof (ISagaEntity).Name);
-			des.Should(Be.Not.Null);
-			des.Should(Be.TypeOf<TestSagaData>());
-			((TestSagaData) des).TestValue.Should(Be.EqualTo("testValue"));
+			des.Should(Be.Not.Null, "des.Should(Be.Not.Null)");
+			des.Should(Be.TypeOf<TestSagaData>(), "des.Should(Be.TypeOf<TestSagaData>())");
+			((TestSagaData) des).TestValue.Should(Be.EqualTo("testValue"), "((TestSagaData) des).TestValue.Should(Be.EqualTo(\"testValue\"))");
 		}
 
 		[Test]
@@ -194,8 +194,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.SagaPersister
 
 			var result = BlobSerializer.Serialize(new TestSagaData {TestValue = "Value"});
 
-			result.ToString().Should(Be.EqualTo(expectedXml.ToString()));
-			JsonBlobSerializer.VERSION.Should(Be.EqualTo("2"));
+			result.ToString().Should(Be.EqualTo(expectedXml.ToString()), "result.ToString().Should(Be.EqualTo(expectedXml.ToString()))");
+			JsonBlobSerializer.VERSION.Should(Be.EqualTo("2"), "JsonBlobSerializer.VERSION.Should(Be.EqualTo(\"2\"))");
 		}
 
 		[Test]
@@ -215,8 +215,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.SagaPersister
 			var profile = BlobSerializer.Deserialize(toDeserializeXml, typeof (ISagaEntity).Name);
 
 			var typedProfile = profile as TestSagaData;
-			typedProfile.Id.Should(Be.EqualTo(Guid.Empty));
-			typedProfile.TestValue.Should(Be.EqualTo("testValue"));
+			typedProfile.Id.Should(Be.EqualTo(Guid.Empty), "typedProfile.Id.Should(Be.EqualTo(Guid.Empty))");
+			typedProfile.TestValue.Should(Be.EqualTo("testValue"), "typedProfile.TestValue.Should(Be.EqualTo(\"testValue\"))");
 		}
 
 		[Test, ExpectedException(typeof (ApplicationException))]

@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,16 +30,16 @@ namespace Tp.Testing.Common.NBehave
 		{
 			var stackTrace = new StackTrace();
 			var type = stackTrace.GetFrame(1).GetMethod().DeclaringType;
-			scenario.Execute(new StoryRunnerFilter(type.Namespace, type.Name, "."), new[] {type.Assembly}, eventListeners);
+			scenario.Execute(new StoryRunnerFilter(type.Namespace, type.Name, "."), new[] { type.Assembly }, eventListeners);
 		}
 
 		private static void Execute(this string scenario, StoryRunnerFilter filter, params Assembly[] assemblies)
 		{
-			Execute(scenario, filter, assemblies, new IEventListener[] {});
+			Execute(scenario, filter, assemblies, new IEventListener[] { });
 		}
 
 		private static void Execute(this string scenario, StoryRunnerFilter filter, IEnumerable<Assembly> assemblies,
-		                            params IEventListener[] eventListenersArg)
+			params IEventListener[] eventListenersArg)
 		{
 			var eventListeners = new List<IEventListener>();
 			eventListeners.AddRange(eventListenersArg);
@@ -71,13 +66,14 @@ namespace Tp.Testing.Common.NBehave
 				try
 				{
 					var assembly = Assembly.LoadFrom(assemblyName);
-					if (assembly.IsDefined(typeof (ActionStepsAssemblyAttribute), false))
+					if (assembly.IsDefined(typeof(ActionStepsAssemblyAttribute), false))
 					{
 						assemblies.Add(assembly);
 					}
 				}
 				catch //just ignore any kind of load exceptions
-				{}
+				{
+				}
 			}
 			return assemblies;
 		}

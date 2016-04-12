@@ -1,63 +1,75 @@
-// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Text;
 using Tp.Core;
 using Tp.Core.Annotations;
 
 // ReSharper disable once CheckNamespace
+
 namespace System.Linq
 {
 	public static class EnumerableExtensions
 	{
-		// for generic interface IEnumerable<T>
-		public static string ToString<T>(this IEnumerable<T> source, [NotNull] Func<T, string> selector, string separator)
+		//2013-05-02 00:00:00 - Canonical Time
+		public const string DateSqlStringFormat = "yyyy-MM-dd HH:mm:ss";
+
+		[NotNull, Pure]
+		public static string ToString<T>(
+			[CanBeNull] this IEnumerable<T> source,
+			[NotNull, InstantHandle] Func<T, string> selector,
+			[CanBeNull] string separator)
 		{
 			if (source == null)
 				return String.Empty;
-
-			if (String.IsNullOrEmpty(separator))
-				throw new ArgumentException("Parameter separator can not be null or empty.");
 
 			return String.Join(separator, source.Where(x => !Equals(x, null)).Select(selector));
 		}
 
-		public static string ToString<T>(this IEnumerable<T> source, string separator)
+		[NotNull, Pure]
+		public static string ToString<T>(
+			[CanBeNull] this IEnumerable<T> source,
+			[CanBeNull] string separator)
 		{
 			return source.ToString(x => x.ToString(), separator);
 		}
 
-		// for interface IEnumerable
-		public static string ToString(this IEnumerable source, string separator)
+		[NotNull, Pure]
+		public static string ToString(
+			[CanBeNull] this IEnumerable source,
+			[CanBeNull] string separator)
 		{
 			if (source == null)
 				return String.Empty;
-
-			if (String.IsNullOrEmpty(separator))
-				throw new ArgumentException("Parameter separator can not be null or empty.");
-
 			return source.Cast<object>().ToString(separator);
 		}
 
-
-		public static string ToSqlString<T>(this IEnumerable<T> values)
+		[NotNull, Pure]
+		public static string ToSqlString<T>(
+			[CanBeNull] this IEnumerable<T> source)
 		{
-			if (values.IsNullOrEmpty())
-				return " ( null )";
+			const string empty = " ( null )";
+			if (source == null)
+			{
+				return empty;
+			}
+
+			var values = source as IReadOnlyCollection<T> ?? source.ToList();
+			if (values.Count == 0)
+			{
+				return empty;
+			}
 
 			return String.Format(" ({0}) ", String.Join(",", values.Select(ToSimpleSqlString)));
 		}
 
-		public static string ToSimpleSqlString<T>(this T x)
+		[NotNull, Pure]
+		public static string ToSimpleSqlString<T>(
+			[NotNull] this T x)
 		{
 			if (x is string)
 			{
-				return string.Format("'{0}'", x);
+				return $"'{x}'";
 			}
 			if (x is bool)
 			{
@@ -66,18 +78,29 @@ namespace System.Linq
 			return x.ToString();
 		}
 
+		[NotNull, Pure]
 		public static string ToSqlString(this DateTime date)
 		{
-			//2013-05-02 00:00:00 - Canonical Time
-			return date.ToString("yyyy-MM-dd HH:mm:ss");
+			return date.ToString(DateSqlStringFormat);
 		}
-		public static string ToSqlString(this DateTime? date)
+
+		[NotNull, Pure]
+		public static string ToSqlString([CanBeNull] this DateTime? date)
 		{
 			return date == null ? "null" : date.Value.ToSqlString();
 		}
 
+		[NotNull, Pure]
+		public static string ToCommaDelimitedList(
+			[NotNull] this IEnumerable<string> items)
+		{
+			return string.Join(", ", items.Select(x => string.Concat("'", x, "'")));
+		}
 
-		public static T FirstOrDefault<T>(this IEnumerable<T> source, T defaultValue)
+		[CanBeNull]
+		public static T FirstOrDefault<T>(
+			[NotNull] this IEnumerable<T> source,
+			[CanBeNull] T defaultValue)
 		{
 			using (IEnumerator<T> enumerator = source.GetEnumerator())
 			{
@@ -85,17 +108,12 @@ namespace System.Linq
 			}
 		}
 
-		public static IEnumerable<T> TakeAtMost<T>(this IEnumerable<T> source, int count)
+		[NotNull, Pure, LinqTunnel]
+		public static IEnumerable<T> TakeAtMost<T>(
+			[NotNull] this IEnumerable<T> source, int count)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (count < 2)
-			{
-				throw new ArgumentOutOfRangeException("count");
-			}
+			if (source == null) { throw new ArgumentNullException(nameof(source)); }
+			if (count < 2) { throw new ArgumentOutOfRangeException(nameof(count)); }
 
 			var list = source.ToList();
 
@@ -109,11 +127,13 @@ namespace System.Linq
 			if (actualCount <= count)
 			{
 				foreach (var item in list)
+				{
 					yield return item;
+				}
 			}
 			else
 			{
-				var frequency = (actualCount - 1) / (double)(count - 1);
+				var frequency = (actualCount - 1) / (double) (count - 1);
 
 				var sourceWithNumbers = list.Select((x, i) => new { x, i });
 
@@ -121,7 +141,7 @@ namespace System.Linq
 
 				foreach (var sourceWithNumber in sourceWithNumbers)
 				{
-					if ((int)Math.Round(currentNumber) == sourceWithNumber.i)
+					if ((int) Math.Round(currentNumber) == sourceWithNumber.i)
 					{
 						yield return sourceWithNumber.x;
 						currentNumber += frequency;
@@ -130,14 +150,19 @@ namespace System.Linq
 			}
 		}
 
-
-		public static IEnumerable<T> Concat<T>(this IEnumerable<T> items, params T[] additional)
+		[NotNull, Pure, LinqTunnel]
+		public static IEnumerable<T> Concat<T>(
+			[NotNull] this IEnumerable<T> items,
+			[NotNull, ItemNotNull] params T[] additional)
 		{
 			return Enumerable.Concat(items, additional);
 		}
 
 #if DEBUG
-		public static IEnumerable<T> TapDebug<T>(this IEnumerable<T> items, Action<T> action)
+		[NotNull, Pure, LinqTunnel]
+		public static IEnumerable<T> TapDebug<T>(
+			[NotNull] this IEnumerable<T> items,
+			[NotNull] Action<T> action)
 		{
 			foreach (var item in items)
 			{
@@ -147,22 +172,28 @@ namespace System.Linq
 		}
 #endif
 
-		public static bool Empty<T>(this IEnumerable<T> enumerable)
+		[Pure]
+		public static bool Empty<T>([NotNull] this IEnumerable<T> enumerable)
 		{
 			return !enumerable.Any();
 		}
 
-		public static bool Empty<T>(this ICollection<T> collection)
+		[Pure]
+		public static bool Empty<T>([NotNull] this ICollection<T> collection)
 		{
 			return collection.Count == 0;
 		}
 
-		public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
+		[Pure]
+		public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> enumerable)
 		{
 			return enumerable == null || !enumerable.Any();
 		}
 
-		public static IEnumerable<TItem> CollectDuplicates<TItem, TKey>(this IEnumerable<TItem> items, Func<TItem, TKey> itemKeyProvider)
+		[Pure, NotNull]
+		public static IEnumerable<TItem> CollectDuplicates<TItem, TKey>(
+			[NotNull] this IEnumerable<TItem> items,
+			[InstantHandle] Func<TItem, TKey> itemKeyProvider)
 		{
 			var map = new Dictionary<TKey, List<TItem>>();
 			foreach (TItem item in items)
@@ -181,17 +212,20 @@ namespace System.Linq
 			return map.Where(i => i.Value.Count > 1).SelectMany(i => i.Value);
 		}
 
-
-		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+		public static void ForEach<T>(
+			[CanBeNull] this IEnumerable<T> source,
+			[NotNull, InstantHandle] Action<T> action)
 		{
 			source.ForEach((x, i) => action(x));
 		}
 
-
-		public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+		public static void ForEach<T>(
+			[CanBeNull] this IEnumerable<T> source,
+			[NotNull, InstantHandle] Action<T, int> action)
 		{
 			if (source == null)
 				return;
+
 			var index = 0;
 			foreach (var elem in source)
 			{
@@ -199,12 +233,16 @@ namespace System.Linq
 			}
 		}
 
-		public static IEnumerable<IEnumerable<T>> Split<T>(this IList<T> source, int partSize)
+		[NotNull, Pure, LinqTunnel]
+		public static IEnumerable<IEnumerable<T>> Split<T>(
+			[NotNull] this IReadOnlyCollection<T> source, int partSize)
 		{
 			return source.Where((x, i) => i % partSize == 0).Select((x, i) => source.Skip(i * partSize).Take(partSize));
 		}
 
-		public static IEnumerable<IReadOnlyList<T>> SplitArray<T>(this T[] source, int partSize)
+		[NotNull, Pure, LinqTunnel]
+		public static IEnumerable<IReadOnlyList<T>> SplitArray<T>(
+			[NotNull] this T[] source, int partSize)
 		{
 			if (partSize == 0)
 			{
@@ -224,6 +262,7 @@ namespace System.Linq
 			}
 		}
 
+		[NotNull, Pure, LinqTunnel]
 		public static IEnumerable<T> SafeConcat<T>([CanBeNull] this IEnumerable<T> first, [CanBeNull] IEnumerable<T> second)
 		{
 			if (first == null)
@@ -237,7 +276,9 @@ namespace System.Linq
 		/// <summary>
 		/// Return first element, if a <param name="source"></param> contains one element, otherwise - default(T)
 		/// </summary>
-		public static T SingleOrDefaultRelax<T>(this IEnumerable<T> source, Func<T, bool> predicate = null)
+		public static T SingleOrDefaultRelax<T>(
+			[NotNull] this IEnumerable<T> source,
+			[InstantHandle] Func<T, bool> predicate = null)
 		{
 			if (predicate == null)
 				predicate = x => true;
@@ -253,8 +294,9 @@ namespace System.Linq
 			}
 		}
 
-
-		public static void Times(this int count, Action<int> @do)
+		public static void Times(
+			this int count,
+			[NotNull, InstantHandle] Action<int> @do)
 		{
 			for (int i = 0; i < count; i++)
 			{
@@ -262,6 +304,7 @@ namespace System.Linq
 			}
 		}
 
+		[NotNull, Pure, LinqTunnel]
 		public static IEnumerable<int> Times(this int count)
 		{
 			for (int i = 0; i < count; i++)
@@ -270,11 +313,14 @@ namespace System.Linq
 			}
 		}
 
-		public static void Times(this int count, Action @do)
+		public static void Times(
+			this int count,
+			[NotNull, InstantHandle] Action @do)
 		{
 			count.Times(_ => @do());
 		}
 
+		[NotNull, Pure, LinqTunnel]
 		public static IEnumerable<int> To(this int from, int uninclusiveTo)
 		{
 			for (int i = from; i < uninclusiveTo; i++)
@@ -283,10 +329,11 @@ namespace System.Linq
 			}
 		}
 
+		[NotNull, Pure, LinqTunnel]
 		public static IEnumerable<TTo> Unfold<TFrom, TTo>(this TFrom seed,
-			Func<TFrom, bool> canGenerate,
-			Func<TFrom, TTo> generateNextValue,
-			Func<TFrom, TFrom> generateNextState)
+			[NotNull] Func<TFrom, bool> canGenerate,
+			[NotNull] Func<TFrom, TTo> generateNextValue,
+			[NotNull] Func<TFrom, TFrom> generateNextState)
 		{
 			var state = seed;
 			while (canGenerate(state))
@@ -296,20 +343,27 @@ namespace System.Linq
 			}
 		}
 
+		[NotNull, Pure, LinqTunnel]
 		public static IEnumerable<TTo> Unfold<TFrom, TTo>(this TFrom seed,
-			Func<TFrom, TTo> generateNextValue,
-			Func<TFrom, TFrom> generateNextState)
+			[NotNull] Func<TFrom, TTo> generateNextValue,
+			[NotNull] Func<TFrom, TFrom> generateNextState)
 		{
 			return Unfold(seed, x => true, generateNextValue, generateNextState);
 		}
 
-		public static Tuple<IEnumerable<T>, IEnumerable<T>> Partition<T>(this IEnumerable<T> sequence, Func<T, bool> predicate)
+		[Pure]
+		public static PartitionResult<T> Partition<T>(
+			[NotNull] this IEnumerable<T> sequence,
+			[NotNull, InstantHandle] Func<T, bool> predicate)
 		{
-			return sequence.Partition(predicate, Tuple.Create);
+			return sequence.Partition(predicate, (matching, notMatching) => new PartitionResult<T>(matching, notMatching));
 		}
 
-		public static TResult Partition<T, TResult>(this IEnumerable<T> sequence, Func<T, bool> predicate,
-			Func<IEnumerable<T>, IEnumerable<T>, TResult> resultSelector)
+		[Pure]
+		public static TResult Partition<T, TResult>(
+			[NotNull] this IEnumerable<T> sequence,
+			[NotNull, InstantHandle] Func<T, bool> predicate,
+			[NotNull, InstantHandle] Func<IEnumerable<T>, IEnumerable<T>, TResult> resultSelector)
 		{
 			var groups = sequence.GroupBy(predicate).ToArray();
 			var matches = groups.FirstOrDefault(x => x.Key);
@@ -319,24 +373,152 @@ namespace System.Linq
 				matches ?? Enumerable.Empty<T>(),
 				doesNotMatch ?? Enumerable.Empty<T>());
 		}
-		
-		public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> xs)
+
+		[NotNull, ItemNotNull, Pure, LinqTunnel]
+		public static IEnumerable<Tuple<T, T>> Pairwise<T>(
+			[NotNull] this IEnumerable<T> xs)
+		{
+			using (var enumerator = xs.GetEnumerator())
+			{
+				if (!enumerator.MoveNext())
+				{
+					yield break;
+				}
+
+				var left = enumerator.Current;
+
+				while (enumerator.MoveNext())
+				{
+					var right = enumerator.Current;
+					yield return Tuple.Create(left, right);
+					left = right;
+				}
+			}
+		}
+
+		[NotNull, Pure]
+		public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(
+			[NotNull] this IEnumerable<T> xs)
 		{
 			return new ReadOnlyCollection<T>(xs.ToList());
 		}
 
-		public static IEnumerable<T> ToEnumerable<T>(this T value)
+		[NotNull, Pure]
+		public static IEnumerable<T> Yield<T>(this T value)
 		{
 			yield return value;
+		}
+
+		public static int MaxOrDefault<TSource>(
+			[NotNull] this IEnumerable<TSource> source,
+			[NotNull, InstantHandle] Func<TSource, int> selector,
+			int defaultValue = default(int))
+		{
+			return source.Select(selector).DefaultIfEmpty(defaultValue).Max();
+		}
+
+		/// <summary>
+		/// Drops last n elements from the sequence. Returns empty sequence if source contains less than n elements.
+		/// </summary>
+		[NotNull, Pure, LinqTunnel]
+		public static IEnumerable<T> DropLast<T>(
+			[NotNull] this IEnumerable<T> xs, int n = 1)
+		{
+			if (n < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(n));
+			}
+
+			Queue<T> buffer = new Queue<T>(n + 1);
+			foreach (T x in xs)
+			{
+				buffer.Enqueue(x);
+				if (buffer.Count == n + 1)
+				{
+					yield return buffer.Dequeue();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Batches the source sequence into sized buckets and applies a projection to each bucket.
+		/// </summary>
+		/// <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+		/// <typeparam name="TResult">Type of result returned by <paramref name="resultSelector"/>.</typeparam>
+		/// <param name="source">The source sequence.</param>
+		/// <param name="size">Size of buckets.</param>
+		/// <param name="resultSelector">The projection to apply to each bucket.</param>
+		/// <returns>A sequence of projections on equally sized buckets containing elements of the source collection.</returns>
+		public static IEnumerable<TResult> Batch<TSource, TResult>(this IEnumerable<TSource> source, int size,
+			Func<TSource[], TResult> resultSelector)
+		{
+			if (source == null) throw new ArgumentNullException(nameof(source));
+			if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size));
+			if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
+
+			TSource[] bucket = null;
+			var count = 0;
+
+			foreach (var item in source)
+			{
+				if (bucket == null)
+				{
+					bucket = new TSource[size];
+				}
+
+				bucket[count++] = item;
+
+				if (count != size)
+				{
+					continue;
+				}
+
+				yield return resultSelector(bucket);
+
+				bucket = null;
+				count = 0;
+			}
+
+			if (bucket != null && count > 0)
+			{
+				yield return resultSelector(bucket.Take(count).ToArray());
+			}
+		}
+
+		[Pure]
+		public static bool Contains<T>(
+			[NotNull] this IEnumerable<T> set,
+			[NotNull] IEnumerable<T> subSet)
+		{
+			return subSet.All(set.Contains);
+		}
+
+		[Pure]
+		public static bool Intersects<T>(
+			[NotNull] this IEnumerable<T> left,
+			[NotNull] IEnumerable<T> right)
+		{
+			return left.Any(right.Contains);
+		}
+	}
+
+	public struct PartitionResult<T>
+	{
+		public readonly IEnumerable<T> Matching;
+		public readonly IEnumerable<T> NotMatching;
+
+		public PartitionResult(IEnumerable<T> matching, IEnumerable<T> notMatching)
+		{
+			Matching = matching;
+			NotMatching = notMatching;
 		}
 	}
 
 	public class GroupWithCount
 	{
-		public static GroupWithCount<TKey> New<TKey>(TKey key, int count)
-		{
-			return new GroupWithCount<TKey>(key, count);
-		}
+		[NotNull]
+		public static GroupWithCount<TKey> New<TKey>(TKey key, int count) =>
+			new GroupWithCount<TKey>(key, count);
 	}
 
 	public class GroupWithCount<TKey> : IEquatable<GroupWithCount<TKey>>
@@ -345,7 +527,7 @@ namespace System.Linq
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return EqualityComparer<TKey>.Default.Equals(_key, other._key) && _count == other._count;
+			return EqualityComparer<TKey>.Default.Equals(Key, other.Key) && Count == other.Count;
 		}
 
 		public static bool operator ==(GroupWithCount<TKey> left, GroupWithCount<TKey> right)
@@ -358,23 +540,14 @@ namespace System.Linq
 			return !Equals(left, right);
 		}
 
-		private readonly TKey _key;
-		private readonly int _count;
+		public TKey Key { get; }
 
-		public TKey Key
-		{
-			get { return _key; }
-		}
-
-		public int Count
-		{
-			get { return _count; }
-		}
+		public int Count { get; }
 
 		public GroupWithCount(TKey key, int count)
 		{
-			_key = key;
-			_count = count;
+			Key = key;
+			Count = count;
 		}
 
 		public override string ToString()

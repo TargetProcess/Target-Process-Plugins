@@ -1,19 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tp.Core
 {
-	public class MaybeDictionary<TKey, TValue> : Dictionary<TKey,TValue>, IDictionary<TKey, Maybe<TValue>>
+	public class MaybeDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IDictionary<TKey, Maybe<TValue>>
 	{
-		public MaybeDictionary(IEqualityComparer<TKey> comparer=null):base(comparer??EqualityComparer<TKey>.Default)
+		public MaybeDictionary(IEqualityComparer<TKey> comparer = null) : base(comparer ?? EqualityComparer<TKey>.Default)
 		{
 		}
 
-		public MaybeDictionary(IDictionary<TKey,TValue> other) : base(other)
+		public MaybeDictionary(IDictionary<TKey, TValue> other) : base(other)
 		{
-			
 		}
 
 
@@ -39,7 +37,7 @@ namespace Tp.Core
 
 		public void CopyTo(KeyValuePair<TKey, Maybe<TValue>>[] array, int arrayIndex)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public bool Remove(KeyValuePair<TKey, Maybe<TValue>> item)
@@ -58,9 +56,9 @@ namespace Tp.Core
 
 		public void Add(TKey key, Maybe<TValue> value)
 		{
-			if (value!=Maybe.Nothing)
+			if (value != Maybe.Nothing)
 			{
-				base.Add(key,value.Value);
+				base.Add(key, value.Value);
 			}
 		}
 
@@ -77,7 +75,7 @@ namespace Tp.Core
 			get { return this.GetValue<TKey, TValue>(key); }
 			set
 			{
-				if (value!=Maybe.Nothing)
+				if (value != Maybe.Nothing)
 				{
 					base[key] = value.Value;
 				}
@@ -86,7 +84,6 @@ namespace Tp.Core
 					if (ContainsKey(key))
 						Remove(key);
 				}
-
 			}
 		}
 

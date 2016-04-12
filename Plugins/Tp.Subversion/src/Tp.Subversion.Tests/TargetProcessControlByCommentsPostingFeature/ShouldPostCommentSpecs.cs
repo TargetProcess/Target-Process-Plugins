@@ -145,7 +145,7 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 		[Then("no comments should be posted")]
 		public void EntityShouldNotHaveAnyComments()
 		{
-			Context.Transport.TpQueue.GetCreatedDtos<CommentDTO>().ToArray().Should(Be.Empty);
+			Context.Transport.TpQueue.GetCreatedDtos<CommentDTO>().ToArray().Should(Be.Empty, "Context.Transport.TpQueue.GetCreatedDtos<CommentDTO>().ToArray().Should(Be.Empty)");
 		}
 
 		[Then("comment '$comment' should be posted on entity $entityId by the '$tpUserName'")]
@@ -158,10 +158,10 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			string postedComment = commentDto.Description;
 			var user = Context.GetTpUserByName(userName);
 
-			commentDto.OwnerID.Should(Be.EqualTo(user.Id));
-			commentDto.GeneralID.Should(Be.EqualTo(entityId));
+			commentDto.OwnerID.Should(Be.EqualTo(user.Id), "commentDto.OwnerID.Should(Be.EqualTo(user.Id))");
+			commentDto.GeneralID.Should(Be.EqualTo(entityId), "commentDto.GeneralID.Should(Be.EqualTo(entityId))");
 
-			postedComment.Should(Be.EqualTo(comment));
+			postedComment.Should(Be.EqualTo(comment), "postedComment.Should(Be.EqualTo(comment))");
 		}
 
 		[Then("empty comment should be posted on entity $entityId by the '$tpUserName'")]
@@ -173,10 +173,10 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 
 			var user = Context.GetTpUserByName(userName);
 
-			commentDto.OwnerID.Should(Be.EqualTo(user.Id));
-			commentDto.GeneralID.Should(Be.EqualTo(entityId));
+			commentDto.OwnerID.Should(Be.EqualTo(user.Id), "commentDto.OwnerID.Should(Be.EqualTo(user.Id))");
+			commentDto.GeneralID.Should(Be.EqualTo(entityId), "commentDto.GeneralID.Should(Be.EqualTo(entityId))");
 
-			commentDto.Description.Should(Be.Null);
+			commentDto.Description.Should(Be.Null, "commentDto.Description.Should(Be.Null)");
 		}
 
 		[Then("comment '$comment' should be posted via ChangeEntityStateCommand on entity $entityId by the '$tpUserName'")]
@@ -188,16 +188,16 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 
 			var user = Context.GetTpUserByName(userName);
 
-			changeStatusCmd.UserID.Should(Be.EqualTo(user.Id));
-			changeStatusCmd.EntityId.Should(Be.EqualTo(entityId));
+			changeStatusCmd.UserID.Should(Be.EqualTo(user.Id), "changeStatusCmd.UserID.Should(Be.EqualTo(user.Id))");
+			changeStatusCmd.EntityId.Should(Be.EqualTo(entityId), "changeStatusCmd.EntityId.Should(Be.EqualTo(entityId))");
 
-			changeStatusCmd.Comment.Should(Be.EqualTo(comment));
+			changeStatusCmd.Comment.Should(Be.EqualTo(comment), "changeStatusCmd.Comment.Should(Be.EqualTo(comment))");
 		}
 
 		[Then("no additional comments should be posted")]
 		public void NoAdditionalCommentsShouldBePosted()
 		{
-			ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<CommentDTO>().Should(Be.Empty);
+			ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<CommentDTO>().Should(Be.Empty, "ObjectFactory.GetInstance<TransportMock>().TpQueue.GetCreatedDtos<CommentDTO>().Should(Be.Empty)");
 		}
 
 		private static VcsPluginContext Context

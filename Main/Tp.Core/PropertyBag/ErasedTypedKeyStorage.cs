@@ -6,6 +6,7 @@ namespace Tp.Core.PropertyBag
 	public class ErasedTypedKeyStorage<T>
 	{
 		private readonly Dictionary<Type, T> _items;
+
 		public ErasedTypedKeyStorage()
 		{
 			_items = new Dictionary<Type, T>();
@@ -20,7 +21,7 @@ namespace Tp.Core.PropertyBag
 		{
 			_items.Remove(key.Type);
 		}
-		
+
 		public Maybe<T> MaybeGetItem(TypedKey key)
 		{
 			return _items.GetValue(key.Type);

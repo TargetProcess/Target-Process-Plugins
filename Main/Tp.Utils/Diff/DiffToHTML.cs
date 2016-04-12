@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
-
-using Tp.Components.Diff;
 
 namespace Tp.Components.Diff
 {
@@ -17,7 +14,7 @@ namespace Tp.Components.Diff
 
 		public void AddLine(string line)
 		{
-			lines.Add(line);	
+			lines.Add(line);
 		}
 
 		public List<string> Lines
@@ -52,12 +49,13 @@ namespace Tp.Components.Diff
 
 	public class ChunkParser
 	{
-		static Regex beginChunkPatern = new Regex(@"@@\s+[+-](?<g1>\d+),(?<g2>\d+)\s+[+-](?<g3>\d+),(?<g4>\d+)\s+@@");
+		static readonly Regex beginChunkPatern = new Regex(@"@@\s+[+-](?<g1>\d+),(?<g2>\d+)\s+[+-](?<g3>\d+),(?<g4>\d+)\s+@@");
+
 		public static List<DiffChunk> Parse(string unidiffResult)
 		{
 			List<DiffChunk> chunks = new List<DiffChunk>();
 			unidiffResult = unidiffResult.Replace("\r", "");
-			string[] lines = unidiffResult.Split(new char[] {'\n'});
+			string[] lines = unidiffResult.Split(new char[] { '\n' });
 			DiffChunk currentChunk = null;
 			int i = 0;
 
@@ -73,8 +71,8 @@ namespace Tp.Components.Diff
 					currentChunk.FirstEnd = Int32.Parse(chunkBeginMatches.Groups["g2"].Value);
 					currentChunk.SecondBegin = Int32.Parse(chunkBeginMatches.Groups["g3"].Value);
 					currentChunk.SecondEnd = Int32.Parse(chunkBeginMatches.Groups["g4"].Value);
-					
-				} else if (currentChunk != null)
+				}
+				else if (currentChunk != null)
 				{
 					currentChunk.AddLine(lines[i]);
 				}
@@ -101,7 +99,7 @@ namespace Tp.Components.Diff
 		string line;
 		DiffActionType action;
 		int lineNumber;
-		
+
 		public DiffLineData(string line, DiffActionType action)
 		{
 			this.line = line;
@@ -114,7 +112,7 @@ namespace Tp.Components.Diff
 			this.action = action;
 			this.lineNumber = lineNumber;
 		}
-		
+
 
 		public string FomatedLineNumber
 		{
@@ -124,11 +122,13 @@ namespace Tp.Components.Diff
 					return "     ";
 				string val = (lineNumber + 1).ToString();
 				while (val.Length < 5)
+				{
 					val = " " + val;
+				}
 				return val;
 			}
 		}
-		
+
 		public int LineNumber
 		{
 			get { return lineNumber; }
@@ -151,8 +151,8 @@ namespace Tp.Components.Diff
 	public class DiffToHTML
 	{
 		string[] parsedOriginaFile;
-		List<DiffLineData> leftPan = new List<DiffLineData>();
-		List<DiffLineData> rightPan = new List<DiffLineData>();
+		readonly List<DiffLineData> leftPan = new List<DiffLineData>();
+		readonly List<DiffLineData> rightPan = new List<DiffLineData>();
 
 		public List<DiffLineData> LeftPan
 		{
@@ -171,7 +171,7 @@ namespace Tp.Components.Diff
 		public void Parse(string originalFile, string _unidiffResult)
 		{
 			originalFile = originalFile.Replace("\r", "");
-			parsedOriginaFile = originalFile.Split(new char[] {'\n'});
+			parsedOriginaFile = originalFile.Split(new char[] { '\n' });
 			List<DiffChunk> chunks = ChunkParser.Parse(_unidiffResult);
 
 			int leftLast = 1;
@@ -181,7 +181,7 @@ namespace Tp.Components.Diff
 				CopyLines(leftPan, leftLast, chunk.FirstBegin);
 				CopyLines(rightPan, leftLast, chunk.FirstBegin);
 				leftLast = chunk.FirstEnd + 1;
-				
+
 				//CopyLines(rightPan, rightLast, chunk.SecondBegin);
 				//rightLast = chunk.SecondEnd;
 
@@ -206,7 +206,7 @@ namespace Tp.Components.Diff
 			int n = 0;
 			int leftLineNumber = 0;
 			int rightLineNumber = 0;
-			
+
 			for (int diffItem = 0; diffItem < diff.Length; diffItem++)
 			{
 				Diff.Item aItem = diff[diffItem];
@@ -245,17 +245,17 @@ namespace Tp.Components.Diff
 				leftPan.Add(new DiffLineData(bLines[n], DiffActionType.None, leftLineNumber));
 				rightPan.Add(new DiffLineData(bLines[n], DiffActionType.None, rightLineNumber));
 				leftLineNumber++;
-				rightLineNumber++;				
+				rightLineNumber++;
 				n++;
 			} // while			
 
-			PostProcessPans();			
+			PostProcessPans();
 		}
-		
+
 		void PostProcessPans()
 		{
 			int i = 0;
-			
+
 			while (i < leftPan.Count)
 			{
 				int removedLines = CountOfLinese(DiffActionType.Deleted, i);
@@ -272,12 +272,14 @@ namespace Tp.Components.Diff
 					if (count == 0)
 					{
 						i += Math.Max(removedLines, addedLines);
-					} else
+					}
+					else
 					{
 						MakeLinesUpdated(i + offset, count * 2);
 						i += count;
 					}
-				} else 
+				}
+				else
 					i++;
 			}
 		}
@@ -287,7 +289,7 @@ namespace Tp.Components.Diff
 			int leftPos = position;
 			int rightPos = position;
 
-			for (int i = 0; i < count; i++ )
+			for (int i = 0; i < count; i++)
 			{
 				if (leftPan[leftPos].Action == DiffActionType.Deleted)
 				{
@@ -296,7 +298,7 @@ namespace Tp.Components.Diff
 					leftPos++;
 					continue;
 				}
-					
+
 				if (rightPan[rightPos].Action == DiffActionType.Added)
 				{
 					rightPan[rightPos].Action = DiffActionType.Updated;
@@ -304,7 +306,6 @@ namespace Tp.Components.Diff
 					rightPos++;
 					continue;
 				}
-					
 			}
 		}
 
@@ -317,7 +318,7 @@ namespace Tp.Components.Diff
 					count++;
 				else
 					break;
-				i++;			
+				i++;
 			}
 			return count;
 		}
@@ -326,10 +327,10 @@ namespace Tp.Components.Diff
 		{
 			if (line.Length == 0)
 				line = " ";
-			
+
 			string resultString = line.Substring(1);
 			char controlSymbol = line[0];
-					
+
 			if (controlSymbol == ' ')
 			{
 				leftPan.Add(new DiffLineData(resultString, DiffActionType.None));
@@ -349,10 +350,10 @@ namespace Tp.Components.Diff
 
 		void CopyLines(List<DiffLineData> pan, int firstLine, int lastLine)
 		{
-			for(int i = firstLine - 1; i < lastLine - 1; i++)
+			for (int i = firstLine - 1; i < lastLine - 1; i++)
+			{
 				pan.Add(new DiffLineData(parsedOriginaFile[i], DiffActionType.None));
+			}
 		}
-
-
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System;
+using log4net;
 using StructureMap;
 using Tp.Core.Services;
-using log4net;
 
 namespace Tp.Core
 {
@@ -17,7 +17,8 @@ namespace Tp.Core
 			RunOnServices(container, s => s.Stop(), () => log.Info("Services stopping..."), () => log.Info("Services stopped..."), log.Error);
 		}
 
-		private static void RunOnServices(IContainer container, Action<IService> action, Action starting, Action finishing, Action<Exception> onError)
+		private static void RunOnServices(IContainer container, Action<IService> action, Action starting, Action finishing,
+			Action<Exception> onError)
 		{
 			starting();
 			try

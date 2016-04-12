@@ -51,9 +51,9 @@ namespace Tp.MashupManager.Tests.Mashups
 		public void CheckDefaultMashupReturned(string mashupName)
 		{
 			var mashup = _response.ResponseData.Deserialize<Mashup>();
-			mashup.Name.Should(Be.EqualTo(mashupName));
-			mashup.Placeholders.ToLower().Should(Be.EqualTo(DefaultPlaceholders.ToLower()));
-			mashup.Files.First().Content.Should(Be.EqualTo(DefaultScript));
+			mashup.Name.Should(Be.EqualTo(mashupName), "mashup.Name.Should(Be.EqualTo(mashupName))");
+			mashup.Placeholders.ToLower().Should(Be.EqualTo(DefaultPlaceholders.ToLower()), "mashup.Placeholders.ToLower().Should(Be.EqualTo(DefaultPlaceholders.ToLower()))");
+			mashup.Files.First().Content.Should(Be.EqualTo(DefaultScript), "mashup.Files.First().Content.Should(Be.EqualTo(DefaultScript))");
 		}
 	}
 }

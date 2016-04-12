@@ -193,13 +193,13 @@ namespace Tp.MashupManager.Tests.MashupLibrary
 		[Then("command should return Success")]
 		public void CommandShouldReturnSuccess()
 		{
-			_response.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed));
+			_response.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed), "_response.PluginCommandStatus.Should(Is.EqualTo(PluginCommandStatus.Succeed))");
 		}
 
 		[Then(@"following libraries should be refreshed: (?<libraries>([^,]+,?\s*)+)")]
 		public void CheckLibrariesRefreshed(string[] libraries)
 		{
-			MockedRepositories.SelectMany(x => x.RefreshedLibraries).Select(p => p.Name).Should(Be.EquivalentTo(libraries));
+			MockedRepositories.SelectMany(x => x.RefreshedLibraries).Select(p => p.Name).Should(Be.EquivalentTo(libraries), "MockedRepositories.SelectMany(x => x.RefreshedLibraries).Select(p => p.Name).Should(Be.EquivalentTo(libraries))");
 		}
 
 		[Then("following sources should be returned:")]
@@ -209,19 +209,19 @@ namespace Tp.MashupManager.Tests.MashupLibrary
 			commandResult
 				.Single(r => r.Name == sourceName.Trim()).Packages
 				.Select(p => p.Name)
-				.Should(Be.EquivalentTo(packages.Split(',').Select(p => p.Trim())));
+				.Should(Be.EquivalentTo(packages.Split(',').Select(p => p.Trim())), "commandResult.Single(r => r.Name == sourceName.Trim()).Packages.Select(p => p.Name).Should(Be.EquivalentTo(packages.Split(',').Select(p => p.Trim())))");
 		}
 
 		[Then("$count sources should be returned")]
 		public void CheckReturnedSourcesCount(int count)
 		{
-			GetReturnedSources().Count().Should(Is.EqualTo(count));
+			GetReturnedSources().Count().Should(Is.EqualTo(count), "GetReturnedSources().Count().Should(Is.EqualTo(count))");
 		}
 
 		[Then("following ReadmeMarkdown should be returned: '$markdownContent'")]
 		public void CheckReturnedReadmeMarkdown(string markdownContent)
 		{
-			_response.ResponseData.Deserialize<PackageDetailedDto>().ReadmeMarkdown.Should(Be.EqualTo(markdownContent));
+			_response.ResponseData.Deserialize<PackageDetailedDto>().ReadmeMarkdown.Should(Be.EqualTo(markdownContent), "_response.ResponseData.Deserialize<PackageDetailedDto>().ReadmeMarkdown.Should(Be.EqualTo(markdownContent))");
 		}
 
 		private static LibraryRepositoryConfigStorageMock StorageConfig

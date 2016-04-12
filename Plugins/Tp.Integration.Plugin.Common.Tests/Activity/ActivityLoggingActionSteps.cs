@@ -162,16 +162,16 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		public void ActivityShouldBeRetrieved(int numberOfRecords)
 		{
 			var activity = Context.Activities.FirstOrDefault();
-			activity.Should(Be.Not.Null);
-			activity.Records.Count().Should(Be.EqualTo(numberOfRecords));
+			activity.Should(Be.Not.Null, "activity.Should(Be.Not.Null)");
+			activity.Records.Count().Should(Be.EqualTo(numberOfRecords), "activity.Records.Count().Should(Be.EqualTo(numberOfRecords))");
 		}
 
 		[Then("no records should be retrieved")]
 		public void NoRecordsShouldBeRetrieved()
 		{
 			var activity = Context.Activities.FirstOrDefault();
-			activity.Should(Be.Not.Null);
-			activity.Records.Should(Be.Empty);
+			activity.Should(Be.Not.Null, "activity.Should(Be.Not.Null)");
+			activity.Records.Should(Be.Empty, "activity.Records.Should(Be.Empty)");
 		}
 
 		[Then("logs for account '$accountName' and profile '$profileName' should be removed")]
@@ -179,8 +179,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		{
 			var mock = ObjectFactory.GetInstance<Log4NetFileRepositoryMock>();
 
-			mock.RemovedFolders.Count.Should(Be.EqualTo(1));
-			mock.RemovedFolders.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(1));
+			mock.RemovedFolders.Count.Should(Be.EqualTo(1), "mock.RemovedFolders.Count.Should(Be.EqualTo(1))");
+			mock.RemovedFolders.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(1), "mock.RemovedFolders.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(1))");
 		}
 
 		[Then("activity log for account '$accountName' and profile '$profileName' should be removed")]
@@ -188,9 +188,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		{
 			var mock = ObjectFactory.GetInstance<Log4NetFileRepositoryMock>();
 
-			mock.RemovedFiles.Count.Should(Be.EqualTo(3));
-			mock.RemovedFiles.All(x => x.GetFileNameWithoutExtension().StartsWith("Activity")).Should(Be.True);
-			mock.RemovedFiles.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(3));
+			mock.RemovedFiles.Count.Should(Be.EqualTo(3), "mock.RemovedFiles.Count.Should(Be.EqualTo(3))");
+			mock.RemovedFiles.All(x => x.GetFileNameWithoutExtension().StartsWith("Activity")).Should(Be.True, "mock.RemovedFiles.All(x => x.GetFileNameWithoutExtension().StartsWith(\"Activity\")).Should(Be.True)");
+			mock.RemovedFiles.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(3), "mock.RemovedFiles.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(3))");
 		}
 
 		[Then("error log for account '$accountName' and profile '$profileName' should be removed")]
@@ -198,9 +198,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		{
 			var mock = ObjectFactory.GetInstance<Log4NetFileRepositoryMock>();
 
-			mock.RemovedFiles.Count.Should(Be.EqualTo(3));
-			mock.RemovedFiles.All(x => x.GetFileNameWithoutExtension().StartsWith("Error")).Should(Be.True);
-			mock.RemovedFiles.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(3));
+			mock.RemovedFiles.Count.Should(Be.EqualTo(3), "mock.RemovedFiles.Count.Should(Be.EqualTo(3))");
+			mock.RemovedFiles.All(x => x.GetFileNameWithoutExtension().StartsWith("Error")).Should(Be.True, "mock.RemovedFiles.All(x => x.GetFileNameWithoutExtension().StartsWith(\"Error\")).Should(Be.True)");
+			mock.RemovedFiles.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(3), "mock.RemovedFiles.Select(x => x.Contains(accountName) && x.Contains(profileName)).Count().Should(Be.EqualTo(3))");
 		}
 
 		[Then("no records should be written to activity log for account '$accountName' and profile '$profileName'")]
@@ -208,7 +208,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		{
 			var fullLogName = accountName + "\\" + profileName + "\\" + "PluginActivityLogger";
 			var logger = ObjectFactory.GetInstance<FakeActivityLogger>();
-			logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Empty);
+			logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Empty, "logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Empty)");
 		}
 
 		[Then("activity log for profile '$profileName' for account '$accountName' should be written")]
@@ -216,7 +216,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		{
 			var fullLogName = accountName + "\\" + profileName + "\\" + "PluginActivityLogger";
 			var logger = ObjectFactory.GetInstance<FakeActivityLogger>();
-			logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Not.Empty);
+			logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Not.Empty, "logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Not.Empty)");
 		}
 
 		[Then("error log for profile '$profileName' for account '$accountName' should be written")]
@@ -224,7 +224,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 		{
 			var fullLogName = accountName + "\\" + profileName + "\\" + "PluginErrorLogger";
 			var logger = ObjectFactory.GetInstance<FakeActivityLogger>();
-			logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Not.Empty);
+			logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Not.Empty, "logger.LoggersUsed.Where(x => x == fullLogName).ToList().Should(Be.Not.Empty)");
 		}
 
 		private void RetrieveLogger(string loggerName, string accountName, string profileName)
@@ -234,18 +234,18 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 				.OfType<Logger>()
 				.FirstOrDefault(x => x.Name.Contains(loggerName) && x.Name.Contains(accountName) && x.Name.Contains(profileName));
 
-			logger.Should(Be.Not.Null);
+			logger.Should(Be.Not.Null, "logger.Should(Be.Not.Null)");
 			CheckAppenders(logger, accountName, profileName);
 		}
 
 		private static void CheckAppenders(IAppenderAttachable logger, string accountName, string profileName)
 		{
-			logger.Appenders.Should(Be.Not.Empty);
-			logger.Appenders.OfType<PluginRollingFileAppender>().Should(Be.Not.Empty);
+			logger.Appenders.Should(Be.Not.Empty, "logger.Appenders.Should(Be.Not.Empty)");
+			logger.Appenders.OfType<PluginRollingFileAppender>().Should(Be.Not.Empty, "logger.Appenders.OfType<PluginRollingFileAppender>().Should(Be.Not.Empty)");
 
 			var appender = logger.Appenders.OfType<PluginRollingFileAppender>().First();
-			appender.File.Contains(accountName).Should(Be.True);
-			appender.File.Contains(profileName).Should(Be.True);
+			appender.File.Contains(accountName).Should(Be.True, "appender.File.Contains(accountName).Should(Be.True)");
+			appender.File.Contains(profileName).Should(Be.True, "appender.File.Contains(profileName).Should(Be.True)");
 		}
 	}
 }

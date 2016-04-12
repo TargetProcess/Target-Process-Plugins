@@ -4,7 +4,7 @@ namespace Tp.Search.Model.Document
 	{
 		ProjectIndexData CreateProjectData(params int?[] projectIds);
 		string CreateEntityStateData(int entityStateId);
-		string CreateSquadData(int? squadId);
+		SquadIndexData CreateSquadData(params int?[] squadIds);
 		string CreateImpedimentData(bool? isPrivate, int? ownerId, int? responsibleId);
 	}
 }

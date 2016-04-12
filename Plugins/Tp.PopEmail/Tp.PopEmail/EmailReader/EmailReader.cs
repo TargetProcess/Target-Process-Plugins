@@ -171,7 +171,7 @@ namespace Tp.PopEmailIntegration.EmailReader
 			var mailMessage = new System.Net.Mail.MailMessage
 			{
 				Sender = new MailAddress(mailBeeMailMessage.From.AsString),
-				Subject = mailBeeMailMessage.Subject,
+				Subject = mailBeeMailMessage.Subject?.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ') ?? string.Empty,
 				Body =
 					mailBeeMailMessage.IsBodyAvail("text/html", false)
 						? mailBeeMailMessage.BodyHtmlText
@@ -183,6 +183,10 @@ namespace Tp.PopEmailIntegration.EmailReader
 			foreach (var emailAddress in mailBeeMailMessage.To.Cast<EmailAddress>().Where(emailAddress => !mailMessage.To.TryAdd(emailAddress.AsString)))
 			{
 				_log.WarnFormat("To address \"{0}\" is not in a recognized format.", emailAddress.AsString);
+			}
+			foreach (var emailAddress in mailBeeMailMessage.ReplyTo.Cast<EmailAddress>().Where(emailAddress => !mailMessage.ReplyToList.TryAdd(emailAddress.AsString)))
+			{
+				_log.WarnFormat("ReplyTo address \"{0}\" is not in a recognized format.", emailAddress.AsString);
 			}
 			foreach (var emailAddress in mailBeeMailMessage.Cc.Cast<EmailAddress>().Where(emailAddress => !mailMessage.CC.TryAdd(emailAddress.AsString)))
 			{
@@ -239,6 +243,7 @@ namespace Tp.PopEmailIntegration.EmailReader
 				FromDisplayName = message.From.DisplayName,
 				Recipients = String.Join("; ", message.To.Select(address => address.Address).ToArray()),
 				CC = message.CC.Select(address => new MailAddressLite { Address = address.Address, DisplayName = address.DisplayName }).ToList(),
+				ReplyTo = message.ReplyToList.Select(address => new MailAddressLite { Address = address.Address, DisplayName = address.DisplayName }).ToList(),
 				Subject = message.Subject,
 				ContentType = ContentTypeEnum.Email,
 				Body = message.Body,

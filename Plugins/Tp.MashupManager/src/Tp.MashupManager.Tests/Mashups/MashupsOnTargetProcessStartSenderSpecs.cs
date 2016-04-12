@@ -24,10 +24,10 @@ namespace Tp.MashupManager.Tests.Mashups
 					And profile mashups are: third, fourth
 				When TargetProcess starts
 				Then 4 mashups should be sent to TP
-					And default mashup 'Account1 first' with accounts 'Account1' should be sent to TP
-					And default mashup 'Account1 second' with accounts 'Account1' should be sent to TP
-					And default mashup 'Account2 third' with accounts 'Account2' should be sent to TP
-					And default mashup 'Account2 fourth' with accounts 'Account2' should be sent to TP
+					And default mashup 'first' with accounts 'Account1' should be sent to TP
+					And default mashup 'second' with accounts 'Account1' should be sent to TP
+					And default mashup 'third' with accounts 'Account2' should be sent to TP
+					And default mashup 'fourth' with accounts 'Account2' should be sent to TP
 			"
 				.Execute();
 		}

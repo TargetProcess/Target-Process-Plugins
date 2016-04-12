@@ -28,10 +28,10 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			var serializedProfile = pluginProfile.Serialize();
 			var deserializedProfile = serializedProfile.DeserializeProfile();
 
-			deserializedProfile.Name.Should(Be.EqualTo("TestProfile"));
+			deserializedProfile.Name.Should(Be.EqualTo("TestProfile"), "deserializedProfile.Name.Should(Be.EqualTo(\"TestProfile\"))");
 			deserializedProfile.Settings.Should(Be.Not.Null, "Settings weren't deserialized");
 			var settings = (SampleProfileSerialized) deserializedProfile.Settings;
-			settings.StringValue.Should(Be.EqualTo("components"));
+			settings.StringValue.Should(Be.EqualTo("components"), "settings.StringValue.Should(Be.EqualTo(\"components\"))");
 		}
 	}
 }

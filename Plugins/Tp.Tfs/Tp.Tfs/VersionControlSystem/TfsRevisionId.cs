@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -11,8 +11,8 @@ namespace Tp.Tfs.VersionControlSystem
 	[Serializable]
 	public class TfsRevisionId : IComparable
 	{
-		public static readonly DateTime UtcTimeMin = DateTime.MinValue.ToUniversalTime();
-		public static readonly DateTime UtcTimeMax = new DateTime(2038, 01, 19).ToUniversalTime();
+        public static readonly DateTime UtcTimeMin = DateTime.MinValue.AddYears(1753).ToUniversalTime();
+		public static readonly DateTime UtcTimeMax = DateTime.MaxValue.ToUniversalTime();
 
 		public TfsRevisionId()
 		{
@@ -49,7 +49,7 @@ namespace Tp.Tfs.VersionControlSystem
 
 		public override string ToString()
 		{
-			return string.Format("RevisionId: {0}, Date: {1}", Value, Time);
+			return $"RevisionId: {Value}, Date: {Time}";
 		}
 	}
 }

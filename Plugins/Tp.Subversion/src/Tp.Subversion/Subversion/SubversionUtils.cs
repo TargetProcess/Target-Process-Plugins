@@ -3,10 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using SharpSvn;
 using StructureMap;
 using Tp.Integration.Common;
@@ -32,6 +30,10 @@ namespace Tp.Subversion.Subversion
 				    svnRevision.ChangedPaths == null ||
 				    svnRevision.ChangedPaths.Count == 0)
 				{
+					_log.InfoFormat("Skip processing revision {0}. {1}.", svnRevision.Revision,
+						svnRevision.ChangedPaths == null
+							? "ChangedPaths == null"
+							: $"ChangedPaths.Count == {svnRevision.ChangedPaths.Count}");
 					continue;
 				}
 

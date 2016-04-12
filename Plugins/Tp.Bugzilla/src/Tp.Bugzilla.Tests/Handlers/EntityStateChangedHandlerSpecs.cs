@@ -204,7 +204,7 @@ namespace Tp.Bugzilla.Tests.Handlers
 		[Then("states mapping should contain $count item")]
 		public void CheckStatesMappingCount(int count)
 		{
-			Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(count));
+			Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(count), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(count))");
 		}
 
 		[Then("states mapping should be updated as following:")]
@@ -213,7 +213,7 @@ namespace Tp.Bugzilla.Tests.Handlers
 			var tpValue = JsonConvert.DeserializeObject<MappingLookup>(value);
 
 			Profile.GetProfile<BugzillaProfile>().StatesMapping.Single(
-				m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name));
+				m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Single(m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name))");
 		}
 	}
 }

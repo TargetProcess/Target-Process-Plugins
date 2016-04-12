@@ -31,7 +31,7 @@ namespace Tp.Integration.Plugin.Common.Tests
 					             {
 						             var xml = XDocument.Load(reader);
 									 var dto = BlobSerializer.Deserialize(xml, type.Name);
-									 dto.Should(Be.Not.Null);
+									 dto.Should(Be.Not.Null, "dto.Should(Be.Not.Null)");
 					             }
 					         });
 		}
@@ -46,8 +46,8 @@ namespace Tp.Integration.Plugin.Common.Tests
 </Value>";
 
 			var project = BlobSerializer.Deserialize(XDocument.Parse(s), "Tp.Integration.Common.ProjectDTO, Tp.Integration.Messages") as ProjectDTO;
-			project.ID.Should(Be.EqualTo(13));
-			project.CustomFieldsMetaInfo.Should(Be.Null);
+			project.ID.Should(Be.EqualTo(13), "project.ID.Should(Be.EqualTo(13))");
+			project.CustomFieldsMetaInfo.Should(Be.Null, "project.CustomFieldsMetaInfo.Should(Be.Null)");
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ namespace Tp.Integration.Plugin.Common.Tests
 </Value>";
 
 			var user = BlobSerializer.Deserialize(XDocument.Parse(s), "Tp.Integration.Common.UserDTO, Tp.Integration.Messages") as UserDTO;
-			user.UserID.Should(Be.EqualTo(4));
+			user.UserID.Should(Be.EqualTo(4), "user.UserID.Should(Be.EqualTo(4))");
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Tp.Integration.Plugin.Common.Tests
 </Value>";
 			
 			var project = BlobSerializer.Deserialize(XDocument.Parse(s), "Tp.Integration.Common.ProjectDTO, Tp.Integration.Messages") as ProjectDTO;
-			project.ProjectID.Should(Be.EqualTo(13));
+			project.ProjectID.Should(Be.EqualTo(13), "project.ProjectID.Should(Be.EqualTo(13))");
 		}
 	}
 }

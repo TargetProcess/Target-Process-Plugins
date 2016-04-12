@@ -1,30 +1,12 @@
-﻿#region BSD License
-/* 
-Copyright (c) 2010, NETFx
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-* Neither the name of Clarius Consulting nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-#endregion
-#pragma warning disable 0436
+﻿#pragma warning disable 0436
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
 
 /// <summary>
-/// Provides strong-typed static reflection for arbitrary 
-/// expressions, typically static members where no 
+/// Provides strong-typed static reflection for arbitrary
+/// expressions, typically static members where no
 /// instance parameter is needed.
 /// </summary>
 public static partial class Reflect
@@ -140,9 +122,9 @@ public static partial class Reflect
 		Guard.NotNull(() => lambda, lambda);
 
 		if (lambda.Body.NodeType != ExpressionType.Call)
-			throw new ArgumentException("Not a method call", "lambda");
+			throw new ArgumentException("Not a method call", nameof(lambda));
 
-		return ((MethodCallExpression)lambda.Body).Method;
+		return ((MethodCallExpression) lambda.Body).Method;
 	}
 
 	private static MethodInfo GetDelegateMethodInfo(LambdaExpression lambda)
@@ -150,27 +132,27 @@ public static partial class Reflect
 		Guard.NotNull(() => lambda, lambda);
 
 		if (lambda.Body.NodeType != ExpressionType.Convert)
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		// Do we need all these checks here? The compiler always generates 
+		// Do we need all these checks here? The compiler always generates
 		// this same chain of calls for the given call pattern...
 
-		var convertOperand = ((UnaryExpression)lambda.Body).Operand;
+		var convertOperand = ((UnaryExpression) lambda.Body).Operand;
 
 		if (convertOperand.NodeType != ExpressionType.Call)
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		var createDelegate = (MethodCallExpression)convertOperand;
+		var createDelegate = (MethodCallExpression) convertOperand;
 
 		if (createDelegate.Arguments.Last().NodeType != ExpressionType.Constant)
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		var methodRef = (ConstantExpression)createDelegate.Arguments.Last();
+		var methodRef = (ConstantExpression) createDelegate.Arguments.Last();
 
 		if (!(methodRef.Value is MethodInfo))
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		return (MethodInfo)methodRef.Value;
+		return (MethodInfo) methodRef.Value;
 	}
 
 	private static MemberInfo GetMemberInfo(LambdaExpression lambda)
@@ -178,14 +160,14 @@ public static partial class Reflect
 		Guard.NotNull(() => lambda, lambda);
 
 		if (lambda.Body.NodeType == ExpressionType.MemberAccess)
-			return ((MemberExpression)lambda.Body).Member;
+			return ((MemberExpression) lambda.Body).Member;
 		else
-			throw new ArgumentException("Not a member access", "lambda");
+			throw new ArgumentException("Not a member access", nameof(lambda));
 	}
 }
 
 /// <summary>
-/// Provides strong-typed static reflection of the <typeparamref name="TTarget"/> 
+/// Provides strong-typed static reflection of the <typeparamref name="TTarget"/>
 /// type.
 /// </summary>
 /// <typeparam name="TTarget">Type to reflect.</typeparam>
@@ -266,6 +248,7 @@ public static partial class Reflect<TTarget>
 
 		return info;
 	}
+
 	/// <summary>
 	/// Gets the field represented by the lambda expression.
 	/// </summary>
@@ -287,27 +270,27 @@ public static partial class Reflect<TTarget>
 		Guard.NotNull(() => lambda, lambda);
 
 		if (lambda.Body.NodeType != ExpressionType.Convert)
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		// Do we need all these checks here? The compiler always generates 
+		// Do we need all these checks here? The compiler always generates
 		// this same chain of calls for the given call pattern...
 
-		var convertOperand = ((UnaryExpression)lambda.Body).Operand;
+		var convertOperand = ((UnaryExpression) lambda.Body).Operand;
 
 		if (convertOperand.NodeType != ExpressionType.Call)
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		var createDelegate = (MethodCallExpression)convertOperand;
+		var createDelegate = (MethodCallExpression) convertOperand;
 
 		if (createDelegate.Arguments.Last().NodeType != ExpressionType.Constant)
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		var methodRef = (ConstantExpression)createDelegate.Arguments.Last();
+		var methodRef = (ConstantExpression) createDelegate.Arguments.Last();
 
 		if (!(methodRef.Value is MethodInfo))
-			throw new ArgumentException("Not a method reference", "lambda");
+			throw new ArgumentException("Not a method reference", nameof(lambda));
 
-		return (MethodInfo)methodRef.Value;
+		return (MethodInfo) methodRef.Value;
 	}
 
 	private static MethodInfo GetMethodInfo(LambdaExpression lambda)
@@ -315,9 +298,9 @@ public static partial class Reflect<TTarget>
 		Guard.NotNull(() => lambda, lambda);
 
 		if (lambda.Body.NodeType != ExpressionType.Call)
-			throw new ArgumentException("Not a method call", "lambda");
+			throw new ArgumentException("Not a method call", nameof(lambda));
 
-		return ((MethodCallExpression)lambda.Body).Method;
+		return ((MethodCallExpression) lambda.Body).Method;
 	}
 
 	private static MemberInfo GetMemberInfo(LambdaExpression lambda)
@@ -325,9 +308,9 @@ public static partial class Reflect<TTarget>
 		Guard.NotNull(() => lambda, lambda);
 
 		if (lambda.Body.NodeType == ExpressionType.MemberAccess)
-			return ((MemberExpression)lambda.Body).Member;
+			return ((MemberExpression) lambda.Body).Member;
 		else
-			throw new ArgumentException("Not a member access", "lambda");
+			throw new ArgumentException("Not a member access", nameof(lambda));
 	}
 }
 #pragma warning restore 0436

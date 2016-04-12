@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 
 namespace Tp.Integration.Messages
 {
@@ -36,7 +32,7 @@ namespace Tp.Integration.Messages
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != typeof(PluginName)) return false;
-			return Equals((PluginName)obj);
+			return Equals((PluginName) obj);
 		}
 
 		public override int GetHashCode()

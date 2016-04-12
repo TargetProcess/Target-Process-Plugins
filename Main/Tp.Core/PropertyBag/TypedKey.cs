@@ -12,6 +12,7 @@ namespace Tp.Core.PropertyBag
 	public class TypedKey
 	{
 		private readonly Type _type;
+
 		public TypedKey(Type type)
 		{
 			_type = type;

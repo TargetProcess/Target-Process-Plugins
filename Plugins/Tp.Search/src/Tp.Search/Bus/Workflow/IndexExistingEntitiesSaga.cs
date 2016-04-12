@@ -26,7 +26,8 @@ namespace Tp.Search.Bus.Workflow
 									  IHandleMessages<TestStepQueryResult>,
 									  IHandleMessages<ImpedimentQueryResult>,
 									  IHandleMessages<CommentQueryResult>,
-									  IHandleMessages<ReleaseProjectQueryResult>
+									  IHandleMessages<ReleaseProjectQueryResult>,
+									  IHandleMessages<AssignableSquadQueryResult>
 	{
 		private readonly IDocumentIndexProvider _documentIndexProvider;
 		private readonly IPluginContext _pluginContext;
@@ -38,6 +39,7 @@ namespace Tp.Search.Bus.Workflow
 		private readonly ImpedimentsIndexing _impedimentsIndexing;
 		private readonly CommentsIndexing _commentsIndexing;
 		private readonly ReleaseProjectIndexing _releaseProjectIndexing;
+		private readonly AssignableSquadIndexing _assignableSquadIndexing;
 
 		public IndexExistingEntitiesSaga()
 		{
@@ -53,7 +55,8 @@ namespace Tp.Search.Bus.Workflow
 			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testStepsIndexing.Start(), q => Send(q), _logger);
 			_testStepsIndexing = new TestStepsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _impedimentsIndexing.Start(), q => Send(q), _logger, (dto, indexer) => indexer.AddTestStepIndex(dto, DocumentIndexOptimizeSetup.NoOptimize));
 			_impedimentsIndexing = new ImpedimentsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _releaseProjectIndexing.Start(), q => Send(q), _logger);
-			_releaseProjectIndexing = new ReleaseProjectIndexing(entityIndexer, () => Data, entityTypesProvider, d => _commentsIndexing.Start(), q => Send(q), _logger);
+			_releaseProjectIndexing = new ReleaseProjectIndexing(entityIndexer, () => Data, entityTypesProvider, d => _assignableSquadIndexing.Start(), q => Send(q), _logger);
+			_assignableSquadIndexing = new AssignableSquadIndexing(entityIndexer, () => Data, entityTypesProvider, d => _commentsIndexing.Start(), q => Send(q), _logger);
 			_commentsIndexing = new CommentsIndexing(entityIndexer, () => Data, entityTypesProvider, d =>
 				{
 					SendLocal(new IndexExistingEntitiesDoneLocalMessage { SagaId = Data.OuterSagaId });
@@ -69,6 +72,7 @@ namespace Tp.Search.Bus.Workflow
 			ConfigureMapping<TestStepQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<ImpedimentQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<ReleaseProjectQueryResult>(saga => saga.Id, message => message.SagaId);
+			ConfigureMapping<AssignableSquadQueryResult>(saga => saga.Id, message => message.SagaId);
 			ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
 		}
 
@@ -110,6 +114,11 @@ namespace Tp.Search.Bus.Workflow
 			_releaseProjectIndexing.Handle(message);
 		}
 
+		public void Handle(AssignableSquadQueryResult message)
+		{
+			_assignableSquadIndexing.Handle(message);
+		}
+
 		public void Handle(TargetProcessExceptionThrownMessage message)
 		{
 			_logger.Error("Build indexes failed", new Exception(message.ExceptionString));
@@ -131,6 +140,7 @@ namespace Tp.Search.Bus.Workflow
 		public int AssignablesRetrievedCount { get; set; }
 		public int TestStepsRetrievedCount { get; set; }
 		public int ReleaseProjectsRetrievedCount { get; set; }
+		public int AssignableSquadsRetrievedCount { get; set; }
 		public int ImpedimentsRetrievedCount { get; set; }
 		public int CommentsRetrievedCount { get; set; }
 
@@ -138,6 +148,7 @@ namespace Tp.Search.Bus.Workflow
 		public int AssignablesCurrentDataWindowSize { get; set; }
 		public int TestStepsCurrentDataWindowSize { get; set; }
 		public int ReleaseProjectsCurrentDataWindowSize { get; set; }
+		public int AssignableSquadsCurrentDataWindowSize { get; set; }
 		public int ImpedimentsCurrentDataWindowSize { get; set; }
 		public int CommentsCurrentDataWindowSize { get; set; }
 	}

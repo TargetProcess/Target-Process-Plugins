@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,10 +6,10 @@ using System.Linq;
 namespace Tp.Integration.Messages.PluginLifecycle
 {
 	public class MashupCollection : IEnumerable<Mashup>
-	{	
+	{
 		private readonly string _mashupsPhysicalPath;
 		private IEnumerable<Mashup> _mashups;
-		private readonly IMashupDirectoryIgnoreStrategy _directoryIgnoreStrategy; 
+		private readonly IMashupDirectoryIgnoreStrategy _directoryIgnoreStrategy;
 
 		public MashupCollection(string mashupsPhysicalPath, IMashupDirectoryIgnoreStrategy directoryIgnoreStrategy = null)
 		{
@@ -40,25 +35,24 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		{
 			if (!Directory.Exists(mashupsPhysicalPath))
 			{
-				return new Mashup[] {};
+				return new Mashup[] { };
 			}
 
 			IEnumerable<string> directories = Directory.GetDirectories(mashupsPhysicalPath);
-
 			return (from directory in directories
-					where !ShouldIgnoreMashupDirectory(directory)
-			        let baseDir = directory
-			        let configs = Directory.GetFiles(directory, "*.cfg")
-			        let mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines))
-			        let mashupName = new DirectoryInfo(directory).Name
-					let files = GetMashupFiles(directory)
-			        select new Mashup
-				        {
-					        MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
-							MashupPhysicalFilePaths = files.ToArray(),
-					        MashupName = mashupName,
-					        MashupConfig = mashupConfig
-				        }).ToList();
+				where !ShouldIgnoreMashupDirectory(directory)
+				let baseDir = directory
+				let configs = Directory.GetFiles(directory, "*.cfg")
+				let mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines))
+				let mashupName = new DirectoryInfo(directory).Name
+				let files = GetMashupFiles(directory)
+				select new Mashup
+				{
+					MashupFilePaths = files.Select(x => MakePathRelative(x, baseDir)).ToArray(),
+					MashupPhysicalFilePaths = files.ToArray(),
+					MashupName = mashupName,
+					MashupConfig = mashupConfig
+				}).ToList();
 		}
 
 		private string[] GetMashupFiles(string directory)
@@ -78,7 +72,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
 		{
 			return path.Replace(basePath, ".");
 		}
-		
+
 		private bool ShouldIgnoreMashupDirectory(string directory)
 		{
 			return _directoryIgnoreStrategy.ShouldIgnoreMashupDirectory(directory);

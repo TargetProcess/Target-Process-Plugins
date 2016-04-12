@@ -2,8 +2,8 @@ tau.mashups
     .addDependency("emailIntegration/editor")
     .addDependency("tp/plugins/profileRepository")
     .addDependency("tp/plugins/commandGateway")
-    .addDependency("libs/jquery/jquery.tmpl")
-    .addMashup(function (editor, profileRepository, commandGateway, jquery, config) {
+    .addDependency("libs/jquery/jquery")
+    .addMashup(function (editor, profileRepository, commandGateway, $, config) {
 
         new editor({
             config: config,
@@ -18,12 +18,13 @@ tau.mashups
     .addDependency("tp/plugins/profileControlsBlock")
     .addDependency("emailIntegration/editorTemplate")
     .addDependency("tp/plugins/errorMessageContainer")
+    .addDependency("libs/jquery/jquery")
     .addDependency("emailIntegration/jquery/numeric")
     .addDependency("emailIntegration/jquery/iphone-switch")
     .addDependency("emailIntegration/jquery/defaultvalue.source")
     .addModule("emailIntegration/editor",
 
-     function (bus, profileControlsBlock, editorTemplate, errorMessageContainer) {
+     function (bus, profileControlsBlock, editorTemplate, errorMessageContainer, $) {
 
          function emailProfileEditor(config) {
              this._create(config);
@@ -85,10 +86,6 @@ tau.mashups
                  this.portInput.numeric({ negative: false });
 
                  rendered.appendTo(this.placeHolder);
-
-                 jQuery.fn.slideFadeToggle = function (speed, easing, callback) {
-                     return this.animate({ opacity: 'toggle', height: 'toggle' }, speed, easing, callback);
-                 };
 
                  $('#linkSample').click(function () {
                      $('#ruleDescription').animate({ opacity: 'toggle', height: 'toggle' }, 'slow');

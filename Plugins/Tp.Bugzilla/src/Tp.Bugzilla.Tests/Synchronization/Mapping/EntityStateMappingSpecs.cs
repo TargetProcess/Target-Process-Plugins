@@ -199,7 +199,7 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 		[Then("entity states mapping should be cleared")]
 		public void EntityStatesMappingShouldBeEmpty()
 		{
-			Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(0));
+			Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(0), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(0))");
 		}
 
 		protected override MappingSourceEntry Source

@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -24,14 +20,18 @@ namespace Tp.Testing.Common.NUnit
 		/// <param name="message">The message that will be displayed on failure</param>
 		/// <param name="args">Arguments to be used in formatting the message</param>
 		[DebuggerStepThrough]
-		public static void Should(this object actual, Constraint constraint, string message = null, params object[] args)
+		public static void Should(this object actual, IResolveConstraint constraint, string message, params object[] args)
 		{
+			if (message == null) { throw new ArgumentNullException(nameof(message)); }
+
 			Assert.That(actual, constraint, message, args);
 		}
 
 		[DebuggerStepThrough]
-		public static void Should<T>(this IEnumerable<T> actual, CollectionEquivalentConstraint constraint, string message = null, params object[] args)
+		public static void Should<T>(this IEnumerable<T> actual, CollectionEquivalentConstraint constraint, string message, params object[] args)
 		{
+			if (message == null) { throw new ArgumentNullException(nameof(message)); }
+
 			if (!actual.GetType().IsArray)
 				actual = actual.ToArray();
 

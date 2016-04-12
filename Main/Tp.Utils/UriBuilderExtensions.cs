@@ -1,5 +1,3 @@
-// ReSharper disable CheckNamespace
-
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -20,7 +18,7 @@ namespace System
 			}
 
 			uri.Query = collection.AsKeyValuePairs().Select(pair => pair.Key == null ? pair.Value : pair.Key + "=" + pair.Value).ToString("&");
-			
+
 			return uri;
 		}
 
@@ -37,7 +35,7 @@ namespace System
 
 		public static UriBuilder SetQueryParameter(this UriBuilder uri, string name, string value)
 		{
-			return uri.SetQueryParameters(new NameValueCollection { {name, value} });
+			return uri.SetQueryParameters(new NameValueCollection { { name, value } });
 		}
 
 		public static IEnumerable<KeyValuePair<string, string>> GetQueryParams(this UriBuilder uri)
@@ -54,6 +52,5 @@ namespace System
 		{
 			return HttpUtility.ParseQueryString(uri.Query);
 		}
-
 	}
 }

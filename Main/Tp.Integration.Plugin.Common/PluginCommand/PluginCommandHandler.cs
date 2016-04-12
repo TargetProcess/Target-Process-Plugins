@@ -46,7 +46,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
 				}
 				else
 				{
-					replyMessage = commandsToExecute[0].Execute(message.Arguments);
+					replyMessage = commandsToExecute[0].Execute(message.Arguments, message.User);
 				}
 
 				_tpBus.Reply(replyMessage);

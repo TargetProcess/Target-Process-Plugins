@@ -1,18 +1,13 @@
-// 
-// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System.IO;
 
 namespace Tp.Core
 {
 	public class LocalFileSystem : IFileSystem
 	{
-		private readonly IFileSystemWatcher _fileSystemWatcher;
+
 		public LocalFileSystem()
 		{
-			_fileSystemWatcher = new FileSystemWatcherImpl();
+			FileSystemWatcher = new FileSystemWatcherImpl();
 		}
 
 		public virtual bool DirectoryExists(string physicalPath)
@@ -47,9 +42,6 @@ namespace Tp.Core
 			return Path.GetFullPath(relativePath);
 		}
 
-		public virtual IFileSystemWatcher FileSystemWatcher
-		{
-			get { return _fileSystemWatcher; }
-		}
+		public virtual IFileSystemWatcher FileSystemWatcher { get; }
 	}
 }

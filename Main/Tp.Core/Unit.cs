@@ -15,10 +15,7 @@ namespace Tp.Core
 		/// </summary>
 		public static Unit Default
 		{
-			get
-			{
-				return Unit._default;
-			}
+			get { return Unit._default; }
 		}
 
 		static Unit()

@@ -105,7 +105,7 @@ namespace Tp.Subversion.Comments
 			ObjectFactory.Configure(x => x.For<IActionFactory>().Use<ActionFactory>());
 			var comment = string.Format("added headerRenderer to WindowShade control{0} added fix to allow CanvasButton to work within a Repeater", Environment.NewLine);
 			var info = new RevisionInfo {Comment = comment};
-			new CommentParser().ParseAssignToEntityAction(info).Should(Be.Empty);
+			new CommentParser().ParseAssignToEntityAction(info).Should(Be.Empty, "new CommentParser().ParseAssignToEntityAction(info).Should(Be.Empty)");
 		}
 	}
 }

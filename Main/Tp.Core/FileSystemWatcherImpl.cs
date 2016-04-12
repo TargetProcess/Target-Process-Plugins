@@ -1,33 +1,34 @@
 using System;
 using System.IO;
+using System.Reactive.Linq;
 
 namespace Tp.Core
 {
 	internal class FileSystemWatcherImpl : IFileSystemWatcher
 	{
-		public IDisposable Subscribe(string path, Action<FileSystemEventArgs> handler)
+		public IObservable<FileSystemEventArgs> Watch(string path)
 		{
-			var watcher = new FileSystemWatcher
+			return Observable.Create<FileSystemEventArgs>(o =>
+			{
+				var watcher = new FileSystemWatcher
 				{
 					Path = path,
 					Filter = string.Empty,
 					IncludeSubdirectories = true
 				};
-			FileSystemEventHandler h1 = (_, args) => handler(args);
-			RenamedEventHandler h2 = (_, args) => handler(args);
-			watcher.Changed += h1;
-			watcher.Created += h1;
-			watcher.Deleted += h1;
-			watcher.Renamed += h2;
-			watcher.EnableRaisingEvents = true;
-			return Disposable.Create(() =>
-				{
-					watcher.EnableRaisingEvents = false;
-					watcher.Changed -= h1;
-					watcher.Created -= h1;
-					watcher.Deleted -= h1;
-					watcher.Renamed -= h2;
-				});
+				var changed = Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(h => (_, args) => h(args), h => watcher.Changed += h,
+					h => watcher.Changed -= h);
+				var created = Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(h => (_, args) => h(args), h => watcher.Created += h,
+					h => watcher.Created -= h);
+				var deleted = Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(h => (_, args) => h(args), h => watcher.Deleted += h,
+					h => watcher.Deleted -= h);
+				var renamed = Observable.FromEvent<RenamedEventHandler, FileSystemEventArgs>(h => (_, args) => h(args), h => watcher.Renamed += h,
+					h => watcher.Renamed -= h);
+				var source = changed.Merge(created).Merge(deleted).Merge(renamed);
+				var token = source.Subscribe(o);
+				watcher.EnableRaisingEvents = true;
+				return new CompositeDisposable(new[] { Disposable.Create(watcher.Dispose), token });
+			});
 		}
 	}
 }

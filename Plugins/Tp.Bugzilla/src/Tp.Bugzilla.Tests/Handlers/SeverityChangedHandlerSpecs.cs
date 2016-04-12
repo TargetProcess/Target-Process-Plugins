@@ -140,14 +140,14 @@ namespace Tp.Bugzilla.Tests.Handlers
 			var tpValue = JsonConvert.DeserializeObject<MappingLookup>(value);
 
 			Profile.GetProfile<BugzillaProfile>().SeveritiesMapping
-				.Single(m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name));
+				.Single(m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name), "Profile.GetProfile<BugzillaProfile>().SeveritiesMapping.Single(m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name))");
 		}
 
 		[Then("severities mapping contains $count items")]
 		public void CheckMappingItemsCount(int count)
 		{
 			Profile.GetProfile<BugzillaProfile>().SeveritiesMapping
-				.Count.Should(Be.EqualTo(count));
+				.Count.Should(Be.EqualTo(count), "Profile.GetProfile<BugzillaProfile>().SeveritiesMapping.Count.Should(Be.EqualTo(count))");
 		}
 	}
 }

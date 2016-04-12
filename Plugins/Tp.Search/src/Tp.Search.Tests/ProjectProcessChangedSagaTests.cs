@@ -74,7 +74,7 @@ namespace Tp.Search.Tests
 				EntityStateIds = new[] { 11 },
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
 	}
 }

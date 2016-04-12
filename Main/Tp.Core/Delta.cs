@@ -1,41 +1,24 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace Tp.Core
 {
 	public class Delta
 	{
-		private readonly object _original;
-		private readonly object _changed;
-		private readonly IEnumerable<string> _changedFields;
 		protected Delta(object original, object changed, IEnumerable<string> changedFields)
 		{
-			_original = original;
-			_changed = changed;
-			_changedFields = changedFields;
+			Original = original;
+			Changed = changed;
+			ChangedFields = changedFields;
 		}
 
-		public object Original
-		{
-			get { return _original; }
-		}
+		public object Original { get; }
 
-		public object Changed
-		{
-			get { return _changed; }
-		}
+		public object Changed { get; }
 
-		public IEnumerable<string> ChangedFields
-		{
-			get { return _changedFields; }
-		}
-		
+		public IEnumerable<string> ChangedFields { get; }
+
 		public override string ToString()
 		{
 			return "Delta. Original: {0}, Changed: {1}".Fmt(Original, Changed);
@@ -53,14 +36,14 @@ namespace Tp.Core
 				return false;
 			}
 
-			return Equals(_original, other._original) && Equals(_changed, other._changed);
+			return Equals(Original, other.Original) && Equals(Changed, other.Changed);
 		}
 
 		public override int GetHashCode()
 		{
 			unchecked
 			{
-				return ((_original != null ? _original.GetHashCode() : 0) * 397) ^ (_changed != null ? _changed.GetHashCode() : 0);
+				return ((Original?.GetHashCode() ?? 0) * 397) ^ (Changed?.GetHashCode() ?? 0);
 			}
 		}
 
@@ -72,17 +55,16 @@ namespace Tp.Core
 
 	public class Delta<TData> : Delta
 	{
-		public Delta(TData original, TData changed, IEnumerable<string> changedFields) : base(original, changed, changedFields){}
-
-		public new TData Original
+		public Delta(TData original, TData changed, IEnumerable<string> changedFields) : base(original, changed, changedFields)
 		{
-			get { return (TData) base.Original; }
 		}
 
-		public new TData Changed
-		{
-			get { return (TData) base.Changed; }
-		}
+		public new TData Original => (TData) base.Original;
+
+		public new TData Changed => (TData) base.Changed;
+
+		public Delta<TData> WithNewChangedFields(IEnumerable<string> changedFields) =>
+			new Delta<TData>(Original, Changed, changedFields);
 
 		public override bool Equals(object obj)
 		{
@@ -110,19 +92,16 @@ namespace Tp.Core
 
 	public static class DeltaExtensions
 	{
-		public static string Dump(this IEnumerable<Delta> deltas)
-		{
-			return string.Join(Environment.NewLine, deltas.Select(x => x.ToString()));
-		}
+		public static string Dump(this IEnumerable<Delta> deltas) =>
+			string.Join(Environment.NewLine, deltas.Select(x => x.ToString()));
 
-		public static Delta<TResult> Select<T, TResult>(this Delta<T> delta, Func<T, TResult> map)
-		{
-			return new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
-		}
+		public static Delta<TResult> Select<T, TResult>(this Delta<T> delta, Func<T, TResult> map) =>
+			new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
 
-		public static Delta<TResult> Select<TResult>(this Delta delta, Func<object, TResult> map)
-		{
-			return new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
-		}
+		public static Delta<TResult> Select<TResult>(this Delta delta, Func<object, TResult> map) =>
+			new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
+
+		public static T GetChangedOrOriginal<T>(this Delta<Maybe<T>> delta) =>
+			delta.Changed.OrElse(() => delta.Original).Value;
 	}
 }

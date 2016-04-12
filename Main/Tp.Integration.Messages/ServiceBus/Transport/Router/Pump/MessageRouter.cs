@@ -1,8 +1,3 @@
-// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -23,7 +18,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 		private Action<TMessage> _handleMessage;
 		private int _childrenCount;
 
-		protected MessageRouter(IMessageSource<TMessage> messageSource, IProducerConsumerFactory<TMessage> producerConsumerFactory, Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
+		protected MessageRouter(IMessageSource<TMessage> messageSource, IProducerConsumerFactory<TMessage> producerConsumerFactory,
+			Func<TMessage, string> tagMessageProvider, IScheduler scheduler, ILoggerContextSensitive log)
 			: base(messageSource, scheduler, log)
 		{
 			_log = log;
@@ -50,16 +46,16 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			_handleMessage = handleMessage;
 			ThreadPool.QueueUserWorkItem(x => InitializeChildren(GetChildTags()));
 			base.ConsumeCore(m =>
-			                 	{
-			                 		if (IsTransactional)
-			                 		{
-			                 			new TransactionWrapper().RunInTransaction(() => Process(m), IsolationLevel, TransactionTimeout);
-			                 		}
-			                 		else
-			                 		{
-										Process(m);
-			                 		}
-			                 	});
+			{
+				if (IsTransactional)
+				{
+					new TransactionWrapper().RunInTransaction(() => Process(m), IsolationLevel, TransactionTimeout);
+				}
+				else
+				{
+					Process(m);
+				}
+			});
 		}
 
 		protected abstract IEnumerable<string> GetChildTags();
@@ -125,11 +121,11 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 			consumer.AddObserver(new DisposeProducerOnCompleteObserver(producer, _log));
 			consumer.Consume(_handleMessage);
 			return new Child
-			       	{
-			       		Source = source,
-			       		Consumer = consumer,
-			       		Producer = producer
-			       	};
+			{
+				Source = source,
+				Consumer = consumer,
+				Producer = producer
+			};
 		}
 
 		private struct Child

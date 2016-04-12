@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -25,7 +24,7 @@ namespace Tp.Utils.IO
 		{
 			if (reader == null)
 			{
-				throw new ArgumentNullException("reader");
+				throw new ArgumentNullException(nameof(reader));
 			}
 			_reader = reader;
 		}
@@ -94,7 +93,7 @@ namespace Tp.Utils.IO
 		{
 			if (s == null)
 			{
-				throw new ArgumentNullException("s");
+				throw new ArgumentNullException(nameof(s));
 			}
 			if (s.Length == 0)
 			{
@@ -107,7 +106,7 @@ namespace Tp.Utils.IO
 		{
 			if (s == null)
 			{
-				throw new ArgumentNullException("s");
+				throw new ArgumentNullException(nameof(s));
 			}
 			if (s.Length == 0)
 			{

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -13,16 +12,16 @@ namespace Tp.Utils.Sys
 	/// Executes command in a console window, reads its output.
 	/// </summary>
 	/// <remarks>
-	/// 
+	///
 	/// </remarks>
 	// TODO remove or move
 	public class Executor
 	{
 		private const int ERROR_FILE_NOT_FOUND = 2;
 		private const int ERROR_ACCESS_DENIED = 5;
-		private const int TIMEOUT = 1*60*1000;
+		private const int TIMEOUT = 1 * 60 * 1000;
 
-		private readonly ILog _log = LogManager.GetLogger(typeof (Executor));
+		private readonly ILog _log = LogManager.GetLogger(typeof(Executor));
 
 		private int _timeOut = TIMEOUT;
 
@@ -45,7 +44,7 @@ namespace Tp.Utils.Sys
 		/// <returns>Return value from command.</returns>
 		/// <exception cref="ArgumentException">If <c>command</c> is <c>null</c> or empty string.</exception>
 		public int Execute(string command, string arguments,
-		                   out string output, out string errorOutput)
+			out string output, out string errorOutput)
 		{
 			return Execute(command, arguments, Encoding.UTF8, null, out output, out errorOutput);
 		}
@@ -61,7 +60,7 @@ namespace Tp.Utils.Sys
 		/// <returns>Return value from command.</returns>
 		/// <exception cref="ArgumentException">If <c>command</c> is <c>null</c> or empty string.</exception>
 		public int Execute(string command, string arguments,
-		                   string input, out string output, out string errorOutput)
+			string input, out string output, out string errorOutput)
 		{
 			return Execute(command, arguments, Encoding.UTF8, input, out output, out errorOutput);
 		}
@@ -77,7 +76,7 @@ namespace Tp.Utils.Sys
 		/// <returns>Return value from command.</returns>
 		/// <exception cref="ArgumentException">If <c>command</c> is <c>null</c> or empty string.</exception>
 		public int Execute(string command, string arguments, Encoding encoding,
-		                   out string output, out string errorOutput)
+			out string output, out string errorOutput)
 		{
 			return Execute(command, arguments, encoding, null, out output, out errorOutput);
 		}
@@ -94,22 +93,22 @@ namespace Tp.Utils.Sys
 		/// <returns>Return value from command.</returns>
 		/// <exception cref="ArgumentException">If <c>command</c> is <c>null</c> or empty string.</exception>
 		public int Execute(string command, string arguments, Encoding encoding,
-		                   string input, out string output, out string errorOutput)
+			string input, out string output, out string errorOutput)
 		{
 			if (string.IsNullOrEmpty(command))
 			{
-				throw new ArgumentException("Command name cannot be null or empty string", "command");
+				throw new ArgumentException("Command name cannot be null or empty string", nameof(command));
 			}
 
 			if (_log.IsDebugEnabled)
 			{
 				if (string.IsNullOrEmpty(arguments))
 				{
-					_log.Debug(string.Format("Executing command '{0}' without arguments", command));
+					_log.Debug($"Executing command '{command}' without arguments");
 				}
 				else
 				{
-					_log.Debug(string.Format("Executing command '{0}' with arguments '{1}'", command, arguments));
+					_log.Debug($"Executing command '{command}' with arguments '{arguments}'");
 				}
 			}
 
@@ -141,7 +140,7 @@ namespace Tp.Utils.Sys
 
 			if (_log.IsDebugEnabled)
 			{
-				_log.Debug(string.Format("Command '{0}' completed with return value {1}", command, process.ExitCode));
+				_log.Debug($"Command '{command}' completed with return value {process.ExitCode}");
 			}
 
 			return process.ExitCode;
@@ -156,7 +155,7 @@ namespace Tp.Utils.Sys
 		/// <param name="errorOutput">Command error output.</param>
 		/// <returns>Return value from command</returns>
 		public int Execute(string command, string arguments,
-		                   out byte[] output, out string errorOutput)
+			out byte[] output, out string errorOutput)
 		{
 			return Execute(command, arguments, null, out output, out errorOutput);
 		}
@@ -171,11 +170,11 @@ namespace Tp.Utils.Sys
 		/// <param name="errorOutput">Command error output.</param>
 		/// <returns>Return value from command</returns>
 		public int Execute(string command, string arguments,
-		                   string input, out byte[] output, out string errorOutput)
+			string input, out byte[] output, out string errorOutput)
 		{
 			if (_log.IsDebugEnabled)
 			{
-				_log.Debug(string.Format("Executing command '{0}' with arguments '{1}'", command, arguments));
+				_log.Debug($"Executing command '{command}' with arguments '{arguments}'");
 			}
 
 			Process process = CreateProcess(command, arguments, Encoding.UTF8);
@@ -206,7 +205,7 @@ namespace Tp.Utils.Sys
 
 			if (_log.IsDebugEnabled)
 			{
-				_log.Debug(string.Format("Command '{0}' completed with return value {1}", command, process.ExitCode));
+				_log.Debug($"Command '{command}' completed with return value {process.ExitCode}");
 			}
 
 			return process.ExitCode;
@@ -217,18 +216,18 @@ namespace Tp.Utils.Sys
 			var process = new Process
 			{
 				StartInfo =
-					{
-						FileName = command,
-						UseShellExecute = false,
-						WindowStyle = ProcessWindowStyle.Hidden,
-						CreateNoWindow = true,
-						RedirectStandardInput = true,
-						RedirectStandardOutput = true,
-						RedirectStandardError = true,
-						Arguments = arguments,
-						StandardOutputEncoding = encoding ?? Encoding.Default,
-						StandardErrorEncoding = encoding ?? Encoding.Default,
-					}
+				{
+					FileName = command,
+					UseShellExecute = false,
+					WindowStyle = ProcessWindowStyle.Hidden,
+					CreateNoWindow = true,
+					RedirectStandardInput = true,
+					RedirectStandardOutput = true,
+					RedirectStandardError = true,
+					Arguments = arguments,
+					StandardOutputEncoding = encoding ?? Encoding.Default,
+					StandardErrorEncoding = encoding ?? Encoding.Default,
+				}
 			};
 
 			return process;
@@ -244,17 +243,17 @@ namespace Tp.Utils.Sys
 			{
 				if (ex.NativeErrorCode == ERROR_FILE_NOT_FOUND)
 				{
-					throw new ApplicationException(string.Format("Cannot find executable: '{0}'", command));
+					throw new ApplicationException($"Cannot find executable: '{command}'");
 				}
 				if (ex.NativeErrorCode == ERROR_ACCESS_DENIED)
 				{
-					throw new ApplicationException(string.Format("Access denied to executable: '{0}'", command));
+					throw new ApplicationException($"Access denied to executable: '{command}'");
 				}
-				throw new ApplicationException(string.Format("Cannot execute command: '{0}'", command), ex);
+				throw new ApplicationException($"Cannot execute command: '{command}'", ex);
 			}
 			catch (Exception ex)
 			{
-				throw new ApplicationException(string.Format("Cannot execute command: '{0}'", command), ex);
+				throw new ApplicationException($"Cannot execute command: '{command}'", ex);
 			}
 		}
 
@@ -264,7 +263,7 @@ namespace Tp.Utils.Sys
 			{
 				if (_log.IsDebugEnabled)
 				{
-					_log.Debug(string.Format("Command '{0}' did not finish in the specified amount of time and will be killed", command));
+					_log.Debug($"Command '{command}' did not finish in the specified amount of time and will be killed");
 				}
 
 				try
@@ -275,10 +274,10 @@ namespace Tp.Utils.Sys
 				{
 					if (_log.IsDebugEnabled)
 					{
-						_log.Debug(string.Format("Error killing timed out command '{0}'", command), ex);
+						_log.Debug($"Error killing timed out command '{command}'", ex);
 					}
 				}
-				throw new ProcessTimeOutException(string.Format("Command '{0}' timed out and was killed.", command));
+				throw new ProcessTimeOutException($"Command '{command}' timed out and was killed.");
 			}
 		}
 

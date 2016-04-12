@@ -135,13 +135,13 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		[Then(@"profile should have tp users: (?<users>([^,]+,?\s*)+)")]
 		public void ProfileShouldHaveTpUsers(string[] users)
 		{
-			Storage.Get<UserDTO>().Select(x => x.Login).ToArray().Should(Be.EquivalentTo(users));
+			Storage.Get<UserDTO>().Select(x => x.Login).ToArray().Should(Be.EquivalentTo(users), "Storage.Get<UserDTO>().Select(x => x.Login).ToArray().Should(Be.EquivalentTo(users))");
 		}
 
 		[Then(@"profile should be initialized")]
 		public void ProfileShouldBeInitialized()
 		{
-			Storage.Initialized.Should(Be.True);
+			Storage.Initialized.Should(Be.True, "Storage.Initialized.Should(Be.True)");
 		}
 
 		[Given("user '$userLogin' created")]
@@ -208,31 +208,31 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		[Then("tfs repository should be '$tfsUrl'")]
 		public void TfsRepoUrlShouldBe(string tfsUrl)
 		{
-			Profile.Uri.Should(Be.EqualTo(tfsUrl));
+			Profile.Uri.Should(Be.EqualTo(tfsUrl), "Profile.Uri.Should(Be.EqualTo(tfsUrl))");
 		}
 
 		[Then("sync interval should be predefined as $syncInterval")]
 		public void SyncIntervalShouldBe(int syncInterval)
 		{
-			Profile.SynchronizationInterval.Should(Be.EqualTo(syncInterval));
+			Profile.SynchronizationInterval.Should(Be.EqualTo(syncInterval), "Profile.SynchronizationInterval.Should(Be.EqualTo(syncInterval))");
 		}
 
 		[Then("tfs login should be '$login'")]
 		public void TfsLoginShouldBe(string login)
 		{
-			Profile.Login.Should(Be.EqualTo(login));
+			Profile.Login.Should(Be.EqualTo(login), "Profile.Login.Should(Be.EqualTo(login))");
 		}
 
 		[Then("tfs password should be '$password'")]
 		public void TfsPasswordShouldBe(string password)
 		{
-			Profile.Password.Should(Be.EqualTo(password));
+			Profile.Password.Should(Be.EqualTo(password), "Profile.Password.Should(Be.EqualTo(password))");
 		}
 
 		[Then("tfs starting revision should be $revision")]
 		public void TfsRevisionShouldBe(int revision)
 		{
-			Profile.StartRevision.Should(Be.EqualTo(revision.ToString()));
+			Profile.StartRevision.Should(Be.EqualTo(revision.ToString()), "Profile.StartRevision.Should(Be.EqualTo(revision.ToString()))");
 		}
 
 		[Then("$profileAmount plugin profiles should be created")]
@@ -240,19 +240,19 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		{
 			var profiles =
 				(from profile in Account.Profiles select profile.GetProfile<TfsPluginProfile>()).ToArray();
-			profiles.Length.Should(Be.EqualTo(profileAmount));
+			profiles.Length.Should(Be.EqualTo(profileAmount), "profiles.Length.Should(Be.EqualTo(profileAmount))");
 		}
 
 		[Then("user mapping should be:")]
 		public void UserMappingShouldBe(string tfs, string targetprocess)
 		{
-			Profile.UserMapping[tfs.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()));
+			Profile.UserMapping[tfs.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()), "Profile.UserMapping[tfs.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()))");
 		}
 
 		[Then("$userCount user snould be mapped")]
 		public void UsersShouldBeMapped(int userCount)
 		{
-			Profile.UserMapping.Count.Should(Be.EqualTo(userCount));
+			Profile.UserMapping.Count.Should(Be.EqualTo(userCount), "Profile.UserMapping.Count.Should(Be.EqualTo(userCount))");
 		}
 
 		protected override string SettingsXmlNode
@@ -268,7 +268,7 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 		[Then(@"profile should have revisions: (?<revisionIds>([^,]+,?\s*)+)")]
 		public void PluginProfileShouldContainRevisions(int[] revisionIds)
 		{
-			Storage.Get<RevisionIdRelation>().Count(x => revisionIds.Contains(Int32.Parse(x.RevisionId))).Should(Be.EqualTo(revisionIds.Length));
+			Storage.Get<RevisionIdRelation>().Count(x => revisionIds.Contains(Int32.Parse(x.RevisionId))).Should(Be.EqualTo(revisionIds.Length), "Storage.Get<RevisionIdRelation>().Count(x => revisionIds.Contains(Int32.Parse(x.RevisionId))).Should(Be.EqualTo(revisionIds.Length))");
 		}
 
 		private static TfsPluginProfile Profile

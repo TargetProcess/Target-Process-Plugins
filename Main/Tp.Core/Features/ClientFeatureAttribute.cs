@@ -11,9 +11,9 @@ namespace Tp.Core.Features
 		{
 			if (string.IsNullOrEmpty(clientFeatureName))
 			{
-				throw new ArgumentNullException("clientFeatureName");
+				throw new ArgumentNullException(nameof(clientFeatureName));
 			}
-				
+
 			ClientFeatureName = clientFeatureName;
 		}
 	}

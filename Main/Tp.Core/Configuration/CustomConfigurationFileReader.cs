@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System;
+﻿using System;
 using System.Configuration;
 using System.IO;
 using Tp.Core.Annotations;
@@ -40,6 +35,7 @@ namespace Tp.Core.Configuration
 			if (notifyOnFileChange)
 				WatchConfigFile();
 		}
+
 		/// <summary>
 		/// Get the configuration that represents the content of the configuration file
 		/// </summary>
@@ -78,7 +74,7 @@ namespace Tp.Core.Configuration
 				_configuration = configuration;
 			}
 
-			public T GetSection<T>(string sectionName) where T:ConfigurationSection
+			public T GetSection<T>(string sectionName) where T : ConfigurationSection
 			{
 				return (T) _configuration.GetSection(sectionName);
 			}

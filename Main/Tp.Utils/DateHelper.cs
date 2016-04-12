@@ -1,7 +1,3 @@
-//  
-// Copyright (c) 2005-2009 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System;
 using System.Collections.Generic;
 
@@ -75,14 +71,14 @@ namespace Tp.Components
 
 			diff = maxTimeSpan - minTimeSpan;
 
-			var period = diff.TotalDays/(countOfDates - 1);
+			var period = diff.TotalDays / (countOfDates - 1);
 
-			var reportDates = new List<DateTime> {minDate.Date};
+			var reportDates = new List<DateTime> { minDate.Date };
 
 			var date = minDate.Date;
 			for (var i = 1; i < (countOfDates - 1); i++)
 			{
-				reportDates.Add(date.AddDays(period*i).Date);
+				reportDates.Add(date.AddDays(period * i).Date);
 			}
 
 			reportDates.Add(maxDate.Date);

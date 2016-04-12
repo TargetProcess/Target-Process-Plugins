@@ -1,12 +1,12 @@
 ﻿using System;
-using NServiceBus;
-using NServiceBus.ObjectBuilder;
 using System.Collections;
-using System.Reflection;
-using NServiceBus.Config;
 using System.Collections.Generic;
-using NServiceBus.Saga;
 using System.Linq;
+using System.Reflection;
+using NServiceBus;
+using NServiceBus.Config;
+using NServiceBus.ObjectBuilder;
+using NServiceBus.Saga;
 
 namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 {
@@ -98,7 +98,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 		{
 			var types = new List<Type>();
 			foreach (Assembly a in assemblies)
+			{
 				types.AddRange(a.GetTypes());
+			}
 
 			return ConfigureMessageHandlersIn(types);
 		}
@@ -153,7 +155,9 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			var types = new List<Type>(TypesToScan);
 
 			foreach (Type t in order.Types)
+			{
 				types.Remove(t);
+			}
 
 			types.InsertRange(0, order.Types);
 
@@ -173,17 +177,21 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 			var sagaHandlers = new List<Type>();
 
 			foreach (Type t in types)
+			{
 				if (IsMessageHandler(t))
 				{
 					Configurer.ConfigureComponent(t, ComponentCallModelEnum.Singlecall);
 					handlers.Add(t);
 				}
+			}
 
 			foreach (Type t in types)
+			{
 				if (IsSagaMessageHandler(t))
 				{
 					sagaHandlers.Add(t);
 				}
+			}
 
 			busConfig.ConfigureProperty(b => b.MessageHandlerTypes, handlers);
 			busConfig.ConfigureProperty(b => b.SagaMessageHandlerTypes, sagaHandlers);

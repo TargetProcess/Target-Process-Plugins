@@ -11,9 +11,9 @@ namespace System.Linq.Dynamic
 		{
 			_props = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
 		}
+
 		public override string ToString()
 		{
-			
 			var sb = new StringBuilder();
 			sb.Append("{");
 			for (int i = 0; i < _props.Length; i++)

@@ -33,7 +33,7 @@ namespace Tp.Utils.Documentation
 		{
 			return valueType
 				.GetInterfaces()
-				.FirstOrNothing(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof (IApiType<>))
+				.FirstOrNothing(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IApiType<>))
 				.Select(i => ExtractDocumentationType(i.GetGenericArguments()[0]))
 				.GetOrDefault(valueType);
 		}

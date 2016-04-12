@@ -274,7 +274,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		[Then("bug in TargetProcess with name '$bugName' should have $count attachments")]
 		public void CheckAttachmentsCount(string bugName, int count)
 		{
-			TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Count().Should(Be.EqualTo(count));
+			TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Count().Should(Be.EqualTo(count), "TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then(
@@ -284,9 +284,9 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var part = GetCreatedAttachmentByName(fileName);
 
-			part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)));
+			part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)), "part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)))");
 
-			Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content));
+			Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content), "Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content))");
 		}
 
 		private AddAttachmentPartToMessageCommand GetCreatedAttachmentByName(string fileName)
@@ -298,7 +298,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				attachments.AddRange(message.AttachmentDtos);
 			}
 
-			attachments.FirstOrDefault(x => x.OriginalFileName == fileName).Should(Be.Not.Null);
+			attachments.FirstOrDefault(x => x.OriginalFileName == fileName).Should(Be.Not.Null, "attachments.FirstOrDefault(x => x.OriginalFileName == fileName).Should(Be.Not.Null)");
 
 			var part =
 				TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Single(x => x.FileName == fileName);
@@ -310,14 +310,14 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		{
 			var part = GetCreatedAttachmentByName(fileName);
 
-			part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID));
-			part.Description.Should(Be.EqualTo(description));
+			part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID), "part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID))");
+			part.Description.Should(Be.EqualTo(description), "part.Description.Should(Be.EqualTo(description))");
 		}
 
 		[Then("no attachments should present on disk")]
 		public void CheckThatThereIsNoAttachments()
 		{
-			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0));
+			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0), "Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0))");
 		}
 	}
 }

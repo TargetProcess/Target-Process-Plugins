@@ -13,6 +13,7 @@ namespace Tp.Core.Expressions.Visitors
 			}
 			return base.VisitMember(memberExpression);
 		}
+
 		protected override Expression VisitIndex(IndexExpression node)
 		{
 			return ProtectFromNull(node, node.Object);
@@ -44,16 +45,12 @@ namespace Tp.Core.Expressions.Visitors
 			{
 				return memberExpression;
 			}
-			else
-			{
-				var condition = Expression.ReferenceEqual(Visit(target), Expression.Constant(null, target.Type));
 
-				var @true = Expression.Constant(memberExpression.Type.DefaultValue(), memberExpression.Type);
-				var @false = memberExpression;
-				return Expression.Condition(condition, @true, @false);
-			}
+			var condition = Expression.ReferenceEqual(Visit(target), Expression.Constant(null, target.Type));
+
+			var @true = Expression.Constant(memberExpression.Type.DefaultValue(), memberExpression.Type);
+			var @false = memberExpression;
+			return Expression.Condition(condition, @true, @false);
 		}
-
-
 	}
 }

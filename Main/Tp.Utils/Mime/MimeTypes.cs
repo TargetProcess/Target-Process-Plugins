@@ -1,7 +1,3 @@
-// 
-// Copyright (c) 2005-2008 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -149,8 +145,6 @@ namespace Tp.Utils.Mime
 		/// </returns>
 		public MimeType GetMimeTypeByContent(Stream data)
 		{
-			
-			
 			// Preliminary checks
 			if (data == null || (data.Length < 1))
 				return null;
@@ -241,7 +235,7 @@ namespace Tp.Utils.Mime
 		{
 			IList mimeTypes = null;
 			int index = name.LastIndexOf('.');
-			if ((index != - 1) && (index != name.Length - 1))
+			if ((index != -1) && (index != name.Length - 1))
 			{
 				// There's an extension, so try to find
 				// the corresponding mime-types

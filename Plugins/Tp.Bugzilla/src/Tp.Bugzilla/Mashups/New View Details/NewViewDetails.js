@@ -1,7 +1,7 @@
 ﻿tau.mashups
     .addDependency('jQuery')
     .addDependency('Underscore')
-    .addDependency('BugzillaViewDetails/BugInfoTemplate')
+    .addDependency('BugzillaViewDetails/NewBugInfoTemplate')
     .addModule('BugzillaViewDetails/NewViewDetails', function ($, _, template) {
         function NewView() {
         }

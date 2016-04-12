@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,27 +41,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FuncTests|AnyCPU'">
-    <OutputPath>bin\FuncTests\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Tp.Integration.Messages.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>$(SolutionDir)packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -77,7 +60,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Reactive">
-      <HintPath>$(SolutionDir)packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
@@ -87,8 +70,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tp.Core.Functional">
-      <HintPath>..\..\packages\Tp.Core.Functional.0.1.1\lib\net45\Tp.Core.Functional.dll</HintPath>
+    <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -98,9 +81,9 @@
     <Compile Include="AccountLifecycle\AccountRemovedLastStepMessage.cs" />
     <Compile Include="AccountLifecycle\IAccountLifecycleMessage.cs" />
     <Compile Include="AccountName.cs" />
-    <Compile Include="AdditionalEntityAttributes.cs" />
     <Compile Include="Commands\ExecutePluginCommandCommand.cs" />
     <Compile Include="Commands\PluginCommandResponseMessage.cs" />
+    <Compile Include="Commands\CreateTaskForUserStoryWithTeamCommand.cs" />
     <Compile Include="Commands\PostTimeCommand.cs" />
     <Compile Include="Commands\ChangeEntityStateCommand.cs" />
     <Compile Include="ComponentModel\PasswordAttribute.cs" />
@@ -114,131 +97,225 @@
     <Compile Include="ComponentModel\ProjectIdAttribute.cs" />
     <Compile Include="ComponentModel\TextAreaAttribute.cs" />
     <Compile Include="DataTransferObject.cs" />
-    <Compile Include="Entities\ApplicationContextDataDTO.cs" />
-    <Compile Include="Entities\AssignableDTO.cs" />
-    <Compile Include="Entities\AttachmentDTO.cs" />
-    <Compile Include="Entities\AttachmentFileDTO.cs" />
-    <Compile Include="Entities\BugDTO.cs" />
-    <Compile Include="Entities\BuildDTO.cs" />
-    <Compile Include="Entities\CommentDTO.cs" />
-    <Compile Include="Entities\CompanyDTO.cs" />
-    <Compile Include="Entities\ContactDTO.cs" />
-    <Compile Include="Entities\DtoVisitor.cs" />
+    <Compile Include="Entities\CustomFieldInfoExtensions.cs" />
     <Compile Include="Entities\Entities.cs" />
-    <Compile Include="Entities\EpicDTO.cs" />
-    <Compile Include="Entities\GeneralFollowerDTO.cs" />
-    <Compile Include="Entities\IDTOVisitor.cs" />
+    <Compile Include="Entities\Generated\ApplicationContextDataDTO.generated.cs" />
+    <Compile Include="Entities\Generated\AssignableDTO.generated.cs" />
+    <Compile Include="Entities\Generated\AssignableSquadDTO.generated.cs" />
+    <Compile Include="Entities\Generated\AttachmentDTO.generated.cs" />
+    <Compile Include="Entities\Generated\AttachmentFileDTO.generated.cs" />
+    <Compile Include="Entities\Generated\BugDTO.generated.cs" />
+    <Compile Include="Entities\Generated\BuildDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ClientStorageDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ClientStorageGroupDTO.generated.cs" />
+    <Compile Include="Entities\Generated\CommentDTO.generated.cs" />
+    <Compile Include="Entities\Generated\CompanyDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ContactDTO.generated.cs" />
+    <Compile Include="Entities\Generated\CustomActivityDTO.generated.cs" />
+    <Compile Include="Entities\Generated\CustomFieldDTO.generated.cs" />
+    <Compile Include="Entities\Generated\CustomReportDTO.generated.cs" />
+    <Compile Include="Entities\Generated\CustomRuleDTO.generated.cs" />
+    <Compile Include="Entities\Generated\EntityStateDTO.generated.cs" />
+    <Compile Include="Entities\Generated\EntityTypeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\EpicDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ExternalReferenceDTO.generated.cs" />
+    <Compile Include="Entities\Generated\FeatureDTO.generated.cs" />
+    <Compile Include="Entities\Generated\FreezedTestCaseInfoDTO.generated.cs" />
+    <Compile Include="Entities\Generated\FreezedTestStepInfoDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralFieldExtensionDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralFollowerDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralListItemDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralNumericPriorityListItemDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralRelationDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralRelationTypeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralUserDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GlobalSettingDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ImpedimentDTO.generated.cs" />
+    <Compile Include="Entities\Generated\IntegrationDto.empty.generated.cs" />
+    <Compile Include="Entities\Generated\IterationDTO.generated.cs" />
+    <Compile Include="Entities\Generated\LicenseDTO.generated.cs" />
+    <Compile Include="Entities\Generated\LookupGeneralListItemDTO.generated.cs" />
+    <Compile Include="Entities\Generated\MessageDTO.generated.cs" />
+    <Compile Include="Entities\Generated\MessageGeneralDTO.generated.cs" />
+    <Compile Include="Entities\Generated\MessageUidDTO.generated.cs" />
+    <Compile Include="Entities\Generated\MilestoneDTO.generated.cs" />
+    <Compile Include="Entities\Generated\PasswordRecoveryDTO.generated.cs" />
+    <Compile Include="Entities\Generated\PluginProfileDTO.generated.cs" />
+    <Compile Include="Entities\Generated\PluginProfileMessageDTO.generated.cs" />
+    <Compile Include="Entities\Generated\PracticeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\PriorityDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProcessAdminDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProcessDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProcessPracticeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProgramDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProjectAllocationDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProjectDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ProjectMemberDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ReleaseDTO.generated.cs" />
+    <Compile Include="Entities\Generated\ReleaseProjectDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RequestDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RequesterDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RequestRequesterDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RequestTypeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RevisionAssignableDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RevisionDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RevisionFileDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RoleDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RoleEffortDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RoleEntityTypeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RuleDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RuleEngineUserDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SavedFilterDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SeverityDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SquadDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SquadIterationDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SquadMemberDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SquadProjectAllocationDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SquadProjectDTO.generated.cs" />
+    <Compile Include="Entities\Generated\SystemUserDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TagBundleDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TagBundleTagDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TagDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TagGeneralDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TaskDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TeamDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TeamListItemDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TermDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestCaseDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestCaseRunBugDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestCaseRunDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestCaseTestPlanDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestItemTestPlanLinkDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestPlanDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestPlanRunBugDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestPlanRunDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestPlanTestPlanDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestRunItemHierarchyLinkDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestStepDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TestStepRunDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TimeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TpEventDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TpProfileDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TpProjectProfileDTO.generated.cs" />
+    <Compile Include="Entities\Generated\TpSessionDTO.generated.cs" />
+    <Compile Include="Entities\Generated\UserDTO.generated.cs" />
+    <Compile Include="Entities\Generated\UserProjectAllocationDTO.generated.cs" />
+    <Compile Include="Entities\Generated\UserStoryDTO.generated.cs" />
+    <Compile Include="Entities\Generated\WorkflowDTO.generated.cs" />
+    <Compile Include="Entities\ICustomFieldConfigHolder.cs" />
+    <Compile Include="Entities\IDTOVisitor.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IDTOVisitor.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Interfaces.cs" />
-    <Compile Include="Entities\ReleaseProjectDTO.cs" />
-    <Compile Include="Entities\SquadIterationDTO.cs" />
-    <Compile Include="Entities\TestStepDTO.cs" />
-    <Compile Include="Entities\TestStepRunDTO.cs" />
-    <Compile Include="Entities\CustomActivityDTO.cs" />
-    <Compile Include="Entities\CustomFieldDTO.cs" />
-    <Compile Include="Entities\CustomReportDTO.cs" />
+    <Compile Include="Entities\StorageItemScopeDTO.cs" />
+    <Compile Include="Entities\TestCaseRunStatusDTO.cs" />
     <Compile Include="Entities\EmailAttachmentDTO.cs" />
-    <Compile Include="Entities\EntityStateDTO.cs" />
-    <Compile Include="Entities\EntityTypeDTO.cs" />
-    <Compile Include="Entities\ExternalReferenceDTO.cs" />
-    <Compile Include="Entities\FeatureDTO.cs" />
     <Compile Include="Entities\Field.cs" />
-    <Compile Include="Entities\GeneralDTO.cs" />
-    <Compile Include="Entities\GeneralFieldExtensionDTO.cs" />
-    <Compile Include="Entities\GeneralListItemDTO.cs" />
-    <Compile Include="Entities\GeneralNumericPriorityListItemDTO.cs" />
-    <Compile Include="Entities\GeneralRelationDTO.cs" />
-    <Compile Include="Entities\GeneralRelationTypeDto.cs" />
-    <Compile Include="Entities\GeneralUserDTO.cs" />
-    <Compile Include="Entities\GlobalSettingDTO.cs" />
     <Compile Include="Entities\ICustomFieldInfo.cs" />
-    <Compile Include="Entities\ImpedimentDTO.cs" />
-    <Compile Include="Entities\IterationDTO.cs" />
-    <Compile Include="Entities\LicenseDTO.cs" />
     <Compile Include="Entities\LookupFilterDto.cs" />
-    <Compile Include="Entities\MessageDTO.cs" />
-    <Compile Include="Entities\MessageGeneralDTO.cs" />
-    <Compile Include="Entities\MessageUidDTO.cs" />
-    <Compile Include="Entities\MilestoneDTO.cs" />
-    <Compile Include="Entities\PasswordRecoveryDTO.cs" />
-    <Compile Include="Entities\PluginProfileDTO.cs" />
-    <Compile Include="Entities\PluginProfileMessageDTO.cs" />
-    <Compile Include="Entities\PracticeDTO.cs" />
-    <Compile Include="Entities\PriorityDTO.cs" />
-    <Compile Include="Entities\ProcessAdminDTO.cs" />
-    <Compile Include="Entities\ProcessDTO.cs" />
-    <Compile Include="Entities\ProcessPracticeDTO.cs" />
-    <Compile Include="Entities\ProgramDTO.cs" />
-    <Compile Include="Entities\ProjectDTO.cs" />
-    <Compile Include="Entities\ProjectMemberDTO.cs" />
-    <Compile Include="Entities\ReleaseDTO.cs" />
-    <Compile Include="Entities\RequestDTO.cs" />
-    <Compile Include="Entities\RequesterDTO.cs" />
-    <Compile Include="Entities\RequestRequesterDTO.cs" />
-    <Compile Include="Entities\RequestTypeDTO.cs" />
-    <Compile Include="Entities\RevisionAssignableDTO.cs" />
-    <Compile Include="Entities\RevisionDTO.cs" />
-    <Compile Include="Entities\RevisionFileDTO.cs" />
-    <Compile Include="Entities\RoleDTO.cs" />
-    <Compile Include="Entities\RoleEffortDTO.cs" />
-    <Compile Include="Entities\RoleEntityTypeDTO.cs" />
-    <Compile Include="Entities\RuleDTO.cs" />
-    <Compile Include="Entities\SavedFilterDTO.cs" />
-    <Compile Include="Entities\SeverityDTO.cs" />
-    <Compile Include="Entities\SystemUserDTO.cs" />
-    <Compile Include="Entities\TagBundleDTO.cs" />
-    <Compile Include="Entities\TagBundleTagDTO.cs" />
-    <Compile Include="Entities\TagDTO.cs" />
-    <Compile Include="Entities\TagGeneralDTO.cs" />
-    <Compile Include="Entities\TaskDTO.cs" />
-    <Compile Include="Entities\TeamDTO.cs" />
-    <Compile Include="Entities\TeamListItemDTO.cs" />
-    <Compile Include="Entities\TermDTO.cs" />
-    <Compile Include="Entities\TestCaseDTO.cs" />
-    <Compile Include="Entities\TestCaseRunDTO.cs" />
-    <Compile Include="Entities\TestCaseTestPlanDTO.cs" />
-    <Compile Include="Entities\TestPlanDTO.cs" />
-    <Compile Include="Entities\TestPlanRunDTO.cs" />
-    <Compile Include="Entities\TimeDTO.cs" />
-    <Compile Include="Entities\TpEventDTO.cs" />
-    <Compile Include="Entities\TpProfileDTO.cs" />
-    <Compile Include="Entities\TpProjectProfileDTO.cs" />
-    <Compile Include="Entities\TpSessionDTO.cs" />
-    <Compile Include="Entities\UserDTO.cs" />
-    <Compile Include="Entities\UserStoryDTO.cs" />
-    <Compile Include="EntityLifecycle\Commands\Attachment.cs" />
-    <Compile Include="EntityLifecycle\Commands\AttachmentFile.cs" />
-    <Compile Include="EntityLifecycle\Commands\Bug.cs" />
-    <Compile Include="EntityLifecycle\Commands\Build.cs" />
-    <Compile Include="EntityLifecycle\Commands\Comment.cs" />
-    <Compile Include="EntityLifecycle\Commands\Company.cs" />
-    <Compile Include="EntityLifecycle\Commands\Contact.cs" />
-    <Compile Include="EntityLifecycle\Commands\CustomActivity.cs" />
-    <Compile Include="EntityLifecycle\Commands\CustomField.cs" />
-    <Compile Include="EntityLifecycle\Commands\EntityState.cs" />
-    <Compile Include="EntityLifecycle\Commands\Epic.cs" />
-    <Compile Include="EntityLifecycle\Commands\Feature.cs" />
-    <Compile Include="EntityLifecycle\Commands\Impediment.cs" />
-    <Compile Include="EntityLifecycle\Commands\Iteration.cs" />
-    <Compile Include="EntityLifecycle\Commands\Message.cs" />
-    <Compile Include="EntityLifecycle\Commands\Process.cs" />
-    <Compile Include="EntityLifecycle\Commands\Program.cs" />
-    <Compile Include="EntityLifecycle\Commands\Project.cs" />
-    <Compile Include="EntityLifecycle\Commands\ProjectMember.cs" />
-    <Compile Include="EntityLifecycle\Commands\Release.cs" />
-    <Compile Include="EntityLifecycle\Commands\Request.cs" />
-    <Compile Include="EntityLifecycle\Commands\Requester.cs" />
-    <Compile Include="EntityLifecycle\Commands\Role.cs" />
-    <Compile Include="EntityLifecycle\Commands\RoleEffort.cs" />
-    <Compile Include="EntityLifecycle\Commands\Tag.cs" />
-    <Compile Include="EntityLifecycle\Commands\TagBundle.cs" />
-    <Compile Include="EntityLifecycle\Commands\Task.cs" />
-    <Compile Include="EntityLifecycle\Commands\Team.cs" />
-    <Compile Include="EntityLifecycle\Commands\TestCase.cs" />
-    <Compile Include="EntityLifecycle\Commands\TestPlan.cs" />
-    <Compile Include="EntityLifecycle\Commands\TestPlanRun.cs" />
-    <Compile Include="EntityLifecycle\Commands\Time.cs" />
-    <Compile Include="EntityLifecycle\Commands\User.cs" />
-    <Compile Include="EntityLifecycle\Commands\UserStory.cs" />
+    <Compile Include="EntityLifecycle\Commands\ApplicationContextData.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Assignable.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\AssignableSquad.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\AttachGeneralUserToRequest.cs" />
+    <Compile Include="EntityLifecycle\Commands\Attachment.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\AttachmentFile.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\AttachmentPart.cs" />
+    <Compile Include="EntityLifecycle\Commands\AttachMessageToGeneral.cs" />
+    <Compile Include="EntityLifecycle\Commands\Bug.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Build.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Comment.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Company.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Contact.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\CustomActivity.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\CustomField.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\CustomReport.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\CustomRule.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\EntityState.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\EntityType.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Epic.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\ExternalReference.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Feature.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\General.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralFieldExtension.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralFollower.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralNumericPriorityListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralRelation.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralRelationType.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GeneralUser.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\GlobalSetting.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Impediment.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Iteration.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\License.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\LookupGeneralListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\MessageGeneral.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\MessageUid.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Milestone.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\PasswordRecovery.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\PluginProfile.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\PluginProfileMessage.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Practice.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Priority.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Process.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\ProcessAdmin.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\ProcessPractice.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Program.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Project.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\ProjectAllocation.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\ProjectMember.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Release.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\ReleaseProject.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Request.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Requester.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RequestRequester.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RequestType.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Revision.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RevisionAssignable.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RevisionFile.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Role.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RoleEffort.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RoleEntityType.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Rule.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\RuleEngineUser.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\SavedFilter.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Severity.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Squad.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\SquadIteration.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\SquadMember.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\SquadProject.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\SquadProjectAllocation.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\SystemUser.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Tag.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TagBundle.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TagBundleTag.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TagGeneral.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Task.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Team.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TeamListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Term.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestCase.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestCaseRun.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestCaseRunBug.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestCaseTestPlan.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestItemTestPlanLink.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestPlan.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestPlanRun.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestPlanRunBug.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestPlanTestPlan.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestStep.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TestStepRun.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Time.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TpEvent.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TpProfile.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TpProjectProfile.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\TpSession.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\User.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\UserProjectAllocation.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\UserStory.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\Workflow.generated.cs" />
     <Compile Include="EntityLifecycle\DeleteEntityCommand.cs" />
     <Compile Include="EntityLifecycle\CreateEntityCommand.cs" />
     <Compile Include="EntityLifecycle\DtoType.cs" />
@@ -255,62 +332,108 @@
     <Compile Include="EntityLifecycle\ITargetProcessCommand.cs" />
     <Compile Include="EntityLifecycle\ITargetProcessMessage.cs" />
     <Compile Include="EntityLifecycle\MessageExtensions.cs" />
-    <Compile Include="EntityLifecycle\Messages\AttachmentFile.cs" />
-    <Compile Include="EntityLifecycle\Messages\Attachment.cs" />
-    <Compile Include="EntityLifecycle\Messages\Bug.cs" />
-    <Compile Include="EntityLifecycle\Messages\Build.cs" />
-    <Compile Include="EntityLifecycle\Messages\Comment.cs" />
-    <Compile Include="EntityLifecycle\Messages\Company.cs" />
-    <Compile Include="EntityLifecycle\Messages\Contact.cs" />
-    <Compile Include="EntityLifecycle\Messages\TestStep.cs" />
-    <Compile Include="EntityLifecycle\Messages\CustomActivity.cs" />
-    <Compile Include="EntityLifecycle\Messages\CustomField.cs" />
-    <Compile Include="EntityLifecycle\Messages\CustomReport.cs" />
-    <Compile Include="EntityLifecycle\Messages\EntityState.cs" />
-    <Compile Include="EntityLifecycle\Messages\Epic.cs" />
-    <Compile Include="EntityLifecycle\Messages\Feature.cs" />
-    <Compile Include="EntityLifecycle\Messages\GeneralFollower.cs" />
-    <Compile Include="EntityLifecycle\Messages\GlobalSetting.cs" />
-    <Compile Include="EntityLifecycle\Messages\Impediment.cs" />
-    <Compile Include="EntityLifecycle\Messages\ReleaseProject.cs" />
-    <Compile Include="EntityLifecycle\Messages\SquadIteration.cs" />
-    <Compile Include="EntityLifecycle\Messages\Iteration.cs" />
-    <Compile Include="EntityLifecycle\Messages\Message.cs" />
-    <Compile Include="EntityLifecycle\Messages\MessageUid.cs" />
-    <Compile Include="EntityLifecycle\Messages\Milestone.cs" />
-    <Compile Include="EntityLifecycle\Messages\Priority.cs" />
-    <Compile Include="EntityLifecycle\Messages\Process.cs" />
-    <Compile Include="EntityLifecycle\Messages\ProcessAdminDelegate.cs" />
-    <Compile Include="EntityLifecycle\Messages\ProcessPractice.cs" />
-    <Compile Include="EntityLifecycle\Messages\Program.cs" />
-    <Compile Include="EntityLifecycle\Messages\Project.cs" />
-    <Compile Include="EntityLifecycle\Messages\ProjectMember.cs" />
-    <Compile Include="EntityLifecycle\Messages\Release.cs" />
-    <Compile Include="EntityLifecycle\Messages\Request.cs" />
-    <Compile Include="EntityLifecycle\Messages\Requester.cs" />
-    <Compile Include="EntityLifecycle\Messages\Revision.cs" />
-    <Compile Include="EntityLifecycle\Messages\RevisionAssignable.cs" />
-    <Compile Include="EntityLifecycle\Messages\RevisionFile.cs" />
-    <Compile Include="EntityLifecycle\Messages\Role.cs" />
-    <Compile Include="EntityLifecycle\Messages\RoleEffort.cs" />
-    <Compile Include="EntityLifecycle\Messages\RoleEntityType.cs" />
-    <Compile Include="EntityLifecycle\Messages\Rule.cs" />
-    <Compile Include="EntityLifecycle\Messages\Severity.cs" />
-    <Compile Include="EntityLifecycle\Messages\Tag.cs" />
-    <Compile Include="EntityLifecycle\Messages\TagBundle.cs" />
-    <Compile Include="EntityLifecycle\Messages\Task.cs" />
-    <Compile Include="EntityLifecycle\Messages\Team.cs" />
-    <Compile Include="EntityLifecycle\Messages\Term.cs" />
-    <Compile Include="EntityLifecycle\Messages\TestCase.cs" />
-    <Compile Include="EntityLifecycle\Messages\TestCaseRun.cs" />
-    <Compile Include="EntityLifecycle\Messages\TestCaseTestPlan.cs" />
-    <Compile Include="EntityLifecycle\Messages\TestPlan.cs" />
-    <Compile Include="EntityLifecycle\Messages\TestPlanRun.cs" />
-    <Compile Include="EntityLifecycle\Messages\Time.cs" />
-    <Compile Include="EntityLifecycle\Messages\User.cs" />
-    <Compile Include="EntityLifecycle\Messages\UserStory.cs" />
+    <Compile Include="EntityLifecycle\Messages\AdditionalMessages.cs" />
+    <Compile Include="EntityLifecycle\Messages\ApplicationContextData.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Assignable.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\AssignableSquad.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Attachment.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\AttachmentFile.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Bug.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Build.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Comment.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Company.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Contact.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomActivity.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomField.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomReport.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\CustomRule.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\EntityState.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\EntityType.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Epic.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\ExternalReference.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Feature.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\General.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralFieldExtension.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralFollower.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralNumericPriorityListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralRelation.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralRelationType.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GeneralUser.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\GlobalSetting.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Impediment.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Iteration.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\License.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\LookupGeneralListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Message.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\MessageGeneral.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\MessageUid.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Milestone.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PasswordRecovery.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PluginProfile.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PluginProfileMessage.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Practice.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Priority.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Process.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProcessAdmin.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProcessPractice.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Program.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Project.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProjectAllocation.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\ProjectMember.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Release.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\ReleaseProject.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Request.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Requester.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RequestRequester.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RequestType.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Revision.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RevisionAssignable.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RevisionFile.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Role.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RoleEffort.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RoleEntityType.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Rule.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\RuleEngineUser.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\SavedFilter.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Severity.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Squad.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\SquadIteration.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\SquadMember.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\SquadProject.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\SquadProjectAllocation.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\SystemUser.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Tag.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TagBundle.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TagBundleTag.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TagGeneral.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Task.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Team.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TeamListItem.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Term.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestCase.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestCaseRun.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestCaseRunBug.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestItemTestPlanLink.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestPlan.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestPlanRun.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestPlanRunBug.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestPlanTestPlan.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestStep.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TestStepRun.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Time.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TpEvent.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TpProfile.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TpProjectProfile.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\TpSession.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\User.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\UserProjectAllocation.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\UserStory.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\Workflow.generated.cs" />
     <Compile Include="EntityLifecycle\Queries\AssignableQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CommentQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\AssignableSquadQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\TeamQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\TestStepQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CustomFieldQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\EntityState.cs" />
@@ -334,7 +457,9 @@
     <Compile Include="EntityLifecycle\SagaMessage.cs" />
     <Compile Include="EntityLifecycle\UpdateEntityCommand.cs" />
     <Compile Include="Enums\ActionTypeEnum.cs" />
+    <Compile Include="Enums\CkFinderFileTypeEnum.cs" />
     <Compile Include="Enums\ContentTypeEnum.cs" />
+    <Compile Include="Enums\CustomFieldScopeEnum.cs" />
     <Compile Include="Enums\FieldType.cs" />
     <Compile Include="Enums\FileActionEnum.cs" />
     <Compile Include="Enums\HistoryTypeEnum.cs" />
@@ -439,7 +564,14 @@
     <Compile Include="Ticker\TickMessage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EntityLifecycle\Commands\Command.tt" />
+    <None Include="EntityLifecycle\Messages\Message.tt" />
     <None Include="packages.config" />
+    <None Include="Entities\IDTOVisitor.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IDTOVisitor.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Entities\Generated\IntegrationDto.tt" />
     <None Include="TpPublic.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -447,15 +579,41 @@
       <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
       <Name>Tp.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tp.Utils\Tp.Utils.csproj">
+      <Project>{bf902d46-3d03-46d6-9e0b-d4246584a881}</Project>
+      <Name>Tp.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ServiceBus\Transport\Router\Extensions\" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <CodeDir>$(ProjectDir)..\..\</CodeDir>
+  </PropertyGroup>
+  <Import Project="$(CodeDir)Libs\T4\T4.targets" />
+  <Target Name="GenerateTemplatedArtifacts" AfterTargets="PrepareResources">
+    <ItemGroup>
+      <T4Template Include="Entities\Generated\IntegrationDto.tt" />
+      <T4Template Include="Entities\IDTOVisitor.tt" />
+      <T4Template Include="EntityLifecycle\Commands\Command.tt" />
+      <T4Template Include="EntityLifecycle\Messages\Message.tt" />
+      <SelfProject Include="$(ProjectFileName)">
+        <Properties>T4Input=$(ProjectDir)%(T4Template.identity)</Properties>
+      </SelfProject>
+    </ItemGroup>
+    <MSBuild Projects="@(SelfProject)" BuildInParallel="true" Targets="T4ModelGen" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

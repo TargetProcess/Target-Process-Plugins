@@ -5,8 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using NServiceBus;
 using NServiceBus.Saga;
 using Tp.Core;
@@ -44,7 +42,7 @@ namespace Tp.Search.Bus.Workflow
 											 q.GeneralId = Data.GeneralId;
 											 Send(q);
 										 }
-										 , _logger, (dto, indexer) => indexer.UpdateCommentIndex(dto, new List<CommentField>(), Maybe.Return(Data.ProjectId), Maybe.Nothing, DocumentIndexOptimizeSetup.NoOptimize));
+										 , _logger, (dto, indexer) => indexer.UpdateCommentIndex(dto, new List<CommentField>(), true, false, DocumentIndexOptimizeSetup.NoOptimize));
 
 			_testStepsIndexing = new TestStepsIndexing(entityIndexer, () => Data, entityTypesProvider, d => MarkAsComplete(),
 										 q =>

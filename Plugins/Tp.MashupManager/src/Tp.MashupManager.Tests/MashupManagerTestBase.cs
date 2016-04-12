@@ -186,60 +186,60 @@ namespace Tp.MashupManager.Tests
 		[Then(@"profile should have following mashups: (?<mashupNames>([^,]+,?\s*)+)")]
 		public void CheckProfileMashups(string[] mashupNames)
 		{
-			MashupManagerProfile.MashupNames.Should(Be.EquivalentTo(mashupNames));
+			MashupManagerProfile.MashupNames.Should(Be.EquivalentTo(mashupNames), "MashupManagerProfile.MashupNames.Should(Be.EquivalentTo(mashupNames))");
 
 			foreach (var mashupName in mashupNames)
 			{
 				var mashup = GetMashupFromStorage(mashupName);
-				mashup.Placeholders.Should(Be.Not.Null.And.Not.Empty);
-				mashup.Files.Should(Be.Not.Null.And.Not.Empty);
+				mashup.Placeholders.Should(Be.Not.Null.And.Not.Empty, "mashup.Placeholders.Should(Be.Not.Null.And.Not.Empty)");
+				mashup.Files.Should(Be.Not.Null.And.Not.Empty, "mashup.Files.Should(Be.Not.Null.And.Not.Empty)");
 			}
 		}
 
 		[Then("$count mashups should be sent to TP")]
 		public void CheckCreatedMashupsCount(int count)
 		{
-			PluginMashupsMessages.Count().Should(Be.EqualTo(count));
+			PluginMashupsMessages.Count().Should(Be.EqualTo(count), "PluginMashupsMessages.Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then("mashup '$mashupName' with placeholders '$placeholders' and script '$script' should be sent to TP")]
 		public void CheckCreatedInTpMashup(string mashupName, string placeholders, string script)
 		{
 			var mashup = GetMashupMessageByName(mashupName);
-			mashup.MashupName.Should(Be.EqualTo(mashupName));
-			mashup.PluginMashupScripts.Single().ScriptContent.Should(Be.EqualTo(script));
-			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())));
+			mashup.MashupName.Should(Be.EqualTo(mashupName), "mashup.MashupName.Should(Be.EqualTo(mashupName))");
+			mashup.PluginMashupScripts.Single().ScriptContent.Should(Be.EqualTo(script), "mashup.PluginMashupScripts.Single().ScriptContent.Should(Be.EqualTo(script))");
+			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())), "mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())))");
 		}
 
 		[Then(@"mashup '$mashupName' with placeholders '$placeholders' and fileNames '(?<fileNames>([^,]+,?\s*)+)' should be sent to TP")]
 		public void CheckCreatedInTpMashupWithConfig(string mashupName, string placeholders, string[] fileNames)
 		{
 			var mashup = GetMashupMessageByName(mashupName);
-			mashup.MashupName.Should(Be.EqualTo(mashupName));
-			mashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames));
-			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())));
+			mashup.MashupName.Should(Be.EqualTo(mashupName), "mashup.MashupName.Should(Be.EqualTo(mashupName))");
+			mashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames), "mashup.PluginMashupScripts.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames))");
+			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())), "mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())))");
 		}
 
 		[Then("'$fileName' file of '$mashupName' mashup sended to TP should contain '$script' script")]
 		public void CheckSendedToTpMashupFileContent(string fileName, string mashupName, string script)
 		{
 			var mashup = GetMashupMessageByName(mashupName);
-			mashup.MashupName.Should(Be.EqualTo(mashupName));
-			mashup.PluginMashupScripts.First(x => x.FileName.EqualsIgnoreCase(fileName)).ScriptContent.Should(Be.EqualTo(script));
+			mashup.MashupName.Should(Be.EqualTo(mashupName), "mashup.MashupName.Should(Be.EqualTo(mashupName))");
+			mashup.PluginMashupScripts.First(x => x.FileName.EqualsIgnoreCase(fileName)).ScriptContent.Should(Be.EqualTo(script), "mashup.PluginMashupScripts.First(x => x.FileName.EqualsIgnoreCase(fileName)).ScriptContent.Should(Be.EqualTo(script))");
 		}
 
 		[Then("mashup '$mashupName' with accounts '$accounts' and placeholders '$placeholders' and script '$script' should be sent to TP")]
 		public void CheckCreatedInTpMashup(string mashupName, string accounts, string placeholders, string script)
 		{
 			PluginMashupMessage mashup = GetMashupMessageByName(mashupName);
-			mashup.MashupName.Should(Be.EqualTo(mashupName));
-			mashup.PluginMashupScripts.Select(s => s.ScriptContent).ToArray().Should(Be.EquivalentTo(new[] { script, string.Format("{0}{1}", MashupConfig.AccountsConfigPrefix, accounts) }));
-			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())));
+			mashup.MashupName.Should(Be.EqualTo(mashupName), "mashup.MashupName.Should(Be.EqualTo(mashupName))");
+			mashup.PluginMashupScripts.Select(s => s.ScriptContent).ToArray().Should(Be.EquivalentTo(new[] { script, string.Format("{0}{1}", MashupConfig.AccountsConfigPrefix, accounts) }), "mashup.PluginMashupScripts.Select(s => s.ScriptContent).ToArray().Should(Be.EquivalentTo(new[] { script, string.Format(\"{{i}}{{i}}\", MashupConfig.AccountsConfigPrefix, accounts) }))");
+			mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())), "mashup.Placeholders.Select(p => p.ToLower()).Should(Be.EquivalentTo(placeholders.Split(',').Select(p => p.Trim().ToLower())))");
 
 			var scriptNames = mashup.PluginMashupScripts.Select(s => s.FileName).ToArray();
-			scriptNames.Count().Should(Be.EqualTo(2));
-			scriptNames.Should(Contains.Item(Mashup.AccountCfgFileName));
-			scriptNames.Count(n => n.EndsWith("js")).Should(Be.EqualTo(1));
+			scriptNames.Count().Should(Be.EqualTo(2), "scriptNames.Count().Should(Be.EqualTo(2))");
+			scriptNames.Should(Contains.Item(Mashup.AccountCfgFileName), "scriptNames.Should(Contains.Item(Mashup.AccountCfgFileName))");
+			scriptNames.Count(n => n.EndsWith("js")).Should(Be.EqualTo(1), "scriptNames.Count(n => n.EndsWith(\"js\")).Should(Be.EqualTo(1))");
 		}
 
 		[Then("default mashup '$mashupName' with accounts '$accountName' should be sent to TP")]
@@ -252,7 +252,7 @@ namespace Tp.MashupManager.Tests
 		public void CheckMashupPluginNameInTp(string mashupName, string pluginName)
 		{
 			var mashup = GetMashupMessageByName(mashupName);
-			mashup.PluginName.Value.Should(Be.EqualTo(pluginName));
+			mashup.PluginName.Value.Should(Be.EqualTo(pluginName), "mashup.PluginName.Value.Should(Be.EqualTo(pluginName))");
 		}
 
 		[Then("default mashup '$mashupName' should be sent to TP")]
@@ -264,7 +264,7 @@ namespace Tp.MashupManager.Tests
 		[Then("$count mashup should be in profile storage")]
 		public void CheckMashupStorage(int count)
 		{
-			Directory.GetDirectories(MashupStorageDirectory).Count().Should(Be.EqualTo(count));
+			Directory.GetDirectories(MashupStorageDirectory).Count().Should(Be.EqualTo(count), "Directory.GetDirectories(MashupStorageDirectory).Count().Should(Be.EqualTo(count))");
 		}
 
 		[Then(@"profile storage should contain mashup '$mashupName' with placeholders '$placeholders' and files '(?<fileNames>([^,]+,?\s*)+)'")]
@@ -272,11 +272,11 @@ namespace Tp.MashupManager.Tests
 		{
 			var mashup = ScriptStorage.GetMashup(mashupName);
 
-			mashup.Name.Should(Be.EqualTo(mashupName));
-			mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()));
-			mashup.Files.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames));
+			mashup.Name.Should(Be.EqualTo(mashupName), "mashup.Name.Should(Be.EqualTo(mashupName))");
+			mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()), "mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()))");
+			mashup.Files.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames), "mashup.Files.Select(x => x.FileName).ToArray().Should(Be.EquivalentTo(fileNames))");
 
-			MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName));
+			MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName), "MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName))");
 		}
 
 		[Then("'$fileName' file of '$mashupName' mashup in storage should contain '$script' script")]
@@ -284,8 +284,8 @@ namespace Tp.MashupManager.Tests
 		{
 			var mashup = ScriptStorage.GetMashup(mashupName);
 
-			mashup.Name.Should(Be.EqualTo(mashupName));
-			mashup.Files.First(x => x.FileName.EqualsIgnoreCase(fileName)).Content.Should(Be.EqualTo(script));
+			mashup.Name.Should(Be.EqualTo(mashupName), "mashup.Name.Should(Be.EqualTo(mashupName))");
+			mashup.Files.First(x => x.FileName.EqualsIgnoreCase(fileName)).Content.Should(Be.EqualTo(script), "mashup.Files.First(x => x.FileName.EqualsIgnoreCase(fileName)).Content.Should(Be.EqualTo(script))");
 		}
 
 		[Then("mashup '$mashupName' with placeholders '$placeholders' and script '$script' should be in profile storage")]
@@ -293,21 +293,21 @@ namespace Tp.MashupManager.Tests
 		{
 			var mashup = ScriptStorage.GetMashup(mashupName);
 
-			mashup.Name.Should(Be.EqualTo(mashupName));
-			mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()));
-			mashup.Files.First().Content.Should(Be.EqualTo(script));
+			mashup.Name.Should(Be.EqualTo(mashupName), "mashup.Name.Should(Be.EqualTo(mashupName))");
+			mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()), "mashup.Placeholders.ToLower().Should(Be.EqualTo(placeholders.ToLower()))");
+			mashup.Files.First().Content.Should(Be.EqualTo(script), "mashup.Files.First().Content.Should(Be.EqualTo(script))");
 
-			MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName));
+			MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName), "MashupManagerProfile.MashupNames.Should(Contains.Item(mashupName))");
 		}
 
 		[Then("command should return validation error for '$fieldName' field '$errorMessage'")]
 		public void CheckValidateError(string fieldName, string errorMessage)
 		{
-			_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Fail));
+			_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Fail), "_response.PluginCommandStatus.Should(Be.EqualTo(PluginCommandStatus.Fail))");
 			var error = _response.ResponseData.Deserialize<PluginProfileErrorCollection>()
 				.SingleOrDefault(e => e.FieldName == fieldName);
-			error.Should(Be.Not.Null);
-			error.Message.Should(Be.EqualTo(errorMessage));
+			error.Should(Be.Not.Null, "error.Should(Be.Not.Null)");
+			error.Message.Should(Be.EqualTo(errorMessage), "error.Message.Should(Be.EqualTo(errorMessage))");
 		}
 
 		[Then("default mashup '$mashupName' should be in profile storage")]
@@ -327,24 +327,24 @@ namespace Tp.MashupManager.Tests
 		public void MashupShouldBeCleared(string mashupName, string pluginName)
 		{
 			var mashupCommand = GetMashupMessageByName(mashupName);
-			mashupCommand.PluginName.Value.Should(Be.EqualTo(pluginName));
-			mashupCommand.Placeholders.Should(Be.Empty);
-			mashupCommand.PluginMashupScripts.Should(Be.Empty);
+			mashupCommand.PluginName.Value.Should(Be.EqualTo(pluginName), "mashupCommand.PluginName.Value.Should(Be.EqualTo(pluginName))");
+			mashupCommand.Placeholders.Should(Be.Empty, "mashupCommand.Placeholders.Should(Be.Empty)");
+			mashupCommand.PluginMashupScripts.Should(Be.Empty, "mashupCommand.PluginMashupScripts.Should(Be.Empty)");
 		}
 
 		[Then("mashup '$mashupName' should be cleared in profile")]
 		public void MashupShouldBeClearedInProfile(string mashupName)
 		{
-			MashupManagerProfile.MashupNames.Where(m => m == mashupName).Should(Be.Empty);
-			GetMashupFromStorage(mashupName).Should(Be.Null);
+			MashupManagerProfile.MashupNames.Where(m => m == mashupName).Should(Be.Empty, "MashupManagerProfile.MashupNames.Where(m => m == mashupName).Should(Be.Empty)");
+			GetMashupFromStorage(mashupName).Should(Be.Null, "GetMashupFromStorage(mashupName).Should(Be.Null)");
 		}
 
 		[Then("mashup '$mashupName' should be cleared in TP")]
 		public void MashupShouldBeClearedInTp(string mashupName)
 		{
 			var mashupCommand = GetMashupMessageByName(mashupName);
-			mashupCommand.Placeholders.Should(Be.Empty);
-			mashupCommand.PluginMashupScripts.Should(Be.Empty);
+			mashupCommand.Placeholders.Should(Be.Empty, "mashupCommand.Placeholders.Should(Be.Empty)");
+			mashupCommand.PluginMashupScripts.Should(Be.Empty, "mashupCommand.PluginMashupScripts.Should(Be.Empty)");
 		}
 
 		protected Mashup GetMashupFromStorage(string mashupName)

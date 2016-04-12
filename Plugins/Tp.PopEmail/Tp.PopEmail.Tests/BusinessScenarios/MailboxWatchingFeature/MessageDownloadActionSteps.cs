@@ -20,7 +20,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.MailboxWatchingFeature
 		[Given("there are messages in mail inbox:")]
 		public void PutMessagesIntoInbox(string uid, string from)
 		{
-			SetSenderAddress(uid.Trim(), from == "''" ? string.Empty : from.Trim());
+			SetSenderAddressAndSubject(uid.Trim(), "", from == "''" ? string.Empty : from.Trim());
 		}
 
 		[Given("profile has downloaded message '$uid'")]
@@ -33,16 +33,23 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.MailboxWatchingFeature
 		public void MessageShouldBeAttachedToProject(string[] uids)
 		{
 			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Select(x => x.Mail.MessageUidDto.UID).ToArray().
-				Should(Be.EquivalentTo(uids));
+				Should(Be.EquivalentTo(uids), "Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Select(x => x.Mail.MessageUidDto.UID).ToArray().Should(Be.EquivalentTo(uids))");
 		}
 
 		[Given("message with uid '$uid' has sender address '$email'")]
 		public void SetSenderAddress(string uid, string email)
 		{
+			SetSenderAddressAndSubject(uid, "", email);
+		}
+
+		[Given("message with uid '$uid' has subject '$subject' and sender address '$email'")]
+		public void SetSenderAddressAndSubject(string uid, string subject, string email)
+		{
 			Context.EmailClient.Messages[uid] = new MailMessage
-			                                    	{
-			                                    		From = new EmailAddress(email)
-			                                    	};
+			{
+				From = new EmailAddress(email),
+				Subject = string.IsNullOrEmpty(subject) ? string.Empty : subject
+			};
 		}
 
 		[Given(@"mail server has uids: (?<uids>([^,]+,?\s*)+)")]
@@ -54,7 +61,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.MailboxWatchingFeature
 		[Then(@"downloaded messages should be: (?<uids>([^,]+,?\s*)+)")]
 		public void DownloadedMessagesShouldBe(string[] uids)
 		{
-			Context.MessageUids.GetUids().Should(Be.EquivalentTo(uids));
+			Context.MessageUids.GetUids().Should(Be.EquivalentTo(uids), "Context.MessageUids.GetUids().Should(Be.EquivalentTo(uids))");
 		}
 
 		[Given("message with uid '$uid' has empty sender address")]
@@ -78,20 +85,20 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.MailboxWatchingFeature
 		[Then("message '$uid' should be passed to process")]
 		public void MessageShouldBeDownloaded(string uid)
 		{
-			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Count().Should(Be.EqualTo(1));
-			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().First().Mail.MessageUidDto.UID.Should(Be.EqualTo(uid));
+			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Count().Should(Be.EqualTo(1), "Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Count().Should(Be.EqualTo(1))");
+			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().First().Mail.MessageUidDto.UID.Should(Be.EqualTo(uid), "Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().First().Mail.MessageUidDto.UID.Should(Be.EqualTo(uid))");
 		}
 
 		[Then("downloaded messages should be empty")]
 		public void DownloadedMessagesShouldBeEmpty()
 		{
-			Context.MessageUids.GetUids().Should(Be.Empty);
+			Context.MessageUids.GetUids().Should(Be.Empty, "Context.MessageUids.GetUids().Should(Be.Empty)");
 		}
 
 		[Then("no messages should be passed to process")]
 		public void NoMessageShouldBeDownloaded()
 		{
-			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Count().Should(Be.EqualTo(0));
+			Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Count().Should(Be.EqualTo(0), "Context.Transport.LocalQueue.GetMessages<EmailReceivedMessage>().Count().Should(Be.EqualTo(0))");
 		}
 
 		private MessageDownloadContext Context

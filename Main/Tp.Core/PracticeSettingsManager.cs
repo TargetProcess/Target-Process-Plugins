@@ -10,10 +10,8 @@ namespace Tp.Core
 {
 	public enum PlanningUnit
 	{
-		[Description("h")]
-		Hour,
-		[Description("pt")]
-		Point,
+		[Description("h")] Hour,
+		[Description("pt")] Point,
 	}
 
 	public enum PracticeSettings
@@ -58,7 +56,7 @@ namespace Tp.Core
 			using (var reader = new StringReader(s))
 			{
 				var serializer = new XmlSerializer(typeof(List<PracticeSetting>));
-				return (List<PracticeSetting>)serializer.Deserialize(reader);
+				return (List<PracticeSetting>) serializer.Deserialize(reader);
 			}
 		}
 

@@ -2,7 +2,7 @@ tau.mashups
     .addDependency("libs/jquery/jquery")
     .addModule("emailIntegration/jqueryUtils",
 
-function () {
+function ($) {
 
     $.fn.enabled = function (enableIt) {
 

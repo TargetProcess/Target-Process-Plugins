@@ -4,6 +4,7 @@
 // 
 
 using System.Linq;
+using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
@@ -12,7 +13,7 @@ namespace Tp.Bugzilla.CustomCommand
 {
 	public class GetSupportedVersionsCommand : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			return new PluginCommandResponseMessage
 			       	{

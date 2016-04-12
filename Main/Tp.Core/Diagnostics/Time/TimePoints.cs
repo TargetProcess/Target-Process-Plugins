@@ -8,6 +8,7 @@ namespace Tp.Core.Diagnostics.Time
 	public class TimePoints : TimePointsBase
 	{
 		private readonly List<TimePoint> _timepoints;
+
 		public TimePoints()
 		{
 			_timepoints = new List<TimePoint>();
@@ -18,10 +19,7 @@ namespace Tp.Core.Diagnostics.Time
 			_timepoints = new List<TimePoint>(other._timepoints);
 		}
 
-		public override IEnumerable<TimePoint> Points
-		{
-			get { return _timepoints; }
-		}
+		public override IEnumerable<TimePoint> Points => _timepoints;
 
 		public override void Add(TimePoint timestamp)
 		{
@@ -38,7 +36,7 @@ namespace Tp.Core.Diagnostics.Time
 			var distances = CalculateDistances();
 			return distances.Aggregate(new StringBuilder(), (acc, distance) => acc.AppendLine(distance.ToString())).ToString();
 		}
-		
+
 		public override ITimePoints CreateFork()
 		{
 			return new TimePoints(this);
@@ -49,14 +47,14 @@ namespace Tp.Core.Diagnostics.Time
 			var list = _timepoints.ToList();
 			var ordered = list.OrderBy(t => t).ToList();
 			var distances = ordered
-						.Skip(1)
-						.Zip(ordered, (next, prev) => new TimePointsDistance
-						{
-							Start = prev.Name,
-							End = next.Name,
-							Length = (next.Timestamp - prev.Timestamp)
-						})
-						.ToList();
+				.Skip(1)
+				.Zip(ordered, (next, prev) => new TimePointsDistance
+				{
+					Start = prev.Name,
+					End = next.Name,
+					Length = (next.Timestamp - prev.Timestamp)
+				})
+				.ToList();
 			distances.Add(new TimePointsDistance
 			{
 				Start = ordered.First().Name,
@@ -65,7 +63,7 @@ namespace Tp.Core.Diagnostics.Time
 			});
 			return distances;
 		}
-		
+
 		public struct TimePointsDistance : IEquatable<TimePointsDistance>
 		{
 			public string Start { get; set; }
@@ -80,7 +78,7 @@ namespace Tp.Core.Diagnostics.Time
 			public override bool Equals(object obj)
 			{
 				if (ReferenceEquals(null, obj)) return false;
-				if (obj.GetType() != typeof (TimePointsDistance)) return false;
+				if (obj.GetType() != typeof(TimePointsDistance)) return false;
 				return Equals((TimePointsDistance) obj);
 			}
 
@@ -89,8 +87,8 @@ namespace Tp.Core.Diagnostics.Time
 				unchecked
 				{
 					int result = (Start != null ? Start.GetHashCode() : 0);
-					result = (result*397) ^ (End != null ? End.GetHashCode() : 0);
-					result = (result*397) ^ Length.GetHashCode();
+					result = (result * 397) ^ (End != null ? End.GetHashCode() : 0);
+					result = (result * 397) ^ Length.GetHashCode();
 					return result;
 				}
 			}

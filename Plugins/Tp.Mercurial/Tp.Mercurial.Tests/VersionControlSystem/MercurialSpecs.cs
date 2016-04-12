@@ -102,10 +102,10 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 			{
                 var revisionRange = mercurial.GetFromTillHead(CreateMercurialRevisionId(MercurialRevisionId.UtcTimeMin), 100).Single();
                 MercurialRevisionId fromChangeSet = revisionRange.FromChangeset;
-                fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 11:43:18 AM")));
+                fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 11:43:18 AM")), "fromChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2012-04-09 11:43:18 AM\")))");
 
                 MercurialRevisionId toChangeSet = revisionRange.ToChangeset;
-                toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 15:08:01 PM")));
+                toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 15:08:01 PM")), "toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2012-04-09 15:08:01 PM\")))");
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 			}
 			catch (Exception ex)
 			{
-				ex.Message.Should(Be.EqualTo("abort: repository //bla-bla not found!\n"));
+				ex.Message.Should(Be.EqualTo("abort: repository //bla-bla not found!\n"), "ex.Message.Should(Be.EqualTo(\"abort: repository //bla-bla not found!\\n\"))");
 			}
 		}
 
@@ -134,10 +134,10 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
                 MercurialRevisionId startRevisionId = CreateMercurialRevisionId(DateTime.Parse(("2012-04-09 11:43:18 AM")));
                 var revisionRange = mercurial.GetFromTillHead(startRevisionId, 100).Single();
                 MercurialRevisionId fromChangeSet = revisionRange.FromChangeset;
-				fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time));
+				fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time), "fromChangeSet.Time.Should(Be.EqualTo(startRevisionId.Time))");
 
                 MercurialRevisionId toChangeSet = revisionRange.ToChangeset;
-                toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 15:08:01 PM")));
+                toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 15:08:01 PM")), "toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2012-04-09 15:08:01 PM\")))");
 			}
 		}
 
@@ -151,10 +151,10 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
                 MercurialRevisionId fromChangeSet = revisionRange.FromChangeset;
 
 				MercurialRevisionId fromExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 11:44:23 AM"));
-				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
+				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time), "fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time))");
 
                 MercurialRevisionId toChangeSet = revisionRange.ToChangeset;
-                toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 15:08:01 PM")));
+                toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse("2012-04-09 15:08:01 PM")), "toChangeSet.Time.Should(Be.EqualTo(DateTime.Parse(\"2012-04-09 15:08:01 PM\")))");
 			}
 		}
 
@@ -177,12 +177,12 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
                 MercurialRevisionId fromChangeSet = revisionRange.FromChangeset;
 
 				MercurialRevisionId fromExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 11:44:23 AM"));
-				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time));
+				fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time), "fromChangeSet.Time.Should(Be.EqualTo(fromExpected.Time))");
 
 
 				MercurialRevisionId toExpected = CreateMercurialRevisionId(DateTime.Parse("2012-04-09 15:06:47 PM"));
                 MercurialRevisionId toChangeSet = revisionRange.ToChangeset;
-				toChangeSet.Time.Should(Be.EqualTo(toExpected.Time));
+				toChangeSet.Time.Should(Be.EqualTo(toExpected.Time), "toChangeSet.Time.Should(Be.EqualTo(toExpected.Time))");
 			}
 		}
 
@@ -193,7 +193,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 			{
                 var authors = mercurial.RetrieveAuthors(new DateRange(MercurialRevisionId.UtcTimeMin, DateTime.Now));
 
-				authors.Should(Be.EquivalentTo(new[] {"msuhinin"}));
+				authors.Should(Be.EquivalentTo(new[] {"msuhinin"}), "authors.Should(Be.EquivalentTo(new[] {\"msuhinin\"}))");
 			}
 		}
 
@@ -269,13 +269,13 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 
 		private static void AssertEqual(IList<RevisionEntryInfo> actual, IList<RevisionEntryInfo> expected)
 		{
-			actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()));
-			actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()));
+			actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()), "actual.Select(x => x.Action).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Action).ToArray()))");
+			actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()), "actual.Select(x => x.Path).ToArray().Should(Be.EquivalentTo(expected.Select(x => x.Path).ToArray()))");
 
 			for (int i = 0; i < actual.Count; i++)
 			{
-				actual[i].Action.Should(Be.EqualTo(expected[i].Action));
-				actual[i].Path.Should(Be.EqualTo(expected[i].Path));
+				actual[i].Action.Should(Be.EqualTo(expected[i].Action), "actual[i].Action.Should(Be.EqualTo(expected[i].Action))");
+				actual[i].Path.Should(Be.EqualTo(expected[i].Path), "actual[i].Path.Should(Be.EqualTo(expected[i].Path))");
 			}
 		}
 
@@ -288,8 +288,8 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
                 var revisionRange = mercurial.GetFromTillHead(startRevisionId, 100).Single();
 
                 var revisions = mercurial.GetRevisions(revisionRange);
-				revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits));
-				revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] {"msuhinin"}));
+				revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits), "revisions.Select(x => x.Comment).ToArray().Should(Be.EquivalentTo(commits))");
+				revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] {"msuhinin"}), "revisions.Select(x => x.Author).Distinct().ToArray().Should(Be.EquivalentTo(new[] {\"msuhinin\"}))");
 			}
 		}
 
@@ -301,7 +301,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
                 MercurialRevisionId correctRevisionId = CreateMercurialRevisionId(MercurialRevisionId.UtcTimeMin);
 				var errors = new PluginProfileErrorCollection();
                 mercurial.CheckRevision(correctRevisionId, errors);
-				errors.Should(Be.Empty);
+				errors.Should(Be.Empty, "errors.Should(Be.Empty)");
 			}
 		}
 
@@ -319,7 +319,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 			        MercurialRevisionId.UtcTimeMin.ToShortDateString(),
 			        MercurialRevisionId.UtcTimeMax.ToShortDateString());
 
-				errors.Single().ToString().Should(Be.EqualTo(localizedMessage));
+				errors.Single().ToString().Should(Be.EqualTo(localizedMessage), "errors.Single().ToString().Should(Be.EqualTo(localizedMessage))");
 			}
 		}
 
@@ -358,7 +358,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 
 				transportMock.HandleLocalMessage(profile, new NewRevisionRangeDetectedLocalMessage {Range = revisionRange});
 
-				transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1));
+				transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1), "transportMock.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RevisionDTO).Should(Be.EqualTo(1))");
 			}
 		}
 
@@ -384,7 +384,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 
 				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
 
-				ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null);
+				ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null, "ObjectFactory.GetInstance<IRevisionStorageRepository>().GetRevisionId(tpId).Should(Be.Not.Null)");
 			}
 		}
 
@@ -405,7 +405,7 @@ namespace Tp.Mercurial.Tests.VersionControlSystem
 
 				transportMock.HandleLocalMessage(_profile, new NewRevisionRangeDetectedLocalMessage { Range = revisionRange });
 
-				ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False);
+				ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False, "ObjectFactory.GetInstance<IStorageRepository>().Get<bool>().FirstOrDefault().Should(Be.False)");
 			}
 		}
 

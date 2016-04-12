@@ -1,6 +1,6 @@
 tau.mashups
 	.addDependency("libs/jquery/jquery")
-	.addModule("TestRunImport/jquery/iphone-switch", function () {
+	.addModule("TestRunImport/jquery/iphone-switch", function ($) {
 		/************************************************ 
 		*  jQuery iphoneSwitch plugin                   *
 		*                                               *

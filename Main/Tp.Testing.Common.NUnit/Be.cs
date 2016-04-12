@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -13,11 +12,16 @@ namespace Tp.Testing.Common.NUnit
 	{
 		public static CollectionEquivalentConstraint EquivalentTo<T>(IEnumerable<T> expected)
 		{
-			if (!expected.GetType().IsArray)
-				expected = expected.ToArray();
+			var array = expected as T[] ?? expected.ToArray();
 
-			return new CollectionEquivalentConstraint(expected);
+			return new CollectionEquivalentConstraint(array);
 		}
-	}
 
+		public static CollectionContainsConstraint Containing<T>(T expected)
+		{
+			return new CollectionContainsConstraint(expected);
+		}
+
+		public static Constraint Nothing => new NothingConstraint();
+	}
 }

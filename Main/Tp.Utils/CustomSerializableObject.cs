@@ -21,7 +21,7 @@ namespace Tp.Components
 			while (enumerator.MoveNext())
 			{
 				FieldInfo fieldInfo = GetType().GetField(enumerator.Name, GetBindingFlags());
-				object value = info.GetValue(enumerator.Name, typeof (object));
+				object value = info.GetValue(enumerator.Name, typeof(object));
 				fieldInfo.SetValue(this, value);
 			}
 		}
@@ -31,7 +31,7 @@ namespace Tp.Components
 			FieldInfo[] infos = GetType().GetFields(GetBindingFlags());
 			foreach (FieldInfo fieldInfo in infos)
 			{
-				if (fieldInfo.GetCustomAttributes(typeof (NonSerializedAttribute), true).Length > 0)
+				if (fieldInfo.GetCustomAttributes(typeof(NonSerializedAttribute), true).Length > 0)
 					continue;
 
 				object value = fieldInfo.GetValue(this);

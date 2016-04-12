@@ -21,7 +21,7 @@ namespace Tp.Search.Tests
 			var expected = b.GetBitIndexes().ToArray();
 			var b2 = new WAHBitArray(WAHBitArray.TYPE.Compressed_WAH, b.GetCompressed());
 			var actual = b2.GetBitIndexes().ToArray();
-			expected.Should(Be.EqualTo(actual));
+			expected.Should(Be.EqualTo(actual), "expected.Should(Be.EqualTo(actual))");
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Tp.Search.Tests
 			var expected = b.GetBitIndexes().ToArray();
 			var b2 = new WAHBitArray(WAHBitArray.TYPE.Compressed_WAH, b.GetCompressed());
 			var actual = b2.GetBitIndexes().ToArray();
-			expected.Should(Be.EqualTo(actual));
+			expected.Should(Be.EqualTo(actual), "expected.Should(Be.EqualTo(actual))");
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace Tp.Search.Tests
 			var expected = b.GetBitIndexes().ToArray();
 			var b2 = new WAHBitArray(WAHBitArray.TYPE.Compressed_WAH, b.GetCompressed());
 			var actual = b2.GetBitIndexes().ToArray();
-			expected.Should(Be.EqualTo(actual));
+			expected.Should(Be.EqualTo(actual), "expected.Should(Be.EqualTo(actual))");
 		}
 
 		[Test]
@@ -94,7 +94,7 @@ namespace Tp.Search.Tests
 			var expected = b.GetBitIndexes().ToArray();
 			var b2 = new WAHBitArray(WAHBitArray.TYPE.Compressed_WAH, b.GetCompressed());
 			var actual = b2.GetBitIndexes().ToArray();
-			expected.Should(Be.EqualTo(actual));
+			expected.Should(Be.EqualTo(actual), "expected.Should(Be.EqualTo(actual))");
 		}
 	}
 }

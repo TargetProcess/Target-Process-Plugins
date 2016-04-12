@@ -90,7 +90,7 @@ sub get_timezone
     print $cgi->header('text');
     
     my $dbh = Bugzilla->dbh;
-    my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(TIMESTAMP(NOW()),  UTC_TIMESTAMP())', undef);
+    my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(TIMESTAMP(NOW()), UTC_TIMESTAMP())', undef);
     
     print $hours;
 }

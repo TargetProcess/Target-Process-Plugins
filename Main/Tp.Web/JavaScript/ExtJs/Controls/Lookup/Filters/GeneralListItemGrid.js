@@ -7,7 +7,7 @@ Tp.controls.Lookup.GeneralListItemGrid = Ext.extend(Tp.controls.Lookup.GridPanel
 				region: 'center',
 				width: 600,
 				columns: [
-					{ header: 'Type', align: 'center', sortable: true, dataIndex: 'EntityTypeAbbreviation', renderer: function (v, o, r) { return String.format("<img class='x-item-icon' src='{0}/img/{1}' />", Application.baseUrl, r.data.Icon); } },
+					{ header: 'Type', align: 'center', sortable: true, dataIndex: 'EntityTypeAbbreviation', renderer: function (v, o, r) { return String.format('<span id="entityType" class="tau-entity-icon tau-entity-icon--{0}">{1}</span>', r.data.Icon.toLowerCase(), r.data.EntityTypeAbbreviation); } },
 					{ id: 'id', header: 'ID', width: 70, sortable: true, dataIndex: 'GeneralID' },
 					{ header: 'Name', width: 320, sortable: true, dataIndex: 'Name', renderer: function (v) { return String.format("<div style='white-space:normal'><a class='lookupActionLink' href='javascript:void(0)'>{0}</a></div>", v); } },
 					{ header: 'Project', width: 150, sortable: true, dataIndex: 'ProjectName' }

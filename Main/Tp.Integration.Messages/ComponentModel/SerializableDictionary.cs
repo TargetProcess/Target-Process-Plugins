@@ -21,7 +21,7 @@ namespace Tp.Integration.Messages.ComponentModel
 
 		public SerializableDictionary(IDictionary<TKey, TValue> dictionary)
 			: base(dictionary)
-		{			
+		{
 		}
 
 		public SerializableDictionary(IEqualityComparer<TKey> comparer)
@@ -47,7 +47,7 @@ namespace Tp.Integration.Messages.ComponentModel
 		protected SerializableDictionary(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
-		}		
+		}
 
 		#region IXmlSerializable Members
 
@@ -58,8 +58,8 @@ namespace Tp.Integration.Messages.ComponentModel
 
 		public void ReadXml(XmlReader reader)
 		{
-			var keySerializer = new XmlSerializer(typeof (TKey));
-			var valueSerializer = new XmlSerializer(typeof (TValue));
+			var keySerializer = new XmlSerializer(typeof(TKey));
+			var valueSerializer = new XmlSerializer(typeof(TValue));
 
 			bool wasEmpty = reader.IsEmptyElement;
 			reader.Read();
@@ -89,8 +89,8 @@ namespace Tp.Integration.Messages.ComponentModel
 
 		public void WriteXml(XmlWriter writer)
 		{
-			var keySerializer = new XmlSerializer(typeof (TKey));
-			var valueSerializer = new XmlSerializer(typeof (TValue));
+			var keySerializer = new XmlSerializer(typeof(TKey));
+			var valueSerializer = new XmlSerializer(typeof(TValue));
 
 			foreach (TKey key in Keys)
 			{

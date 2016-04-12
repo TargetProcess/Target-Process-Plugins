@@ -13,6 +13,7 @@ using Tp.Integration.Messages.ServiceBus.UnicastBus;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using log4net;
+using Tp.Integration.Common;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
@@ -28,7 +29,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 			_msmqTransport = msmqTransport;
 		}
 
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			foreach (var account in _accountCollection)
 			{

@@ -9,7 +9,6 @@ namespace Tp.Core.Extensions
 
 		private StringCaseInsensitiveComparer()
 		{
-
 		}
 
 		public bool Equals(string x, string y)
@@ -22,5 +21,4 @@ namespace Tp.Core.Extensions
 			return obj.ToLower().GetHashCode();
 		}
 	}
-
 }

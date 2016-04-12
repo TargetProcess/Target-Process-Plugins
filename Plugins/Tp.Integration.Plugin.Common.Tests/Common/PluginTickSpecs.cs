@@ -173,14 +173,14 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void TickMessagesShouldBeSentTo(string profileName, string accountName)
 		{
 			var tickMessage = ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Single();
-			tickMessage.AccountName.Should(Be.EqualTo(accountName));
-			tickMessage.ProfileName.Should(Be.EqualTo(profileName));
+			tickMessage.AccountName.Should(Be.EqualTo(accountName), "tickMessage.AccountName.Should(Be.EqualTo(accountName))");
+			tickMessage.ProfileName.Should(Be.EqualTo(profileName), "tickMessage.ProfileName.Should(Be.EqualTo(profileName))");
 		}
 
 		[Then("no Tick message should be sent")]
 		public void NoTickMessageShouldBeSent()
 		{
-			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Should(Be.Empty);
+			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Should(Be.Empty, "ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Should(Be.Empty)");
 		}
 
 		[Then(
@@ -189,21 +189,21 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void LastSyncDateShouldBe(string lastSyncDateUpdated, string profileName, string accountName)
 		{
 			var profile = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(accountName).Profiles[profileName];
-			profile.Get<LastSyncDate>().First().Value.Minute.Should(Be.EqualTo(DateTime.Parse(lastSyncDateUpdated).Minute));
+			profile.Get<LastSyncDate>().First().Value.Minute.Should(Be.EqualTo(DateTime.Parse(lastSyncDateUpdated).Minute), "profile.Get<LastSyncDate>().First().Value.Minute.Should(Be.EqualTo(DateTime.Parse(lastSyncDateUpdated).Minute))");
 		}
 
 		[Then("Last Synchronization Date should be empty for account '$accountName' and profile '$profileName'")]
 		public void LastSyncDateShouldBeEmpty(string accountName, string profileName)
 		{
 			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().First().Message.LastSyncDate.
-				Should(Be.Null);
+				Should(Be.Null, "ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().First().Message.LastSyncDate.Should(Be.Null)");
 		}
 
 		[Then("Last Synchronization Date should not be empty for account '$accountName' and profile '$profileName'")]
 		public void LastSyncDateShouldBeNotEmpty(string accountName, string profileName)
 		{
 			ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Skip(1).First().Message.LastSyncDate.
-				Should(Be.Not.Null);
+				Should(Be.Not.Null, "ObjectFactory.GetInstance<TransportMock>().LocalQueue.GetMessageInfos<TickMessage>().Skip(1).First().Message.LastSyncDate.Should(Be.Not.Null)");
 		}
 	}
 }

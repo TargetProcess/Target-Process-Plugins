@@ -104,11 +104,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			}
 			finally
 			{
-				pluginStorage.Get<LastSyncDate>().Should(Be.Empty);
+				pluginStorage.Get<LastSyncDate>().Should(Be.Empty, "pluginStorage.Get<LastSyncDate>().Should(Be.Empty)");
 			}
 
 			pluginStorage.Get<LastSyncDate>().Add(new LastSyncDate(DateTime.Now));
-			pluginStorage.Get<LastSyncDate>().Should(Be.Not.Empty);
+			pluginStorage.Get<LastSyncDate>().Should(Be.Not.Empty, "pluginStorage.Get<LastSyncDate>().Should(Be.Not.Empty)");
 		}
 
 		[Test]
@@ -131,11 +131,11 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			}
 			finally
 			{
-				pluginStorage.Get<LastSyncDate>().Should(Be.Empty);
+				pluginStorage.Get<LastSyncDate>().Should(Be.Empty, "pluginStorage.Get<LastSyncDate>().Should(Be.Empty)");
 			}
 
 			pluginStorage.Get<LastSyncDate>().AddRange(new[] {new LastSyncDate(DateTime.Now), new LastSyncDate(DateTime.Now)});
-			pluginStorage.Get<LastSyncDate>().Count().Should(Be.EqualTo(2));
+			pluginStorage.Get<LastSyncDate>().Count().Should(Be.EqualTo(2), "pluginStorage.Get<LastSyncDate>().Count().Should(Be.EqualTo(2))");
 		}
 
 		#region Action Steps
@@ -162,7 +162,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void JiraLoginInProfileShouldMatch(string accountName, string profileName, string jiraLogin)
 		{
 			GetAccount(accountName).Profiles.First(x => x.Name == profileName).GetProfile<SampleJiraProfile>().JiraLogin.Should(
-				Be.EqualTo(jiraLogin));
+				Be.EqualTo(jiraLogin), "GetAccount(accountName).Profiles.First(x => x.Name == profileName).GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.EqualTo(jiraLogin))");
 		}
 
 		[When(@"remove profile '$profileName' from account '$accountName'")]
@@ -226,21 +226,21 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[Then(@"account '$accountName' should have profiles stored in local database: (?<profileNames>([^,]+,?\s*)+)")]
 		public void AccountShouldHaveProfiles(string accountName, string[] profileNames)
 		{
-			GetAccount(accountName).Profiles.Select(x => x.Name.Value).ToArray().Should(Be.EquivalentTo(profileNames));
+			GetAccount(accountName).Profiles.Select(x => x.Name.Value).ToArray().Should(Be.EquivalentTo(profileNames), "GetAccount(accountName).Profiles.Select(x => x.Name.Value).ToArray().Should(Be.EquivalentTo(profileNames))");
 		}
 
 		[Then("profile '$profileName' should have string value '$stringValue'")]
 		public void ProfileShouldHaveStringValue(string profileName, string stringValue)
 		{
 			var profile = GetProfile(profileName);
-			profile.Get<string>().First().Should(Be.EqualTo(stringValue));
+			profile.Get<string>().First().Should(Be.EqualTo(stringValue), "profile.Get<string>().First().Should(Be.EqualTo(stringValue))");
 		}
 
 		[Then(@"profile '$profileName' should have string value list: (?<stringValues>([^,]+,?\s*)+)")]
 		public void ProfileShouldHaveStringValues(string profileName, string[] stringValues)
 		{
 			var profile = GetProfile(profileName);
-			profile.Get<string>().ToArray().Should(Be.EquivalentTo(stringValues));
+			profile.Get<string>().ToArray().Should(Be.EquivalentTo(stringValues), "profile.Get<string>().ToArray().Should(Be.EquivalentTo(stringValues))");
 		}
 
 		#endregion

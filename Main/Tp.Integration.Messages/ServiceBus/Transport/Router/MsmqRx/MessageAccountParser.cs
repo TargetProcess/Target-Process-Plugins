@@ -18,8 +18,15 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 			_command = command;
 		}
 
-		public string Name { get { return _name; } }
-		public string Command { get { return _command; } }
+		public string Name
+		{
+			get { return _name; }
+		}
+
+		public string Command
+		{
+			get { return _command; }
+		}
 	}
 
 	internal class MessageAccountParser
@@ -30,7 +37,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 
 		private MessageAccountParser()
 		{
-			_serializer = new XmlSerializer(typeof (List<HeaderInfo>));
+			_serializer = new XmlSerializer(typeof(List<HeaderInfo>));
 		}
 
 		public MessageAccount Parse(IEnumerable<HeaderInfo> parts)

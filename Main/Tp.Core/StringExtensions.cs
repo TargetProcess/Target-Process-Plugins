@@ -1,33 +1,31 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Tp.Core;
 using Tp.Core.Annotations;
+
+// ReSharper disable once CheckNamespace
 
 namespace System
 {
 	public static class StringExtensions
 	{
-
 		private static readonly Dictionary<char, char> SpecialCharacters = new Dictionary<char, char>
-			{
-				{'0', '\0'},
-				{'a', '\a'},
-				{'b', '\b'},
-				{'f', '\f'},
-				{'n', '\n'},
-				{'r', '\r'},
-				{'t', '\t'},
-				{'v', '\v'},
-				{'\\', '\\'},
-				{'"', '\"'},
-			};
+		{
+			{ '0', '\0' },
+			{ 'a', '\a' },
+			{ 'b', '\b' },
+			{ 'f', '\f' },
+			{ 'n', '\n' },
+			{ 'r', '\r' },
+			{ 't', '\t' },
+			{ 'v', '\v' },
+			{ '\\', '\\' },
+			{ '"', '\"' },
+		};
 
 		private static readonly Dictionary<char, char> SpecialCharactersInverted;
 
@@ -36,89 +34,91 @@ namespace System
 			SpecialCharactersInverted = SpecialCharacters.ToDictionary(x => x.Value, x => x.Key);
 		}
 
-		[StringFormatMethod("format")]
+		[StringFormatMethod("format"), Pure]
 		public static string Fmt(this string format, params object[] args)
 		{
 			return String.Format(format, args);
 		}
 
-		[StringFormatMethod("format")]
+		[StringFormatMethod("format"), Pure]
 		public static string Fmt(this string format, object arg1)
 		{
-			return String.Format(format, arg1);
+			return string.Format(format, arg1);
 		}
 
-		[StringFormatMethod("format")]
+		[StringFormatMethod("format"), Pure]
 		public static string Fmt(this string format, object arg1, object arg2)
 		{
 			return String.Format(format, arg1, arg2);
 		}
 
-		[StringFormatMethod("format")]
+		[StringFormatMethod("format"), Pure]
 		public static string Fmt(this string format, object arg1, object arg2, object arg3)
 		{
 			return String.Format(format, arg1, arg2, arg3);
 		}
 
+		[Pure]
+		[ContractAnnotation("format:null => true")]
 		public static bool IsNullOrEmpty(this string format)
 		{
-			return String.IsNullOrEmpty(format);
+			return string.IsNullOrEmpty(format);
 		}
 
+		[Pure]
+		[ContractAnnotation("value:null => true")]
 		public static bool IsNullOrWhitespace(this string value)
 		{
 			return value == null || value.Trim().Length == 0;
 		}
 
 		[StringFormatMethod("format")]
-		public static StringBuilder AppendLine(this StringBuilder stringBuilder, string format, params object[] args)
+		public static StringBuilder AppendLine(
+			[NotNull] this StringBuilder stringBuilder, string format, params object[] args)
 		{
 			return stringBuilder.AppendFormat(format, args).AppendLine();
 		}
 
+		[Pure]
+		[ContractAnnotation("source:null => false")]
 		public static bool Contains(this string source, string value, StringComparison comparisonType)
 		{
-			return source.IndexOf(value, comparisonType) >= 0;
+			return source != null && source.IndexOf(value, comparisonType) >= 0;
 		}
 
-		public static string ToStringSafe(this object s)
-		{
-			if (s == null)
-				return null;
-			return s.ToString();
-		}
+		[Pure]
+		public static string ToStringSafe([CanBeNull] this object s) =>
+			s?.ToString();
 
-		public static string TrimSafe(this string s, params char[] chars)
-		{
-			if (s == null)
-				return null;
-			return s.Trim(chars);
-		}
+		[Pure]
+		[ContractAnnotation("s:null => null")]
+		public static string TrimSafe(this string s, params char[] chars) =>
+			s?.Trim(chars);
 
-		public static bool EqualsIgnoreCase(this string a, string b)
-		{
-			return string.Equals(a, b, StringComparison.InvariantCultureIgnoreCase);
-		}
+		[Pure]
+		public static bool EqualsIgnoreCase(this string a, string b) =>
+			string.Equals(a, b, StringComparison.InvariantCultureIgnoreCase);
 
-
+		[Pure]
+		[ContractAnnotation("value:null => null")]
 		public static string FilterInvalidXmlCharacters(this string value)
 		{
 			if (value.IsNullOrEmpty())
 				return value;
 			var sb = new StringBuilder(value.Length);
 			foreach (var c in value.Where(c => (c == 0x9) ||
-			                                   (c == 0xA) ||
-			                                   (c == 0xD) ||
-			                                   ((c >= 0x20) && (c <= 0xD7FF)) ||
-			                                   ((c >= 0xE000) && (c <= 0xFFFD))))
+				(c == 0xA) ||
+				(c == 0xD) ||
+				((c >= 0x20) && (c <= 0xD7FF)) ||
+				((c >= 0xE000) && (c <= 0xFFFD))))
 			{
 				sb.Append(c);
 			}
 			return sb.ToString();
 		}
 
-
-		public static string Escape(this string s)
+		[Pure, NotNull]
+		public static string Escape([NotNull] this string s)
 		{
 			var result = new StringBuilder(s.Length);
 			foreach (char c in s)
@@ -137,7 +137,8 @@ namespace System
 			return result.ToString();
 		}
 
-		public static string Unescape(this string s)
+		[Pure, NotNull]
+		public static string Unescape([NotNull] this string s)
 		{
 			var result = new StringBuilder(s.Length);
 
@@ -149,7 +150,8 @@ namespace System
 			return result.ToString();
 		}
 
-		private static IEnumerable<char> NormalizeChars(string s)
+		[NotNull, Pure, LinqTunnel]
+		private static IEnumerable<char> NormalizeChars([NotNull] string s)
 		{
 			using (var enumerator = s.GetEnumerator())
 			{
@@ -157,14 +159,15 @@ namespace System
 				{
 					var current = enumerator.Current;
 
-
 					if (current == '\\')
 					{
 						if (!enumerator.MoveNext())
 						{
-							throw new ArgumentException(Res.InvalidCharacterLiteral);
+							throw new ArgumentException(Res.InvalidCharacterLiteral.Value);
 						}
-						yield return SpecialCharacters.GetValue(enumerator.Current).GetOrThrow(() => new ArgumentException(Res.InvalidCharacter.Fmt(enumerator.Current)));
+						yield return
+							SpecialCharacters.GetValue(enumerator.Current)
+								.GetOrThrow(() => new ArgumentException(Res.InvalidCharacter(enumerator.Current).Value));
 					}
 					else
 					{
@@ -174,6 +177,8 @@ namespace System
 			}
 		}
 
+		[Pure]
+		[ContractAnnotation("value:null => null")]
 		public static string CamelCase(this string value)
 		{
 			if (string.IsNullOrEmpty(value))
@@ -183,6 +188,21 @@ namespace System
 			var sb = new StringBuilder(value);
 			sb[0] = char.ToLowerInvariant(sb[0]);
 			return sb.ToString();
+		}
+
+		[Pure]
+		[TableValuedSqlFunction("f_SplitByComma", "Value", DbType.String)]
+		public static IEnumerable<string> SplitByComma(this string value)
+		{
+			return value.IsNullOrEmpty()
+				? Enumerable.Empty<string>()
+				: value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+		}
+
+		[Pure]
+		public static string NormalizeLineEndings(this string value)
+		{
+			return Regex.Replace(value, @"\r\n|\n\r|\n|\r", Environment.NewLine);
 		}
 	}
 }

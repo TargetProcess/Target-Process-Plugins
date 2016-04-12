@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -22,17 +18,40 @@ namespace Tp.Utils.Html
 		private readonly HashSet<string> BlockElementTags = new HashSet<string>
 		{
 			// Headings
-			"h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9",
+			"h1",
+			"h2",
+			"h3",
+			"h4",
+			"h5",
+			"h6",
+			"h7",
+			"h8",
+			"h9",
 			// Text containers
-			"p", "pre", "blockquote", "address",
+			"p",
+			"pre",
+			"blockquote",
+			"address",
 			// Lists
-			"ul", "ol", "li", "dl", "dt", "dd", "dir", "menu",
+			"ul",
+			"ol",
+			"li",
+			"dl",
+			"dt",
+			"dd",
+			"dir",
+			"menu",
 			// Other
-			"div", "center", "form", "table",
+			"div",
+			"center",
+			"form",
+			"table",
 			// Tables
-			"caption", "tr", //"td", "th",
+			"caption",
+			"tr", //"td", "th",
 			// Explicit line break
-			"br", "hr",
+			"br",
+			"hr",
 		};
 
 		/// <summary>

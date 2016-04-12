@@ -7,7 +7,9 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.MsmqRx
 	class MsmqMessageProducer : MsmqMessageProducerBase<MessageEx>
 	{
 		private readonly ILoggerContextSensitive _log;
-		public MsmqMessageProducer(string queueName, Func<MessageQueueTransactionType> transactionType, ILoggerContextSensitive log):base(queueName, transactionType)
+
+		public MsmqMessageProducer(string queueName, Func<MessageQueueTransactionType> transactionType, ILoggerContextSensitive log)
+			: base(queueName, transactionType)
 		{
 			_log = log;
 		}

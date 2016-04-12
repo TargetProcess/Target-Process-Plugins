@@ -136,8 +136,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Core
 		public void AttachmentShouldBeCreated(string attachmentName, string attachmentContent)
 		{
 			var message = Transport.LocalQueue.GetMessages<AttachmentsPushedToTPMessageInternal>().First();
-			message.AttachmentDtos.FirstOrDefault(x => x.OriginalFileName == attachmentName).Should(Be.Not.Null);
-			message.SagaId.Should(Be.EqualTo(_outerSagaId));
+			message.AttachmentDtos.FirstOrDefault(x => x.OriginalFileName == attachmentName).Should(Be.Not.Null, "message.AttachmentDtos.FirstOrDefault(x => x.OriginalFileName == attachmentName).Should(Be.Not.Null)");
+			message.SagaId.Should(Be.EqualTo(_outerSagaId), "message.SagaId.Should(Be.EqualTo(_outerSagaId))");
 
 			var parts =
 				Transport.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Where(x => x.FileName == attachmentName);
@@ -148,13 +148,13 @@ namespace Tp.Integration.Plugin.Common.Tests.Core
 				content.Append(Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)));
 			}
 
-			content.ToString().Should(Be.EqualTo(attachmentContent));
+			content.ToString().Should(Be.EqualTo(attachmentContent), "content.ToString().Should(Be.EqualTo(attachmentContent))");
 		}
 
 		[Then("attachment folder should be empty")]
 		public void AttachmentFolderShouldBeEmpty()
 		{
-			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Should(Be.Empty);
+			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Should(Be.Empty, "Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Should(Be.Empty)");
 		}
 	}
 }

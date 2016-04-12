@@ -38,7 +38,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.ServiceBus
 			}
 
 			pluginQueueFactory.ProcessedMessages.Select(x => x.Body as string).ToArray().Should(
-				Be.EquivalentTo(new[] {"UiMessage1", "UiMessage2", "Message1", "Message2"}));
+				Be.EquivalentTo(new[] {"UiMessage1", "UiMessage2", "Message1", "Message2"}), "pluginQueueFactory.ProcessedMessages.Select(x => x.Body as string).ToArray().Should(Be.EquivalentTo(new[] {\"UiMessage1\", \"UiMessage2\", \"Message1\", \"Message2\"}))");
 		}
 
 		private static MsmqUiPriorityTransport CreateTransport(PluginQueueFactoryMock pluginQueueFactory)
@@ -74,7 +74,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common.ServiceBus
 			transport.Process();
 
 			pluginQueueFactory.ProcessedMessages.Select(x => x.Body as string).ToArray().Should(
-				Be.EquivalentTo(new[] {"Message1", "UiMessage1", "Message2"}));
+				Be.EquivalentTo(new[] {"Message1", "UiMessage1", "Message2"}), "pluginQueueFactory.ProcessedMessages.Select(x => x.Body as string).ToArray().Should(Be.EquivalentTo(new[] {\"Message1\", \"UiMessage1\", \"Message2\"}))");
 		}
 	}
 

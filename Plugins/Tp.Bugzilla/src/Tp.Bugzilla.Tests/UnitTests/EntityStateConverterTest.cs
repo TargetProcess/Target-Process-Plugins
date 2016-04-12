@@ -86,7 +86,7 @@ namespace Tp.Bugzilla.Tests.UnitTests
 		private void CheckMappedBugzillaValue(int tpEntityStateId, string bzStatus)
 		{
 			var mapped = _converter.GetMappedBugzillaStatus(new BugDTO {EntityStateID = tpEntityStateId});
-			mapped.Should(Be.EqualTo(bzStatus));
+			mapped.Should(Be.EqualTo(bzStatus), "mapped.Should(Be.EqualTo(bzStatus))");
 		}
 	}
 }

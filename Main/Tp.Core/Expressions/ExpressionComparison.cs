@@ -35,8 +35,7 @@ namespace Tp.Core.Expressions
 		/// Gets a value indicating if the two provided expression trees were found to be equal in
 		/// content.
 		/// </summary>
-		public bool ExpressionsAreEqual
-		{ get; private set; }
+		public bool ExpressionsAreEqual { get; private set; }
 
 		/// <summary>
 		/// Processes the provided <see cref="Expression"/> object by loading the next node coming
@@ -69,94 +68,94 @@ namespace Tp.Core.Expressions
 		/// <inheritdoc/>
 		protected override Expression VisitBinary(BinaryExpression node)
 		{
-			BinaryExpression comparand = (BinaryExpression)_comparand;
+			BinaryExpression comparand = (BinaryExpression) _comparand;
 
 			if (!AreEqual(node, comparand, x => x.Method))
 				return Fail(node);
 
 			return AreEqual(node, comparand, x => x.IsLifted, x => x.IsLiftedToNull)
-			       	? base.VisitBinary(node)
-			       	: Fail(node);
+				? base.VisitBinary(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitConstant(ConstantExpression node)
 		{
-			ConstantExpression comparand = (ConstantExpression)_comparand;
+			ConstantExpression comparand = (ConstantExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Value)
-			       	? base.VisitConstant(node)
-			       	: Fail(node);
+				? base.VisitConstant(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitDebugInfo(DebugInfoExpression node)
 		{
-			DebugInfoExpression comparand = (DebugInfoExpression)_comparand;
+			DebugInfoExpression comparand = (DebugInfoExpression) _comparand;
 
 			if (!AreEqual(node, comparand, x => x.IsClear))
 				return Fail(node);
 
 			return AreEqual(node,
-			                comparand,
-			                x => x.EndColumn,
-			                x => x.EndLine,
-			                x => x.StartLine,
-			                x => x.StartColumn)
-			       	? base.VisitDebugInfo(node)
-			       	: Fail(node);
+				comparand,
+				x => x.EndColumn,
+				x => x.EndLine,
+				x => x.StartLine,
+				x => x.StartColumn)
+				? base.VisitDebugInfo(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitDynamic(DynamicExpression node)
 		{
-			DynamicExpression comparand = (DynamicExpression)_comparand;
+			DynamicExpression comparand = (DynamicExpression) _comparand;
 
 			if (!AreEqual(node, comparand, x => x.DelegateType))
 				return Fail(node);
 
 			return AreEqual(node, comparand, x => x.Binder)
-			       	? base.VisitDynamic(node)
-			       	: Fail(node);
+				? base.VisitDynamic(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitGoto(GotoExpression node)
 		{
-			GotoExpression comparand = (GotoExpression)_comparand;
+			GotoExpression comparand = (GotoExpression) _comparand;
 
 			if (!AreEqual(node, comparand, x => x.Kind))
 				return Fail(node);
 
 			return AreEqual(node.Target, comparand.Target)
-			       	? base.VisitGoto(node)
-			       	: Fail(node);
+				? base.VisitGoto(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitIndex(IndexExpression node)
 		{
-			IndexExpression comparand = (IndexExpression)_comparand;
+			IndexExpression comparand = (IndexExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Indexer)
-			       	? base.VisitIndex(node)
-			       	: Fail(node);
+				? base.VisitIndex(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitLabel(LabelExpression node)
 		{
-			LabelExpression comparand = (LabelExpression)_comparand;
+			LabelExpression comparand = (LabelExpression) _comparand;
 
 			return AreEqual(comparand.Target, node.Target)
-			       	? base.VisitLabel(node)
-			       	: Fail(node);
+				? base.VisitLabel(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitLambda<T>(Expression<T> node)
 		{
-			LambdaExpression comparand = (LambdaExpression)_comparand;
+			LambdaExpression comparand = (LambdaExpression) _comparand;
 
 			// If lambda expression differs in return type, the expression's type property itself
 			// is different. Thus, there is no need to compare return types since all expressions
@@ -165,117 +164,117 @@ namespace Tp.Core.Expressions
 				return Fail(node);
 
 			return AreEqual(node, comparand, x => x.TailCall)
-			       	? base.VisitLambda(node)
-			       	: Fail(node);
+				? base.VisitLambda(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitListInit(ListInitExpression node)
 		{
-			ListInitExpression comparand = (ListInitExpression)_comparand;
+			ListInitExpression comparand = (ListInitExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Initializers, AreEqual)
-			       	? base.VisitListInit(node)
-			       	: Fail(node);
+				? base.VisitListInit(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitLoop(LoopExpression node)
 		{
-			LoopExpression comparand = (LoopExpression)_comparand;
+			LoopExpression comparand = (LoopExpression) _comparand;
 
 			if (!AreEqual(comparand.BreakLabel, node.BreakLabel))
 				return Fail(node);
 
 			return AreEqual(comparand.ContinueLabel, node.ContinueLabel)
-			       	? base.VisitLoop(node)
-			       	: Fail(node);
+				? base.VisitLoop(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitMember(MemberExpression node)
 		{
-			MemberExpression comparand = (MemberExpression)_comparand;
+			MemberExpression comparand = (MemberExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Member)
-			       	? base.VisitMember(node)
-			       	: Fail(node);
+				? base.VisitMember(node)
+				: Fail(node);
 		}
 
 		///<inheritdoc/>
 		protected override Expression VisitMemberInit(MemberInitExpression node)
 		{
-			MemberInitExpression comparand = (MemberInitExpression)_comparand;
+			MemberInitExpression comparand = (MemberInitExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Bindings, AreEqual)
-			       	? base.VisitMemberInit(node)
-			       	: Fail(node);
+				? base.VisitMemberInit(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitMethodCall(MethodCallExpression node)
 		{
-			MethodCallExpression comparand = (MethodCallExpression)_comparand;
+			MethodCallExpression comparand = (MethodCallExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Method)
-			       	? base.VisitMethodCall(node)
-			       	: Fail(node);
+				? base.VisitMethodCall(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitNew(NewExpression node)
 		{
-			NewExpression comparand = (NewExpression)_comparand;
+			NewExpression comparand = (NewExpression) _comparand;
 
 			if (!AreEqual(node, comparand, x => x.Constructor))
 				return Fail(node);
 
 			return AreEqual(node, comparand, x => x.Members)
-			       	? base.VisitNew(node)
-			       	: Fail(node);
+				? base.VisitNew(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitSwitch(SwitchExpression node)
 		{
-			SwitchExpression comparand = (SwitchExpression)_comparand;
+			SwitchExpression comparand = (SwitchExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Comparison)
-			       	? base.VisitSwitch(node)
-			       	: Fail(node);
+				? base.VisitSwitch(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitTry(TryExpression node)
 		{
-			TryExpression comparand = (TryExpression)_comparand;
+			TryExpression comparand = (TryExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.Handlers, AreEqual)
-			       	? base.VisitTry(node)
-			       	: Fail(node);
+				? base.VisitTry(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitTypeBinary(TypeBinaryExpression node)
 		{
-			TypeBinaryExpression comparand = (TypeBinaryExpression)_comparand;
+			TypeBinaryExpression comparand = (TypeBinaryExpression) _comparand;
 
 			return AreEqual(node, comparand, x => x.TypeOperand)
-			       	? base.VisitTypeBinary(node)
-			       	: Fail(node);
+				? base.VisitTypeBinary(node)
+				: Fail(node);
 		}
 
 		/// <inheritdoc/>
 		protected override Expression VisitUnary(UnaryExpression node)
 		{
-			UnaryExpression comparand = (UnaryExpression)_comparand;
+			UnaryExpression comparand = (UnaryExpression) _comparand;
 
 			if (!AreEqual(node, comparand, x => x.Method))
 				return Fail(node);
 
 			return AreEqual(node, comparand, x => x.IsLifted, x => x.IsLiftedToNull)
-			       	? base.VisitUnary(node)
-			       	: Fail(node);
+				? base.VisitUnary(node)
+				: Fail(node);
 		}
 
 		/// <summary>
@@ -332,8 +331,8 @@ namespace Tp.Core.Expressions
 			if (MemberBindingType.ListBinding != first.BindingType)
 				return true;
 
-			MemberListBinding firstList = (MemberListBinding)first;
-			MemberListBinding secondList = (MemberListBinding)second;
+			MemberListBinding firstList = (MemberListBinding) first;
+			MemberListBinding secondList = (MemberListBinding) second;
 
 			return AreEqual(firstList, secondList, x => x.Initializers, AreEqual);
 		}

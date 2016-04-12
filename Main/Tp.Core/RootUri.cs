@@ -5,6 +5,7 @@ namespace Tp.Core
 	public class RootUri
 	{
 		private readonly Uri _root;
+
 		public RootUri(Uri root)
 		{
 			_root = root;

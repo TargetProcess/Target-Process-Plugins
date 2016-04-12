@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -9,46 +8,17 @@ namespace Tp.Core.Expressions
 	public static class QueryableHelper
 	{
 		[Pure]
-		public static IQueryable<T> Replace<T, T1, T2>(this IQueryable<T> queryable, Expression<Func<T1, T2>> what,
-													   LambdaExpression with)
-		{
-			Expression e = queryable.Expression;
-
-			var newE = ReplaceLambda(e, what, with);
-
-			return queryable.Provider.CreateQuery<T>(newE);
-		}
-
-
-		[Pure]
 		public static IQueryable<T> ProtectFromNullReference<T>(this IQueryable<T> queryable)
 		{
-			Expression e = queryable.Expression;
-
-			var newE = e.ProtectFromNullReference();
-
-			return queryable.Provider.CreateQuery<T>(newE);
+			return queryable.TransformExpression(e => e.ProtectFromNullReference());
 		}
 
 		[Pure]
 		public static IQueryable<T> Replace<T>(this IQueryable<T> queryable, LambdaExpression what, LambdaExpression with)
 		{
-			Expression e = queryable.Expression;
-
-			var newE = ReplaceLambda(e, what, with);
-
-			return queryable.Provider.CreateQuery<T>(newE);
+			return queryable.TransformExpression(x => ReplaceLambda(x, what, with));
 		}
 
-
-		[Pure]
-		public static Expression<Func<T, T1>> Replace<T, T1, T3>(this Expression<Func<T, T1>> e, Expression<Func<T, T3>> what, LambdaExpression with)
-		{
-			var r = new LambdaReplacer(what, with);
-
-			var newE = r.Visit(e);
-			return (Expression<Func<T, T1>>)newE;
-		}
 
 		private static Expression ReplaceLambda(Expression e, LambdaExpression what, LambdaExpression with)
 		{

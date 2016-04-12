@@ -133,7 +133,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		[When("profile '$profileName' became not initialized")]
 		public void MakeProfileNotInitialized(string profileName)
 		{
-			_profile.Name.Value.Should(Be.EqualTo(profileName));
+			_profile.Name.Value.Should(Be.EqualTo(profileName), "_profile.Name.Value.Should(Be.EqualTo(profileName))");
 			_profile.MarkAsNotInitialized();
 			_profile.Save();
 		}
@@ -173,9 +173,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 			string profileName,
 			string accountName)
 		{
-			messagesSentLocally.Should(Be.EquivalentTo(expectedMessageNames));
-			Bus.GetOutProfileName().Should(Be.EqualTo((ProfileName) profileName));
-			Bus.GetOutAccountName().Should(Be.EqualTo(new AccountName(accountName)));
+			messagesSentLocally.Should(Be.EquivalentTo(expectedMessageNames), "messagesSentLocally.Should(Be.EquivalentTo(expectedMessageNames))");
+			Bus.GetOutProfileName().Should(Be.EqualTo((ProfileName) profileName), "Bus.GetOutProfileName().Should(Be.EqualTo((ProfileName) profileName))");
+			Bus.GetOutAccountName().Should(Be.EqualTo(new AccountName(accountName)), "Bus.GetOutAccountName().Should(Be.EqualTo(new AccountName(accountName)))");
 		}
 
 		private static IBus Bus

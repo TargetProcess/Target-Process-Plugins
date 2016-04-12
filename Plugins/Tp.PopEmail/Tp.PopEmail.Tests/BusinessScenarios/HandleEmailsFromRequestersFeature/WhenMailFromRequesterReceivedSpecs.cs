@@ -1,11 +1,8 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature;
 using Tp.Testing.Common.NBehave;
@@ -13,7 +10,7 @@ using Tp.Testing.Common.NBehave;
 namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFeature
 {
 	[TestFixture]
-    [Category("PartPlugins0")]
+	[Category("PartPlugins0")]
 	public class WhenMailFromRequesterReceivedSpecs
 	{
 		[Test]
@@ -60,7 +57,6 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
 					And 2 messages should be created"
 				.Execute(In.Context<EmailProcessingSagaActionSteps>());
 		}
-
 
 		[Test]
 		public void ShouldCreateRequesterWhenMailFromDeletedUserArrived()
@@ -123,7 +119,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
 		public void ShouldCreateRequestAndAttachToProjectFromMessage()
 		{
 			@"Given sender 'sender@company.com' is from company 1
-				  And email subject is 'Jira extra bug'
+					And email subject is 'Jira extra bug'
 					And project 7 is from company 1
 					And project 8 is from company 1
 					And profile has a rule: when company matched to project 7 and subject contains 'Jira' then create request in project 7 and attach to project 8
@@ -132,7 +128,6 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
 					And request in project 7 should be created from the message"
 				.Execute(In.Context<EmailProcessingSagaActionSteps>());
 		}
-
 
 		[Test]
 		public void ShouldConsiderRequesterMoreImportantThanUser()
@@ -164,5 +159,18 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
 				.Execute(In.Context<EmailProcessingSagaActionSteps>());
 		}
 
+		[Test]
+		public void RequestShouldBeAttachedToTeam()
+		{
+			@"Given project 1
+					And deleted requester 'Joe Black' with email 'sender@company.com'
+					And requester 'Sara White' with email 'sender@company.com'
+					And profile has a rule: then attach to project 1 and create public request in project 1 and attach request to team 100
+				And sender email is 'sender@company.com'
+			When the email arrived
+				Then the message from requester 'Sara White' should be created
+					And public request with team 100 in project 1 should be created from the message"
+				.Execute(In.Context<EmailProcessingSagaActionSteps>());
+		}
 	}
 }

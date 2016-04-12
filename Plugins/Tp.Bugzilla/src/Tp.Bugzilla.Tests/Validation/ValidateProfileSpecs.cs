@@ -93,7 +93,7 @@ namespace Tp.Bugzilla.Tests.Validation
 		[Then(@"error should occur for $fieldName: ""$errorMessage""")]
 		public void ErrorShouldOccur(string fieldName, string errorMessage)
 		{
-			_errors.Any(x => x.FieldName == fieldName && x.Message == errorMessage).Should(Be.True);
+			_errors.Any(x => x.FieldName == fieldName && x.Message == errorMessage).Should(Be.True, "_errors.Any(x => x.FieldName == fieldName && x.Message == errorMessage).Should(Be.True)");
 		}
 
 		private void HandlePluginCommand(string commandName, string args)

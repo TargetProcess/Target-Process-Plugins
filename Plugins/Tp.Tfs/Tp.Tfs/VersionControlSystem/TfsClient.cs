@@ -1,10 +1,11 @@
 ﻿//
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 //
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.TeamFoundation.Client;
@@ -21,44 +22,39 @@ namespace Tp.Tfs.VersionControlSystem
 		private const int UriTfsTeamProject = 2;
 
 		private readonly VersionControlServer _versionControl;
-		private readonly ISourceControlConnectionSettingsSource _settings;
 
 		private TfsTeamProjectCollection _teamProjectCollection;
 		private TeamProject[] _teamProjects;
 
 		public TfsClient(ISourceControlConnectionSettingsSource settings)
 		{
-			_settings = settings;
-			_versionControl = GetVersionControl(_settings);
+			_versionControl = GetVersionControl(settings);
 		}
 
 		~TfsClient()
 		{
-			if (_teamProjectCollection != null)
-				_teamProjectCollection.Dispose();
+			_teamProjectCollection?.Dispose();
 		}
 
 		public IEnumerable<RevisionRange> GetFromTillHead(Int32 from, int pageSize)
 		{
-			return GetChangesetsRanges(changeset => changeset.ChangesetId >= from, pageSize);
+			return GetChangesetsRanges(from, int.MaxValue, pageSize);
 		}
 
 		public IEnumerable<RevisionRange> GetAfterTillHead(RevisionId revisionId, int pageSize)
 		{
-			return GetChangesetsRanges(changeset => changeset.ChangesetId > int.Parse(revisionId.Value), pageSize);
+			return GetChangesetsRanges(int.Parse(revisionId.Value), int.MaxValue, pageSize, true);
 		}
 
 		public IEnumerable<RevisionRange> GetFromAndBefore(RevisionId fromRevision, RevisionId toRevision, int pageSize)
 		{
-			return GetChangesetsRanges(
-					changeset => changeset.ChangesetId >= int.Parse(fromRevision.Value) && changeset.ChangesetId <= int.Parse(toRevision.Value),
-					pageSize);
+			return GetChangesetsRanges(int.Parse(fromRevision.Value), int.Parse(toRevision.Value), pageSize);
 		}
 
 		public Changeset GetParentCommit(Changeset commit)
 		{
-			int changesetId = GetChangesets(changeset => changeset.ChangesetId < commit.ChangesetId).Max(ch => ch.ChangesetId);
-			return _versionControl.GetChangeset(changesetId);
+			var changeset = GetFirstChangesetBefore(commit.ChangesetId);
+			return _versionControl.GetChangeset(changeset.ChangesetId);
 		}
 
 		public Changeset GetCommit(RevisionId id)
@@ -68,7 +64,7 @@ namespace Tp.Tfs.VersionControlSystem
 
 		public string[] RetrieveAuthors(DateRange dateRange)
 		{
-			var authors = GetChangesets(changeset => changeset.CreationDate >= dateRange.StartDate && changeset.CreationDate <= dateRange.EndDate)
+			var authors = GetChangesets(CreateDateVSpec(dateRange.StartDate.GetValueOrDefault()), CreateDateVSpec(dateRange.EndDate.GetValueOrDefault()))
 					.Select(changeset => changeset.Committer)
 					.Distinct()
 					.ToArray();
@@ -76,9 +72,19 @@ namespace Tp.Tfs.VersionControlSystem
 			return authors;
 		}
 
+		private static VersionSpec CreateDateVSpec(DateTime date)
+		{
+			//Format is:  D2009-11-16T14:32
+			return VersionSpec.ParseSingleSpec(
+											   string.Format("D{0:yyy}-{0:MM}-{0:dd}T{0:HH}:{0:mm}", date),
+											   string.Empty);
+		}
+
 		public RevisionInfo[] GetRevisions(RevisionId fromChangeset, RevisionId toChangeset)
 		{
-			var revisionInfos = GetChangesets(changeset => changeset.ChangesetId >= int.Parse(fromChangeset.Value) && changeset.ChangesetId <= int.Parse(toChangeset.Value))
+			var revisionInfos =
+				GetChangesets(VersionSpec.ParseSingleSpec((fromChangeset.Value).ToString(CultureInfo.InvariantCulture), null),
+					VersionSpec.ParseSingleSpec((toChangeset.Value).ToString(CultureInfo.InvariantCulture), null))
 					.Select(changeset => changeset.ToRevisionInfo())
 					.ToArray();
 
@@ -109,7 +115,7 @@ namespace Tp.Tfs.VersionControlSystem
 
 		private VersionControlServer GetVersionControl(ISourceControlConnectionSettingsSource settings)
 		{
-			VersionControlServer versionControl = null;
+			VersionControlServer versionControl;
 
 			TfsConnectionParameters parameters = TfsConnectionHelper.GetTfsConnectionParameters(settings);
 
@@ -131,7 +137,7 @@ namespace Tp.Tfs.VersionControlSystem
 						_teamProjectCollection.EnsureAuthenticated();
 
 						versionControl = _teamProjectCollection.GetService<VersionControlServer>();
-						_teamProjects = new TeamProject[] { versionControl.GetTeamProject(parameters.TeamProjectName) };
+						_teamProjects = new[] { versionControl.GetTeamProject(parameters.TeamProjectName) };
 
 						break;
 					}
@@ -142,7 +148,36 @@ namespace Tp.Tfs.VersionControlSystem
 			return versionControl;
 		}
 
-		private IEnumerable<Changeset> GetChangesets(Func<Changeset, bool> predicate)
+		private Changeset GetFirstChangesetBefore(int before)
+		{
+			List<Changeset> changesets = new List<Changeset>();
+
+			foreach (var teamProject in _teamProjects)
+			{
+				var projectChangesets = _versionControl.QueryHistory(
+					teamProject.ServerItem,
+					VersionSpec.Latest,
+					0,
+					RecursionType.Full,
+					null,
+					null,
+					VersionSpec.ParseSingleSpec((before).ToString(CultureInfo.InvariantCulture), null),
+					2,
+					true,
+					true).Cast<Changeset>();
+
+				var projectChangesetsBefore = projectChangesets.Where(ch => ch.ChangesetId < before).ToArray();
+
+				if (projectChangesetsBefore.Any())
+				{
+					changesets.Add(projectChangesetsBefore.MaxBy(ch => ch.ChangesetId));
+				}
+			}
+
+			return changesets.MaxBy(ch => ch.ChangesetId);
+		}
+
+		private IEnumerable<Changeset> GetChangesets(VersionSpec fromChangeset, VersionSpec toChangeset)
 		{
 			List<Changeset> changesets = new List<Changeset>();
 
@@ -155,23 +190,72 @@ namespace Tp.Tfs.VersionControlSystem
 								0,
 								RecursionType.Full,
 								null,
-								null,
-								null,
-								Int32.MaxValue,
+								fromChangeset,
+								toChangeset,
+								int.MaxValue,
 								true,
-								true).Cast<Changeset>().Where(predicate).OrderBy(changeset => changeset.ChangesetId));
+								true,
+								false,
+								true).Cast<Changeset>());
 			}
 
 			return changesets;
 		}
 
-		private IEnumerable<RevisionRange> GetChangesetsRanges(Func<Changeset, bool> predicate, int pageSize)
+		private IEnumerable<RevisionRange> GetChangesetsRanges(int startChangesetId, int endChangesetId, int pageSize, bool skipStartChangeset = false)
 		{
-			var changesets = GetChangesets(predicate).ToList();
-			var pages = changesets.Split(pageSize);
-			var result = pages.Select(page => new RevisionRange(page.First().ToRevisionId(), page.Last().ToRevisionId()));
+			var changesets = new List<RevisionRange>();
 
-			return result;
+			foreach (var teamProject in _teamProjects)
+			{
+				var pageIncrement = skipStartChangeset ? 2 : 1;
+				var from = startChangesetId;
+				var to = endChangesetId;
+
+				do
+				{
+					var pageResult = _versionControl.QueryHistory(
+						teamProject.ServerItem,
+						VersionSpec.Latest,
+						0,
+						RecursionType.Full,
+						null,
+						VersionSpec.ParseSingleSpec((from).ToString(CultureInfo.InvariantCulture), null),
+						to == int.MaxValue ? null : VersionSpec.ParseSingleSpec((to).ToString(CultureInfo.InvariantCulture), null),
+						pageSize + pageIncrement,
+						true,
+						true,
+						false,
+						true).Cast<Changeset>().ToArray();
+
+					pageIncrement = 1;
+
+					if (skipStartChangeset && pageResult.Any() && pageResult.First().ChangesetId == startChangesetId)
+					{
+						pageResult = pageResult.Skip(1).ToArray();
+					}
+
+					if (pageResult.Any())
+					{
+						if (pageResult.Length > pageSize)
+						{
+							changesets.Add(new RevisionRange(pageResult.First().ToRevisionId(), pageResult[pageSize - 1].ToRevisionId()));
+							from = pageResult.Last().ChangesetId;
+						}
+						else
+						{
+							changesets.Add(new RevisionRange(pageResult.First().ToRevisionId(), pageResult.Last().ToRevisionId()));
+							from = -1;
+						}
+					}
+					else
+					{
+						from = -1;
+					}
+				} while (from != -1);
+			}
+
+			return changesets;
 		}
 	}
 }

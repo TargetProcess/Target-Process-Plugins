@@ -62,8 +62,38 @@ namespace Tp.MashupManager.Tests.MashupStorage
 					new MashupFile {FileName = FileName2, Content = string.Empty}
 				}) {Name = MashupName});
 
-			File.Exists(Path.Combine(_mashupFolderPath, FileName)).Should(Be.True);
-			File.Exists(Path.Combine(_mashupFolderPath, FileName2)).Should(Be.True);
+			File.Exists(Path.Combine(_mashupFolderPath, FileName)).Should(Be.True, "File.Exists(Path.Combine(_mashupFolderPath, FileName)).Should(Be.True)");
+			File.Exists(Path.Combine(_mashupFolderPath, FileName2)).Should(Be.True, "File.Exists(Path.Combine(_mashupFolderPath, FileName2)).Should(Be.True)");
+		}
+
+		[Test, ExpectedException(typeof(BadMashupFileNameException))]
+		public void ShouldRaiseBadMashupFileNameErrorForAbsolutePath()
+		{
+			_storage.SaveMashup(
+				new Mashup(new List<MashupFile>
+				{
+					new MashupFile {FileName = @"C:\1.txt", Content = string.Empty},
+				}) { Name = MashupName });
+		}
+
+		[Test, ExpectedException(typeof(BadMashupFileNameException))]
+		public void ShouldRaiseBadMashupFileNameErrorForRelativePath()
+		{
+			_storage.SaveMashup(
+				new Mashup(new List<MashupFile>
+				{
+					new MashupFile {FileName = @"..\" + FileName, Content = string.Empty},
+				}) { Name = MashupName });
+		}
+
+		[Test, ExpectedException(typeof(BadMashupNameException))]
+		public void ShouldRaiseBadMashupNameError()
+		{
+			_storage.SaveMashup(
+				new Mashup(new List<MashupFile>
+				{
+					new MashupFile {FileName = @"C:\1.txt", Content = string.Empty},
+				}) { Name = @"\..\zagzag" });
 		}
 	}
 }

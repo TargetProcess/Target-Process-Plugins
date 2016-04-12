@@ -1,4 +1,5 @@
 ﻿using System.CodeDom;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -14,7 +15,7 @@ using Tp.Testing.Common.NUnit;
 namespace Tp.Search.Tests
 {
 	[TestFixture]
-    [Category("PartPlugins1")]
+	[Category("PartPlugins1")]
 	public class SearchTests : SearchTestBase
 	{
 		[Test]
@@ -36,8 +37,8 @@ namespace Tp.Search.Tests
 					Query = "+zagzag +bla",
 					ProjectIds = new[] { 1 }
 				});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[]{id.ToString()}));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[]{id.ToString()}), "result.AssignableIds.Should(Be.EquivalentTo(new[]{id.ToString()}))");
 		}
 
 		[Test]
@@ -72,7 +73,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 }
 			});
 
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 
 			indexer.UpdateGeneralIndex(new GeneralDTO
 				{
@@ -97,8 +98,8 @@ namespace Tp.Search.Tests
 					Query = value,
 					ProjectIds = new[] {1}
 				});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] {id.ToString()}));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] {id.ToString()}), "result.AssignableIds.Should(Be.EquivalentTo(new[] {id.ToString()}))");
 		}
 
 		[Test]
@@ -120,8 +121,8 @@ namespace Tp.Search.Tests
 				Query = "\"zagzag\"",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -143,8 +144,8 @@ namespace Tp.Search.Tests
 				Query = "\" zagzag\"  ",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -174,8 +175,8 @@ namespace Tp.Search.Tests
 				Query = "\"SqlClient. SqlException: Could not continue scan with NOLOCK due to data movement\"",
 				ProjectIds = new[]{1}
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -197,8 +198,8 @@ namespace Tp.Search.Tests
 				Query = "\" zagzag     a\"  ",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -228,8 +229,8 @@ namespace Tp.Search.Tests
 				Query = "\"local@time\"",
 				ProjectIds = new[]{1}
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -259,8 +260,8 @@ namespace Tp.Search.Tests
 				Query = "+zag -time",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 
@@ -291,8 +292,8 @@ namespace Tp.Search.Tests
 				Query = "local@time",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(ids.Select(x => x.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(ids.Select(x => x.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(ids.Select(x => x.ToString()).ToArray()))");
 		}
 
 		[Test]
@@ -314,8 +315,8 @@ namespace Tp.Search.Tests
 				Query = "\"zag zag.\"",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 		
 		[Test]
@@ -345,8 +346,8 @@ namespace Tp.Search.Tests
 				Query = "+bla.zag.",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -376,8 +377,8 @@ namespace Tp.Search.Tests
 				Query = "+zag -xxx",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -407,8 +408,8 @@ namespace Tp.Search.Tests
 				Query = "22 time",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -438,8 +439,8 @@ namespace Tp.Search.Tests
 				Query = "*zag.xxx",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -495,8 +496,8 @@ namespace Tp.Search.Tests
 				Query = "*zag.xxx",
 				ProjectIds = new[] { projectId, 5 }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { ids[2].ToString(), ids[4].ToString() }));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { ids[2].ToString(), ids[4].ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { ids[2].ToString(), ids[4].ToString() }))");
 		}
 
 		[Test]
@@ -527,8 +528,8 @@ namespace Tp.Search.Tests
 				Query = "\"@test\"",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(ids.Select(x => x.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(ids.Select(x => x.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(ids.Select(x => x.ToString()).ToArray()))");
 		}
 		
 		[Test]
@@ -558,7 +559,7 @@ namespace Tp.Search.Tests
 				Query = "+zagzag +bla",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -611,8 +612,8 @@ namespace Tp.Search.Tests
 				EntityStateIds = new[]{targetEntityStateId},
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignableIds.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignableIds.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(expectedAssignableIds.Select(s => s.ToString()).ToArray()))");
 		}
 
 		[Test]
@@ -667,8 +668,8 @@ namespace Tp.Search.Tests
 				Query = "zagzag",
 				TeamIds = new[] { targetTeamId }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()))");
 		}
 		
 		[Test]
@@ -725,25 +726,38 @@ namespace Tp.Search.Tests
 				Query = "zagzag",
 				TeamIds = new[] { targetTeamId }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()))");
+
+			indexer.UpdateAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = 1,
+				AssignableID = target.AssignableID,
+				SquadID = newTargetTeamId
+			}, new AssignableSquadDTO
+			{
+				AssignableSquadID = 1,
+				AssignableID = target.AssignableID,
+				SquadID = targetTeamId
+			}, new List<AssignableSquadField> {AssignableSquadField.SquadID});
 			target.SquadID = newTargetTeamId;
-			indexer.UpdateAssignableIndex(target, new[] {AssignableField.SquadID}, isIndexing:false);
+			indexer.UpdateAssignableIndex(target, new[] {AssignableField.SquadID}, false);
+
 			var newResult = queryRunner.Run(new QueryData
 			{
 				Query = "zagzag",
 				TeamIds = new[] { targetTeamId }
 			});
-			newResult.Total.Should(Be.EqualTo(1));
-			newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()));
+			newResult.Total.Should(Be.EqualTo(1), "newResult.Total.Should(Be.EqualTo(1))");
+			newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()), "newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()))");
 
 			var lastResult = queryRunner.Run(new QueryData
 			{
 				Query = "zagzag",
 				TeamIds = new[] { newTargetTeamId }
 			});
-			lastResult.Total.Should(Be.EqualTo(1));
-			lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Select(s => s.ToString()).ToArray()));
+			lastResult.Total.Should(Be.EqualTo(1), "lastResult.Total.Should(Be.EqualTo(1))");
+			lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Select(s => s.ToString()).ToArray()), "lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Select(s => s.ToString()).ToArray()))");
 		}
 
 		[Test]
@@ -800,17 +814,25 @@ namespace Tp.Search.Tests
 				Query = "zagzag",
 				TeamIds = new[] { targetTeamId }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()))");
+
+			indexer.RemoveAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = 1,
+				AssignableID = target.AssignableID,
+				SquadID = targetTeamId
+			});
 			target.SquadID = null;
 			indexer.UpdateAssignableIndex(target, new[] { AssignableField.SquadID }, isIndexing: false);
+
 			var newResult = queryRunner.Run(new QueryData
 			{
 				Query = "zagzag",
 				TeamIds = new[] { targetTeamId }
 			});
-			newResult.Total.Should(Be.EqualTo(1));
-			newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()));
+			newResult.Total.Should(Be.EqualTo(1), "newResult.Total.Should(Be.EqualTo(1))");
+			newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()), "newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()))");
 
 			var lastResult = queryRunner.Run(new QueryData
 			{
@@ -818,8 +840,393 @@ namespace Tp.Search.Tests
 				TeamIds = null,
 				IncludeNoTeam = true
 			});
-			lastResult.Total.Should(Be.EqualTo(2));
-			lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Concat(new[]{assignableIdWithNullSquad}).Select(s => s.ToString()).ToArray()));
+			lastResult.Total.Should(Be.EqualTo(2), "lastResult.Total.Should(Be.EqualTo(2))");
+			lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Concat(new[]{assignableIdWithNullSquad}).Select(s => s.ToString()).ToArray()), "lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Concat(new[]{assignableIdWithNullSquad}).Select(s => s.ToString()).ToArray()))");
+		}
+
+		[Test]
+		public void SearchUserStoryByTeamAfterAddAssignableSquad()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int targetTeamId = 1;
+			const int anotherTargetTeamId = 2;
+			const int expectedAssignableId = 1;
+			const int userStoryTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID;
+			var target = new AssignableDTO
+			{
+				ID = expectedAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableIndex(target);
+			indexer.AddAssignableIndex(new AssignableDTO
+			{
+				ID = 2,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			});
+			
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			indexer.AddAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = 1,
+				AssignableID = expectedAssignableId,
+				SquadID = anotherTargetTeamId
+			});
+						
+			var newResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			newResult.Total.Should(Be.EqualTo(2), "newResult.Total.Should(Be.EqualTo(2))");
+			newResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "newResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			var lastResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { anotherTargetTeamId }
+			});
+			lastResult.Total.Should(Be.EqualTo(1), "lastResult.Total.Should(Be.EqualTo(1))");
+			lastResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "lastResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+		}
+
+		[Test]
+		public void SearchUserStoryByTeamAfterUpdateAssignableSquad()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int targetTeamId = 1;
+			const int anotherTargetTeamId = 2;
+			const int expectedAssignableId = 1;
+			const int expectedAssignableSquadId = 1;
+			const int userStoryTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID;
+			var target = new AssignableDTO
+			{
+				ID = expectedAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableIndex(target);
+			indexer.AddAssignableIndex(new AssignableDTO
+			{
+				ID = 2,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			});
+			var targetAssignableSquad = new AssignableSquadDTO
+			{
+				AssignableSquadID = expectedAssignableSquadId,
+				AssignableID = expectedAssignableId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableSquadIndex(targetAssignableSquad);
+
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] {targetTeamId}
+			});
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			indexer.UpdateAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = expectedAssignableSquadId,
+				AssignableID = expectedAssignableId,
+				SquadID = anotherTargetTeamId
+			}, targetAssignableSquad, new List<AssignableSquadField> {AssignableSquadField.SquadID});
+
+			var newResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] {targetTeamId}
+			});
+			newResult.Total.Should(Be.EqualTo(1), "newResult.Total.Should(Be.EqualTo(1))");
+			newResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "newResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
+
+			var lastResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] {anotherTargetTeamId}
+			});
+			lastResult.Total.Should(Be.EqualTo(1), "lastResult.Total.Should(Be.EqualTo(1))");
+			lastResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "lastResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+		}
+
+		[Test]
+		public void SearchUserStoryByTeamAfterRemoveAssignableSquad()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int targetTeamId = 1;
+			const int expectedAssignableId = 1;
+			const int expectedAssignableSquadId = 1;
+			const int userStoryTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID;
+			var target = new AssignableDTO
+			{
+				ID = expectedAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableIndex(target);
+			indexer.AddAssignableIndex(new AssignableDTO
+			{
+				ID = 2,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			});
+			var targetAssignableSquad = new AssignableSquadDTO
+			{
+				AssignableSquadID = expectedAssignableSquadId,
+				AssignableID = expectedAssignableId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableSquadIndex(targetAssignableSquad);
+
+			var queryRunner = GetInstance<QueryRunner>();
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			indexer.RemoveAssignableSquadIndex(targetAssignableSquad);
+
+			var newResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			newResult.Total.Should(Be.EqualTo(1), "newResult.Total.Should(Be.EqualTo(1))");
+			newResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "newResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
+		}
+
+		[Test]
+		public void SearchUserStoryByMultipleTeamsAfterChange()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int targetTeamId = 1;
+			const int anotherTargetTeamId = 2;
+			const int updatedTeamId = 3;
+			const int expectedAssignableId = 1;
+			const int userStoryTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID;
+			var target = new AssignableDTO
+			{
+				ID = expectedAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableIndex(target);
+			var targetAssignableSquad  = new AssignableSquadDTO
+			{
+				AssignableSquadID = 1,
+				AssignableID = expectedAssignableId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableSquadIndex(targetAssignableSquad);
+			target.SquadID = targetTeamId;
+			indexer.UpdateAssignableIndex(target, new[] { AssignableField.SquadID }, false);
+			indexer.AddAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = 2,
+				AssignableID = expectedAssignableId,
+				SquadID = anotherTargetTeamId
+			});
+			target.SquadID = anotherTargetTeamId;
+			indexer.UpdateAssignableIndex(target, new[] { AssignableField.SquadID }, false);
+
+			var queryRunner = GetInstance<QueryRunner>();
+			var targetResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			targetResult.Total.Should(Be.EqualTo(1), "targetResult.Total.Should(Be.EqualTo(1))");
+			targetResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "targetResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			var anotherResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { anotherTargetTeamId }
+			});
+			anotherResult.Total.Should(Be.EqualTo(1), "anotherResult.Total.Should(Be.EqualTo(1))");
+			anotherResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "anotherResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			indexer.UpdateAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = targetAssignableSquad.AssignableSquadID,
+				AssignableID = targetAssignableSquad.AssignableID,
+				SquadID = updatedTeamId
+			}, targetAssignableSquad, new List<AssignableSquadField> { AssignableSquadField.SquadID });
+			target.SquadID = updatedTeamId;
+			indexer.UpdateAssignableIndex(target, new[] { AssignableField.SquadID }, isIndexing: false);
+
+			var oldResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			oldResult.Total.Should(Be.EqualTo(0), "oldResult.Total.Should(Be.EqualTo(0))");
+			oldResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "oldResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
+			var anotherStillResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { anotherTargetTeamId }
+			});
+			anotherStillResult.Total.Should(Be.EqualTo(1), "anotherStillResult.Total.Should(Be.EqualTo(1))");
+			anotherStillResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "anotherStillResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+			var updatedResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { updatedTeamId }
+			});
+			updatedResult.Total.Should(Be.EqualTo(1), "updatedResult.Total.Should(Be.EqualTo(1))");
+			updatedResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "updatedResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+		}
+
+		[Test]
+		public void SearchUserStoryByNoTeamAfterChangeAssignableSquad()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int targetTeamId = 1;
+			const int anotherTargetTeamId = 2;
+			const int expectedAssignableId = 1;
+			const int userStoryTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID;
+			var target = new AssignableDTO
+			{
+				ID = expectedAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = null
+			};
+			indexer.AddAssignableIndex(target);
+			indexer.AddAssignableIndex(new AssignableDTO
+			{
+				ID = 2,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = null
+			});
+
+			var queryRunner = GetInstance<QueryRunner>();
+
+			var result = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = null,
+				IncludeNoTeam = true
+			});
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "result.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			var targetAssignableSquad = new AssignableSquadDTO
+			{
+				AssignableSquadID = 1,
+				AssignableID = expectedAssignableId,
+				SquadID = targetTeamId
+			};
+			indexer.AddAssignableSquadIndex(targetAssignableSquad);
+
+			var noTeamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = null,
+				IncludeNoTeam = true
+			});
+			noTeamResult.Total.Should(Be.EqualTo(1), "noTeamResult.Total.Should(Be.EqualTo(1))");
+			noTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "noTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
+
+			var teamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId },
+				IncludeNoTeam = true
+			});
+			teamResult.Total.Should(Be.EqualTo(2), "teamResult.Total.Should(Be.EqualTo(2))");
+			teamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "teamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			indexer.UpdateAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = targetAssignableSquad.AssignableSquadID,
+				AssignableID = targetAssignableSquad.AssignableID,
+				SquadID = anotherTargetTeamId
+			}, targetAssignableSquad, new List<AssignableSquadField> { AssignableSquadField.SquadID });
+
+			var updatedNoTeamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = null,
+				IncludeNoTeam = true
+			});
+			updatedNoTeamResult.Total.Should(Be.EqualTo(1), "updatedNoTeamResult.Total.Should(Be.EqualTo(1))");
+			updatedNoTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "updatedNoTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
+
+			var updatedTeamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { targetTeamId }
+			});
+			updatedTeamResult.Total.Should(Be.EqualTo(0), "updatedTeamResult.Total.Should(Be.EqualTo(0))");
+			updatedTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "updatedTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
+
+			var anotherTeamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { anotherTargetTeamId },
+				IncludeNoTeam = true
+			});
+			anotherTeamResult.Total.Should(Be.EqualTo(2), "anotherTeamResult.Total.Should(Be.EqualTo(2))");
+			anotherTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "anotherTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			indexer.RemoveAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = targetAssignableSquad.AssignableSquadID,
+				AssignableID = targetAssignableSquad.AssignableID,
+				SquadID = anotherTargetTeamId
+			});
+
+			var lastNoTeamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = null,
+				IncludeNoTeam = true
+			});
+			lastNoTeamResult.Total.Should(Be.EqualTo(2), "lastNoTeamResult.Total.Should(Be.EqualTo(2))");
+			lastNoTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True, "lastNoTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.True)");
+
+			var lastTeamResult = queryRunner.Run(new QueryData
+			{
+				Query = "zagzag",
+				TeamIds = new[] { anotherTargetTeamId }
+			});
+			lastTeamResult.Total.Should(Be.EqualTo(0), "lastTeamResult.Total.Should(Be.EqualTo(0))");
+			lastTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False, "lastTeamResult.AssignableIds.Contains(expectedAssignableId.ToString()).Should(Be.False)");
 		}
 
 		[Test]
@@ -876,8 +1283,8 @@ namespace Tp.Search.Tests
 				Query = "zagzag",
 				ProjectIds = new[] { targetProjectId }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Select(s => s.ToString()).ToArray()))");
 			target.ProjectID = null;
 			indexer.UpdateAssignableIndex(target, new[] { AssignableField.ProjectID }, isIndexing: false);
 			var newResult = queryRunner.Run(new QueryData
@@ -885,8 +1292,8 @@ namespace Tp.Search.Tests
 				Query = "zagzag",
 				ProjectIds = new[] { targetProjectId }
 			});
-			newResult.Total.Should(Be.EqualTo(1));
-			newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()));
+			newResult.Total.Should(Be.EqualTo(1), "newResult.Total.Should(Be.EqualTo(1))");
+			newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()), "newResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Skip(1).Select(s => s.ToString()).ToArray()))");
 
 			var lastResult = queryRunner.Run(new QueryData
 			{
@@ -894,8 +1301,8 @@ namespace Tp.Search.Tests
 				ProjectIds = null,
 				IncludeNoProject = true
 			});
-			lastResult.Total.Should(Be.EqualTo(2));
-			lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Concat(new[] { assignableIdWithNullProject }).Select(s => s.ToString()).ToArray()));
+			lastResult.Total.Should(Be.EqualTo(2), "lastResult.Total.Should(Be.EqualTo(2))");
+			lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Concat(new[] { assignableIdWithNullProject }).Select(s => s.ToString()).ToArray()), "lastResult.AssignableIds.Should(Be.EquivalentTo(expectedAssignablesIds.Take(1).Concat(new[] { assignableIdWithNullProject }).Select(s => s.ToString()).ToArray()))");
 		}
 
 		[Test]
@@ -946,8 +1353,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { targetProjectId },
 				TeamIds = new[]{targetSquadId}
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { expectedAssignablesIds[2] }.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { expectedAssignablesIds[2] }.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(new[] { expectedAssignablesIds[2] }.Select(s => s.ToString()).ToArray()))");
 		}
 
 		[Test]
@@ -1023,9 +1430,80 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { targetProjectId },
 				TeamIds = new[] { targetSquadId },
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { expectedAssignablesIds[2] }.Select(s => s.ToString()).ToArray()));
-			result.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentIds[2] }.Select(s => s.ToString()).ToArray()));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { expectedAssignablesIds[2] }.Select(s => s.ToString()).ToArray()), "result.AssignableIds.Should(Be.EquivalentTo(new[] { expectedAssignablesIds[2] }.Select(s => s.ToString()).ToArray()))");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentIds[2] }.Select(s => s.ToString()).ToArray()), "result.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentIds[2] }.Select(s => s.ToString()).ToArray()))");
+		}
+
+		[Test]
+		public void SearchCommentByMultipleTeams()
+		{
+			var indexer = GetInstance<IEntityIndexer>();
+			const int targetSquadId = 1;
+			const int anotherTargetSquadId = 2;
+			const int expectedAssignableId = 1;
+			const int anotherAssignableId = 2;
+			const int expectedAssignableSquadId = 1;
+			const int expectedCommentId = 1;
+			const int anotherCommentId = 2;
+			const int userStoryTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID;
+			indexer.AddAssignableIndex(new AssignableDTO
+			{
+				ID = expectedAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetSquadId
+			});
+			var targetAssignableSquad = new AssignableSquadDTO
+			{
+				AssignableSquadID = expectedAssignableSquadId,
+				AssignableID = expectedAssignableId,
+				SquadID = targetSquadId
+			};
+			indexer.AddAssignableSquadIndex(targetAssignableSquad);
+			indexer.AddAssignableSquadIndex(new AssignableSquadDTO
+			{
+				AssignableSquadID = 2,
+				AssignableID = expectedAssignableId,
+				SquadID = anotherTargetSquadId
+			});
+			indexer.AddCommentIndex(new CommentDTO
+			{
+				CommentID = expectedCommentId,
+				GeneralID = expectedAssignableId,
+				Description = "qwerty ffff"
+			});
+			indexer.AddAssignableIndex(new AssignableDTO
+			{
+				ID = anotherAssignableId,
+				Name = "zagzag",
+				Description = "",
+				EntityTypeID = userStoryTypeId,
+				SquadID = targetSquadId
+			});
+			indexer.AddCommentIndex(new CommentDTO
+			{
+				CommentID = anotherCommentId,
+				GeneralID = anotherAssignableId,
+				Description = "qwerty wert"
+			});			
+
+			var queryRunner = GetInstance<QueryRunner>();
+			var targetResult = queryRunner.Run(new QueryData
+			{
+				Query = "qwerty",
+				TeamIds = new[] { targetSquadId }
+			});
+			targetResult.Total.Should(Be.EqualTo(2), "targetResult.Total.Should(Be.EqualTo(2))");
+			targetResult.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentId, anotherCommentId }.Select(s => s.ToString()).ToArray()), "targetResult.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentId, anotherCommentId }.Select(s => s.ToString()).ToArray()))");
+			var anotherQueryResult = queryRunner.Run(new QueryData
+			{
+				Query = "qwerty",
+				TeamIds = new[] { anotherTargetSquadId }
+			});
+			anotherQueryResult.Total.Should(Be.EqualTo(1), "anotherQueryResult.Total.Should(Be.EqualTo(1))");
+			anotherQueryResult.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentId }.Select(s => s.ToString()).ToArray()), "anotherQueryResult.CommentIds.Should(Be.EquivalentTo(new[] { expectedCommentId }.Select(s => s.ToString()).ToArray()))");
 		}
 
 		[Test]
@@ -1054,18 +1532,18 @@ namespace Tp.Search.Tests
 				Query = "test",
 				ProjectIds = new[] { 1 }
 			});
-			entityWithComments.Total.Should(Be.EqualTo(2));
-			entityWithComments.AssignableIds.Should(Be.EquivalentTo(new[]{1}.Select(x => x.ToString()).ToArray()));
-			entityWithComments.CommentIds.Should(Be.EquivalentTo(new[] { 10 }.Select(x => x.ToString()).ToArray()));
+			entityWithComments.Total.Should(Be.EqualTo(2), "entityWithComments.Total.Should(Be.EqualTo(2))");
+			entityWithComments.AssignableIds.Should(Be.EquivalentTo(new[]{1}.Select(x => x.ToString()).ToArray()), "entityWithComments.AssignableIds.Should(Be.EquivalentTo(new[]{{i}}.Select(x => x.ToString()).ToArray()))");
+			entityWithComments.CommentIds.Should(Be.EquivalentTo(new[] { 10 }.Select(x => x.ToString()).ToArray()), "entityWithComments.CommentIds.Should(Be.EquivalentTo(new[] { 10 }.Select(x => x.ToString()).ToArray()))");
 			var entityWithoutComments = queryRunner.Run(new QueryData
 			{
 				Query = "test",
 				EntityStateIds = new[]{1},
 				ProjectIds = new[] { 1 }
 			});
-			entityWithoutComments.Total.Should(Be.EqualTo(1));
-			entityWithoutComments.AssignableIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString()).ToArray()));
-			entityWithoutComments.CommentIds.Should(Be.Empty);
+			entityWithoutComments.Total.Should(Be.EqualTo(1), "entityWithoutComments.Total.Should(Be.EqualTo(1))");
+			entityWithoutComments.AssignableIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString()).ToArray()), "entityWithoutComments.AssignableIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString()).ToArray()))");
+			entityWithoutComments.CommentIds.Should(Be.Empty, "entityWithoutComments.CommentIds.Should(Be.Empty)");
 		}
 
 		[Test]
@@ -1100,8 +1578,8 @@ namespace Tp.Search.Tests
 				Query = "qwert asdf",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(new[]{1,2}.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[]{1,2}.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[]{1,2}.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1142,8 +1620,8 @@ namespace Tp.Search.Tests
 				Query = "qwert asdf",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1, 2 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1, 2 }.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[] { 1, 2 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1166,8 +1644,8 @@ namespace Tp.Search.Tests
 				EntityTypeId = testCaseTypeId,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())), "result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1196,8 +1674,8 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.CommentIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())), "result.CommentIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1226,7 +1704,7 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -1249,8 +1727,8 @@ namespace Tp.Search.Tests
 				EntityTypeId = userStoryTypeId,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1280,9 +1758,9 @@ namespace Tp.Search.Tests
 				Query = "qwerty",
 				ProjectIds = new[]{1}
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())), "result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1312,9 +1790,9 @@ namespace Tp.Search.Tests
 				Query = "qwerty",
 				ProjectIds = new[]{1}
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())), "result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1342,7 +1820,7 @@ namespace Tp.Search.Tests
 			{
 				Query = "qwerty",
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -1362,8 +1840,8 @@ namespace Tp.Search.Tests
 				Query = "qwerty",
 				IncludeNoProject = true
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())), "result.GeneralIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1422,8 +1900,8 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(4));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1,2,3,4 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(4), "result.Total.Should(Be.EqualTo(4))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1,2,3,4 }.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[] { 1,2,3,4 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1531,8 +2009,8 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(6));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1, 2, 3, 4, 7, 9 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(6), "result.Total.Should(Be.EqualTo(6))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { 1, 2, 3, 4, 7, 9 }.Select(x => x.ToString())), "result.AssignableIds.Should(Be.EquivalentTo(new[] { 1, 2, 3, 4, 7, 9 }.Select(x => x.ToString())))");
 		}
 
 		[Test]
@@ -1633,9 +2111,9 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID,
 				IncludeNoTeam = true
 			});
-			result.Total.Should(Be.EqualTo(5));
-			result.AssignableIds.Should(Be.Empty);
-			result.CommentIds.Should(Be.EquivalentTo(new[] { 1, 2, 3, 4, 7 }.Select(x => x.ToString())));
+			result.Total.Should(Be.EqualTo(5), "result.Total.Should(Be.EqualTo(5))");
+			result.AssignableIds.Should(Be.Empty, "result.AssignableIds.Should(Be.Empty)");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { 1, 2, 3, 4, 7 }.Select(x => x.ToString())), "result.CommentIds.Should(Be.EquivalentTo(new[] { 1, 2, 3, 4, 7 }.Select(x => x.ToString())))");
 		}
 		[Test]
 		public void SearchUserStoryByNameWithDigitAfterDelete()
@@ -1662,7 +2140,7 @@ namespace Tp.Search.Tests
 				Query = "US2.2",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -1691,8 +2169,8 @@ namespace Tp.Search.Tests
 				Query = "zagzag111",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { "1" }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { \"1\" }))");
 		}
 
 		[Test]
@@ -1718,8 +2196,8 @@ namespace Tp.Search.Tests
 				Query = "zagzag111",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.CommentIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { "1" }), "result.CommentIds.Should(Be.EquivalentTo(new[] { \"1\" }))");
 		}
 
 		[Test]
@@ -1748,8 +2226,8 @@ namespace Tp.Search.Tests
 				Query = "story1",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { "1" }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { \"1\" }))");
 		}
 
 		[Test]
@@ -1794,8 +2272,8 @@ namespace Tp.Search.Tests
 				Query = "US2.2",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { "3" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { "3" }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { \"3\" }))");
 		}
 
 		[Test]
@@ -1822,8 +2300,8 @@ namespace Tp.Search.Tests
 				Query = "US2.2",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { "1" }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { \"1\" }))");
 		}
 
 		[Test]
@@ -1858,7 +2336,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -1886,9 +2364,9 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
-                
+
 		[Test]
 		public void SearchUserStoryByComment()
 		{
@@ -1914,8 +2392,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.CommentIds.Should(Be.EqualTo(new[]{"1"}));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.CommentIds.Should(Be.EqualTo(new[]{"1"}), "result.CommentIds.Should(Be.EqualTo(new[]{\"1\"}))");
 			indexer.RemoveCommentIndex(new CommentDTO
 				{
 					ID = 1,
@@ -1927,7 +2405,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result2.Total.Should(Be.EqualTo(0));
+			result2.Total.Should(Be.EqualTo(0), "result2.Total.Should(Be.EqualTo(0))");
 		}
 		[Test]
 		public void SearchUserStoryWithDigitsWithSpacebar()
@@ -1949,7 +2427,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -1972,7 +2450,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -1995,7 +2473,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -2018,7 +2496,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -2047,7 +2525,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -2089,8 +2567,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(2));
-			result.CommentIds.Should(Be.EquivalentTo(new[] { "1", "2" }));
+			result.Total.Should(Be.EqualTo(2), "result.Total.Should(Be.EqualTo(2))");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { "1", "2" }), "result.CommentIds.Should(Be.EquivalentTo(new[] { \"1\", \"2\" }))");
 			indexer.RemoveCommentIndex(new CommentDTO
 			{
 				ID = 1,
@@ -2102,8 +2580,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result2.Total.Should(Be.EqualTo(1));
-			result2.CommentIds.Should(Be.EquivalentTo(new[] { "2" }));
+			result2.Total.Should(Be.EqualTo(1), "result2.Total.Should(Be.EqualTo(1))");
+			result2.CommentIds.Should(Be.EquivalentTo(new[] { "2" }), "result2.CommentIds.Should(Be.EquivalentTo(new[] { \"2\" }))");
 		}
 
 		[Test]
@@ -2138,8 +2616,8 @@ namespace Tp.Search.Tests
 				EntityTypeId = QueryEntityTypeProvider.TESTCASE_TYPE_ID
 			});
 
-			result.Total.Should(Be.EqualTo(1));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { "1" }), "result.GeneralIds.Should(Be.EquivalentTo(new[] { \"1\" }))");
 		}
 
 		[Test]
@@ -2163,7 +2641,7 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = QueryEntityTypeProvider.USERSTORY_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
 		}
 
 		[Test]
@@ -2194,8 +2672,8 @@ namespace Tp.Search.Tests
 				TeamIds = new[]{1},
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.CommentIds.Should(Be.EquivalentTo(new[]{"1"}));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.CommentIds.Should(Be.EquivalentTo(new[]{"1"}), "result.CommentIds.Should(Be.EquivalentTo(new[]{\"1\"}))");
 		}
 
 		[Test]
@@ -2232,8 +2710,8 @@ namespace Tp.Search.Tests
 					},
 				EntityTypeId = QueryEntityTypeProvider.COMMENT_TYPE_ID
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.CommentIds.Should(Be.EquivalentTo(new[] { "1" }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { "1" }), "result.CommentIds.Should(Be.EquivalentTo(new[] { \"1\" }))");
 		}
 
 		[Test]
@@ -2255,8 +2733,8 @@ namespace Tp.Search.Tests
 				Query = "+zagzag +bla",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -2285,8 +2763,8 @@ namespace Tp.Search.Tests
 				Query = "+zagzag +bla",
 				ProjectIds = new[] { projectId }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }), "result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }))");
 		}
 
 		[Test]
@@ -2323,8 +2801,8 @@ namespace Tp.Search.Tests
 				Query = "+zagzag +bla",
 				ProjectIds = new[] { releaseOtherProjectId }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }), "result.GeneralIds.Should(Be.EquivalentTo(new[] { releaseId.ToString() }))");
 		}
 
 		[Test]
@@ -2361,8 +2839,8 @@ namespace Tp.Search.Tests
 				Query = "+qwerty",
 				ProjectIds = new[] { releaseOtherProjectId }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.CommentIds.Should(Be.EquivalentTo(new[] { commentId.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.CommentIds.Should(Be.EquivalentTo(new[] { commentId.ToString() }), "result.CommentIds.Should(Be.EquivalentTo(new[] { commentId.ToString() }))");
 		}
 
 		[Test]
@@ -2385,8 +2863,8 @@ namespace Tp.Search.Tests
 				Query = "+executed +with +no +error",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }), "result.AssignableIds.Should(Be.EquivalentTo(new[] { id.ToString() }))");
 		}
 
 		[Test]
@@ -2409,7 +2887,7 @@ namespace Tp.Search.Tests
 				Query = "+table",
 				ProjectIds = new[] { 1 }
 			});
-			result.Total.Should(Be.EqualTo(0));
+			result.Total.Should(Be.EqualTo(0), "result.Total.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -2438,8 +2916,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = testCaseTypeId
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))), "result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))))");
 		}
 
 		[Test]
@@ -2474,8 +2952,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 1 },
 				EntityTypeId = testCaseTypeId
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))), "result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))))");
 		}
 
 		[Test]
@@ -2505,15 +2983,15 @@ namespace Tp.Search.Tests
 				EntityTypeId = testCaseTypeId
 			};
 			var result = queryRunner.Run(queryData);
-			result.Total.Should(Be.EqualTo(1));
-			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))), "result.TestStepIds.Should(Be.EquivalentTo(new[] { 1 }.Select(x => x.ToString(CultureInfo.InvariantCulture))))");
 			indexer.RemoveTestStepIndex(new TestStepDTO
 			{
 				ID = 1,
 				TestCaseID = 1
 			});
 			var resultAfterRemove = queryRunner.Run(queryData);
-			resultAfterRemove.Total.Should(Be.EqualTo(0));
+			resultAfterRemove.Total.Should(Be.EqualTo(0), "resultAfterRemove.Total.Should(Be.EqualTo(0))");
 		}
 
 		[Test]
@@ -2556,8 +3034,8 @@ namespace Tp.Search.Tests
 				ProjectIds = new[] { 2 },
 				EntityTypeId = testCaseTypeId
 			});
-			result.Total.Should(Be.EqualTo(1));
-			result.TestStepIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString(CultureInfo.InvariantCulture))));
+			result.Total.Should(Be.EqualTo(1), "result.Total.Should(Be.EqualTo(1))");
+			result.TestStepIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString(CultureInfo.InvariantCulture))), "result.TestStepIds.Should(Be.EquivalentTo(new[] { 2 }.Select(x => x.ToString(CultureInfo.InvariantCulture))))");
 		}
 	}
 }

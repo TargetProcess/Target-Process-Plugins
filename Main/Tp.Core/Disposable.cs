@@ -15,18 +15,17 @@ namespace Tp.Core
 		{
 			_action();
 		}
-		
-		public static IDisposable Create(Action onExit)
-		{
-			return new Disposable(onExit);
-		}
 
-		public static IDisposable Empty
-		{
-			get { return DefaultDisposable.Instance; }
-		}
+		public static IDisposable Create(Action onExit) =>
+			new Disposable(onExit);
 
-		private class DefaultDisposable :IDisposable
+		public static IDisposable Empty =>
+			DefaultDisposable.Instance;
+
+		public static IDisposable Composite(params IDisposable[] disposables) =>
+			new CompositeDisposable(disposables);
+
+		private class DefaultDisposable : IDisposable
 		{
 			public static readonly DefaultDisposable Instance = new DefaultDisposable();
 

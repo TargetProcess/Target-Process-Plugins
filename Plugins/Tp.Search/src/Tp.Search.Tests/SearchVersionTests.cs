@@ -39,7 +39,7 @@ namespace Tp.Search.Tests
 		{
 			var t = new DocumentIndexType(DocumentIndexTypeToken.Entity, DocumentIndexDataTypeToken.Digits, "Entity", Enumerable.Empty<Enum>(), Enumerable.Empty<Enum>(), 2, new DigitsDocumentIndexDataTypeService(), new FileServiceStub());
 			IEnumerable<int> versions = t.GetVersions(AccountName.Empty, new DocumentIndexSetup(string.Empty, 0, 0, 0));
-			versions.Should(Be.EquivalentTo(new[] {1}));
+			versions.Should(Be.EquivalentTo(new[] {1}), "versions.Should(Be.EquivalentTo(new[] {{i}}))");
 		}
 
 		[Test]
@@ -54,14 +54,14 @@ namespace Tp.Search.Tests
 			documentIndexOfVersion3.Shutdown(new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: false));
 			var documentIndexOfVersion2 = CreateDocumentIndex(accountName, 2, documentIndexSetup, activityLoggerFactory);
 			IEnumerable<int> versions = documentIndexOfVersion2.Type.GetVersions(accountName, documentIndexSetup).ToList();
-			versions.Should(Be.EquivalentTo(new[]{1,2,3}));
+			versions.Should(Be.EquivalentTo(new[]{1,2,3}), "versions.Should(Be.EquivalentTo(new[]{1,2,3}))");
 			foreach (var version in versions.Except(new[] { documentIndexOfVersion2.Type.Version}))
 			{
 				DocumentIndexType indexType = documentIndexOfVersion2.Type.CreateVersion(version);
 				var documentIndex = CreateDocumentIndex(accountName, indexType, documentIndexSetup, activityLoggerFactory);
 				documentIndex.Shutdown(new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: true));
 			}
-			documentIndexOfVersion2.Type.GetVersions(accountName, documentIndexSetup).Should(Be.EquivalentTo(new[] { documentIndexOfVersion2 .Type.Version}));
+			documentIndexOfVersion2.Type.GetVersions(accountName, documentIndexSetup).Should(Be.EquivalentTo(new[] { documentIndexOfVersion2 .Type.Version}), "documentIndexOfVersion2.Type.GetVersions(accountName, documentIndexSetup).Should(Be.EquivalentTo(new[] { documentIndexOfVersion2 .Type.Version}))");
 			documentIndexOfVersion2.Shutdown(new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: true));
 		}
 

@@ -1,8 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2010 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,7 +29,8 @@ namespace Tp.Core
 		private class ComparerHelper : IComparer<T>, IComparer
 		{
 			private readonly Func<T, T, int> _f;
-			public ComparerHelper(Func<T,T,int> f)
+
+			public ComparerHelper(Func<T, T, int> f)
 			{
 				_f = f;
 			}

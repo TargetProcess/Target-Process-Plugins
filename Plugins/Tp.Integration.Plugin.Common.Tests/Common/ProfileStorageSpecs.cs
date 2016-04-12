@@ -161,21 +161,21 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void AssertRetrievedSubset(string[] subsetValues)
 		{
 			var subset = StorageRepository.Get<string>(Context.CurrentStorageName);
-			subset.ToArray().Should(Be.EquivalentTo(subsetValues));
+			subset.ToArray().Should(Be.EquivalentTo(subsetValues), "subset.ToArray().Should(Be.EquivalentTo(subsetValues))");
 		}
 
 		[Then("the storage retrieved by empty names array should be empty")]
 		public void AssertEmptySubset()
 		{
 			var subset = StorageRepository.Get<string>(Enumerable.Empty<StorageName>().ToArray()).ToArray();
-			subset.ToArray().Should(Be.Empty);
+			subset.ToArray().Should(Be.Empty, "subset.ToArray().Should(Be.Empty)");
 		}
 
 		[Then(@"the storage retrieved by names '$names' should be: (?<subsetValues>([^,]+,?\s*)+)")]
 		public void AssertRetrievedSubset(string names, string[] subsetValues)
 		{
 			var subset = StorageRepository.Get<string>(names.Split(',').Select(n => new StorageName(n)).ToArray());
-			subset.ToArray().Should(Be.EquivalentTo(subsetValues));
+			subset.ToArray().Should(Be.EquivalentTo(subsetValues), "subset.ToArray().Should(Be.EquivalentTo(subsetValues))");
 		}
 
 		private static ProfileStorageContext Context
@@ -260,7 +260,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		public void ProfileStorageShouldContainStringValue(string profileName, string accountName, string stringValue)
 		{
 			SetCurrentPluginContext(accountName, profileName);
-			StorageRepository.Get<StringValue>().First().Value.Should(Be.EqualTo(stringValue));
+			StorageRepository.Get<StringValue>().First().Value.Should(Be.EqualTo(stringValue), "StorageRepository.Get<StringValue>().First().Value.Should(Be.EqualTo(stringValue))");
 		}
 
 		[Then(
@@ -270,7 +270,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
 		{
 			SetCurrentPluginContext(accountName, profileName);
 			var list = StorageRepository.Get<StringValue>();
-			list.Select(x => x.Value).ToArray().Should(Be.EquivalentTo(stringValues));
+			list.Select(x => x.Value).ToArray().Should(Be.EquivalentTo(stringValues), "list.Select(x => x.Value).ToArray().Should(Be.EquivalentTo(stringValues))");
 		}
 
 		[Then("storage for '$accountName' should contain one profile '$profileName'")]

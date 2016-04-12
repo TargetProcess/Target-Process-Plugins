@@ -19,7 +19,7 @@ namespace Tp.Bugzilla.Tests.UnitTests
 			              	{
 			              		SavedSearches = " query1, query2 "
 			              	};
-			profile.SavedSearches.Should(Be.EqualTo("query1,query2"));
+			profile.SavedSearches.Should(Be.EqualTo("query1,query2"), "profile.SavedSearches.Should(Be.EqualTo(\"query1,query2\"))");
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace Tp.Bugzilla.Tests.UnitTests
 			              	{
 			              		Url = " http://url "
 			              	};
-			profile.Url.Should(Be.EqualTo("http://url"));
+			profile.Url.Should(Be.EqualTo("http://url"), "profile.Url.Should(Be.EqualTo(\"http://url\"))");
 		}
 	}
 }

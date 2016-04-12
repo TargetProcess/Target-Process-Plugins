@@ -213,17 +213,21 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 			var project = Context.Projects.Single(p => p.Abbreviation == projectName);
 
 			Context.Generals.InsertOnSubmit(new General
-			                                	{
-			                                		Name = name,
-			                                		EntityTypeID = BugzillaConstants.BugEntityTypeId,
-			                                		ParentProjectID = project.ProjectID
-			                                	});
+			{
+				Name = name,
+				EntityTypeID = BugzillaConstants.BugEntityTypeId,
+				ParentProjectID = project.ProjectID
+			});
+
 			Context.SubmitChanges();
 			var generalId = GetLastBugIdByName(name);
+			// wtf? project process doesn't contain workflow for bugs
+			// so just pull anyone that satisfies FK_Assignable_EntityState_EntityStateID constraint
+			var entityState = Context.EntityStates.First(es => es.EntityTypeID == BugzillaConstants.BugEntityTypeId);
 
 			Context.ExecuteCommand(
-				"INSERT INTO Assignable (AssignableID, Effort, EffortCompleted, EffortToDo, EntityStateID) VALUES ({0}, 0, 0, 0, 1)"
-					.Fmt(generalId));
+				"INSERT INTO Assignable (AssignableID, Effort, EffortCompleted, EffortToDo, EntityStateID) VALUES ({0}, 0, 0, 0, {1})"
+					.Fmt(generalId, entityState.EntityStateID));
 
 			Context.Bugs.InsertOnSubmit(new Bug {BugID = generalId});
 
@@ -368,80 +372,80 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 			Context.Refresh(RefreshMode.OverwriteCurrentValues, Context.PluginProfiles);
 
 			var profile = Context.PluginProfiles.Single(p => p.ProfileName == name);
-			profile.Active.Should(Be.False);
+			profile.Active.Should(Be.False, "profile.Active.Should(Be.False)");
 		}
 
 		[Then("bugzilla url should be '$url'")]
 		public void CheckUrl(string url)
 		{
-			Profile.Url.Should(Be.EqualTo(url));
+			Profile.Url.Should(Be.EqualTo(url), "Profile.Url.Should(Be.EqualTo(url))");
 		}
 
 		[Then("bugzilla login should be '$login'")]
 		public void CheckLogin(string login)
 		{
-			Profile.Login.Should(Be.EqualTo(login));
+			Profile.Login.Should(Be.EqualTo(login), "Profile.Login.Should(Be.EqualTo(login))");
 		}
 
 		[Then("bugzilla password should be '$password'")]
 		public void CheckPassword(string password)
 		{
-			Profile.Password.Should(Be.EqualTo(password));
+			Profile.Password.Should(Be.EqualTo(password), "Profile.Password.Should(Be.EqualTo(password))");
 		}
 
 		[Then("bugzilla project should be '$projectAbbr'")]
 		public void CheckProject(string projectAbbr)
 		{
 			int projectId = Context.Projects.Single(p => p.Abbreviation == projectAbbr).ProjectID;
-			Profile.Project.Should(Be.EqualTo(projectId));
+			Profile.Project.Should(Be.EqualTo(projectId), "Profile.Project.Should(Be.EqualTo(projectId))");
 		}
 
 		[Then("bugzilla queries should be '$query'")]
 		public void CheckQuery(string query)
 		{
-			Profile.SavedSearches.Should(Be.EqualTo(query));
+			Profile.SavedSearches.Should(Be.EqualTo(query), "Profile.SavedSearches.Should(Be.EqualTo(query))");
 		}
 
 		[Then("bugzilla assignee role should be '$role'")]
 		public void CheckAssignee(string role)
 		{
-			Profile.RolesMapping[DefaultRoles.Assignee].Name.Should(Be.EqualTo(role));
+			Profile.RolesMapping[DefaultRoles.Assignee].Name.Should(Be.EqualTo(role), "Profile.RolesMapping[DefaultRoles.Assignee].Name.Should(Be.EqualTo(role))");
 		}
 
 		[Then("bugzilla reporter role should be '$role'")]
 		public void CheckReporter(string role)
 		{
-			Profile.RolesMapping[DefaultRoles.Reporter].Name.Should(Be.EqualTo(role));
+			Profile.RolesMapping[DefaultRoles.Reporter].Name.Should(Be.EqualTo(role), "Profile.RolesMapping[DefaultRoles.Reporter].Name.Should(Be.EqualTo(role))");
 		}
 
 		[Then("user mapping should be:")]
 		public void CheckUserMapping(string bugzilla, string targetprocess)
 		{
-			Profile.UserMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()));
+			Profile.UserMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()), "Profile.UserMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()))");
 		}
 
 		[Then("state mapping should be:")]
 		public void CheckStateMapping(string bugzilla, string targetprocess)
 		{
-			Profile.StatesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()));
+			Profile.StatesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()), "Profile.StatesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()))");
 		}
 
 		[Then("priority mapping should be:")]
 		public void CheckPriorityMapping(string bugzilla, string targetprocess)
 		{
-			Profile.PrioritiesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()));
+			Profile.PrioritiesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()), "Profile.PrioritiesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()))");
 		}
 
 		[Then("severity mapping should be:")]
 		public void CheckSeverityMapping(string bugzilla, string targetprocess)
 		{
-			Profile.SeveritiesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()));
+			Profile.SeveritiesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()), "Profile.SeveritiesMapping[bugzilla.Trim()].Name.Should(Be.EqualTo(targetprocess.Trim()))");
 		}
 
 		[Then(@"profile should have tp users: (?<users>([^,]+,?\s*)+)")]
 		public void CheckUsers(string[] users)
 		{
-			Storage.Get<UserDTO>().Select(x => x.Login).Distinct().ToArray().Should(Be.EquivalentTo(users));
+			Storage.Get<UserDTO>().Select(x => x.Login).Distinct().ToArray().Should(Be.EquivalentTo(users), "Storage.Get<UserDTO>().Select(x => x.Login).Distinct().ToArray().Should(Be.EquivalentTo(users))");
 		}
 
 		[Then(@"profile should have tp states: (?<states>([^,]+,?\s*)+)")]
@@ -449,7 +453,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		{
 			foreach (var state in states)
 			{
-				Storage.Get<EntityStateDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(state));
+				Storage.Get<EntityStateDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(state), "Storage.Get<EntityStateDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(state))");
 			}
 		}
 
@@ -458,7 +462,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		{
 			foreach (var priority in priorities)
 			{
-				Storage.Get<PriorityDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(priority));
+				Storage.Get<PriorityDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(priority), "Storage.Get<PriorityDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(priority))");
 			}
 		}
 
@@ -467,7 +471,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		{
 			foreach (var severity in severities)
 			{
-				Storage.Get<SeverityDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(severity));
+				Storage.Get<SeverityDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(severity), "Storage.Get<SeverityDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(severity))");
 			}
 		}
 
@@ -476,44 +480,44 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		{
 			foreach (var role in roles)
 			{
-				Storage.Get<RoleDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(role));
+				Storage.Get<RoleDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(role), "Storage.Get<RoleDTO>().Select(x => x.Name).ToArray().Should(Contains.Item(role))");
 			}
 		}
 
 		[Then(@"profile should have tp projects: (?<projects>([^,]+,?\s*)+)")]
 		public void CheckProjects(string[] projects)
 		{
-			Storage.Get<ProjectDTO>().Select(p => p.Abbreviation).ToArray().Should(Be.EquivalentTo(projects));
+			Storage.Get<ProjectDTO>().Select(p => p.Abbreviation).ToArray().Should(Be.EquivalentTo(projects), "Storage.Get<ProjectDTO>().Select(p => p.Abbreviation).ToArray().Should(Be.EquivalentTo(projects))");
 		}
 
 		[Then(@"profile should be initialized")]
 		public void ProfileShouldBeInitialized()
 		{
-			Storage.Initialized.Should(Be.True);
+			Storage.Initialized.Should(Be.True, "Storage.Initialized.Should(Be.True)");
 		}
 
 		[Then("mapped users count shoud be $count")]
 		public void CheckMappedUsersCount(int count)
 		{
-			Profile.UserMapping.Count.Should(Be.EqualTo(count));
+			Profile.UserMapping.Count.Should(Be.EqualTo(count), "Profile.UserMapping.Count.Should(Be.EqualTo(count))");
 		}
 
 		[Then("mapped states count shoud be $count")]
 		public void CheckMappedStatesCount(int count)
 		{
-			Profile.StatesMapping.Count.Should(Be.EqualTo(count));
+			Profile.StatesMapping.Count.Should(Be.EqualTo(count), "Profile.StatesMapping.Count.Should(Be.EqualTo(count))");
 		}
 
 		[Then("mapped priorities count shoud be $count")]
 		public void CheckMappedPrioritiesCount(int count)
 		{
-			Profile.PrioritiesMapping.Count.Should(Be.EqualTo(count));
+			Profile.PrioritiesMapping.Count.Should(Be.EqualTo(count), "Profile.PrioritiesMapping.Count.Should(Be.EqualTo(count))");
 		}
 
 		[Then("mapped severities count shoud be $count")]
 		public void CheckMappedSeveritiesCount(int count)
 		{
-			Profile.SeveritiesMapping.Count.Should(Be.EqualTo(count));
+			Profile.SeveritiesMapping.Count.Should(Be.EqualTo(count), "Profile.SeveritiesMapping.Count.Should(Be.EqualTo(count))");
 		}
 
 		[Then("plugin '$pluginName' should have empty account")]
@@ -527,8 +531,8 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 		{
 			var bugId = GetFirstBugIdByName(bugName);
 
-			Storage.Get<TargetProcessBugId>(externalId).Single().Value.Should(Be.EqualTo(bugId));
-			Storage.Get<BugzillaBugInfo>(bugId.ToString(CultureInfo.InvariantCulture)).Single().Id.Should(Be.EqualTo(externalId));
+			Storage.Get<TargetProcessBugId>(externalId).Single().Value.Should(Be.EqualTo(bugId), "Storage.Get<TargetProcessBugId>(externalId).Single().Value.Should(Be.EqualTo(bugId))");
+			Storage.Get<BugzillaBugInfo>(bugId.ToString(CultureInfo.InvariantCulture)).Single().Id.Should(Be.EqualTo(externalId), "Storage.Get<BugzillaBugInfo>(bugId.ToString(CultureInfo.InvariantCulture)).Single().Id.Should(Be.EqualTo(externalId))");
 		}
 
 		[Then(@"bugzilla bug '$bugName' should have comments stored in profile: (?<comments>([^,]+,?\s*)+)")]
@@ -539,7 +543,7 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 			Storage.Get<CommentDTO>(bugId.ToString(CultureInfo.InvariantCulture))
 				.Select(c => c.Description)
 				.ToArray()
-				.Should(Be.EquivalentTo(comments));
+				.Should(Be.EquivalentTo(comments), "Storage.Get<CommentDTO>(bugId.ToString(CultureInfo.InvariantCulture)).Select(c => c.Description).ToArray().Should(Be.EquivalentTo(comments))");
 		}
 
 		[Then(@"bugzilla bug '$bugName' should have attachments stored in profile: (?<attachments>([^,]+,?\s*)+)")]
@@ -550,14 +554,14 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 			Storage.Get<AttachmentDTO>().Where(c => c.GeneralID == bugId)
 				.Select(c => c.Description)
 				.ToArray()
-				.Should(Be.EquivalentTo(attachments));
+				.Should(Be.EquivalentTo(attachments), "Storage.Get<AttachmentDTO>().Where(c => c.GeneralID == bugId).Select(c => c.Description).ToArray().Should(Be.EquivalentTo(attachments))");
 		}
 
 		[Then("profile should have $count saved bugs")]
 		public void CheckBugsCount(int count)
 		{
-			Storage.Get<TargetProcessBugId>().Count().Should(Be.EqualTo(count));
-			Storage.Get<BugzillaBugInfo>().Count().Should(Be.EqualTo(count));
+			Storage.Get<TargetProcessBugId>().Count().Should(Be.EqualTo(count), "Storage.Get<TargetProcessBugId>().Count().Should(Be.EqualTo(count))");
+			Storage.Get<BugzillaBugInfo>().Count().Should(Be.EqualTo(count), "Storage.Get<BugzillaBugInfo>().Count().Should(Be.EqualTo(count))");
 		}
 
 		#endregion

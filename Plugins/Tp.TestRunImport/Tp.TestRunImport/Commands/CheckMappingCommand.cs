@@ -18,7 +18,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Commands
 {
 	public class CheckMappingCommand : IPluginCommand
 	{
-		public PluginCommandResponseMessage Execute(string args)
+		public PluginCommandResponseMessage Execute(string args, UserDTO user)
 		{
 			return new PluginCommandResponseMessage
 			       	{ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed};

@@ -193,21 +193,21 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 				ObjectFactory.GetInstance<TransportMock>().TpQueue
 					.GetMessages<PostTimeCommand>()
 					.Single(x => x.EntityId == entityId && x.Spent == time);
-			postTimeCmd.Spent.Should(Be.EqualTo(time));
-			postTimeCmd.Left.Should(Be.Null);
+			postTimeCmd.Spent.Should(Be.EqualTo(time), "postTimeCmd.Spent.Should(Be.EqualTo(time))");
+			postTimeCmd.Left.Should(Be.Null, "postTimeCmd.Left.Should(Be.Null)");
 
 			var context = Context;
 			var user = context.GetTpUserByName(userName);
 
-			postTimeCmd.Description.Should(Be.EqualTo(Context.Revisions.Single().Comment));
-			postTimeCmd.UserID.Should(Be.EqualTo(user.Id));
-			postTimeCmd.EntityId.Should(Be.EqualTo(entityId));
+			postTimeCmd.Description.Should(Be.EqualTo(Context.Revisions.Single().Comment), "postTimeCmd.Description.Should(Be.EqualTo(Context.Revisions.Single().Comment))");
+			postTimeCmd.UserID.Should(Be.EqualTo(user.Id), "postTimeCmd.UserID.Should(Be.EqualTo(user.Id))");
+			postTimeCmd.EntityId.Should(Be.EqualTo(entityId), "postTimeCmd.EntityId.Should(Be.EqualTo(entityId))");
 		}
 
 		[Then("time should not be posted")]
 		public void TimeShouldNotBePosted()
 		{
-			Context.Transport.TpQueue.GetMessages<PostTimeCommand>().ToArray().Should(Be.Empty);
+			Context.Transport.TpQueue.GetMessages<PostTimeCommand>().ToArray().Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<PostTimeCommand>().ToArray().Should(Be.Empty)");
 		}
 
 		[Then("time spent $timeSpent and time left $timeLeft should be posted on entity $entityId by the '$tpUserName'")]
@@ -218,15 +218,15 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 			var postTimeCmd = ObjectFactory.GetInstance<TransportMock>().TpQueue
 				.GetMessages<PostTimeCommand>()
 				.Single(x => x.EntityId == entityId);
-			postTimeCmd.Spent.Should(Be.EqualTo(spent));
-			postTimeCmd.Left.Should(Be.EqualTo(left));
+			postTimeCmd.Spent.Should(Be.EqualTo(spent), "postTimeCmd.Spent.Should(Be.EqualTo(spent))");
+			postTimeCmd.Left.Should(Be.EqualTo(left), "postTimeCmd.Left.Should(Be.EqualTo(left))");
 
 			var context = Context;
 			var user = context.GetTpUserByName(userName);
 
-			postTimeCmd.Description.Should(Be.EqualTo(Context.Revisions.Single().Comment));
-			postTimeCmd.UserID.Should(Be.EqualTo(user.Id));
-			postTimeCmd.EntityId.Should(Be.EqualTo(entityId));
+			postTimeCmd.Description.Should(Be.EqualTo(Context.Revisions.Single().Comment), "postTimeCmd.Description.Should(Be.EqualTo(Context.Revisions.Single().Comment))");
+			postTimeCmd.UserID.Should(Be.EqualTo(user.Id), "postTimeCmd.UserID.Should(Be.EqualTo(user.Id))");
+			postTimeCmd.EntityId.Should(Be.EqualTo(entityId), "postTimeCmd.EntityId.Should(Be.EqualTo(entityId))");
 		}
 
 		private static VcsPluginContext Context

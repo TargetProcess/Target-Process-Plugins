@@ -24,14 +24,14 @@ namespace Tp.Git.Tests.VersionControlSystem
 			RevisionId revisionIdDto = revisionId;
 			GitRevisionId restoredRevisionId = revisionIdDto;
 
-			restoredRevisionId.Time.Should(Be.EqualTo(initialTime));
+			restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
 		}
 
 		[Test]
 		public void ShouldSupportMinTime()
 		{
 			GitRevisionId revisionId = new RevisionId { Time = DateTime.MinValue, Value = Guid.NewGuid().ToString() };
-			revisionId.Time.Should(Be.EqualTo(GitRevisionId.UtcTimeMin));
+			revisionId.Time.Should(Be.EqualTo(GitRevisionId.UtcTimeMin), "revisionId.Time.Should(Be.EqualTo(GitRevisionId.UtcTimeMin))");
 		}
 	}
 }

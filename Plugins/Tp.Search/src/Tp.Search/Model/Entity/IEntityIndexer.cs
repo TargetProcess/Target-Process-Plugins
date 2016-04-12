@@ -23,7 +23,7 @@ namespace Tp.Search.Model.Entity
 		IndexResult UpdateTestStepIndex(TestStepDTO testStep, ICollection<TestStepField> changedFields, Maybe<int?> projectId, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult RemoveTestStepIndex(TestStepDTO testStep, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult AddCommentIndex(CommentDTO comment, DocumentIndexOptimizeSetup optimizeSetup = null);
-		IndexResult UpdateCommentIndex(CommentDTO comment, ICollection<CommentField> changedFields, Maybe<int?> projectId, Maybe<int?> squadId, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateCommentIndex(CommentDTO comment, ICollection<CommentField> changedFields, bool shouldIndexProjects, bool shouldIndexSquads, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult RemoveCommentIndex(CommentDTO comment, DocumentIndexOptimizeSetup optimizeSetup = null);
 
 		IndexResult AddImpedimentIndex(ImpedimentDTO impediment, DocumentIndexOptimizeSetup optimizeSetup = null);
@@ -32,6 +32,9 @@ namespace Tp.Search.Model.Entity
 
 		IndexResult AddReleaseProjectIndex(ReleaseProjectDTO releaseProject, DocumentIndexOptimizeSetup optimizeSetup = null);
 		IndexResult RemoveReleaseProjectIndex(ReleaseProjectDTO releaseProject, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult AddAssignableSquadIndex(AssignableSquadDTO assignableSquad, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult UpdateAssignableSquadIndex(AssignableSquadDTO assignableSquad, AssignableSquadDTO originalAssignableSquad, ICollection<AssignableSquadField> changedFields, DocumentIndexOptimizeSetup optimizeSetup = null);
+		IndexResult RemoveAssignableSquadIndex(AssignableSquadDTO assignableSquad, DocumentIndexOptimizeSetup optimizeSetup = null);
 
 		void OptimizeGeneralIndex(DocumentIndexOptimizeSetup optimizeSetup = null);
 		void OptimizeAssignableIndex(DocumentIndexOptimizeSetup optimizeSetup = null);

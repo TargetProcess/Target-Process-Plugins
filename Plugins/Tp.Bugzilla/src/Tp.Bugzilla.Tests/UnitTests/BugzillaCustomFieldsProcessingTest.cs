@@ -23,8 +23,8 @@ namespace Tp.Bugzilla.Tests.UnitTests
 
 			var info = new CustomFieldInfo(field);
 
-			info.Name.Should(Be.EqualTo(cfName));
-			info.Values.Should(Be.EquivalentTo(new[] {cfValue}));
+			info.Name.Should(Be.EqualTo(cfName), "info.Name.Should(Be.EqualTo(cfName))");
+			info.Values.Should(Be.EquivalentTo(new[] {cfValue}), "info.Values.Should(Be.EquivalentTo(new[] {cfValue}))");
 		}
 
 		[Test]
@@ -38,8 +38,8 @@ namespace Tp.Bugzilla.Tests.UnitTests
 
 			var info = new CustomFieldInfo(field);
 
-			info.Name.Should(Be.EqualTo(cfName));
-			info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }));
+			info.Name.Should(Be.EqualTo(cfName), "info.Name.Should(Be.EqualTo(cfName))");
+			info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }), "info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }))");
 		}
 	}
 }

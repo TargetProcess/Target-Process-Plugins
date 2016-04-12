@@ -17,7 +17,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Utils
 		{
 		}
 
-		public StopwatchObserver(Stopwatch runningStopwatch, Action<string> log, Action<string> logInfo, Action<Exception> logOnError, Action onComplete, Func<bool> shouldStopwatchOnComplete)
+		public StopwatchObserver(Stopwatch runningStopwatch, Action<string> log, Action<string> logInfo, Action<Exception> logOnError,
+			Action onComplete, Func<bool> shouldStopwatchOnComplete)
 		{
 			_runningStopwatch = runningStopwatch;
 			_log = log;

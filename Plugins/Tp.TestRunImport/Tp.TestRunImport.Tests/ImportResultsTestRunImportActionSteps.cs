@@ -180,10 +180,10 @@ namespace Tp.TestRunImport.Tests
 		public void LocalMessageTestRunImportResultDetectedLocalMessageShouldBeSent(int resultsCount)
 		{
 			var resultDetectedLocalMessages = Context.Transport.LocalQueue.GetMessages<TestRunImportResultDetectedLocalMessage>();
-			resultDetectedLocalMessages.Length.Should(Be.EqualTo(1));
+			resultDetectedLocalMessages.Length.Should(Be.EqualTo(1), "resultDetectedLocalMessages.Length.Should(Be.EqualTo(1))");
 			var detectedLocalMessage = resultDetectedLocalMessages[0];
-			detectedLocalMessage.TestRunImportInfo.TestRunImportResults.Should(Be.Not.Null);
-			detectedLocalMessage.TestRunImportInfo.TestRunImportResults.Length.Should(Be.EqualTo(resultsCount));
+			detectedLocalMessage.TestRunImportInfo.TestRunImportResults.Should(Be.Not.Null, "detectedLocalMessage.TestRunImportInfo.TestRunImportResults.Should(Be.Not.Null)");
+			detectedLocalMessage.TestRunImportInfo.TestRunImportResults.Length.Should(Be.EqualTo(resultsCount), "detectedLocalMessage.TestRunImportInfo.TestRunImportResults.Length.Should(Be.EqualTo(resultsCount))");
 		}
 
 		[Then("TestPlanRunCreatedMessage with valid TestPlanRun should be sent from TargetProcess")]
@@ -191,34 +191,34 @@ namespace Tp.TestRunImport.Tests
 		{
 			var settings = Context.CurrentProfile.GetProfile<TestRunImportSettings>();
 			var testPlanRunsCreated = Context.Transport.LocalQueue.GetMessages<TestPlanRunCreatedMessage>();
-			testPlanRunsCreated.Length.Should(Be.EqualTo(1));
+			testPlanRunsCreated.Length.Should(Be.EqualTo(1), "testPlanRunsCreated.Length.Should(Be.EqualTo(1))");
 			var testPlanRun = testPlanRunsCreated[0];
-			testPlanRun.Dto.TestPlanRunID.Should(Be.EqualTo(CreatedTestPlanRunId));
+			testPlanRun.Dto.TestPlanRunID.Should(Be.EqualTo(CreatedTestPlanRunId), "testPlanRun.Dto.TestPlanRunID.Should(Be.EqualTo(CreatedTestPlanRunId))");
 			testPlanRun.Dto.CommentOnChangingState.Should(
-				Be.EqualTo(string.Format("State is changed by '{0}' plugin", Context.CurrentProfile.Name.Value)));
-			testPlanRun.Dto.ProjectID.Should(Be.EqualTo(settings.Project));
-			testPlanRun.Dto.TestPlanID.Should(Be.EqualTo(settings.TestPlan));
+				Be.EqualTo(string.Format("State is changed by '{0}' plugin", Context.CurrentProfile.Name.Value)), "testPlanRun.Dto.CommentOnChangingState.Should(Be.EqualTo(string.Format(\"State is changed by '{{i}}' plugin\", Context.CurrentProfile.Name.Value)))");
+			testPlanRun.Dto.ProjectID.Should(Be.EqualTo(settings.Project), "testPlanRun.Dto.ProjectID.Should(Be.EqualTo(settings.Project))");
+			testPlanRun.Dto.TestPlanID.Should(Be.EqualTo(settings.TestPlan), "testPlanRun.Dto.TestPlanID.Should(Be.EqualTo(settings.TestPlan))");
 		}
 
 		[Then("TestCaseRunQuery with valid TestPlanRunId should be sent to TargetProcess")]
 		public void TestCaseRunQueryMessageShouldBeSentToTargetProcess()
 		{
 			var testCaseRunQueries = Context.Transport.TpQueue.GetMessages<TestCaseRunQuery>();
-			testCaseRunQueries.Length.Should(Be.EqualTo(1));
+			testCaseRunQueries.Length.Should(Be.EqualTo(1), "testCaseRunQueries.Length.Should(Be.EqualTo(1))");
 			var testCaseRunQuery = testCaseRunQueries[0];
-			testCaseRunQuery.TestPlanRunId.Should(Be.EqualTo(CreatedTestPlanRunId));
+			testCaseRunQuery.TestPlanRunId.Should(Be.EqualTo(CreatedTestPlanRunId), "testCaseRunQuery.TestPlanRunId.Should(Be.EqualTo(CreatedTestPlanRunId))");
 		}
 
 		[Then(@"TestCaseRunQueryResult should be sent from TargetProcess for TestCaseRuns: (?<testCaseNames>([^,]+,?\s*)+)")]
 		public void TestCaseRunQueryResultMessageShouldBeSentFromTargetProcess(string[] testCaseNames)
 		{
 			var caseRunQueryResults = Context.Transport.LocalQueue.GetMessages<TestCaseRunQueryResult>();
-			caseRunQueryResults.Length.Should(Be.EqualTo(testCaseNames.Length));
+			caseRunQueryResults.Length.Should(Be.EqualTo(testCaseNames.Length), "caseRunQueryResults.Length.Should(Be.EqualTo(testCaseNames.Length))");
 			foreach (var dto in testCaseNames.Select(FindTestCaseTestPlanDtoByName))
 			{
-				dto.Should(Be.Not.Null);
+				dto.Should(Be.Not.Null, "dto.Should(Be.Not.Null)");
 				caseRunQueryResults.FirstOrDefault(x => x.Dtos.First().TestCaseTestPlanID == dto.TestCaseTestPlanID).Should(
-					Be.Not.Null);
+					Be.Not.Null, "caseRunQueryResults.FirstOrDefault(x => x.Dtos.First().TestCaseTestPlanID == dto.TestCaseTestPlanID).Should(Be.Not.Null)");
 			}
 		}
 
@@ -228,16 +228,16 @@ namespace Tp.TestRunImport.Tests
 			var updatedTestCaseRuns =
 				Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is TestCaseRunDTO).ToArray();
 			var testCaseTestPlanDto = FindTestCaseTestPlanDtoByName(name.Trim());
-			testCaseTestPlanDto.Should(Be.Not.Null);
+			testCaseTestPlanDto.Should(Be.Not.Null, "testCaseTestPlanDto.Should(Be.Not.Null)");
 			var updatedDto =
 				updatedTestCaseRuns.FirstOrDefault(
 					x => ((TestCaseRunDTO)(x.Dto)).TestCaseTestPlanID == testCaseTestPlanDto.TestCaseTestPlanID);
-			updatedDto.Should(Be.Not.Null);
+			updatedDto.Should(Be.Not.Null, "updatedDto.Should(Be.Not.Null)");
 			bool? passed = (string.IsNullOrEmpty(state) || string.IsNullOrEmpty(state.Trim()) ||
 							string.Compare(state.Trim(), "IGNORED", StringComparison.InvariantCultureIgnoreCase) == 0)
 							? (bool?)null
 							: string.Compare(state.Trim(), "PASSED", StringComparison.InvariantCultureIgnoreCase) == 0;
-			((TestCaseRunDTO)(updatedDto.Dto)).Passed.Should(Be.EqualTo(passed));
+			((TestCaseRunDTO)(updatedDto.Dto)).Passed.Should(Be.EqualTo(passed), "((TestCaseRunDTO)(updatedDto.Dto)).Passed.Should(Be.EqualTo(passed))");
 			TestCaseRunStatusDTO status;
 			if (passed == null)
 			{
@@ -247,11 +247,11 @@ namespace Tp.TestRunImport.Tests
 			{
 				status = passed == true ? TestCaseRunStatusDTO.Passed : TestCaseRunStatusDTO.Failed;
 			}
-			((TestCaseRunDTO) (updatedDto.Dto)).Status.Should(Is.EqualTo(status));
+			((TestCaseRunDTO) (updatedDto.Dto)).Status.Should(Is.EqualTo(status), "((TestCaseRunDTO) (updatedDto.Dto)).Status.Should(Is.EqualTo(status))");
 			bool? executed = string.IsNullOrEmpty(runned) || string.IsNullOrEmpty(runned.Trim())
 								? (bool?)null
 								: string.Compare(runned.Trim(), "YES", StringComparison.InvariantCultureIgnoreCase) == 0;
-			((TestCaseRunDTO)(updatedDto.Dto)).Runned.Should(Be.EqualTo(executed));
+			((TestCaseRunDTO)(updatedDto.Dto)).Runned.Should(Be.EqualTo(executed), "((TestCaseRunDTO)(updatedDto.Dto)).Runned.Should(Be.EqualTo(executed))");
 		}
 
 		[Then(@"TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: (?<testCaseNames>([^,]+,?\s*)+)"
@@ -259,11 +259,11 @@ namespace Tp.TestRunImport.Tests
 		public void TestCaseRunUpdatedMessageShouldBeSentFromTargetProcess(string[] testCaseNames)
 		{
 			var caseRunUpdatedMessages = Context.Transport.LocalQueue.GetMessages<TestCaseRunUpdatedMessage>();
-			caseRunUpdatedMessages.Length.Should(Be.EqualTo(testCaseNames.Length));
+			caseRunUpdatedMessages.Length.Should(Be.EqualTo(testCaseNames.Length), "caseRunUpdatedMessages.Length.Should(Be.EqualTo(testCaseNames.Length))");
 			foreach (var dto in testCaseNames.Select(FindTestCaseTestPlanDtoByName))
 			{
-				dto.Should(Be.Not.Null);
-				caseRunUpdatedMessages.FirstOrDefault(x => x.Dto.TestCaseTestPlanID == dto.TestCaseTestPlanID).Should(Be.Not.Null);
+				dto.Should(Be.Not.Null, "dto.Should(Be.Not.Null)");
+				caseRunUpdatedMessages.FirstOrDefault(x => x.Dto.TestCaseTestPlanID == dto.TestCaseTestPlanID).Should(Be.Not.Null, "caseRunUpdatedMessages.FirstOrDefault(x => x.Dto.TestCaseTestPlanID == dto.TestCaseTestPlanID).Should(Be.Not.Null)");
 			}
 		}
 
@@ -273,11 +273,11 @@ namespace Tp.TestRunImport.Tests
 		{
 			var updateTestCaseCommands =
 				Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is TestCaseDTO).ToArray();
-			updateTestCaseCommands.Length.Should(Be.EqualTo(testCaseNames.Length));
+			updateTestCaseCommands.Length.Should(Be.EqualTo(testCaseNames.Length), "updateTestCaseCommands.Length.Should(Be.EqualTo(testCaseNames.Length))");
 			foreach (var dto in testCaseNames.Select(FindTestCaseTestPlanDtoByName))
 			{
-				dto.Should(Be.Not.Null);
-				updateTestCaseCommands.FirstOrDefault(x => x.Dto.ID == dto.TestCaseID).Should(Be.Not.Null);
+				dto.Should(Be.Not.Null, "dto.Should(Be.Not.Null)");
+				updateTestCaseCommands.FirstOrDefault(x => x.Dto.ID == dto.TestCaseID).Should(Be.Not.Null, "updateTestCaseCommands.FirstOrDefault(x => x.Dto.ID == dto.TestCaseID).Should(Be.Not.Null)");
 			}
 		}
 

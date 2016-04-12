@@ -1,10 +1,10 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+
 [assembly: AssemblyTitle("Tp.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -17,9 +17,11 @@ using System.Runtime.InteropServices;
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
+
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
+
 [assembly: Guid("a5621c23-fbcc-458c-8eba-5449fb86b615")]
 
 // Version information for an assembly consists of the following four values:
@@ -31,6 +33,7 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.7.0.16545")]
-[assembly: AssemblyVersion("3.7.0.16545")]
-[assembly: AssemblyFileVersion("3.7.0.16545")]
+// [assembly: AssemblyVersion("3.8.5.24767")]
+
+[assembly: AssemblyVersion("3.8.5.24767")]
+[assembly: AssemblyFileVersion("3.8.5.24767")]

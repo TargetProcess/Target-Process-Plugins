@@ -12,9 +12,9 @@ namespace Tp.Search.Model.Document
 			return IndexDataStringServices.EncodeStringId(entityStateId, "Entitystate");
 		}
 
-		public string CreateSquadData(int? squadId)
+		public SquadIndexData CreateSquadData(params int?[] squadIds)
 		{
-			return IndexDataStringServices.EncodeStringId(squadId, "Squad");
+			return new SquadIndexData(squadIds);
 		}
 
 		public string CreateImpedimentData(bool? isPrivate, int? ownerId, int? responsibleId)

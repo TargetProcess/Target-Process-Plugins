@@ -13,9 +13,8 @@ namespace Tp.Integration.Messages.Entities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class Field : ICustomFieldInfo
+	public class Field : ICustomFieldInfo, ICustomFieldConfigHolder
 	{
-
 		/// <summary>
 		/// Field name as presented on the user interface.
 		/// </summary>
@@ -70,6 +69,10 @@ namespace Tp.Integration.Messages.Entities
 		[XmlElement(Order = 90)]
 		public int? EntityTypeID { get; set; }
 
+		[DataMember]
+		[XmlElement(Order = 91)]
+		public bool? CalculationModelContainsCollections { get; set; }
+
 
 		public Field()
 		{
@@ -86,6 +89,7 @@ namespace Tp.Integration.Messages.Entities
 			DefaultValue = other.DefaultValue;
 			CalculationModel = other.CalculationModel;
 			Units = other.Units;
+			CalculationModelContainsCollections = other.CalculationModelContainsCollections;
 			Items = new List<string>(other.Items);
 		}
 
@@ -94,9 +98,9 @@ namespace Tp.Integration.Messages.Entities
 		{
 			if (FieldType == FieldTypeEnum.MultipleSelectionList)
 			{
-				return string.IsNullOrEmpty(Value) ? new string[]{} : Value.Split(',').Select(x => x.Trim()).ToArray();
+				return string.IsNullOrEmpty(Value) ? new string[] { } : Value.Split(',').Select(x => x.Trim()).ToArray();
 			}
-			return new string[]{};
+			return new string[] { };
 		}
 
 		public override string ToString()
@@ -122,8 +126,8 @@ namespace Tp.Integration.Messages.Entities
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(other.Name, Name)
-			       && Equals(other.FieldType, FieldType)
-			       && Equals(other.Value, Value);
+				&& Equals(other.FieldType, FieldType)
+				&& Equals(other.Value, Value);
 		}
 
 		public override bool Equals(object obj)
@@ -131,7 +135,7 @@ namespace Tp.Integration.Messages.Entities
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != typeof(Field)) return false;
-			return Equals((Field)obj);
+			return Equals((Field) obj);
 		}
 
 		public override int GetHashCode()

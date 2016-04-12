@@ -81,12 +81,6 @@ function richTextRenderer() {
 	};
 }
 
-function entityIconIdRenderer(entityKind) {
-	return function(value) {
-		return entityIconRenderer(entityKind)(value) + "&nbsp;&nbsp;&nbsp;" + viewLinkRenderer(entityKind)(value);
-	};
-}
-
 /**
 * Creates renderer for URL custom fields.
 */
@@ -163,12 +157,3 @@ function viewLinkRenderer(entityKind) {
 		return "";
 	};
 }
-
-function entityIconRenderer(entityKind) {
-	return function(value) {
-		if (value != null) {
-			return String.format("<img class='x-item-icon' src='{0}/img/{1}.gif' />", Application.baseUrl, entityKind);
-		}
-		return "";
-	};
-} 

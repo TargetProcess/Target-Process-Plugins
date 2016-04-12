@@ -66,7 +66,7 @@ namespace Tp.Search.Tests
 					EntityStateIds = new[] { stateId },
 					ProjectIds = projectIds
 				});
-			result.Total.Should(Be.EqualTo(resultCount));
+			result.Total.Should(Be.EqualTo(resultCount), "result.Total.Should(Be.EqualTo(resultCount))");
 		}
 
 		protected static ISagaMessage[] ReplyOnEntityQuery<TQuery, TDto, TQueryResult>(TQuery x, TDto[] generalDtos)

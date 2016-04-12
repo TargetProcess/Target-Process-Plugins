@@ -92,7 +92,7 @@ sub get_timezone
 	print $cgi->header('text');
 
 	my $dbh = Bugzilla->dbh;
-	my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(CURTIME(),UTC_TIME())', undef);
+	my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP)', undef);
 
 	print $hours;
 }
@@ -660,24 +660,24 @@ my $bugsListXmlTemplate_text = <<'BUGSLIST';
 [% END %]
 
 [% BLOCK bug_custom_field %]
-  [% FOREACH cf = custom_field_names %]
-        <custom_field>
-            <cf_name>[% cf.name %]</cf_name>
-                        <cf_value>[% bug.${cf.name} FILTER xml %]</cf_value>
-                        <cf_type>[% field_types.${cf.type} %]</cf_type>
-                        <cf_description>[% cf.description %]</cf_description>
-                    <cf_values>
-                      [% FOREACH value = bug.${cf.name}  %]
-                        <cf_value>[% value FILTER xml%]</cf_value>
-                      [% END %]
-                        </cf_values>
-                    <cf_legal_values>
-                          [% FOREACH  legal_value = cf.${'legals'}  %]
-                            <cf_value>[% legal_value.${'name'} FILTER xml %]</cf_value>
-                          [% END %]
-                        </cf_legal_values>
-        </custom_field>
-  [% END %]
+[% FOREACH cf = custom_field_names %]
+	<custom_field>
+		<cf_name>[% cf.name %]</cf_name>
+		<cf_value>[% bug.${cf.name} FILTER xml %]</cf_value>
+		<cf_type>[% field_types.${cf.type} %]</cf_type>
+		<cf_description>[% cf.description %]</cf_description>
+		<cf_values>
+		[% FOREACH value = bug.${cf.name} %]
+			<cf_value>[% value FILTER xml%]</cf_value>
+		[% END %]
+		</cf_values>
+		<cf_legal_values>
+		[% FOREACH legal_value = cf.${'legals'} %]
+			<cf_value>[% legal_value.${'name'} FILTER xml %]</cf_value>
+		[% END %]
+		</cf_legal_values>
+	</custom_field>
+[% END %]
 [% END %]
 BUGSLIST
 

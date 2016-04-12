@@ -13,22 +13,17 @@ namespace Tp.Utils.Documentation
 			AttributeTargets.Interface)]
 	public class ApiTypeAttribute : Attribute
 	{
-		private readonly Type _valueType;
-
 		public ApiTypeAttribute([NotNull] Type valueType)
 		{
 			if (valueType == null)
 			{
-				throw new ArgumentNullException("valueType");
+				throw new ArgumentNullException(nameof(valueType));
 			}
 
-			_valueType = valueType;
+			Type = valueType;
 		}
 
 		[NotNull]
-		public Type Type
-		{
-			get { return _valueType; }
-		}
+		public Type Type { get; }
 	}
 }

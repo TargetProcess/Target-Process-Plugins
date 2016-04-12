@@ -41,7 +41,6 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
 				When the email arrived
 				Then the message from requester 'Sara White' should be created
 					And request in project 1 should be created from the message".Execute(In.Context<EmailProcessingSagaActionSteps>());
-
 		}
 	}
 }

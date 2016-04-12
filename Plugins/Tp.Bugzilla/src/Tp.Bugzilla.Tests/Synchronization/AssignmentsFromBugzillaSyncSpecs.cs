@@ -531,14 +531,14 @@ namespace Tp.Bugzilla.Tests.Synchronization
 		public void CheckThereIsNoDeveloperAssignment(string name)
 		{
 			var roleId = Context.Roles.Where(x => x.Name == "Developer").Select(x => x.ID).SingleOrDefault();
-			Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty);
+			Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty, "Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty)");
 		}
 
 		[Then("TargetProcess bug with name '$bugName' should no QA assigned")]
 		public void CheckThereIsNoQaAssigned(string bugName)
 		{
 			var roleId = Context.Roles.Where(x => x.Name == "QA Engineer").Select(x => x.ID).SingleOrDefault();
-			Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty);
+			Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty, "Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty)");
 		}
 
 		private void CheckAssignable(string bugName, string tpLogin, string role)
@@ -548,7 +548,7 @@ namespace Tp.Bugzilla.Tests.Synchronization
 			teams.Where(x => x.RoleID == Context.Roles.Single(r => r.Name == role).ID)
 				.Where(x => x.UserID == Context.Users.Single(y => y.Login == tpLogin).UserID)
 				.Where(x => x.AssignableID == Context.TpBugs.Single(y => y.Name == bugName).BugID)
-				.Count().Should(Be.EqualTo(1));
+				.Count().Should(Be.EqualTo(1), "teams.Where(x => x.RoleID == Context.Roles.Single(r => r.Name == role).ID).Where(x => x.UserID == Context.Users.Single(y => y.Login == tpLogin).UserID).Where(x => x.AssignableID == Context.TpBugs.Single(y => y.Name == bugName).BugID).Count().Should(Be.EqualTo(1))");
 		}
 	}
 }

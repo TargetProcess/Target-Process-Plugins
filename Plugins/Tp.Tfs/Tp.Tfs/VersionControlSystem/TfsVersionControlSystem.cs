@@ -90,7 +90,7 @@ namespace Tp.Tfs.VersionControlSystem
 			}
 			catch (Exception ex)
 			{
-				throw new VersionControlException(String.Format("TFS exception: {0}", ex.Message));
+				throw new VersionControlException($"TFS exception: {ex.Message}");
 			}
 		}
 

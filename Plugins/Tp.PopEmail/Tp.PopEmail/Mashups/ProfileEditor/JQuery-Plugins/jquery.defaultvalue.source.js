@@ -2,7 +2,7 @@ tau.mashups
     .addDependency("libs/jquery/jquery")
     .addModule("emailIntegration/jquery/defaultvalue.source",
 
-function () {
+function (jQuery) {
 /**
 *	@name							Defaultvalue
 *	@descripton						Gives value to empty inputs

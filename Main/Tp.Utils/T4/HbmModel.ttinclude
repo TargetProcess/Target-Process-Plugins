@@ -1,0 +1,379 @@
+﻿<#@ assembly name="System.Core"#>
+<#@ assembly name="System.Data.Linq"#>
+<#@ assembly name="EnvDTE"#>
+<#@ assembly name="System.Xml"#>
+<#@ assembly name="System.Xml.Linq"#>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<#+
+
+	class Model
+	{
+		private readonly ITextTemplatingEngineHost _host;
+		private const string _xmlns = "urn:nhibernate-mapping-2.2";
+		private readonly IEnumerable<EntityDescription> _entities;
+		private IEnumerable<EntityDescription> _entitiesExtensions;
+		private IEnumerable<EntityOrderings> _orderings;
+
+		private class EntityOrderings
+		{
+			public string EntityName { get; set; }
+			public Dictionary<string, int> Orderings { get; set; }
+		}
+
+		public class EntityProperty
+		{
+			public string Name { get; set; }
+			public string TypeName { get; set; }
+			public bool IsRelationName { get; set; }
+			public bool IsForeignKey { get; set; }
+			public bool IsPrimaryKey { get; set; }
+			public int Ordering { get; set; }
+		}
+
+		public class EntityDescription
+		{
+			public string Name { get; set; }
+			public string BlName { get; set; }
+			public string ParentName { get; set; }
+			public IEnumerable<EntityProperty> Properties { get; set; }
+			public IEnumerable<string> InterfaceParents { get; set; }
+		}
+
+		public Model(ITextTemplatingEngineHost host)
+		{
+			_host = host;
+			_entities = ReadEntities();
+		}
+
+		private readonly List<string> _excludeEntites = new List<string>
+		{
+			"ClientStorageReadModel",
+			"ClientStorageGroupDto",
+			"MetricSetup",
+			"PersonalAccessToken"
+		};
+
+		private readonly List<string> _excludeRelationNames = new List<string>
+		{
+			"Tp.BusinessObjects.Comment, Tp.BusinessObjects",
+			"Tp.BusinessObjects.GeneralUser, Tp.BusinessObjects",
+			"Tp.BusinessObjects.User, Tp.BusinessObjects",
+			"Tp.BusinessObjects.Message, Tp.BusinessObjects",
+			"Tp.BusinessObjects.Workflow, Tp.BusinessObjects",
+			"Tp.BusinessObjects.AttachmentFile, Tp.BusinessObjects",
+			"Tp.BusinessObjects.SquadProject, Tp.BusinessObjects",
+			"Tp.BusinessObjects.AssignableSquad, Tp.BusinessObjects",
+			"Tp.BusinessObjects.ProjectMember, Tp.BusinessObjects",
+			"Tp.BusinessObjects.TestCaseRun, Tp.BusinessObjects",
+			"Tp.BusinessObjects.TestStep, Tp.BusinessObjects",
+			"Tp.BusinessObjects.FreezedTestStepInfo, Tp.BusinessObjects",
+			"Tp.BusinessObjects.MessageUid, Tp.BusinessObjects",
+			"Tp.BusinessObjects.Company, Tp.BusinessObjects",
+			"Tp.BusinessObjects.Revision, Tp.BusinessObjects",
+			"Tp.BusinessObjects.TpEvent, Tp.BusinessObjects",
+			"Tp.BusinessObjects.TestCaseTestPlan, Tp.BusinessObjects",
+			"Tp.BusinessObjects.PluginProfile, Tp.BusinessObjects",
+			"Tp.BusinessObjects.GeneralRelationType, Tp.BusinessObjects"
+		};
+
+		private readonly Dictionary<string, string> _typesMap = new Dictionary<string, string>
+		{
+			{ "StringClob", "string" },
+			{ "Field[]", "Field[]" },
+			{ "BinaryBlob", "byte[]" },
+			{ "MessageUidDTO", "MessageUidDTO" },
+			{ "Tp.BusinessObjects.TestCaseRunStatus, Tp.BusinessObjects.Core", "TestCaseRunStatusDTO" }
+		};
+
+		private readonly Dictionary<string, string> _entityNameMap = new Dictionary<string, string>
+		{
+			{ "ApplicationContextDataRow", "ApplicationContextData" }
+		};
+
+		private readonly Dictionary<string, Dictionary<string, string>> _fieldsTypesAliases = new Dictionary<string, Dictionary<string, string>>
+		{
+			{ "TestCase", new Dictionary<string, string> { { "LastRunStatus", "TestCaseRunStatusDTO" } } },
+			{ "EntityState", new Dictionary<string, string> { { "NumericPriority", "double" } } },
+			{ "Milestone", new Dictionary<string, string> { { "Date", "DateTime" } } },
+			{ "TestCaseRun", new Dictionary<string, string> { { "Status", "TestCaseRunStatusDTO" } } },
+			{ "ClientStorage", new Dictionary<string, string> { { "Scope", "StorageItemScopeDTO" } } }
+		};
+
+		private readonly Dictionary<string, List<string>> _additionalHierarchy = new Dictionary<string, List<string>>
+		{
+			{ "General", new List<string> { "GeneralListItem", "GeneralFieldExtension" } },
+			{ "GeneralListItem", new List<string> { "GeneralNumericPriorityListItem" } }
+		};
+
+		private readonly Dictionary<string, List<string>> _excludeFields = new Dictionary<string, List<string>>
+		{
+			{ "GeneralUser", new List<string> { "IsAdmin" } },
+			{ "Contact", new List<string> { "IsAdmin" } },
+			{ "Requester", new List<string> { "IsAdmin" } },
+			{ "RuleEngineUser", new List<string> { "IsAdmin" } },
+			{ "SystemUser", new List<string> { "IsAdmin" } },
+			{ "User", new List<string> { "IsAdmin" } },
+		};
+
+		public IEnumerable<EntityDescription> GetEntities()
+		{
+			return _entities;
+		}
+
+		public IEnumerable<EntityProperty> GetParentProperties(EntityDescription entity)
+		{
+			var result = new List<EntityProperty>();
+
+			var parentName = entity.ParentName;
+			while (!string.IsNullOrEmpty(parentName))
+			{
+				var innerPropertiesNames = entity.Properties.Select(p => p.Name);
+				var parent = _entities.Single(e => e.Name == parentName);
+				result.AddRange(parent.Properties.Where(p => !p.IsPrimaryKey)
+					.Where(p => !innerPropertiesNames.Contains(p.Name))
+					.Select(p => new EntityProperty
+					{
+						IsPrimaryKey = p.IsPrimaryKey,
+						Name = p.Name,
+						TypeName = p.TypeName,
+						IsForeignKey = p.IsForeignKey,
+						IsRelationName = p.IsRelationName
+					}));
+
+				parentName = parent.ParentName;
+			}
+
+			SetOrderings(entity.Name, result);
+
+			return result;
+		}
+
+		private string GetPathToMain()
+		{
+			var curPath = _host.ResolvePath(".");
+			return curPath.Substring(0, curPath.IndexOf("Main") + 4);
+		}
+
+		private IEnumerable<EntityDescription> ReadEntities()
+		{
+			var pathToMain = GetPathToMain();
+			var path = Path.Combine(pathToMain, @"Tp.Data\NHibernateMappings");
+			var xmls = Directory.GetFiles(path, "*.hbm.xml", SearchOption.AllDirectories);
+
+			return xmls.SelectMany(x =>
+			{
+				var root = XDocument.Load(_host.ResolvePath(x)).Root;
+				return GetFullEntities(root.Element(ElName("class")) ?? root.Element(ElName("joined-subclass")));
+			})
+				.ToList();
+		}
+
+		private IEnumerable<EntityDescription> GetEntitiesExtensions()
+		{
+			if (_entitiesExtensions == null)
+			{
+				var xmlExtensions = XDocument.Load(_host.ResolvePath(Path.Combine(GetPathToMain(), @"Tp.Utils\T4\DtoModelExtension.xml")));
+				_entitiesExtensions = xmlExtensions.Root.Elements(ElName("class")).SelectMany(e => GetFullEntities(e, false));
+			}
+			return _entitiesExtensions;
+		}
+
+		private IEnumerable<EntityDescription> GetFullEntities(XElement classEl, bool getExtensions = true)
+		{
+			var mainEntity = GetEntity(classEl, getExtensions);
+			return new List<EntityDescription>(classEl.Elements(ElName("subclass"))
+				.Select(s => GetEntityWithParent(s, mainEntity.Name, getExtensions))) { mainEntity }
+				.Where(e => !_excludeEntites.Contains(e.Name));
+		}
+
+		private EntityDescription GetEntity(XElement classEl, bool getExtensions = true)
+		{
+			var parent = classEl.Attribute("extends") != null ? NormalizeEntityName(classEl.Attribute("extends").Value) : null;
+			return GetEntityWithParent(classEl, parent, getExtensions);
+		}
+
+		private EntityDescription GetEntityWithParent(XElement classEl, string parentName, bool getExtensions = true)
+		{
+			var name = NormalizeEntityName(classEl.Attribute("name").Value);
+			var entityProperties = GetProperties(classEl, name).ToList();
+
+			if (getExtensions)
+			{
+				var extensions = GetEntitiesExtensions().SingleOrDefault(e => e.Name == name);
+				var extendedProperties = extensions != null ? extensions.Properties : Enumerable.Empty<EntityProperty>();
+				entityProperties = entityProperties.Concat(extendedProperties).ToList();
+			}
+
+			if (!_excludeEntites.Contains(name))
+			{
+				SetOrderings(name, entityProperties);
+			}
+
+			return new EntityDescription
+			{
+				Name = name,
+				BlName = _entityNameMap.ContainsValue(name) ? _entityNameMap.Single(m => m.Value == name).Key : name,
+				Properties = entityProperties,
+				ParentName = parentName,
+				InterfaceParents =
+					_additionalHierarchy.ContainsKey(name)
+						? _additionalHierarchy[name]
+						: (!string.IsNullOrEmpty(parentName) ? new List<string> { parentName } : Enumerable.Empty<string>())
+			};
+		}
+
+		private void SetOrderings(string entityName, IEnumerable<EntityProperty> entityProperties)
+		{
+			var orderings = GetOrderings().SingleOrDefault(o => o.EntityName == entityName);
+			if (orderings == null)
+			{
+				throw new InvalidOperationException(String.Format("There are no orderings for {0} entity. Specify it in DtoOrderings.xml", entityName));
+			}
+
+			foreach (var property in entityProperties)
+			{
+				if (!orderings.Orderings.ContainsKey(property.Name))
+				{
+					throw new InvalidOperationException(
+						String.Format("There is no ordering for {0} property in {1} type. Specify it in DtoOrderings.xml", property.Name, entityName));
+				}
+				property.Ordering = orderings.Orderings[property.Name];
+			}
+		}
+
+		private IEnumerable<EntityOrderings> GetOrderings()
+		{
+			if (_orderings == null)
+			{
+				var xml = XDocument.Load(_host.ResolvePath(Path.Combine(GetPathToMain(), @"Tp.Utils\T4\DtoOrderings.xml")));
+
+				_orderings = xml.Root.Elements("dto").Select(d => new EntityOrderings
+				{
+					EntityName = d.Attribute("name").Value,
+					Orderings = d.Elements("property")
+						.ToDictionary(t => t.Attribute("name").Value,
+							t => Convert.ToInt32(t.Attribute("ordering").Value))
+				});
+			}
+			return _orderings;
+		}
+
+		private IEnumerable<EntityProperty> GetProperties(XElement rootEl, string name)
+		{
+			return GetPlainProperties(rootEl, name).Concat(GetComplexProperties(rootEl, name))
+				.Where(p => !(_excludeFields.ContainsKey(name) && _excludeFields[name].Contains(p.Name)))
+				.ToList();
+		}
+
+		private IEnumerable<EntityProperty> GetPlainProperties(XElement rootEl, string entityName)
+		{
+			return rootEl.Elements(ElName("id")).Concat(rootEl.Elements(ElName("property")))
+				.Select(p =>
+				{
+					var name = p.Attribute("name").Value;
+					var property = new EntityProperty
+					{
+						Name = name,
+						TypeName = GetTypeName(entityName, name, p.Attribute("type") != null ? p.Attribute("type").Value : string.Empty),
+						IsPrimaryKey = name == entityName + "ID" || p.Name == ElName("id")
+					};
+					if (property.IsPrimaryKey && (name == "ID" || name == "SquadID"))
+					{
+						if (name == "ID")
+						{
+							property.Name = entityName + "ID";
+						}
+						if (name == "SquadID")
+						{
+							property.Name = "TeamID";
+						}
+					}
+
+					return property;
+				});
+		}
+
+		private IEnumerable<EntityProperty> GetComplexProperties(XElement rootEl, string entityName)
+		{
+			return rootEl.Elements(ElName("many-to-one")).Concat(rootEl.Elements(ElName("one-to-one")))
+				.SelectMany(p =>
+				{
+					var name = p.Attribute("name").Value;
+					var result = new List<EntityProperty>
+					{
+						new EntityProperty
+						{
+							Name = GetNameWithSpecificRules(entityName, name) + "ID",
+							TypeName = "int?",
+							IsForeignKey = true
+						}
+					};
+					if (!_excludeRelationNames.Contains(p.Attribute("class").Value))
+					{
+						result.Add(new EntityProperty
+						{
+							Name = name + "Name",
+							TypeName = "string",
+							IsRelationName = true
+						});
+					}
+					return result;
+				});
+		}
+
+		private string GetNameWithSpecificRules(string entityName, string propertyName)
+		{
+			return entityName == "Comment" && propertyName == "Comment" ? "Parent" : propertyName;
+		}
+
+		private string GetTypeName(string entityName, string fieldName, string typeName)
+		{
+			if (_fieldsTypesAliases.ContainsKey(entityName) && _fieldsTypesAliases[entityName].ContainsKey(fieldName))
+			{
+				return _fieldsTypesAliases[entityName][fieldName];
+			}
+
+			const string enumFirstPattern = "NHibernate.Type.EnumStringType`1[[";
+			const string enumLastPattern = "]]";
+			if (typeName.StartsWith(enumFirstPattern))
+			{
+				typeName = typeName.Replace(enumFirstPattern, "").Replace(enumLastPattern, "");
+			}
+
+			if (_typesMap.ContainsKey(typeName))
+			{
+				return _typesMap[typeName];
+			}
+
+			typeName = ReplaceNamespaces(typeName, "Tp.Integration.Common.");
+			typeName = ReplaceNamespaces(typeName, "System.");
+
+			if (typeName.Equals("string", StringComparison.InvariantCultureIgnoreCase))
+			{
+				return typeName;
+			}
+			return typeName + "?";
+		}
+
+		private string NormalizeEntityName(string entityName)
+		{
+			var normalizedName = ReplaceNamespaces(entityName, "Tp.BusinessObjects.");
+			return _entityNameMap.ContainsKey(normalizedName) ? _entityNameMap[normalizedName] : normalizedName;
+		}
+
+		private string ReplaceNamespaces(string input, string nameSpace)
+		{
+			return input.Split(',')[0].Replace(nameSpace, "").Trim();
+		}
+
+		private XName ElName(string name)
+		{
+			return XName.Get(name, _xmlns);
+		}
+	}
+
+	#>
