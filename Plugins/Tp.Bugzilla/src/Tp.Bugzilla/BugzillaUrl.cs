@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -40,10 +40,7 @@ namespace Tp.Bugzilla
 			_profile = profile;
 		}
 
-		public string Url
-		{
-			get { return string.IsNullOrEmpty(_profile.Url) ? string.Empty : _profile.Url.TrimEnd('/', '\\'); }
-		}
+		public string Url => string.IsNullOrEmpty(_profile.Url) ? string.Empty : _profile.Url.TrimEnd('/', '\\');
 
 		public string CheckConnection()
 		{
@@ -52,7 +49,7 @@ namespace Tp.Bugzilla
 
 		public bugCollection GetBugs(int[] bugIDs)
 		{
-			var content = UploadDataToBugzilla(string.Format("cmd=get_bugs&id={0}", bugIDs.ToString(",")));
+			var content = UploadDataToBugzilla($"cmd=get_bugs&id={bugIDs.ToString(",")}");
 
 			content = ProcessResponse(content);
 
@@ -70,9 +67,8 @@ namespace Tp.Bugzilla
 		public int[] GetChangedBugsIds(DateTime? date)
 		{
 			var myDtfi = new CultureInfo("en-US", false).DateTimeFormat;
-			var url = string.Format("cmd=get_bug_ids&name={0}&date={1}",
-			                        HttpUtility.UrlEncode(_profile.SavedSearches),
-									string.Format(myDtfi, "{0:yyyy-MM-dd HH:mm:ss}", date));
+			var url =
+				$"cmd=get_bug_ids&name={HttpUtility.UrlEncode(_profile.SavedSearches)}&date={string.Format(myDtfi, "{0:yyyy-MM-dd HH:mm:ss}", date)}";
 
 			var content = UploadDataToBugzilla(url);
 
@@ -82,18 +78,18 @@ namespace Tp.Bugzilla
 			{
 				var ids = content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
 
-				return ids.Select(Int32.Parse).ToArray();
+				return ids.Select(int.Parse).ToArray();
 			}
 			catch (Exception)
 			{
 				throw new InvalidOperationException(
-					string.Format("Unable to take bug ids from Bugzilla. Bugzilla returned an error: {0}", content));
+					$"Unable to take bug ids from Bugzilla. Bugzilla returned an error: {content}");
 			}
 		}
 
 		public string GetBugExternalUrl(string bugId)
 		{
-			return string.Format("{0}/show_bug.cgi?id={1}", Url, bugId);
+			return $"{Url}/show_bug.cgi?id={bugId}";
 		}
 
 		private string UploadDataToBugzilla(string query)
@@ -104,10 +100,10 @@ namespace Tp.Bugzilla
 
 			if (!string.IsNullOrEmpty(_profile.Login) && !string.IsNullOrEmpty(_profile.Password))
 			{
-				query += string.Format("&Bugzilla_login={0}&Bugzilla_password={1}", _profile.Login, _profile.Password);
+				query += $"&Bugzilla_login={_profile.Login}&Bugzilla_password={_profile.Password}";
 			}
 
-			var bret = webClient.UploadData(string.Format("{0}/tp2.cgi", Url), "POST", encoding.GetBytes(query));
+			var bret = webClient.UploadData($"{Url}/tp2.cgi", "POST", encoding.GetBytes(query));
 
 			var content = encoding.GetString(bret);
 

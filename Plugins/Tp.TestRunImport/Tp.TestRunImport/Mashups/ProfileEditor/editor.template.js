@@ -50,7 +50,7 @@ tau.mashups
 			'		<h3 class="h3">Test Cases</h3>' +
 			'		<p class="label pt-5">Mapping Template&nbsp;<span class="error" name="RegExpErrorLabel"></span></p>' +
 			'		<p class="note">' +
-			'			<span class="small">Use regular expression to find test names. Ex: ^(?&lt;testName&gt;[^_]+)_Test$ will extract test case name from ComplexFeature_Test,<br />_(?&lt;testId&gt;\d+)$ will extract test case id from ComplexFeature_1289.</span>&nbsp;<a id="linkSample" class="note" style="font-size: 11px;" href="javascript:void(0);">Learn more</a></p>' +
+			'			<span class="small">Use regular expression to find test names. Ex: ^(?&lt;testName&gt;[^_]+)_Test$ will extract test case name from ComplexFeature_Test,<br />_(?&lt;testId&gt;\\d+)$ will extract test case id from ComplexFeature_1289.</span>&nbsp;<a id="linkSample" class="note" style="font-size: 11px;" href="javascript:void(0);">Learn more</a></p>' +
 			'		<div id="mappingDescription" style="display:none" class="label"><span class="small" style="font-size:12px; color:#333">' +
 			'			<br><br><p>You have a set of tests in one of Testing frameworks (NUnit, JUnit, Selenium). To have test results in TargetProcess, it is required to have a set of related test cases. For example, you have 3 tests in NUnit:</p>' +
 			'			<br><p style="font-size: 14px"><span class="rules-conditions">AddSimpleUserTest</span></p>' +

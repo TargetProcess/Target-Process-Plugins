@@ -176,7 +176,7 @@
 		{
 			if (_entitiesExtensions == null)
 			{
-				var xmlExtensions = XDocument.Load(_host.ResolvePath(Path.Combine(GetPathToMain(), @"Tp.Utils\T4\DtoModelExtension.xml")));
+				var xmlExtensions = XDocument.Load(_host.ResolvePath(Path.Combine(GetPathToMain(), @"Tp.BusinessObjects\Model\Domain\DtoModelExtension.xml")));
 				_entitiesExtensions = xmlExtensions.Root.Elements(ElName("class")).SelectMany(e => GetFullEntities(e, false));
 			}
 			return _entitiesExtensions;
@@ -249,7 +249,7 @@
 		{
 			if (_orderings == null)
 			{
-				var xml = XDocument.Load(_host.ResolvePath(Path.Combine(GetPathToMain(), @"Tp.Utils\T4\DtoOrderings.xml")));
+				var xml = XDocument.Load(_host.ResolvePath(Path.Combine(GetPathToMain(), @"Tp.BusinessObjects\Model\Domain\DtoOrderings.xml")));
 
 				_orderings = xml.Root.Elements("dto").Select(d => new EntityOrderings
 				{

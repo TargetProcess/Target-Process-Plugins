@@ -14,6 +14,5 @@ namespace Tp.Integration.Messages.EntityLifecycle
 
 		public TEntityDto Dto { get; set; }
 		public GeneralUserDTO Author { get; set; }
-		public DateTime? CreateDate { get; set; }
 	}
 }

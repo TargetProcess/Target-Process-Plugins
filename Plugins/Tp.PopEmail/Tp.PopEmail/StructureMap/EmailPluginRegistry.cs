@@ -16,7 +16,7 @@ namespace Tp.PopEmailIntegration.StructureMap
 		{
 			For<IBufferSize>().Singleton().Use(new BufferSize(1000000));
 			For<IMessagePackSize>().Singleton().Use(new MessagePackSize(20));
-			For<IEmailClient>().Use<MailBeePop3EmailClient>();
+			For<IEmailClient>().Use<MailBeeEmailClient>();
 		}
 	}
 }

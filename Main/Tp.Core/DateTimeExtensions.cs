@@ -112,9 +112,7 @@ namespace System
 		public static DateTime TrimHours(this DateTime dateTime)
 			=> new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind);
 
-        public static DateTime TrimTicks(this DateTime dateTime) => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Millisecond, dateTime.Kind);
-
-        public static IFormattedMessage HumanFormat(this DateTime? dateTime)
+		public static IFormattedMessage HumanFormat(this DateTime? dateTime)
 		{
 			if (dateTime != null)
 			{

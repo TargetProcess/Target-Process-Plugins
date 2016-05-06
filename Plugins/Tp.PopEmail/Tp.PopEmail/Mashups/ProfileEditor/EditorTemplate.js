@@ -1,8 +1,8 @@
 tau.mashups
     .addModule("emailIntegration/editorTemplate",
 
-'<form method="POST"><h2 class="h2">POP Integration</h2>'+
-'<p class="note">Retrieves emails from your POP account into internal inbox and creates requests from emails.</p>'+
+'<form method="POST"><h2 class="h2">E-mail Integration</h2>'+
+'<p class="note">Retrieves emails from your mail account into internal inbox and creates requests from emails.</p>'+
 '<div class="base-block">'+
  '	<div class="pad-box">' +
 '		<p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span><br>' +
@@ -11,15 +11,24 @@ tau.mashups
 '	</div>' +
 '	<div class="separator"></div>' +
 '<div class="pad-box">'+
-'<h3 class="h3">POP Email Settings</h3>'+
-'<table>'+
-'<tr>'+
+'<h3 class="h3">Email Settings</h3>'+
+'<table>' +
+'<tr>' +
+'</tr>' +
+'<tr>' +
+'<td><p class="label">Protocol</p></td>' +
 '<td><p class="label">Server&nbsp;<span class="error" name="MailServerErrorLabel"></span></p></td>'+
 '<td class="pl-5"><p class="label">Port&nbsp;<span class="error" name="PortErrorLabel"></span></p></td>'+
 '<td></td>'+
 '<td></td>'+
 '</tr>'+
-'<tr>'+
+'<tr>' +
+'<td>' +
+'<select class="select" id="Protocol" name="Protocol">' +
+'<option value="pop3" {{if Settings.Protocol === "pop3"}}selected="selected"{{/if}}>POP</option>' +
+'<option value="imap" {{if Settings.Protocol === "imap"}}selected="selected"{{/if}}>IMAP</option>' +
+'</select>' +
+'</td>' +
 '<td><input type="text" name="MailServer" id="MailServer" class="input" value="${Settings.MailServer}" style="width: 400px;" /></td>'+
 '<td class="pl-5"><input type="text" name="Port" id="Port" class="input" value="${Settings.Port}" style="width: 100px;" /></td>'+
 '<td class="pl-10 pr-5"><div id="switch"></div></td>'+

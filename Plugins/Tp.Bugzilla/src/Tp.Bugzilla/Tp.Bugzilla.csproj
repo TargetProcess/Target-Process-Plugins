@@ -89,6 +89,7 @@
     <Compile Include="CustomCommand\GetMappingCommand.cs" />
     <Compile Include="CustomCommand\GetSupportedVersionsCommand.cs" />
     <Compile Include="DefaultRoles.cs" />
+    <Compile Include="ImportToBugzilla\BugDeletedHandler.cs" />
     <Compile Include="ImportToTp\ImportBugsChunkHandler.cs" />
     <Compile Include="BugFieldConverters\OwnerConverter.cs" />
     <Compile Include="BugzillaInfo.cs" />

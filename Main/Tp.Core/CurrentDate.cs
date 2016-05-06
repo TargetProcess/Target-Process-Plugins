@@ -7,37 +7,28 @@ namespace Tp.Core
 	/// </summary>
 	public static class CurrentDate
 	{
-		private const string TIME_KEEPER_NAME = "TimeKeeper";
-
 		/// <summary>
 		/// Get the current date using the configured strategy.
 		/// </summary>
-		public static DateTime Value
-		{
-			get
-			{
-				var timeKeeper = TimeKeeper;
-				return timeKeeper.Now;
-			}
-		}
+		public static DateTime Value => TimeKeeper.Now;
+		public static DateTime UtcValue => TimeKeeper.UtcNow;
 
-		static private ITimeKeeper _timeKeeper = CurrentTimeKeeper.Instance;
-
-		private static ITimeKeeper TimeKeeper
-		{
-			get { return _timeKeeper; }
-			set { _timeKeeper = value; }
-		}
+		private static ITimeKeeper TimeKeeper { get; set; } = CurrentTimeKeeper.Instance;
 
 		/// <summary>
 		/// Use the specified delegate to get the current date.
 		/// </summary>
-		/// <param name="getter">New delegate, or <c>null</c> to reset to the <see cref="DateTime.Now"/>.</param>
-		public static IDisposable Setup(Func<DateTime> getter = null)
+		/// <param name="now">New delegate, or <c>null</c> to reset to the <see cref="DateTime.Now"/>.</param>
+		/// <param name="utcNow">set DateTime.UtcNow</param>
+		public static IDisposable Setup(Func<DateTime> now = null, Func<DateTime> utcNow = null)
 		{
-			var oldKeeper = TimeKeeper;
-			TimeKeeper = getter == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(getter);
-			return Disposable.Create(() => TimeKeeper = oldKeeper);
+			if (now == null && utcNow != null)
+			{
+				throw new ArgumentException($"{nameof(utcNow)} should be setuped with {nameof(now)}");
+			}
+			var old = TimeKeeper;
+			TimeKeeper = now == null ? CurrentTimeKeeper.Instance : new DefiniteTimeKeeper(now, utcNow);
+			return Disposable.Create(() => TimeKeeper = old);
 		}
 
 		public static IDisposable Setup(DateTime date)
@@ -48,6 +39,7 @@ namespace Tp.Core
 		private interface ITimeKeeper
 		{
 			DateTime Now { get; }
+			DateTime UtcNow { get; }
 		}
 
 		private class CurrentTimeKeeper : ITimeKeeper
@@ -56,10 +48,9 @@ namespace Tp.Core
 			{
 			}
 
-			public DateTime Now
-			{
-				get { return DateTime.Now; }
-			}
+			public DateTime Now => DateTime.Now;
+
+			public DateTime UtcNow => DateTime.UtcNow;
 
 			public static readonly ITimeKeeper Instance = new CurrentTimeKeeper();
 		}
@@ -67,16 +58,16 @@ namespace Tp.Core
 		private class DefiniteTimeKeeper : ITimeKeeper
 		{
 			private readonly Func<DateTime> _time;
+			private readonly Func<DateTime> _utcTime;
 
-			public DefiniteTimeKeeper(Func<DateTime> time)
+			public DefiniteTimeKeeper(Func<DateTime> time, Func<DateTime> utcTime = null)
 			{
 				_time = time;
+				_utcTime = utcTime ?? (() => { throw new NotImplementedException(); });
 			}
 
-			public DateTime Now
-			{
-				get { return _time(); }
-			}
+			public DateTime Now => _time();
+			public DateTime UtcNow => _utcTime();
 		}
 	}
 }

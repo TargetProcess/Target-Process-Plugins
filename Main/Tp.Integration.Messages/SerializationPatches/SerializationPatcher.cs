@@ -1,23 +1,38 @@
 using System.Collections.Generic;
+using System.Linq;
 using StructureMap;
 
 namespace Tp.Integration.Messages.SerializationPatches
 {
 	public class SerializationPatcher
 	{
-		public static string Apply(string text, params IPatch[] patches)
+		private readonly List<IPatch> _patches;
+
+		public SerializationPatcher(IEnumerable<IPatch> patches)
 		{
-			var patchCollection = new List<IPatch>(patches);
+			_patches = new List<IPatch>(patches);
 			var externalPatchCollection = ObjectFactory.TryGetInstance<IPatchCollection>();
 			if (externalPatchCollection != null)
-				patchCollection.AddRange(externalPatchCollection);
-
-			foreach (var patch in patchCollection)
 			{
-				if (patch.NeedToApply(text))
-				{
-					return patch.Apply(text);
-				}
+				_patches.AddRange(externalPatchCollection);
+			}
+		}
+
+		public bool ShouldApply(string text)
+		{
+			return GetPatchesToApply(text).Any();
+		}
+
+		private IEnumerable<IPatch> GetPatchesToApply(string text)
+		{
+			return _patches.Where(x => x.NeedToApply(text));
+		}
+
+		public string Apply(string text)
+		{
+			foreach (var patch in GetPatchesToApply(text))
+			{
+				text = patch.Apply(text);
 			}
 
 			return text;

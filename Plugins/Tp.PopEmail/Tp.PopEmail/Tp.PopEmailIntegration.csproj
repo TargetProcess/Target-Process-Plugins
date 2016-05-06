@@ -104,6 +104,9 @@
     <Compile Include="Data\MessageUidCollection.cs" />
     <Compile Include="Data\MessageUidRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
+    <Compile Include="EmailReader\Client\MailBee\IMailBeeClient.cs" />
+    <Compile Include="EmailReader\Client\MailBee\ImapMailBeeClient.cs" />
+    <Compile Include="EmailReader\Client\MailBee\Pop3MailBeeClient.cs" />
     <Compile Include="EmailReader\EmailReader.cs" />
     <Compile Include="EmailReader\IMessagePackSize.cs" />
     <Compile Include="Initialization\ProfileAddedMessageHandler.cs" />
@@ -135,7 +138,7 @@
     <Compile Include="Data\UserLite.cs" />
     <Compile Include="Data\UserType.cs" />
     <Compile Include="EmailReader\Client\IEmailClient.cs" />
-    <Compile Include="EmailReader\Client\MailBeePop3EmailClient.cs" />
+    <Compile Include="EmailReader\Client\MailBeeEmailClient.cs" />
     <Compile Include="EmailReader\EmailException.cs" />
     <Compile Include="EmailReader\MailInbox.cs" />
     <Compile Include="EmailReader\EmailProtocol.cs" />

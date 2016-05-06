@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -18,13 +18,11 @@ namespace Tp.Bugzilla
 {
 	public class BugzillaService : IBugzillaService
 	{
-		private readonly IStorageRepository _storageRepository;
 		private readonly BugzillaProfile _bugzillaProfile;
 
 		public BugzillaService(IStorageRepository storageRepository)
 		{
-			_storageRepository = storageRepository;
-			_bugzillaProfile = _storageRepository.GetProfile<BugzillaProfile>();
+			_bugzillaProfile = storageRepository.GetProfile<BugzillaProfile>();
 		}
 
 		public BugzillaService()
@@ -83,7 +81,7 @@ namespace Tp.Bugzilla
 				errors.Add(new PluginProfileError
 					{
 						FieldName = BugzillaProfile.ProfileField,
-						Message = string.Format("The connection with {0} is failed. {1}", profile, ex.Message)
+						Message = $"The connection with {profile} is failed. {ex.Message}"
 					});
 				throw new BugzillaPluginProfileException(profile, errors);
 			}
@@ -133,7 +131,7 @@ namespace Tp.Bugzilla
 				return timeOffset;
 			}
 
-			throw new ApplicationException(string.Format("Invalid offset value returned from Bugzilla service: {0}", response));
+			throw new ApplicationException($"Invalid offset value returned from Bugzilla service: {response}");
 		}
 
 		private string ExecuteBugzillaQuery(IBugzillaQuery query)
@@ -145,8 +143,7 @@ namespace Tp.Bugzilla
 			catch (Exception ex)
 			{
 				throw new ApplicationException(
-					string.Format("Synchronization failed for following operation: {0}. Profile : '{1}'", query,
-					              _bugzillaProfile), ex);
+					$"Synchronization failed for following operation: {query}. Profile : '{_bugzillaProfile}'", ex);
 			}
 		}
 
@@ -155,8 +152,7 @@ namespace Tp.Bugzilla
 			var result = ExecuteBugzillaQuery(query);
 
 			if (result != "OK")
-				throw new ApplicationException(string.Format(
-					"There was exception during performing following operation: {0}. {1}", query.GetOperationDescription(), result));
+				throw new ApplicationException($"There was exception during performing following operation: {query.GetOperationDescription()}. {result}");
 		}
 	}
 }

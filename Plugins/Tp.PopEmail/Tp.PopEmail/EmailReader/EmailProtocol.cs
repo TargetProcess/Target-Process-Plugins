@@ -9,5 +9,6 @@ namespace Tp.PopEmailIntegration.EmailReader
 	{
 		None = 0,
 		Pop3 = 1,
+		Imap = 2,
 	}
 }

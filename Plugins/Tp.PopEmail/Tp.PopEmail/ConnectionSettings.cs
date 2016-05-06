@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2010 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Runtime.Serialization;
@@ -51,8 +51,11 @@ namespace Tp.PopEmailIntegration
 				case "pop":
 				case "pop3":
 					return EmailProtocol.Pop3;
+				case "imap":
+				case "imap4":
+					return EmailProtocol.Imap;
 				default:
-					throw new EmailException(string.Format("Protocol '{0}' not recognized", Protocol));
+					throw new EmailException($"Protocol '{Protocol}' not recognized");
 			}
 		}
 

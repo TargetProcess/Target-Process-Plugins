@@ -1,6 +1,13 @@
-﻿using System;
+﻿// 
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using log4net;
 using NServiceBus;
 using NServiceBus.Serialization;
 using Tp.Integration.Messages.SerializationPatches;
@@ -9,6 +16,8 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 {
 	public class AdvancedXmlSerializer : IMessageSerializer
 	{
+		private readonly ILog _logger = LogManager.GetLogger("Deserialiaztion");
+
 		public void Serialize(IMessage[] messages, Stream stream)
 		{
 			using (var serializer = new XmlSerializer())
@@ -25,24 +34,43 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		{
 			var xmlDocument = new XmlDocument();
 			xmlDocument.Load(stream);
+			var result = Deserialize(xmlDocument);
 
-			try
+			var notFoundTypesCount = result.Item2;
+			if (notFoundTypesCount == 0)
 			{
-				return Deserialize(xmlDocument);
+				return result.Item1;
 			}
-			catch (Exception)
+
+			var serializationPatcher = new SerializationPatcher(new IPatch[] {});
+			if (!serializationPatcher.ShouldApply(xmlDocument.InnerXml))
 			{
-				var patchedText = SerializationPatcher.Apply(xmlDocument.InnerXml);
-				var patchedXmlDocument = new XmlDocument();
-				patchedXmlDocument.LoadXml(patchedText);
-				return Deserialize(patchedXmlDocument);
+				return result.Item1;
 			}
+
+			return ApplyPatchesAndDeserialize(serializationPatcher, xmlDocument);
 		}
 
-		private static IMessage[] Deserialize(XmlDocument xmlDocument)
+		private IMessage[] ApplyPatchesAndDeserialize(SerializationPatcher serializationPatcher, XmlDocument xmlDocument)
 		{
-			var deserializer = new XmlDeserializer();
-			return (IMessage[]) deserializer.Deserialize(xmlDocument);
+			var patchedText = serializationPatcher.Apply(xmlDocument.InnerXml);
+			var patchedXmlDocument = new XmlDocument();
+			patchedXmlDocument.LoadXml(patchedText);
+			return Deserialize(patchedXmlDocument).Item1;
+		}
+
+		private Tuple<IMessage[], int> Deserialize(XmlDocument xmlDocument)
+		{
+			var notFoundTypesCount = 0;
+
+			var deserializer = new XmlDeserializer(e =>
+			{
+				notFoundTypesCount++;
+				_logger.Warn(e);
+			});
+			
+			var messages = (IMessage[]) deserializer.Deserialize(xmlDocument);
+			return Tuple.Create(messages.Where(x => x != null).ToArray(), notFoundTypesCount);
 		}
 	}
 }

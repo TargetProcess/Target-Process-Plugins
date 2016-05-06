@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<CacheT4Generation>True</CacheT4Generation>
+		<!--
+		<IntermediateOutputPath>$(SolutionDir)\Output\obj\$(Configuration)\$(MSBuildProjectName)\</IntermediateOutputPath>
+		<OutputPath>$(SolutionDir)\Output\bin\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+		-->
+		<OutDir>$(OutputPath)</OutDir>
+	</PropertyGroup>
+</Project>

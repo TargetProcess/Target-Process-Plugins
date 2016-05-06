@@ -207,5 +207,57 @@ namespace Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus
 			var deserialized = (SampleMessage) deserializer.Deserialize(_serialized);
 			deserialized.SagaId.Should(Is.EqualTo(_message.SagaId), "deserialized.SagaId.Should(Is.EqualTo(_message.SagaId))");
 		}
+
+		[Test]
+		public void SerializationShouldBeForwardCompatibleWhenAddingNewFieldOfPrimitiveType()
+		{
+			//'messageFromNewSdk' variable is a serialized instance of class 
+			//private class SampleSerializationMessage
+			//{
+			//	public string StringField { get; set; }
+			//	public int IntField { get; set; }
+			//}
+			var messageFromNewSdk =
+				@"<?xml version=""1.0"" encoding=""utf-8""?><object name="""" type=""TK0"" assembly=""""><!-- Data section : Don't edit any attributes ! --><properties><property name=""StringField"" type=""TK1"" assembly="""">123</property><property name=""IntField"" type=""TK2"" assembly="""">12</property></properties><!-- TypeDictionary : Don't edit anything in this section at all ! --><typedictionary name="""" type=""System.Collections.Hashtable"" assembly=""mscorlib""><items><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK0</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus.AdvancedXmlSerializerSpecs+SampleSerializationMessage</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Plugin.Common.Tests</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK2</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.Int32</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK1</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.String</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item></items></typedictionary></object>";
+
+			var xml = new XmlDocument();
+			xml.LoadXml(messageFromNewSdk);
+			var res = (SampleSerializationMessage) _deserializer.Deserialize(xml);
+			res.StringField.Should(Be.EqualTo("123"), $"{nameof(res.StringField)} field is not deserialized correctly");
+			res.DoubleField.Should(Be.EqualTo(0), $"{nameof(res.DoubleField)} field has not default value");
+		}
+
+		[Test]
+		public void SerializationShouldBeForwardCompatibleWhenAddingNewFieldOfCustomType()
+		{
+			//'messageFromNewSdk' variable is a serialized instance of class 
+			//private class SampleSerializationMessage
+			//{
+			//	public string StringField { get; set; }
+			//	public SampleEnum SampleEnumField { get; set; }
+			//}
+
+			//private enum SampleEnum
+			//{
+			//	None,
+			//	SomeValue
+			//}
+
+			var messageFromNewSdk =
+				@"<?xml version=""1.0"" encoding=""utf-8""?><object name="""" type=""TK0"" assembly=""""><!-- Data section : Don't edit any attributes ! --><properties><property name=""StringField"" type=""TK1"" assembly="""">123</property><property name=""SampleEnumField"" type=""TK2"" assembly="""">SomeValue</property></properties><!-- TypeDictionary : Don't edit anything in this section at all ! --><typedictionary name="""" type=""System.Collections.Hashtable"" assembly=""mscorlib""><items><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK2</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus.AdvancedXmlSerializerSpecs+SampleEnum</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Plugin.Common.Tests</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK0</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Plugin.Common.Tests.Messages.NServiceBus.AdvancedXmlSerializerSpecs+SampleSerializationMessage</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">Tp.Integration.Plugin.Common.Tests</property></properties></property></properties></item><item><properties><property name=""Key"" type=""System.String"" assembly=""mscorlib"">TK1</property><property name=""Value"" type=""Tp.Integration.Messages.ServiceBus.Serialization.TypeInfo"" assembly=""Tp.Integration.Messages""><properties><property name=""TypeName"" type=""System.String"" assembly=""mscorlib"">System.String</property><property name=""AssemblyName"" type=""System.String"" assembly=""mscorlib"">mscorlib</property></properties></property></properties></item></items></typedictionary></object>";
+
+			var xml = new XmlDocument();
+			xml.LoadXml(messageFromNewSdk);
+			var res = (SampleSerializationMessage)_deserializer.Deserialize(xml);
+			res.StringField.Should(Be.EqualTo("123"), $"{nameof(res.StringField)} field is not deserialized correctly");
+			res.DoubleField.Should(Be.EqualTo(0), $"{nameof(res.DoubleField)} field has not default value");
+		}
+
+
+		private class SampleSerializationMessage
+		{
+			public string StringField { get; set; }
+			public double DoubleField { get; set; }
+		}
 	}
 }

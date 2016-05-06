@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(ProjectDir)..\..\Libs\Build\Tp.Common.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -69,6 +70,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
@@ -76,6 +78,10 @@
     </Reference>
     <Reference Include="Mono.Reflection">
       <HintPath>..\..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
@@ -112,6 +118,10 @@
     <Compile Include="Argument.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Chrono.cs" />
+    <Compile Include="Diagnostics\Event\DiagnosticEvent.cs" />
+    <Compile Include="Diagnostics\Event\DiagnosticEventSerializer.cs" />
+    <Compile Include="Diagnostics\Event\DiagnosticEventsService.cs" />
+    <Compile Include="Diagnostics\Event\IDiagnosticEventsService.cs" />
     <Compile Include="Diagnostics\Time\HttpHeaderAttribute.cs" />
     <Compile Include="ITextProvider.cs" />
     <Compile Include="Features\ITpFeatureList.cs" />
@@ -340,7 +350,6 @@
     <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy $(TargetDir)$(TargetFileName)   $(ProjectDir)..\..\Libs\$(TargetFileName)  /Y /d</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

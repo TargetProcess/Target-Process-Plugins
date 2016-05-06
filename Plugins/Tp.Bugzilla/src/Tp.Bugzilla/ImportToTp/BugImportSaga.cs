@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -55,19 +55,24 @@ namespace Tp.Bugzilla.ImportToTp
 
 			if (storedBug == null)
 			{
-				_logger.InfoFormat("Importing bug. {0}", message.ThirdPartyBug.ToString());
+				_logger.Info($"Importing bug. {message.ThirdPartyBug}");
 				Send(new CreateBugCommand(tpBug.BugDto));
 				Data.CreatingBug = true;
 			}
+			else if (!storedBug.Deleted)
+			{
+				_logger.Info($"Updating bug. {message.ThirdPartyBug}");
+				tpBug.BugDto.ID = storedBug.Value;
+				Send(new UpdateBugCommand(tpBug.BugDto) { ChangedFields = tpBug.ChangedFields.ToArray() });
+				// We will not receive BugUpdatedMessage if no fields were changed. So we should process related entities immediately.
+				SendLocal(new ExistingBugImportedToTargetProcessMessage<BugzillaBug> { TpBugId = tpBug.BugDto.ID, ThirdPartyBug = Data.ThirdPartyBug });
+
+				_bugzillaInfoStorageRepository.SaveBugzillaBugInfo(tpBug.BugDto.ID, new BugzillaBugInfo(message.ThirdPartyBug) { TpId = tpBug.BugDto.ID });
+			}
 			else
 			{
-				_logger.InfoFormat("Updating bug. {0}", message.ThirdPartyBug.ToString());
-				tpBug.BugDto.ID = storedBug.Value;
-				Send(new UpdateBugCommand(tpBug.BugDto) {ChangedFields = tpBug.ChangedFields.ToArray()});
-				// We will not receive BugUpdatedMessage if no fields were changed. So we should process related entities immediately.
-				SendLocal(new ExistingBugImportedToTargetProcessMessage<BugzillaBug> {TpBugId = tpBug.BugDto.ID, ThirdPartyBug = Data.ThirdPartyBug});
-
-				_bugzillaInfoStorageRepository.SaveBugzillaBugInfo(tpBug.BugDto.ID, new BugzillaBugInfo(message.ThirdPartyBug) {TpId = tpBug.BugDto.ID});
+				_logger.Info($"Skip updating changes from Bugzilla bug {message.ThirdPartyBug}, TargetProcess Bug ID: {storedBug.Value} was deleted");
+				MarkAsComplete();
 			}
 		}
 
@@ -78,7 +83,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 			_bugzillaInfoStorageRepository.SaveBugsRelation(tpBugId, new BugzillaBugInfo(bugzillaBug) {TpId = message.Dto.ID});
 
-			_logger.InfoFormat("Bug imported. {0}; TargetProcess Bug ID: {1}", bugzillaBug.ToString(), message.Dto.BugID);
+			_logger.Info($"Bug imported. {bugzillaBug}; TargetProcess Bug ID: {message.Dto.BugID}");
 
 			SendLocal(new NewBugImportedToTargetProcessMessage<BugzillaBug> {TpBugId = tpBugId, ThirdPartyBug = bugzillaBug});
 			MarkAsComplete();
@@ -86,7 +91,7 @@ namespace Tp.Bugzilla.ImportToTp
 
 		public void Handle(BugUpdatedMessage message)
 		{
-			_logger.InfoFormat("Bug updated. {0}; TargetProcess Bug ID: {1}", Data.ThirdPartyBug, message.Dto.BugID);
+			_logger.Info($"Bug updated. {Data.ThirdPartyBug}; TargetProcess Bug ID: {message.Dto.BugID}");
 
 			DoNotContinueDispatchingCurrentMessageToHandlers();
 			MarkAsComplete();

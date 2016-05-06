@@ -328,12 +328,12 @@ namespace Tp.Subversion.SerializationPatches
 			revisionInfo.Entries[0].Path.Should(Be.EqualTo("path"), "revisionInfo.Entries[0].Path.Should(Be.EqualTo(\"path\"))");
 		}
 
-		private static IPluginLocalMessage[] Deserialize(string oldMessage)
+		private static object[] Deserialize(string oldMessage)
 		{
 			var byteArray = Encoding.ASCII.GetBytes(oldMessage);
 			var stream = new MemoryStream(byteArray);
 
-			var newRevisionRangeDetectedLocalMessage = new AdvancedXmlSerializer().Deserialize(stream) as IPluginLocalMessage[];
+			var newRevisionRangeDetectedLocalMessage = new AdvancedXmlSerializer().Deserialize(stream) as object[];
 			return newRevisionRangeDetectedLocalMessage;
 		}
 

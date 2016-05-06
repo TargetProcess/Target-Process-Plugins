@@ -61,7 +61,7 @@ namespace Tp.PopEmailIntegration
 		[When("check connection")]
 		public void CheckConnection()
 		{
-			var client = new MailBeePop3EmailClient(_settings);
+			var client = new MailBeeEmailClient(_settings);
 			client.CheckConnection(_errors);
 		}
 

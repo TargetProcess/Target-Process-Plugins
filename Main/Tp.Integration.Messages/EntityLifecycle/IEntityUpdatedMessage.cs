@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Tp.Integration.Common;
 
 namespace Tp.Integration.Messages.EntityLifecycle
@@ -25,11 +24,5 @@ namespace Tp.Integration.Messages.EntityLifecycle
 		/// The author of changes
 		/// </summary>
 		GeneralUserDTO Author { get; }
-
-		/// <summary>
-		/// The date of message creating
-		/// </summary>
-		/// 
-		DateTime? CreateDate { get; }
 	}
 }

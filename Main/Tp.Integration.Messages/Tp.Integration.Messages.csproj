@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(ProjectDir)..\..\Libs\Build\Tp.Common.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -602,18 +603,29 @@
     <CodeDir>$(ProjectDir)..\..\</CodeDir>
   </PropertyGroup>
   <Import Project="$(CodeDir)Libs\T4\T4.targets" />
+  <ItemGroup>
+	<T4Template Include="Entities\Generated\IntegrationDto.tt" />
+    <T4Template Include="Entities\IDTOVisitor.tt" />
+    <T4Template Include="EntityLifecycle\Commands\Command.tt" />
+    <T4Template Include="EntityLifecycle\Messages\Message.tt" />
+  </ItemGroup>
   <Target Name="GenerateTemplatedArtifacts" AfterTargets="PrepareResources">
     <ItemGroup>
-      <T4Template Include="Entities\Generated\IntegrationDto.tt" />
-      <T4Template Include="Entities\IDTOVisitor.tt" />
-      <T4Template Include="EntityLifecycle\Commands\Command.tt" />
-      <T4Template Include="EntityLifecycle\Messages\Message.tt" />
       <SelfProject Include="$(ProjectFileName)">
-        <Properties>T4Input=$(ProjectDir)%(T4Template.identity)</Properties>
+        <Properties>T4Input=$(ProjectDir)%(T4Template.identity);T4InputDataStatusFileName=T4HbmModelData.status;T4InputDataStatusFileName2=T4DtoModelData.status;T4TemplateBodyStatusFileName=Tp.Integration.Messages.Templates.status</Properties>
       </SelfProject>
     </ItemGroup>
-    <MSBuild Projects="@(SelfProject)" BuildInParallel="true" Targets="T4ModelGen" />
+    <MSBuild Projects="@(SelfProject)" BuildInParallel="false" Targets="T4ModelGen" />
   </Target>
+  <Target Name="BeforeBuild">
+   <ItemGroup>
+      <T4TemplateSelfProject Include="$(ProjectFileName)">
+	    <Properties>Data=@(T4Template);DataStatus=Tp.Integration.Messages.Templates.status</Properties> 
+      </T4TemplateSelfProject>
+    </ItemGroup>
+    <MSBuild Projects="@(T4TemplateSelfProject)" BuildInParallel="false" Targets="StoreSnapshot" />
+  </Target>
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

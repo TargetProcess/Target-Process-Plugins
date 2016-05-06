@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -15,6 +15,7 @@ namespace Tp.Bugzilla
 	{
 		TargetProcessBugId GetTargetProcessBugId(string bugzillaBugId);
 		BugzillaBugInfo GetBugzillaBug(int? tpBugId);
+		BugzillaBugInfo RemoveBugzillaBug(int? tpBugId);
 		IEnumerable<BugzillaBugInfo> GetBugzillaBugs(IEnumerable<int> tpBugs);
 		void SaveBugsRelation(int? tpBugId, BugzillaBugInfo bugzillaBug);
 		void SaveBugzillaBugInfo(int? tpBugId, BugzillaBugInfo bug);
@@ -46,6 +47,16 @@ namespace Tp.Bugzilla
 				                   	})
 				.SelectMany(x => x.Bugs.Select(bugInfo => SetBugUrl(bugInfo, x.BugzillaUrl)))
 				.ToList();
+		}
+
+		public BugzillaBugInfo RemoveBugzillaBug(int? tpBugId)
+		{
+			var bugzillaBugInfo = GetBugzillaBug(tpBugId);
+			if (bugzillaBugInfo != null)
+			{
+				_repository.Get<BugzillaBugInfo>(new StorageName(bugzillaBugInfo.TpId.ToString())).Clear();
+			}
+			return bugzillaBugInfo;
 		}
 
 		public IEnumerable<BugzillaBugInfo> GetBugzillaBugs(IEnumerable<int> tpBugs)

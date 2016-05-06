@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System.Linq;
 using Tp.Integration.Common;
@@ -40,16 +40,13 @@ namespace Tp.PopEmailIntegration.CustomCommands
 
 		private static void CheckConnection(ConnectionSettings settings, PluginProfileErrorCollection errors)
 		{
-			using (IEmailClient client = new MailBeePop3EmailClient(settings))
+			using (IEmailClient client = new MailBeeEmailClient(settings))
 			{
 				client.CheckConnection(errors);
 				client.Disconnect();
 			}
 		}
 
-		public string Name
-		{
-			get { return "CheckConnection"; }
-		}
+		public string Name { get; } = "CheckConnection";
 	}
 }

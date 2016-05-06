@@ -80,10 +80,14 @@ tau.mashups
                  var rendered = $.tmpl(this.template, data || this._getDefaultProfile());
                  rendered.find('#name').enabled(!this._isEditMode());
 
+                 var that = this;
+
                  this.preloader = rendered.find('span.preloader');
                  this.successfulConnection = rendered.find('#successfulConnection');
                  this.portInput = rendered.find('#Port');
                  this.portInput.numeric({ negative: false });
+                 this.protocolSelect = rendered.find('#Protocol');
+                 this.protocolSelect.change(function() { that._setPort(); });
 
                  rendered.appendTo(this.placeHolder);
 
@@ -101,12 +105,18 @@ tau.mashups
                  new profileControlsBlock({ placeholder: rendered }).render();
              },
 
+             _isImapSelected: function() {
+                 return this.protocolSelect.val() === 'imap';
+             },
+
              _initCheckConnectionButton: function () {
                  var btn = this.placeHolder.find("#checkConnection");
                  btn.click($.proxy(this._checkConnection, this));
              },
 
              _initUseSsl: function (data, rendered) {
+                 this.useSsl = data == null || data.Settings == null ? false : !!data.Settings.UseSSL;
+
                  rendered.find('#switch').iphoneSwitch(
                     data != null && data.Settings.UseSSL ? 'on' : 'off',
                     $.proxy(this._onSwitchOn, this),
@@ -119,12 +129,22 @@ tau.mashups
                 );
              },
 
+             _setPort: function () {
+                 var port = this._isImapSelected()
+                     ? this.useSsl ? 993 : 143
+                     : this.useSsl ? 995 : 110;
+
+                 this.portInput.val(port);
+             },
+
              _onSwitchOn: function (el) {
-                 this.portInput.val(995);
+                 this.useSsl = true;
+                 this._setPort();
              },
 
              _onSwitchOff: function (el) {
-                 this.portInput.val(110);
+                 this.useSsl = false;
+                 this._setPort();
              },
 
              _setFocus: function (profile) {
@@ -215,8 +235,7 @@ tau.mashups
                          Port: this._getSetPort(),
                          UseSSL: this._getSetUseSsl(),
                          Rules: escape(this._find('#Rules').val()),
-                         MailServer: this._find('#MailServer').val(),
-                         Protocol: 'pop3'
+                         MailServer: this._find('#MailServer').val()
                      }
                  };
              },

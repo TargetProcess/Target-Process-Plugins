@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using log4net;
 
 namespace Tp.Integration.Messages.ServiceBus.Serialization
 {
@@ -14,6 +15,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 	/// </summary>
 	public class XmlDeserializer : IDisposable
 	{
+		private readonly Action<TypeNotFoundWhileDeserializationException> _typeNotFoundAction;
 		private bool ignorecreationerrors = false;
 		private Hashtable typedictionary = new Hashtable(); // Parsed Types
 		private readonly Dictionary<string, Assembly> assemblycache = new Dictionary<string, Assembly>(); // Found Assemblies
@@ -57,6 +59,15 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 		}
 
 		#endregion XmlDeserializer Properties
+
+		public XmlDeserializer() : this(e => { })
+		{
+		}
+
+		public XmlDeserializer(Action<TypeNotFoundWhileDeserializationException> typeNotFoundAction)
+		{
+			_typeNotFoundAction = typeNotFoundAction;
+		}
 
 		#region Deserialize
 
@@ -540,7 +551,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
 				if (type == null)
 				{
-					throw new TypeNotFoundWhileDeserializationException("Assembly or Type not found.");
+					throw new TypeNotFoundWhileDeserializationException($"Assembly or Type not found. Assembly: {info.Assembly}, Type: {info.Type}");
 				}
 
 				// Ok, we've got the Type, now try to create an instance.
@@ -601,13 +612,10 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
 
 				return Activator.CreateInstance(type);
 			}
-			catch (TypeNotFoundWhileDeserializationException)
+			catch (TypeNotFoundWhileDeserializationException e)
 			{
-				if (IgnoreCreationErrors)
-				{
-					return null;
-				}
-				throw;
+				_typeNotFoundAction(e);
+				return null;
 			}
 			catch (Exception e)
 			{

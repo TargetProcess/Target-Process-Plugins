@@ -1,5 +1,4 @@
-﻿using System;
-using Tp.Integration.Common;
+﻿using Tp.Integration.Common;
 
 namespace Tp.Integration.Messages.EntityLifecycle
 {
@@ -7,6 +6,5 @@ namespace Tp.Integration.Messages.EntityLifecycle
 	{
 		TEntityDto Dto { get; }
 		GeneralUserDTO Author { get; }
-		DateTime? CreateDate { get; }
 	}
 }
