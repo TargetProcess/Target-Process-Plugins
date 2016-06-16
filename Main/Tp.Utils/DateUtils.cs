@@ -6,11 +6,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using log4net;
 using Tp.Core;
+using Tp.Core.Annotations;
 
 namespace Tp.Utils
 {
 	public static class DateUtils
 	{
+		//2013-05-02 00:00:00 - Canonical Time
+		public const string DateSqlStringFormat = "yyyy-MM-dd HH:mm:ss";
+
 		private static readonly string[] _formats =
 		{
 			// these 2 time formats are used in Bugzilla
@@ -535,6 +539,24 @@ namespace Tp.Utils
 				return null;
 			}
 			return dateTime1 > dateTime2 ? dateTime1 : dateTime2;
+		}
+
+		[NotNull, Pure]
+		public static string ToSqlString(this DateTime date)
+		{
+			return date.ToString(DateSqlStringFormat);
+		}
+
+		[NotNull, Pure]
+		public static string ToSqlString([CanBeNull] this DateTime? date)
+		{
+			return date == null ? "null" : date.Value.ToSqlString();
+		}
+
+		[Pure]
+		public static DateTime FromSqlString([NotNull] string str)
+		{
+			return DateTime.ParseExact(str, DateSqlStringFormat, CultureInfo.InvariantCulture);
 		}
 	}
 }

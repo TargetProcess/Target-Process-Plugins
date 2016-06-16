@@ -32,6 +32,6 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.8.7.25367")]
-[assembly: AssemblyVersion("3.8.7.25367")]
-[assembly: AssemblyFileVersion("3.8.7.25367")]
+// [assembly: AssemblyVersion("3.8.9.26184")]
+[assembly: AssemblyVersion("3.8.9.26184")]
+[assembly: AssemblyFileVersion("3.8.9.26184")]

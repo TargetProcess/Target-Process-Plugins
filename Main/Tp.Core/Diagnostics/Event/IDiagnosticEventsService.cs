@@ -4,6 +4,6 @@ namespace Tp.Core.Diagnostics.Event
 {
 	public interface IDiagnosticEventsService
 	{
-		Action<DiagnosticEvent> CreateEventWriter(string eventWriterName);
+		Action<DiagnosticEvent> CreateEventReceiver(string eventWriterName);
 	}
 }

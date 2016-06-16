@@ -323,7 +323,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <CodeAnalysisRuleSet>../../../../shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(ProjectDir)Scripts\*.*  $(TargetDir)Mashups\ProfileEditor\Scripts\*.* /Y /E /D

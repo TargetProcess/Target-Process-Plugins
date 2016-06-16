@@ -425,7 +425,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>IF EXIST $(ProjectDir)..\..\Libs\chess echo F | xcopy $(ProjectDir)..\..\Libs\chess\*.*  $(TargetDir)Concurrency\chess\*.* /Y /E /D</PreBuildEvent>

@@ -1,13 +1,16 @@
-﻿using System;
+﻿// 
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using StructureMap;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using StructureMap;
-using StructureMap.Configuration.DSL;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Messages;

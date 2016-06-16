@@ -129,5 +129,27 @@ namespace System
 				type = type.BaseType;
 			}
 		}
+
+		/// <summary>
+		/// Checks if type is a subclass of a generic base type
+		/// Example: IsSubclassOfRawGeneric(typeof(Dog), typeof(Animal&lt;&gt;))
+		/// </summary>
+		public static bool IsSubclassOfRawGeneric(Type type, Type generic)
+		{
+			if (!generic.IsGenericTypeDefinition)
+			{
+				throw new ArgumentException(nameof(generic));
+			}
+			while (type != null && type != typeof(object))
+			{
+				var cur = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+				if (generic == cur)
+				{
+					return true;
+				}
+				type = type.BaseType;
+			}
+			return false;
+		}
 	}
 }

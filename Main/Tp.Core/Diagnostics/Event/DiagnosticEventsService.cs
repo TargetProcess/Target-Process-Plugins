@@ -5,7 +5,12 @@ namespace Tp.Core.Diagnostics.Event
 {
 	class DiagnosticEventsService : IDiagnosticEventsService
 	{
-		public Action<DiagnosticEvent> CreateEventWriter(string eventWriterName)
+		private readonly ILog _log;
+		public DiagnosticEventsService(ITpLogManager logManager)
+		{
+			_log = logManager.DefaultLog;
+		}
+		public Action<DiagnosticEvent> CreateEventReceiver(string eventWriterName)
 		{
 			var logger = LogManager.GetLogger(eventWriterName);
 			return e =>
@@ -18,7 +23,7 @@ namespace Tp.Core.Diagnostics.Event
 				}
 				catch (Exception error)
 				{
-					TpLogManager.Instance.DefaultLog.Error($"{eventWriterName} write failed.", error);
+					_log.Error($"{eventWriterName} write failed.", error);
 				}
 			};
 		}

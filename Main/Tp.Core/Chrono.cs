@@ -6,12 +6,22 @@ namespace Tp.Core
 {
 	public class Chrono
 	{
-		public static void TimeIt(Action a, Action<TimeSpan> handleElapsed)
+		public static void TimeIt(Action target, Action<TimeSpan> handleElapsed)
 		{
 			var w = Stopwatch.StartNew();
-			a();
+			target();
 			w.Stop();
 			handleElapsed(w.Elapsed);
+		}
+
+		public static IDisposable TimeIt(Action<TimeSpan> handleElapsed)
+		{
+			var w = Stopwatch.StartNew();
+			return Disposable.Create(() =>
+			{
+				w.Stop();
+				handleElapsed(w.Elapsed);
+			});
 		}
 	}
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -73,6 +74,7 @@ namespace System.Linq.Dynamic
 				}
 			}
 		}
+
 
 		private void AddSymbol(string name, object value)
 		{
@@ -344,6 +346,7 @@ namespace System.Linq.Dynamic
 
 		private static readonly Expression<Func<int?, int?, double?>> nullableIntDiv = (x, y) => (1.0 * x) / y;
 		private static readonly Expression<Func<int, int, double>> intDiv = (x, y) => (1.0 * x) / y;
+		private static readonly string[] AggregationMethodNames = new[] {"Sum","Count","Average","Min","Max","Aggregate"};
 
 		private Expression GenerateDivide(Expression left, Expression right)
 		{
@@ -534,6 +537,7 @@ namespace System.Linq.Dynamic
 				if (value == (object) KEYWORD_IT) return ParseIt();
 				if (value == (object) KEYWORD_IIF) return ParseIif();
 				if (value == (object) KEYWORD_NEW) return ParseNewObject();
+				if (value == (object) KEYWORD_IFNONE) return ParseIfNone();
 				NextToken();
 				return (Expression) value;
 			}
@@ -573,14 +577,52 @@ namespace System.Linq.Dynamic
 			NextToken();
 			Expression[] args = ParseArgumentList();
 			if (args.Length != 3)
+			{
 				throw ParseError(errorPos, Res.IifRequiresThreeArgs);
+			}
 			return GenerateConditional(args[0], args[1], args[2], errorPos);
 		}
+
+		private Expression ParseIfNone()
+		{
+			int errorPos = _token.Position;
+			NextToken();
+			Expression[] args = ParseArgumentList();
+			if (args.Length != 2)
+			{
+				throw ParseError(errorPos, Res.IfNoneRequiresTwoArgs);
+			}
+			return GenerateCoalesce(args[0], args[1], errorPos);
+		}
+
 
 		private Expression GenerateConditional(Expression test, Expression expr1, Expression expr2, int errorPos)
 		{
 			if (test.Type != typeof(bool))
+			{
 				throw ParseError(errorPos, Res.FirstExprMustBeBool);
+			}
+
+			return EqualizeTypesAndCombine(expr1, expr2, errorPos, (e1, e2) => Expression.Condition(test, e1, e2));
+		}
+
+		private Expression GenerateCoalesce(Expression valueExpr, Expression ifNoneExpr, int errorPos)
+		{
+			if (!IsNullableType(valueExpr.Type) && valueExpr.Type != typeof(string))
+			{
+				throw ParseError(errorPos, Res.TypeHasNoNullableFormAndIsNotString(valueExpr.Type.Name, KEYWORD_IFNONE, 1));
+			}
+
+			if (!IsNumericType(ifNoneExpr.Type) && ifNoneExpr.Type != typeof(bool) && ifNoneExpr.Type != typeof(string))
+			{
+				throw ParseError(errorPos, Res.SimpleTypeExpected(ifNoneExpr.Type.Name, KEYWORD_IFNONE, 2));
+			}
+
+			return EqualizeTypesAndCombine(valueExpr, ifNoneExpr, errorPos, Expression.Coalesce);
+		}
+
+		private Expression EqualizeTypesAndCombine(Expression expr1, Expression expr2, int errorPos, Func<Expression, Expression, Expression> combineResults)
+		{
 			if (expr1.Type != expr2.Type)
 			{
 				Expression expr1As2 = expr2 != NullLiteral ? PromoteExpression(expr1, expr2.Type, true) : null;
@@ -602,7 +644,8 @@ namespace System.Linq.Dynamic
 					throw ParseError(errorPos, Res.NeitherTypeConvertsToOther(type1, type2));
 				}
 			}
-			return Expression.Condition(test, expr1, expr2);
+
+			return combineResults(expr1, expr2);
 		}
 
 		private Expression ParseNewJson()
@@ -611,38 +654,11 @@ namespace System.Linq.Dynamic
 			var expressions = new List<Expression>();
 			do
 			{
-				var token = _token;
-				var pos = _textPos;
-				var ch = _ch;
 				NextToken();
-				int exprPos = _token.Position;
 
-				var expression = Try.Create(ParseExpression);
-
-				Expression expr = null;
-				string propName = null;
-				expression.Switch(
-					e =>
-					{
-						expr = e;
-						if (TokenIdentifierIs("as"))
-						{
-							NextToken();
-							propName = GetIdentifier();
-							NextToken();
-						}
-						else if (_token.ID == TokenId.Colon)
-						{
-							ParseNameColonExpression(token, pos, ch, ParseError(exprPos, Res.MissingAsClause), out propName, out expr);
-						}
-						else
-						{
-							var maybePropName = GetPropertyName(expr, exprPos);
-							propName = maybePropName
-								.GetOrThrow(() => ParseError(exprPos, Res.MissingAsClause));
-						}
-					},
-					exception => ParseNameColonExpression(token, pos, ch, exception, out propName, out expr));
+				Expression expr;
+				string propName;
+				ParseObjectPropertyDefinition(out expr, out propName);
 
 				expressions.Add(expr);
 				properties.Add(new DynamicProperty(propName, expr.Type));
@@ -652,14 +668,66 @@ namespace System.Linq.Dynamic
 			return CreateMemberInit(properties, expressions);
 		}
 
+		private void ParseObjectPropertyDefinition(out Expression expr, out string propName)
+		{
+			var exprPos = _token.Position;
+			if (_token.ID == TokenId.Identifier)
+			{
+				propName = GetIdentifier();
+				var token = _token;
+				var pos = _textPos;
+				var ch = _ch;
+				NextToken();
+				if (_token.ID != TokenId.Colon)
+				{
+					_token = token;
+					_textPos = pos;
+					_ch = ch;
+				}
+				else
+				{
+					NextToken();
+					expr = ParseExpression();
+					return;
+				}
+			}
+
+			expr = ParseExpression();
+			if (TokenIdentifierIs("as"))
+			{
+				NextToken();
+				propName = GetIdentifier();
+				NextToken();
+
+				return;
+			}
+
+			var maybePropName = GetPropertyName(expr, exprPos);
+			propName = maybePropName
+				.GetOrThrow(() => ParseError(exprPos, Res.MissingAsClause));
+		}
+
 		private Maybe<string> GetPropertyName(Expression expr, int exprPos)
 		{
 			var maybePropName = expr
 				.MaybeAs<MemberExpression>().Select(x => x.Member.Name)
-				.OrElse(() => GetMethodName(expr))
 				.OrElse(() => DynamicDictionary.GetAlias(expr, exprPos))
-				.OrElse(() => GetConditionName(expr, exprPos));
+				.OrElse(() => GetConditionName(expr, exprPos))
+				.OrElse(() => GetEnumerableRootName(expr, exprPos))
+				.OrElse(() => GetMethodName(expr));
+
 			return maybePropName;
+		}
+
+		// find the root of Enumerable chains and get it name
+		// userstories.Where(x).select(y)=>'userstories'
+		private Maybe<string> GetEnumerableRootName(Expression expr, int exprPos)
+		{
+			return expr.MaybeAs<MethodCallExpression>()
+				.Where(x => x.Method.DeclaringType == typeof(Enumerable))
+				.Where(x => !AggregationMethodNames.Contains(x.Method.Name))
+				.Select(x => x.Arguments.First())
+				.Bind(x => GetPropertyName(x, exprPos));
 		}
 
 		// special case for protected nullable properties
@@ -669,26 +737,6 @@ namespace System.Linq.Dynamic
 			return expr.MaybeAs<ConditionalExpression>()
 				.Bind(conditional => ExtensionsProvider.GetValue<Expression>(conditional)
 					.Bind(x => GetPropertyName(x, exprPos)));
-		}
-
-		private void ParseNameColonExpression(Token token, int pos, char ch, Exception exception, out string propName,
-			out Expression expr)
-		{
-			_token = token;
-			_textPos = pos;
-			_ch = ch;
-			NextToken();
-			propName = GetIdentifier();
-			NextToken();
-			if (_token.ID == TokenId.Colon)
-			{
-				NextToken();
-				expr = ParseExpression();
-			}
-			else
-			{
-				throw exception;
-			}
 		}
 
 		private static Maybe<string> GetMethodName(Expression expr)
@@ -999,7 +1047,7 @@ namespace System.Linq.Dynamic
 		private static MethodInfo GetEnumerableMethod(string methodName, Type[] types)
 		{
 			return (from m in typeof(Enumerable).GetMethods()
-				where m.Name == methodName && m.IsGenericMethod
+				where m.Name.EqualsIgnoreCase(methodName) && m.IsGenericMethod
 				let parameters = m.GetParameters()
 				where parameters.Length == 2 && parameters.All(x => x.ParameterType.IsGenericType)
 					&& parameters[0].ParameterType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
@@ -1534,6 +1582,15 @@ namespace System.Linq.Dynamic
 							return true;
 					}
 					break;
+				case TypeCode.Decimal:
+					switch (tc)
+					{
+						case TypeCode.Decimal:
+						case TypeCode.Single:
+						case TypeCode.Double:
+							return true;
+					}
+					break;
 				default:
 					if (st == tt) return true;
 					break;
@@ -1977,7 +2034,8 @@ namespace System.Linq.Dynamic
 				{ "null", NullLiteral },
 				{ KEYWORD_IT, KEYWORD_IT },
 				{ KEYWORD_IIF, KEYWORD_IIF },
-				{ KEYWORD_NEW, KEYWORD_NEW }
+				{ KEYWORD_NEW, KEYWORD_NEW },
+				{ KEYWORD_IFNONE, KEYWORD_IFNONE }
 			};
 			foreach (Type type in PredefinedTypes) { d.Add(type.Name, type); }
 			return d;

@@ -113,6 +113,7 @@ namespace Tp.Core.Features
 		[ClientFeature("metricsFeatureEffort")] MetricsFeatureEffort,
 		[ClientFeature("metricsEpicEffort")] MetricsEpicEffort,
 		[ClientFeature("metricsRequestEffort")] MetricsRequestEffort,
+		[ClientFeature("metricsProjectEffort")] MetricsProjectEffort,
 
 
 		[ClientFeature("userStoryNewLists")] UserStoryNewLists,
@@ -144,5 +145,10 @@ namespace Tp.Core.Features
 		/// Enables generation of link entities between TestCaseRun and its each parent TestPlanRun
 		/// </summary>
 		TestRunItemHierarchyLink,
+		TrackApplicationContextStatistics,
+		/// <summary>
+		/// Groups team iterations on axis by StartDate if Team is selected as second axis. US#121581.
+		/// </summary>
+		TeamIterationAxisGrouping,
 	}
 }

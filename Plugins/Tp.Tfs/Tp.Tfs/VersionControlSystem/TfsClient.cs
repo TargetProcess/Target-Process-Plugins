@@ -1,18 +1,20 @@
 ﻿//
-// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 //
 
+using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Git.Client;
+using Microsoft.TeamFoundation.VersionControl.Client;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.VersionControl.Client;
 using Tp.Core;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
+using VersionControlException = Tp.SourceControl.VersionControlSystem.VersionControlException;
 
 namespace Tp.Tfs.VersionControlSystem
 {
@@ -136,9 +138,22 @@ namespace Tp.Tfs.VersionControlSystem
 						_teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
 						_teamProjectCollection.EnsureAuthenticated();
 
-						versionControl = _teamProjectCollection.GetService<VersionControlServer>();
-						_teamProjects = new[] { versionControl.GetTeamProject(parameters.TeamProjectName) };
-
+						try
+						{
+							versionControl = _teamProjectCollection.GetService<VersionControlServer>();
+							_teamProjects = new[] { versionControl.GetTeamProject(parameters.TeamProjectName) };
+						}
+						catch (Microsoft.TeamFoundation.VersionControl.Client.VersionControlException)
+						{
+							var gitRepositoryService = _teamProjectCollection.GetService<GitRepositoryService>();
+							var gitRepositories = gitRepositoryService.QueryRepositories(parameters.TeamProjectName);
+							var gitRepository = gitRepositories.Single(gr => gr.Name.Equals(parameters.TeamProjectName));
+							if (gitRepository != null)
+							{
+								throw new VersionControlException($"Git team project is not supported, use Git plugin with '{gitRepository.RemoteUrl}' instead.");
+							}
+							throw;
+						}
 						break;
 					}
 				default:

@@ -2,7 +2,6 @@
 using Tp.Core.Diagnostics.Event;
 using Tp.Core.Diagnostics.Time;
 using Tp.Core.Diagnostics.Time.Source;
-using Tp.Core.Features;
 using Tp.Core.Services;
 
 namespace Tp.Core.Diagnostics

@@ -2,22 +2,32 @@ namespace System.IO
 {
 	public static class StreamExtensions
 	{
+		// This will be used in copying input stream to output stream.
+		public const int ReadStreamBufferSize = 64 * 1024;
+
 		public static void CopyTo(this Stream source, Stream destination)
 		{
-			source.CopyTo(destination, new byte[64 * 1024], () => { });
+			source.CopyTo(destination, 0, source.Length, () => { });
 		}
 
-		public static void CopyTo(this Stream source, Stream destination, byte[] buffer, Action chunkAction)
+		public static void CopyTo(this Stream source, Stream destination, long start, long length, Action chunkAction)
 		{
-			var length = buffer.Length;
-			while (true)
+			var end = start + length;
+			source.Seek(start, SeekOrigin.Begin);
+			var bytesRemaining = end - source.Position;
+			var buffer = new byte[ReadStreamBufferSize];
+
+			while (bytesRemaining > 0)
 			{
-				int read = source.Read(buffer, 0, length);
-				if (read <= 0)
+				var bytesRead = source.Read(buffer, 0, bytesRemaining > ReadStreamBufferSize ? ReadStreamBufferSize : (int) bytesRemaining);
+
+				if (bytesRead == 0)
 					break;
 
-				destination.Write(buffer, 0, read);
+				destination.Write(buffer, 0, bytesRead);
 				chunkAction();
+
+				bytesRemaining = end - source.Position;
 			}
 		}
 

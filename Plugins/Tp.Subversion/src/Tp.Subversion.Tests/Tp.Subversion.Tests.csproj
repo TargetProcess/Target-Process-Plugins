@@ -191,7 +191,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <CodeAnalysisRuleSet>../../../../shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo D | xcopy /E $(ProjectDir)TestRepository $(TargetDir)TestRepository /Y /D

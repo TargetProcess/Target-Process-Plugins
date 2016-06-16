@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -29,12 +30,31 @@ namespace Tp.Core.Diagnostics.Event
 			};
 			foreach (var x in ev.Data)
 			{
-				data.Add(x.Key, x.Value);
+				data.Add(x.Key, Prepare(x.Value));
 			}
 			using (TextWriter writer = new StringWriter())
 			{
 				_serializer.Serialize(writer, data);
 				return writer.ToString();
+			}
+		}
+
+		private object Prepare(object value)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+			switch (Type.GetTypeCode(value.GetType()))
+			{
+				case TypeCode.Single:
+					return Math.Round((float) value, 3);
+				case TypeCode.Double:
+					return Math.Round((double)value, 3);
+				case TypeCode.Decimal:
+					return Math.Round((decimal)value, 3);
+				default:
+					return value;
 			}
 		}
 	}

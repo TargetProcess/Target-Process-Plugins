@@ -11,9 +11,6 @@ namespace System.Linq
 {
 	public static class EnumerableExtensions
 	{
-		//2013-05-02 00:00:00 - Canonical Time
-		public const string DateSqlStringFormat = "yyyy-MM-dd HH:mm:ss";
-
 		[NotNull, Pure]
 		public static string ToString<T>(
 			[CanBeNull] this IEnumerable<T> source,
@@ -76,18 +73,6 @@ namespace System.Linq
 				return x.Equals(true) ? "1" : "0";
 			}
 			return x.ToString();
-		}
-
-		[NotNull, Pure]
-		public static string ToSqlString(this DateTime date)
-		{
-			return date.ToString(DateSqlStringFormat);
-		}
-
-		[NotNull, Pure]
-		public static string ToSqlString([CanBeNull] this DateTime? date)
-		{
-			return date == null ? "null" : date.Value.ToSqlString();
 		}
 
 		[NotNull, Pure]

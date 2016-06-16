@@ -51,12 +51,18 @@ namespace System.Linq.Dynamic
 		private const string KEYWORD_IT = "it";
 		private const string KEYWORD_IIF = "iif";
 		private const string KEYWORD_NEW = "new";
+		private const string KEYWORD_IFNONE = "ifnone";
 
 		private struct Token
 		{
 			public TokenId ID;
 			public int Position;
 			public string Text;
+
+			public override string ToString()
+			{
+				return $"ID: {ID}, Position: {Position}, Text: {Text}";
+			}
 		}
 
 		protected enum TokenId

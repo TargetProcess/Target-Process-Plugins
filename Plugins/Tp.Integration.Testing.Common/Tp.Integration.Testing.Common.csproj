@@ -113,7 +113,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <CodeAnalysisRuleSet>../../shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy /Y /D $(TargetPath) ..\..\..\..\Libs\TargetProcess\$(TargetFileName)</PostBuildEvent>

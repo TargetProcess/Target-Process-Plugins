@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using StructureMap;
@@ -9,22 +8,8 @@ using Tp.Core.Annotations;
 
 namespace Tp.Core.Diagnostics.Time
 {
-	public class ProfilerProvider
-	{
-		private ProfilerProvider()
-		{
-		}
-
-		public static readonly ProfilerProvider Instance = new ProfilerProvider();
-
-		public Profiler GetProfiler()
-		{
-			return ObjectFactory.GetInstance<Profiler>();
-		}
-	}
-
 	/// <summary>
-	/// TpProfiler instance should be used per thread
+	/// Profiler instance should be used per thread
 	/// The only cross thread interaction occurs during merging children threads profilers into parent through usage of AddData method
 	/// P.S. TpProfiler usage covers only structural parallelism !
 	/// </summary>
@@ -42,17 +27,16 @@ namespace Tp.Core.Diagnostics.Time
 			return _data.ToArray();
 		}
 
+		public void AddData(TimeInterval data)
+		{
+			_data.Push(data);
+		}
+
 		public void AddData(IEnumerable<TimeInterval> data)
 		{
 			_data.PushRange(data.ToArray());
 		}
-
-		public IDisposable Start(ProfilerTarget target)
-		{
-			var stopWatch = Stopwatch.StartNew();
-			return Disposable.Create(() => _data.Push(new TimeInterval(target, stopWatch.Elapsed, Thread.CurrentThread.ManagedThreadId)));
-		}
-
+		
 		public void Clear()
 		{
 			_data.Clear();
@@ -64,15 +48,29 @@ namespace Tp.Core.Diagnostics.Time
 			Clear();
 		}
 
-		public static T Run<T>(ProfilerTarget target, Func<T> f)
+		public static Profiler GetProfiler()
 		{
-			using (ProfilerProvider.Instance.GetProfiler().Start(target))
-				return f();
+			return ObjectFactory.GetInstance<Profiler>();
+		}
+	}
+
+	public static class ProfilerExtensions
+	{
+		public static IDisposable Track(this Profiler profiler, ProfilerTarget target)
+		{
+			return Chrono.TimeIt(elapsed => profiler.AddData(new TimeInterval(target, elapsed, Thread.CurrentThread.ManagedThreadId)));
 		}
 
-		public static void Run(ProfilerTarget target, Action a)
+		public static T Track<T>(this Profiler profiler, ProfilerTarget target, Func<T> f)
 		{
-			Run<object>(target, () =>
+			T result = default(T);
+			Chrono.TimeIt(() => result = f(), elapsed => profiler.AddData(new TimeInterval(target, elapsed, Thread.CurrentThread.ManagedThreadId)));
+			return result;
+		}
+
+		public static void Track(this Profiler profiler, ProfilerTarget target, Action a)
+		{
+			Track<object>(profiler, target, () =>
 			{
 				a();
 				return null;

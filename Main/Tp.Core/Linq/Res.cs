@@ -9,6 +9,7 @@ namespace System.Linq.Dynamic
 		public static IFormattedMessage InvalidCharacterLiteral => "Character literal must contain exactly one character.".Localize();
 		public static IFormattedMessage NoItInScope => "No 'it' is in scope.".Localize();
 		public static IFormattedMessage IifRequiresThreeArgs => "The 'iif' function requires three arguments.".Localize();
+		public static IFormattedMessage IfNoneRequiresTwoArgs => "The 'ifnone' function requires two arguments.".Localize();
 		public static IFormattedMessage FirstExprMustBeBool => "The first expression must be of type 'Boolean'.".Localize();
 		public static IFormattedMessage MissingAsClause => "Expression is missing an 'as' clause.".Localize();
 		public static IFormattedMessage ArgsIncompatibleWithLambda => "Argument list incompatible with lambda expression.".Localize();
@@ -71,6 +72,11 @@ namespace System.Linq.Dynamic
 			return "Type '{type}' has no nullable form.".Localize(new { type });
 		}
 
+		public static IFormattedMessage TypeHasNoNullableFormAndIsNotString(string type, string @operator, int argumentNumber)
+		{
+			return "{operator} operator works only with nullable numbers, bools and strings for #{argumentNumber} argument. Actual type:'{type}'.".Localize(new { type, @operator, argumentNumber });
+		}
+
 		public static IFormattedMessage NoMatchingConstructor(string type)
 		{
 			return "No matching constructor in type '{type}'.".Localize(new { type });
@@ -129,6 +135,11 @@ namespace System.Linq.Dynamic
 		public static IFormattedMessage InvalidCharacter(char character)
 		{
 			return "Syntax error '{character}'.".Localize(new { character });
+		}
+
+		public static IFormattedMessage SimpleTypeExpected(string type, string @operator, int argumentNumber)
+		{
+			return "String, number or bool expected for {operator} operator in #{argumentNumber} argument instead of '{type}'.".Localize(new { type, @operator, argumentNumber });
 		}
 	}
 }

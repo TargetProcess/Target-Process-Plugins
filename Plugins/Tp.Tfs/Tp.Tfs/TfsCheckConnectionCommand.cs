@@ -1,17 +1,18 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Globalization;
 using Microsoft.TeamFoundation;
 using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Git.Client;
 using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using System.Globalization;
+using System.Linq;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
-using System.Linq;
 
 namespace Tp.Tfs
 {
@@ -61,9 +62,29 @@ namespace Tp.Tfs
 								collection.Connect(ConnectOptions.None);
 
 								var vcs = collection.GetService<VersionControlServer>();
-								TeamProject teamProject = vcs.GetTeamProject(parameters.TeamProjectName);
 
-								CheckChangeset(settings, vcs, teamProject);
+								try
+								{
+									TeamProject teamProject = vcs.GetTeamProject(parameters.TeamProjectName);
+
+									CheckChangeset(settings, vcs, teamProject);
+								}
+								catch (Microsoft.TeamFoundation.VersionControl.Client.VersionControlException)
+								{
+									var gitRepositoryService = collection.GetService<GitRepositoryService>();
+									var gitRepositories = gitRepositoryService.QueryRepositories(parameters.TeamProjectName);
+									var gitRepository = gitRepositories.Single(gr => gr.Name.Equals(parameters.TeamProjectName));
+									if (gitRepository != null)
+									{
+										errors.Add(new PluginProfileError { FieldName = "Uri", Message =
+											$"Git team project is not supported, use Git plugin with '{gitRepository.RemoteUrl}' instead."
+										});
+									}
+									else
+									{
+										throw;
+									}
+								}
 
 								break;
 							}
@@ -122,8 +143,7 @@ namespace Tp.Tfs
 				}
 				finally
 				{
-					if (collection != null)
-						collection.Dispose();
+					collection?.Dispose();
 				}
 			}
 		}

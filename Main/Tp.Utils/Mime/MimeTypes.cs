@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Xml;
 
@@ -16,7 +17,7 @@ namespace Tp.Utils.Mime
 		#region Class Members
 
 		/// <summary>The default <code>application/octet-stream</code> MimeType </summary>
-		public const String DEFAULT = "application/octet-stream";
+		public const string DEFAULT = MediaTypeNames.Application.Octet;
 
 		/// <summary>All the registered MimeTypes </summary>
 		private readonly ArrayList _types = new ArrayList();
@@ -44,7 +45,7 @@ namespace Tp.Utils.Mime
 		#endregion
 
 		/// <summary>Should never be instanciated from outside </summary>
-		public MimeTypes(String strFilepath)
+		public MimeTypes(string strFilepath)
 		{
 			var reader = new MimeTypesReader();
 			Add(reader.Read(strFilepath));
@@ -74,17 +75,14 @@ namespace Tp.Utils.Mime
 		/// </summary>
 		/// <returns> the minimum length of data to provide.
 		/// </returns>
-		public int MinLength
-		{
-			get { return _minLength; }
-		}
+		public int MinLength => _minLength;
 
 		/// <summary> Return a MimeTypes instance.</summary>
 		/// <param name="filepath">is the mime-types definitions xml file.
 		/// </param>
 		/// <returns> A MimeTypes instance for the specified filepath xml file.
 		/// </returns>
-		public static MimeTypes Get(String filepath)
+		public static MimeTypes Get(string filepath)
 		{
 			MimeTypes instance;
 			lock (Instances.SyncRoot)
@@ -117,7 +115,7 @@ namespace Tp.Utils.Mime
 		/// <returns> the Mime Content Type of the specified document name, or
 		/// <code>null</code> if none is found.
 		/// </returns>
-		public MimeType GetMimeType(String name)
+		public MimeType GetMimeType(string name)
 		{
 			MimeType[] founds = GetMimeTypes(name);
 			if ((founds == null) || (founds.Length < 1))
@@ -166,11 +164,7 @@ namespace Tp.Utils.Mime
 		public MimeType GetMimeTypeByExtension(string name)
 		{
 			MimeType[] mimeTypes = name != null ? GetMimeTypes(name) : null;
-			MimeType mimeType;
-			if (mimeTypes != null)
-				mimeType = mimeTypes[0];
-			else
-				mimeType = null;
+			var mimeType = mimeTypes?[0];
 			return mimeType;
 		}
 
@@ -231,7 +225,7 @@ namespace Tp.Utils.Mime
 		/// <summary> Returns an array of matching MimeTypes from the specified name
 		/// (many MimeTypes can have the same registered extensions).
 		/// </summary>
-		private MimeType[] GetMimeTypes(String name)
+		private MimeType[] GetMimeTypes(string name)
 		{
 			IList mimeTypes = null;
 			int index = name.LastIndexOf('.');

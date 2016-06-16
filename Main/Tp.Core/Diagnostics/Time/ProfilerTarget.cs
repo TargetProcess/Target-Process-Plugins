@@ -23,6 +23,12 @@ namespace Tp.Core.Diagnostics.Time
 		[HttpHeader("X-Static-LoadResourceFromDbReader")] [Description("Time spent on loading static resource from data reader")] StaticTypedLoadResourceFromDbReader,
 		[HttpHeader("X-DslFilterAutoApply")] [Description("Time spent on dsl filter applying")] DslFilterAutoApply,
 		[HttpHeader("X-DslFilterBuild")] [Description("Time spent on dsl filter building")] DslFilterBuild,
-		[HttpHeader("X-DslFilterBuildSuggestions")] [Description("Time spent on dsl suggestions filter building")] DslFilterBuildSuggestions
+		[HttpHeader("X-DslFilterBuildSuggestions")] [Description("Time spent on dsl suggestions filter building")] DslFilterBuildSuggestions,
+		BuildApplicationContext,
+		BuildProjectContext,
+		BuildProcessContext,
+		BuildTeamContext,
+		BuildApplicationContextDtoExtension,
+		BuildApplicationContextLite
 	}
 }
