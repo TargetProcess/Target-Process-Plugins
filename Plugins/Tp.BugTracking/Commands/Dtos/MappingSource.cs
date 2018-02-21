@@ -7,19 +7,19 @@ using System.Runtime.Serialization;
 
 namespace Tp.BugTracking.Commands.Dtos
 {
-	[DataContract]
-	public class MappingSource
-	{
-		[DataMember]
-		public MappingSourceEntry States { get; set; }
+    [DataContract]
+    public class MappingSource
+    {
+        [DataMember]
+        public MappingSourceEntry States { get; set; }
 
-		[DataMember]
-		public MappingSourceEntry Priorities { get; set; }
+        [DataMember]
+        public MappingSourceEntry Priorities { get; set; }
 
-		[DataMember]
-		public MappingSourceEntry Severities { get; set; }
+        [DataMember]
+        public MappingSourceEntry Severities { get; set; }
 
-		[DataMember]
-		public MappingSourceEntry Roles { get; set; }
-	}
+        [DataMember]
+        public MappingSourceEntry Roles { get; set; }
+    }
 }

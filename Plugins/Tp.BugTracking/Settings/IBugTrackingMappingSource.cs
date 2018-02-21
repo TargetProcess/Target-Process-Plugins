@@ -7,16 +7,16 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.BugTracking.Settings
 {
-	public interface IBugTrackingMappingSource
-	{
-		MappingContainer StatesMapping { get; }
+    public interface IBugTrackingMappingSource
+    {
+        MappingContainer StatesMapping { get; }
 
-		MappingContainer SeveritiesMapping { get; }
+        MappingContainer SeveritiesMapping { get; }
 
-		MappingContainer PrioritiesMapping { get; }
+        MappingContainer PrioritiesMapping { get; }
 
-		MappingContainer UserMapping { get; }
+        MappingContainer UserMapping { get; }
 
-		MappingContainer RolesMapping { get; }
-	}
+        MappingContainer RolesMapping { get; }
+    }
 }

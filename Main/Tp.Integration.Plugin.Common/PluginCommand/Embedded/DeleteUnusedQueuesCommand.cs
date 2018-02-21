@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Linq;
@@ -14,39 +14,40 @@ using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Logging;
 using log4net;
 using Tp.Integration.Common;
+using Tp.Integration.Messages;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	internal class DeleteUnusedQueuesCommand : IPluginCommand
-	{
-		private readonly IAccountCollection _accountCollection;
-		private readonly IMsmqTransport _msmqTransport;
-		public static string Deleteunusedqueues = "DeleteUnusedQueues";
+    internal class DeleteUnusedQueuesCommand : IPluginCommand
+    {
+        private readonly IAccountCollection _accountCollection;
+        private readonly IMsmqTransport _msmqTransport;
+        public static string Deleteunusedqueues = "DeleteUnusedQueues";
 
-		public DeleteUnusedQueuesCommand(IAccountCollection accountCollection, IMsmqTransport msmqTransport)
-		{
-			_accountCollection = accountCollection;
-			_msmqTransport = msmqTransport;
-		}
+        public DeleteUnusedQueuesCommand(IAccountCollection accountCollection, IMsmqTransport msmqTransport)
+        {
+            _accountCollection = accountCollection;
+            _msmqTransport = msmqTransport;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			foreach (var account in _accountCollection)
-			{
-				if (!account.Profiles.Any())
-				{
-					_msmqTransport.TryDeleteQueue(account.Name.Value);
-				}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            foreach (var account in _accountCollection)
+            {
+                if (!account.Profiles.Any())
+                {
+                    _msmqTransport.TryDeleteQueue(account.Name.Value);
+                }
 
-				_msmqTransport.TryDeleteUiQueue(account.Name.Value);
-			}
+                _msmqTransport.TryDeleteUiQueue(account.Name.Value);
+            }
 
-			return new PluginCommandResponseMessage { ResponseData = string.Empty, PluginCommandStatus = PluginCommandStatus.Succeed };
-		}
+            return new PluginCommandResponseMessage { ResponseData = string.Empty.Serialize(), PluginCommandStatus = PluginCommandStatus.Succeed };
+        }
 
-		public string Name
-		{
-			get { return Deleteunusedqueues; }
-		}
-	}
+        public string Name
+        {
+            get { return Deleteunusedqueues; }
+        }
+    }
 }

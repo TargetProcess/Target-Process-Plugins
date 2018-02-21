@@ -8,12 +8,12 @@ using Tp.SourceControl;
 
 namespace Tp.Subversion.Subversion
 {
-	public class CurrentProfileToSvnConnectionSettingsAdapter :
-		CurrentProfileToConnectionSettingsAdapter<SubversionPluginProfile>
-	{
-		public CurrentProfileToSvnConnectionSettingsAdapter(IStorageRepository repository)
-			: base(repository)
-		{
-		}
-	}
+    public class CurrentProfileToSvnConnectionSettingsAdapter :
+        CurrentProfileToConnectionSettingsAdapter<SubversionPluginProfile>
+    {
+        public CurrentProfileToSvnConnectionSettingsAdapter(IStorageRepository repository)
+            : base(repository)
+        {
+        }
+    }
 }

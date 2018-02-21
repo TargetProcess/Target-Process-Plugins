@@ -13,40 +13,40 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class PriorityConverter : GuessConverterBase<BugzillaBug, PriorityDTO>
-	{
-		public PriorityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
-		{
-		}
+    public class PriorityConverter : GuessConverterBase<BugzillaBug, PriorityDTO>
+    {
+        public PriorityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
+        {
+        }
 
-		protected override void SetValue(ConvertedBug dto, int id)
-		{
-			dto.BugDto.PriorityID = id;
-		}
+        protected override void SetValue(ConvertedBug dto, int id)
+        {
+            dto.BugDto.PriorityID = id;
+        }
 
-		protected override PriorityDTO GetFromStorage(string value)
-		{
-			return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
-		}
+        protected override PriorityDTO GetFromStorage(string value)
+        {
+            return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+        }
 
-		protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
-		{
-			return thirdPartyBug.priority;
-		}
+        protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
+        {
+            return thirdPartyBug.priority;
+        }
 
-		protected override MappingContainer Map
-		{
-			get { return StorageRepository.GetProfile<BugzillaProfile>().PrioritiesMapping; }
-		}
+        protected override MappingContainer Map
+        {
+            get { return StorageRepository.GetProfile<BugzillaProfile>().PrioritiesMapping; }
+        }
 
-		protected override BugField BugField
-		{
-			get { return BugField.PriorityID; }
-		}
+        protected override BugField BugField
+        {
+            get { return BugField.PriorityID; }
+        }
 
-		protected override string BugFieldName
-		{
-			get { return "Priority"; }
-		}
-	}
+        protected override string BugFieldName
+        {
+            get { return "Priority"; }
+        }
+    }
 }

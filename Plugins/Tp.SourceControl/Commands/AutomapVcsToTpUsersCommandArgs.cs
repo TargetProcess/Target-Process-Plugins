@@ -9,19 +9,19 @@ using Tp.SourceControl.Settings;
 
 namespace Tp.SourceControl.Commands
 {
-	[DataContract]
-	public class AutomapVcsToTpUsersCommandArgs
-	{
-		public AutomapVcsToTpUsersCommandArgs()
-		{
-			TpUsers = new List<TpUserMappingInfo>();
-			Connection = new ConnectionSettings();
-		}
+    [DataContract]
+    public class AutomapVcsToTpUsersCommandArgs
+    {
+        public AutomapVcsToTpUsersCommandArgs()
+        {
+            TpUsers = new List<TpUserMappingInfo>();
+            Connection = new ConnectionSettings();
+        }
 
-		[DataMember]
-		public List<TpUserMappingInfo> TpUsers { get; set; }
+        [DataMember]
+        public List<TpUserMappingInfo> TpUsers { get; set; }
 
-		[DataMember]
-		public ConnectionSettings Connection { get; set; }
-	}
+        [DataMember]
+        public ConnectionSettings Connection { get; set; }
+    }
 }

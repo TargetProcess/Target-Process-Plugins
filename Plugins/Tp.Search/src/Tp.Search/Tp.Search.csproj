@@ -51,6 +51,9 @@
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="log4net.Ext.Json, Version=1.2.13.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\log4net.Ext.Json.1.2.10.1.2.10.20140804\lib\net20-full\log4net.Ext.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
       <Private>True</Private>
@@ -68,12 +71,16 @@
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+      <HintPath>..\..\..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -85,12 +92,14 @@
     </Reference>
     <Reference Include="Tp.Service.Proxies, Version=2.15.0.15001, Culture=neutral, PublicKeyToken=ee2a1130677e5334, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\Libs\Tp.Service.Proxies.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bus\AccountRemovedMessageHandler.cs" />
     <Compile Include="Bus\AutomaticOnDemandProfileCreator.cs" />
     <Compile Include="Bus\Commands\BuildSearchIndexesCommand.cs" />
+    <Compile Include="Bus\Commands\SearchCommand.cs" />
     <Compile Include="Bus\Data\IndexProgressData.cs" />
     <Compile Include="Bus\Data\PageData.cs" />
     <Compile Include="Bus\Data\TeamProjectRelation.cs" />
@@ -178,7 +187,6 @@
     <Compile Include="Model\Query\QueryPlanBuilder.cs" />
     <Compile Include="Bus\Data\QueryResultData.cs" />
     <Compile Include="Model\Document\DocumentIndexSetup.cs" />
-    <Compile Include="Model\Document\EnumDescriptions.cs" />
     <Compile Include="Model\Entity\IEntityTypeProvider.cs" />
     <Compile Include="Model\Document\DocumentIndexTyped.cs" />
     <Compile Include="Model\Document\DocumentIndexTypeToken.cs" />
@@ -187,11 +195,7 @@
     <Compile Include="Model\Document\IDocumentIndexProvider.cs" />
     <Compile Include="Model\Document\IDocumentIndex.cs" />
     <Compile Include="Model\Query\QueryParser.cs" />
-    <Compile Include="Bus\MashupForTp2.cs" />
     <Compile Include="Bus\Data\QueryData.cs" />
-    <Compile Include="Bus\Commands\SearchCommand.cs" />
-    <Compile Include="Bus\SendEnableForTp2Mashup.cs" />
-    <Compile Include="Bus\Commands\SetEnableForTp2.cs" />
     <Compile Include="Model\Document\DocumentIdFactory.cs" />
     <Compile Include="Model\Entity\EntityDocument.cs" />
     <Compile Include="Model\Entity\EntityIndexer.cs" />
@@ -202,11 +206,6 @@
     <Compile Include="Messages\IndexExistingEntitiesDoneLocalMessage.cs" />
     <Compile Include="Messages\IndexExistingEntitiesLocalMessage.cs" />
     <Compile Include="Messages\ProjectProcessChangedLocalMessage.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Bus\RunAtStartStopInitializer.cs" />
     <Compile Include="Bus\SearcherOnTargetProcessStartSender.cs" />
     <Compile Include="Bus\SearcherPluginUpdatedProfileInitializationSaga.cs" />
@@ -223,16 +222,19 @@
     <Compile Include="Bus\Workflow\ProjectProcessChangedSaga.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="Install.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Mashups\PluginUiLayout\placeholders.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Mashups\SearchApplication\SearchApplication.cfg">
+    <None Include="Mashups\SearchApplication\.scope.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Mashups\SearchTP2\SearchTP2.cfg">
+    <None Include="Mashups\SearchApplication\SearchApplication.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Mashups\SearchTP3\SearchTP3.cfg">
@@ -242,24 +244,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="Mashups\TPSearch\placeholders.cfg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Tp.Integration.Plugin.Common.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
     <None Include="Uninstall.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mashups\TPSearch\jquery\" />
-    <Folder Include="Mashups\TPSearch\templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Mashups\PluginUiLayout\PluginLayout.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -273,80 +265,79 @@
     <Content Include="Mashups\ProfileEditor\registerMashup.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Mashups\SearchApplication\components\component.page.search.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\components\component.search.filter.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\components\component.search.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\configurations\config.search.container.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\extensions\extension.search.filter.hider.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\extensions\extension.search.filter.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\models\model.search.filter.resolver.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\models\model.search.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Mashups\SearchApplication\SearchApplication.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mashups\SearchTP2\SearchTP2.js">
+    <Content Include="Mashups\SearchApplication\services\service.search.command.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.command.multiIds.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.command.multiIdsParts.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.command.text.contextBuilder.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.command.text.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.commandFactory.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\services\service.search.resultHandler.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\templates\template.search.filter.entity.states.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\templates\template.search.filter.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\templates\template.search.fn.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\templates\template.search.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchApplication\views\view.page.search.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\SearchTP3\searchfield.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mashups\SearchTP3\SearchTP3.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_flat_0_aaaaaa_40x100.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_flat_75_ffffff_40x100.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_glass_55_fbf9ee_1x400.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_glass_65_ffffff_1x400.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_glass_75_dadada_1x400.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_glass_75_e6e6e6_1x400.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_glass_95_fef1ec_1x400.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-bg_highlight-soft_75_cccccc_1x100.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-icons_222222_256x240.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-icons_2e83ff_256x240.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-icons_454545_256x240.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-icons_888888_256x240.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\images\ui-icons_cd0a0a_256x240.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\jquery.highlight-3.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\SearchResultsItem.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\SearchResultsItemTmpl.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\SearchResultsTmpl.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mashups\TPSearch\tpSearch.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\EnableInTp2.js" />
     <Content Include="search-icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Mashups\TPSearch\commands.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="Mashups\TPSearch\SearchResults.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -383,17 +374,13 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
   </PropertyGroup>
   <Import Project="..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>echo F | move  /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

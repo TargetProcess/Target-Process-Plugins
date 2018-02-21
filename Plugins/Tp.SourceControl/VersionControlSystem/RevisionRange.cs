@@ -8,27 +8,29 @@ using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.VersionControlSystem
 {
-	[Serializable]
-	[DataContract]
-	public class RevisionRange
-	{
-		public RevisionRange() {}
+    [Serializable]
+    [DataContract]
+    public class RevisionRange
+    {
+        public RevisionRange()
+        {
+        }
 
-		public RevisionRange(RevisionId fromChangeset, RevisionId toChangeset)
-		{
-			FromChangeset = fromChangeset;
-			ToChangeset = toChangeset;
-		}
+        public RevisionRange(RevisionId fromChangeset, RevisionId toChangeset)
+        {
+            FromChangeset = fromChangeset;
+            ToChangeset = toChangeset;
+        }
 
-		[DataMember]
-		public RevisionId FromChangeset { get; private set; }
+        [DataMember]
+        public RevisionId FromChangeset { get; private set; }
 
-		[DataMember]
-		public RevisionId ToChangeset { get; private set; }
+        [DataMember]
+        public RevisionId ToChangeset { get; private set; }
 
-		public override string ToString()
-		{
-			return string.Format("{0} - {1}", FromChangeset, ToChangeset);
-		}
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", FromChangeset, ToChangeset);
+        }
+    }
 }

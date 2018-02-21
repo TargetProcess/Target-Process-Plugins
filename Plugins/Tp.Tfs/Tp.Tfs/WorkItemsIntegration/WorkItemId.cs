@@ -8,36 +8,36 @@ using System.Runtime.Serialization;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	[Serializable]
-	[DataContract]
-	public class WorkItemId
-	{
-		[DataMember]
-		public string Id { get; set; }
+    [Serializable]
+    [DataContract]
+    public class WorkItemId
+    {
+        [DataMember]
+        public string Id { get; set; }
 
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as WorkItemId);
-		}
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as WorkItemId);
+        }
 
-		public bool Equals(WorkItemId other)
-		{
-			if (ReferenceEquals(null, other))
-			{
-				return false;
-			}
+        public bool Equals(WorkItemId other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
 
-			if (ReferenceEquals(this, other))
-			{
-				return true;
-			}
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
 
-			return other.Id == Id;
-		}
+            return other.Id == Id;
+        }
 
-		public override int GetHashCode()
-		{
-			return Int32.Parse(Id);
-		}
-	}
+        public override int GetHashCode()
+        {
+            return Int32.Parse(Id);
+        }
+    }
 }

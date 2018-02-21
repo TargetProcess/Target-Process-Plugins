@@ -9,42 +9,42 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.Gateways
 {
-	internal class ProfileGateway : IProfileGateway
-	{
-		private readonly IProfileReadonly _profile;
-		private AccountName _accountName;
-		private ITpBus _bus;
-		private IStorage<ITargetProcessMessage> _storage;
-		private bool _disposed;
+    internal class ProfileGateway : IProfileGateway
+    {
+        private readonly IProfileReadonly _profile;
+        private AccountName _accountName;
+        private ITpBus _bus;
+        private IStorage<ITargetProcessMessage> _storage;
+        private bool _disposed;
 
-		public ProfileGateway(IProfileReadonly profile, AccountName accountName, ITpBus bus)
-		{
-			_profile = profile;
-			_accountName = accountName;
-			_bus = bus;
-			_storage = _profile.Get<ITargetProcessMessage>();
-		}
+        public ProfileGateway(IProfileReadonly profile, AccountName accountName, ITpBus bus)
+        {
+            _profile = profile;
+            _accountName = accountName;
+            _bus = bus;
+            _storage = _profile.Get<ITargetProcessMessage>();
+        }
 
-		public void Send(ITargetProcessMessage message)
-		{
-			if (!_profile.Initialized)
-			{
-				_storage.Add(message);
-			}
-			else
-			{
-				_bus.SendLocalWithContext(_profile.Name, _accountName, message);
-			}
-		}
+        public void Send(ITargetProcessMessage message)
+        {
+            if (!_profile.Initialized)
+            {
+                _storage.Add(message);
+            }
+            else
+            {
+                _bus.SendLocalWithContext(_profile.Name, _accountName, message);
+            }
+        }
 
-		public void Dispose()
-		{
-			if (_disposed) return;
-			_disposed = true;
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
 
-			_accountName = null;
-			_bus = null;
-			_storage = null;
-		}
-	}
+            _accountName = null;
+            _bus = null;
+            _storage = null;
+        }
+    }
 }

@@ -3,8 +3,8 @@ using Tp.Integration.Messages.EntityLifecycle;
 
 namespace Tp.Integration.Messages.PluginLifecycle
 {
-	[Serializable]
-	public class ProfileAddedMessage : ITargetProcessMessage
-	{
-	}
+    [Serializable]
+    public class ProfileAddedMessage : ITargetProcessMessage
+    {
+    }
 }

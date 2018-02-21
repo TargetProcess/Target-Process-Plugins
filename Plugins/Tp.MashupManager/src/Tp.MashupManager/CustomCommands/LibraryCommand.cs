@@ -13,26 +13,24 @@ using Tp.MashupManager.MashupLibrary;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public abstract class LibraryCommand<T> : IPluginCommand
-		where T : LibraryCommandArg
-	{
-		private ILibrary _library;
-		protected ILibrary Library
-		{
-			get
-			{
-				return _library ?? (_library = ObjectFactory.GetInstance<ILibrary>());
-			}
-		}
+    public abstract class LibraryCommand<T> : IPluginCommand
+        where T : LibraryCommandArg
+    {
+        private ILibrary _library;
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var commandArg = string.IsNullOrEmpty(args) ? default(T) : args.Deserialize<T>();
-			return ExecuteOperation(commandArg);
-		}
+        protected ILibrary Library
+        {
+            get { return _library ?? (_library = ObjectFactory.GetInstance<ILibrary>()); }
+        }
 
-		protected abstract PluginCommandResponseMessage ExecuteOperation(T commandArg);
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var commandArg = string.IsNullOrEmpty(args) ? default(T) : args.Deserialize<T>();
+            return ExecuteOperation(commandArg);
+        }
 
-		public abstract string Name { get; }
-	}
+        protected abstract PluginCommandResponseMessage ExecuteOperation(T commandArg);
+
+        public abstract string Name { get; }
+    }
 }

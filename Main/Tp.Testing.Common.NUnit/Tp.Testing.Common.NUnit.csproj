@@ -24,7 +24,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>default</LangVersion>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -38,7 +37,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
@@ -50,6 +49,10 @@
     <Reference Include="NBehave.Spec.NUnit">
       <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net35\NBehave.Spec.NUnit.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -59,23 +62,26 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Addins\CleanupAddin.cs" />
-    <Compile Include="Addins\CleanupOnErrorAttribute.cs" />
-    <Compile Include="Addins\RetryTestAddin\RetryTestAttribute.cs" />
-    <Compile Include="Addins\RetryTestAddin\RetryTestAddin.cs" />
-    <Compile Include="Addins\RetryTestAddin\RetryTestDecorator.cs" />
     <Compile Include="AssertExtensions.cs" />
+    <Compile Include="AssertGroup.cs" />
     <Compile Include="Be.cs" />
     <Compile Include="BugAttribute.cs" />
     <Compile Include="ConstraintExpressionExtensions.cs" />
     <Compile Include="HasValueConstraint.cs" />
     <Compile Include="Have.cs" />
+    <Compile Include="JsonEqualConstraint.cs" />
+    <Compile Include="Jenkins\JenkinsProvider.cs" />
+    <Compile Include="SelfTestsBase.cs" />
+    <Compile Include="StrictSelfTestsBase.cs" />
     <Compile Include="ValueConstraint.cs" />
     <Compile Include="NothingConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

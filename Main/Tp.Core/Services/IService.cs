@@ -1,8 +1,8 @@
 namespace Tp.Core.Services
 {
-	public interface IService
-	{
-		void Start();
-		void Stop();
-	}
+    public interface IService
+    {
+        void Start();
+        void Stop();
+    }
 }

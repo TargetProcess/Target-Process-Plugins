@@ -7,11 +7,11 @@ using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.LegacyProfileConvertsion.Common
 {
-	public interface IConvertorArgs : IDatabaseConfiguration
-	{
-		string AccountName { get; }
-		string TpConnectionString { get; }
-		string PluginConnectionString { get; }
-		string Action { get; }
-	}
+    public interface IConvertorArgs : IDatabaseConfiguration
+    {
+        string AccountName { get; }
+        string TpConnectionString { get; }
+        string PluginConnectionString { get; }
+        string Action { get; }
+    }
 }

@@ -29,10 +29,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec Revision
         {
-            get
-            {
-                return _Revision;
-            }
+            get { return _Revision; }
         }
 
         /// <summary>
@@ -40,10 +37,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
         }
 
         /// <summary>
@@ -52,10 +46,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public bool IsLocal
         {
-            get
-            {
-                return _IsLocal;
-            }
+            get { return _IsLocal; }
         }
     }
 }

@@ -1,0 +1,919 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.TeamFoundation.TestManagement.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageSummary">
+            <summary>
+            Represents the code coverage summary results
+            Used to publish or retrieve code coverage summary against a build
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageSummary.CoverageData">
+            <summary>
+            List of coverage data and details for the build
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageSummary.Build">
+            <summary>
+            Uri of build for which data is retrieved/published
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageSummary.DeltaBuild">
+            <summary>
+            Uri of build against which difference in coverage is computed
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData">
+            <summary>
+            Represents the build configuration (platform, flavor) and coverage data for the build
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData.CoverageStats">
+            <summary>
+            List of coverage data for the build
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData.BuildPlatform">
+            <summary>
+            Platform of build for which data is retrieved/published
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData.BuildFlavor">
+            <summary>
+            Flavor of build for which data is retrieved/published
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics">
+            <summary>
+            Represents the code coverage statistics for a particular coverage label (modules, statements, blocks, etc.)
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics.Label">
+            <summary>
+            Label of coverage data ("Blocks", "Statements", "Modules", etc.)
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics.Position">
+            <summary>
+            Position of label
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics.Total">
+            <summary>
+            Total units
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics.Covered">
+            <summary>
+            Covered units
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics.IsDeltaAvailable">
+            <summary>
+            Is delta valid
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageStatistics.Delta">
+            <summary>
+            Delta of coverage
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.CoverageQueryFlags">
+            <summary>
+            Used to choose which coverage data is returned by a QueryXXXCoverage() call.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CoverageQueryFlags.Modules">
+            <summary>
+            If set, the Coverage.Modules property will be populated.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CoverageQueryFlags.Functions">
+            <summary>
+            If set, the ModuleCoverage.Functions properties will be populated.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.CoverageQueryFlags.BlockData">
+            <summary>
+            If set, the ModuleCoverage.CoverageData field will be populated.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.DtlEnvironmentDetails">
+            <summary>
+            This is a temporary class to provide the details for the test run environment.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Unspecified">
+            <summary>
+            Only used during an update to preserve the existing value.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.None">
+            <summary>
+            Test has not been completed, or the test type does not report
+            pass/failure.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Passed">
+            <summary>
+            Test was executed w/o any issues.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Failed">
+            <summary>
+            Test was executed, but there were issues.
+            Issues may involve exceptions or failed assertions.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Inconclusive">
+            <summary>
+            Test has completed, but we can't say if it passed or failed.
+            May be used for aborted tests...
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Timeout">
+            <summary>
+            The test timed out
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Aborted">
+            <summary>
+            Test was aborted. 
+            This was not caused by a user gesture, but rather by a framework decision.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Blocked">
+            <summary>
+            Test had it chance for been executed but was not, as ITestElement.IsRunnable == false.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.NotExecuted">
+            <summary>
+            Test was not executed. 
+            This was caused by a user gesture - e.g. user hit stop button.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Warning">
+            <summary>
+            To be used by Run level results.
+            This is not a failure.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Error">
+            <summary>
+            There was a system error while we were trying to execute a test.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.NotApplicable">
+            <summary>
+            Test is Not Applicable for execution.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.Paused">
+            <summary>
+            Test is paused.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome.InProgress">
+            <summary>
+            Test is currently executing. Added this for TCM charts
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.RunFilter">
+            <summary>
+            This class is used to provide the filters used for discovery
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.RunFilter.SourceFilter">
+            <summary>
+            filter for the test case sources (test containers)
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.RunFilter.TestCaseFilter">
+            <summary>
+            filter for the test cases
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.ShallowReference">
+            <summary>
+            An abstracted reference to some other resource. This class is used to provide the build
+            data contracts with a uniform way to reference other resources in a way that provides easy
+            traversal through links.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.ShallowReference.Id">
+            <summary>
+            Id of the resource
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.ShallowReference.Name">
+            <summary>
+            Name of the linked resource (definition name, controller name, etc.)
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.ShallowReference.Url">
+            <summary>
+            Full http link to the resource
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.AttachmentType">
+            <summary>
+            The types of test attachments.        
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestMessageLogDetails">
+            <summary>
+            An abstracted reference to some other resource. This class is used to provide the build
+            data contracts with a uniform way to reference other resources in a way that provides easy
+            traversal through links.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestMessageLogDetails.EntryId">
+            <summary>
+            Id of the resource
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestMessageLogDetails.DateCreated">
+            <summary>
+            Date when the resource is created
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestMessageLogDetails.Message">
+            <summary>
+            Message of the resource
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings">
+            <summary>
+            Represents the test settings of the run.
+            Used to create test settings and fetch test settings
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.TestSettingsId">
+            <summary>
+            Test settings id. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.TestSettingsName">
+            <summary>
+            Test settings name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.TestSettingsContent">
+            <summary>
+            Test settings content. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.Description">
+            <summary>
+            Description of the test settings. Used in create test settings.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.AreaPath">
+            <summary>
+            Area path required to create test settings
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.MachineRoles">
+            <summary>
+            Xml string of machine roles. Used in create test settings.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings.IsPublic">
+            <summary>
+            Indicates if the tests settings is public or private.Used in create test settings.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState">
+            <summary>
+            The types of states for test run.        
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.Unspecified">
+            <summary>
+            Only used during an update to preserve the existing value.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.NotStarted">
+            <summary>
+            The run is still being created.  No tests have started yet.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.InProgress">
+            <summary>
+            Tests are running.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.Completed">
+            <summary>
+            All tests have completed or been skipped.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.Aborted">
+            <summary>
+            Run is stopped and remaing tests have been aborted
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.Waiting">
+            <summary>
+            Run is currently initializing
+            This is a legacy state and should not be used any more
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState.NeedsInvestigation">
+            <summary>
+            Run requires investigation because of a test point failure
+            This is a legacy state and should not be used any more
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestRunSubstate">
+            <summary>
+            The types of sub states for test run.
+            It gives the user more info about the test run beyond the high level test run state 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetBuildCodeCoverageAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting Code Coverage object for build based on buildId and flags
+            This API can be consumed in GET process.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="flags"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunCodeCoverageAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting Code Coverage object for test run based on runId and flags
+            This API can be consumed in GET process.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="flags"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetCodeCoverageSummaryAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting Code Coverage object for build based on current buildId and delta buildId(optional)
+            This API can be consumed in GET process.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="deltaBuildId"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.UpdateCodeCoverageSummaryAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for publishing Code Coverage object for build based on buildId
+            This API can be consumed in POST process.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="coverageData"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.CreateResultRetentionSettingsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.ResultRetentionSettings,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="retentionSettings"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.DeleteResultRetentionSettingsAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetResultRetentionSettingsAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.UpdateResultRetentionSettingsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.ResultRetentionSettings,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="retentionSettings"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.CreateTestRunAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestAttachmentReference object based on attachmentRequestModel, project, and runId
+            This API can be consumed in Post process.
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.CreateTestResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestAttachmentReference object based on attachmentRequestModel, project, runId, and testCaseResultId
+            This API can be consumed in Post process.
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunAttachmentContentAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunAttachmentZipAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunAttachmentZipAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestResultAttachmentContentAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestResultAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestResultAttachmentZipAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestResultAttachmentZipAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.AddCustomFieldsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.CustomTestFieldDefinition[],System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="newFields"></param>
+            <param name="project">Project ID or project name</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.AddCustomFieldsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.CustomTestFieldDefinition[],System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="newFields"></param>
+            <param name="project">Project ID</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.QueryCustomFieldsAsync(System.String,Microsoft.TeamFoundation.TestManagement.WebApi.CustomTestFieldScope,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="scopeFilter"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.QueryCustomFieldsAsync(System.Guid,Microsoft.TeamFoundation.TestManagement.WebApi.CustomTestFieldScope,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="scopeFilter"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.#cctor">
+            <summary>
+            Creates the dictionary for all the exceptions that need to be serialized
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.QueryReportForBuildAsync(System.String,System.Int32,System.String,System.Boolean,Microsoft.TeamFoundation.TestManagement.WebApi.BuildReference,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="sourceWorkflow"></param>
+            <param name="includeFailureDetails"></param>
+            <param name="buildToCompare"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.QueryReportForBuildAsync(System.Guid,System.Int32,System.String,System.Boolean,Microsoft.TeamFoundation.TestManagement.WebApi.BuildReference,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="sourceWorkflow"></param>
+            <param name="includeFailureDetails"></param>
+            <param name="buildToCompare"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestCaseResultByIdAsync(System.String,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResult object based on projectid, runId and testCaseResultId
+            This API can be consumed in Query process.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="includeIterationDetails"></param>
+            <returns>TestCaseResult object</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestCaseResultsAsync(System.String,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResult objects based on project and runId
+            This API can be consumed in Query process.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="includeIterationDetails"></param>
+            <returns>List of TestCaseResult objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.AddTestResultsToTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultCreateModel[],System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for adding TestCaseResult objects based on project and runId
+            This method can be consumed in Post Process
+            </summary>
+            <param name="resultCreateModels"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <returns>List of TestCaseResult objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.UpdateTestResultsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResultUpdateModel[],System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for updating TestCaseResult objects based on project and runId
+            This method can be consumed in Patch process
+            </summary>
+            <param name="resultUpdateModels"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <returns>List of TestCaseResult objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.BulkUpdateTestResultsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResultUpdateModel,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for updating TestCaseResult objects based on project, runId and resultIds
+            This method can be consumed in Patch process
+            </summary>
+            <param name="resultUpdateModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="resultIds"></param>
+            <returns>List of TestCaseResult objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetActionResultsAsync(System.String,System.Int32,System.Int32,System.Int32,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestActionResult objects based on project, runId, testCaseResultId, and iterationId
+            This method can be consumed in Query process
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="iterationId"></param>
+            <param name="actionPath"></param>
+            <returns>List of TestActionResult objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestResultAttachmentsAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResultAttachment objects based on project, runId, testCaseResultId, and iterationId.
+            This method can be consumed in Query process. 
+            Note: This API has been deprecated and will be removed in next update
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="iterationId"></param>
+            <returns>List of TestCaseResultAttachment objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetResultParametersAsync(System.String,System.Int32,System.Int32,System.Int32,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestResultParameter objects based on project, runId, testCaseResultId, and iterationId
+            This method can be consumed in Query process
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="iterationId"></param>
+            <param name="paramName"></param>
+            <returns>List of TestResultParameter objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestIterationAsync(System.String,System.Int32,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestIterationDetails object based on project, runId, testCaseResultId, and iterationId
+            This method can be consumed in Query process
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="iterationId"></param>
+            <param name="includeActionResults"></param>
+            <returns>TestIterationDetails object</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestIterationsAsync(System.String,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestIterationDetails objects based on project, runId, and testCaseResultId
+            This method can be consumed in Query process
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="includeActionResults"></param>
+            <returns>List of TestIterationDetails objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestResultsByQueryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.QueryModel,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResult objects based on query, project, includeResultDetails, includeIterationDetails, skip, and top
+            This method can be consumed in Post process.
+            </summary>
+            <param name="query"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="includeResultDetails"></param>
+            <param name="includeIterationDetails"></param>
+            <param name="skip"></param>
+            <param name="top"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.CreateTestRunAsync(System.String,Microsoft.TeamFoundation.TestManagement.WebApi.RunCreateModel,System.Object)">
+            <summary>
+            Sends REST based msg to Server for creating new entry of Test Run.
+            </summary>
+            <param name="projectId">Project Id</param>
+            <param name="testRun">RunCreateModel object</param>
+            <returns>TestRun Object</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunByIdAsync(System.String,System.Int32,System.Object)">
+            <summary>
+            Sends REST based msg to Server for getting TestRun object based on runid and projectid
+            This API can be consumed in Query process
+            </summary>
+            <param name="projectId">Project Id</param>
+            <param name="runId">Run Id</param>
+            <returns>Test Run object</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunsAsync(System.String,System.String,System.Guid,System.Guid,System.Int32,System.Boolean,System.Nullable{System.Boolean},System.Int32,System.Int32,System.Object)">
+            <summary>
+            Sends REST based msg to Server for getting list of TestRun objects based on various parameters
+            This API can be consumed in Query process
+            </summary>
+            <returns>IList of TestRun type objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunLogsAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting test run logs based on runid and projectid
+            This API can be consumed in Query process
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.UpdateTestRunAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.RunUpdateModel,System.Object)">
+            <summary>
+            Sends REST based msg to Server for updating TestRun object based on runid and projectid.
+            This API can be consumed in Patch process.
+            Resource Version 2.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestRunsByQueryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.QueryModel,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestRun objects based on query, project, includeRunDetails, skip and top.
+            This API can be consumed in Post process.
+            </summary>
+            <param name="query"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="includeRunDetails"></param>
+            <param name="skip"></param>
+            <param name="top"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetTestSettingsByIdAsync(System.String,System.Int32,System.Object)">
+            <summary>
+            Sends REST based msg to Server for getting TestSettings object based on testSettingsId and projectid
+            This API can be consumed in Query process
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.CreateTestSettingsAsync(System.String,Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings)">
+            <summary>
+            Sends REST based msg to Server for creating TestSettings based on TestSettings object and projectId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.DeleteTestSettingsAsync(System.String,System.Int32)">
+            <summary>
+            Sends REST based msg to Server for deleting TestSettings object based on testSettingsId and projectid
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementHttpClient.GetSuitesByTestCaseIdAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to server for getting Test Suite objects which have the specified test case
+            This API can be consumed in Get process
+            </summary>
+            <param name="testCaseId"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.CreateTestRunAsync(System.String,Microsoft.TeamFoundation.TestManagement.WebApi.RunCreateModel,System.Object)">
+            <summary>
+            Sends REST based msg to Server for creating new entry of Test Run.
+            Resource Version 2.
+            </summary>
+            <param name="projectId">Project Id</param>
+            <param name="testRun">RunCreateModel object</param>
+            <returns>TestRun Object</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestRunByIdAsync(System.String,System.Int32,System.Object)">
+            <summary>
+            Sends REST based msg to Server for getting TestRun object based on runid and projectid.
+            This API can be consumed in Query process.
+            Resource Version 2.
+            </summary>
+            <param name="projectId">Project Id</param>
+            <param name="runId">Run Id</param>
+            <returns>Test Run object</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestRunsAsync(System.String,System.String,System.Guid,System.Guid,System.Int32,System.Boolean,System.Nullable{System.Boolean},System.Int32,System.Int32,System.Object)">
+            <summary>
+            Sends REST based msg to Server for getting list of TestRun objects based on various parameters.
+            This API can be consumed in Query process.
+            Resource Version 2.
+            </summary>
+            <returns>IList of TestRun type objects</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestRunLogsAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting test run logs based on runid and projectid
+            This API can be consumed in Query process
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.UpdateTestRunAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.RunUpdateModel,System.Object)">
+            <summary>
+            Sends REST based msg to Server for updating TestRun object based on runid and projectid.
+            This API can be consumed in Patch process.
+            Resource Version 2.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestRunsByQueryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.QueryModel,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestRuns objects based on project, query, includeRunDetails, skip, and top
+            This API can be consumed in Post process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestSettingsByIdAsync(System.String,System.Int32,System.Object)">
+            <summary>
+            Sends REST based msg to Server for getting TestSettings object based on testSettingsId and projectid
+            This API can be consumed in Query process
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.CreateTestSettingsAsync(System.String,Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings)">
+            <summary>
+            Sends REST based msg to Server for creating TestSettings based on TestSettings object and projectId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.DeleteTestSettingsAsync(System.String,System.Int32)">
+            <summary>
+            Sends REST based msg to Server for deleting TestSettings object based on testSettingsId and projectId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestCaseResultByIdAsync(System.String,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResult object based on project, runId and testCaseResultId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestCaseResultsAsync(System.String,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResult objects based on project and runId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.AddTestResultsToTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultCreateModel[],System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for adding TestCaseResult objects based on project and runId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.UpdateTestResultsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResultUpdateModel[],System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for updating TestCaseResult objects based on project and runId
+            </summary>        
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.BulkUpdateTestResultsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResultUpdateModel,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for updating TestCaseResult objects based on project, runId and resultIds
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetActionResultsAsync(System.String,System.Int32,System.Int32,System.Int32,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestActionResult objects based on project, runId, testCaseResultId, and iterationId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestResultAttachmentsAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestCaseResultAttachment objects based on project, runId, testCaseResultId, and iterationId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetResultParametersAsync(System.String,System.Int32,System.Int32,System.Int32,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestResultParameter objects based on project, runId, testCaseResultId, and iterationId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestIterationAsync(System.String,System.Int32,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestIterationDetails object based on project, runId, testCaseResultId, and iterationId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestIterationsAsync(System.String,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestIterationDetails objects based on project, runId, and testCaseResultId
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestResultsByQueryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.QueryModel,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestResults objects based on project, query, includeResultDetails, includeIterationDetails, skip, and top
+            This API can be consumed in Post process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.CreateTestRunAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestAttachmentReference object based on attachmentRequestModel, project, and runId
+            This API can be consumed in Post process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.CreateTestResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting TestAttachmentReference object based on attachmentRequestModel, project, runId, and testCaseResultId
+            This API can be consumed in Post process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetBuildCodeCoverageAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting Code Coverage object for build based on buildId and flags
+            This API can be consumed in GET process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetTestRunCodeCoverageAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to Server for getting Code Coverage object for test run based on runId and flags
+            This API can be consumed in GET process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.TestManagement.WebApi.ITestManagementHttpClient.GetSuitesByTestCaseIdAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends REST based msg to server for getting Test Suite objects which have the specified test case
+            This API can be consumed in Get process
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.TestManagement.WebApi.TestManagementResourceIds.AreaId">
+            <summary>
+            Service area for all TestManagement REST endpoints
+            </summary>
+        </member>
+    </members>
+</doc>

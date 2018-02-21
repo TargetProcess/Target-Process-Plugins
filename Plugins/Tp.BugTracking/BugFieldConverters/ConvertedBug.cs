@@ -9,16 +9,16 @@ using Tp.Integration.Common;
 
 namespace Tp.BugTracking.BugFieldConverters
 {
-	[Serializable]
-	public class ConvertedBug
-	{
-		public ConvertedBug()
-		{
-			BugDto = new BugDTO();
-			ChangedFields = new List<Enum>();
-		}
+    [Serializable]
+    public class ConvertedBug
+    {
+        public ConvertedBug()
+        {
+            BugDto = new BugDTO();
+            ChangedFields = new List<Enum>();
+        }
 
-		public BugDTO BugDto { get; set; }
-		public List<Enum> ChangedFields { get; set; }
-	}
+        public BugDTO BugDto { get; set; }
+        public List<Enum> ChangedFields { get; set; }
+    }
 }

@@ -10,22 +10,22 @@ using Tp.Integration.Testing.Common;
 
 namespace Tp.Integration.Plugin.Common.Tests
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class StructureMapRegistryTests
-	{
-		[SetUp]
-		public void Init()
-		{
-			//This configures structureMap inside.
-			TransportMock.CreateWithoutStructureMapClear(typeof (WhenAddANewProfileSpecs).Assembly,
-			                                             typeof (WhenAddANewProfileSpecs).Assembly);
-		}
+    public class StructureMapRegistryTests
+    {
+        [SetUp]
+        public void Init()
+        {
+            //This configures structureMap inside.
+            TransportMock.CreateWithoutStructureMapClear(typeof(WhenAddANewProfileSpecs).Assembly,
+                typeof(WhenAddANewProfileSpecs).Assembly);
+        }
 
-		[Test]
-		public void CheckConfiguration()
-		{
-			ObjectFactory.AssertConfigurationIsValid();
-		}
-	}
+        [Test]
+        public void CheckConfiguration()
+        {
+            ObjectFactory.AssertConfigurationIsValid();
+        }
+    }
 }

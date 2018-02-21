@@ -22,11 +22,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a <see cref="Changeset"/> object.
         /// </summary>
-        public Changeset Result
-        {
-            get;
-            private set;
-        }
+        public Changeset Result { get; private set; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="CommandBase{T}.Command"/>, or an

@@ -11,27 +11,28 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Mercurial.Tests.VersionControlSystem
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class MercurialRevisionIdSpecs
-	{
-		[Test]
-		public void ShouldHandlePosixTime()
-		{
-			var initialTime = DateTime.Today.AddHours(6);
+    public class MercurialRevisionIdSpecs
+    {
+        [Test]
+        public void ShouldHandlePosixTime()
+        {
+            var initialTime = DateTime.Today.AddHours(6);
             MercurialRevisionId revisionId = new RevisionId { Time = initialTime, Value = Guid.NewGuid().ToString() };
 
-			RevisionId revisionIdDto = revisionId;
+            RevisionId revisionIdDto = revisionId;
             MercurialRevisionId restoredRevisionId = revisionIdDto;
 
-			restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
-		}
+            restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
+        }
 
-		[Test]
-		public void ShouldSupportMinTime()
-		{
+        [Test]
+        public void ShouldSupportMinTime()
+        {
             MercurialRevisionId revisionId = new RevisionId { Time = DateTime.MinValue, Value = Guid.NewGuid().ToString() };
-            revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin), "revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin))");
-		}
-	}
+            revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin),
+                "revisionId.Time.Should(Be.EqualTo(MercurialRevisionId.UtcTimeMin))");
+        }
+    }
 }

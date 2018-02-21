@@ -37,21 +37,13 @@ namespace Mercurial.XmlSerializationTypes
         /// Gets or sets the local revision number of this log entry.
         /// </summary>
         [XmlAttribute("revision")]
-        public int Revision
-        {
-            get;
-            set;
-        }
+        public int Revision { get; set; }
 
         /// <summary>
         /// Gets or sets the hash of this log entry.
         /// </summary>
         [XmlAttribute("node")]
-        public string Hash
-        {
-            get;
-            set;
-        }
+        public string Hash { get; set; }
 
         /// <summary>
         /// Gets the tags of this log entry.
@@ -59,41 +51,26 @@ namespace Mercurial.XmlSerializationTypes
         [XmlElement("tag")]
         public Collection<LogEntryTagNode> Tags
         {
-            get
-            {
-                return new Collection<LogEntryTagNode>(_Tags);
-            }
+            get { return new Collection<LogEntryTagNode>(_Tags); }
         }
 
         /// <summary>
         /// Gets or sets the commit message of this log entry.
         /// </summary>
         [XmlElement("msg")]
-        public string CommitMessage
-        {
-            get;
-            set;
-        }
+        public string CommitMessage { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp of this log entry.
         /// </summary>
         [XmlElement("date")]
-        public DateTime Timestamp
-        {
-            get;
-            set;
-        }
+        public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Gets or sets the author of this log entry.
         /// </summary>
         [XmlElement("author")]
-        public LogEntryAuthorNode Author
-        {
-            get;
-            set;
-        }
+        public LogEntryAuthorNode Author { get; set; }
 
         /// <summary>
         /// Gets the collection of parents of this log entry.
@@ -101,21 +78,14 @@ namespace Mercurial.XmlSerializationTypes
         [XmlElement("parent")]
         public Collection<LogEntryParentNode> Parents
         {
-            get
-            {
-                return new Collection<LogEntryParentNode>(_Parents);
-            }
+            get { return new Collection<LogEntryParentNode>(_Parents); }
         }
 
         /// <summary>
         /// Gets or sets the named branch this log entry is on.
         /// </summary>
         [XmlElement("branch")]
-        public string Branch
-        {
-            get;
-            set;
-        }
+        public string Branch { get; set; }
 
         /// <summary>
         /// Gets the individual path actions of this log entry.
@@ -123,10 +93,7 @@ namespace Mercurial.XmlSerializationTypes
         [XmlArray("paths")]
         public Collection<LogEntryPathNode> PathActions
         {
-            get
-            {
-                return new Collection<LogEntryPathNode>(_PathActions);
-            }
+            get { return new Collection<LogEntryPathNode>(_PathActions); }
         }
 
         /// <summary>
@@ -135,10 +102,7 @@ namespace Mercurial.XmlSerializationTypes
         [XmlArray("copies")]
         public Collection<LogEntryCopyNode> Copies
         {
-            get
-            {
-                return new Collection<LogEntryCopyNode>(_Copies);
-            }
+            get { return new Collection<LogEntryCopyNode>(_Copies); }
         }
     }
 }

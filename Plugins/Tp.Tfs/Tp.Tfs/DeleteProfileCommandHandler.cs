@@ -13,28 +13,28 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Tfs
 {
-	public class DeleteProfileCommandHandler : IHandleMessages<ExecutePluginCommandCommand>
-	{
-		private readonly IStorageRepository _storage;
+    public class DeleteProfileCommandHandler : IHandleMessages<ExecutePluginCommandCommand>
+    {
+        private readonly IStorageRepository _storage;
 
-		public DeleteProfileCommandHandler(IStorageRepository storage)
-		{
-			_storage = storage;
-		}
+        public DeleteProfileCommandHandler(IStorageRepository storage)
+        {
+            _storage = storage;
+        }
 
-		public void Handle(ExecutePluginCommandCommand message)
-		{
-			if (message.CommandName == EmbeddedPluginCommands.DeleteProfile)
-			{
-				// When profile is deleted ProfileFileStorage.Clear() is called. 
-				// The profile repository folder is created during this call. This folder is redundant for TFS plugin.
-				// We need to delete it here
+        public void Handle(ExecutePluginCommandCommand message)
+        {
+            if (message.CommandName == EmbeddedPluginCommands.DeleteProfile)
+            {
+                // When profile is deleted ProfileFileStorage.Clear() is called. 
+                // The profile repository folder is created during this call. This folder is redundant for TFS plugin.
+                // We need to delete it here
 
-				string folderPath = ObjectFactory.GetInstance<PluginDataFolder>().Path;
+                string folderPath = ObjectFactory.GetInstance<PluginDataFolder>().Path;
 
-				if (Directory.Exists(folderPath))
-					Directory.Delete(folderPath, true);
-			}
-		}
-	}
+                if (Directory.Exists(folderPath))
+                    Directory.Delete(folderPath, true);
+            }
+        }
+    }
 }

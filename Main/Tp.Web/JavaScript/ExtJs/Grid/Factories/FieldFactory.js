@@ -33,7 +33,7 @@ Tp.controls.grid.FieldFactory = Ext.extend(Object, {
 					}
 					return new Ext.form.NumberField({ allowNegative: false });
 				case "float":
-					return new Ext.form.NumberField({ allowNegative: false });
+					return new Ext.form.NumberField({ allowNegative: columnConfig.Facet && columnConfig.Facet.customField === true });
 				case "bool":
 					return new Tp.controls.BooleanField({});
 				case "date":

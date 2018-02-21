@@ -17,14 +17,14 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Handlers
 {
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class EntityStateChangedHandlerSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void ShouldCheckCreate()
-		{
-			@"
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class EntityStateChangedHandlerSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void ShouldCheckCreate()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -34,13 +34,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					And entity states storage should contain item 'Done' with id 2 and process id 12
 					And entity states storage should contain item 'New' with id 3 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckCreateUnproperEntityState()
-		{
-			@"
+        [Test]
+        public void ShouldCheckCreateUnproperEntityState()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -49,13 +49,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					And entity states storage should contain item 'Open' with id 1 and process id 12
 					And entity states storage should contain item 'Done' with id 2 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotSaveEntityStatesForUserStory()
-		{
-			@"
+        [Test]
+        public void ShouldNotSaveEntityStatesForUserStory()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -64,13 +64,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					And entity states storage should contain item 'Open' with id 1 and process id 12
 					And entity states storage should contain item 'Done' with id 2 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckUpdate()
-		{
-			@"
+        [Test]
+        public void ShouldCheckUpdate()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -79,13 +79,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					And entity states storage should contain item 'Open' with id 1 and process id 12
 					And entity states storage should contain item 'New' with id 2 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckUpdateUnproperEntityState()
-		{
-			@"
+        [Test]
+        public void ShouldCheckUpdateUnproperEntityState()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -94,13 +94,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					And entity states storage should contain item 'Open' with id 1 and process id 12
 					And entity states storage should contain item 'Done' with id 2 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckDelete()
-		{
-			@"
+        [Test]
+        public void ShouldCheckDelete()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -108,13 +108,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 				Then entity states storage should contain 1 items
 					And entity states storage should contain item 'Open' with id 1 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckDeleteUnproperEntityState()
-		{
-			@"
+        [Test]
+        public void ShouldCheckDeleteUnproperEntityState()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And set entity state 'Open' with id 1 and process id 12 to storage
 					And set entity state 'Done' with id 2 and process id 12 to storage
@@ -123,13 +123,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					And entity states storage should contain item 'Open' with id 1 and process id 12
 					And entity states storage should contain item 'Done' with id 2 and process id 12
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldUpdateMappingOnEntityStateUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldUpdateMappingOnEntityStateUpdated()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And following states created in TargetProcess:
 						|id|name|
@@ -142,13 +142,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 						|key|value|
 						|Open|{Id:1, Name:""New""}|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>().And<EntityStateMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldDeleteMappingOnEntityStateDeleted()
-		{
-			@"
+        [Test]
+        public void ShouldDeleteMappingOnEntityStateDeleted()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 12 created
 					And following states created in TargetProcess:
 						|id|name|
@@ -164,56 +164,79 @@ namespace Tp.Bugzilla.Tests.Handlers
 						|key|value|
 						|Open|{Id:1, Name:""Open""}|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>().And<EntityStateMappingSpecs>());
-		}
-		
-		[Given("set entity state with id $id and process id $processId to storage")]
-		public void SetEntityStateToStorage(int id, int processId)
-		{
-			Profile.Get<EntityStateDTO>().Add(new EntityStateDTO {ID = id, EntityStateID = id, ProcessID = processId});
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateChangedHandlerSpecs>().And<EntityStateMappingSpecs>());
+        }
 
-		[Given("set entity state '$name' with id $id and process id $processId to storage")]
-		public void SetEntityStateToStorage(string name, int id, int processId)
-		{
-			Profile.Get<EntityStateDTO>().Add(new EntityStateDTO
-			                                  	{ID = id, EntityStateID = id, ProcessID = processId, Name = name});
-		}
+        [Given("set entity state with id $id and process id $processId to storage")]
+        public void SetEntityStateToStorage(int id, int processId)
+        {
+            Profile.Get<EntityStateDTO>().Add(new EntityStateDTO { ID = id, EntityStateID = id, ProcessID = processId });
+        }
 
-		[When("handled EntityStateCreatedMessage message with entity state id $id, process id $processId, name '$name', entityTypeName '$entityTypeName'")]
-		public void HandleCreate(int id, int processId, string name, string entityTypeName)
-		{
-			var entityState = new EntityStateDTO { ID = id, EntityStateID = id, ProcessID = processId, Name = name, EntityTypeName = entityTypeName };
-			TransportMock.HandleMessageFromTp(Profile, new EntityStateCreatedMessage {Dto = entityState});
-		}
+        [Given("set entity state '$name' with id $id and process id $processId to storage")]
+        public void SetEntityStateToStorage(string name, int id, int processId)
+        {
+            Profile.Get<EntityStateDTO>().Add(new EntityStateDTO
+                { ID = id, EntityStateID = id, ProcessID = processId, Name = name });
+        }
 
-		[When("handled EntityStateUpdatedMessage message with entity state id $id, process id $processId, name '$name', entityTypeName '$entityTypeName'")]
-		public void HandleUpdate(int id, int processId, string name, string entityTypeName)
-		{
-			var entityState = new EntityStateDTO { ID = id, EntityStateID = id, ProcessID = processId, Name = name, EntityTypeName = entityTypeName };
-			TransportMock.HandleMessageFromTp(Profile, new EntityStateUpdatedMessage {Dto = entityState});
-		}
+        [When(
+             "handled EntityStateCreatedMessage message with entity state id $id, process id $processId, name '$name', entityTypeName '$entityTypeName'"
+         )]
+        public void HandleCreate(int id, int processId, string name, string entityTypeName)
+        {
+            var entityState = new EntityStateDTO
+            {
+                ID = id,
+                EntityStateID = id,
+                ProcessID = processId,
+                Name = name,
+                EntityTypeName = entityTypeName
+            };
+            TransportMock.HandleMessageFromTp(Profile, new EntityStateCreatedMessage { Dto = entityState });
+        }
 
-		[When("handled EntityStateDeletedMessage message with entity state id $id, process id $processId, entityTypeName '$entityTypeName'")]
-		public void HandleDelete(int id, int processId, string entityTypeName)
-		{
-			var entityState = new EntityStateDTO { ID = id, EntityStateID = id, ProcessID = processId, EntityTypeName = entityTypeName };
-			TransportMock.HandleMessageFromTp(Profile, new EntityStateDeletedMessage {Dto = entityState});
-		}
+        [When(
+             "handled EntityStateUpdatedMessage message with entity state id $id, process id $processId, name '$name', entityTypeName '$entityTypeName'"
+         )]
+        public void HandleUpdate(int id, int processId, string name, string entityTypeName)
+        {
+            var entityState = new EntityStateDTO
+            {
+                ID = id,
+                EntityStateID = id,
+                ProcessID = processId,
+                Name = name,
+                EntityTypeName = entityTypeName
+            };
+            TransportMock.HandleMessageFromTp(Profile, new EntityStateUpdatedMessage { Dto = entityState });
+        }
 
-		[Then("states mapping should contain $count item")]
-		public void CheckStatesMappingCount(int count)
-		{
-			Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(count), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(count))");
-		}
+        [When("handled EntityStateDeletedMessage message with entity state id $id, process id $processId, entityTypeName '$entityTypeName'")
+        ]
+        public void HandleDelete(int id, int processId, string entityTypeName)
+        {
+            var entityState = new EntityStateDTO { ID = id, EntityStateID = id, ProcessID = processId, EntityTypeName = entityTypeName };
+            TransportMock.HandleMessageFromTp(Profile, new EntityStateDeletedMessage { Dto = entityState });
+        }
 
-		[Then("states mapping should be updated as following:")]
-		public void CheckMapping(string key, string value)
-		{
-			var tpValue = JsonConvert.DeserializeObject<MappingLookup>(value);
+        [Then("states mapping should contain $count item")]
+        public void CheckStatesMappingCount(int count)
+        {
+            Profile.GetProfile<BugzillaProfile>()
+                .StatesMapping.Count.Should(Be.EqualTo(count),
+                    "Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(count))");
+        }
 
-			Profile.GetProfile<BugzillaProfile>().StatesMapping.Single(
-				m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Single(m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name))");
-		}
-	}
+        [Then("states mapping should be updated as following:")]
+        public void CheckMapping(string key, string value)
+        {
+            var tpValue = JsonConvert.DeserializeObject<MappingLookup>(value);
+
+            Profile.GetProfile<BugzillaProfile>().StatesMapping.Single(
+                    m => m.Key == key && m.Value.Id == tpValue.Id)
+                .Value.Name.Should(Be.EqualTo(tpValue.Name),
+                    "Profile.GetProfile<BugzillaProfile>().StatesMapping.Single(m => m.Key == key && m.Value.Id == tpValue.Id).Value.Name.Should(Be.EqualTo(tpValue.Name))");
+        }
+    }
 }

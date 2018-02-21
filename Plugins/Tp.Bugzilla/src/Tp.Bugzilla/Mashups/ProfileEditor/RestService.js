@@ -14,10 +14,15 @@ tau.mashups.addDependency("libs/jquery/jquery")
 
         restService.prototype = {
             _requestUrlBase:'/api/v1/',
+            _requestV2UrlBase:'/api/v2/',
             _requestsInProgress:0,
             _cache:{},
 
             _ctor:function() {
+            },
+
+            _getV2Url: function (entityName) {
+            	return new Tp.WebServiceURL(this._requestV2UrlBase + entityName).url;
             },
 
             _getUrl:function(entityName) {
@@ -79,38 +84,27 @@ tau.mashups.addDependency("libs/jquery/jquery")
 
                 this._requestsInProgress = 3;
 
-                $.getJSON(this._getUrl('Projects.asmx/' + projectId + '?include=[process[id]]'),
-                    $.proxy(this._onProcessRecieved(success), this));
+                $.getJSON(this._getV2Url('Project/' + projectId + '?select={states:Process.EntityStates.Where(EntityType.Name==%27Bug%27).Where(Workflow.ParentWorkflow==null).Select({id,name})}&take=1000'),
+                    $.proxy(this._onEntityStatesRecieved(success), this));
 
-                $.getJSON(this._getUrl('Priorities.asmx?take=1000'),
+                $.getJSON(this._getV2Url('Priority?where=EntityType.Name==%27Bug%27&select={id,name}&take=1000'),
                     $.proxy(this._onPrioritiesRecieved(success), this));
 
-                $.getJSON(this._getUrl('Severities.asmx?take=1000'),
+                $.getJSON(this._getV2Url('Severity?take=1000'),
                     $.proxy(this._onSeveritiesRecieved(success), this));
-            },
-
-            _onProcessRecieved: function(success){
-                return function(process){
-                    $.getJSON(this._getUrl('Processes.asmx/' + process.Process.Id + '/EntityStates/?include=[Id,Name,EntityType[Id,Name]]&take=1000'),
-                    $.proxy(this._onEntityStatesRecieved(success), this));
-                }
             },
 
             _onEntityStatesRecieved:function(onSuccess) {
                 var that = this;
                 return function(states) {
                     that._requestsInProgress--;
-                    var source = $(states.Items)
-                        .filter(
-                        function(index, element) {
-                            return element.EntityType.Name == 'Bug';
-                        }).map(function(index, element) {
-                            return { Id:element.Id, Name:element.Name };
-                        });
+                    var source = $(states.items[0].states).map(function (index, element) {
+                        return { Id:element.id, Name:element.name };
+                    });
 
                     that._cache.states = $.makeArray(source);
 
-                    if (that._requestsInProgress == 0 && onSuccess)
+                    if (that._requestsInProgress === 0 && onSuccess)
                         onSuccess(that._cache);
                 };
             },
@@ -119,17 +113,13 @@ tau.mashups.addDependency("libs/jquery/jquery")
                 var that = this;
                 return function(priorities) {
                     that._requestsInProgress--;
-                    var source = $(priorities.Items)
-                        .filter(
-                        function(index, element) {
-                            return element.EntityType.Name == 'Bug';
-                        }).map(function(index, element) {
-                            return { Id:element.Id, Name:element.Name };
-                        });
+                    var source = $(priorities.items).map(function(index, element) {
+                        return { Id:element.id, Name:element.name };
+                    });
 
                     that._cache.priorities = $.makeArray(source);
 
-                    if (that._requestsInProgress == 0 && onSuccess)
+                    if (that._requestsInProgress === 0 && onSuccess)
                         onSuccess(that._cache);
                 };
             },
@@ -138,14 +128,13 @@ tau.mashups.addDependency("libs/jquery/jquery")
                 var that = this;
                 return function(severities) {
                     that._requestsInProgress--;
-                    var source = $(severities.Items)
-                        .map(function(index, element) {
-                            return { Id:element.Id, Name:element.Name };
-                        });
+                    var source = $(severities.items).map(function(index, element) {
+                        return { Id:element.id, Name:element.name };
+                    });
 
                     that._cache.severities = $.makeArray(source);
 
-                    if (that._requestsInProgress == 0 && onSuccess)
+                    if (that._requestsInProgress === 0 && onSuccess)
                         onSuccess(that._cache);
                 };
             },
@@ -184,7 +173,6 @@ tau.mashups.addDependency("libs/jquery/jquery")
             //region getRoles
 
             getRoles:function(processes, success) {
-
                 var processList = $.map(processes,
                     function(item) {
                         return item.Id;

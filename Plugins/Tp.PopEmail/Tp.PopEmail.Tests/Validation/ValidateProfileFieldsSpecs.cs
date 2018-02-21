@@ -20,209 +20,211 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.PopEmailIntegration.Validation
 {
-	[TestFixture, ActionSteps]
-    [Category("PartPlugins0")]
-	public class ValidateProfileFieldsSpecs
-	{
-		private TransportMock _transportMock;
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class ValidateProfileFieldsSpecs
+    {
+        private TransportMock _transportMock;
 
-		[BeforeScenario]
-		public void BeforeScenario()
-		{
-			_transportMock = TransportMock.CreateWithoutStructureMapClear(typeof (ProjectEmailProfile).Assembly,
-			                                                              typeof (ProjectEmailProfile).Assembly);
-		}
+        [BeforeScenario]
+        public void BeforeScenario()
+        {
+            _transportMock = TransportMock.CreateWithoutStructureMapClear(typeof(ProjectEmailProfile).Assembly,
+                typeof(ProjectEmailProfile).Assembly);
+        }
 
-		[SetUp]
-		public void Setup()
-		{
-		}
+        [SetUp]
+        public void Setup()
+        {
+        }
 
-		[Test]
-		public void ShouldThrowValidationExceptionIfServerIsEmpty()
-		{
-			@" Given profile 'profile_1' with no mail server specified
+        [Test]
+        public void ShouldThrowValidationExceptionIfServerIsEmpty()
+        {
+            @" Given profile 'profile_1' with no mail server specified
 				When trying to save profile 'profile_1'
 				Then validation errors for field 'MailServer' should be 'Server should not be empty'
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldThrowValidationExceptionIfPortIsZero()
-		{
-			@" Given profile 'profile_1' with port equals to 0
+        [Test]
+        public void ShouldThrowValidationExceptionIfPortIsZero()
+        {
+            @" Given profile 'profile_1' with port equals to 0
 				When trying to save profile 'profile_1'
 				Then validation errors for field 'Port' should be 'Port should not be empty'
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldThrowValidationExceptionIfLoginIsEmpty()
-		{
-			@" Given profile 'profile_1' with no login specified
+        [Test]
+        public void ShouldThrowValidationExceptionIfLoginIsEmpty()
+        {
+            @" Given profile 'profile_1' with no login specified
 				When trying to save profile 'profile_1'
 				Then validation errors for field 'Login' should be 'Login should not be empty'
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldThrowValidationExceptionIfPasswordIsEmpty()
-		{
-			@" Given profile 'profile_1' with no password specified
+        [Test]
+        public void ShouldThrowValidationExceptionIfPasswordIsEmpty()
+        {
+            @" Given profile 'profile_1' with no password specified
 				When trying to save profile 'profile_1'
 				Then validation errors for field 'Password' should be 'Password should not be empty'
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldThrowValidationExceptionIfRulesIsEmpty()
-		{
-			@" Given profile 'profile_1' with no rules specified
+        [Test]
+        public void ShouldThrowValidationExceptionIfRulesIsEmpty()
+        {
+            @" Given profile 'profile_1' with no rules specified
 				When trying to save profile 'profile_1'
 				Then validation errors for field 'Rules' should be 'Rules should not be empty'
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldThrowValidationExceptionIfRulesAreInvalid()
-		{
-			@" Given profile 'profile_1' with rules 'bla bla'
+        [Test]
+        public void ShouldThrowValidationExceptionIfRulesAreInvalid()
+        {
+            @" Given profile 'profile_1' with rules 'bla bla'
 				When trying to save profile 'profile_1'
 				Then validation errors for field 'Rules' should be 'Invalid rules format'
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldNotThrowExceptionsForValidProfile()
-		{
-			@" Given valid profile 'profile_1'
+        [Test]
+        public void ShouldNotThrowExceptionsForValidProfile()
+        {
+            @" Given valid profile 'profile_1'
 				When trying to save profile 'profile_1'
 				Then no validation errors should exist
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Given("valid profile '$profileName'")]
-		public void CreateValidProfile(string profileName)
-		{
-			CreateProfileInitialization(Settings, profileName);
-		}
+        [Given("valid profile '$profileName'")]
+        public void CreateValidProfile(string profileName)
+        {
+            CreateProfileInitialization(Settings, profileName);
+        }
 
-		[Given("profile '$profileName' with rules '$rules'")]
-		public void CreateProfileWithInvalidRule(string profileName, string rules)
-		{
-			var settings = Settings;
-			settings.Rules = rules;
+        [Given("profile '$profileName' with rules '$rules'")]
+        public void CreateProfileWithInvalidRule(string profileName, string rules)
+        {
+            var settings = Settings;
+            settings.Rules = rules;
 
-			CreateProfileInitialization(settings, profileName);
-		}
+            CreateProfileInitialization(settings, profileName);
+        }
 
-		[Given("profile '$profileName' with no mail server specified")]
-		public void CreateProfileWithoutmailServer(string profileName)
-		{
-			var settings = Settings;
-			settings.MailServer = "";
+        [Given("profile '$profileName' with no mail server specified")]
+        public void CreateProfileWithoutmailServer(string profileName)
+        {
+            var settings = Settings;
+            settings.MailServer = "";
 
-			CreateProfileInitialization(settings, profileName);
-		}
+            CreateProfileInitialization(settings, profileName);
+        }
 
-		[Given("profile '$profileName' with port equals to 0")]
-		public void CreateProfileWithZeroPort(string profileName)
-		{
-			var settings = Settings;
-			settings.Port = 0;
+        [Given("profile '$profileName' with port equals to 0")]
+        public void CreateProfileWithZeroPort(string profileName)
+        {
+            var settings = Settings;
+            settings.Port = 0;
 
-			CreateProfileInitialization(settings, profileName);
-		}
+            CreateProfileInitialization(settings, profileName);
+        }
 
-		[Given("profile '$profileName' with no login specified")]
-		public void CreateProfileWithoutLogin(string profileName)
-		{
-			var settings = Settings;
-			settings.Login = null;
+        [Given("profile '$profileName' with no login specified")]
+        public void CreateProfileWithoutLogin(string profileName)
+        {
+            var settings = Settings;
+            settings.Login = null;
 
-			CreateProfileInitialization(settings, profileName);
-		}
+            CreateProfileInitialization(settings, profileName);
+        }
 
-		[Given("profile '$profileName' with no password specified")]
-		public void CreateProfileWithoutPassword(string profileName)
-		{
-			var settings = Settings;
-			settings.Password = "";
+        [Given("profile '$profileName' with no password specified")]
+        public void CreateProfileWithoutPassword(string profileName)
+        {
+            var settings = Settings;
+            settings.Password = "";
 
-			CreateProfileInitialization(settings, profileName);
-		}
+            CreateProfileInitialization(settings, profileName);
+        }
 
-		[Given("profile '$profileName' with no rules specified")]
-		public void CreateProfileWithoutRules(string profileName)
-		{
-			var settings = Settings;
-			settings.Rules = "";
+        [Given("profile '$profileName' with no rules specified")]
+        public void CreateProfileWithoutRules(string profileName)
+        {
+            var settings = Settings;
+            settings.Rules = "";
 
-			CreateProfileInitialization(settings, profileName);
-		}
+            CreateProfileInitialization(settings, profileName);
+        }
 
-		[When("trying to save profile '$profileName'")]
-		public void SaveProfile(string profileName)
-		{
-		}
+        [When("trying to save profile '$profileName'")]
+        public void SaveProfile(string profileName)
+        {
+        }
 
-		[Then("validation errors for field '$field' should be '$error'")]
-		public void GetError(string field, string error)
-		{
-			var exceptionResponseMsg =
-				_transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Single(
-					x => x.PluginCommandStatus == PluginCommandStatus.Fail);
-			var errorCollection1 = exceptionResponseMsg.ResponseData.Deserialize<PluginProfileErrorCollection>();
-			var errorCollection = errorCollection1;
-			var fieldValidationError = errorCollection.Where(x => x.FieldName == field);
+        [Then("validation errors for field '$field' should be '$error'")]
+        public void GetError(string field, string error)
+        {
+            var exceptionResponseMsg =
+                _transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Single(
+                    x => x.PluginCommandStatus == PluginCommandStatus.Fail);
+            var errorCollection1 = exceptionResponseMsg.ResponseData.Deserialize<PluginProfileErrorCollection>();
+            var errorCollection = errorCollection1;
+            var fieldValidationError = errorCollection.Where(x => x.FieldName == field);
 
-			new[] {error}.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()), "new[] {error}.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()))");
-		}
+            new[] { error }.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()),
+                "new[] {error}.Should(Is.SubsetOf(fieldValidationError.Select(x => x.Message).ToArray()))");
+        }
 
-		[Then("no validation errors should exist")]
-		public void CheckThereIsNoErrors()
-		{
-			_transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Where(
-				x => x.PluginCommandStatus == PluginCommandStatus.Fail)
-				.Should(Be.Empty, "_transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Where(x => x.PluginCommandStatus == PluginCommandStatus.Fail).Should(Be.Empty)");
-		}
+        [Then("no validation errors should exist")]
+        public void CheckThereIsNoErrors()
+        {
+            _transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Where(
+                    x => x.PluginCommandStatus == PluginCommandStatus.Fail)
+                .Should(Be.Empty,
+                    "_transportMock.TpQueue.GetMessages<PluginCommandResponseMessage>().Where(x => x.PluginCommandStatus == PluginCommandStatus.Fail).Should(Be.Empty)");
+        }
 
-		private void CreateProfileInitialization(ProjectEmailProfile settings, string profileName)
-		{
-			var profile = new PluginProfileDto
-			              	{
-			              		Name = profileName,
-			              		Settings = settings
-			              	};
+        private void CreateProfileInitialization(ProjectEmailProfile settings, string profileName)
+        {
+            var profile = new PluginProfileDto
+            {
+                Name = profileName,
+                Settings = settings
+            };
 
-			var createProfileCmd = new ExecutePluginCommandCommand
-			                       	{CommandName = EmbeddedPluginCommands.AddProfile, Arguments = profile.Serialize()};
-			_transportMock.HandleMessageFromTp(
-				new List<HeaderInfo> {new HeaderInfo {Key = BusExtensions.ACCOUNTNAME_KEY, Value = "Account"}}, createProfileCmd);
-		}
+            var createProfileCmd = new ExecutePluginCommandCommand
+                { CommandName = EmbeddedPluginCommands.AddProfile, Arguments = profile.Serialize() };
+            _transportMock.HandleMessageFromTp(
+                new List<HeaderInfo> { new HeaderInfo { Key = BusExtensions.ACCOUNTNAME_KEY, Value = "Account" } }, createProfileCmd);
+        }
 
-		private static ProjectEmailProfile Settings
-		{
-			get
-			{
-				return new ProjectEmailProfile
-				       	{
-				       		Login = "login",
-				       		MailServer = "mail.server",
-				       		Password = "pass",
-				       		Port = 123,
-				       		Protocol = "pop3",
-				       		Rules = "then attach to project 1 and create request in project 1",
-				       		UseSSL = true
-				       	};
-			}
-		}
-	}
+        private static ProjectEmailProfile Settings
+        {
+            get
+            {
+                return new ProjectEmailProfile
+                {
+                    Login = "login",
+                    MailServer = "mail.server",
+                    Password = "pass",
+                    Port = 123,
+                    Protocol = "pop3",
+                    Rules = "then attach to project 1 and create request in project 1",
+                    UseSSL = true
+                };
+            }
+        }
+    }
 }

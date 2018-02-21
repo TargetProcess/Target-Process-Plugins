@@ -44,10 +44,7 @@ namespace Mercurial
         /// </summary>
         public FileState State
         {
-            get
-            {
-                return _State;
-            }
+            get { return _State; }
         }
 
         /// <summary>
@@ -56,10 +53,7 @@ namespace Mercurial
         /// </summary>
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
         }
 
         #region IEquatable<FileStatus> Members
@@ -103,7 +97,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(FileStatus))
                 return false;
-            return Equals((FileStatus)obj);
+            return Equals((FileStatus) obj);
         }
 
         /// <summary>

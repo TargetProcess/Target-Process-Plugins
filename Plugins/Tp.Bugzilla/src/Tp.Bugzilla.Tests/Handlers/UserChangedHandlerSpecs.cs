@@ -14,14 +14,14 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Handlers
 {
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class UserChangedHandlerSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void ShouldCheckCreate()
-		{
-			@"
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class UserChangedHandlerSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void ShouldCheckCreate()
+        {
+            @"
 				Given bugzilla profile created
 					And set of Users set to storage:
 					|id|login|email|
@@ -35,13 +35,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					|2|user2|user2@mail.com|
 					|3|user3|user3@mail.com|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckUpdate()
-		{
-			@"
+        [Test]
+        public void ShouldCheckUpdate()
+        {
+            @"
 				Given bugzilla profile created
 					And set of Users set to storage:
 					|id|login|email|
@@ -54,13 +54,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					|1|user1|user1@mail.com|
 					|2|user2 updated|user2@mail.com|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckUpdateWhenEmailChanged()
-		{
-			@"
+        [Test]
+        public void ShouldCheckUpdateWhenEmailChanged()
+        {
+            @"
 				Given bugzilla profile created
 					And set of Users set to storage:
 					|id|login|email|
@@ -73,13 +73,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					|1|user1|user1@mail.com|
 					|2|user2|user2Upd@mail.com|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckDelete()
-		{
-			@"
+        [Test]
+        public void ShouldCheckDelete()
+        {
+            @"
 				Given bugzilla profile created
 					And set of Users set to storage:
 					|id|login|email|
@@ -91,13 +91,13 @@ namespace Tp.Bugzilla.Tests.Handlers
 					|id|login|email|
 					|1|user1|user1@mail.com|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
+        }
 
-		[Test]
-		public void ShouldCheckCreateInactive()
-		{
-			@"
+        [Test]
+        public void ShouldCheckCreateInactive()
+        {
+            @"
 				Given bugzilla profile created
 					And set of Users set to storage:
 					|id|login|email|
@@ -111,72 +111,76 @@ namespace Tp.Bugzilla.Tests.Handlers
 					|2|user2|user2@mail.com|
 					|3|user3|user3@mail.com|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<UserChangedHandlerSpecs>());
+        }
 
-		[Given("set of Users set to storage:")]
-		public void SetUserToStorage(int id, string login, string email)
-		{
-			var user = new UserDTO {ID = id, Login = login, Email = email};
+        [Given("set of Users set to storage:")]
+        public void SetUserToStorage(int id, string login, string email)
+        {
+            var user = new UserDTO { ID = id, Login = login, Email = email };
 
-			Profile.Get<UserDTO>(user.ID.ToString()).Add(user);
-			Profile.Get<UserDTO>(user.Email).Add(user);
-		}
+            Profile.Get<UserDTO>(user.ID.ToString()).Add(user);
+            Profile.Get<UserDTO>(user.Email).Add(user);
+        }
 
-		[When("handled UserCreatedMessage message with user id $id, login '$login' and email '$email'")]
-		public void HandleCreate(int id, string login, string email)
-		{
-			var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = true };
-			TransportMock.HandleMessageFromTp(Profile, new UserCreatedMessage {Dto = user});
-		}
+        [When("handled UserCreatedMessage message with user id $id, login '$login' and email '$email'")]
+        public void HandleCreate(int id, string login, string email)
+        {
+            var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = true };
+            TransportMock.HandleMessageFromTp(Profile, new UserCreatedMessage { Dto = user });
+        }
 
-		[When("handled UserUpdatedMessage message with user id $id, login '$login' and email '$email'")]
-		public void HandleUpdate(int id, string login, string email)
-		{
-			var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = true };
-			TransportMock.HandleMessageFromTp(Profile, new UserUpdatedMessage {Dto = user});
-		}
+        [When("handled UserUpdatedMessage message with user id $id, login '$login' and email '$email'")]
+        public void HandleUpdate(int id, string login, string email)
+        {
+            var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = true };
+            TransportMock.HandleMessageFromTp(Profile, new UserUpdatedMessage { Dto = user });
+        }
 
-		[When("handled UserCreatedMessage message with inactive user id $id, login '$login' and email '$email'")]
-		public void HandlCreateInactiveWithLogin(int id, string login, string email)
-		{
-			var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = false };
-			TransportMock.HandleMessageFromTp(Profile, new UserCreatedMessage { Dto = user });
-		}
+        [When("handled UserCreatedMessage message with inactive user id $id, login '$login' and email '$email'")]
+        public void HandlCreateInactiveWithLogin(int id, string login, string email)
+        {
+            var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = false };
+            TransportMock.HandleMessageFromTp(Profile, new UserCreatedMessage { Dto = user });
+        }
 
-		[When("handled UserUpdatedMessage message with user id $id, login '$login' and changed email '$email'")]
-		public void HandleUpdateWithEmailChanged(int id, string login, string email)
-		{
-			var user = new UserDTO {ID = id, Login = login, Email = email, IsActive = true};
-			TransportMock.HandleMessageFromTp(Profile,
-			                                  new UserUpdatedMessage {Dto = user, ChangedFields = new[] {UserField.Email}});
-		}
+        [When("handled UserUpdatedMessage message with user id $id, login '$login' and changed email '$email'")]
+        public void HandleUpdateWithEmailChanged(int id, string login, string email)
+        {
+            var user = new UserDTO { ID = id, Login = login, Email = email, IsActive = true };
+            TransportMock.HandleMessageFromTp(Profile,
+                new UserUpdatedMessage { Dto = user, ChangedFields = new[] { UserField.Email } });
+        }
 
-		[When("handled UserDeletedMessage message with user id $id and email '$email'")]
-		public void HandleDelete(int id, string email)
-		{
-			var user = new UserDTO {ID = id, Email = email};
-			TransportMock.HandleMessageFromTp(Profile, new UserDeletedMessage {Dto = user});
-		}
+        [When("handled UserDeletedMessage message with user id $id and email '$email'")]
+        public void HandleDelete(int id, string email)
+        {
+            var user = new UserDTO { ID = id, Email = email };
+            TransportMock.HandleMessageFromTp(Profile, new UserDeletedMessage { Dto = user });
+        }
 
-		[Then("users storage should contain $count items")]
-		public void ChechStorageCount(int count)
-		{
-			Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count))");
-		}
+        [Then("users storage should contain $count items")]
+        public void ChechStorageCount(int count)
+        {
+            Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count), "Profile.Get<UserDTO>().Count().Should(Be.EqualTo(count))");
+        }
 
-		[Then("users storage should contain following items:")]
-		public void CheckStorageItem(int id, string login, string email)
-		{
-			Profile.Get<UserDTO>(id.ToString())
-				.Where(u => u.Login == login)
-				.Where(u => u.Email == email)
-				.SingleOrDefault().Should(Be.Not.Null, "Profile.Get<UserDTO>(id.ToString()).Where(u => u.Login == login).Where(u => u.Email == email).SingleOrDefault().Should(Be.Not.Null)");
+        [Then("users storage should contain following items:")]
+        public void CheckStorageItem(int id, string login, string email)
+        {
+            Profile.Get<UserDTO>(id.ToString())
+                .Where(u => u.Login == login)
+                .Where(u => u.Email == email)
+                .SingleOrDefault()
+                .Should(Be.Not.Null,
+                    "Profile.Get<UserDTO>(id.ToString()).Where(u => u.Login == login).Where(u => u.Email == email).SingleOrDefault().Should(Be.Not.Null)");
 
-			Profile.Get<UserDTO>(email)
-				.Where(u => u.Login == login)
-				.Where(u => u.ID == id)
-				.SingleOrDefault().Should(Be.Not.Null, "Profile.Get<UserDTO>(email).Where(u => u.Login == login).Where(u => u.ID == id).SingleOrDefault().Should(Be.Not.Null)");
-		}
-	}
+            Profile.Get<UserDTO>(email)
+                .Where(u => u.Login == login)
+                .Where(u => u.ID == id)
+                .SingleOrDefault()
+                .Should(Be.Not.Null,
+                    "Profile.Get<UserDTO>(email).Where(u => u.Login == login).Where(u => u.ID == id).SingleOrDefault().Should(Be.Not.Null)");
+        }
+    }
 }

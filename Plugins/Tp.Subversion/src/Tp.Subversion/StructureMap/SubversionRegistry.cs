@@ -18,42 +18,42 @@ using Tp.Subversion.Workflow;
 
 namespace Tp.Subversion.StructureMap
 {
-	public class SubversionRegistry : SourceControlRegistry
-	{
-		public SubversionRegistry()
-		{
-			For<IExcludedAssemblyNamesSource>().HybridHttpOrThreadLocalScoped().Use<SvnPluginExcludedAssemblies>();
-			For<IPatchCollection>().Use<SvnPatchCollection>();
-		}
+    public class SubversionRegistry : SourceControlRegistry
+    {
+        public SubversionRegistry()
+        {
+            For<IExcludedAssemblyNamesSource>().HybridHttpOrThreadLocalScoped().Use<SvnPluginExcludedAssemblies>();
+            For<IPatchCollection>().Use<SvnPatchCollection>();
+        }
 
-		protected override void ConfigureCheckConnectionErrorResolver()
-		{
-			For<ICheckConnectionErrorResolver>().Use<SubversionErrorResolver>();
-		}
+        protected override void ConfigureCheckConnectionErrorResolver()
+        {
+            For<ICheckConnectionErrorResolver>().Use<SubversionErrorResolver>();
+        }
 
-		protected override void ConfigureSourceControlConnectionSettingsSource()
-		{
-			For<ISourceControlConnectionSettingsSource>().Use<CurrentProfileToSvnConnectionSettingsAdapter>();
-		}
+        protected override void ConfigureSourceControlConnectionSettingsSource()
+        {
+            For<ISourceControlConnectionSettingsSource>().Use<CurrentProfileToSvnConnectionSettingsAdapter>();
+        }
 
-		protected override void ConfigureRevisionIdComparer()
-		{
-			For<IRevisionIdComparer>().Use<SubversionRevisionIdComparer>();
-		}
+        protected override void ConfigureRevisionIdComparer()
+        {
+            For<IRevisionIdComparer>().Use<SubversionRevisionIdComparer>();
+        }
 
-		protected override void ConfigureVersionControlSystem()
-		{
-			For<IVersionControlSystem>().Use<Subversion.Subversion>();
-		}
+        protected override void ConfigureVersionControlSystem()
+        {
+            For<IVersionControlSystem>().Use<Subversion.Subversion>();
+        }
 
-		protected override void ConfigureRevisionStorage()
-		{
-			For<IRevisionStorageRepository>().HybridHttpOrThreadLocalScoped().Use<SubversionRevisionStorageRepository>();
-		}
+        protected override void ConfigureRevisionStorage()
+        {
+            For<IRevisionStorageRepository>().HybridHttpOrThreadLocalScoped().Use<SubversionRevisionStorageRepository>();
+        }
 
-		protected override void ConfigureUserMapper()
-		{
-			For<UserMapper>().Use<SubversionUserMapper>();
-		}
-	}
+        protected override void ConfigureUserMapper()
+        {
+            For<UserMapper>().Use<SubversionUserMapper>();
+        }
+    }
 }

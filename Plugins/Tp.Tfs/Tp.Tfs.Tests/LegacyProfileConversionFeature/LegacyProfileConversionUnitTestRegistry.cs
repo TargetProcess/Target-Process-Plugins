@@ -13,8 +13,8 @@ using Tp.Plugin.Core;
 
 namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 {
-	public class TfsLegacyProfileConversionUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
-	{
+    public class TfsLegacyProfileConversionUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
+    {
         public TfsLegacyProfileConversionUnitTestRegistry()
         {
             For<TransportMock>().Use(
@@ -22,8 +22,8 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
                     typeof(TfsPluginProfile).Assembly,
                     new List<Assembly>
                     {
-                        typeof (ExceptionThrownLocalMessage).Assembly,
-                        typeof (TfsPluginProfile).Assembly
+                        typeof(ExceptionThrownLocalMessage).Assembly,
+                        typeof(TfsPluginProfile).Assembly
                     },
                     new Assembly[] { }));
 
@@ -32,9 +32,9 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
             For<PluginInitializer>().Use(mock);
         }
 
-		protected override Assembly PluginAssembly
-		{
-			get { return typeof (TfsPluginProfile).Assembly; }
-		}
-	}
+        protected override Assembly PluginAssembly
+        {
+            get { return typeof(TfsPluginProfile).Assembly; }
+        }
+    }
 }

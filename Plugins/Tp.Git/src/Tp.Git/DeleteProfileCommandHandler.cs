@@ -12,25 +12,25 @@ using Tp.Integration.Plugin.Common.Storage;
 
 namespace Tp.Git
 {
-	public class DeleteProfileCommandHandler : IHandleMessages<ExecutePluginCommandCommand>
-	{
-		private readonly IStorageRepository _storage;
+    public class DeleteProfileCommandHandler : IHandleMessages<ExecutePluginCommandCommand>
+    {
+        private readonly IStorageRepository _storage;
 
-		public DeleteProfileCommandHandler(IStorageRepository storage)
-		{
-			_storage = storage;
-		}
+        public DeleteProfileCommandHandler(IStorageRepository storage)
+        {
+            _storage = storage;
+        }
 
-		public void Handle(ExecutePluginCommandCommand message)
-		{
-			if (message.CommandName == EmbeddedPluginCommands.DeleteProfile)
-			{
-				var folder = _storage.Get<GitRepositoryFolder>().FirstOrDefault();
-				if(folder != null)
-				{
-					folder.Delete();
-				}
-			}
-		}
-	}
+        public void Handle(ExecutePluginCommandCommand message)
+        {
+            if (message.CommandName == EmbeddedPluginCommands.DeleteProfile)
+            {
+                var folder = _storage.Get<GitRepositoryFolder>().FirstOrDefault();
+                if (folder != null)
+                {
+                    folder.Delete();
+                }
+            }
+        }
+    }
 }

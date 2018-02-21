@@ -13,20 +13,12 @@ namespace Mercurial
         /// <summary>
         /// Gets the type of action that was performed on the path.
         /// </summary>
-        public ChangesetPathActionType Action
-        {
-            get;
-            internal set;
-        }
+        public ChangesetPathActionType Action { get; internal set; }
 
         /// <summary>
         /// Gets the path involved.
         /// </summary>
-        public string Path
-        {
-            get;
-            internal set;
-        }
+        public string Path { get; internal set; }
 
         /// <summary>
         /// Gets the path of the source of the copy.
@@ -35,11 +27,7 @@ namespace Mercurial
         /// This property only contains a value if <see cref="Action"/> is <see cref="ChangesetPathActionType.Add"/>
         /// and the add is a copy of an existing file, otherwise it will be <see cref="string.Empty"/>.
         /// </remarks>
-        public string Source
-        {
-            get;
-            internal set;
-        }
+        public string Source { get; internal set; }
 
         #region IEquatable<ChangesetPathAction> Members
 
@@ -94,7 +82,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(ChangesetPathAction))
                 return false;
-            return Equals((ChangesetPathAction)obj);
+            return Equals((ChangesetPathAction) obj);
         }
 
         /// <summary>

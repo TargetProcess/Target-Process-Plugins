@@ -14,65 +14,47 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Git.VersionControlSystem
 {
-	[Serializable]
-	public class GitRepositoryFolder
-	{
-		public string Value { get; set; }
-		public string RepoUri { get; set; }
+    [Serializable]
+    public class GitRepositoryFolder
+    {
+        public string Value { get; set; }
+        public string RepoUri { get; set; }
 
-		[NonSerialized]
-		private bool _wasMarkedAsDeleted;
+        [NonSerialized] private bool _wasMarkedAsDeleted;
 
-		public void Delete()
-		{
-			if (!Exists())
-			{
-				return;
-			}
+        public void Delete()
+        {
+            if (!Exists())
+            {
+                return;
+            }
 
-			try
-			{
-				ShutdownGit(this);
-			}
-			catch (Exception ex)
-			{
-				ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
-			}
+            try
+            {
+                DeleteDirectory();
+            }
+            catch (Exception ex)
+            {
+                _wasMarkedAsDeleted = true;
+                ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
+            }
+        }
 
-			try
-			{
-				DeleteDirectory();
-			}
-			catch (Exception ex)
-			{
-				_wasMarkedAsDeleted = true;
-				ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
-			}
-		}
-
-		public bool Exists()
-		{
+        public bool Exists()
+        {
             string path = GetAbsolutePath();
             bool exists = Directory.Exists(path);
             return exists && !_wasMarkedAsDeleted;
-		}
+        }
 
-		private static void ShutdownGit(GitRepositoryFolder repositoryFolder)
-		{
-            string path = repositoryFolder.GetAbsolutePath();
-			var git = NGit.Api.Git.Open(path);
-			git.GetRepository().Close();
-			WindowCache.Reconfigure(new WindowCacheConfig());
-		}
-
-		private void DeleteDirectory()
-		{
+        private void DeleteDirectory()
+        {
             string path = GetAbsolutePath();
             path.DeleteDirectory();
-		}
+        }
 
-		public static GitRepositoryFolder Create(string repoUri)
-		{
+        public static GitRepositoryFolder Create(string repoUri)
+        {
             GitRepositoryFolder folder = new GitRepositoryFolder();
             folder.RepoUri = repoUri;
 
@@ -83,7 +65,7 @@ namespace Tp.Git.VersionControlSystem
             folder.Value = relativeUri.OriginalString;
 
             return folder;
-		}
+        }
 
         private string GetRepositoryFolder()
         {
@@ -136,9 +118,9 @@ namespace Tp.Git.VersionControlSystem
             return path;
         }
 
-		protected static string GitCloneRootFolder
-		{
-			get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
-		}
-	}
+        protected static string GitCloneRootFolder
+        {
+            get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
+        }
+    }
 }

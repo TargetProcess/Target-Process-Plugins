@@ -49,10 +49,7 @@ namespace Mercurial
         /// </summary>
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
         }
 
         /// <summary>
@@ -60,10 +57,7 @@ namespace Mercurial
         /// </summary>
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
         }
 
         #region IEquatable<RemoteRepositoryPath> Members
@@ -108,7 +102,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(RemoteRepositoryPath))
                 return false;
-            return Equals((RemoteRepositoryPath)obj);
+            return Equals((RemoteRepositoryPath) obj);
         }
 
         /// <summary>

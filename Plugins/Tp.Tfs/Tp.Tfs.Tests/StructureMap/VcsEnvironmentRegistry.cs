@@ -8,12 +8,12 @@ using Tp.Tfs.StructureMap;
 
 namespace Tp.Tfs.Tests.StructureMap
 {
-	public class VcsEnvironmentRegistry : TfsRegistry
-	{
-		public VcsEnvironmentRegistry()
-		{
-			For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
+    public class VcsEnvironmentRegistry : TfsRegistry
+    {
+        public VcsEnvironmentRegistry()
+        {
+            For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
             For<WorkItemsContext>().HybridHttpOrThreadLocalScoped().Use<WorkItemsContext>();
-		}
-	}
+        }
+    }
 }

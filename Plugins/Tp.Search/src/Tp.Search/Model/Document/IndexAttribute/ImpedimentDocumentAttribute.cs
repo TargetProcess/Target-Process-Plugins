@@ -10,15 +10,19 @@ using Tp.Integration.Common;
 
 namespace Tp.Search.Model.Document.IndexAttribute
 {
-	[AttributeUsage(AttributeTargets.Field)]
-	class ImpedimentDocumentAttribute : Attribute, IDocumentFieldsProvider
-	{
-		private readonly IEnumerable<Enum> _fields;
-		public ImpedimentDocumentAttribute(ImpedimentField[] fields)
-		{
-			_fields = fields.Cast<Enum>().ToList();
-		}
+    [AttributeUsage(AttributeTargets.Field)]
+    class ImpedimentDocumentAttribute : Attribute, IDocumentFieldsProvider
+    {
+        private readonly IEnumerable<Enum> _fields;
 
-		public IEnumerable<Enum> DocumentFields { get { return _fields; } }
-	}
+        public ImpedimentDocumentAttribute(ImpedimentField[] fields)
+        {
+            _fields = fields.Cast<Enum>().ToList();
+        }
+
+        public IEnumerable<Enum> DocumentFields
+        {
+            get { return _fields; }
+        }
+    }
 }

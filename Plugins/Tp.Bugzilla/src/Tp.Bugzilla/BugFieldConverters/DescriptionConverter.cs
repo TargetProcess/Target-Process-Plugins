@@ -11,46 +11,46 @@ using Tp.Integration.Common;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class DescriptionConverter : IBugConverter<BugzillaBug>
-	{
-		public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
-		{
-			var description = thirdPartyBug.description;
+    public class DescriptionConverter : IBugConverter<BugzillaBug>
+    {
+        public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
+        {
+            var description = thirdPartyBug.description;
 
-			if (String.IsNullOrEmpty(description)) return;
+            if (String.IsNullOrEmpty(description)) return;
 
-			convertedBug.BugDto.Description = FormatDescription(description);
-			convertedBug.ChangedFields.Add(BugField.Description);
-		}
+            convertedBug.BugDto.Description = FormatDescription(description);
+            convertedBug.ChangedFields.Add(BugField.Description);
+        }
 
-		public static string FormatDescription(string data)
-		{
-			data = CleanUpContent(data);
-			data = data.Replace(Environment.NewLine, "<br/>");
-			data = data.Replace("\r\n", "<br/>");
-			data = data.Replace("\n", "<br/>");
-			data = data.Replace(" ", "&nbsp;");
+        public static string FormatDescription(string data)
+        {
+            data = CleanUpContent(data);
+            data = data.Replace(Environment.NewLine, "<br/>");
+            data = data.Replace("\r\n", "<br/>");
+            data = data.Replace("\n", "<br/>");
+            data = data.Replace(" ", "&nbsp;");
 
-			return data;
-		}
+            return data;
+        }
 
-		public static string CleanUpContent(string content)
-		{
-			if (string.IsNullOrEmpty(content))
-				return content;
+        public static string CleanUpContent(string content)
+        {
+            if (string.IsNullOrEmpty(content))
+                return content;
 
-			var builder = new StringBuilder();
-			var allowedSymbols = new[] {10, 13};
+            var builder = new StringBuilder();
+            var allowedSymbols = new[] { 10, 13 };
 
-			foreach (var symbol in content)
-			{
-				if (symbol <= 31 && !allowedSymbols.Contains(symbol))
-					continue;
+            foreach (var symbol in content)
+            {
+                if (symbol <= 31 && !allowedSymbols.Contains(symbol))
+                    continue;
 
-				builder.Append(symbol);
-			}
+                builder.Append(symbol);
+            }
 
-			return builder.ToString();
-		}
-	}
+            return builder.ToString();
+        }
+    }
 }

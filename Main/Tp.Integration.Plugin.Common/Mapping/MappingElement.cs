@@ -7,18 +7,18 @@ using System.Runtime.Serialization;
 
 namespace Tp.Integration.Plugin.Common.Mapping
 {
-	[DataContract]
-	public class MappingElement
-	{
-		[DataMember]
-		public string Key { get; set; }
+    [DataContract]
+    public class MappingElement
+    {
+        [DataMember]
+        public string Key { get; set; }
 
-		[DataMember]
-		public MappingLookup Value { get; set; }
+        [DataMember]
+        public MappingLookup Value { get; set; }
 
-		public bool IsEmptyValue()
-		{
-			return Value == null || (Value.Id == 0 && string.IsNullOrEmpty(Value.Name));
-		}
-	}
+        public bool IsEmptyValue()
+        {
+            return Value == null || (Value.Id == 0 && string.IsNullOrEmpty(Value.Name));
+        }
+    }
 }

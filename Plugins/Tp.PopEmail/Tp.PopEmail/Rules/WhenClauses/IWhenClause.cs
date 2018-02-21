@@ -7,8 +7,8 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration.Rules.WhenClauses
 {
-	public interface IWhenClause
-	{
-		bool IsMatched(EmailMessage email);
-	}
+    public interface IWhenClause
+    {
+        bool IsMatched(EmailMessage email);
+    }
 }

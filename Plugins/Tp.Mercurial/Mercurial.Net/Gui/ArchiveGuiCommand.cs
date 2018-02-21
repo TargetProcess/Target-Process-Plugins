@@ -23,11 +23,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and

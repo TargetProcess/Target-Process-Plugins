@@ -13,40 +13,40 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class SeverityConverter : GuessConverterBase<BugzillaBug, SeverityDTO>
-	{
-		public SeverityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
-		{
-		}
+    public class SeverityConverter : GuessConverterBase<BugzillaBug, SeverityDTO>
+    {
+        public SeverityConverter(IStorageRepository storageRepository, IActivityLogger logger) : base(storageRepository, logger)
+        {
+        }
 
-		protected override void SetValue(ConvertedBug dto, int id)
-		{
-			dto.BugDto.SeverityID = id;
-		}
+        protected override void SetValue(ConvertedBug dto, int id)
+        {
+            dto.BugDto.SeverityID = id;
+        }
 
-		protected override SeverityDTO GetFromStorage(string value)
-		{
-			return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
-		}
+        protected override SeverityDTO GetFromStorage(string value)
+        {
+            return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+        }
 
-		protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
-		{
-			return thirdPartyBug.bug_severity;
-		}
+        protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
+        {
+            return thirdPartyBug.bug_severity;
+        }
 
-		protected override MappingContainer Map
-		{
-			get { return StorageRepository.GetProfile<BugzillaProfile>().SeveritiesMapping; }
-		}
+        protected override MappingContainer Map
+        {
+            get { return StorageRepository.GetProfile<BugzillaProfile>().SeveritiesMapping; }
+        }
 
-		protected override BugField BugField
-		{
-			get { return BugField.SeverityID; }
-		}
+        protected override BugField BugField
+        {
+            get { return BugField.SeverityID; }
+        }
 
-		protected override string BugFieldName
-		{
-			get { return "Severity"; }
-		}
-	}
+        protected override string BugFieldName
+        {
+            get { return "Severity"; }
+        }
+    }
 }

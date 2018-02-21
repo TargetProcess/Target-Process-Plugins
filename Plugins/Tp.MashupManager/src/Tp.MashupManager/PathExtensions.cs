@@ -9,19 +9,19 @@ using System.IO;
 
 namespace Tp.MashupManager
 {
-	public static class PathExtensions
-	{
-		public static string GetRelativePathTo(this string path, string baseDirectoryPath)
-		{
-			if (!baseDirectoryPath.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)))
-			{
-				baseDirectoryPath += Path.DirectorySeparatorChar;
-			}
+    public static class PathExtensions
+    {
+        public static string GetRelativePathTo(this string path, string baseDirectoryPath)
+        {
+            if (!baseDirectoryPath.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)))
+            {
+                baseDirectoryPath += Path.DirectorySeparatorChar;
+            }
 
-			return Uri.UnescapeDataString(
-				new Uri(baseDirectoryPath).MakeRelativeUri(new Uri(path))
-					.ToString().Replace('/', Path.DirectorySeparatorChar)
-				);
-		}
-	}
+            return Uri.UnescapeDataString(
+                new Uri(baseDirectoryPath).MakeRelativeUri(new Uri(path))
+                    .ToString().Replace('/', Path.DirectorySeparatorChar)
+            );
+        }
+    }
 }

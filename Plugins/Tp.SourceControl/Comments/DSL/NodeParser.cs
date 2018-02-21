@@ -8,26 +8,26 @@ using System.Globalization;
 
 namespace Tp.SourceControl.Comments.DSL
 {
-	public static class NodeParser
-	{
-		public static int GetEntityId(object value)
-		{
-			return Convert.ToInt32(value, CultureInfo.InvariantCulture);
-		}
+    public static class NodeParser
+    {
+        public static int GetEntityId(object value)
+        {
+            return Convert.ToInt32(value, CultureInfo.InvariantCulture);
+        }
 
-		public static decimal GetTime(object value)
-		{
-			return Convert.ToDecimal(value.ToString().Replace(",", "."), CultureInfo.InvariantCulture);
-		}
+        public static decimal GetTime(object value)
+        {
+            return Convert.ToDecimal(value.ToString().Replace(",", "."), CultureInfo.InvariantCulture);
+        }
 
-		public static string GetStatus(object value)
-		{
-			return Convert.ToString(value).Trim().Trim(',');
-		}
+        public static string GetStatus(object value)
+        {
+            return Convert.ToString(value).Trim().Trim(',');
+        }
 
-		public static string GetCommentSegment(object value)
-		{
-			return Convert.ToString(value).Trim();
-		}
-	}
+        public static string GetCommentSegment(object value)
+        {
+            return Convert.ToString(value).Trim();
+        }
+    }
 }

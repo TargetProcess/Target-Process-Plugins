@@ -11,27 +11,27 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public class GetProfileCommand : IPluginCommand
-	{
-		private readonly IProfileCollection _profileCollection;
+    public class GetProfileCommand : IPluginCommand
+    {
+        private readonly IProfileCollection _profileCollection;
 
-		public GetProfileCommand(IProfileCollection profileCollection)
-		{
-			_profileCollection = profileCollection;
-		}
+        public GetProfileCommand(IProfileCollection profileCollection)
+        {
+            _profileCollection = profileCollection;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage
-			       	{
-			       		ResponseData = _profileCollection[args].ConvertToDto().Serialize(),
-			       		PluginCommandStatus = PluginCommandStatus.Succeed
-			       	};
-		}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage
+            {
+                ResponseData = _profileCollection[args].ConvertToDto().Serialize(),
+                PluginCommandStatus = PluginCommandStatus.Succeed
+            };
+        }
 
-		public string Name
-		{
-			get { return EmbeddedPluginCommands.GetProfile; }
-		}
-	}
+        public string Name
+        {
+            get { return EmbeddedPluginCommands.GetProfile; }
+        }
+    }
 }

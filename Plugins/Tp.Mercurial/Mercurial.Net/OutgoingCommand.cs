@@ -59,15 +59,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -78,15 +72,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -97,10 +85,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -174,15 +159,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = (value ?? string.Empty).Trim();
-            }
+            set { _Destination = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -190,11 +169,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Gets the collection of revisions intended to be included in the destination.
@@ -203,10 +178,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>
@@ -217,10 +189,7 @@ namespace Mercurial
         [DefaultValue(false)]
         public bool RecurseSubRepositories
         {
-            get
-            {
-                return _RecurseSubRepositories;
-            }
+            get { return _RecurseSubRepositories; }
 
             set
             {
@@ -251,11 +220,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="Changeset"/> objects.
         /// </summary>
-        public IEnumerable<Changeset> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Changeset> Result { get; private set; }
 
         #endregion
 

@@ -1,9 +1,9 @@
 namespace Tp.Search.Model.Optimization
 {
-	public enum DeferredOptimizeType
-	{
-		None,
-		Calls,
-		Time
-	}
+    public enum DeferredOptimizeType
+    {
+        None,
+        Calls,
+        Time
+    }
 }

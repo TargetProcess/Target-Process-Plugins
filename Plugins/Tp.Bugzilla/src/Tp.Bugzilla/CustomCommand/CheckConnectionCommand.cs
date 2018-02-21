@@ -15,56 +15,53 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.CustomCommand
 {
-	public class CheckConnectionCommand : IPluginCommand
-	{
-		private readonly IActivityLogger _logger;
+    public class CheckConnectionCommand : IPluginCommand
+    {
+        private readonly IActivityLogger _logger;
 
-		public CheckConnectionCommand(IActivityLogger logger)
-		{
-			_logger = logger;
-		}
+        public CheckConnectionCommand(IActivityLogger logger)
+        {
+            _logger = logger;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var errors = new PluginProfileErrorCollection();
-			var profile = args.DeserializeProfile();
-			var settings = (BugzillaProfile) profile.Settings;
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var errors = new PluginProfileErrorCollection();
+            var profile = args.DeserializeProfile();
+            var settings = (BugzillaProfile) profile.Settings;
 
-			var properties = GetBugzillaProperties(settings, errors);
+            var properties = GetBugzillaProperties(settings, errors);
 
-			return errors.Any()
-			       	? new PluginCommandResponseMessage
-			       	  	{PluginCommandStatus = PluginCommandStatus.Fail, ResponseData = errors.Serialize()}
-			       	: new PluginCommandResponseMessage
-			       	  	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = properties.Serialize()};
-		}
+            return errors.Any()
+                ? new PluginCommandResponseMessage
+                    { PluginCommandStatus = PluginCommandStatus.Fail, ResponseData = errors.Serialize() }
+                : new PluginCommandResponseMessage
+                    { PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = properties.Serialize() };
+        }
 
-		public BugzillaProperties GetBugzillaProperties(BugzillaProfile profile, PluginProfileErrorCollection errors)
-		{
-			profile.ValidateCredentials(errors);
+        public BugzillaProperties GetBugzillaProperties(BugzillaProfile profile, PluginProfileErrorCollection errors)
+        {
+            profile.ValidateCredentials(errors);
 
-			if (!errors.Any())
-			{
-				try
-				{
-					_logger.Info("Checking connection");
-					var bugzillaProperties = new BugzillaService().CheckConnection(profile);
-					_logger.Info("Connection success");
-					return new BugzillaProperties(bugzillaProperties);
-				}
-				catch (BugzillaPluginProfileException e)
-				{
-					e.ErrorCollection.ForEach(errors.Add);
-					_logger.WarnFormat("Connection failed: {0}", e);
-				}
-			}
+            if (!errors.Any())
+            {
+                try
+                {
+                    _logger.Info("Checking connection");
+                    var bugzillaProperties = new BugzillaService().CheckConnection(profile);
+                    _logger.Info("Connection success");
+                    return new BugzillaProperties(bugzillaProperties);
+                }
+                catch (BugzillaPluginProfileException e)
+                {
+                    e.ErrorCollection.ForEach(errors.Add);
+                    _logger.WarnFormat("Connection failed: {0}", e);
+                }
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public string Name
-		{
-			get { return "CheckConnection"; }
-		}
-	}
+        public string Name => "CheckConnection";
+    }
 }

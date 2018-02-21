@@ -9,9 +9,9 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration
 {
-	[Serializable]
-	public class EmailReceivedMessage : IPluginLocalMessage
-	{
-		public EmailMessage Mail { get; set; }
-	}
+    [Serializable]
+    public class EmailReceivedMessage : IPluginLocalMessage
+    {
+        public EmailMessage Mail { get; set; }
+    }
 }

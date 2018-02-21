@@ -73,10 +73,7 @@ namespace Mercurial
                 return _ClientPath;
             }
 
-            private set
-            {
-                _ClientPath = value;
-            }
+            private set { _ClientPath = value; }
         }
 
         /// <summary>
@@ -138,10 +135,7 @@ namespace Mercurial
                 return _CurrentVersion;
             }
 
-            private set
-            {
-                _CurrentVersion = value;
-            }
+            private set { _CurrentVersion = value; }
         }
 
         /// <summary>
@@ -203,7 +197,8 @@ namespace Mercurial
         /// <exception cref="InvalidOperationException">
         /// <para>Unable to find or interpret version number from the Mercurial client.</para>
         /// </exception>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Since reading the version means executing an external program, a property is not the way to go.")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate",
+             Justification = "Since reading the version means executing an external program, a property is not the way to go.")]
         public static Version GetVersion()
         {
             LazyInitialize();
@@ -237,7 +232,8 @@ namespace Mercurial
 
                 default:
                     throw new InvalidOperationException(
-                        string.Format(CultureInfo.InvariantCulture, "Incorrect version number length, too many or too few parts: {0}", versionString));
+                        string.Format(CultureInfo.InvariantCulture, "Incorrect version number length, too many or too few parts: {0}",
+                            versionString));
             }
         }
 
@@ -299,10 +295,10 @@ namespace Mercurial
                 return null;
 
             return (from path in environmentPath.Split(';')
-                    where !StringEx.IsNullOrWhiteSpace(path)
-                    let executablePath = Path.Combine(path.Trim(), "hg.exe")
-                    where File.Exists(executablePath)
-                    select executablePath).FirstOrDefault();
+                where !StringEx.IsNullOrWhiteSpace(path)
+                let executablePath = Path.Combine(path.Trim(), "hg.exe")
+                where File.Exists(executablePath)
+                select executablePath).FirstOrDefault();
         }
     }
 }

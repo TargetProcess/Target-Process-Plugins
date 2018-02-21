@@ -10,27 +10,32 @@ using Tp.PopEmailIntegration.Sagas;
 
 namespace Tp.PopEmailIntegration
 {
-	public class UpdateMessageBodySagaContext : PopEmailIntegrationContext
-	{
-		public UpdateMessageBodySagaContext()
-		{
-			ObjectFactory.Configure(x => x.For<UpdateMessageBodySagaContext>().Use(this));
+    public class UpdateMessageBodySagaContext : PopEmailIntegrationContext
+    {
+        public UpdateMessageBodySagaContext()
+        {
+            ObjectFactory.Configure(x => x.For<UpdateMessageBodySagaContext>().Use(this));
 
-			_command = new UpdateMessageBodyCommandInternal {AttachmentDtos = new AttachmentDTO[] {}, MessageDto = new MessageDTO(), OuterSagaId = OuterSagaId};
-		}
+            _command = new UpdateMessageBodyCommandInternal
+            {
+                AttachmentDtos = new AttachmentDTO[] { },
+                MessageDto = new MessageDTO(),
+                OuterSagaId = OuterSagaId
+            };
+        }
 
-		private readonly UpdateMessageBodyCommandInternal _command;
-		private readonly Guid _outerSagaId = Guid.NewGuid();
+        private readonly UpdateMessageBodyCommandInternal _command;
+        private readonly Guid _outerSagaId = Guid.NewGuid();
 
 
-		public UpdateMessageBodyCommandInternal Command
-		{
-			get { return _command; }
-		}
+        public UpdateMessageBodyCommandInternal Command
+        {
+            get { return _command; }
+        }
 
-		public Guid OuterSagaId
-		{
-			get { return _outerSagaId; }
-		}
-	}
+        public Guid OuterSagaId
+        {
+            get { return _outerSagaId; }
+        }
+    }
 }

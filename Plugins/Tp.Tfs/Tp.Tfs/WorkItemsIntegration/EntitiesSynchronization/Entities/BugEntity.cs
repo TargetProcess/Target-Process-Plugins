@@ -5,7 +5,7 @@
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Entities
 {
-	public class BugEntity : WorkItemEntity
-	{
-	}
+    public class BugEntity : WorkItemEntity
+    {
+    }
 }

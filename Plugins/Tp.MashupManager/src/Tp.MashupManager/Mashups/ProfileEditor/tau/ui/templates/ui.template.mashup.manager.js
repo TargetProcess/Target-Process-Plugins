@@ -7,7 +7,7 @@ tau.mashups
             engine: 'jqote2',
             markup: [
                 '<div class="plugins mashups-manager i-role-mashupManager">',
-                    '<h2 class="h2 icon">Mashup Manager</h2>',
+                    '<h2 class="h2">Mashup Manager</h2>',
                     '<table class="mashups-block">',
                         '<tr>',
                             '<td class="list i-role-mashupList"></td>',

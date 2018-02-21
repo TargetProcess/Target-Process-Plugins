@@ -46,15 +46,9 @@ namespace Mercurial
         [NullableArgument]
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
 
-            set
-            {
-                _Name = (value ?? string.Empty).Trim();
-            }
+            set { _Name = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -83,12 +77,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the value of the <see cref="Revision"/> property to the
@@ -117,15 +106,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RenameFrom
         {
-            get
-            {
-                return _RenameFrom;
-            }
+            get { return _RenameFrom; }
 
-            set
-            {
-                _RenameFrom = (value ?? string.Empty).Trim();
-            }
+            set { _RenameFrom = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -152,11 +135,7 @@ namespace Mercurial
         /// Default value is <see cref="BookmarkAction.CreateNew"/>.
         /// </summary>
         [DefaultValue(BookmarkAction.CreateNew)]
-        public BookmarkAction Action
-        {
-            get;
-            set;
-        }
+        public BookmarkAction Action { get; set; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="CommandBase{T}.Command"/>, or an
@@ -196,7 +175,8 @@ namespace Mercurial
                         break;
 
                     default:
-                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unknown BookmarkAction specified for BookmarkCommand: {0}", Action));
+                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                            "Unknown BookmarkAction specified for BookmarkCommand: {0}", Action));
                 }
             }
         }
@@ -233,7 +213,8 @@ namespace Mercurial
             if (StringEx.IsNullOrWhiteSpace(Name))
                 throw new InvalidOperationException("The Name property must be set on the BookmarkCommand before executing it");
             if (Action == BookmarkAction.RenameExisting && StringEx.IsNullOrWhiteSpace(RenameFrom))
-                throw new InvalidOperationException("The RenameFrom property must be set on the BookmarkCommand before executing it with an Action of BookmarkAction.RenameExisting");
+                throw new InvalidOperationException(
+                    "The RenameFrom property must be set on the BookmarkCommand before executing it with an Action of BookmarkAction.RenameExisting");
         }
     }
 }

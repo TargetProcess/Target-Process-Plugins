@@ -10,26 +10,26 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.Subversion.Commands
 {
-	public class SubversionCheckConnectionCommand : VcsCheckConnectionCommand<SubversionPluginProfile>
-	{
-		protected override void OnCheckConnection(PluginProfileErrorCollection errors, SubversionPluginProfile settings)
-		{
-			settings.ValidateUri(errors);
+    public class SubversionCheckConnectionCommand : VcsCheckConnectionCommand<SubversionPluginProfile>
+    {
+        protected override void OnCheckConnection(PluginProfileErrorCollection errors, SubversionPluginProfile settings)
+        {
+            settings.ValidateUri(errors);
 
-			if (!errors.Any())
-			{
-				base.OnCheckConnection(errors, settings);
-			}
-		}
+            if (!errors.Any())
+            {
+                base.OnCheckConnection(errors, settings);
+            }
+        }
 
-		protected override void CheckStartRevision(SubversionPluginProfile settings,
-		                                           IVersionControlSystem versionControlSystem,
-		                                           PluginProfileErrorCollection errors)
-		{
-			if (settings.RevisionSpecified && settings.ValidateStartRevision(errors))
-			{
-				versionControlSystem.CheckRevision(settings.StartRevision, errors);
-			}
-		}
-	}
+        protected override void CheckStartRevision(SubversionPluginProfile settings,
+            IVersionControlSystem versionControlSystem,
+            PluginProfileErrorCollection errors)
+        {
+            if (settings.RevisionSpecified && settings.ValidateStartRevision(errors))
+            {
+                versionControlSystem.CheckRevision(settings.StartRevision, errors);
+            }
+        }
+    }
 }

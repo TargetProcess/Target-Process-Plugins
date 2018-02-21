@@ -13,42 +13,42 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.Tfs.LegacyProfileConversion
 {
-	public class LegacyRevisionsImporter : LegacyProfileConvertor
-	{
-		public LegacyRevisionsImporter(
-						IConvertorArgs args,
-						IAccountCollection accountCollection,
-						ILogManager logManager,
-						PluginInitializer initializer)
-			: base(args, accountCollection, logManager, initializer)
-		{
-		}
+    public class LegacyRevisionsImporter : LegacyProfileConvertor
+    {
+        public LegacyRevisionsImporter(
+            IConvertorArgs args,
+            IAccountCollection accountCollection,
+            ILogManager logManager,
+            PluginInitializer initializer)
+            : base(args, accountCollection, logManager, initializer)
+        {
+        }
 
-		protected override void ExecuteForProfile(PluginProfile legacyProfile, IAccount account)
-		{
-			var profile = GetProfile(account, legacyProfile);
+        protected override void ExecuteForProfile(PluginProfile legacyProfile, IAccount account)
+        {
+            var profile = GetProfile(account, legacyProfile);
 
-			if (profile == null)
-			{
-				return;
-			}
+            if (profile == null)
+            {
+                return;
+            }
 
-			MigrateRevisions(legacyProfile, profile);
+            MigrateRevisions(legacyProfile, profile);
 
-			profile.Save();
-		}
+            profile.Save();
+        }
 
-		private static IProfile GetProfile(IAccount account, PluginProfile legacyProfile)
-		{
-			var convertedProfileName = String.Concat(legacyProfile.ProfileName, "_converted");
+        private static IProfile GetProfile(IAccount account, PluginProfile legacyProfile)
+        {
+            var convertedProfileName = String.Concat(legacyProfile.ProfileName, "_converted");
 
-			return account.Profiles.FirstOrDefault(x => x.Name == convertedProfileName) ??
-						 account.Profiles.FirstOrDefault(x => x.Name == legacyProfile.ProfileName);
-		}
+            return account.Profiles.FirstOrDefault(x => x.Name == convertedProfileName) ??
+                account.Profiles.FirstOrDefault(x => x.Name == legacyProfile.ProfileName);
+        }
 
-		protected override IEnumerable<PluginProfile> GetLegacyProfiles()
-		{
-			return _context.PluginProfiles.Where(x => x.Active == true && x.PluginName == "Team Foundation Server Integration");
-		}
-	}
+        protected override IEnumerable<PluginProfile> GetLegacyProfiles()
+        {
+            return _context.PluginProfiles.Where(x => x.Active == true && x.PluginName == "Team Foundation Server Integration");
+        }
+    }
 }

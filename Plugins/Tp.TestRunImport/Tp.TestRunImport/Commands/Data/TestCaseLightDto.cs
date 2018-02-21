@@ -5,9 +5,9 @@
 
 namespace Tp.Integration.Plugin.TestRunImport.Commands.Data
 {
-	public class TestCaseLightDto
-	{
-		public string Name { get; set; }
-		public int Id { get; set; }
-	}
+    public class TestCaseLightDto
+    {
+        public string Name { get; set; }
+        public int Id { get; set; }
+    }
 }

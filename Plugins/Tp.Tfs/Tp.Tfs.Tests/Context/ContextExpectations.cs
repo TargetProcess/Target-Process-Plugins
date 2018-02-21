@@ -8,24 +8,25 @@ using System.Collections.Generic;
 
 namespace Tp.Tfs.Tests.Context
 {
-	public class ContextExpectations
-	{
-		private readonly VcsPluginContext _context;
+    public class ContextExpectations
+    {
+        private readonly VcsPluginContext _context;
 
-		private readonly Dictionary<Type, CreateCommandExpectations> _createCommandExpectations = new Dictionary<Type, CreateCommandExpectations>();
+        private readonly Dictionary<Type, CreateCommandExpectations> _createCommandExpectations =
+            new Dictionary<Type, CreateCommandExpectations>();
 
-		public ContextExpectations(VcsPluginContext context)
-		{
-			_context = context;
-		}
+        public ContextExpectations(VcsPluginContext context)
+        {
+            _context = context;
+        }
 
-		public CreateCommandExpectations CreateCommand<TDto>()
-		{
-			if (!_createCommandExpectations.ContainsKey(typeof (TDto)))
-			{
-				_createCommandExpectations[typeof (TDto)] = new CreateCommandExpectations(typeof (TDto), _context.Transport);
-			}
-			return _createCommandExpectations[typeof (TDto)];
-		}
-	}
+        public CreateCommandExpectations CreateCommand<TDto>()
+        {
+            if (!_createCommandExpectations.ContainsKey(typeof(TDto)))
+            {
+                _createCommandExpectations[typeof(TDto)] = new CreateCommandExpectations(typeof(TDto), _context.Transport);
+            }
+            return _createCommandExpectations[typeof(TDto)];
+        }
+    }
 }

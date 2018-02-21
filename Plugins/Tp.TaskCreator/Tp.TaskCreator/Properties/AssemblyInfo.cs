@@ -2,6 +2,7 @@
 // Copyright (c) 2005-2010 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Tp.Integration.Plugin.Common;
@@ -38,8 +39,10 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.8.9.26184")]
+// [assembly: AssemblyVersion("3.12.6.38108")]
 
-[assembly: AssemblyVersion("3.8.9.26184")]
-[assembly: AssemblyFileVersion("3.8.9.26184")]
-[assembly: PluginAssembly("Task Creator", "This plugin automatically creates a number of tasks for a user story as it is added.", "Helpers", "task-creator-icon.png")]
+[assembly: AssemblyVersion("3.12.6.38108")]
+[assembly: AssemblyFileVersion("3.12.6.38108")]
+[assembly:
+    PluginAssembly("Task Creator", "This plugin automatically creates a number of tasks for a user story as it is added.", "Helpers",
+        "task-creator-icon.png")]

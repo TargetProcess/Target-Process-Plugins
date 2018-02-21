@@ -8,24 +8,24 @@ using Tp.Bugzilla.Schemas;
 
 namespace Tp.Bugzilla
 {
-	[Serializable]
-	public class BugzillaComment
-	{
-		public BugzillaComment()
-		{
-		}
+    [Serializable]
+    public class BugzillaComment
+    {
+        public BugzillaComment()
+        {
+        }
 
-		public BugzillaComment(long_desc comment)
-		{
-			Body = comment.thetext;
-			Author = comment.who;
-			DateAdded = comment.bug_when;
-		}
+        public BugzillaComment(long_desc comment)
+        {
+            Body = comment.thetext;
+            Author = comment.who;
+            DateAdded = comment.bug_when;
+        }
 
-		public string Body { get; set; }
+        public string Body { get; set; }
 
-		public string Author { get; set; }
+        public string Author { get; set; }
 
-		public string DateAdded { get; set; }
-	}
+        public string DateAdded { get; set; }
+    }
 }

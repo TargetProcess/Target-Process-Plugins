@@ -37,10 +37,7 @@ namespace Mercurial
         [DefaultValue(null)]
         public int? Similarity
         {
-            get
-            {
-                return _Similarity;
-            }
+            get { return _Similarity; }
 
             set
             {

@@ -29,15 +29,9 @@ namespace Mercurial.Attributes
         /// </summary>
         public string FalseOption
         {
-            get
-            {
-                return _FalseOption;
-            }
+            get { return _FalseOption; }
 
-            set
-            {
-                _FalseOption = (value ?? string.Empty).Trim();
-            }
+            set { _FalseOption = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -48,15 +42,9 @@ namespace Mercurial.Attributes
         /// </summary>
         public string TrueOption
         {
-            get
-            {
-                return _TrueOption;
-            }
+            get { return _TrueOption; }
 
-            set
-            {
-                _TrueOption = (value ?? string.Empty).Trim();
-            }
+            set { _TrueOption = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -80,7 +68,7 @@ namespace Mercurial.Attributes
                 result = FalseOption;
             else if (propertyValue is bool)
             {
-                if ((bool)propertyValue)
+                if ((bool) propertyValue)
                     result = TrueOption;
                 else
                     result = FalseOption;

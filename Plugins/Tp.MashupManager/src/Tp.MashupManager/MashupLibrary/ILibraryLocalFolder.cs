@@ -5,8 +5,8 @@
 
 namespace Tp.MashupManager.MashupLibrary
 {
-	public interface ILibraryLocalFolder
-	{
-		string Path { get; }
-	}
+    public interface ILibraryLocalFolder
+    {
+        string Path { get; }
+    }
 }

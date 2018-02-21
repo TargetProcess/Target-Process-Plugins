@@ -8,12 +8,12 @@ using Tp.Integration.Plugin.TestRunImport.FrameworkTypes;
 
 namespace Tp.TestRunImport.Tests.JUnit
 {
-	[ActionSteps]
-	public class JUnitTestRunImportActionSteps : ImportResultsTestRunImportActionSteps
-	{
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.JUnit; }
-		}
-	}
+    [ActionSteps]
+    public class JUnitTestRunImportActionSteps : ImportResultsTestRunImportActionSteps
+    {
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.JUnit; }
+        }
+    }
 }

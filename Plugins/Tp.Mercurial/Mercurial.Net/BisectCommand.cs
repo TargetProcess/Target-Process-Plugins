@@ -58,15 +58,9 @@ namespace Mercurial
         [DefaultValue(BisectState.None)]
         public BisectState State
         {
-            get
-            {
-                return _State;
-            }
+            get { return _State; }
 
-            set
-            {
-                _State = value;
-            }
+            set { _State = value; }
         }
 
         /// <summary>
@@ -77,15 +71,9 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool Update
         {
-            get
-            {
-                return _Update;
-            }
+            get { return _Update; }
 
-            set
-            {
-                _Update = value;
-            }
+            set { _Update = value; }
         }
 
         /// <summary>
@@ -95,15 +83,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string TestCommand
         {
-            get
-            {
-                return _TestCommand;
-            }
+            get { return _TestCommand; }
 
-            set
-            {
-                _TestCommand = (value ?? string.Empty).Trim();
-            }
+            set { _TestCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -117,7 +99,8 @@ namespace Mercurial
             base.Validate();
 
             if (State == BisectState.None)
-                throw new InvalidOperationException("The State property must be set to something other than None before executing a BisectCommand");
+                throw new InvalidOperationException(
+                    "The State property must be set to something other than None before executing a BisectCommand");
         }
 
         /// <summary>
@@ -261,10 +244,6 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public BisectResult Result
-        {
-            get;
-            private set;
-        }
+        public BisectResult Result { get; private set; }
     }
 }

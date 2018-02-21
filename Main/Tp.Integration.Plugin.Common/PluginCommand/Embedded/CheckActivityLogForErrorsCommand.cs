@@ -13,28 +13,28 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public class CheckActivityLogForErrorsCommand : IPluginCommand
-	{
-		private readonly IProfileCollection _profileCollection;
+    public class CheckActivityLogForErrorsCommand : IPluginCommand
+    {
+        private readonly IProfileCollection _profileCollection;
 
-		public CheckActivityLogForErrorsCommand(IProfileCollection profileCollection)
-		{
-			_profileCollection = profileCollection;
-		}
+        public CheckActivityLogForErrorsCommand(IProfileCollection profileCollection)
+        {
+            _profileCollection = profileCollection;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var responseData =
-				_profileCollection.Select(
-					x => new ProfileErrorCheckResult {ProfileName = x.Name.Value, ErrorsExist = x.Log.CheckForErrors()}).ToArray().
-					Serialize();
-			return new PluginCommandResponseMessage
-			       	{ResponseData = responseData, PluginCommandStatus = PluginCommandStatus.Succeed};
-		}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var responseData =
+                _profileCollection.Select(
+                        x => new ProfileErrorCheckResult { ProfileName = x.Name.Value, ErrorsExist = x.Log.CheckForErrors() }).ToArray().
+                    Serialize();
+            return new PluginCommandResponseMessage
+                { ResponseData = responseData, PluginCommandStatus = PluginCommandStatus.Succeed };
+        }
 
-		public string Name
-		{
-			get { return EmbeddedPluginCommands.CheckActivityLogForErrors; }
-		}
-	}
+        public string Name
+        {
+            get { return EmbeddedPluginCommands.CheckActivityLogForErrors; }
+        }
+    }
 }

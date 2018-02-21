@@ -16,163 +16,166 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Tests.Mocks
 {
-	public class BugzillaServiceMock : IBugzillaService
-	{
-		//private readonly BugzillaBugCollection _bugs = new BugzillaBugCollection();
-		private readonly List<string> _statuses = new List<string>();
-		private readonly List<string> _resolutions = new List<string>();
-		private readonly Dictionary<string, int> _bugUpdateCalls = new Dictionary<string, int>();
-		private TimeSpan _timeOffset;
-		private readonly IDictionary<ProfileName, BugzillaBugCollection> _bugsCollection = new Dictionary<ProfileName, BugzillaBugCollection>();
+    public class BugzillaServiceMock : IBugzillaService
+    {
+        //private readonly BugzillaBugCollection _bugs = new BugzillaBugCollection();
+        private readonly List<string> _statuses = new List<string>();
+        private readonly List<string> _resolutions = new List<string>();
+        private readonly Dictionary<string, int> _bugUpdateCalls = new Dictionary<string, int>();
+        private TimeSpan _timeOffset;
 
-		public IProfileReadonly InnerProfile { get; set; }
+        private readonly IDictionary<ProfileName, BugzillaBugCollection> _bugsCollection =
+            new Dictionary<ProfileName, BugzillaBugCollection>();
 
-		public IProfileReadonly CurrentProfile
-		{
-			get
-			{
-				return InnerProfile ?? ObjectFactory.GetInstance<IProfileReadonly>();
-			}
-		}
+        public IProfileReadonly InnerProfile { get; set; }
 
-		public BugzillaBugCollection Bugs
-		{
-			get
-			{
-				if (!_bugsCollection.ContainsKey(CurrentProfile.Name))
-				{
-					_bugsCollection.Add(CurrentProfile.Name, new BugzillaBugCollection());
-				}
-				return _bugsCollection[CurrentProfile.Name];
-			}
-		}
+        public IProfileReadonly CurrentProfile
+        {
+            get { return InnerProfile ?? ObjectFactory.GetInstance<IProfileReadonly>(); }
+        }
 
-		public List<string> Statuses
-		{
-			get { return _statuses; }
-		}
+        public BugzillaBugCollection Bugs
+        {
+            get
+            {
+                if (!_bugsCollection.ContainsKey(CurrentProfile.Name))
+                {
+                    _bugsCollection.Add(CurrentProfile.Name, new BugzillaBugCollection());
+                }
+                return _bugsCollection[CurrentProfile.Name];
+            }
+        }
 
-		public List<string> Resolutions
-		{
-			get { return _resolutions; }
-		}
+        public List<string> Statuses
+        {
+            get { return _statuses; }
+        }
 
-		public Dictionary<string, int> BugUpdateCalls
-		{
-			get { return _bugUpdateCalls; }
-		}
+        public List<string> Resolutions
+        {
+            get { return _resolutions; }
+        }
 
-		public virtual int[] GetChangedBugIds(DateTime? lastSyncDate)
-		{
-			return Bugs.Where(x => DateTime.Parse(x.creation_ts) > (lastSyncDate ?? DateTime.MinValue)).Select(x => int.Parse(x.bug_id)).ToArray();
-		}
+        public Dictionary<string, int> BugUpdateCalls
+        {
+            get { return _bugUpdateCalls; }
+        }
 
-		public bugzilla_properties CheckConnection()
-		{
-			throw new NotImplementedException();
-		}
+        public virtual int[] GetChangedBugIds(DateTime? lastSyncDate)
+        {
+            return
+                Bugs.Where(x => DateTime.Parse(x.creation_ts) > (lastSyncDate ?? DateTime.MinValue))
+                    .Select(x => int.Parse(x.bug_id))
+                    .ToArray();
+        }
 
-		public virtual bugCollection GetBugs(int[] bugIDs)
-		{
-			var bugCollection = new bugCollection();
-			bugCollection.AddRange(Bugs.Distinct(new BugComparer()).Where(x => bugIDs.Contains(int.Parse(x.bug_id))).Select(x => x).ToArray());
-			return bugCollection;
-		}
+        public bugzilla_properties CheckConnection()
+        {
+            throw new NotImplementedException();
+        }
 
-		public List<string> GetStatuses()
-		{
-			return Statuses;
-		}
+        public virtual bugCollection GetBugs(int[] bugIDs)
+        {
+            var bugCollection = new bugCollection();
+            bugCollection.AddRange(
+                Bugs.Distinct(new BugComparer()).Where(x => bugIDs.Contains(int.Parse(x.bug_id))).Select(x => x).ToArray());
+            return bugCollection;
+        }
 
-		public List<string> GetResolutions()
-		{
-			return Resolutions;
-		}
+        public List<string> GetStatuses()
+        {
+            return Statuses;
+        }
 
-		public void Execute(IBugzillaQuery query)
-		{
-			if(query is BugzillaCommentAction)
-			{
-				SendComment(query as BugzillaCommentAction);
-			}
-			else if(query is BugzillaAssigneeAction)
-			{
-				AssignUser(query as BugzillaAssigneeAction);
-			}
-			else
-			{
-				ChangeState(query as BugzillaChangeStatusAction);
-			}
-		}
+        public List<string> GetResolutions()
+        {
+            return Resolutions;
+        }
 
-		private void SendComment(BugzillaCommentAction bugzillaCommentAction)
-		{
-			var queryString = HttpUtility.ParseQueryString(bugzillaCommentAction.Value());
+        public void Execute(IBugzillaQuery query)
+        {
+            if (query is BugzillaCommentAction)
+            {
+                SendComment(query as BugzillaCommentAction);
+            }
+            else if (query is BugzillaAssigneeAction)
+            {
+                AssignUser(query as BugzillaAssigneeAction);
+            }
+            else
+            {
+                ChangeState(query as BugzillaChangeStatusAction);
+            }
+        }
 
-			var bug = Bugs.GetById(int.Parse(queryString["bugid"]));
+        private void SendComment(BugzillaCommentAction bugzillaCommentAction)
+        {
+            var queryString = HttpUtility.ParseQueryString(bugzillaCommentAction.Value());
 
-			if(bug.long_descCollection == null || bug.long_descCollection.Count < 1)
-			{
-				bug.long_descCollection = new long_descCollection {new long_desc {thetext = "description"}};
-			}
+            var bug = Bugs.GetById(int.Parse(queryString["bugid"]));
 
-			bug.long_descCollection.Add(new long_desc
-			                            	{
-			                            		thetext = Encoding.ASCII.GetString(Convert.FromBase64String(queryString["comment_text"])), 
-												who = queryString["owner"],
-												bug_when = queryString["date"]
-			                            	});
-		}
+            if (bug.long_descCollection == null || bug.long_descCollection.Count < 1)
+            {
+                bug.long_descCollection = new long_descCollection { new long_desc { thetext = "description" } };
+            }
 
-		private void AssignUser(BugzillaAssigneeAction assigneeAction)
-		{
-			var queryString = HttpUtility.ParseQueryString(assigneeAction.Value());
+            bug.long_descCollection.Add(new long_desc
+            {
+                thetext = Encoding.ASCII.GetString(Convert.FromBase64String(queryString["comment_text"])),
+                who = queryString["owner"],
+                bug_when = queryString["date"]
+            });
+        }
 
-			var bug = Bugs.GetById(int.Parse(queryString["bugid"]));
+        private void AssignUser(BugzillaAssigneeAction assigneeAction)
+        {
+            var queryString = HttpUtility.ParseQueryString(assigneeAction.Value());
 
-			bug.assigned_to = queryString["user"];
-		}
+            var bug = Bugs.GetById(int.Parse(queryString["bugid"]));
 
-		private void ChangeState(BugzillaChangeStatusAction action)
-		{
-			var queryString = HttpUtility.ParseQueryString(action.Value());
+            bug.assigned_to = queryString["user"];
+        }
 
-			var bug = Bugs.GetById(int.Parse(queryString["id"]));
-			bug.bug_status = queryString["status"];
-			if (!string.IsNullOrEmpty(queryString["resolution"]))
-				bug.resolution = queryString["resolution"];
+        private void ChangeState(BugzillaChangeStatusAction action)
+        {
+            var queryString = HttpUtility.ParseQueryString(action.Value());
 
-			if (!string.IsNullOrEmpty(queryString["dup_id"]))
-				bug.dup_id = queryString["dup_id"];
+            var bug = Bugs.GetById(int.Parse(queryString["id"]));
+            bug.bug_status = queryString["status"];
+            if (!string.IsNullOrEmpty(queryString["resolution"]))
+                bug.resolution = queryString["resolution"];
 
-			if (!BugUpdateCalls.ContainsKey(bug.bug_id))
-			{
-				BugUpdateCalls.Add(bug.bug_id, 0);
-			}
-			BugUpdateCalls[bug.bug_id]++;
-		}
+            if (!string.IsNullOrEmpty(queryString["dup_id"]))
+                bug.dup_id = queryString["dup_id"];
 
-		public TimeSpan GetTimeOffset()
-		{
-			return _timeOffset;
-		}
+            if (!BugUpdateCalls.ContainsKey(bug.bug_id))
+            {
+                BugUpdateCalls.Add(bug.bug_id, 0);
+            }
+            BugUpdateCalls[bug.bug_id]++;
+        }
 
-		public void SetTimeOffset(TimeSpan offset)
-		{
-			_timeOffset = offset;
-		}
-	}
+        public TimeSpan GetTimeOffset()
+        {
+            return _timeOffset;
+        }
 
-	public class BugComparer : IEqualityComparer<bug>
-	{
-		public bool Equals(bug x, bug y)
-		{
-			return x.bug_id == y.bug_id;
-		}
+        public void SetTimeOffset(TimeSpan offset)
+        {
+            _timeOffset = offset;
+        }
+    }
 
-		public int GetHashCode(bug obj)
-		{
-			return obj.bug_id.GetHashCode();
-		}
-	}
+    public class BugComparer : IEqualityComparer<bug>
+    {
+        public bool Equals(bug x, bug y)
+        {
+            return x.bug_id == y.bug_id;
+        }
+
+        public int GetHashCode(bug obj)
+        {
+            return obj.bug_id.GetHashCode();
+        }
+    }
 }

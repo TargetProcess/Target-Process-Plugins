@@ -8,9 +8,9 @@ using Tp.MashupManager.MashupLibrary.Package;
 
 namespace Tp.MashupManager.CustomCommands.Dtos
 {
-	public class LibraryRepositoryDto
-	{
-		public string Name { get; set; }
-		public IEnumerable<LibraryPackage> Packages { get; set; }
-	}
+    public class LibraryRepositoryDto
+    {
+        public string Name { get; set; }
+        public IEnumerable<LibraryPackage> Packages { get; set; }
+    }
 }

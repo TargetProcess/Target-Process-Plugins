@@ -7,13 +7,13 @@ using System;
 
 namespace Tp.Plugin.Core.Attachments
 {
-	[Serializable]
-	public class LocalStoredAttachment
-	{
-		public FileId FileId { get; set; }
-		public string FileName { get; set; }
-		public string Description { get; set; }
-		public int? OwnerId { get; set; }
-		public DateTime? CreateDate { get; set; }
-	}
+    [Serializable]
+    public class LocalStoredAttachment
+    {
+        public FileId FileId { get; set; }
+        public string FileName { get; set; }
+        public string Description { get; set; }
+        public int? OwnerId { get; set; }
+        public DateTime? CreateDate { get; set; }
+    }
 }

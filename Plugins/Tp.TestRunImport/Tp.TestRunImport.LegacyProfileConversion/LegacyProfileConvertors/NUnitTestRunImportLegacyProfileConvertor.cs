@@ -9,25 +9,26 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.TestRunImport.LegacyProfileConversion.LegacyProfileConvertors
 {
-	public class NUnitTestRunImportLegacyProfileConvertor : TestRunImportLegacyProfileConvertor
-	{
-		public NUnitTestRunImportLegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection) : base(args, accountCollection)
-		{
-		}
+    public class NUnitTestRunImportLegacyProfileConvertor : TestRunImportLegacyProfileConvertor
+    {
+        public NUnitTestRunImportLegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection)
+            : base(args, accountCollection)
+        {
+        }
 
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.NUnit; }
-		}
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.NUnit; }
+        }
 
-		protected override string SettingsXmlNode
-		{
-			get { return "NUnitSettings"; }
-		}
+        protected override string SettingsXmlNode
+        {
+            get { return "NUnitSettings"; }
+        }
 
-		protected override string PluginName
-		{
-			get { return "Automatic NUnit Test Run Import"; }
-		}
-	}
+        protected override string PluginName
+        {
+            get { return "Automatic NUnit Test Run Import"; }
+        }
+    }
 }

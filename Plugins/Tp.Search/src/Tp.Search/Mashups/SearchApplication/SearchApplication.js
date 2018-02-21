@@ -1,83 +1,98 @@
 tau.mashups
     .addDependency('jQuery')
+    .addDependency('Underscore')
     .addDependency('application.creator')
-    .addDependency('tau/core/event')
-    .addDependency('tau/core/class')
-    .addDependency('tau/core/bus.reg')
-    .addDependency('tau/services/service.search')
-    .addDependency('tau/service.container')
-    .addDependency('libs/jquery/jquery.ui.tauBubble')
-    .addDependency('libs/parseUri')
-    .addDependency('tau/utils/utils.urlBuilder.service.tp2')
-    .addModule('Searcher/SearchApplication', function ($, AppCreator, Event, Class, busRegistry, ServiceSearch, serviceContainerClass, buble, parseUri, UrlBuilder) {
-
-        var appCreator = function(configurator) {
-
-            var APP_ID = 'sp';
-            var appIdSeedUrl = configurator.getExternal().getHashParam(APP_ID).toLowerCase();
+    .addModule('tp/search/SearchApplication', function ($, _, AppCreator) {
+        return function(configurator) {
+            var APP_ID = 'searchPopup';
+            var SEARCH2_NO_CONFLICT_APP_ID = 'search1Popup';
+            var SEARCH_RESULTS_CSS_CLASS = 'tau-cover-view--search';
 
             configurator._id = _.uniqueId('search_results_viewer');
-            if (!configurator.isBoardEdition){
-                configurator.registerService('urlBuilder', new UrlBuilder(configurator));
-            }
+
+            var appId = configurator.getFeaturesService().isEnabled('search2')
+                ? SEARCH2_NO_CONFLICT_APP_ID
+                : APP_ID;
 
             var PAGE_NAME = 'entity component';
-
             var ROUTING_PATTERNS = [
                 {
-                    pattern: /search/,
-                    adapter: function () {
-                        this.resolve({ id: null, entity: 'search' });
+                    pattern: /query\/(.+)/,
+                    adapter: function (searchString) {
+                        var decodedSearchString = decodeURIComponent(searchString);
+                        this.configurator.service('search').params().set('searchString', decodedSearchString);
+                        this.resolve({ id: null, entity: decodedSearchString });
                     },
-                    type: 'tau/components/component.page.search',
-                    host: 'tau/components/component.master.empty'
+                    host: {
+                        name: 'master empty',
+                        type: 'master.empty'
+                    },
+                    type: {
+                        name: 'page.search',
+                        type: 'page.search',
+                        namespace: 'tp/search'
+                    }
                 },
                 {
                     pattern: /(\w+)\/([0-9]+)($|\s|&)/,
                     adapter: function (entityType, entityId) {
                         this.resolve({
-                            id: parseInt(entityId),
+                            id: parseInt(entityId, 10),
                             entity: {
-                                id: parseInt(entityId),
+                                id: parseInt(entityId, 10),
                                 type: entityType
                             },
                             action: 'show',
                             handlers: {}
                         });
                     },
+                    host: {
+                        name: 'master empty',
+                        type: 'master.empty'
+                    },
                     type: {
                         name: PAGE_NAME,
                         type: 'page.entity'
-                    },
-                    host: 'tau/components/component.master.empty'
+                    }
                 },
                 {
                     pattern: /(\w+)\/([0-9]+)\/(\w+)[&|]*.*/,
                     adapter: function (entityType, entityId, action) {
                         this.resolve({
-                            id: parseInt(entityId),
+                            id: parseInt(entityId, 10),
                             entity: {
-                                id: parseInt(entityId),
+                                id: parseInt(entityId, 10),
                                 type: entityType
                             },
                             action: action,
                             handlers: {}
                         });
                     },
+                    host: {
+                        name: 'master empty',
+                        type: 'master.empty'
+                    },
                     type: {
                         name: PAGE_NAME,
                         type: 'page.entity'
-                    },
-                    host: 'tau/components/component.master.empty'
+                    }
                 }
             ];
 
             var integrationConfig = {
                 disableProgressIndicator: true,
                 showInCoverView: true,
-                keepAlive: false,
-                cssClass: (appIdSeedUrl === 'search' ? 'tau-search-popup' : '')
+                keepAlive: false
             };
+
+            var searchParam = configurator
+                .getHashService()
+                .getHashParam(appId)
+                .toLowerCase();
+            var isSearchResults = _.startsWith(searchParam, 'query/');
+            if (isSearchResults) {
+                integrationConfig.cssClass = SEARCH_RESULTS_CSS_CLASS;
+            }
 
             if (configurator.isBoardEdition) {
                 integrationConfig.showInCoverView = true;
@@ -87,8 +102,8 @@ tau.mashups
 
             var appConfig = {
                 name: 'application board',
-                applicationId:APP_ID,
-                routes:ROUTING_PATTERNS,
+                applicationId: appId,
+                routes: ROUTING_PATTERNS,
                 configurator: configurator,
                 options: {
                     routing: {
@@ -106,18 +121,12 @@ tau.mashups
 
                     appBus.on('innerContentRendered', function(e, renderData) {
                         var $el = renderData.element;
-
-                        var searchParam = configurator.getExternal().getHashParam(APP_ID).toLowerCase();
-                        var isSearch = ('search' === searchParam);
-
-                        var $popupRoleNode = $el.parents('.tau-cover-view_page');
-
-                        if (isSearch) {
-                            $popupRoleNode.addClass('tau-search-popup');
-                        }
-                        else {
-                            $popupRoleNode.removeClass('tau-search-popup');
-                        }
+                        var searchParam = configurator
+                            .getHashService()
+                            .getHashParam(appId).toLowerCase();
+                        var isSearchResults = _.startsWith(searchParam, 'query/');
+                        $el.parents('.tau-cover-view_page')
+                            .toggleClass(SEARCH_RESULTS_CSS_CLASS, isSearchResults);
                     });
 
                     appBus.initialize(appConfig);
@@ -126,5 +135,4 @@ tau.mashups
                     return $return;
                 });
         };
-        return appCreator;
     });

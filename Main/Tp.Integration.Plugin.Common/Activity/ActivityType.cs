@@ -5,9 +5,9 @@
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public enum ActivityType : byte
-	{
-		All = 0,
-		Errors = 10
-	}
+    public enum ActivityType : byte
+    {
+        All = 0,
+        Errors = 10
+    }
 }

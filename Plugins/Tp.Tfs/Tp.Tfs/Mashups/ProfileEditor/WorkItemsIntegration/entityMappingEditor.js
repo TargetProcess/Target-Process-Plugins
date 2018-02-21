@@ -25,7 +25,7 @@ tau.mashups
                         '<span class="small">Select pairs of entities here (Example: Work Items entity -> TP entity)</span>' +
                     '</p>' +
                     '<div class="pt-10 automapping" style="display: none">' +
-                        '<a href="" class="button">Run Auto-mapping</a>' +
+                        '<a href="" class="button tau-btn">Run Auto-mapping</a>' +
                         '<span class="preloader" style="display:none"></span>' +
                     '</div>' +
                     '<div class="automapping" style="display: none">' +
@@ -160,7 +160,7 @@ tau.mashups
 	        _renderEntityMappingLines: function (data) {
 	            var entityMappingLineEditors = null;
 	            var that = this;
-	            
+
 	            if (data.Mapping && data.Mapping.length > 0) {
 	                entityMappingLineEditors = $(data.Mapping).map(
                         function () { return new EntityMappingLine({ model: that, data: data, mappingPair: this }) });

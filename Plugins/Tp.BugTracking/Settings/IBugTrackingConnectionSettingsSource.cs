@@ -5,14 +5,14 @@
 
 namespace Tp.BugTracking.Settings
 {
-	public interface IBugTrackingConnectionSettingsSource
-	{
-		string Url { get; }
+    public interface IBugTrackingConnectionSettingsSource
+    {
+        string Url { get; }
 
-		string Login { get; }
+        string Login { get; }
 
-		string Password { get; }
+        string Password { get; }
 
-		string SavedSearches { get; }
-	}
+        string SavedSearches { get; }
+    }
 }

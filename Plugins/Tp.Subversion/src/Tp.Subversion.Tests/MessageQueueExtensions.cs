@@ -10,16 +10,17 @@ using System.Text;
 using Tp.Integration.Messages.EntityLifecycle;
 
 // ReSharper disable CheckNamespace
+
 namespace Tp.Integration.Testing.Common
 // ReSharper restore CheckNamespace
 {
-	public static class MessageQueueExtensions
-	{
-		public static IEnumerable<TDto> GetCreatedDtos<TDto>(this MessageQueue messageQueue)
-		{
-			return messageQueue.GetMessages<CreateCommand>()
-				.Select(x => x.Dto)
-				.OfType<TDto>();
-		}
-	}
+    public static class MessageQueueExtensions
+    {
+        public static IEnumerable<TDto> GetCreatedDtos<TDto>(this MessageQueue messageQueue)
+        {
+            return messageQueue.GetMessages<CreateCommand>()
+                .Select(x => x.Dto)
+                .OfType<TDto>();
+        }
+    }
 }

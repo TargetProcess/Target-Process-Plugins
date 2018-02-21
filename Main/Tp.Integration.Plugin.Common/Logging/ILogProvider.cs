@@ -4,18 +4,18 @@ using log4net;
 
 namespace Tp.Integration.Plugin.Common.Logging
 {
-	public interface ILogProvider
-	{
-		/// <summary>
-		/// Gets all available loggers bound to runtime plugin context
-		/// </summary>
-		/// <returns></returns>
-		IEnumerable<ILog> GetActivityLoggers(IPluginContext context);
+    public interface ILogProvider
+    {
+        /// <summary>
+        /// Gets all available loggers bound to runtime plugin context
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ILog> GetActivityLoggers(IPluginContext context);
 
-		/// <summary>
-		/// Gets all available loggers
-		/// </summary>
-		/// <returns></returns>
-		IEnumerable<ILog> GetActivityLoggers();
-	}
+        /// <summary>
+        /// Gets all available loggers
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ILog> GetActivityLoggers();
+    }
 }

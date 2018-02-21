@@ -8,12 +8,12 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 {
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class ConvertProfileSpecs
-	{
-		private const string FULL_MAPPING_TEMPLATE =
-			@"Given {0}
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class ConvertProfileSpecs
+    {
+        private const string FULL_MAPPING_TEMPLATE =
+            @"Given {0}
 					And profile name is 'ProfileName'
 					And project 'p1' for the first process created
 					And user 'tpuser1' created
@@ -87,27 +87,28 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					And profile should have tp projects: p1
 					And profile should be initialized";
 
-		[Test]
-		public void ConvertProfileWithAllMappingsForAccount()
-		{
-			string.Format(FULL_MAPPING_TEMPLATE, 
-				"create account 'TargetProcessTest.tpondemand.com'", @"plugin 'Bugzilla' should have account 'TargetProcessTest.tpondemand.com'
+        [Test]
+        public void ConvertProfileWithAllMappingsForAccount()
+        {
+            string.Format(FULL_MAPPING_TEMPLATE,
+                    "create account 'TargetProcessTest.tpondemand.com'",
+                    @"plugin 'Bugzilla' should have account 'TargetProcessTest.tpondemand.com'
 				                                                     And ")
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ConvertProfileWithAllMappingsForEmptyAccount()
-		{
-			string.Format(FULL_MAPPING_TEMPLATE,
-				"account is empty", "")
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+        [Test]
+        public void ConvertProfileWithAllMappingsForEmptyAccount()
+        {
+            string.Format(FULL_MAPPING_TEMPLATE,
+                    "account is empty", "")
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldSkipDeletedInactiveUsers()
-		{
-			@"Given create account 'TargetProcessTest.tpondemand.com'
+        [Test]
+        public void ShouldSkipDeletedInactiveUsers()
+        {
+            @"Given create account 'TargetProcessTest.tpondemand.com'
 					And profile name is 'ProfileName'
 					And project 'p1' for the first process created
 					And bugzilla url is 'http://host/bugzilla363'
@@ -128,13 +129,13 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 				Then user mapping should be:
 					|bugzilla|targetprocess|
 					|bzuser1|tpuser1|"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldNotMapUsersNotInTeam()
-		{
-			@"Given create account 'TargetProcessTest.tpondemand.com'
+        [Test]
+        public void ShouldNotMapUsersNotInTeam()
+        {
+            @"Given create account 'TargetProcessTest.tpondemand.com'
 					And profile name is 'ProfileName'
 					And project 'p1' for the first process created
 					And bugzilla url is 'http://host/bugzilla363'
@@ -155,13 +156,13 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					|bugzilla|targetprocess|
 					|bzuser1|tpuser1|
 					And mapped users count shoud be 1"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void StoreExternalDataWhenConvertProfile()
-		{
-			@"
+        [Test]
+        public void StoreExternalDataWhenConvertProfile()
+        {
+            @"
 				Given create account 'TargetProcessTest.tpondemand.com'
 					And profile name is 'ProfileName'
 					And project 'p1' for the first process created
@@ -196,12 +197,12 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					And profile should be initialized
 
 			".Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+        }
 
-		[Test]
-		public void DontStoreNonExistingBugs()
-		{
-			@"
+        [Test]
+        public void DontStoreNonExistingBugs()
+        {
+            @"
 				Given create account 'TargetProcessTest.tpondemand.com'
 					And profile name is 'ProfileName'
 					And project 'p1' for the first process created
@@ -228,12 +229,12 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					And profile should be initialized
 
 			".Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+        }
 
-		[Test]
-		public void ShouldImportDuplicatedBugzillaBugExternalReferenceOnce()
-		{
-			@"
+        [Test]
+        public void ShouldImportDuplicatedBugzillaBugExternalReferenceOnce()
+        {
+            @"
 				Given create account 'TargetProcessTest.tpondemand.com'
 					And profile name is 'ProfileName'
 					And project 'p1' for the first process created
@@ -261,6 +262,6 @@ namespace Tp.Bugzilla.Tests.LegacyProfileConversion
 					And profile should be initialized
 
 			".Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
-	}
+        }
+    }
 }

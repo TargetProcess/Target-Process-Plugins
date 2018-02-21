@@ -5,25 +5,25 @@
 
 namespace Tp.Bugzilla.BugzillaQueries
 {
-	public class BugzillaAssigneeAction : IBugzillaAction
-	{
-		private readonly string _bugzillaBugId;
-		private readonly string _userEmail;
+    public class BugzillaAssigneeAction : IBugzillaAction
+    {
+        private readonly string _bugzillaBugId;
+        private readonly string _userEmail;
 
-		public BugzillaAssigneeAction(string bugzillaBugId, string userEmail)
-		{
-			_bugzillaBugId = bugzillaBugId;
-			_userEmail = userEmail;
-		}
-		
-		public string Value()
-		{
-			return string.Format("cmd=assign_user&bugid={0}&user={1}", _bugzillaBugId, _userEmail);
-		}
+        public BugzillaAssigneeAction(string bugzillaBugId, string userEmail)
+        {
+            _bugzillaBugId = bugzillaBugId;
+            _userEmail = userEmail;
+        }
 
-		public string GetOperationDescription()
-		{
-			return string.Format("Assign user '{0}' to bug with id '{1}'", _userEmail, _bugzillaBugId);
-		}
-	}
+        public string Value()
+        {
+            return string.Format("cmd=assign_user&bugid={0}&user={1}", _bugzillaBugId, _userEmail);
+        }
+
+        public string GetOperationDescription()
+        {
+            return string.Format("Assign user '{0}' to bug with id '{1}'", _userEmail, _bugzillaBugId);
+        }
+    }
 }

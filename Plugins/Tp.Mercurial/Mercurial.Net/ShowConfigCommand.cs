@@ -23,11 +23,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="ConfigurationEntry"/> objects.
         /// </summary>
-        public IEnumerable<ConfigurationEntry> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<ConfigurationEntry> Result { get; private set; }
 
         #endregion
 
@@ -61,7 +57,8 @@ namespace Mercurial
                     if (ma.Success)
                     {
                         entries.Add(
-                            new ConfigurationEntry(ma.Groups["section"].Value.Trim(), ma.Groups["name"].Value.Trim(), ma.Groups["value"].Value.Trim()));
+                            new ConfigurationEntry(ma.Groups["section"].Value.Trim(), ma.Groups["name"].Value.Trim(),
+                                ma.Groups["value"].Value.Trim()));
                     }
                 }
             }

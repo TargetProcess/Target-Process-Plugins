@@ -17,17 +17,15 @@ namespace Mercurial.Hooks
         /// <summary>
         /// This is the backing field for the <see cref="Values"/> property.
         /// </summary>
-        private readonly MercurialCommandHookDictionary _Values = new MercurialCommandHookDictionary(Environment.GetEnvironmentVariable("HG_VALUES") ?? "{}");
+        private readonly MercurialCommandHookDictionary _Values =
+            new MercurialCommandHookDictionary(Environment.GetEnvironmentVariable("HG_VALUES") ?? "{}");
 
         /// <summary>
         /// Gets the namespace the keys was listed from.
         /// </summary>
         public string Namespace
         {
-            get
-            {
-                return _Namespace;
-            }
+            get { return _Namespace; }
         }
 
         /// <summary>
@@ -35,10 +33,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public MercurialCommandHookDictionary Values
         {
-            get
-            {
-                return _Values;
-            }
+            get { return _Values; }
         }
     }
 }

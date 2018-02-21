@@ -62,6 +62,7 @@ tau.mashups
                 profile.Settings.StatesMapping = this.mappingController.getStatesMapping();
                 profile.Settings.SeveritiesMapping = this.mappingController.getSeveritiesMapping();
                 profile.Settings.PrioritiesMapping = this.mappingController.getPrioritiesMapping();
+                profile.Settings.CustomMapping = this.mappingController.getCustomMapping();
                 profile.Settings.RolesMapping = this.mappingController.getRolesMapping();
 
                 return profile;

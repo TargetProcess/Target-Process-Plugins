@@ -68,21 +68,14 @@ namespace Mercurial
         [BooleanArgument(TrueOption = "--debug")]
         [DefaultValue(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected bool DebugOutput
-        {
-            get;
-            set;
-        }
+        protected bool DebugOutput { get; set; }
 
         /// <summary>
         /// Gets the raw standard output from executing the command line client.
         /// </summary>
         public string RawStandardOutput
         {
-            get
-            {
-                return _RawStandardOutput;
-            }
+            get { return _RawStandardOutput; }
         }
 
         /// <summary>
@@ -90,20 +83,13 @@ namespace Mercurial
         /// </summary>
         public string RawStandardErrorOutput
         {
-            get
-            {
-                return _RawStandardErrorOutput;
-            }
+            get { return _RawStandardErrorOutput; }
         }
 
         /// <summary>
         /// Gets the raw exit code from executing the command line client.
         /// </summary>
-        public int RawExitCode
-        {
-            get;
-            private set;
-        }
+        public int RawExitCode { get; private set; }
 
         #region ICommand Members
 
@@ -118,10 +104,7 @@ namespace Mercurial
         /// </remarks>
         public Collection<string> AdditionalArguments
         {
-            get
-            {
-                return new Collection<string>(_AdditionalArguments);
-            }
+            get { return new Collection<string>(_AdditionalArguments); }
         }
 
         /// <summary>
@@ -148,10 +131,7 @@ namespace Mercurial
         /// </remarks>
         public virtual string Command
         {
-            get
-            {
-                return _Command;
-            }
+            get { return _Command; }
         }
 
         /// <summary>
@@ -174,7 +154,8 @@ namespace Mercurial
                     if (!prop.IsDefined(typeof(ArgumentAttribute), true))
                         continue;
 
-                    ArgumentAttribute[] attributes = prop.GetCustomAttributes(typeof(ArgumentAttribute), true).Cast<ArgumentAttribute>().ToArray();
+                    ArgumentAttribute[] attributes =
+                        prop.GetCustomAttributes(typeof(ArgumentAttribute), true).Cast<ArgumentAttribute>().ToArray();
                     foreach (ArgumentAttribute attribute in attributes)
                     {
                         string[] values = attribute.GetOptions(prop.GetValue(this, null));
@@ -182,7 +163,8 @@ namespace Mercurial
                             continue;
 
                         var argAttr = attribute as NullableArgumentAttribute;
-                        if (argAttr != null && StringEx.IsNullOrWhiteSpace(argAttr.NonNullOption) && StringEx.IsNullOrWhiteSpace(argAttr.NullOption))
+                        if (argAttr != null && StringEx.IsNullOrWhiteSpace(argAttr.NonNullOption)
+                            && StringEx.IsNullOrWhiteSpace(argAttr.NullOption))
                             arguments.AddRange(values);
                         else
                             options.AddRange(values);
@@ -242,10 +224,7 @@ namespace Mercurial
         [DefaultValue(1800)]
         public virtual int Timeout
         {
-            get
-            {
-                return _Timeout;
-            }
+            get { return _Timeout; }
 
             set
             {
@@ -259,11 +238,7 @@ namespace Mercurial
         /// Gets or sets the object that will act as an observer of command execution.
         /// </summary>
         [DefaultValue(null)]
-        public IMercurialCommandObserver Observer
-        {
-            get;
-            set;
-        }
+        public IMercurialCommandObserver Observer { get; set; }
 
         #endregion
 
@@ -288,7 +263,7 @@ namespace Mercurial
             if (StringEx.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException("value");
             AdditionalArguments.Add(value);
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -401,7 +376,7 @@ namespace Mercurial
         public T WithTimeout(int value)
         {
             Timeout = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -420,7 +395,7 @@ namespace Mercurial
         public T WithObserver(IMercurialCommandObserver value)
         {
             Observer = value;
-            return (T)this;
+            return (T) this;
         }
     }
 }

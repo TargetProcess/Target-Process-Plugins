@@ -113,7 +113,11 @@ if (Sys.Browser.agent == Sys.Browser.Safari) {
 	};
 }
 
-var Application = function () {
+window.Application = function () {
+	var urlBuilder = null;
+	require(['tau/configurator'], function(configurator) {
+		urlBuilder = configurator.getUrlBuilder();
+	});
 	var type = new Ext.extend(Object, {
 		menuBootstrap: null,
 		constructor: function () {
@@ -133,11 +137,11 @@ var Application = function () {
 		user: {},
 
 		getViewUrl: function (entityId, entityKind) {
-			var url = '/View.aspx?ID=' + encodeURIComponent(entityId);
-			if (entityKind) {
-				url = url + '&Entity=' + encodeURIComponent(entityKind);
-			}
-			return new Tp.WebServiceURL(url).toString();
+			return urlBuilder.getApplicationPath() + '/' + urlBuilder.getBoardPageRelativePath() + urlBuilder.getNewViewUrl(entityId, entityKind);
+		},
+
+		getShortViewUrl: function (entityId) {
+			return urlBuilder.getShortViewUrl({id: entityId});
 		}
 	});
 	return new type();

@@ -14,20 +14,12 @@ namespace Mercurial.XmlSerializationTypes
         /// Gets or sets the name of the author of the log entry.
         /// </summary>
         [XmlText]
-        public string Name
-        {
-            get;
-            set;
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the email address of the author of the log entry.
         /// </summary>
         [XmlAttribute("email")]
-        public string Email
-        {
-            get;
-            set;
-        }
+        public string Email { get; set; }
     }
 }

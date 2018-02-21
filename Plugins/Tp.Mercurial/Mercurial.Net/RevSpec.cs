@@ -75,10 +75,7 @@ namespace Mercurial
         /// </returns>
         public static RevSpec Null
         {
-            get
-            {
-                return _Null;
-            }
+            get { return _Null; }
         }
 
         /// <summary>
@@ -90,10 +87,7 @@ namespace Mercurial
         /// </returns>
         public static RevSpec WorkingDirectoryParent
         {
-            get
-            {
-                return _WorkingDirectoryParent;
-            }
+            get { return _WorkingDirectoryParent; }
         }
 
         /// <summary>
@@ -104,10 +98,7 @@ namespace Mercurial
         /// </value>
         public static RevSpec All
         {
-            get
-            {
-                return _All;
-            }
+            get { return _All; }
         }
 
         /// <summary>
@@ -115,10 +106,7 @@ namespace Mercurial
         /// </summary>
         public static RevSpec Heads
         {
-            get
-            {
-                return _Heads;
-            }
+            get { return _Heads; }
         }
 
         /// <summary>
@@ -126,10 +114,7 @@ namespace Mercurial
         /// </summary>
         public static RevSpec Merges
         {
-            get
-            {
-                return _Merges;
-            }
+            get { return _Merges; }
         }
 
         /// <summary>
@@ -138,10 +123,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Branches
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "branch({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "branch({0})", this)); }
         }
 
         /// <summary>
@@ -150,10 +132,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Children
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "children({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "children({0})", this)); }
         }
 
         /// <summary>
@@ -162,10 +141,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Parents
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "parents({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "parents({0})", this)); }
         }
 
         /// <summary>
@@ -173,10 +149,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Roots
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "roots({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "roots({0})", this)); }
         }
 
         /// <summary>
@@ -185,10 +158,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec LeftParent
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "p1({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "p1({0})", this)); }
         }
 
         /// <summary>
@@ -197,10 +167,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec RightParent
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "p2({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "p2({0})", this)); }
         }
 
         /// <summary>
@@ -209,10 +176,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec AllOrNothing
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "present({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "present({0})", this)); }
         }
 
         /// <summary>
@@ -241,10 +205,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Max
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "max({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "max({0})", this)); }
         }
 
         /// <summary>
@@ -253,10 +214,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Min
         {
-            get
-            {
-                return new RevSpec(string.Format(CultureInfo.InvariantCulture, "min({0})", this));
-            }
+            get { return new RevSpec(string.Format(CultureInfo.InvariantCulture, "min({0})", this)); }
         }
 
         /// <summary>
@@ -265,10 +223,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Not
         {
-            get
-            {
-                return !this;
-            }
+            get { return !this; }
         }
 
         /// <summary>
@@ -279,10 +234,7 @@ namespace Mercurial
         /// </value>
         public static RevSpec Closed
         {
-            get
-            {
-                return _Closed;
-            }
+            get { return _Closed; }
         }
 
         #region IEquatable<RevSpec> Members
@@ -659,10 +611,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Ancestors
         {
-            get
-            {
-                return string.Format(CultureInfo.InvariantCulture, "ancestors({0})", this);
-            }
+            get { return string.Format(CultureInfo.InvariantCulture, "ancestors({0})", this); }
         }
 
         /// <summary>
@@ -671,10 +620,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Descendants
         {
-            get
-            {
-                return string.Format(CultureInfo.InvariantCulture, "descendants({0})", this);
-            }
+            get { return string.Format(CultureInfo.InvariantCulture, "descendants({0})", this); }
         }
 
         /// <summary>
@@ -1173,10 +1119,7 @@ namespace Mercurial
         /// </summary>
         public static RevSpec Bookmarks
         {
-            get
-            {
-                return new RevSpec("bookmark()");
-            }
+            get { return new RevSpec("bookmark()"); }
         }
 
         /// <summary>
@@ -1199,7 +1142,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(RevSpec))
                 return false;
-            return Equals((RevSpec)obj);
+            return Equals((RevSpec) obj);
         }
 
         /// <summary>
@@ -1221,7 +1164,8 @@ namespace Mercurial
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "revision", Justification = "The true/false operators both return false in order to make && and || behave like & and |")]
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "revision",
+             Justification = "The true/false operators both return false in order to make && and || behave like & and |")]
         public static bool operator true(RevSpec revision)
         {
             return false;
@@ -1234,7 +1178,8 @@ namespace Mercurial
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "revision", Justification = "The true/false operators both return false in order to make && and || behave like & and |")]
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "revision",
+             Justification = "The true/false operators both return false in order to make && and || behave like & and |")]
         public static bool operator false(RevSpec revision)
         {
             return false;

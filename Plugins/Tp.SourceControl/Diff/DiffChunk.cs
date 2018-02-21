@@ -7,26 +7,26 @@ using System.Collections.Generic;
 
 namespace Tp.SourceControl.Diff
 {
-	public class DiffChunk
-	{
-		public DiffChunk()
-		{
-			Lines = new List<string>();
-		}
+    public class DiffChunk
+    {
+        public DiffChunk()
+        {
+            Lines = new List<string>();
+        }
 
-		public void AddLine(string line)
-		{
-			Lines.Add(line);
-		}
+        public void AddLine(string line)
+        {
+            Lines.Add(line);
+        }
 
-		public List<string> Lines { get; private set; }
+        public List<string> Lines { get; private set; }
 
-		public int FirstBegin { get; set; }
+        public int FirstBegin { get; set; }
 
-		public int FirstEnd { get; set; }
+        public int FirstEnd { get; set; }
 
-		public int SecondBegin { get; set; }
+        public int SecondBegin { get; set; }
 
-		public int SecondEnd { get; set; }
-	}
+        public int SecondEnd { get; set; }
+    }
 }

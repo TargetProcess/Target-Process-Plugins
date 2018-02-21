@@ -4,20 +4,19 @@
 // 
 
 using System;
-using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.SourceControl
 {
-	public static class UserLookupExtensions
-	{
-		public static MappingLookup ConvertToUserLookup(this UserDTO userDto)
-		{
-			return new MappingLookup
-			{
-				Id = userDto.ID.GetValueOrDefault(),
-				Name = String.Format("{0} {1}", userDto.FirstName, userDto.LastName)
-			};
-		}
-	}
+    public static class UserLookupExtensions
+    {
+        public static MappingLookup ConvertToUserLookup(this TpUserData userDto)
+        {
+            return new MappingLookup
+            {
+                Id = userDto.ID.GetValueOrDefault(),
+                Name = String.Format("{0} {1}", userDto.FirstName, userDto.LastName)
+            };
+        }
+    }
 }

@@ -8,11 +8,11 @@ using Tp.Git.Tests.Context;
 
 namespace Tp.Git.Tests.StructureMap
 {
-	public class VcsEnvironmentRegistry : GitRegistry
-	{
-		public VcsEnvironmentRegistry()
-		{
-			For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
-		}
-	}
+    public class VcsEnvironmentRegistry : GitRegistry
+    {
+        public VcsEnvironmentRegistry()
+        {
+            For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
+        }
+    }
 }

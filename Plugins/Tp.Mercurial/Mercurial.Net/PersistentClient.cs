@@ -47,7 +47,8 @@ namespace Mercurial
                 throw new ArgumentNullException("repositoryPath");
 
             if (!IsSupported(repositoryPath))
-                throw new NotSupportedException("The persistent client is not supported for the given repository or by the current Mercurial client");
+                throw new NotSupportedException(
+                    "The persistent client is not supported for the given repository or by the current Mercurial client");
 
             _RepositoryPath = repositoryPath;
             StartPersistentMercurialClient();
@@ -66,10 +67,7 @@ namespace Mercurial
         /// </summary>
         public string RepositoryPath
         {
-            get
-            {
-                return _RepositoryPath;
-            }
+            get { return _RepositoryPath; }
         }
 
         /// <summary>
@@ -106,9 +104,9 @@ namespace Mercurial
             IEnumerable<string> arguments = new[]
             {
                 command.Command,
-                 "--noninteractive",
-                 "--encoding",
-                 "utf-8",
+                "--noninteractive",
+                "--encoding",
+                "utf-8",
             };
             arguments = arguments.Concat(command.Arguments.Where(a => !StringEx.IsNullOrWhiteSpace(a)));
             arguments = arguments.Concat(command.AdditionalArguments.Where(a => !StringEx.IsNullOrWhiteSpace(a)));
@@ -119,10 +117,10 @@ namespace Mercurial
             int length = commandEncoded.Length;
             var commandBuffer = new StringBuilder();
             commandBuffer.Append("runcommand\n");
-            commandBuffer.Append((char)((length >> 24) & 0xff));
-            commandBuffer.Append((char)((length >> 16) & 0xff));
-            commandBuffer.Append((char)((length >> 8) & 0xff));
-            commandBuffer.Append((char)(length & 0xff));
+            commandBuffer.Append((char) ((length >> 24) & 0xff));
+            commandBuffer.Append((char) ((length >> 16) & 0xff));
+            commandBuffer.Append((char) ((length >> 8) & 0xff));
+            commandBuffer.Append((char) (length & 0xff));
             commandBuffer.Append(commandEncoded);
 
             string commandArguments = null;
@@ -131,7 +129,7 @@ namespace Mercurial
                 commandArguments = string.Join(" ", commandParts.Skip(1).ToArray());
                 command.Observer.Executing(command.Command, commandArguments);
             }
-            
+
             byte[] buffer = Encoding.GetEncoding("iso-8859-1").GetBytes(commandBuffer.ToString());
             foreach (byte b in buffer)
             {
@@ -241,7 +239,7 @@ namespace Mercurial
                     psi.StandardErrorEncoding = Encoding.GetEncoding("iso-8859-1");
 
                     _Process = Process.Start(psi);
-                    DecodeInitialBlock();        
+                    DecodeInitialBlock();
                 }
             }
         }
@@ -270,18 +268,18 @@ namespace Mercurial
                     //_Process.Dispose();
                     //_Process.Close();
                     ////_Process.WaitForExit();
-                    
+
                     //if (_Process.StandardInput.BaseStream.CanWrite)
-                        _Process.StandardInput.Write("dummycommandforceservertoquit\n");
+                    _Process.StandardInput.Write("dummycommandforceservertoquit\n");
 
                     //if (_Process.StandardInput..BaseStream != null)
-                        _Process.StandardInput.Close();
+                    _Process.StandardInput.Close();
 
                     //if (!_Process.HasExited)
-                        _Process.WaitForExit();
+                    _Process.WaitForExit();
 
                     _Process = null;
-                }    
+                }
             }
         }
     }

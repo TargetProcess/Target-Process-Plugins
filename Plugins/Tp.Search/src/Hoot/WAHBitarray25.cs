@@ -17,7 +17,7 @@ namespace hOOt
         public WAHBitArray()
         {
             //_usingIndexes = true;
-					_usingIndexes = false;
+            _usingIndexes = false;
         }
 
         public WAHBitArray(TYPE type, uint[] ints)
@@ -60,7 +60,7 @@ namespace hOOt
         {
             if (_usingIndexes)
             {
-                var f = _offsets.Find(delegate(uint i) { return i == (uint)index; });
+                var f = _offsets.Find(delegate(uint i) { return i == (uint) index; });
                 if (f > 0)
                     return true;
                 else
@@ -74,6 +74,7 @@ namespace hOOt
         }
 
         private object _lock = new object();
+
         public void Set(int index, bool val)
         {
             lock (_lock)
@@ -84,10 +85,10 @@ namespace hOOt
                     _offsets.RemoveAll(delegate(uint i) { return i == index; });
                     if (val == true)
                     {
-                        _offsets.Add((uint)index);
+                        _offsets.Add((uint) index);
                         // set max
                         if (index > _curMax)
-                            _curMax = (uint)index;
+                            _curMax = (uint) index;
                     }
 
                     ChangeTypeIfNeeded();
@@ -125,12 +126,12 @@ namespace hOOt
                 if (_usingIndexes)
                 {
                     _offsets.Sort();
-									if (_offsets.Count == 0)
-									{
-										return 0;
-									}
+                    if (_offsets.Count == 0)
+                    {
+                        return 0;
+                    }
                     uint l = _offsets[_offsets.Count - 1];
-                    return (int)l;
+                    return (int) l;
                 }
                 CheckBitArray();
                 return _uncompressed.Length << 5;
@@ -138,6 +139,7 @@ namespace hOOt
         }
 
         #region [  B I T    O P E R T A I O N S  ]
+
         public WAHBitArray And(WAHBitArray op)
         {
             lock (_lock)
@@ -212,6 +214,7 @@ namespace hOOt
                 return new WAHBitArray(TYPE.Uncompressed_WAH, left);
             }
         }
+
         #endregion
 
         public long CountOnes()
@@ -265,23 +268,23 @@ namespace hOOt
             _uncompressed = null;
         }
 
-        public uint[] GetCompressed()//out bool usingindexes)
+        public uint[] GetCompressed() //out bool usingindexes)
         {
             uint[] data = _uncompressed;
             if (_usingIndexes)
-                data = UnpackOffsets(); 
+                data = UnpackOffsets();
             else if (_uncompressed == null)
                 return new uint[] { 0 };
             Compress(data);
             return _compressed;
         }
 
-        public IEnumerable<int> GetBitIndexes()//bool ones)
+        public IEnumerable<int> GetBitIndexes() //bool ones)
         {
             if (_usingIndexes)
             {
                 foreach (uint i in _offsets)
-                    yield return (int)i;
+                    yield return (int) i;
             }
             else
             {
@@ -290,12 +293,12 @@ namespace hOOt
 
                 for (int i = 0; i < count; i++)
                 {
-                    if (_uncompressed[i] > 0)//&& ones == true)
+                    if (_uncompressed[i] > 0) //&& ones == true)
                     {
                         for (int j = 0; j < 32; j++)
                         {
                             bool b = internalGet((i << 5) + j);
-                            if (b == true)// ones)
+                            if (b == true) // ones)
                                 yield return (i << 5) + j;
                         }
                     }
@@ -356,9 +359,9 @@ namespace hOOt
 
             foreach (uint index in _offsets)
             {
-                int pointer = ((int)index) >> 5;
-                uint mask = (uint)1 << (31 - // high order bit set
-                    ((int)index % 32));
+                int pointer = ((int) index) >> 5;
+                uint mask = (uint) 1 << (31 - // high order bit set
+                    ((int) index % 32));
 
                 ints[pointer] |= mask;
             }
@@ -380,7 +383,7 @@ namespace hOOt
 
                 // create bitmap
                 foreach (var i in _offsets)
-                    Set((int)i, true);
+                    Set((int) i, true);
                 // clear list
                 _offsets = new List<uint>();
             }
@@ -410,7 +413,7 @@ namespace hOOt
         {
             isDirty = true;
             int pointer = index >> 5;
-            uint mask = (uint)1 << (31 - // high order bit set
+            uint mask = (uint) 1 << (31 - // high order bit set
                 (index % 32));
 
             if (val)
@@ -422,7 +425,7 @@ namespace hOOt
         private bool internalGet(int index)
         {
             int pointer = index >> 5;
-            uint mask = (uint)1 << (31 - // high order bit get
+            uint mask = (uint) 1 << (31 - // high order bit get
                 (index % 32));
 
             if (pointer < _uncompressed.Length)
@@ -448,6 +451,7 @@ namespace hOOt
         }
 
         #region compress / uncompress
+
         private uint Take31Bits(uint[] data, int index)
         {
             ulong l1 = 0;
@@ -465,7 +469,7 @@ namespace hOOt
             l = (l1 << 32) + l2;
             ret = (l >> (33 - off)) & 0x7fffffff;
 
-            return (uint)ret;
+            return (uint) ret;
         }
 
         private void Compress(uint[] data)
@@ -474,7 +478,7 @@ namespace hOOt
             uint zeros = 0;
             uint ones = 0;
             int count = data.Length << 5;
-            for (int i = 0; i < count; )
+            for (int i = 0; i < count;)
             {
                 uint num = Take31Bits(data, i);
                 i += 31;
@@ -520,30 +524,30 @@ namespace hOOt
             }
         }
 
-	    private void Write31Bits(List<uint> list, int index, uint val)
-	    {
-		    this.ResizeAsNeeded(list, index + 32);
+        private void Write31Bits(List<uint> list, int index, uint val)
+        {
+            this.ResizeAsNeeded(list, index + 32);
 
-		    int off = (index%32);
-		    int pointer = index >> 5;
+            int off = (index % 32);
+            int pointer = index >> 5;
 
-		    if (pointer >= list.Count - 1)
-			    list.Add(0);
+            if (pointer >= list.Count - 1)
+                list.Add(0);
 
-		    ulong l = ((ulong) list[pointer] << 32) + list[pointer + 1];
-		    l |= (ulong) val << (33 - off);
+            ulong l = ((ulong) list[pointer] << 32) + list[pointer + 1];
+            l |= (ulong) val << (33 - off);
 
-		    list[pointer] = (uint) (l >> 32);
-				//asc: workaround
-				//index % 31 = 0 because of usage from Uncompress()
-				//second uint is not used and break decompression 
-		    if (off == 0)
-		    {
-			    list.RemoveAt(pointer + 1);
-			    return;
-		    }
-				list[pointer + 1] = (uint)(l & 0xffffffff);
-       }
+            list[pointer] = (uint) (l >> 32);
+            //asc: workaround
+            //index % 31 = 0 because of usage from Uncompress()
+            //second uint is not used and break decompression 
+            if (off == 0)
+            {
+                list.RemoveAt(pointer + 1);
+                return;
+            }
+            list[pointer + 1] = (uint) (l & 0xffffffff);
+        }
 
         private void WriteOnes(List<uint> list, int index, uint count)
         {
@@ -552,7 +556,7 @@ namespace hOOt
             int off = index % 32;
             //the positon for 32 bit array in list
             int pointer = index >> 5;
-            int cc = (int)count;
+            int cc = (int) count;
             int x = 32 - off;
 
             if (pointer >= list.Count)
@@ -560,16 +564,16 @@ namespace hOOt
 
             if (cc > x) //current pointer
             {
-                list[pointer] |= (uint)((0xffffffff >> off));
+                list[pointer] |= (uint) ((0xffffffff >> off));
                 cc -= (32 - off);
             }
             else
             {
-                list[pointer] |= (uint)((0xffffffff << (32 - cc)));
+                list[pointer] |= (uint) ((0xffffffff << (32 - cc)));
                 cc = 0;
             }
 
-            while (cc >= 32)//full ints
+            while (cc >= 32) //full ints
             {
                 //0xffffffff = 4294967295 = 1111 1111 1111 1111 1111 1111 1111 1111
                 list.Add(0xffffffff);
@@ -603,12 +607,13 @@ namespace hOOt
                     if ((ci & 0x40000000) > 0) // ones count
                         WriteOnes(list, index, count);
 
-                    index += (int)count;
+                    index += (int) count;
                 }
             }
             ResizeAsNeeded(list, index);
             _uncompressed = list.ToArray();
         }
+
         #endregion
 
         #endregion

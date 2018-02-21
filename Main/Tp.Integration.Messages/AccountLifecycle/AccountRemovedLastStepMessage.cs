@@ -3,19 +3,19 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Integration.Messages.AccountLifecycle
 {
-	[Serializable]
-	public sealed class AccountRemovedLastStepMessage
-		: IPluginLocalMessage
-	{
-		public AccountRemovedLastStepMessage()
-		{
-		}
+    [Serializable]
+    public sealed class AccountRemovedLastStepMessage
+        : IPluginLocalMessage
+    {
+        public AccountRemovedLastStepMessage()
+        {
+        }
 
-		public AccountRemovedLastStepMessage(string accountName)
-		{
-			AccountName = accountName;
-		}
+        public AccountRemovedLastStepMessage(string accountName)
+        {
+            AccountName = accountName;
+        }
 
-		public string AccountName { get; set; }
-	}
+        public string AccountName { get; set; }
+    }
 }

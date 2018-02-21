@@ -43,7 +43,7 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             Patterns.Add(TokenType.EOF, regex);
             Tokens.Add(TokenType.EOF);
 
-            regex = new Regex(@"'[^']+'", RegexOptions.Compiled);
+            regex = new Regex(@"'[^'\\\r\n]*(?:\\.[^'\\\r\n]*)*'", RegexOptions.Compiled);
             Patterns.Add(TokenType.STRING_PARAM, regex);
             Tokens.Add(TokenType.STRING_PARAM);
 
@@ -55,7 +55,7 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             Patterns.Add(TokenType.WhenKeyword, regex);
             Tokens.Add(TokenType.WhenKeyword);
 
-            regex = new Regex(@"subject contains", RegexOptions.Compiled);
+            regex = new Regex(@"subject\s+contains", RegexOptions.Compiled);
             Patterns.Add(TokenType.SubjectContainsKeyword, regex);
             Tokens.Add(TokenType.SubjectContainsKeyword);
 
@@ -63,27 +63,27 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
             Patterns.Add(TokenType.ThenKeyword, regex);
             Tokens.Add(TokenType.ThenKeyword);
 
-            regex = new Regex(@"attach to project", RegexOptions.Compiled);
+            regex = new Regex(@"attach\s+to\s+project", RegexOptions.Compiled);
             Patterns.Add(TokenType.AttachToProjectKeyword, regex);
             Tokens.Add(TokenType.AttachToProjectKeyword);
 
-            regex = new Regex(@"create request in project", RegexOptions.Compiled);
+            regex = new Regex(@"create\s+request\s+in\s+project", RegexOptions.Compiled);
             Patterns.Add(TokenType.CreateRequestKeyword, regex);
             Tokens.Add(TokenType.CreateRequestKeyword);
 
-            regex = new Regex(@"create private request in project", RegexOptions.Compiled);
+            regex = new Regex(@"create\s+private\s+request\s+in\s+project", RegexOptions.Compiled);
             Patterns.Add(TokenType.CreatePrivateRequestKeyword, regex);
             Tokens.Add(TokenType.CreatePrivateRequestKeyword);
 
-            regex = new Regex(@"create public request in project", RegexOptions.Compiled);
+            regex = new Regex(@"create\s+public\s+request\s+in\s+project", RegexOptions.Compiled);
             Patterns.Add(TokenType.CreatePublicRequestKeyword, regex);
             Tokens.Add(TokenType.CreatePublicRequestKeyword);
 
-            regex = new Regex(@"company matched to project", RegexOptions.Compiled);
+            regex = new Regex(@"company\s+matched\s+to\s+project", RegexOptions.Compiled);
             Patterns.Add(TokenType.CompanyMatchedKeyword, regex);
             Tokens.Add(TokenType.CompanyMatchedKeyword);
 
-            regex = new Regex(@"attach request to team", RegexOptions.Compiled);
+            regex = new Regex(@"attach\s+request\s+to\s+team", RegexOptions.Compiled);
             Patterns.Add(TokenType.AttachRequestToTeamKeyword, regex);
             Tokens.Add(TokenType.AttachRequestToTeamKeyword);
 

@@ -17,17 +17,17 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[TestFixture]
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class CommentsFromBugzillaSyncSpecs : BugzillaTestBase
-	{
-		private const string DefaultCreateDate = "2011-07-14 10:59:17";
+    [TestFixture]
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class CommentsFromBugzillaSyncSpecs : BugzillaTestBase
+    {
+        private const string DefaultCreateDate = "2011-07-14 10:59:17";
 
-		[Test]
-		public void ShouldImportCommentsOnBugCreated()
-		{
-			@"
+        [Test]
+        public void ShouldImportCommentsOnBugCreated()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -42,13 +42,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;1' created on '2011-07-14 10:59:17' by 'Lansie'
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;2' created on '2011-07-14 10:59:17' by 'Dowson'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldImportCommentsWithoutOwner()
-		{
-			@"
+        [Test]
+        public void ShouldImportCommentsWithoutOwner()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -63,13 +63,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;1' created on '2011-07-14 10:59:17' by 'Lansie'
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;2' created on '2011-07-14 10:59:17' by default user
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotImportCommentIfThereIsNoComments()
-		{
-			@"
+        [Test]
+        public void ShouldNotImportCommentIfThereIsNoComments()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -80,13 +80,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bugs with following names should be created in TargetProcess: bug1
 					And bug in TargetProcess with name 'bug1' should have 0 comments
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldAddOnlyNewCommentOnBugUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldAddOnlyNewCommentOnBugUpdated()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -106,13 +106,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;3' created on '2011-07-14 10:59:19' by 'Dowson'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldClearCommentOfInvalidCharacters()
-		{
-			@"
+        [Test]
+        public void ShouldClearCommentOfInvalidCharacters()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -125,13 +125,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have 1 comments
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;1' created by 'Lansie'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotClearAllowedCharacters()
-		{
-			@"
+        [Test]
+        public void ShouldNotClearAllowedCharacters()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -145,13 +145,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have 1 comments
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;1&nbsp;<br/>' created by 'Lansie'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldAssignCommentWhenFewBugzillaUsersMappedToSingleTargetProcessUser()
-		{
-			@"
+        [Test]
+        public void ShouldAssignCommentWhenFewBugzillaUsersMappedToSingleTargetProcessUser()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -169,65 +169,68 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have 1 comments
 					And bug in TargetProcess with name 'bug1' should have comment 'comment&nbsp;1' created by 'Dowson'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Given("bug $bugId has comment '$commentText' created on '$createDate' by '$ownerEmail' ")]
-		public void AddComment(int bugId, string commentText, string createDate, string ownerEmail)
-		{
-			var comment = new long_desc {thetext = commentText, bug_when = createDate, who = ownerEmail};
-			ObjectFactory.GetInstance<BugzillaServiceMock>().Bugs.AddComment(bugId, comment);
-		}
+        [Given("bug $bugId has comment '$commentText' created on '$createDate' by '$ownerEmail' ")]
+        public void AddComment(int bugId, string commentText, string createDate, string ownerEmail)
+        {
+            var comment = new long_desc { thetext = commentText, bug_when = createDate, who = ownerEmail };
+            ObjectFactory.GetInstance<BugzillaServiceMock>().Bugs.AddComment(bugId, comment);
+        }
 
-		[Given("bug $bugId has comment '$commentText' created by '$ownerEmail'")]
-		public void AddComment(int bugId, string commentText, string ownerEmail)
-		{
-			AddComment(bugId, commentText, DefaultCreateDate, ownerEmail);
-		}
+        [Given("bug $bugId has comment '$commentText' created by '$ownerEmail'")]
+        public void AddComment(int bugId, string commentText, string ownerEmail)
+        {
+            AddComment(bugId, commentText, DefaultCreateDate, ownerEmail);
+        }
 
-		[Given("bug $bugId has comment with invalid char at the end '$commentText' created by '$ownerEmail'")]
-		public void AddCommentWithInvalidChar(int bugId, string commentText, string ownerEmail)
-		{
-			AddComment(bugId, commentText + ((char) 8).ToString(), ownerEmail);
-		}
+        [Given("bug $bugId has comment with invalid char at the end '$commentText' created by '$ownerEmail'")]
+        public void AddCommentWithInvalidChar(int bugId, string commentText, string ownerEmail)
+        {
+            AddComment(bugId, commentText + ((char) 8).ToString(), ownerEmail);
+        }
 
-		[Then("bug in TargetProcess with name '$bugName' should have $commentsCount comments")]
-		public void CheckCommentsCount(string bugName, int commentsCount)
-		{
-			TransportMock.TpQueue.GetMessages<CreateCommand>().Where(c => c.Dto is CommentDTO).Count()
-				.Should(Be.EqualTo(commentsCount), "TransportMock.TpQueue.GetMessages<CreateCommand>().Where(c => c.Dto is CommentDTO).Count().Should(Be.EqualTo(commentsCount))");
-		}
+        [Then("bug in TargetProcess with name '$bugName' should have $commentsCount comments")]
+        public void CheckCommentsCount(string bugName, int commentsCount)
+        {
+            TransportMock.TpQueue.GetMessages<CreateCommand>().Where(c => c.Dto is CommentDTO).Count()
+                .Should(Be.EqualTo(commentsCount),
+                    "TransportMock.TpQueue.GetMessages<CreateCommand>().Where(c => c.Dto is CommentDTO).Count().Should(Be.EqualTo(commentsCount))");
+        }
 
-		[Then(
-			"bug in TargetProcess with name '$bugName' should have comment '$commentText' created on '$createDate' by '$tpLogin'"
-			)]
-		public void CheckBugComment(string bugName, string commentText, string createdDate, string tpLogin)
-		{
-			CheckBugCommentExists(bugName, commentText, createdDate, Context.Users.Single(u => u.Login == tpLogin).ID);
-		}
+        [Then(
+             "bug in TargetProcess with name '$bugName' should have comment '$commentText' created on '$createDate' by '$tpLogin'"
+         )]
+        public void CheckBugComment(string bugName, string commentText, string createdDate, string tpLogin)
+        {
+            CheckBugCommentExists(bugName, commentText, createdDate, Context.Users.Single(u => u.Login == tpLogin).ID);
+        }
 
-		[Then(
-			"bug in TargetProcess with name '$bugName' should have comment '$commentText' created on '$createDate' by default user"
-			)]
-		public void CheckBugCommentForDefaultUser(string bugName, string commmentText, string createdDate)
-		{
-			CheckBugCommentExists(bugName, commmentText, createdDate, null);
-		}
+        [Then(
+             "bug in TargetProcess with name '$bugName' should have comment '$commentText' created on '$createDate' by default user"
+         )]
+        public void CheckBugCommentForDefaultUser(string bugName, string commmentText, string createdDate)
+        {
+            CheckBugCommentExists(bugName, commmentText, createdDate, null);
+        }
 
-		[Then("bug in TargetProcess with name '$bugName' should have comment '$commentText' created by '$tpLogin'")]
-		public void CheckBugComment(string bugName, string commentText, string tpLogin)
-		{
-			CheckBugComment(bugName, commentText, DefaultCreateDate, tpLogin);
-		}
+        [Then("bug in TargetProcess with name '$bugName' should have comment '$commentText' created by '$tpLogin'")]
+        public void CheckBugComment(string bugName, string commentText, string tpLogin)
+        {
+            CheckBugComment(bugName, commentText, DefaultCreateDate, tpLogin);
+        }
 
-		private void CheckBugCommentExists(string bugName, string commmentText, string createdDate, int? ownerId)
-		{
-			Context.TpComments
-				.Where(c => c.Description == commmentText)
-				.Where(c => c.CreateDate == DateTime.Parse(createdDate).ToLocalTime())
-				.Where(c => c.OwnerID == ownerId)
-				.Where(c => c.GeneralID == Context.TpBugs.Single(b => b.Name == bugName).ID)
-				.Any().Should(Be.True, "Context.TpComments.Where(c => c.Description == commmentText).Where(c => c.CreateDate == DateTime.Parse(createdDate).ToLocalTime()).Where(c => c.OwnerID == ownerId).Where(c => c.GeneralID == Context.TpBugs.Single(b => b.Name == bugName).ID).Any().Should(Be.True)");
-		}
-	}
+        private void CheckBugCommentExists(string bugName, string commmentText, string createdDate, int? ownerId)
+        {
+            Context.TpComments
+                .Where(c => c.Description == commmentText)
+                .Where(c => c.CreateDate == DateTime.Parse(createdDate).ToLocalTime())
+                .Where(c => c.OwnerID == ownerId)
+                .Where(c => c.GeneralID == Context.TpBugs.Single(b => b.Name == bugName).ID)
+                .Any()
+                .Should(Be.True,
+                    "Context.TpComments.Where(c => c.Description == commmentText).Where(c => c.CreateDate == DateTime.Parse(createdDate).ToLocalTime()).Where(c => c.OwnerID == ownerId).Where(c => c.GeneralID == Context.TpBugs.Single(b => b.Name == bugName).ID).Any().Should(Be.True)");
+        }
+    }
 }

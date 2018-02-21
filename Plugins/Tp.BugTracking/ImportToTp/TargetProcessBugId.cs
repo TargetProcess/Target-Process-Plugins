@@ -7,13 +7,13 @@ using System.Runtime.Serialization;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	[DataContract]
-	public class TargetProcessBugId
-	{
-		[DataMember]
-		public int Value { get; set; }
+    [DataContract]
+    public class TargetProcessBugId
+    {
+        [DataMember]
+        public int Value { get; set; }
 
-		[DataMember]
-		public bool Deleted { get; set; }
-	}
+        [DataMember]
+        public bool Deleted { get; set; }
+    }
 }

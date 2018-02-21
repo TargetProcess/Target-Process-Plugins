@@ -7,10 +7,10 @@ using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.RevisionStorage
 {
-	[DataContract]
-	public class TargetProcessRevisionId
-	{
-		[DataMember]
-		public int? Value { get; set; }
-	}
+    [DataContract]
+    public class TargetProcessRevisionId
+    {
+        [DataMember]
+        public int? Value { get; set; }
+    }
 }

@@ -13,61 +13,61 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class EntityStateConverter : GuessConverterBase<BugzillaBug, EntityStateDTO>
-	{
-		private readonly IBugzillaService _bugzillaService;
+    public class EntityStateConverter : GuessConverterBase<BugzillaBug, EntityStateDTO>
+    {
+        private readonly IBugzillaService _bugzillaService;
 
-		public EntityStateConverter(IStorageRepository storageRepository, IBugzillaService bugzillaService, IActivityLogger logger)
-			: base(storageRepository, logger)
-		{
-			_bugzillaService = bugzillaService;
-		}
+        public EntityStateConverter(IStorageRepository storageRepository, IBugzillaService bugzillaService, IActivityLogger logger)
+            : base(storageRepository, logger)
+        {
+            _bugzillaService = bugzillaService;
+        }
 
-		protected override void SetValue(ConvertedBug dto, int id)
-		{
-			dto.BugDto.EntityStateID = id;
-		}
+        protected override void SetValue(ConvertedBug dto, int id)
+        {
+            dto.BugDto.EntityStateID = id;
+        }
 
-		protected override EntityStateDTO GetFromStorage(string value)
-		{
-			return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
-		}
+        protected override EntityStateDTO GetFromStorage(string value)
+        {
+            return GetDtoStorage().SingleOrDefault(s => s.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+        }
 
-		protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
-		{
-			return thirdPartyBug.bug_status;
-		}
+        protected override string GetThirdPartyValue(BugzillaBug thirdPartyBug)
+        {
+            return thirdPartyBug.bug_status;
+        }
 
-		protected override MappingContainer Map
-		{
-			get { return StorageRepository.GetProfile<BugzillaProfile>().StatesMapping; }
-		}
+        protected override MappingContainer Map
+        {
+            get { return StorageRepository.GetProfile<BugzillaProfile>().StatesMapping; }
+        }
 
-		protected override BugField BugField
-		{
-			get { return BugField.EntityStateID; }
-		}
+        protected override BugField BugField
+        {
+            get { return BugField.EntityStateID; }
+        }
 
-		protected override string BugFieldName
-		{
-			get { return "Entity State"; }
-		}
+        protected override string BugFieldName
+        {
+            get { return "Entity State"; }
+        }
 
-		public string GetMappedBugzillaStatus(BugDTO bug)
-		{
-			var stateId = bug.EntityStateID.GetValueOrDefault();
-			var mappedStates = Map.Where(x => x.Value.Id == stateId).Select(x => x.Key).ToList();
+        public string GetMappedBugzillaStatus(BugDTO bug)
+        {
+            var stateId = bug.EntityStateID.GetValueOrDefault();
+            var mappedStates = Map.Where(x => x.Value.Id == stateId).Select(x => x.Key).ToList();
 
-			if (mappedStates.Count() > 1)
-			{
-				_logger.WarnFormat("State mapping is ambiguous. Bugzilla state is not changed. Entity State: {0}", bug.EntityStateName);
-				return null;
-			}
+            if (mappedStates.Count() > 1)
+            {
+                _logger.WarnFormat("State mapping is ambiguous. Bugzilla state is not changed. Entity State: {0}", bug.EntityStateName);
+                return null;
+            }
 
-			var mappedValue = mappedStates.SingleOrDefault();
-			var bugStatus = mappedValue ?? GetDtoStorage().Single(s => s.EntityStateID == stateId).Name;
-			var statuses = _bugzillaService.GetStatuses();
-			return statuses.Find(s => s.Equals(bugStatus, StringComparison.InvariantCultureIgnoreCase));
-		}
-	}
+            var mappedValue = mappedStates.SingleOrDefault();
+            var bugStatus = mappedValue ?? GetDtoStorage().Single(s => s.EntityStateID == stateId).Name;
+            var statuses = _bugzillaService.GetStatuses();
+            return statuses.Find(s => s.Equals(bugStatus, StringComparison.InvariantCultureIgnoreCase));
+        }
+    }
 }

@@ -47,11 +47,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--remote")]
         [DefaultValue(false)]
-        public bool CheckPushAndPull
-        {
-            get;
-            set;
-        }
+        public bool CheckPushAndPull { get; set; }
 
         /// <summary>
         /// Sets the <see cref="CheckPushAndPull"/> property to the specified value and
@@ -75,10 +71,6 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public RepositorySummary Result
-        {
-            get;
-            private set;
-        }
+        public RepositorySummary Result { get; private set; }
     }
 }

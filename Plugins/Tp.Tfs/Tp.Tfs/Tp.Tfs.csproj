@@ -86,6 +86,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="log4net.Ext.Json, Version=1.2.13.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\log4net.Ext.Json.1.2.10.1.2.10.20140804\lib\net20-full\log4net.Ext.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.16.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.16.204221202\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
       <Private>True</Private>
@@ -250,13 +253,13 @@
       <HintPath>..\..\..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
@@ -272,8 +275,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -293,6 +297,9 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -337,7 +344,6 @@
     <Compile Include="StructureMap\TfsRegistry.cs" />
     <Compile Include="TfsConnectionHelper.cs" />
     <Compile Include="VersionControlSystem\ChangesetExtensions.cs" />
-    <Compile Include="VersionControlSystem\DateTimeExtensions.cs" />
     <Compile Include="VersionControlSystem\FileActionExtensions.cs" />
     <Compile Include="VersionControlSystem\InvalidRevisionException.cs" />
     <Compile Include="VersionControlSystem\TfsCheckConnectionErrorResolver.cs" />
@@ -418,9 +424,6 @@
     <Content Include="Mashups\ProfileEditor\WorkItemsIntegration\userMappingEditor.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mashups\ViewDiff\RegisterMashup.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="tfs-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -436,9 +439,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Mashups\ProfileEditor\WorkItemsIntegration\ProfileEditor.cfg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Mashups\ViewDiff\placeholders.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -470,6 +470,10 @@
     <ProjectReference Include="..\..\Tp.LegacyProfileConversion.Common\Tp.LegacyProfileConversion.Common.csproj">
       <Project>{D08648F9-6293-492D-A2F4-3D240DB1D6BD}</Project>
       <Name>Tp.LegacyProfileConversion.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TP.Plugins.Toolkit\Tp.Plugins.Toolkit\Tp.Plugins.Toolkit.csproj">
+      <Project>{CD5AEB5D-48D4-4AD5-A0EB-6294EF827DDA}</Project>
+      <Name>Tp.Plugins.Toolkit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tp.SourceControl\Tp.SourceControl.csproj">
       <Project>{AC8B8885-D4F1-4EC9-A428-B90B2AC088C3}</Project>

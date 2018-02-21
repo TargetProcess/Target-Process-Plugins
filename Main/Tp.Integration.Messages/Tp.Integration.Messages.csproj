@@ -24,7 +24,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,7 +35,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
@@ -52,8 +51,8 @@
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+      <HintPath>..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -65,6 +64,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,16 +88,9 @@
     <Compile Include="Commands\CreateTaskForUserStoryWithTeamCommand.cs" />
     <Compile Include="Commands\PostTimeCommand.cs" />
     <Compile Include="Commands\ChangeEntityStateCommand.cs" />
-    <Compile Include="ComponentModel\PasswordAttribute.cs" />
-    <Compile Include="ComponentModel\TextBoxAttribute.cs" />
-    <Compile Include="ComponentModel\TpCategotyAttribute.cs" />
-    <Compile Include="ComponentModel\TPDescriptionAttribute.cs" />
-    <Compile Include="ComponentModel\MailProtocolAttribute.cs" />
     <Compile Include="ComponentModel\SerializableDictionary.cs" />
     <Compile Include="ComponentModel\SerializableStringDictionary.cs" />
     <Compile Include="ComponentModel\StringDictionaryAttribute.cs" />
-    <Compile Include="ComponentModel\ProjectIdAttribute.cs" />
-    <Compile Include="ComponentModel\TextAreaAttribute.cs" />
     <Compile Include="DataTransferObject.cs" />
     <Compile Include="Entities\CustomFieldInfoExtensions.cs" />
     <Compile Include="Entities\Entities.cs" />
@@ -122,6 +117,7 @@
     <Compile Include="Entities\Generated\FeatureDTO.generated.cs" />
     <Compile Include="Entities\Generated\FreezedTestCaseInfoDTO.generated.cs" />
     <Compile Include="Entities\Generated\FreezedTestStepInfoDTO.generated.cs" />
+    <Compile Include="Entities\Generated\GeneralConversionDTO.generated.cs" />
     <Compile Include="Entities\Generated\GeneralDTO.generated.cs" />
     <Compile Include="Entities\Generated\GeneralFieldExtensionDTO.generated.cs" />
     <Compile Include="Entities\Generated\GeneralFollowerDTO.generated.cs" />
@@ -139,6 +135,7 @@
     <Compile Include="Entities\Generated\MessageDTO.generated.cs" />
     <Compile Include="Entities\Generated\MessageGeneralDTO.generated.cs" />
     <Compile Include="Entities\Generated\MessageUidDTO.generated.cs" />
+    <Compile Include="Entities\Generated\MetricsUserDTO.generated.cs" />
     <Compile Include="Entities\Generated\MilestoneDTO.generated.cs" />
     <Compile Include="Entities\Generated\PasswordRecoveryDTO.generated.cs" />
     <Compile Include="Entities\Generated\PluginProfileDTO.generated.cs" />
@@ -174,8 +171,6 @@
     <Compile Include="Entities\Generated\SquadProjectAllocationDTO.generated.cs" />
     <Compile Include="Entities\Generated\SquadProjectDTO.generated.cs" />
     <Compile Include="Entities\Generated\SystemUserDTO.generated.cs" />
-    <Compile Include="Entities\Generated\TagBundleDTO.generated.cs" />
-    <Compile Include="Entities\Generated\TagBundleTagDTO.generated.cs" />
     <Compile Include="Entities\Generated\TagDTO.generated.cs" />
     <Compile Include="Entities\Generated\TagGeneralDTO.generated.cs" />
     <Compile Include="Entities\Generated\TaskDTO.generated.cs" />
@@ -204,17 +199,19 @@
     <Compile Include="Entities\Generated\UserStoryDTO.generated.cs" />
     <Compile Include="Entities\Generated\WorkflowDTO.generated.cs" />
     <Compile Include="Entities\ICustomFieldConfigHolder.cs" />
+    <Compile Include="Entities\ICustomFieldInfo.cs" />
     <Compile Include="Entities\IDTOVisitor.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IDTOVisitor.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\Interfaces.cs" />
+    <Compile Include="Entities\PermissionGroups\EntityPermissionsDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\UserPermissionGroupsDTO.cs" />
     <Compile Include="Entities\StorageItemScopeDTO.cs" />
     <Compile Include="Entities\TestCaseRunStatusDTO.cs" />
     <Compile Include="Entities\EmailAttachmentDTO.cs" />
     <Compile Include="Entities\Field.cs" />
-    <Compile Include="Entities\ICustomFieldInfo.cs" />
     <Compile Include="Entities\LookupFilterDto.cs" />
     <Compile Include="EntityLifecycle\Commands\ApplicationContextData.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Assignable.generated.cs" />
@@ -289,8 +286,6 @@
     <Compile Include="EntityLifecycle\Commands\SquadProjectAllocation.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\SystemUser.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Tag.generated.cs" />
-    <Compile Include="EntityLifecycle\Commands\TagBundle.generated.cs" />
-    <Compile Include="EntityLifecycle\Commands\TagBundleTag.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\TagGeneral.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Task.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Team.generated.cs" />
@@ -347,6 +342,7 @@
     <Compile Include="EntityLifecycle\Messages\CustomField.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomReport.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomRule.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PermissionGroup\EntityPermissionGroups.cs" />
     <Compile Include="EntityLifecycle\Messages\EntityState.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\EntityType.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Epic.generated.cs" />
@@ -370,6 +366,7 @@
     <Compile Include="EntityLifecycle\Messages\MessageUid.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Milestone.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\PasswordRecovery.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PermissionGroup\UserPermissionGroups.cs" />
     <Compile Include="EntityLifecycle\Messages\PluginProfile.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\PluginProfileMessage.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Practice.generated.cs" />
@@ -404,8 +401,6 @@
     <Compile Include="EntityLifecycle\Messages\SquadProjectAllocation.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\SystemUser.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Tag.generated.cs" />
-    <Compile Include="EntityLifecycle\Messages\TagBundle.generated.cs" />
-    <Compile Include="EntityLifecycle\Messages\TagBundleTag.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\TagGeneral.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Task.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Team.generated.cs" />
@@ -433,6 +428,12 @@
     <Compile Include="EntityLifecycle\Queries\AssignableQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CommentQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\AssignableSquadQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\EntityPermissionGroupsQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\SquadIterationQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\PermissionGroupsQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\PermissionGroupsQueryResult.cs" />
+    <Compile Include="EntityLifecycle\Queries\SquadMemberQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\SquadQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\TeamQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\TestStepQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CustomFieldQuery.cs" />
@@ -454,6 +455,8 @@
     <Compile Include="EntityLifecycle\Queries\TestCaseRun.cs" />
     <Compile Include="EntityLifecycle\Queries\TestCaseTestPlan.cs" />
     <Compile Include="EntityLifecycle\Queries\User.cs" />
+    <Compile Include="EntityLifecycle\Queries\SystemUser.cs" />
+    <Compile Include="EntityLifecycle\Queries\UserPermissionGroupsQuery.cs" />
     <Compile Include="EntityLifecycle\SagaMessage.cs" />
     <Compile Include="EntityLifecycle\UpdateEntityCommand.cs" />
     <Compile Include="Enums\ActionTypeEnum.cs" />
@@ -479,6 +482,7 @@
     <Compile Include="PluginLifecycle\IPluginLocalMessage.cs" />
     <Compile Include="PluginLifecycle\Mashup.cs" />
     <Compile Include="PluginLifecycle\MashupConfig.cs" />
+    <Compile Include="PluginLifecycle\MashupMetaInfo.cs" />
     <Compile Include="PluginLifecycle\MashupPlaceholder.cs" />
     <Compile Include="PluginLifecycle\MashupCollection.cs" />
     <Compile Include="PluginLifecycle\PluginAccount.cs" />
@@ -518,10 +522,13 @@
     <Compile Include="ServiceBus\Transport\ConfigureMsmqTransport.cs" />
     <Compile Include="ServiceBus\Transport\IMsmqTransport.cs" />
     <Compile Include="ServiceBus\Transport\MessageLabelParser.cs" />
+    <Compile Include="ServiceBus\Transport\RetryCountPerMessageKeeper.cs" />
     <Compile Include="ServiceBus\Transport\PluginQueue.cs" />
     <Compile Include="ServiceBus\Transport\PluginQueueFactory.cs" />
+    <Compile Include="ServiceBus\Transport\Router\MsmqRx\IMessageWithId.cs" />
+    <Compile Include="ServiceBus\Transport\TransportTransactionHelper.cs" />
+    <Compile Include="ServiceBus\Transport\TransportTransactionMode.cs" />
     <Compile Include="ServiceBus\Transport\Router\Interfaces\IMessageSource.cs" />
-    <Compile Include="ServiceBus\Transport\Router\Interfaces\NotImplementedProducerConsumerFactory.cs" />
     <Compile Include="ServiceBus\Transport\Router\MsmqRx\MsmqMessageProducerBase.cs" />
     <Compile Include="ServiceBus\Transport\Router\IRouterChildTagsSource.cs" />
     <Compile Include="ServiceBus\Transport\Router\Pump\MessageSource.cs" />
@@ -572,13 +579,6 @@
       <Project>{93BF8935-0436-4E51-AC35-0BA1D93B8133}</Project>
       <Name>Tp.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tp.Utils\Tp.Utils.csproj">
-      <Project>{bf902d46-3d03-46d6-9e0b-d4246584a881}</Project>
-      <Name>Tp.Utils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ServiceBus\Transport\Router\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -3,33 +3,33 @@
 
 NUMBER -> @"[0-9]+";
 EOF -> @"^$";
-STRING_PARAM -> @"'[^']+'";
+STRING_PARAM -> @"'[^'\\\r\n]*(?:\\.[^'\\\r\n]*)*'";
 
 [Skip] WHITESPACE -> @"\s+";
 
 WhenKeyword -> @"when";
 
-SubjectContainsKeyword -> @"subject contains";
+SubjectContainsKeyword -> @"subject\s+contains";
 SubjectContainsClause -> SubjectContainsKeyword STRING_PARAM;
 
 ThenKeyword -> @"then";
 
-AttachToProjectKeyword -> @"attach to project";
+AttachToProjectKeyword -> @"attach\s+to\s+project";
 AttachToProjectClause -> AttachToProjectKeyword NUMBER;
 
-CreateRequestKeyword -> @"create request in project";
+CreateRequestKeyword -> @"create\s+request\s+in\s+project";
 CreateRequestClause -> CreateRequestKeyword NUMBER;
 
-CreatePrivateRequestKeyword -> @"create private request in project";
+CreatePrivateRequestKeyword -> @"create\s+private\s+request\s+in\s+project";
 CreatePrivateRequestClause -> CreatePrivateRequestKeyword NUMBER;
 
-CreatePublicRequestKeyword -> @"create public request in project";
+CreatePublicRequestKeyword -> @"create\s+public\s+request\s+in\s+project";
 CreatePublicRequestClause -> CreatePublicRequestKeyword NUMBER;
 
-CompanyMatchedKeyword -> @"company matched to project";
+CompanyMatchedKeyword -> @"company\s+matched\s+to\s+project";
 CompanyMatchedClause -> CompanyMatchedKeyword NUMBER;
 
-AttachRequestToTeamKeyword -> @"attach request to team";
+AttachRequestToTeamKeyword -> @"attach\s+request\s+to\s+team";
 AttachRequestToTeamClause -> AttachRequestToTeamKeyword NUMBER;
 
 AndKeyword -> @"and";

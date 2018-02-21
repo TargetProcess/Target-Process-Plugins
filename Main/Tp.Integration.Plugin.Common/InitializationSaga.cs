@@ -10,36 +10,36 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common
 {
-	public abstract class InitializationSaga<TSagaData> :
-		TpSaga<TSagaData> where TSagaData : ISagaEntity
-	{
-		private Func<IProfile> Profile;
+    public abstract class InitializationSaga<TSagaData> :
+        TpSaga<TSagaData> where TSagaData : ISagaEntity
+    {
+        private Func<IProfile> Profile;
 
-		protected InitializationSaga()
-		{
-			Profile = () =>
-			          	{
-			          		//var context = ObjectFactory.GetInstance<IPluginContext>();
-							var profile = ObjectFactory.GetInstance<IProfile>();
+        protected InitializationSaga()
+        {
+            Profile = () =>
+            {
+                //var context = ObjectFactory.GetInstance<IPluginContext>();
+                var profile = ObjectFactory.GetInstance<IProfile>();
 
-			          		Profile = () => profile;
-			          		return profile;
-			          	};
-		}
+                Profile = () => profile;
+                return profile;
+            };
+        }
 
-		protected void StartInitialization()
-		{
-			if (Profile().Initialized) return;
-			OnStartInitialization();
-		}
+        protected void StartInitialization()
+        {
+            if (Profile().Initialized) return;
+            OnStartInitialization();
+        }
 
-		protected abstract void OnStartInitialization();
+        protected abstract void OnStartInitialization();
 
-		protected new void MarkAsComplete()
-		{
-			Profile().MarkAsInitialized();
-			Profile().Save();
-			base.MarkAsComplete();
-		}
-	}
+        protected new void MarkAsComplete()
+        {
+            Profile().MarkAsInitialized();
+            Profile().Save();
+            base.MarkAsComplete();
+        }
+    }
 }

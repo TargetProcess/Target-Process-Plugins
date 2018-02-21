@@ -13,27 +13,27 @@ using Tp.PopEmailIntegration.Rules.Parsing;
 
 namespace Tp.PopEmailIntegration.Rules.ThenClauses
 {
-	public abstract class ThenClause : IThenClause
-	{
-		protected readonly ITpBus _bus;
-		private readonly IStorageRepository _storage;
-		protected readonly int _projectId;
+    public abstract class ThenClause : IThenClause
+    {
+        protected readonly ITpBus _bus;
+        private readonly IStorageRepository _storage;
+        protected readonly int _projectId;
 
-		protected ThenClause(ParseNode clauseNode, ITpBus bus, IStorageRepository storage)
-		{
-			_bus = bus;
-			_storage = storage;
+        protected ThenClause(ParseNode clauseNode, ITpBus bus, IStorageRepository storage)
+        {
+            _bus = bus;
+            _storage = storage;
 
-			var projectIdNode = ClauseFactory.FindRecursive(TokenType.NUMBER, clauseNode);
-			_projectId = Int32.Parse(projectIdNode.Token.Text);
-		}
+            var projectIdNode = ClauseFactory.FindRecursive(TokenType.NUMBER, clauseNode);
+            _projectId = Int32.Parse(projectIdNode.Token.Text);
+        }
 
-		public virtual bool IsMatched(EmailMessage message)
-		{
-			var projects = _storage.Get<ProjectDTO>();
-			return projects.Any(x => x.ProjectID == _projectId && x.DeleteDate == null);
-		}
+        public virtual bool IsMatched(EmailMessage message)
+        {
+            var projects = _storage.Get<ProjectDTO>();
+            return projects.Any(x => x.ProjectID == _projectId && x.DeleteDate == null);
+        }
 
-		public abstract void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
-	}
+        public abstract void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
+    }
 }

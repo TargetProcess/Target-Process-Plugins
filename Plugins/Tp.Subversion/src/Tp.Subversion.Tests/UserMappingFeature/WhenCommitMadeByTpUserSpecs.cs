@@ -14,25 +14,25 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Subversion.UserMappingFeature
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class WhenCommitMadeByTpUserSpecs
-	{
-		[SetUp]
-		public void Init()
-		{
-			ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
-			ObjectFactory.Configure(
-				x =>
-				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly,
-				                                                                        new List<Assembly>
-				                                                                        	{typeof (Command).Assembly})));
-		}
+    public class WhenCommitMadeByTpUserSpecs
+    {
+        [SetUp]
+        public void Init()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
+            ObjectFactory.Configure(
+                x =>
+                    x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly,
+                        new List<Assembly>
+                            { typeof(Command).Assembly })));
+        }
 
-		[Test]
-		public void ShouldMapUsers()
-		{
-			@"Given vcs history is:
+        [Test]
+        public void ShouldMapUsers()
+        {
+            @"Given vcs history is:
 					|commit|
 					|{Id:1, Author:""mich"", Comment:""#123""}|
 				And tp user 'Michael Jackson' with id 1
@@ -41,25 +41,25 @@ namespace Tp.Subversion.UserMappingFeature
 					|mich		|Michael Jackson	|
 			When plugin started up
 			Then revision 1 in TP should have author 'Michael Jackson'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
+        }
 
-		[Test]
-		public void ShouldAutomapUsersByLogin()
-		{
-			@"Given vcs history is:
+        [Test]
+        public void ShouldAutomapUsersByLogin()
+        {
+            @"Given vcs history is:
 					|commit|
 					|{Id:1, Author:""john"", Comment:""#123""}|
 				And tp user with name 'John Smith', login 'john' and id 1
 				When plugin started up
 				Then revision 1 in TP should have author 'John Smith'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
+        }
 
-		[Test]
-		public void ShouldPutMessageToLogIfNoMapping()
-		{
-			@"Given vcs history is:
+        [Test]
+        public void ShouldPutMessageToLogIfNoMapping()
+        {
+            @"Given vcs history is:
 					|commit|
 					|{Id:1, Author:""Bob"", Comment:""#123""}|
 				And tp user 'John' with id 1
@@ -68,13 +68,13 @@ namespace Tp.Subversion.UserMappingFeature
 					|John		|John   |
 			When plugin started up
 			Then log should contain message: Revision author doesn't match any TP User name. There is no valid mapping for user Bob"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
+        }
 
-		[Test]
-		public void SvnUserShouldBeCaseInsensivite()
-		{
-			@"Given vcs history is:
+        [Test]
+        public void SvnUserShouldBeCaseInsensivite()
+        {
+            @"Given vcs history is:
 					|commit|
 					|{Id:1, Author:""John"", Comment:""#123""}|
 				And tp user 'John' with id 1
@@ -83,7 +83,7 @@ namespace Tp.Subversion.UserMappingFeature
 					|jOhN		|John	|
 			When plugin started up
 			Then revision 1 in TP should have author 'John'"
-				.Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
-		}
-	}
+                .Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>().And<UserMappingFeatureActionSteps>());
+        }
+    }
 }

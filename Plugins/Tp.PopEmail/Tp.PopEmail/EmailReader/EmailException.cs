@@ -8,26 +8,26 @@ using System.Runtime.Serialization;
 
 namespace Tp.PopEmailIntegration.EmailReader
 {
-	/// <summary>
-	/// The exception that is thrown when email cannot be downloaded.
-	/// </summary>
-	[Serializable]
-	public class EmailException : ApplicationException
-	{
-		public EmailException()
-		{
-		}
+    /// <summary>
+    /// The exception that is thrown when email cannot be downloaded.
+    /// </summary>
+    [Serializable]
+    public class EmailException : ApplicationException
+    {
+        public EmailException()
+        {
+        }
 
-		public EmailException(string message) : base(message)
-		{
-		}
+        public EmailException(string message) : base(message)
+        {
+        }
 
-		public EmailException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
+        public EmailException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
 
-		public EmailException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-	}
+        public EmailException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
 }

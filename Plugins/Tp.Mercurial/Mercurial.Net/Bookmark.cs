@@ -39,10 +39,7 @@ namespace Mercurial
         /// </summary>
         public bool IsWorkingFolder
         {
-            get
-            {
-                return _IsWorkingFolder;
-            }
+            get { return _IsWorkingFolder; }
         }
 
         /// <summary>
@@ -103,7 +100,8 @@ namespace Mercurial
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "Bookmark ({2}Name={0}, Revision=#{1})", Name, RevisionNumber, (_IsWorkingFolder ? "* " : string.Empty));
+            return string.Format(CultureInfo.InvariantCulture, "Bookmark ({2}Name={0}, Revision=#{1})", Name, RevisionNumber,
+                (_IsWorkingFolder ? "* " : string.Empty));
         }
     }
 }

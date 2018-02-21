@@ -10,30 +10,30 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
-	public class ScriptValidator : Validator, IDataHolder<string>
-	{
-		public ScriptValidator(IBugTrackingConnectionSettingsSource connectionSettings)
-			: base(connectionSettings)
-		{
-		}
+    public class ScriptValidator : Validator, IDataHolder<string>
+    {
+        public ScriptValidator(IBugTrackingConnectionSettingsSource connectionSettings)
+            : base(connectionSettings)
+        {
+        }
 
-		protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
-		{
-			try
-			{
-				Data = new BugzillaUrl(ConnectionSettings).CheckConnection();
-			}
-			catch (Exception)
-			{
-				errors.Add(new PluginProfileError
-				           	{
-				           		FieldName = BugzillaProfile.UrlField,
-				           		Message = "The Bugzilla script tp2.cgi was not found. Please copy tp2.cgi to the Bugzilla folder.",
-								AdditionalInfo = ValidationErrorType.TpCgiNotFound.ToString()
-				           	});
-			}
-		}
+        protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
+        {
+            try
+            {
+                Data = new BugzillaUrl(ConnectionSettings).CheckConnection();
+            }
+            catch (Exception)
+            {
+                errors.Add(new PluginProfileError
+                {
+                    FieldName = BugzillaProfile.UrlField,
+                    Message = "The Bugzilla script tp2.cgi was not found. Please copy tp2.cgi to the Bugzilla folder.",
+                    AdditionalInfo = ValidationErrorType.TpCgiNotFound.ToString()
+                });
+            }
+        }
 
-		public string Data { get; private set; }
-	}
+        public string Data { get; private set; }
+    }
 }

@@ -8,17 +8,17 @@ using Tp.MashupManager.CustomCommands.Args;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class RefreshLibraryCommand : LibraryCommand<LibraryCommandArg>
-	{
-		protected override PluginCommandResponseMessage ExecuteOperation(LibraryCommandArg commandArg)
-		{
-			Library.Refresh();
-			return new PluginCommandResponseMessage {PluginCommandStatus = PluginCommandStatus.Succeed};
-		}
+    public class RefreshLibraryCommand : LibraryCommand<LibraryCommandArg>
+    {
+        protected override PluginCommandResponseMessage ExecuteOperation(LibraryCommandArg commandArg)
+        {
+            Library.Refresh();
+            return new PluginCommandResponseMessage { PluginCommandStatus = PluginCommandStatus.Succeed };
+        }
 
-		public override string Name
-		{
-			get { return "RefreshLibrary"; }
-		}
-	}
+        public override string Name
+        {
+            get { return "RefreshLibrary"; }
+        }
+    }
 }

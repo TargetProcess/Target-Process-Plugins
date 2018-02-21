@@ -36,16 +36,13 @@ namespace Mercurial.Gui
         [DefaultValue(false)]
         public bool ShowClean
         {
-            get
-            {
-                return _ShowClean;
-            }
+            get { return _ShowClean; }
 
             set
             {
                 if (_ShowClean == value)
                     return;
-                
+
                 EnsurePropertyAvailability("ShowClean", GuiClientType.PyQT);
                 _ShowClean = value;
             }
@@ -59,16 +56,13 @@ namespace Mercurial.Gui
         [DefaultValue(false)]
         public bool ShowIgnored
         {
-            get
-            {
-                return _ShowIgnored;
-            }
+            get { return _ShowIgnored; }
 
             set
             {
                 if (_ShowIgnored == value)
                     return;
-                
+
                 EnsurePropertyAvailability("ShowIgnored", GuiClientType.PyQT);
                 _ShowIgnored = value;
             }

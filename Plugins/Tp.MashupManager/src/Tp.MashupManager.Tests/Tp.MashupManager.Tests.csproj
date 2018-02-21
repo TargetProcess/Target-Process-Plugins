@@ -41,26 +41,35 @@
     <Reference Include="Common.Logging.Log4Net">
       <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\..\Libs\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Posix">
-      <HintPath>..\..\..\..\Libs\NGit\Mono.Posix.dll</HintPath>
+    <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Posix.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Security">
-      <HintPath>..\..\..\..\Libs\NGit\Mono.Security.dll</HintPath>
+    <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Security.Win32, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Security.Win32.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NBehave.Narrator.Framework">
       <HintPath>..\..\..\..\packages\nbehave.0.5.1.263\lib\net40\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="NGit">
-      <HintPath>..\..\..\..\Libs\NGit\NGit.dll</HintPath>
+    <Reference Include="NGit, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\NGit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NSch">
-      <HintPath>..\..\..\..\Libs\NGit\NSch.dll</HintPath>
+    <Reference Include="NSch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\NSch.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -81,11 +90,17 @@
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\..\Libs\Rhino.Mocks.dll</HintPath>
     </Reference>
-    <Reference Include="Sharpen">
-      <HintPath>..\..\..\..\Libs\NGit\Sharpen.dll</HintPath>
+    <Reference Include="Sharpen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Sharpen.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    <Reference Include="Sharpen.Unix, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Sharpen.Unix.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -96,6 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MashupConfigTests.cs" />
     <Compile Include="MashupLibrary\LibraryRepositoryConfigStorageTests.cs" />
     <Compile Include="MashupLibrary\Repository\Config\LibraryRepositoryConfigStorageMock.cs" />
     <Compile Include="MashupLibrary\Repository\LibraryRepositoryMock.cs" />

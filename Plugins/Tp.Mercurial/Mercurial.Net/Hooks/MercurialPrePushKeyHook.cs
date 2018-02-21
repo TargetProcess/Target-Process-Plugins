@@ -40,10 +40,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string Namespace
         {
-            get
-            {
-                return _Namespace;
-            }
+            get { return _Namespace; }
         }
 
         /// <summary>
@@ -51,10 +48,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
         }
 
         /// <summary>
@@ -62,10 +56,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string OldValue
         {
-            get
-            {
-                return _OldValue;
-            }
+            get { return _OldValue; }
         }
 
         /// <summary>
@@ -73,10 +64,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string NewValue
         {
-            get
-            {
-                return _NewValue;
-            }
+            get { return _NewValue; }
         }
     }
 }

@@ -5,8 +5,8 @@
 
 namespace Tp.Integration.Plugin.Common.Domain
 {
-	public interface IAccount : IAccountReadonly
-	{
-		new IProfileCollection Profiles { get; }
-	}
+    public interface IAccount : IAccountReadonly
+    {
+        new IProfileCollection Profiles { get; }
+    }
 }

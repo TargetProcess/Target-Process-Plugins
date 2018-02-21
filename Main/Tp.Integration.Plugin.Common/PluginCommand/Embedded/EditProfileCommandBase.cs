@@ -14,72 +14,72 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public abstract class EditProfileCommandBase : ProfileCommandBase, IPluginCommand
-	{
-		private readonly IPluginMetadata _pluginMetadata;
+    public abstract class EditProfileCommandBase : ProfileCommandBase, IPluginCommand
+    {
+        private readonly IPluginMetadata _pluginMetadata;
 
-		protected EditProfileCommandBase(IProfileCollection profileCollection, ITpBus bus, IPluginContext pluginContext,
-		                                 IPluginMetadata pluginMetadata)
-			: base(profileCollection, bus, pluginContext)
-		{
-			_pluginMetadata = pluginMetadata;
-		}
+        protected EditProfileCommandBase(IProfileCollection profileCollection, ITpBus bus, IPluginContext pluginContext,
+            IPluginMetadata pluginMetadata)
+            : base(profileCollection, bus, pluginContext)
+        {
+            _pluginMetadata = pluginMetadata;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
-		{
-			var profileDto = args.DeserializeProfile();
-			return OnExecute(profileDto);
-		}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
+        {
+            var profileDto = args.DeserializeProfile();
+            return OnExecute(profileDto);
+        }
 
-		public abstract string Name { get; }
+        public abstract string Name { get; }
 
-		protected IPluginMetadata PluginMetadata
-		{
-			get { return _pluginMetadata; }
-		}
+        protected IPluginMetadata PluginMetadata
+        {
+            get { return _pluginMetadata; }
+        }
 
-		protected void NormalizeProfile(PluginProfileDto dto)
-		{
-			if (dto.Name == null)
-				dto.Name = string.Empty;
+        protected void NormalizeProfile(PluginProfileDto dto)
+        {
+            if (dto.Name == null)
+                dto.Name = string.Empty;
 
-			dto.Name = dto.Name.Trim();
-		}
+            dto.Name = dto.Name.Trim();
+        }
 
-		protected abstract PluginCommandResponseMessage OnExecute(PluginProfileDto profileProfileDto);
+        protected abstract PluginCommandResponseMessage OnExecute(PluginProfileDto profileProfileDto);
 
-		public void AddPluginProfile(PluginProfileDto pluginProfile)
-		{
-			var errors = new PluginProfileErrorCollection();
-			ValidateUniqueness(pluginProfile, errors);
-			ValidateProfile(pluginProfile, errors);
-			HandleErrors(errors);
+        public void AddPluginProfile(PluginProfileDto pluginProfile)
+        {
+            var errors = new PluginProfileErrorCollection();
+            ValidateUniqueness(pluginProfile, errors);
+            ValidateProfile(pluginProfile, errors);
+            HandleErrors(errors);
 
-			ChangeProfiles(
-				profileCollection => profileCollection.Add(new ProfileCreationArgs(pluginProfile.Name, pluginProfile.Settings)));
-		}
+            ChangeProfiles(
+                profileCollection => profileCollection.Add(new ProfileCreationArgs(pluginProfile.Name, pluginProfile.Settings)));
+        }
 
-		protected static void ValidateProfile(PluginProfileDto pluginProfile, PluginProfileErrorCollection errors)
-		{
-			new ProfileDtoValidator(pluginProfile).Validate(errors);
-		}
+        protected static void ValidateProfile(PluginProfileDto pluginProfile, PluginProfileErrorCollection errors)
+        {
+            new ProfileDtoValidator(pluginProfile).Validate(errors);
+        }
 
-		protected static void HandleErrors(PluginProfileErrorCollection errors)
-		{
-			if (!errors.Empty())
-			{
-				throw new PluginProfileValidationException(errors);
-			}
-		}
+        protected static void HandleErrors(PluginProfileErrorCollection errors)
+        {
+            if (!errors.Empty())
+            {
+                throw new PluginProfileValidationException(errors);
+            }
+        }
 
-		private void ValidateUniqueness(PluginProfileDto pluginProfile, PluginProfileErrorCollection errors)
-		{
-			if (
-				ProfileCollection.Any(
-					x => string.Equals(x.Name.Value, pluginProfile.Name, StringComparison.InvariantCultureIgnoreCase)))
-			{
-				errors.Add(new PluginProfileError {FieldName = "Name", Message = "Profile name should be unique for plugin"});
-			}
-		}
-	}
+        private void ValidateUniqueness(PluginProfileDto pluginProfile, PluginProfileErrorCollection errors)
+        {
+            if (
+                ProfileCollection.Any(
+                    x => string.Equals(x.Name.Value, pluginProfile.Name, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                errors.Add(new PluginProfileError { FieldName = "Name", Message = "Profile name should be unique for plugin" });
+            }
+        }
+    }
 }

@@ -7,40 +7,40 @@ using Tp.Core;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	/// <summary>
-	/// Provides access to current profile log.
-	/// </summary>
-	public interface IActivityLog
-	{
-		ActivityDto GetBy(ActivityFilter filter);
+    /// <summary>
+    /// Provides access to current profile log.
+    /// </summary>
+    public interface IActivityLog
+    {
+        ActivityDto GetBy(ActivityFilter filter);
 
-		void Remove();
+        void Remove();
 
-		void ClearBy(ActivityFilter filter);
+        void ClearBy(ActivityFilter filter);
 
-		bool CheckForErrors();
-	}
+        bool CheckForErrors();
+    }
 
-	internal class ActivityLogSafeNull : SafeNull<ActivityLogSafeNull, IActivityLog>, IActivityLog, INullable
-	{
-		private readonly ActivityDto _activityDto = new ActivityDto();
+    internal class ActivityLogSafeNull : SafeNull<ActivityLogSafeNull, IActivityLog>, IActivityLog, INullable
+    {
+        private readonly ActivityDto _activityDto = new ActivityDto();
 
-		public ActivityDto GetBy(ActivityFilter filter)
-		{
-			return _activityDto;
-		}
+        public ActivityDto GetBy(ActivityFilter filter)
+        {
+            return _activityDto;
+        }
 
-		public void Remove()
-		{
-		}
+        public void Remove()
+        {
+        }
 
-		public void ClearBy(ActivityFilter filter)
-		{
-		}
+        public void ClearBy(ActivityFilter filter)
+        {
+        }
 
-		public bool CheckForErrors()
-		{
-			return false;
-		}
-	}
+        public bool CheckForErrors()
+        {
+            return false;
+        }
+    }
 }

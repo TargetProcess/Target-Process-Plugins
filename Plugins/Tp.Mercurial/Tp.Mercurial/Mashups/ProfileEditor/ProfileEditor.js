@@ -135,7 +135,11 @@ tau.mashups
                 this.UserMappingEditor.render();
 
                 this.placeHolder.on('click', '.collapsable', this._toggle);
-                this.placeHolder.find('#startRevision').datepicker({ minDate: "01/01/1970", maxDate: "01/19/2038" });
+                this.placeHolder.find('#startRevision').datepicker({
+                    dateFormat: 'MM/dd/yy',
+                    minDate: '01/01/1970',
+                    maxDate: '01/19/2038'
+                });
 
                 new profileControlsBlock({ placeholder: rendered }).render();
             },

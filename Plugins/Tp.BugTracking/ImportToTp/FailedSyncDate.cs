@@ -7,23 +7,23 @@ using System;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	[Serializable]
-	public class FailedSyncDate
-	{
-		public FailedSyncDate()
-		{
-		}
+    [Serializable]
+    public class FailedSyncDate
+    {
+        public FailedSyncDate()
+        {
+        }
 
-		public FailedSyncDate(DateTime? failedSyncDate)
-		{
-			_value = failedSyncDate;
-		}
+        public FailedSyncDate(DateTime? failedSyncDate)
+        {
+            _value = failedSyncDate;
+        }
 
-		private readonly DateTime? _value;
+        private readonly DateTime? _value;
 
-		public DateTime? GetValue()
-		{
-			return _value;
-		}
-	}
+        public DateTime? GetValue()
+        {
+            return _value;
+        }
+    }
 }

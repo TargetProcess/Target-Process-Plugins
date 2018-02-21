@@ -5,10 +5,10 @@
 
 namespace Tp.Integration.Plugin.Common.FileStorage
 {
-	public interface IProfileFileStorage
-	{
-		string GetFolder();
+    public interface IProfileFileStorage
+    {
+        string GetFolder();
 
-		void Clear();
-	}
+        void Clear();
+    }
 }

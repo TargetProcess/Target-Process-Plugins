@@ -7,10 +7,10 @@ using System;
 
 namespace Tp.PopEmailIntegration.Initialization
 {
-	[Serializable]
-	public class ProfileServerAndLogin
-	{
-		public string MailServer { get; set; }
-		public string Login { get; set; }
-	}
+    [Serializable]
+    public class ProfileServerAndLogin
+    {
+        public string MailServer { get; set; }
+        public string Login { get; set; }
+    }
 }

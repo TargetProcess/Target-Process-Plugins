@@ -11,120 +11,120 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common
 {
-	public class AssemblyScanner : IPluginMetadata
-	{
-		private readonly IAssembliesHost _assembliesHost;
-		private readonly Type _profileType;
-		private readonly PluginData _pluginAssemblyAttribute;
+    public class AssemblyScanner : IPluginMetadata
+    {
+        private readonly IAssembliesHost _assembliesHost;
+        private readonly Type _profileType;
+        private readonly PluginData _pluginAssemblyAttribute;
 
-		public AssemblyScanner(IAssembliesHost assembliesHost)
-		{
-			_assembliesHost = assembliesHost;
-			_profileType = GetProfileTypeByAssemblyScanning();
-			_pluginAssemblyAttribute = FindPluginAssemblyAttributeByAssemblyScanning();
-			IsNewProfileInitializable = GetIsNewProfileInitializableByAssemblyScanning();
-			IsUpdatedProfileInitializable = GetIsUpdatedProfileInitializableByAssemblyScanning();
-		}
+        public AssemblyScanner(IAssembliesHost assembliesHost)
+        {
+            _assembliesHost = assembliesHost;
+            _profileType = GetProfileTypeByAssemblyScanning();
+            _pluginAssemblyAttribute = FindPluginAssemblyAttributeByAssemblyScanning();
+            IsNewProfileInitializable = GetIsNewProfileInitializableByAssemblyScanning();
+            IsUpdatedProfileInitializable = GetIsUpdatedProfileInitializableByAssemblyScanning();
+        }
 
-		#region ProfileType
+        #region ProfileType
 
-		private Type GetProfileTypeByAssemblyScanning()
-		{
-			return GetTypesWith<ProfileAttribute>(true).FirstOrDefault() ?? typeof (object);
-		}
+        private Type GetProfileTypeByAssemblyScanning()
+        {
+            return GetTypesWith<ProfileAttribute>(true).FirstOrDefault() ?? typeof(object);
+        }
 
-		private IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit)
-			where TAttribute : Attribute
-		{
-			return from type in GetLoadedTypes()
-			       where type.IsDefined(typeof (TAttribute), inherit)
-			       select type;
-		}
+        private IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit)
+            where TAttribute : Attribute
+        {
+            return from type in GetLoadedTypes()
+                where type.IsDefined(typeof(TAttribute), inherit)
+                select type;
+        }
 
-		private IEnumerable<Type> GetLoadedTypes()
-		{
-			return from a in _assembliesHost.GetAssemblies()
-			       from t in a.GetTypes()
-			       select t;
-		}
-		
-		public Type ProfileType
-		{
-			get { return _profileType; }
-		}
+        private IEnumerable<Type> GetLoadedTypes()
+        {
+            return from a in _assembliesHost.GetAssemblies()
+                from t in a.GetTypes()
+                select t;
+        }
 
-		#endregion
+        public Type ProfileType
+        {
+            get { return _profileType; }
+        }
 
-		#region Plugin Assembly Info
+        #endregion
 
-		public PluginData PluginData
-		{
-			get { return _pluginAssemblyAttribute; }
-		}
+        #region Plugin Assembly Info
 
-		public bool IsSyncronizableProfile
-		{
-			get
-			{
-				var profileType = _profileType;
-				return (profileType != null && profileType.GetInterfaces().Any(x => x == typeof (ISynchronizableProfile)));
-			}
-		}
+        public PluginData PluginData
+        {
+            get { return _pluginAssemblyAttribute; }
+        }
 
-		public bool IsNewProfileInitializable { get; private set; }
+        public bool IsSyncronizableProfile
+        {
+            get
+            {
+                var profileType = _profileType;
+                return (profileType != null && profileType.GetInterfaces().Any(x => x == typeof(ISynchronizableProfile)));
+            }
+        }
 
-		public bool IsUpdatedProfileInitializable { get; private set; }
+        public bool IsNewProfileInitializable { get; private set; }
 
-		private bool GetIsNewProfileInitializableByAssemblyScanning()
-		{
-			return FindIsDerivedFromType(typeof (NewProfileInitializationSaga<>));
-		}
+        public bool IsUpdatedProfileInitializable { get; private set; }
 
-		private bool GetIsUpdatedProfileInitializableByAssemblyScanning()
-		{
-			return FindIsDerivedFromType(typeof (UpdatedProfileInitializationSaga<>));
-		}
+        private bool GetIsNewProfileInitializableByAssemblyScanning()
+        {
+            return FindIsDerivedFromType(typeof(NewProfileInitializationSaga<>));
+        }
 
-		private bool FindIsDerivedFromType(Type baseType)
-		{
-			var types = GetLoadedTypes();
+        private bool GetIsUpdatedProfileInitializableByAssemblyScanning()
+        {
+            return FindIsDerivedFromType(typeof(UpdatedProfileInitializationSaga<>));
+        }
 
-			var result = from type in types
-			             where type.Assembly != baseType.Assembly && IsTypeDerivedFromGenericType(type, baseType)
-			             select type;
+        private bool FindIsDerivedFromType(Type baseType)
+        {
+            var types = GetLoadedTypes();
 
-			return !result.Empty();
-		}
+            var result = from type in types
+                where type.Assembly != baseType.Assembly && IsTypeDerivedFromGenericType(type, baseType)
+                select type;
 
-		public bool IsTypeDerivedFromGenericType(Type typeToCheck, Type genericType)
-		{
-			if (typeToCheck == typeof (object))
-			{
-				return false;
-			}
+            return !result.Empty();
+        }
 
-			if (typeToCheck == null)
-			{
-				return false;
-			}
+        public bool IsTypeDerivedFromGenericType(Type typeToCheck, Type genericType)
+        {
+            if (typeToCheck == typeof(object))
+            {
+                return false;
+            }
 
-			if (typeToCheck.IsGenericType && typeToCheck.GetGenericTypeDefinition() == genericType)
-			{
-				return true;
-			}
+            if (typeToCheck == null)
+            {
+                return false;
+            }
 
-			return IsTypeDerivedFromGenericType(typeToCheck.BaseType, genericType);
-		}
+            if (typeToCheck.IsGenericType && typeToCheck.GetGenericTypeDefinition() == genericType)
+            {
+                return true;
+            }
 
-		private PluginData FindPluginAssemblyAttributeByAssemblyScanning()
-		{
-			var pluginAssembly = _assembliesHost.GetAssemblies().FirstOrDefault(x => x.IsDefined(typeof(PluginAssemblyAttribute), false));
+            return IsTypeDerivedFromGenericType(typeToCheck.BaseType, genericType);
+        }
 
-			var pluginData = pluginAssembly.GetCustomAttributes(false).OfType<PluginAssemblyAttribute>().FirstOrDefault().GetData();
+        private PluginData FindPluginAssemblyAttributeByAssemblyScanning()
+        {
+            var pluginAssembly = _assembliesHost.GetAssemblies().FirstOrDefault(x => x.IsDefined(typeof(PluginAssemblyAttribute), false));
 
-			return pluginData;
-		}
+            var pluginData = pluginAssembly.GetCustomAttributes(false).OfType<PluginAssemblyAttribute>().FirstOrDefault().GetData();
 
-		#endregion
-	}
+            return pluginData;
+        }
+
+        #endregion
+    }
 }

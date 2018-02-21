@@ -5,16 +5,16 @@
     <Setting Name="TpConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=SSPI&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa</Value>
+      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=SSPI</Value>
     </Setting>
     <Setting Name="PluginConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=SSPI&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa</Value>
+      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=SSPI</Value>
     </Setting>
   </Settings>
 </SettingsFile>

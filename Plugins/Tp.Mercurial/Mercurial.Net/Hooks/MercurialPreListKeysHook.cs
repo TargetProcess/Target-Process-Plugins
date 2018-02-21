@@ -33,10 +33,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string Namespace
         {
-            get
-            {
-                return _Namespace;
-            }
+            get { return _Namespace; }
         }
     }
 }

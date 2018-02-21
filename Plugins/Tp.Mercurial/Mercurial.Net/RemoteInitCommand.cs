@@ -47,15 +47,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -66,15 +60,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -85,10 +73,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -105,15 +90,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Location
         {
-            get
-            {
-                return _Location;
-            }
+            get { return _Location; }
 
-            set
-            {
-                _Location = (value ?? string.Empty).Trim();
-            }
+            set { _Location = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

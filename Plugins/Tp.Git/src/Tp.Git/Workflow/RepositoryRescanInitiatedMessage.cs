@@ -2,7 +2,7 @@
 
 namespace Tp.Git.Workflow
 {
-	public class RepositoryRescanInitiatedMessage : IPluginLocalMessage
-	{
-	}
+    public class RepositoryRescanInitiatedMessage : IPluginLocalMessage
+    {
+    }
 }

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?> 
+<?xml-stylesheet type="text/xsl" href="../../xsl/bodytemplates.xsl"?>
+<!--DOCTYPE bodytemplates SYSTEM "../../dtd/bodytemplates.dtd"-->
+<bodytemplates lang="ru">
+	<contents priority="1">
+		<![CDATA[Nous sommes desoles de vous informer que votre message n a pas
+pu etre remis a un ou plusieurs de ses destinataires.
+Ceci est un message automatique genere par le serveur {TO_HOST}.
+Merci de ne pas y repondre.
+
+This is the mail system at host {TO_HOST}.
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients.
+
+                  The mail system
+
+<{TO_EMAIL}>: host {FROM_HOST}[{FROM_IP}] said: {DESCRIPTION}]]>
+	</contents>
+</bodytemplates>

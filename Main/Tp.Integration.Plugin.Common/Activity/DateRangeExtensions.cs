@@ -8,12 +8,12 @@ using Tp.Core;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public static class DateRangeExtensions
-	{
-		public static bool IsInRangeIncludingEndDate(this DateRange range, DateTime dateTime)
-		{
-			return (!range.StartDate.HasValue || range.StartDate.Value < dateTime)
-			       && (!range.EndDate.HasValue || range.EndDate.Value >= dateTime);
-		}
-	}
+    public static class DateRangeExtensions
+    {
+        public static bool IsInRangeIncludingEndDate(this DateRange range, DateTime dateTime)
+        {
+            return (!range.StartDate.HasValue || range.StartDate.Value < dateTime)
+                && (!range.EndDate.HasValue || range.EndDate.Value >= dateTime);
+        }
+    }
 }

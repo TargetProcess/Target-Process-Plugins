@@ -12,7 +12,7 @@
     <AssemblyName>Tp.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -45,7 +45,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,7 +54,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelegateDecompiler">
@@ -78,12 +76,13 @@
     <Reference Include="Mono.Reflection">
       <HintPath>..\..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -95,6 +94,9 @@
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
@@ -117,19 +119,37 @@
     <Compile Include="Argument.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Chrono.cs" />
+    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="Configuration\AppSettingsReader.cs" />
+    <Compile Include="Diagnostics\Counters\CounterKey.cs" />
+    <Compile Include="Diagnostics\Counters\DiagnosticCounterData.cs" />
+    <Compile Include="Diagnostics\Counters\DiagnosticCountersService.cs" />
+    <Compile Include="Diagnostics\Counters\IDiagnosticCounter.cs" />
+    <Compile Include="Diagnostics\Counters\IDiagnosticCountersService.cs" />
     <Compile Include="Diagnostics\Event\DiagnosticEvent.cs" />
+    <Compile Include="Diagnostics\Event\DiagnosticEventMetadata.cs" />
     <Compile Include="Diagnostics\Event\DiagnosticEventSerializer.cs" />
     <Compile Include="Diagnostics\Event\DiagnosticEventsService.cs" />
+    <Compile Include="Diagnostics\Event\DiagnosticConfiguration.cs" />
     <Compile Include="Diagnostics\Event\IDiagnosticEventsService.cs" />
+    <Compile Include="Diagnostics\IDiagnosticDataProvider.cs" />
     <Compile Include="Diagnostics\Time\HttpHeaderAttribute.cs" />
+    <Compile Include="Diagnostics\Time\IProfilerDataCollector.cs" />
     <Compile Include="Diagnostics\Time\IProfilerDataProcessor.cs" />
+    <Compile Include="Diagnostics\Time\IProfilerProvider.cs" />
+    <Compile Include="Diagnostics\Time\NoProfilerDataProcess.cs" />
+    <Compile Include="Expressions\ExpressionsHelper.cs" />
+    <Compile Include="Diagnostics\Time\NoProfilerDataCollector.cs" />
+    <Compile Include="Diagnostics\Time\ProfilerDiagnostics.cs" />
     <Compile Include="ITextProvider.cs" />
     <Compile Include="Features\ITpFeatureList.cs" />
     <Compile Include="Features\TpFeature.cs" />
     <Compile Include="Features\TpFeatureListExtensions.cs" />
     <Compile Include="Internationalization\MessageLocalizer.cs" />
     <Compile Include="Internationalization\LocalizationScopeAttribute.cs" />
-    <Compile Include="Linq\SpecificExtensionMethodsProvider.cs" />
+    <Compile Include="Linq\SafeConvert.cs" />
+    <Compile Include="Linq\SurrogateGeneratorHelper.cs" />
+    <Compile Include="Linq\TokenType.cs" />
     <Compile Include="LocalizedInvalidOperationException.cs" />
     <Compile Include="LocalizedNotImplementedException.cs" />
     <Compile Include="LocalizedNotSupportedException.cs" />
@@ -141,7 +161,6 @@
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\IConfigurationReader.cs" />
     <Compile Include="CountExtensions.cs" />
-    <Compile Include="Csv\CsvExtensions.cs" />
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
     <Compile Include="Csv\CsvRenderer.cs" />
@@ -151,16 +170,8 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Delta.cs" />
     <Compile Include="Diagnostics\DiagnosticsRegistry.cs" />
-    <Compile Include="Diagnostics\IPerformanceCounter.cs" />
-    <Compile Include="Diagnostics\IPerformanceCounters.cs" />
-    <Compile Include="Diagnostics\IPerformanceCountersCategoryInfo.cs" />
-    <Compile Include="Diagnostics\NullSafePerformanceCounter.cs" />
-    <Compile Include="Diagnostics\PerformanceCounter.cs" />
-    <Compile Include="Diagnostics\PerformanceCounters.cs" />
-    <Compile Include="Diagnostics\PerformanceCounterService.cs" />
     <Compile Include="Diagnostics\Time\ITimePoints.cs" />
     <Compile Include="Diagnostics\Time\ITimePointsFork.cs" />
-    <Compile Include="Diagnostics\Time\ITpProfilerDataCollector.cs" />
     <Compile Include="Diagnostics\Time\TpProfilerStatisticRecord.cs" />
     <Compile Include="Diagnostics\Time\ProfilerStatistics.cs" />
     <Compile Include="Diagnostics\Time\Profiler.cs" />
@@ -168,12 +179,10 @@
     <Compile Include="Diagnostics\Time\Source\TimePointsSource.cs" />
     <Compile Include="Diagnostics\Time\TimePoint.cs" />
     <Compile Include="Diagnostics\Time\TimePoints.cs" />
-    <Compile Include="Diagnostics\Time\TimePointsBase.cs" />
     <Compile Include="Diagnostics\Time\ProfilerTarget.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="DirectoryExtensions.cs" />
-    <Compile Include="EnumExtensions.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Expressions\Visitors\BooleanEvaluator.cs" />
     <Compile Include="Expressions\Visitors\CaseInsensitiveVisitor.cs" />
@@ -202,8 +211,6 @@
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IFileSystemWatcher.cs" />
     <Compile Include="IInvariant.cs" />
-    <Compile Include="ILock.cs" />
-    <Compile Include="ILockOwner.cs" />
     <Compile Include="INameValueDataProvider.cs" />
     <Compile Include="Inflector.cs" />
     <Compile Include="IStatelessConverter.cs" />
@@ -217,16 +224,14 @@
     <Compile Include="Linq\IMethodProvider.cs" />
     <Compile Include="Linq\ISurrogateMethod.cs" />
     <Compile Include="Linq\ITypeProvider.cs" />
-    <Compile Include="Linq\Parser.cs" />
-    <Compile Include="Linq\ParseTree.cs" />
-    <Compile Include="Linq\Scanner.cs" />
+    <Compile Include="Linq\Token.cs" />
     <Compile Include="Linq\UntypedQueryable.cs" />
     <Compile Include="Lock.cs" />
     <Compile Include="LocalFileSystem.cs" />
     <Compile Include="Locker.cs" />
     <Compile Include="IPresentationErrorItem.cs" />
+    <Compile Include="Memoize.cs" />
     <Compile Include="MoreLinqExtensions.cs" />
-    <Compile Include="NoLock.cs" />
     <Compile Include="NumberExtensions.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="PracticeSettingsManager.cs" />
@@ -243,19 +248,16 @@
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="EmptyObserver.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Expressions\PreOrderTraverseVisitor.cs" />
     <Compile Include="Expressions\ExpressionComparison.cs" />
     <Compile Include="Expressions\ExpressionEnumerable.cs" />
-    <Compile Include="Expressions\ExpressionEventArg.cs" />
     <Compile Include="Expressions\ExpressionExtensions.cs" />
     <Compile Include="Expressions\LambdaSubstituter.cs" />
     <Compile Include="Expressions\QueryableHelper.cs" />
     <Compile Include="Features\StructureMapExtensions.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="Services\IService.cs" />
-    <Compile Include="ITpLogManager.cs" />
     <Compile Include="Linq\ClassFactory.cs" />
     <Compile Include="Linq\ExpressionParser.Inner.cs">
       <DependentUpon>ExpressionParser.cs</DependentUpon>
@@ -267,7 +269,6 @@
     <Compile Include="IContext.cs" />
     <Compile Include="INullable.cs" />
     <Compile Include="Lazy.cs" />
-    <Compile Include="Linq\DynamicClass.cs" />
     <Compile Include="Linq\DynamicExpressionParser.cs" />
     <Compile Include="Linq\DynamicOrdering.cs" />
     <Compile Include="Linq\DynamicProperty.cs" />
@@ -278,7 +279,6 @@
     <Compile Include="InvalidDateRangeException.cs" />
     <Compile Include="MaybeConvert\MaybeConvertExtensions.cs" />
     <Compile Include="MaybeDictionary.cs" />
-    <Compile Include="netfx\System\Guard.cs" />
     <Compile Include="netfx\System\Reflection\GetCustomAttribute.cs" />
     <Compile Include="netfx\System\Reflection\Reflect.cs" />
     <Compile Include="netfx\System\Reflection\Reflect.Overloads.cs">
@@ -301,7 +301,6 @@
     <Compile Include="StringUtils.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TpLogManager.cs" />
-    <Compile Include="TpLogManagerExtensions.cs" />
     <Compile Include="TpPolicy.cs" />
     <Compile Include="TupleExtensions.cs" />
     <Compile Include="Match.cs" />
@@ -345,7 +344,7 @@
   </PropertyGroup>
   <PropertyGroup>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

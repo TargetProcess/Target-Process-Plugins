@@ -33,8 +33,9 @@ namespace Mercurial
         /// <summary>
         /// Asks the user which of the local or the other version to keep as the merged version.
         /// </summary>
-        [Obsolete("Do not use this, there is no way to provide feedback to the command client at this time, instead use a MergeJob and control the merge manually that way.")]
-        public const string InternalPrompt = "internal:prompt";
+        [Obsolete(
+             "Do not use this, there is no way to provide feedback to the command client at this time, instead use a MergeJob and control the merge manually that way."
+         )] public const string InternalPrompt = "internal:prompt";
 
         /// <summary>
         /// Creates three versions of the files to merge, containing the contents of local, other and base.

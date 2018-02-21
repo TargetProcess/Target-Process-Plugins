@@ -31,10 +31,7 @@ namespace Mercurial.Gui
         [RepeatableArgument]
         public Collection<string> Sources
         {
-            get
-            {
-                return new Collection<string>(_Sources);
-            }
+            get { return new Collection<string>(_Sources); }
         }
 
         /// <summary>

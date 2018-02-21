@@ -5,10 +5,10 @@
 
 namespace Tp.BugTracking
 {
-	public interface IUserMapper
-	{
-		int? GetTpIdBy(string thirdPartyId);
+    public interface IUserMapper
+    {
+        int? GetTpIdBy(string thirdPartyId);
 
-		string GetThirdPartyIdBy(int? tpUserId);
-	}
+        string GetThirdPartyIdBy(int? tpUserId);
+    }
 }

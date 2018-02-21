@@ -11,22 +11,22 @@ using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 
 namespace Tp.Bugzilla.CustomCommand
 {
-	public class GetBugzillaBugsCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var bugIds = args.Deserialize<int[]>();
+    public class GetBugzillaBugsCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var bugIds = args.Deserialize<int[]>();
 
-			var repository = ObjectFactory.GetInstance<IBugzillaInfoStorageRepository>();
-			var bugs = repository.GetAllBugzillaBugs(bugIds);
+            var repository = ObjectFactory.GetInstance<IBugzillaInfoStorageRepository>();
+            var bugs = repository.GetAllBugzillaBugs(bugIds);
 
-			return new PluginCommandResponseMessage
-			       	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = bugs.Serialize()};
-		}
+            return new PluginCommandResponseMessage
+                { PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = bugs.Serialize() };
+        }
 
-		public string Name
-		{
-			get { return "GetBugzillaBugs"; }
-		}
-	}
+        public string Name
+        {
+            get { return "GetBugzillaBugs"; }
+        }
+    }
 }

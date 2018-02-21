@@ -65,10 +65,7 @@ namespace Mercurial
         /// </summary>
         public int LineNumber
         {
-            get
-            {
-                return _LineNumber;
-            }
+            get { return _LineNumber; }
         }
 
         /// <summary>
@@ -77,10 +74,7 @@ namespace Mercurial
         /// </summary>
         public int RevisionNumber
         {
-            get
-            {
-                return _RevisionNumber;
-            }
+            get { return _RevisionNumber; }
         }
 
         /// <summary>
@@ -88,10 +82,7 @@ namespace Mercurial
         /// </summary>
         public string Line
         {
-            get
-            {
-                return _Line;
-            }
+            get { return _Line; }
         }
 
         #region IEquatable<Annotation> Members
@@ -136,7 +127,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(Annotation))
                 return false;
-            return Equals((Annotation)obj);
+            return Equals((Annotation) obj);
         }
 
         /// <summary>

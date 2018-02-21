@@ -39,7 +39,11 @@ namespace Tp.Tfs.Tests.WorkItems
             try
             {
                 Context.ClearWorkItems();
-                Context.ProjectsMapping.Add(new MappingElement { Key = "testProject", Value = new MappingLookup() { Id = 1, Name = "Test" } });
+                Context.ProjectsMapping.Add(new MappingElement
+                {
+                    Key = "testProject",
+                    Value = new MappingLookup() { Id = 1, Name = "Test" }
+                });
             }
             catch (Exception)
             {
@@ -56,107 +60,132 @@ namespace Tp.Tfs.Tests.WorkItems
 
         [When("synchronizing work items entities")]
         public void SynchronizeWorkItems()
-		{
-		    var lastSyncDate = ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().FirstOrDefault();
+        {
+            var lastSyncDate = ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().FirstOrDefault();
 
-			DateTime? date;
+            DateTime? date;
 
-			if (lastSyncDate == null)
-				date = null;
-			else
-				date = lastSyncDate.Value;
+            if (lastSyncDate == null)
+                date = null;
+            else
+                date = lastSyncDate.Value;
 
-			ObjectFactory.GetInstance<TransportMock>().HandleLocalMessage(Context.Profile, new TickMessage(date));
-		}
-        
+            ObjectFactory.GetInstance<TransportMock>().HandleLocalMessage(Context.Profile, new TickMessage(date));
+        }
+
         [Then("bugs with following names should be created in TargetProcess: '$entityName'")]
         public void BugShouldBeCreated(string entityName)
-		{
-            Context.TpBugs.Count(x => x.Name == entityName).Should(Be.EqualTo(1), "Context.TpBugs.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
-		}
+        {
+            Context.TpBugs.Count(x => x.Name == entityName)
+                .Should(Be.EqualTo(1), "Context.TpBugs.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
+        }
 
         [Then("bug in TargetProcess with name '$entityName' should have description '$description'")]
         public void CheckBugDescription(string entityName, string description)
         {
-            Context.TpBugs.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description), "Context.TpBugs.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
+            Context.TpBugs.First(x => x.Name == entityName)
+                .Description.Should(Be.EqualTo(description),
+                    "Context.TpBugs.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
         }
 
         [Then("bug in TargetProcess with name '$entityName' should be in '$project'")]
         public void CheckBugProject(string entityName, string projectName)
         {
-            Context.TpBugs.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName), "Context.TpBugs.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
+            Context.TpBugs.First(x => x.Name == entityName)
+                .ProjectName.Should(Be.EqualTo(projectName),
+                    "Context.TpBugs.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
         }
 
         [Then("user stories with following names should be created in TargetProcess: '$entityName'")]
         public void UserStoryShouldBeCreated(string entityName)
         {
-            Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(1), "Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
+            Context.TpUserStories.Count(x => x.Name == entityName)
+                .Should(Be.EqualTo(1), "Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
         }
 
         [Given("user stories with following names should be created in TargetProcess: '$entityName'")]
         public void UserStoryShouldBeCreated2(string entityName)
         {
-            Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(1), "Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
+            Context.TpUserStories.Count(x => x.Name == entityName)
+                .Should(Be.EqualTo(1), "Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
         }
 
         [Then("user story in TargetProcess with name '$entityName' should have description '$description'")]
         public void CheckUserStoryDescription(string entityName, string description)
         {
-            Context.TpUserStories.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description), "Context.TpUserStories.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
+            Context.TpUserStories.First(x => x.Name == entityName)
+                .Description.Should(Be.EqualTo(description),
+                    "Context.TpUserStories.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
         }
 
         [Given("user stories in TargetProcess with name '$entityName' should have description '$description'")]
         public void CheckUserStoryDescription2(string entityName, string description)
         {
-            Context.TpUserStories.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description), "Context.TpUserStories.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
+            Context.TpUserStories.First(x => x.Name == entityName)
+                .Description.Should(Be.EqualTo(description),
+                    "Context.TpUserStories.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
         }
 
         [Then("user story in TargetProcess with name '$entityName' should be in '$project'")]
         public void CheckUserStoryProject(string entityName, string projectName)
         {
-            Context.TpUserStories.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName), "Context.TpUserStories.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
+            Context.TpUserStories.First(x => x.Name == entityName)
+                .ProjectName.Should(Be.EqualTo(projectName),
+                    "Context.TpUserStories.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
         }
 
         [Given("user stories in TargetProcess with name '$entityName' should be in '$project'")]
         public void CheckUserStoryProject2(string entityName, string projectName)
         {
-            Context.TpUserStories.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName), "Context.TpUserStories.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
+            Context.TpUserStories.First(x => x.Name == entityName)
+                .ProjectName.Should(Be.EqualTo(projectName),
+                    "Context.TpUserStories.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
         }
 
         [Then("features with following names should be created in TargetProcess: '$entityName'")]
         public void FeatureShouldBeCreated(string entityName)
         {
-            Context.TpFeatures.Count(x => x.Name == entityName).Should(Be.EqualTo(1), "Context.TpFeatures.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
+            Context.TpFeatures.Count(x => x.Name == entityName)
+                .Should(Be.EqualTo(1), "Context.TpFeatures.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
         }
 
         [Then("feature in TargetProcess with name '$entityName' should have description '$description'")]
         public void CheckFeatureDescription(string entityName, string description)
         {
-            Context.TpFeatures.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description), "Context.TpFeatures.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
+            Context.TpFeatures.First(x => x.Name == entityName)
+                .Description.Should(Be.EqualTo(description),
+                    "Context.TpFeatures.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
         }
 
         [Then("feature in TargetProcess with name '$entityName' should be in '$project'")]
         public void CheckFeatureProject(string entityName, string projectName)
         {
-            Context.TpFeatures.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName), "Context.TpFeatures.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
+            Context.TpFeatures.First(x => x.Name == entityName)
+                .ProjectName.Should(Be.EqualTo(projectName),
+                    "Context.TpFeatures.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
         }
 
         [Then("requests with following names should be created in TargetProcess: '$entityName'")]
         public void RequestShouldBeCreated(string entityName)
         {
-            Context.TpRequests.Count(x => x.Name == entityName).Should(Be.EqualTo(1), "Context.TpRequests.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
+            Context.TpRequests.Count(x => x.Name == entityName)
+                .Should(Be.EqualTo(1), "Context.TpRequests.Count(x => x.Name == entityName).Should(Be.EqualTo(1))");
         }
 
         [Then("request in TargetProcess with name '$entityName' should have description '$description'")]
         public void CheckRequestDescription(string entityName, string description)
         {
-            Context.TpRequests.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description), "Context.TpRequests.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
+            Context.TpRequests.First(x => x.Name == entityName)
+                .Description.Should(Be.EqualTo(description),
+                    "Context.TpRequests.First(x => x.Name == entityName).Description.Should(Be.EqualTo(description))");
         }
 
         [Then("request in TargetProcess with name '$entityName' should be in '$project'")]
         public void CheckRequestProject(string entityName, string projectName)
         {
-            Context.TpRequests.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName), "Context.TpRequests.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
+            Context.TpRequests.First(x => x.Name == entityName)
+                .ProjectName.Should(Be.EqualTo(projectName),
+                    "Context.TpRequests.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
         }
 
 
@@ -165,16 +194,17 @@ namespace Tp.Tfs.Tests.WorkItems
         {
             Context.ChangeWorkItem(entityName, new Dictionary<string, string> { { field, newFieldValue } });
         }
-        
+
 
         [Then("user story with name '$entityName' is absent in TP")]
         public void UserStoryShouldBeAbsentInTP(string entityName)
         {
-             Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(0), "Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(0))");
+            Context.TpUserStories.Count(x => x.Name == entityName)
+                .Should(Be.EqualTo(0), "Context.TpUserStories.Count(x => x.Name == entityName).Should(Be.EqualTo(0))");
         }
 
         ///////////////////////////////////////////////////
-        
+
         [Given("tfs profile '$TestProfile' created")]
         public void CreateProfile(string profileName)
         {
@@ -211,7 +241,7 @@ namespace Tp.Tfs.Tests.WorkItems
         public void ChangeTpEntity(string entityName, string field, string newEntityName)
         {
             UserStoryDTO tpEntity = Context.TpUserStories.First(x => x.Name == entityName);
-            var nameProperty = typeof (UserStoryDTO).GetProperty(field);
+            var nameProperty = typeof(UserStoryDTO).GetProperty(field);
             nameProperty.SetValue(tpEntity, newEntityName, null);
 
             tpEntity.Name.Should(Be.EqualTo(newEntityName), "tpEntity.Name.Should(Be.EqualTo(newEntityName))");

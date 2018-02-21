@@ -5,14 +5,14 @@
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
-	public enum ValidationErrorType
-	{
-		BugzillaNotFound,
-		InvalidBugzillaVersion,
-		InvalidCredentials,
-		TpCgiNotFound,
-		InvalidTpCgiVersion,
-		QueryNotFound,
-		TrustFailure
-	}
+    public enum ValidationErrorType
+    {
+        BugzillaNotFound,
+        InvalidBugzillaVersion,
+        InvalidCredentials,
+        TpCgiNotFound,
+        InvalidTpCgiVersion,
+        QueryNotFound,
+        TrustFailure
+    }
 }

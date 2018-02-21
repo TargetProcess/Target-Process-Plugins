@@ -5,13 +5,14 @@
 
 namespace Tp.Bugzilla.BugzillaQueries
 {
-	public interface IBugzillaQuery
-	{
-		string Value();
+    public interface IBugzillaQuery
+    {
+        string Value();
 
-		string GetOperationDescription();
-	}
+        string GetOperationDescription();
+    }
 
-	public interface IBugzillaAction : IBugzillaQuery
-	{}
+    public interface IBugzillaAction : IBugzillaQuery
+    {
+    }
 }

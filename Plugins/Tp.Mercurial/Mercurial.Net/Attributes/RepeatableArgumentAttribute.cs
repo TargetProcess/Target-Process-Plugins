@@ -23,15 +23,9 @@ namespace Mercurial.Attributes
         /// </summary>
         public string Option
         {
-            get
-            {
-                return _Option;
-            }
+            get { return _Option; }
 
-            set
-            {
-                _Option = (value ?? string.Empty).Trim();
-            }
+            set { _Option = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

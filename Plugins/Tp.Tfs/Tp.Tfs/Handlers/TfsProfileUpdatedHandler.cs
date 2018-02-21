@@ -12,68 +12,73 @@ using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
 namespace Tp.Tfs.Handlers
 {
-	public class TfsProfileUpdatedHandler : IHandleMessages<ProfileUpdatedMessage>
-	{
-		private readonly IProfile _profile;
+    public class TfsProfileUpdatedHandler : IHandleMessages<ProfileUpdatedMessage>
+    {
+        private readonly IProfile _profile;
 
-		public TfsProfileUpdatedHandler(IProfile profile)
-		{
-			_profile = profile;
-		}
+        public TfsProfileUpdatedHandler(IProfile profile)
+        {
+            _profile = profile;
+        }
 
-		public void Handle(ProfileUpdatedMessage message)
-		{
-			var tfsProfile = _profile.Settings as TfsPluginProfile;
+        public void Handle(ProfileUpdatedMessage message)
+        {
+            var tfsProfile = _profile.Settings as TfsPluginProfile;
 
-			var projectsMappingHistory = _profile.Get<ProjectsMappingHistory>().FirstOrDefault();
+            var projectsMappingHistory = _profile.Get<ProjectsMappingHistory>().FirstOrDefault();
 
-			if (projectsMappingHistory == null)
-				return;
+            if (projectsMappingHistory == null)
+                return;
 
-			var currentElement = projectsMappingHistory.Current;
-			var importedTypes = new List<ImportedType>(currentElement.ImportedTypes);
+            var currentElement = projectsMappingHistory.Current;
+            var importedTypes = new List<ImportedType>(currentElement.ImportedTypes);
 
-			foreach (var mapping in tfsProfile.EntityMapping)
-			{
-				if (currentElement.ImportedTypes.Exists(x => x.Type == mapping.First))
-					continue;
+            foreach (var mapping in tfsProfile.EntityMapping)
+            {
+                if (currentElement.ImportedTypes.Exists(x => x.Type == mapping.First))
+                    continue;
 
-				importedTypes.Add(new ImportedType { StartID = int.Parse(tfsProfile.StartWorkItem), Type = mapping.First, IsFirstSync = true });
-			}
+                importedTypes.Add(new ImportedType
+                {
+                    StartID = int.Parse(tfsProfile.StartWorkItem),
+                    Type = mapping.First,
+                    IsFirstSync = true
+                });
+            }
 
-			if (currentElement.IsEquals(tfsProfile.ProjectsMapping[0]))
-			{
-				if (importedTypes.Count != currentElement.ImportedTypes.Count)
-				{
-					currentElement.ImportedTypes = importedTypes;
-					_profile.Get<ProjectsMappingHistory>().ReplaceWith(projectsMappingHistory);
-				}
+            if (currentElement.IsEquals(tfsProfile.ProjectsMapping[0]))
+            {
+                if (importedTypes.Count != currentElement.ImportedTypes.Count)
+                {
+                    currentElement.ImportedTypes = importedTypes;
+                    _profile.Get<ProjectsMappingHistory>().ReplaceWith(projectsMappingHistory);
+                }
 
-				return;
-			}
+                return;
+            }
 
-			currentElement.IsCurrent = false;
+            currentElement.IsCurrent = false;
 
-			importedTypes = importedTypes.Select(x => x.Clone()).ToList();
+            importedTypes = importedTypes.Select(x => x.Clone()).ToList();
 
-			importedTypes.ForEach(importedType =>
-			{
-				if (!importedType.IsFirstSync)
-					importedType.StartID = currentElement.WorkItemsRange.Max + 1;
-			});
+            importedTypes.ForEach(importedType =>
+            {
+                if (!importedType.IsFirstSync)
+                    importedType.StartID = currentElement.WorkItemsRange.Max + 1;
+            });
 
-			var projectsMapping = new ProjectsMappingHistoryElement()
-			{
-				Key = tfsProfile.ProjectsMapping[0].Key,
-				Value = tfsProfile.ProjectsMapping[0].Value,
-				WorkItemsRange = new CreatedWorkItemsRange() { Min = currentElement.WorkItemsRange.Max + 1, Max = -1 },
-				IsCurrent = true,
-				ImportedTypes = importedTypes
-			};
+            var projectsMapping = new ProjectsMappingHistoryElement()
+            {
+                Key = tfsProfile.ProjectsMapping[0].Key,
+                Value = tfsProfile.ProjectsMapping[0].Value,
+                WorkItemsRange = new CreatedWorkItemsRange() { Min = currentElement.WorkItemsRange.Max + 1, Max = -1 },
+                IsCurrent = true,
+                ImportedTypes = importedTypes
+            };
 
-			projectsMappingHistory.Add(projectsMapping);
+            projectsMappingHistory.Add(projectsMapping);
 
-			_profile.Get<ProjectsMappingHistory>().ReplaceWith(projectsMappingHistory);
-		}
-	}
+            _profile.Get<ProjectsMappingHistory>().ReplaceWith(projectsMappingHistory);
+        }
+    }
 }

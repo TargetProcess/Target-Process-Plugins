@@ -30,15 +30,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string File
         {
-            get
-            {
-                return _File;
-            }
+            get { return _File; }
 
-            set
-            {
-                _File = (value ?? string.Empty).Trim();
-            }
+            set { _File = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

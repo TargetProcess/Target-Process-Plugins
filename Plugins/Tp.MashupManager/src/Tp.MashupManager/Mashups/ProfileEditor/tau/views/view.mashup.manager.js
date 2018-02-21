@@ -1,75 +1,71 @@
+/*global tau*/
 tau.mashups
     .addDependency('Underscore')
     .addDependency('tau/core/view-base')
     .addDependency('tau/components/component.container')
     .addDependency('tau/mashup.manager/configurations/configuration.mashup.manager')
-    .addModule('tau/mashup.manager/views/view.mashup.manager', function (_, ViewBase, ComponentContainer, ConfigurationMashupManager) {
-        return ViewBase.extend({
-            init: function (config) {
-                this._super(config);
-            },
+    .addModule('tau/mashup.manager/views/view.mashup.manager',
+        function(_, ViewBase, ComponentContainer, ConfigurationMashupManager) {
+            return ViewBase.extend({
+                initialize: function() {
+                    //LEFT BLANK SINCE WORKFLOW CHANGED
+                },
 
-            initialize: function () {
-                //LEFT BLANK SINCE WORKFLOW CHANGED
-            },
+                'bus beforeInit': function() {
+                    var configurator = this.config.context.configurator;
+                    configurator.getTitleManager().setTitle('Mashup Manager');
 
-            "bus beforeInit": function (evt) {
+                    var appConfig = this.config;
+                    var containerConfig = _.extend(appConfig, (new ConfigurationMashupManager()).getConfig(appConfig));
+                    appConfig.context.actionData = appConfig.actionData;
 
-                var configurator = this.config.context.configurator;
-                configurator.getTitleManager().setTitle('Mashup Manager');
+                    this.container = ComponentContainer.create({
+                        name: 'mashup manager page container',
 
-                var appConfig = this.config;
-                var containerConfig = _.extend(appConfig, (new ConfigurationMashupManager()).getConfig(appConfig));
+                        layout: containerConfig.layout,
+                        template: containerConfig.template,
 
-                this.container = ComponentContainer.create({
-                    name: 'mashup manager page container',
+                        extensions: _.union([], containerConfig.extensions || []),
+                        context: appConfig.context
+                    });
 
-                    layout: containerConfig.layout,
-                    template: containerConfig.template,
+                    this.container.on('afterInit', this['container afterInit'], this);
+                    this.container.on('afterRender', this['container afterRender'], this);
+                    this.container.on('componentsCreated', this['container componentsCreated'], this);
 
-                    extensions: _.union([], containerConfig.extensions || []),
-                    context: _.extend(appConfig.context, {actionData: appConfig.actionData})
-                });
+                    this.container.initialize(containerConfig);
+                },
 
-                this.container.on('afterInit', this['container afterInit'], this);
-                this.container.on('afterRender', this['container afterRender'], this);
-                this.container.on('componentsCreated', this['container componentsCreated'], this);
+                'container afterInit': function() {
+                    this.fireAfterInit();
+                },
 
-                this.container.initialize(containerConfig);
-            },
+                'container componentsCreated': function(evt) {
+                    this.fire(evt.name, evt.data);
+                },
 
-            "container afterInit": function (evt) {
-                this.fireAfterInit();
-            },
+                'container afterRender': function(evt) {
+                    this.fireBeforeRender();
+                    this.element = evt.data.element;
+                    this.fireAfterRender();
+                },
 
-            "container componentsCreated": function (evt) {
-                this.fire(evt.name, evt.data);
-            },
+                lifeCycleCleanUp: function() {
+                    this.destroyContainer();
+                    this._super();
+                },
 
-            "container afterRender": function (evt) {
-                this.fireBeforeRender();
-                this.element = evt.data.element;
-                this.fireAfterRender();
-            },
+                destroyContainer: function() {
+                    if (this.container) {
+                        this.container.destroy();
+                        this.container = null;
+                    }
+                },
 
-            lifeCycleCleanUp: function () {
-                this.destroyContainer();
-                this._super();
-            },
-
-            destroyContainer: function () {
-                if (!this.container) {
-                    return;
+                destroy: function() {
+                    this.destroyContainer();
+                    this._super();
                 }
-
-                this.container.destroy();
-                this.container = null;
-            },
-
-            destroy: function () {
-                this.destroyContainer();
-                this._super();
-            }
-        });
-    }
-);
+            });
+        }
+    );

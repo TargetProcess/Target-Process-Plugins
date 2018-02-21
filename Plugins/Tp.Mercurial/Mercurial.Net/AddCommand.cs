@@ -40,10 +40,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Paths
         {
-            get
-            {
-                return _Files.Collection;
-            }
+            get { return _Files.Collection; }
         }
 
         /// <summary>
@@ -79,10 +76,7 @@ namespace Mercurial
         [DefaultValue(false)]
         public bool RecurseSubRepositories
         {
-            get
-            {
-                return _RecurseSubRepositories;
-            }
+            get { return _RecurseSubRepositories; }
 
             set
             {
@@ -120,10 +114,7 @@ namespace Mercurial
         /// </summary>
         public override IEnumerable<string> Arguments
         {
-            get
-            {
-                return base.Arguments.Concat(_Files.GetArguments());
-            }
+            get { return base.Arguments.Concat(_Files.GetArguments()); }
         }
 
         /// <summary>

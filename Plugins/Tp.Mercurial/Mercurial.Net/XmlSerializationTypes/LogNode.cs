@@ -23,10 +23,7 @@ namespace Mercurial.XmlSerializationTypes
         [XmlElement("logentry")]
         public Collection<LogEntryNode> LogEntries
         {
-            get
-            {
-                return new Collection<LogEntryNode>(_LogEntries);
-            }
+            get { return new Collection<LogEntryNode>(_LogEntries); }
         }
     }
 }

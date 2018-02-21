@@ -40,11 +40,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Gets or sets the initial search pattern.
@@ -54,15 +50,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string SearchPattern
         {
-            get
-            {
-                return _SearchPattern;
-            }
+            get { return _SearchPattern; }
 
-            set
-            {
-                _SearchPattern = (value ?? string.Empty).Trim();
-            }
+            set { _SearchPattern = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -81,7 +71,7 @@ namespace Mercurial.Gui
         public T WithRevision(RevSpec value)
         {
             Revision = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -100,7 +90,7 @@ namespace Mercurial.Gui
         public T WithSearchPattern(string value)
         {
             SearchPattern = value;
-            return (T)this;
+            return (T) this;
         }
     }
 }

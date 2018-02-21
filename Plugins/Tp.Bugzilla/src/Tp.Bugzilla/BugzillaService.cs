@@ -16,143 +16,144 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla
 {
-	public class BugzillaService : IBugzillaService
-	{
-		private readonly BugzillaProfile _bugzillaProfile;
+    public class BugzillaService : IBugzillaService
+    {
+        private readonly BugzillaProfile _bugzillaProfile;
 
-		public BugzillaService(IStorageRepository storageRepository)
-		{
-			_bugzillaProfile = storageRepository.GetProfile<BugzillaProfile>();
-		}
+        public BugzillaService(IStorageRepository storageRepository)
+        {
+            _bugzillaProfile = storageRepository.GetProfile<BugzillaProfile>();
+        }
 
-		public BugzillaService()
-		{
-		}
+        public BugzillaService()
+        {
+        }
 
-		public bugzilla_properties CheckConnection()
-		{
-			return CheckConnection(_bugzillaProfile);
-		}
+        public bugzilla_properties CheckConnection()
+        {
+            return CheckConnection(_bugzillaProfile);
+        }
 
-		public bugzilla_properties CheckConnection(BugzillaProfile profile)
-		{
-			var errors = new PluginProfileErrorCollection();
-			try
-			{
-				var validators = new Queue<Validator>();
+        public bugzilla_properties CheckConnection(BugzillaProfile profile)
+        {
+            var errors = new PluginProfileErrorCollection();
+            try
+            {
+                var validators = new Queue<Validator>();
 
-				var connectionValidator = new ConnectionValidator(profile);
-				validators.Enqueue(connectionValidator);
+                var connectionValidator = new ConnectionValidator(profile);
+                validators.Enqueue(connectionValidator);
 
-				var scriptValidator = new ScriptValidator(profile);
-				validators.Enqueue(scriptValidator);
+                var scriptValidator = new ScriptValidator(profile);
+                validators.Enqueue(scriptValidator);
 
-				var responseValidator = new ResponseValidator(profile, scriptValidator);
-				validators.Enqueue(responseValidator);
+                var responseValidator = new ResponseValidator(profile, scriptValidator);
+                validators.Enqueue(responseValidator);
 
-				var deserializeValidator = new DeserializeValidator(profile, responseValidator);
-				validators.Enqueue(deserializeValidator);
+                var deserializeValidator = new DeserializeValidator(profile, responseValidator);
+                validators.Enqueue(deserializeValidator);
 
-				var settingsValidator = new SettingsValidator(profile, deserializeValidator);
-				validators.Enqueue(settingsValidator);
+                var settingsValidator = new SettingsValidator(profile, deserializeValidator);
+                validators.Enqueue(settingsValidator);
 
-				var savedQueryValidator = new SavedQueryValidator(profile);
-				validators.Enqueue(savedQueryValidator);
+                var savedQueryValidator = new SavedQueryValidator(profile);
+                validators.Enqueue(savedQueryValidator);
 
-				while (validators.Count > 0)
-				{
-					var validator = validators.Dequeue();
-					validator.Execute(errors);
-				}
+                while (validators.Count > 0)
+                {
+                    var validator = validators.Dequeue();
+                    validator.Execute(errors);
+                }
 
-				if (errors.Any())
-				{
-					throw new BugzillaPluginProfileException(profile, errors);
-				}
+                if (errors.Any())
+                {
+                    throw new BugzillaPluginProfileException(profile, errors);
+                }
 
-				return deserializeValidator.Data;
-			}
-			catch (BugzillaPluginProfileException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-				errors.Add(new PluginProfileError
-					{
-						FieldName = BugzillaProfile.ProfileField,
-						Message = $"The connection with {profile} is failed. {ex.Message}"
-					});
-				throw new BugzillaPluginProfileException(profile, errors);
-			}
-		}
+                return deserializeValidator.Data;
+            }
+            catch (BugzillaPluginProfileException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(new PluginProfileError
+                {
+                    FieldName = BugzillaProfile.ProfileField,
+                    Message = $"The connection with {profile} is failed. {ex.Message}"
+                });
+                throw new BugzillaPluginProfileException(profile, errors);
+            }
+        }
 
-		public int[] GetChangedBugIds(DateTime? date)
-		{
-			var offset = GetTimeOffset();
-			DateTime? bugzillaDateTime = null;
-			if (date.HasValue)
-			{
-				bugzillaDateTime = date.Value.ToUniversalTime().Add(offset);
-			}
+        public int[] GetChangedBugIds(DateTime? date)
+        {
+            var offset = GetTimeOffset();
+            DateTime? bugzillaDateTime = null;
+            if (date.HasValue)
+            {
+                bugzillaDateTime = date.Value.ToUniversalTime().Add(offset);
+            }
 
-			return ObjectFactory.GetInstance<BugzillaUrl>().GetChangedBugsIds(bugzillaDateTime);
-		}
+            return ObjectFactory.GetInstance<BugzillaUrl>().GetChangedBugsIds(bugzillaDateTime);
+        }
 
-		public bugCollection GetBugs(int[] bugIDs)
-		{
-			if (bugIDs.Length == 0) return new bugCollection();
+        public bugCollection GetBugs(int[] bugIDs)
+        {
+            if (bugIDs.Length == 0) return new bugCollection();
 
-			return ObjectFactory.GetInstance<BugzillaUrl>().GetBugs(bugIDs);
-		}
+            return ObjectFactory.GetInstance<BugzillaUrl>().GetBugs(bugIDs);
+        }
 
-		public List<string> GetStatuses()
-		{
-			return CheckConnection().statuses.nameCollection.ToArray().Select(x => x.ToString()).ToList();
-		}
+        public List<string> GetStatuses()
+        {
+            return CheckConnection().statuses.nameCollection.ToArray().Select(x => x.ToString()).ToList();
+        }
 
-		public List<string> GetResolutions()
-		{
-			return CheckConnection().resolutions.nameCollection.ToArray().Select(x => x.ToString()).ToList();
-		}
+        public List<string> GetResolutions()
+        {
+            return CheckConnection().resolutions.nameCollection.ToArray().Select(x => x.ToString()).ToList();
+        }
 
-		public void Execute(IBugzillaQuery query)
-		{
-			ExecuteBugzillaNonQuery(query);
-		}
+        public void Execute(IBugzillaQuery query)
+        {
+            ExecuteBugzillaNonQuery(query);
+        }
 
-		public TimeSpan GetTimeOffset()
-		{
-			var response = ExecuteBugzillaQuery(new BugzillaTimezoneQuery());
+        public TimeSpan GetTimeOffset()
+        {
+            var response = ExecuteBugzillaQuery(new BugzillaTimezoneQuery());
 
-			TimeSpan timeOffset;
-			if (TimeSpan.TryParse(response, out timeOffset))
-			{
-				return timeOffset;
-			}
+            TimeSpan timeOffset;
+            if (TimeSpan.TryParse(response, out timeOffset))
+            {
+                return timeOffset;
+            }
 
-			throw new ApplicationException($"Invalid offset value returned from Bugzilla service: {response}");
-		}
+            throw new ApplicationException($"Invalid offset value returned from Bugzilla service: {response}");
+        }
 
-		private string ExecuteBugzillaQuery(IBugzillaQuery query)
-		{
-			try
-			{
-				return ObjectFactory.GetInstance<BugzillaUrl>().ExecuteOnBugzilla(query);
-			}
-			catch (Exception ex)
-			{
-				throw new ApplicationException(
-					$"Synchronization failed for following operation: {query}. Profile : '{_bugzillaProfile}'", ex);
-			}
-		}
+        private string ExecuteBugzillaQuery(IBugzillaQuery query)
+        {
+            try
+            {
+                return ObjectFactory.GetInstance<BugzillaUrl>().ExecuteOnBugzilla(query);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    $"Synchronization failed for following operation: {query}. Profile : '{_bugzillaProfile}'", ex);
+            }
+        }
 
-		private void ExecuteBugzillaNonQuery(IBugzillaQuery query)
-		{
-			var result = ExecuteBugzillaQuery(query);
+        private void ExecuteBugzillaNonQuery(IBugzillaQuery query)
+        {
+            var result = ExecuteBugzillaQuery(query);
 
-			if (result != "OK")
-				throw new ApplicationException($"There was exception during performing following operation: {query.GetOperationDescription()}. {result}");
-		}
-	}
+            if (result != "OK")
+                throw new ApplicationException(
+                    $"There was exception during performing following operation: {query.GetOperationDescription()}. {result}");
+        }
+    }
 }

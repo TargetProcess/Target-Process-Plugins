@@ -11,16 +11,16 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 {
-	[TestFixture]
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class ReimportFailedOnGettingBugsSpecs :
-		ReimportFailedBugsSpecsBase<BugzillaServiceWithTransportErrorOnGetBugsMock>
-	{
-		[Test]
-		public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugs()
-		{
-			@"
+    [TestFixture]
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class ReimportFailedOnGettingBugsSpecs :
+        ReimportFailedBugsSpecsBase<BugzillaServiceWithTransportErrorOnGetBugsMock>
+    {
+        [Test]
+        public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugs()
+        {
+            @"
 				Given bugzilla profile created 
 					And bugzilla contains bug 1 and name 'bug1' created on '2011-07-14 10:59:17'
 					And bugzilla contains bug 2 and name 'bug2' created on '2011-07-14 10:59:17'
@@ -33,14 +33,14 @@ namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 				Then 3 bugs should be created in TargetProcess
 					And bugs with following names should be created in TargetProcess: bug1, bug2, bug3
 			"
-				.Execute(
-					In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingBugsSpecs>());
-		}
+                .Execute(
+                    In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingBugsSpecs>());
+        }
 
-		[Test]
-		public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugsTwice()
-		{
-			@"
+        [Test]
+        public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugsTwice()
+        {
+            @"
 				Given bugzilla profile created 
 					And bugzilla contains bug 1 and name 'bug1' created on '2011-07-14 10:59:17'
 					And bugzilla contains bug 2 and name 'bug2' created on '2011-07-14 10:59:17'
@@ -54,14 +54,14 @@ namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 				Then 3 bugs should be created in TargetProcess
 					And bugs with following names should be created in TargetProcess: bug1, bug2, bug3
 			"
-				.Execute(
-					In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingBugsSpecs>());
-		}
+                .Execute(
+                    In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingBugsSpecs>());
+        }
 
-		[When("transport error occured on getting bugs chunk during synchronization")]
-		public void ErrorWhenGetFirstBugsChunk()
-		{
-			FailSynchronization();
-		}
-	}
+        [When("transport error occured on getting bugs chunk during synchronization")]
+        public void ErrorWhenGetFirstBugsChunk()
+        {
+            FailSynchronization();
+        }
+    }
 }

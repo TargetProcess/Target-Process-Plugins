@@ -11,50 +11,50 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.PopEmailIntegration.Data
 {
-	public class MessageUidRepository
-	{
-		private readonly IStorageRepository _storageRepository;
+    public class MessageUidRepository
+    {
+        private readonly IStorageRepository _storageRepository;
 
-		public MessageUidRepository(IStorageRepository storageRepository)
-		{
-			_storageRepository = storageRepository;
-		}
+        public MessageUidRepository(IStorageRepository storageRepository)
+        {
+            _storageRepository = storageRepository;
+        }
 
-		public void Add(string uid)
-		{
-			AddRange(new[] {uid});
-		}
+        public void Add(string uid)
+        {
+            AddRange(new[] { uid });
+        }
 
-		public void AddRange(string[] uids)
-		{
-			DoAction(uids, x => x.AddRange(uids));
-		}
+        public void AddRange(string[] uids)
+        {
+            DoAction(uids, x => x.AddRange(uids));
+        }
 
-		public void Remove(string[] skippedUids)
-		{
-			DoAction(skippedUids, x => x.RemoveAll(skippedUids.Contains));
-		}
+        public void Remove(string[] skippedUids)
+        {
+            DoAction(skippedUids, x => x.RemoveAll(skippedUids.Contains));
+        }
 
-		private void DoAction(ICollection<string> uids, Action<MessageUidCollection> action)
-		{
-			if (uids.Count == 0) return;
+        private void DoAction(ICollection<string> uids, Action<MessageUidCollection> action)
+        {
+            if (uids.Count == 0) return;
 
-			var uidStorage = _storageRepository.Get<MessageUidCollection>();
-			var messageUidCollection = uidStorage.FirstOrDefault() ?? new MessageUidCollection();
+            var uidStorage = _storageRepository.Get<MessageUidCollection>();
+            var messageUidCollection = uidStorage.FirstOrDefault() ?? new MessageUidCollection();
 
-			action(messageUidCollection);
+            action(messageUidCollection);
 
-			uidStorage.ReplaceWith(messageUidCollection);
-		}
+            uidStorage.ReplaceWith(messageUidCollection);
+        }
 
-		public string[] GetUids()
-		{
-			return (_storageRepository.Get<MessageUidCollection>().FirstOrDefault() ?? new MessageUidCollection()).ToArray();
-		}
+        public string[] GetUids()
+        {
+            return (_storageRepository.Get<MessageUidCollection>().FirstOrDefault() ?? new MessageUidCollection()).ToArray();
+        }
 
-		public void RemoveAll()
-		{
-			_storageRepository.Get<MessageUidCollection>().Clear();
-		}
-	}
+        public void RemoveAll()
+        {
+            _storageRepository.Get<MessageUidCollection>().Clear();
+        }
+    }
 }

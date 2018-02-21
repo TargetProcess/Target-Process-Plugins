@@ -209,8 +209,10 @@ namespace Mercurial
                         process.Kill();
                         process = null;
                     }
-                    catch (InvalidOperationException){}
-                    
+                    catch (InvalidOperationException)
+                    {
+                    }
+
                     if (command.Observer != null)
                         command.Observer.Executed(psi.FileName, psi.Arguments, 0, string.Empty, string.Empty);
                     throw new MercurialTimeoutException("The executable did not complete within the alloted time");

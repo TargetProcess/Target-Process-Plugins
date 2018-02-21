@@ -87,10 +87,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public string this[int index]
         {
-            get
-            {
-                return _Arguments[index];
-            }
+            get { return _Arguments[index]; }
         }
 
         /// <summary>
@@ -98,10 +95,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public int Count
         {
-            get
-            {
-                return _Arguments.Length;
-            }
+            get { return _Arguments.Length; }
         }
 
         /// <summary>

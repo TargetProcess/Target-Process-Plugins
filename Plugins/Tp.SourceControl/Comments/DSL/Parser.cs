@@ -5,13 +5,14 @@ using System.Collections.Generic;
 
 namespace TinyPG
 {
+
     #region Parser
 
-    public partial class Parser 
+    public partial class Parser
     {
         private Scanner scanner;
         private ParseTree tree;
-        
+
         public Parser(Scanner scanner)
         {
             this.scanner = scanner;
@@ -42,8 +43,10 @@ namespace TinyPG
             parent.Nodes.Add(node);
 
 
-             // Concat Rule
-            tok = scanner.LookAhead(TokenType.ANY_TEXT, TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2, TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2); // ZeroOrMore Rule
+            // Concat Rule
+            tok = scanner.LookAhead(TokenType.ANY_TEXT, TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2,
+                TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3,
+                TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2); // ZeroOrMore Rule
             while (tok.Type == TokenType.ANY_TEXT
                 || tok.Type == TokenType.ANY_SYMBOL
                 || tok.Type == TokenType.IdKeyword1
@@ -57,16 +60,21 @@ namespace TinyPG
                 || tok.Type == TokenType.StatusKeyword2)
             {
                 ParseActionNode(node); // NonTerminal Rule: ActionNode
-            tok = scanner.LookAhead(TokenType.ANY_TEXT, TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2, TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.ANY_TEXT, TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2,
+                    TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3,
+                    TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2); // ZeroOrMore Rule
             }
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.Scan(TokenType.EOF); // Terminal Rule: EOF
-            n = node.CreateNode(tok, tok.ToString() );
+            n = node.CreateNode(tok, tok.ToString());
             node.Token.UpdateRange(tok);
             node.Nodes.Add(n);
-            if (tok.Type != TokenType.EOF) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.EOF.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+            if (tok.Type != TokenType.EOF)
+            {
+                tree.Errors.Add(
+                    new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.EOF.ToString(),
+                        0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                 return;
             }
 
@@ -81,50 +89,58 @@ namespace TinyPG
             parent.Nodes.Add(node);
 
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.ANY_TEXT); // ZeroOrMore Rule
             while (tok.Type == TokenType.ANY_TEXT)
             {
                 tok = scanner.Scan(TokenType.ANY_TEXT); // Terminal Rule: ANY_TEXT
-                n = node.CreateNode(tok, tok.ToString() );
+                n = node.CreateNode(tok, tok.ToString());
                 node.Token.UpdateRange(tok);
                 node.Nodes.Add(n);
-                if (tok.Type != TokenType.ANY_TEXT) {
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                if (tok.Type != TokenType.ANY_TEXT)
+                {
+                    tree.Errors.Add(
+                        new ParseError(
+                            "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001,
+                            0, tok.StartPos, tok.StartPos, tok.Length));
                     return;
                 }
-            tok = scanner.LookAhead(TokenType.ANY_TEXT); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.ANY_TEXT); // ZeroOrMore Rule
             }
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2); // ZeroOrMore Rule
             while (tok.Type == TokenType.ANY_SYMBOL
                 || tok.Type == TokenType.IdKeyword1
                 || tok.Type == TokenType.IdKeyword2)
             {
-
-                 // Concat Rule
+                // Concat Rule
                 ParseEntityIdClause(node); // NonTerminal Rule: EntityIdClause
 
-                 // Concat Rule
+                // Concat Rule
                 tok = scanner.LookAhead(TokenType.COMMA); // ZeroOrMore Rule
                 while (tok.Type == TokenType.COMMA)
                 {
                     tok = scanner.Scan(TokenType.COMMA); // Terminal Rule: COMMA
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.COMMA) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.COMMA.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.COMMA)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.COMMA.ToString(),
+                                0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
-                tok = scanner.LookAhead(TokenType.COMMA); // ZeroOrMore Rule
+                    tok = scanner.LookAhead(TokenType.COMMA); // ZeroOrMore Rule
                 }
-            tok = scanner.LookAhead(TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.ANY_SYMBOL, TokenType.IdKeyword1, TokenType.IdKeyword2); // ZeroOrMore Rule
             }
 
-             // Concat Rule
-            tok = scanner.LookAhead(TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2, TokenType.ANY_TEXT); // ZeroOrMore Rule
+            // Concat Rule
+            tok = scanner.LookAhead(TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3,
+                TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2, TokenType.ANY_TEXT); // ZeroOrMore Rule
             while (tok.Type == TokenType.TimeKeyword
                 || tok.Type == TokenType.CommentKeyword1
                 || tok.Type == TokenType.CommentKeyword2
@@ -134,9 +150,12 @@ namespace TinyPG
                 || tok.Type == TokenType.StatusKeyword2
                 || tok.Type == TokenType.ANY_TEXT)
             {
-                tok = scanner.LookAhead(TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2, TokenType.ANY_TEXT); // Choice Rule
+                tok = scanner.LookAhead(TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2,
+                    TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2,
+                    TokenType.ANY_TEXT); // Choice Rule
                 switch (tok.Type)
-                { // Choice Rule
+                {
+                    // Choice Rule
                     case TokenType.TimeKeyword:
                         ParsePostTimeClause(node); // NonTerminal Rule: PostTimeClause
                         break;
@@ -152,19 +171,26 @@ namespace TinyPG
                         break;
                     case TokenType.ANY_TEXT:
                         tok = scanner.Scan(TokenType.ANY_TEXT); // Terminal Rule: ANY_TEXT
-                        n = node.CreateNode(tok, tok.ToString() );
+                        n = node.CreateNode(tok, tok.ToString());
                         node.Token.UpdateRange(tok);
                         node.Nodes.Add(n);
-                        if (tok.Type != TokenType.ANY_TEXT) {
-                            tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                        if (tok.Type != TokenType.ANY_TEXT)
+                        {
+                            tree.Errors.Add(
+                                new ParseError(
+                                    "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(),
+                                    0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                             return;
                         }
                         break;
                     default:
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos, tok.StartPos, tok.Length));
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0,
+                            tok.StartPos, tok.StartPos, tok.Length));
                         break;
                 } // Choice Rule
-            tok = scanner.LookAhead(TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2, TokenType.ANY_TEXT); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.TimeKeyword, TokenType.CommentKeyword1, TokenType.CommentKeyword2,
+                    TokenType.CommentKeyword3, TokenType.CommentKeyword4, TokenType.StatusKeyword1, TokenType.StatusKeyword2,
+                    TokenType.ANY_TEXT); // ZeroOrMore Rule
             }
 
             parent.Token.UpdateRange(node.Token);
@@ -178,73 +204,94 @@ namespace TinyPG
             parent.Nodes.Add(node);
 
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.ANY_SYMBOL); // ZeroOrMore Rule
             while (tok.Type == TokenType.ANY_SYMBOL)
             {
                 tok = scanner.Scan(TokenType.ANY_SYMBOL); // Terminal Rule: ANY_SYMBOL
-                n = node.CreateNode(tok, tok.ToString() );
+                n = node.CreateNode(tok, tok.ToString());
                 node.Token.UpdateRange(tok);
                 node.Nodes.Add(n);
-                if (tok.Type != TokenType.ANY_SYMBOL) {
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_SYMBOL.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                if (tok.Type != TokenType.ANY_SYMBOL)
+                {
+                    tree.Errors.Add(
+                        new ParseError(
+                            "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_SYMBOL.ToString(),
+                            0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                     return;
                 }
-            tok = scanner.LookAhead(TokenType.ANY_SYMBOL); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.ANY_SYMBOL); // ZeroOrMore Rule
             }
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.IdKeyword1, TokenType.IdKeyword2); // Choice Rule
             switch (tok.Type)
-            { // Choice Rule
+            {
+                // Choice Rule
                 case TokenType.IdKeyword1:
                     tok = scanner.Scan(TokenType.IdKeyword1); // Terminal Rule: IdKeyword1
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.IdKeyword1) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.IdKeyword1.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.IdKeyword1)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.IdKeyword1.ToString(),
+                                0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 case TokenType.IdKeyword2:
                     tok = scanner.Scan(TokenType.IdKeyword2); // Terminal Rule: IdKeyword2
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.IdKeyword2) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.IdKeyword2.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.IdKeyword2)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.IdKeyword2.ToString(),
+                                0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 default:
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos,
+                        tok.StartPos, tok.Length));
                     break;
             } // Choice Rule
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.Scan(TokenType.NUMBER); // Terminal Rule: NUMBER
-            n = node.CreateNode(tok, tok.ToString() );
+            n = node.CreateNode(tok, tok.ToString());
             node.Token.UpdateRange(tok);
             node.Nodes.Add(n);
-            if (tok.Type != TokenType.NUMBER) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.NUMBER.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+            if (tok.Type != TokenType.NUMBER)
+            {
+                tree.Errors.Add(
+                    new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.NUMBER.ToString(),
+                        0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                 return;
             }
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.ANY_SYMBOL); // ZeroOrMore Rule
             while (tok.Type == TokenType.ANY_SYMBOL)
             {
                 tok = scanner.Scan(TokenType.ANY_SYMBOL); // Terminal Rule: ANY_SYMBOL
-                n = node.CreateNode(tok, tok.ToString() );
+                n = node.CreateNode(tok, tok.ToString());
                 node.Token.UpdateRange(tok);
                 node.Nodes.Add(n);
-                if (tok.Type != TokenType.ANY_SYMBOL) {
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_SYMBOL.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                if (tok.Type != TokenType.ANY_SYMBOL)
+                {
+                    tree.Errors.Add(
+                        new ParseError(
+                            "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_SYMBOL.ToString(),
+                            0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                     return;
                 }
-            tok = scanner.LookAhead(TokenType.ANY_SYMBOL); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.ANY_SYMBOL); // ZeroOrMore Rule
             }
 
             parent.Token.UpdateRange(node.Token);
@@ -258,48 +305,62 @@ namespace TinyPG
             parent.Nodes.Add(node);
 
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.Scan(TokenType.TimeKeyword); // Terminal Rule: TimeKeyword
-            n = node.CreateNode(tok, tok.ToString() );
+            n = node.CreateNode(tok, tok.ToString());
             node.Token.UpdateRange(tok);
             node.Nodes.Add(n);
-            if (tok.Type != TokenType.TimeKeyword) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.TimeKeyword.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+            if (tok.Type != TokenType.TimeKeyword)
+            {
+                tree.Errors.Add(
+                    new ParseError(
+                        "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.TimeKeyword.ToString(), 0x1001,
+                        0, tok.StartPos, tok.StartPos, tok.Length));
                 return;
             }
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.Scan(TokenType.DECIMAL); // Terminal Rule: DECIMAL
-            n = node.CreateNode(tok, tok.ToString() );
+            n = node.CreateNode(tok, tok.ToString());
             node.Token.UpdateRange(tok);
             node.Nodes.Add(n);
-            if (tok.Type != TokenType.DECIMAL) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.DECIMAL.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+            if (tok.Type != TokenType.DECIMAL)
+            {
+                tree.Errors.Add(
+                    new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.DECIMAL.ToString(),
+                        0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                 return;
             }
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.Delimiter); // Option Rule
             if (tok.Type == TokenType.Delimiter)
             {
-
-                 // Concat Rule
+                // Concat Rule
                 tok = scanner.Scan(TokenType.Delimiter); // Terminal Rule: Delimiter
-                n = node.CreateNode(tok, tok.ToString() );
+                n = node.CreateNode(tok, tok.ToString());
                 node.Token.UpdateRange(tok);
                 node.Nodes.Add(n);
-                if (tok.Type != TokenType.Delimiter) {
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Delimiter.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                if (tok.Type != TokenType.Delimiter)
+                {
+                    tree.Errors.Add(
+                        new ParseError(
+                            "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Delimiter.ToString(),
+                            0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                     return;
                 }
 
-                 // Concat Rule
+                // Concat Rule
                 tok = scanner.Scan(TokenType.DECIMAL); // Terminal Rule: DECIMAL
-                n = node.CreateNode(tok, tok.ToString() );
+                n = node.CreateNode(tok, tok.ToString());
                 node.Token.UpdateRange(tok);
                 node.Nodes.Add(n);
-                if (tok.Type != TokenType.DECIMAL) {
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.DECIMAL.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                if (tok.Type != TokenType.DECIMAL)
+                {
+                    tree.Errors.Add(
+                        new ParseError(
+                            "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.DECIMAL.ToString(), 0x1001,
+                            0, tok.StartPos, tok.StartPos, tok.Length));
                     return;
                 }
             }
@@ -315,42 +376,56 @@ namespace TinyPG
             parent.Nodes.Add(node);
 
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.StatusKeyword1, TokenType.StatusKeyword2); // Choice Rule
             switch (tok.Type)
-            { // Choice Rule
+            {
+                // Choice Rule
                 case TokenType.StatusKeyword1:
                     tok = scanner.Scan(TokenType.StatusKeyword1); // Terminal Rule: StatusKeyword1
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.StatusKeyword1) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.StatusKeyword1.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.StatusKeyword1)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected "
+                                + TokenType.StatusKeyword1.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 case TokenType.StatusKeyword2:
                     tok = scanner.Scan(TokenType.StatusKeyword2); // Terminal Rule: StatusKeyword2
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.StatusKeyword2) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.StatusKeyword2.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.StatusKeyword2)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected "
+                                + TokenType.StatusKeyword2.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 default:
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos,
+                        tok.StartPos, tok.Length));
                     break;
             } // Choice Rule
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.Scan(TokenType.ANY_TEXT); // Terminal Rule: ANY_TEXT
-            n = node.CreateNode(tok, tok.ToString() );
+            n = node.CreateNode(tok, tok.ToString());
             node.Token.UpdateRange(tok);
             node.Nodes.Add(n);
-            if (tok.Type != TokenType.ANY_TEXT) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+            if (tok.Type != TokenType.ANY_TEXT)
+            {
+                tree.Errors.Add(
+                    new ParseError(
+                        "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001, 0,
+                        tok.StartPos, tok.StartPos, tok.Length));
                 return;
             }
 
@@ -365,74 +440,95 @@ namespace TinyPG
             parent.Nodes.Add(node);
 
 
-             // Concat Rule
-            tok = scanner.LookAhead(TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3, TokenType.CommentKeyword4); // Choice Rule
+            // Concat Rule
+            tok = scanner.LookAhead(TokenType.CommentKeyword1, TokenType.CommentKeyword2, TokenType.CommentKeyword3,
+                TokenType.CommentKeyword4); // Choice Rule
             switch (tok.Type)
-            { // Choice Rule
+            {
+                // Choice Rule
                 case TokenType.CommentKeyword1:
                     tok = scanner.Scan(TokenType.CommentKeyword1); // Terminal Rule: CommentKeyword1
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.CommentKeyword1) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CommentKeyword1.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.CommentKeyword1)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected "
+                                + TokenType.CommentKeyword1.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 case TokenType.CommentKeyword2:
                     tok = scanner.Scan(TokenType.CommentKeyword2); // Terminal Rule: CommentKeyword2
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.CommentKeyword2) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CommentKeyword2.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.CommentKeyword2)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected "
+                                + TokenType.CommentKeyword2.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 case TokenType.CommentKeyword3:
                     tok = scanner.Scan(TokenType.CommentKeyword3); // Terminal Rule: CommentKeyword3
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.CommentKeyword3) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CommentKeyword3.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.CommentKeyword3)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected "
+                                + TokenType.CommentKeyword3.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 case TokenType.CommentKeyword4:
                     tok = scanner.Scan(TokenType.CommentKeyword4); // Terminal Rule: CommentKeyword4
-                    n = node.CreateNode(tok, tok.ToString() );
+                    n = node.CreateNode(tok, tok.ToString());
                     node.Token.UpdateRange(tok);
                     node.Nodes.Add(n);
-                    if (tok.Type != TokenType.CommentKeyword4) {
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CommentKeyword4.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    if (tok.Type != TokenType.CommentKeyword4)
+                    {
+                        tree.Errors.Add(
+                            new ParseError(
+                                "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected "
+                                + TokenType.CommentKeyword4.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
                         return;
                     }
                     break;
                 default:
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos, tok.StartPos, tok.Length));
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found.", 0x0002, 0, tok.StartPos,
+                        tok.StartPos, tok.Length));
                     break;
             } // Choice Rule
 
-             // Concat Rule
+            // Concat Rule
             tok = scanner.LookAhead(TokenType.ANY_TEXT); // ZeroOrMore Rule
             while (tok.Type == TokenType.ANY_TEXT)
             {
                 tok = scanner.Scan(TokenType.ANY_TEXT); // Terminal Rule: ANY_TEXT
-                n = node.CreateNode(tok, tok.ToString() );
+                n = node.CreateNode(tok, tok.ToString());
                 node.Token.UpdateRange(tok);
                 node.Nodes.Add(n);
-                if (tok.Type != TokenType.ANY_TEXT) {
-                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));
+                if (tok.Type != TokenType.ANY_TEXT)
+                {
+                    tree.Errors.Add(
+                        new ParseError(
+                            "Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ANY_TEXT.ToString(), 0x1001,
+                            0, tok.StartPos, tok.StartPos, tok.Length));
                     return;
                 }
-            tok = scanner.LookAhead(TokenType.ANY_TEXT); // ZeroOrMore Rule
+                tok = scanner.LookAhead(TokenType.ANY_TEXT); // ZeroOrMore Rule
             }
 
             parent.Token.UpdateRange(node.Token);
         } // NonTerminalSymbol: PostCommentClause
-
-
     }
 
     #endregion Parser

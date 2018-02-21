@@ -8,12 +8,12 @@ using Tp.Integration.Messages.TargetProcessLifecycle;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
-	public class TargetProcessLifecycleMessageHandler : PluginInfoSender, IHandleMessages<TargetProcessStartedMessage>
-	{
-		public void Handle(TargetProcessStartedMessage message)
-		{
-			SendInfoMessages();
-			SendPluginScriptMessages();
-		}
-	}
+    public class TargetProcessLifecycleMessageHandler : PluginInfoSender, IHandleMessages<TargetProcessStartedMessage>
+    {
+        public void Handle(TargetProcessStartedMessage message)
+        {
+            SendInfoMessages();
+            SendPluginScriptMessages();
+        }
+    }
 }

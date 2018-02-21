@@ -8,10 +8,10 @@ using Tp.MashupManager.CustomCommands.Args;
 
 namespace Tp.MashupManager
 {
-	public interface IMashupInfoRepository
-	{
-		PluginProfileErrorCollection Add(Mashup dto, bool generateUniqueName);
-		PluginProfileErrorCollection Update(UpdateMashupCommandArg commandArg);
-		PluginProfileErrorCollection Delete(string mashupName);
-	}
+    public interface IMashupInfoRepository
+    {
+        PluginProfileErrorCollection Add(Mashup dto, bool generateUniqueName);
+        PluginProfileErrorCollection Update(UpdateMashupCommandArg commandArg);
+        PluginProfileErrorCollection Delete(string mashupName);
+    }
 }

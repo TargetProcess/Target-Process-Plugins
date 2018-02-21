@@ -1,5 +1,3 @@
-﻿
-
 
 
 
@@ -11,8 +9,8 @@
 using System;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using Tp.Integration.Messages.Entities;
 using Tp.Integration.Common;
+using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Common
 {

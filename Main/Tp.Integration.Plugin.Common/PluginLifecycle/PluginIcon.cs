@@ -11,36 +11,36 @@ using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
-	internal class PluginIcon
-	{
-		private readonly IActivityLogger _log;
-		private readonly string _iconFilePath;
+    internal class PluginIcon
+    {
+        private readonly IActivityLogger _log;
+        private readonly string _iconFilePath;
 
-		public PluginIcon(IPluginMetadata pluginMetadata, IActivityLogger log)
-		{
-			_log = log;
-			var iconFileRelativePath = pluginMetadata.PluginData.IconFilePath;
-			if (!string.IsNullOrEmpty(iconFileRelativePath))
-			{
-				_iconFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-				                             pluginMetadata.PluginData.IconFilePath);
-			}
-		}
+        public PluginIcon(IPluginMetadata pluginMetadata, IActivityLogger log)
+        {
+            _log = log;
+            var iconFileRelativePath = pluginMetadata.PluginData.IconFilePath;
+            if (!string.IsNullOrEmpty(iconFileRelativePath))
+            {
+                _iconFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    pluginMetadata.PluginData.IconFilePath);
+            }
+        }
 
-		public string GetIconContent()
-		{
-			if (string.IsNullOrEmpty(_iconFilePath))
-			{
-				return string.Empty;
-			}
+        public string GetIconContent()
+        {
+            if (string.IsNullOrEmpty(_iconFilePath))
+            {
+                return string.Empty;
+            }
 
-			if (!File.Exists(_iconFilePath))
-			{
-				_log.WarnFormat("Cannot find plugin icon by path : '{0}'", _iconFilePath);
-				return string.Empty;
-			}
+            if (!File.Exists(_iconFilePath))
+            {
+                _log.WarnFormat("Cannot find plugin icon by path : '{0}'", _iconFilePath);
+                return string.Empty;
+            }
 
-			return Convert.ToBase64String(File.ReadAllBytes(_iconFilePath));
-		}
-	}
+            return Convert.ToBase64String(File.ReadAllBytes(_iconFilePath));
+        }
+    }
 }

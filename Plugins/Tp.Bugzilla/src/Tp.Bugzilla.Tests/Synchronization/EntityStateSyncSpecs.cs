@@ -17,14 +17,14 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[TestFixture, ActionSteps]
-    [Category("PartPlugins0")]
-	public class EntityStateSyncSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void ShouldUpdateBugzillaBugStateByGuessing()
-		{
-			@"
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class EntityStateSyncSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void ShouldUpdateBugzillaBugStateByGuessing()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla contains bug statuses : assigned,new
 					And bugzilla profile for project 1 created 
@@ -35,13 +35,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When bug 'bug1' entity state was updated in TargetProcess to 'assigned'
 				Then bug 1 status in bugzilla should be 'assigned'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
-		}
-		
-		[Test]
-		public void ShouldUpdateBugzillaBugStateByMapping()
-		{
-			@"
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
+        }
+
+        [Test]
+        public void ShouldUpdateBugzillaBugStateByMapping()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-open,2-done,3-invalid
 					And bugzilla contains bug statuses : new,closed,done
 					And bugzilla profile for project 1 created 
@@ -55,13 +55,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When bug 'bug1' entity state was updated in TargetProcess to 'open'
 				Then bug 1 status in bugzilla should be 'new'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>().And<EntityStateMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldDoNothingIfCantMapTpStateToBzState()
-		{
-			@"
+        [Test]
+        public void ShouldDoNothingIfCantMapTpStateToBzState()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-open,2-done,3-invalid
 					And bugzilla contains bug statuses : new,closed,done
 					And bugzilla profile for project 1 created 
@@ -75,13 +75,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When bug 'bug1' entity state was updated in TargetProcess to 'invalid'
 				Then bug 1 status in bugzilla should be 'done'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>().And<EntityStateMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldUpdateBugzillaBugStateAndSetDuplicate()
-		{
-			@"
+        [Test]
+        public void ShouldUpdateBugzillaBugStateAndSetDuplicate()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla contains bug statuses : assigned,new
 					And bugzilla contains bug resolutions : duplicate
@@ -97,13 +97,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 1 resolution in bugzilla should be 'duplicate'
 					And bug 1 duplicate id in bugzilla should be 2
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldUpdateBugzillaBugStateWithResolution()
-		{
-			@"
+        [Test]
+        public void ShouldUpdateBugzillaBugStateWithResolution()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla contains bug statuses : assigned,new
 					And bugzilla contains bug resolutions : duplicate, closed, fixed
@@ -118,13 +118,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 status in bugzilla should be 'assigned'
 					And bug 1 resolution in bugzilla should be 'closed'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotUpdateStatusInBugzillaIfStateWasNotChanged()
-		{
-			@"
+        [Test]
+        public void ShouldNotUpdateStatusInBugzillaIfStateWasNotChanged()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla contains bug statuses : assigned,new
 					And bugzilla profile for project 1 created 
@@ -136,13 +136,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 status in bugzilla should be 'new'
 					And bug 1 should not be updated in Bugzilla
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotProcessUnsyncronizedBug()
-		{
-			@"
+        [Test]
+        public void ShouldNotProcessUnsyncronizedBug()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla contains bug statuses : assigned,new
 					And bugzilla profile for project 1 created 
@@ -154,13 +154,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 status in bugzilla should be 'new'
 					And bug 1 should not be updated in Bugzilla
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotProcessBugThatWasJustUpdatedByProfile()
-		{
-			@"
+        [Test]
+        public void ShouldNotProcessBugThatWasJustUpdatedByProfile()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla contains bug statuses : assigned,new
 					And bugzilla profile for project 1 created 
@@ -174,13 +174,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug in TargetProcess with name 'bug1' should have state 'assigned'
 					And bug 1 should not be updated in Bugzilla
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotChangeStateIfMultipleBugzillaStatesMappedToTheSameTpState()
-		{
-			@"
+        [Test]
+        public void ShouldNotChangeStateIfMultipleBugzillaStatesMappedToTheSameTpState()
+        {
+            @"
 				Given TargetProcess contains bug entity states for project 1 : 1-assigned,2-new
 					And bugzilla profile for project 1 created 
 					And bugzilla contains bug statuses : assigned,new,open
@@ -197,107 +197,112 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug in TargetProcess with name 'bug1' should have state 'new'
 					And bug 1 should not be updated in Bugzilla
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<EntityStateSyncSpecs>().And<EntityStateMappingSpecs>());
+        }
 
-		[Given(@"bugzilla contains bug statuses : (?<statuses>([^,]+,?\s*)+)")]
-		public void InitBugzillaStatuses(string[] statuses)
-		{
-			ObjectFactory.GetInstance<BugzillaServiceMock>().Statuses.AddRange(statuses);
-		}
+        [Given(@"bugzilla contains bug statuses : (?<statuses>([^,]+,?\s*)+)")]
+        public void InitBugzillaStatuses(string[] statuses)
+        {
+            ObjectFactory.GetInstance<BugzillaServiceMock>().Statuses.AddRange(statuses);
+        }
 
-		[Given(@"bugzilla contains bug resolutions : (?<resolutions>([^,]+,?\s*)+)")]
-		public void InitBugzillaResolutions(string[] resolutions)
-		{
-			ObjectFactory.GetInstance<BugzillaServiceMock>().Resolutions.AddRange(new List<string>(resolutions){""});
-		}
+        [Given(@"bugzilla contains bug resolutions : (?<resolutions>([^,]+,?\s*)+)")]
+        public void InitBugzillaResolutions(string[] resolutions)
+        {
+            ObjectFactory.GetInstance<BugzillaServiceMock>().Resolutions.AddRange(new List<string>(resolutions) { "" });
+        }
 
-		[Given("bug '$bugName' description was updated in TargetProcess to '$bugDescription'")]
-		public void UpdateDescriptionInTp(string bugName, string bugDescription)
-		{
-			var bug = Context.TpBugs.Single(b => b.Name == bugName);
-			bug.Description = bugDescription;
-			TransportMock.HandleMessageFromTp(new BugUpdatedMessage
-			                                  	{
-			                                  		Dto = bug,
-			                                  		ChangedFields = new[] {BugField.Description}
-			                                  	});
-		}
+        [Given("bug '$bugName' description was updated in TargetProcess to '$bugDescription'")]
+        public void UpdateDescriptionInTp(string bugName, string bugDescription)
+        {
+            var bug = Context.TpBugs.Single(b => b.Name == bugName);
+            bug.Description = bugDescription;
+            TransportMock.HandleMessageFromTp(new BugUpdatedMessage
+            {
+                Dto = bug,
+                ChangedFields = new[] { BugField.Description }
+            });
+        }
 
-		[When("bug '$bugName' entity state was updated in TargetProcess with comment '$resolutionComment' to '$entityState'")]
-		public void UpdateBugEntityStateAndResolution(string bugName, string resolutionComment, string entityState)
-		{
-			var state = Context.EntityStates.Single(s => s.Name == entityState);
+        [When("bug '$bugName' entity state was updated in TargetProcess with comment '$resolutionComment' to '$entityState'")]
+        public void UpdateBugEntityStateAndResolution(string bugName, string resolutionComment, string entityState)
+        {
+            var state = Context.EntityStates.Single(s => s.Name == entityState);
 
-			var bug = Context.TpBugs.Single(b => b.Name == bugName);
-			bug.EntityStateID = state.ID;
-			bug.EntityStateName = state.Name;
+            var bug = Context.TpBugs.Single(b => b.Name == bugName);
+            bug.EntityStateID = state.ID;
+            bug.EntityStateName = state.Name;
 
-			if (!string.IsNullOrEmpty(resolutionComment))
-			{
-				if (resolutionComment.Contains(':'))
-				{
-					var pair = resolutionComment.Split(':');
-					var duplicateBug = Context.TpBugs.Single(b => b.Name == pair[1]);
-					resolutionComment = resolutionComment.Replace(pair[1], "#" + duplicateBug.ID);
-				}
+            if (!string.IsNullOrEmpty(resolutionComment))
+            {
+                if (resolutionComment.Contains(':'))
+                {
+                    var pair = resolutionComment.Split(':');
+                    var duplicateBug = Context.TpBugs.Single(b => b.Name == pair[1]);
+                    resolutionComment = resolutionComment.Replace(pair[1], "#" + duplicateBug.ID);
+                }
 
-				bug.CommentOnChangingState = resolutionComment;
-			}
+                bug.CommentOnChangingState = resolutionComment;
+            }
 
-			TransportMock.HandleMessageFromTp(new BugUpdatedMessage
-			                                  	{
-			                                  		Dto = bug,
-			                                  		ChangedFields = new[] {BugField.EntityStateID}
-			                                  	});
-		}
+            TransportMock.HandleMessageFromTp(new BugUpdatedMessage
+            {
+                Dto = bug,
+                ChangedFields = new[] { BugField.EntityStateID }
+            });
+        }
 
-		[When("bug '$bugName' entity state was updated in TargetProcess to '$entityState'")]
-		public void UpdateBugEntityState(string bugName, string entityState)
-		{
-			UpdateBugEntityStateAndResolution(bugName, null, entityState);
-		}
+        [When("bug '$bugName' entity state was updated in TargetProcess to '$entityState'")]
+        public void UpdateBugEntityState(string bugName, string entityState)
+        {
+            UpdateBugEntityStateAndResolution(bugName, null, entityState);
+        }
 
-		[When("unsynchronized bug '$bugName' entity state was updated in TargetProcess to '$entityState'")]
-		public void UpdateEntityStateOfUnsyncBug(string bugName, string entityState)
-		{
-			var state = Context.EntityStates.Single(s => s.Name == entityState);
+        [When("unsynchronized bug '$bugName' entity state was updated in TargetProcess to '$entityState'")]
+        public void UpdateEntityStateOfUnsyncBug(string bugName, string entityState)
+        {
+            var state = Context.EntityStates.Single(s => s.Name == entityState);
 
-			TransportMock.HandleMessageFromTp(new BugUpdatedMessage
-			                                  	{
-			                                  		Dto = new BugDTO
-			                                  		      	{
-			                                  		      		EntityStateID = state.ID,
-			                                  		      		EntityStateName = state.Name,
-			                                  		      		ID = Context.GetNextId(),
-			                                  		      		Name = bugName
-			                                  		      	},
-			                                  		ChangedFields = new[] {BugField.EntityStateID}
-			                                  	});
-		}
+            TransportMock.HandleMessageFromTp(new BugUpdatedMessage
+            {
+                Dto = new BugDTO
+                {
+                    EntityStateID = state.ID,
+                    EntityStateName = state.Name,
+                    ID = Context.GetNextId(),
+                    Name = bugName
+                },
+                ChangedFields = new[] { BugField.EntityStateID }
+            });
+        }
 
-		[Then("bug $bugId status in bugzilla should be '$status'")]
-		public void CheckBugzillaStatus(int bugId, string status)
-		{
-			Context.BugzillaBugs.GetById(bugId).bug_status.Should(Be.EqualTo(status), "Context.BugzillaBugs.GetById(bugId).bug_status.Should(Be.EqualTo(status))");
-		}
+        [Then("bug $bugId status in bugzilla should be '$status'")]
+        public void CheckBugzillaStatus(int bugId, string status)
+        {
+            Context.BugzillaBugs.GetById(bugId)
+                .bug_status.Should(Be.EqualTo(status), "Context.BugzillaBugs.GetById(bugId).bug_status.Should(Be.EqualTo(status))");
+        }
 
-		[Then("bug $bugId resolution in bugzilla should be '$resolution'")]
-		public void CheckResolution(int bugId, string resolution)
-		{
-			Context.BugzillaBugs.GetById(bugId).resolution.Should(Be.EqualTo(resolution), "Context.BugzillaBugs.GetById(bugId).resolution.Should(Be.EqualTo(resolution))");
-		}
+        [Then("bug $bugId resolution in bugzilla should be '$resolution'")]
+        public void CheckResolution(int bugId, string resolution)
+        {
+            Context.BugzillaBugs.GetById(bugId)
+                .resolution.Should(Be.EqualTo(resolution), "Context.BugzillaBugs.GetById(bugId).resolution.Should(Be.EqualTo(resolution))");
+        }
 
-		[Then("bug $bugId duplicate id in bugzilla should be $duplicateBugId")]
-		public void CheckDuplicateId(int bugId, string duplicateBugId)
-		{
-			Context.BugzillaBugs.GetById(bugId).dup_id.Should(Be.EqualTo(duplicateBugId), "Context.BugzillaBugs.GetById(bugId).dup_id.Should(Be.EqualTo(duplicateBugId))");
-		}
+        [Then("bug $bugId duplicate id in bugzilla should be $duplicateBugId")]
+        public void CheckDuplicateId(int bugId, string duplicateBugId)
+        {
+            Context.BugzillaBugs.GetById(bugId)
+                .dup_id.Should(Be.EqualTo(duplicateBugId), "Context.BugzillaBugs.GetById(bugId).dup_id.Should(Be.EqualTo(duplicateBugId))");
+        }
 
-		[Then("bug $bugId should not be updated in Bugzilla")]
-		public void BugShouldNotBeUpdated(string bugId)
-		{
-			ObjectFactory.GetInstance<BugzillaServiceMock>().BugUpdateCalls.ContainsKey(bugId).Should(Be.False, "ObjectFactory.GetInstance<BugzillaServiceMock>().BugUpdateCalls.ContainsKey(bugId).Should(Be.False)");
-		}
-	}
+        [Then("bug $bugId should not be updated in Bugzilla")]
+        public void BugShouldNotBeUpdated(string bugId)
+        {
+            ObjectFactory.GetInstance<BugzillaServiceMock>()
+                .BugUpdateCalls.ContainsKey(bugId)
+                .Should(Be.False, "ObjectFactory.GetInstance<BugzillaServiceMock>().BugUpdateCalls.ContainsKey(bugId).Should(Be.False)");
+        }
+    }
 }

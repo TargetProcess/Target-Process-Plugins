@@ -5,9 +5,9 @@
 
 namespace Tp.PopEmailIntegration.Data
 {
-	public enum UserType
-	{
-		Requester,
-		User,
-	}
+    public enum UserType
+    {
+        Requester,
+        User,
+    }
 }

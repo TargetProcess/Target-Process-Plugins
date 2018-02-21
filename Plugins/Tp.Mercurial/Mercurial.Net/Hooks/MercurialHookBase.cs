@@ -26,10 +26,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public Repository Repository
         {
-            get
-            {
-                return _Repository;
-            }
+            get { return _Repository; }
         }
 
         /// <summary>

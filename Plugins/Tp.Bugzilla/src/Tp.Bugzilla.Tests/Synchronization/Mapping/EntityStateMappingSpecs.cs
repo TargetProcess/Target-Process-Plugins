@@ -16,15 +16,15 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 {
-	[ActionSteps]
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class EntityStateMappingSpecs : MappingTestBase<EntityStateDTO>
-	{
-		[Test]
-		public void ShouldMapStatesByNameDuringProfileCreation()
-		{
-			@"
+    [ActionSteps]
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class EntityStateMappingSpecs : MappingTestBase<EntityStateDTO>
+    {
+        [Test]
+        public void ShouldMapStatesByNameDuringProfileCreation()
+        {
+            @"
 				Given following states created in TargetProcess:
 						|id|name|
 						|1|Open|
@@ -43,13 +43,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|In Progress|{Id:2, Name:""In Progress""}|
 						|Resolved|null|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldMapStatesByNameDuringProfileEditing()
-		{
-			@"
+        [Test]
+        public void ShouldMapStatesByNameDuringProfileEditing()
+        {
+            @"
 				Given bugzilla profile created
 					And profile has following states mapping:
 						|key|value|
@@ -76,13 +76,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|Verifying|{Id:3, Name:""Testing""}|
 						|Resolved|null|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldValidateAndMapStatesByNameDuringProfileEditing()
-		{
-			@"
+        [Test]
+        public void ShouldValidateAndMapStatesByNameDuringProfileEditing()
+        {
+            @"
 				Given bugzilla profile created
 					And profile has following states mapping:
 						|key|value|
@@ -109,13 +109,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|VerifyingUpdated|null|
 						|Resolved|null|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldClearEntityStateMappingIfProjectsProcessChanged()
-		{
-			@"
+        [Test]
+        public void ShouldClearEntityStateMappingIfProjectsProcessChanged()
+        {
+            @"
 				Given bugzilla profile for project 1 with process 1 created
 					And profile has following states mapping:
 						|key|value|
@@ -124,13 +124,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 				When process of project '1' has been changed to '2' in TargetProcess
 				Then entity states mapping should be cleared
 			"
-				.Execute(In.Context<EntityStateMappingSpecs>().And<BugSyncActionSteps>());
-		}
+                .Execute(In.Context<EntityStateMappingSpecs>().And<BugSyncActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMapOnUpdateNotMappedValues()
-		{
-			@"
+        [Test]
+        public void ShouldMapOnUpdateNotMappedValues()
+        {
+            @"
 				Given bugzilla profile created
 					And profile has following states mapping:
 						|key|value|
@@ -147,84 +147,85 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|key|value|
 						|New|{Id:4, Name:""New""}|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<EntityStateMappingSpecs>());
+        }
 
-		[Given("following states created in TargetProcess:")]
-		public void CreateStatesInTargetProcess(int id, string name)
-		{
-			CreateEntityInTargetProcessBase(id, name);
-		}
+        [Given("following states created in TargetProcess:")]
+        public void CreateStatesInTargetProcess(int id, string name)
+        {
+            CreateEntityInTargetProcessBase(id, name);
+        }
 
-		[Given("following states created in Bugzilla:")]
-		public void CreateStatesInBugzilla(string name)
-		{
-			CreateInBugzillaBase(name);
-		}
+        [Given("following states created in Bugzilla:")]
+        public void CreateStatesInBugzilla(string name)
+        {
+            CreateInBugzillaBase(name);
+        }
 
-		[Given("profile has following states mapping:")]
-		public void CreateStatesStatesMappingForProfile(string key, string value)
-		{
-			CreateMappingForProfileBase(key, value);
-		}
+        [Given("profile has following states mapping:")]
+        public void CreateStatesStatesMappingForProfile(string key, string value)
+        {
+            CreateMappingForProfileBase(key, value);
+        }
 
-		[When("mapping states")]
-		public void Map()
-		{
-			MapBase();
-		}
+        [When("mapping states")]
+        public void Map()
+        {
+            MapBase();
+        }
 
-		[When("process of project '$projectId' has been changed to '$newProcess1' in TargetProcess")]
-		public void ChangeProjectsProcess(int projectId, int newProcessId)
-		{
-			TransportMock.HandleMessageFromTp(new ProjectUpdatedMessage
-			                                  	{
-			                                  		Dto = new ProjectDTO {ID = projectId, ProcessID = newProcessId},
-			                                  		ChangedFields = new[] {ProjectField.ProcessID}
-			                                  	});
-		}
+        [When("process of project '$projectId' has been changed to '$newProcess1' in TargetProcess")]
+        public void ChangeProjectsProcess(int projectId, int newProcessId)
+        {
+            TransportMock.HandleMessageFromTp(new ProjectUpdatedMessage
+            {
+                Dto = new ProjectDTO { ID = projectId, ProcessID = newProcessId },
+                ChangedFields = new[] { ProjectField.ProcessID }
+            });
+        }
 
-		[Then("resulting mapping count should be equal to bugzilla states count")]
-		public void CheckMappingsItemsCount()
-		{
-			CheckMappingsItemsCountBase();
-		}
+        [Then("resulting mapping count should be equal to bugzilla states count")]
+        public void CheckMappingsItemsCount()
+        {
+            CheckMappingsItemsCountBase();
+        }
 
-		[Then("resulting mapping is the following:")]
-		public void CheckMappingResults(string key, string value)
-		{
-			CheckMappingResultBase(key, value);
-		}
+        [Then("resulting mapping is the following:")]
+        public void CheckMappingResults(string key, string value)
+        {
+            CheckMappingResultBase(key, value);
+        }
 
-		[Then("entity states mapping should be cleared")]
-		public void EntityStatesMappingShouldBeEmpty()
-		{
-			Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(0), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(0))");
-		}
+        [Then("entity states mapping should be cleared")]
+        public void EntityStatesMappingShouldBeEmpty()
+        {
+            Profile.GetProfile<BugzillaProfile>()
+                .StatesMapping.Count.Should(Be.EqualTo(0), "Profile.GetProfile<BugzillaProfile>().StatesMapping.Count.Should(Be.EqualTo(0))");
+        }
 
-		protected override MappingSourceEntry Source
-		{
-			get { return Context.MappingSource.States; }
-		}
+        protected override MappingSourceEntry Source
+        {
+            get { return Context.MappingSource.States; }
+        }
 
-		protected override MappingContainer Mapping
-		{
-			get { return Profile.GetProfile<BugzillaProfile>().StatesMapping; }
-		}
+        protected override MappingContainer Mapping
+        {
+            get { return Profile.GetProfile<BugzillaProfile>().StatesMapping; }
+        }
 
-		protected override List<EntityStateDTO> StoredEntities
-		{
-			get { return Context.EntityStates; }
-		}
+        protected override List<EntityStateDTO> StoredEntities
+        {
+            get { return Context.EntityStates; }
+        }
 
-		protected override MappingContainer GetFromMappings(Mappings mappings)
-		{
-			return mappings.States;
-		}
+        protected override MappingContainer GetFromMappings(Mappings mappings)
+        {
+            return mappings.States;
+        }
 
-		protected override Func<int, string, EntityStateDTO> CreateEntityForTargetProcess
-		{
-			get { return (id, name) => new EntityStateDTO {EntityStateID = id, Name = name}; }
-		}
-	}
+        protected override Func<int, string, EntityStateDTO> CreateEntityForTargetProcess
+        {
+            get { return (id, name) => new EntityStateDTO { EntityStateID = id, Name = name }; }
+        }
+    }
 }

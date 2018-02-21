@@ -5,10 +5,10 @@
 
 namespace Tp.PopEmailIntegration.EmailReader
 {
-	public enum EmailProtocol
-	{
-		None = 0,
-		Pop3 = 1,
-		Imap = 2,
-	}
+    public enum EmailProtocol
+    {
+        None = 0,
+        Pop3 = 1,
+        Imap = 2,
+    }
 }

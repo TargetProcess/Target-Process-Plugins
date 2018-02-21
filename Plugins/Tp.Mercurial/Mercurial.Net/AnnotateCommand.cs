@@ -40,15 +40,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
 
-            set
-            {
-                _Path = (value ?? string.Empty).Trim();
-            }
+            set { _Path = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -59,15 +53,9 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool FollowRenamesAndMoves
         {
-            get
-            {
-                return _FollowRenamesAndMoves;
-            }
+            get { return _FollowRenamesAndMoves; }
 
-            set
-            {
-                _FollowRenamesAndMoves = value;
-            }
+            set { _FollowRenamesAndMoves = value; }
         }
 
         /// <summary>
@@ -77,11 +65,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         #region IMercurialCommand<IEnumerable<Annotation>> Members
 
@@ -104,11 +88,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="Annotation"/> objects.
         /// </summary>
-        public IEnumerable<Annotation> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Annotation> Result { get; private set; }
 
         #endregion
 
@@ -198,7 +178,8 @@ namespace Mercurial
                     Match ma = re.Match(line);
                     if (ma.Success)
                         result.Add(
-                            new Annotation(lineNumber, int.Parse(ma.Groups["rev"].Value, CultureInfo.InvariantCulture), ma.Groups["line"].Value));
+                            new Annotation(lineNumber, int.Parse(ma.Groups["rev"].Value, CultureInfo.InvariantCulture),
+                                ma.Groups["line"].Value));
 
                     lineNumber++;
                 }

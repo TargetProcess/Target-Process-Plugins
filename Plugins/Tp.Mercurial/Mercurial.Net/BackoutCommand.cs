@@ -48,11 +48,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--merge")]
         [DefaultValue(false)]
-        public bool Merge
-        {
-            get;
-            set;
-        }
+        public bool Merge { get; set; }
 
         /// <summary>
         /// Gets or sets the merge tool to use.
@@ -65,10 +61,7 @@ namespace Mercurial
         [DefaultValue("")]
         public string MergeTool
         {
-            get
-            {
-                return _MergeTool;
-            }
+            get { return _MergeTool; }
 
             set
             {
@@ -83,11 +76,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument(NonNullOption = "--parent")]
         [DefaultValue(null)]
-        public RevSpec ParentRevision
-        {
-            get;
-            set;
-        }
+        public RevSpec ParentRevision { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="RevSpec"/> to backout.
@@ -95,11 +84,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Gets or sets the commit message to use when committing.
@@ -107,15 +92,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Message
         {
-            get
-            {
-                return _Message;
-            }
+            get { return _Message; }
 
-            set
-            {
-                _Message = (value ?? string.Empty).Trim();
-            }
+            set { _Message = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -127,15 +106,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string OverrideAuthor
         {
-            get
-            {
-                return _OverrideAuthor;
-            }
+            get { return _OverrideAuthor; }
 
-            set
-            {
-                _OverrideAuthor = (value ?? string.Empty).Trim();
-            }
+            set { _OverrideAuthor = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -144,11 +117,7 @@ namespace Mercurial
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date")]
         [DefaultValue(null)]
-        public DateTime? OverrideTimestamp
-        {
-            get;
-            set;
-        }
+        public DateTime? OverrideTimestamp { get; set; }
 
         /// <summary>
         /// Sets the <see cref="MergeTool"/> property to the specified value and
@@ -289,7 +258,8 @@ namespace Mercurial
         /// </summary>
         protected override void Prepare()
         {
-            _MessageFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", string.Empty).ToLowerInvariant() + ".txt");
+            _MessageFilePath = Path.Combine(Path.GetTempPath(),
+                Guid.NewGuid().ToString().Replace("-", string.Empty).ToLowerInvariant() + ".txt");
             File.WriteAllText(_MessageFilePath, Message);
         }
 

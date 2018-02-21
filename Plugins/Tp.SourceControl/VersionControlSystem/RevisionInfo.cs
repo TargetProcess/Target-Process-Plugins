@@ -8,34 +8,39 @@ using Tp.Integration.Common;
 
 namespace Tp.SourceControl.VersionControlSystem
 {
-	[Serializable]
-	public class RevisionInfo
-	{
-		public RevisionInfo()
-		{
-			Entries = new RevisionEntryInfo[] {};
-			Time = DateTime.Now;
-			Comment = string.Empty;
-		}
+    [Serializable]
+    public class RevisionInfo
+    {
+        public RevisionInfo()
+        {
+            Entries = new RevisionEntryInfo[] { };
+            Time = DateTime.Now;
+            Comment = string.Empty;
+        }
 
-		public RevisionId Id { get; set; }
+        public RevisionId Id { get; set; }
 
-		public string Comment { get; set; }
+        public string Comment { get; set; }
 
-		public string Author { get; set; }
+        public string Author { get; set; }
 
-		public string Email { get; set; }
+        public string Email { get; set; }
 
-		public DateTime Time { get; set; }
+        public DateTime Time { get; set; }
 
-		public DateTime? TimeCreated { get; set; }
+        public DateTime? TimeCreated { get; set; }
 
-		public RevisionEntryInfo[] Entries { get; set; }
-	}
+        public RevisionEntryInfo[] Entries { get; set; }
+    }
 
-	public class RevisionEntryInfo
-	{
-		public string Path { get; set; }
-		public FileActionEnum Action { get; set; }
-	}
+    public class RevisionEntryInfo
+    {
+        public string Path { get; set; }
+        public FileActionEnum Action { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Action} {Path}";
+        }
+    }
 }

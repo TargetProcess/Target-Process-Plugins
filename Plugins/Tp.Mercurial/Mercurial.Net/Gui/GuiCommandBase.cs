@@ -32,7 +32,8 @@ namespace Mercurial.Gui
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="command"/> is <c>null</c> or empty.</para>
         /// </exception>
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "This property is safe to set from this point.")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors",
+             Justification = "This property is safe to set from this point.")]
         protected GuiCommandBase(string command)
             : base(command)
         {
@@ -51,15 +52,9 @@ namespace Mercurial.Gui
         [DefaultValue(0)]
         public override int Timeout
         {
-            get
-            {
-                return base.Timeout;
-            }
+            get { return base.Timeout; }
 
-            set
-            {
-                base.Timeout = value;
-            }
+            set { base.Timeout = value; }
         }
 
         /// <summary>
@@ -70,7 +65,8 @@ namespace Mercurial.Gui
         /// or the "wrong" version is installed (for instance if a command was introduce in a version, and an older
         /// version is currently installed.)
         /// </remarks>
-        [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Intended usage through descendants, which already has the correct generic type specified.")]
+        [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes",
+             Justification = "Intended usage through descendants, which already has the correct generic type specified.")]
         public static bool IsAvailable
         {
             get
@@ -96,7 +92,8 @@ namespace Mercurial.Gui
         protected static void EnsureCommandAvailability()
         {
             if (!IsAvailable)
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The command {0} is not available in the installed client", typeof(T).Name));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                    "The command {0} is not available in the installed client", typeof(T).Name));
         }
 
         /// <summary>
@@ -115,7 +112,8 @@ namespace Mercurial.Gui
         protected static void EnsurePropertyAvailability(string propertyName, GuiClientType requiredClientType)
         {
             if (GuiClient.ClientType != requiredClientType)
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The property {0} is not available in the installed client", propertyName));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                    "The property {0} is not available in the installed client", propertyName));
         }
 
         /// <summary>
@@ -137,15 +135,9 @@ namespace Mercurial.Gui
         [DefaultValue(true)]
         public bool WaitForGuiToClose
         {
-            get
-            {
-                return _WaitForGuiToClose;
-            }
+            get { return _WaitForGuiToClose; }
 
-            set
-            {
-                _WaitForGuiToClose = value;
-            }
+            set { _WaitForGuiToClose = value; }
         }
 
         /// <summary>
@@ -165,7 +157,7 @@ namespace Mercurial.Gui
         public T WithWaitForGuiToClose(bool value)
         {
             WaitForGuiToClose = value;
-            return (T)this;
+            return (T) this;
         }
     }
 }

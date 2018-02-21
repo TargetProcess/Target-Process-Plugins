@@ -16,6 +16,8 @@
 		<subject keyword="DELIVERY FAILURE:" />
 		<subject keyword="Delivery Status Notification" />
 		<subject keyword="Delivery Confirmation" type="deliv" />
+		<subject keyword="Delivery delayed" />
+		<subject keyword="Diverted Email Notification" />
 
 		<subject keyword="E-mail address changed" type="change" />
 
@@ -37,6 +39,7 @@
 
 		<subject keyword="Potential Junk Mail moved to Junk Mail Folder" type="spam" />
 		<subject keyword="Permanent Delivery Failure" />
+		<subject keyword="postmaster" />
 
 		<subject keyword="Returned mail" />
 		<subject keyword="Receipt Confirmation" />
@@ -51,8 +54,11 @@
 		<subject keyword="unable to deliver mail" />
 		<subject keyword="Undeliverable Message" />
 		<subject keyword="Undeliverable mail" />
-		<subject keyword="Undelivered Mail Returned to Sender"  />
+		<subject keyword="Undelivered Mail Returned to Sender" />
 		<subject keyword="Undeliverable:" />
+
+		<subject keyword="Your email requires verification verify" />
+		<subject keyword="(verification)" />
 	</include>
 	<exclude>
 		<subject keyword="Re:" match="start" />

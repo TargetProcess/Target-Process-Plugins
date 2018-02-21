@@ -7,16 +7,16 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class AddMashupCommand : CrudMashupCommand<Mashup>
-	{
-		protected override PluginProfileErrorCollection ExecuteOperation(Mashup mashup)
-		{
-			return MashupRepository.Add(mashup, false);
-		}
+    public class AddMashupCommand : CrudMashupCommand<Mashup>
+    {
+        protected override PluginProfileErrorCollection ExecuteOperation(Mashup mashup)
+        {
+            return MashupRepository.Add(mashup, false);
+        }
 
-		public override string Name
-		{
-			get { return "AddMashup"; }
-		}
-	}
+        public override string Name
+        {
+            get { return "AddMashup"; }
+        }
+    }
 }

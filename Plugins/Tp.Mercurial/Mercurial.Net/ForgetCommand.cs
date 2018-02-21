@@ -29,10 +29,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Paths
         {
-            get
-            {
-                return _Paths.Collection;
-            }
+            get { return _Paths.Collection; }
         }
 
         /// <summary>
@@ -82,10 +79,7 @@ namespace Mercurial
         /// </summary>
         public override IEnumerable<string> Arguments
         {
-            get
-            {
-                return base.Arguments.Concat(_Paths.GetArguments());
-            }
+            get { return base.Arguments.Concat(_Paths.GetArguments()); }
         }
 
         /// <summary>

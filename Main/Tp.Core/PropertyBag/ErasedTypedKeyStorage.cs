@@ -3,28 +3,33 @@ using System.Collections.Generic;
 
 namespace Tp.Core.PropertyBag
 {
-	public class ErasedTypedKeyStorage<T>
-	{
-		private readonly Dictionary<Type, T> _items;
+    public class ErasedTypedKeyStorage<T>
+    {
+        private readonly Dictionary<Tuple<Type,string>, T> _items;
 
-		public ErasedTypedKeyStorage()
-		{
-			_items = new Dictionary<Type, T>();
-		}
+        public ErasedTypedKeyStorage()
+        {
+            _items = new Dictionary<Tuple<Type,string>, T>();
+        }
 
-		public void AddItem(TypedKey key, T item)
-		{
-			_items[key.Type] = item;
-		}
+        public void AddItem(TypedKey key, T item)
+        {
+            _items[BuildKey(key)] = item;
+        }
 
-		public void RemoveItem(TypedKey key)
-		{
-			_items.Remove(key.Type);
-		}
+        public void RemoveItem(TypedKey key)
+        {
+            _items.Remove(BuildKey(key));
+        }
 
-		public Maybe<T> MaybeGetItem(TypedKey key)
-		{
-			return _items.GetValue(key.Type);
-		}
-	}
+        public Maybe<T> MaybeGetItem(TypedKey key)
+        {
+            return _items.GetValue(BuildKey(key));
+        }
+
+        private Tuple<Type, string> BuildKey(TypedKey key)
+        {
+            return Tuple.Create(key.Type, key.Name);
+        }
+    }
 }

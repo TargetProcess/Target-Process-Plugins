@@ -33,11 +33,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show topological branches only (branches without children.)
@@ -45,11 +41,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--topo")]
         [DefaultValue(false)]
-        public bool Topological
-        {
-            get;
-            set;
-        }
+        public bool Topological { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to include closed branches in the collection.
@@ -57,11 +49,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--closed")]
         [DefaultValue(false)]
-        public bool ShowClosed
-        {
-            get;
-            set;
-        }
+        public bool ShowClosed { get; set; }
 
         /// <summary>
         /// Gets the collection of <see cref="Revision"/>, if non-empty, will only
@@ -70,10 +58,7 @@ namespace Mercurial
         /// </summary>
         public Collection<RevSpec> BranchRevisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_BranchRevisions);
-            }
+            get { return new Collection<RevSpec>(_BranchRevisions); }
         }
 
         #region IMercurialCommand<IEnumerable<Changeset>> Members
@@ -98,11 +83,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="Changeset"/> objects.
         /// </summary>
-        public IEnumerable<Changeset> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Changeset> Result { get; private set; }
 
         #endregion
 

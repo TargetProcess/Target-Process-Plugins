@@ -7,7 +7,7 @@
     .addDependency("libs/jquery/jquery")
     .addDependency("Bugzilla/jquery.utils")
     .addDependency("libs/jquery/jquery.tmpl")
-    .addModule("Bugzilla/BugzillaProfileView", function (template, connectionChecker, bus, profileControlsBlock, DownloadScriptBlock, $) {
+    .addModule("Bugzilla/BugzillaProfileView", function (template, connectionChecker, bus, profileControlsBlock, downloadScriptBlock, $) {
         function bugzillaProfileView(config) {
             this._ctor(config);
         }
@@ -41,7 +41,7 @@
                 rendered.find('#name').enabled(!isEditMode);
                 rendered.find('#project-note').click(function(){
                     rendered.find('#project-info').slideToggle();
-                })
+                });
 
                 if (isEditMode) {
                     rendered.find('#project').enabled(false);
@@ -68,7 +68,7 @@
                     that.connectionChecker.checkConnection(null, $.proxy(that.onCheckConnectionFailure, that));
                 });
 
-                this.downloadScriptBlock = new DownloadScriptBlock({placeholder: this.placeholder.find('.additionalInfo'), mashupPath: this.mashupPath});
+                this.downloadScriptBlock = new downloadScriptBlock({placeholder: this.placeholder.find('.additionalInfo'), mashupPath: this.mashupPath});
 
                 new profileControlsBlock({ placeholder: rendered }).render();
             },
@@ -76,7 +76,7 @@
             onCheckConnectionFailure: function(data) {
                 if ($(data).filter(
                     function(index) {
-                        return this.AdditionalInfo && (this.AdditionalInfo == 'TpCgiNotFound' || this.AdditionalInfo == 'InvalidTpCgiVersion');
+                        return this.AdditionalInfo && (this.AdditionalInfo === 'TpCgiNotFound' || this.AdditionalInfo === 'InvalidTpCgiVersion');
                     }).length > 0) {
                     rendered.find('._downloadScriptBlock').click();
                 }

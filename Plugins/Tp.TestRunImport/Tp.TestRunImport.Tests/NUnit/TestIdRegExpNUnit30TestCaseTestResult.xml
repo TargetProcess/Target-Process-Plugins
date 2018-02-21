@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This file represents the results of running a test suite-->
+<test-run id="2" name="nunitlite.tests.exe" fullname="E:/NUnit.Framework-3.7.1/bin/net-4.5/nunitlite.tests.exe" testcasecount="3" result="Skipped" label="Ignored" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.413176" total="3" passed="1" failed="1" inconclusive="0" skipped="1" asserts="2" random-seed="186462177">
+	<command-line><![CDATA["E:\NUnit.Framework-3.7.1\bin\net-4.5\nunitlite.tests.exe" ]]></command-line>
+	<filter />
+	<test-suite type="Assembly" id="1383" name="nunitlite.tests.exe" fullname="E:/NUnit.Framework-3.7.1/bin/net-4.5/nunitlite.tests.exe" runstate="Runnable" testcasecount="342" result="Skipped" label="Ignored" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.413176" total="342" passed="341" failed="0" warnings="0" inconclusive="0" skipped="1" asserts="698">
+		<environment framework-version="3.7.1.0" clr-version="4.0.30319.42000" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="E:\NUnit.Framework-3.7.1\bin\net-4.5" machine-name="VASKOVSKIY" user="vaskovskiy" user-domain="OFFICE" culture="en-US" uiculture="en-US" os-architecture="x64" />
+		<settings>
+			<setting name="WorkDirectory" value="E:\NUnit.Framework-3.7.1\bin\net-4.5" />
+			<setting name="NumberOfTestWorkers" value="4" />
+		</settings>
+		<properties>
+			<property name="ParallelScope" value="Fixtures" />
+			<property name="_PID" value="30272" />
+			<property name="_APPDOMAIN" value="nunitlite.tests.exe" />
+		</properties>
+		<reason>
+			<message><![CDATA[One or more child tests were ignored]]></message>
+		</reason>
+		<test-suite type="TestSuite" id="1386" name="NUnit" fullname="NUnit" runstate="Runnable" testcasecount="3" result="Passed" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.186040" total="76" passed="76" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="178">
+			<test-suite type="TestSuite" id="1389" name="ConsoleRunner" fullname="NUnit.ConsoleRunner" runstate="Runnable" testcasecount="3" result="Passed" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.177015" total="2" passed="2" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="2">
+				<test-suite type="TestSuite" id="1390" name="Tests" fullname="NUnit.ConsoleRunner.Tests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.175020" total="2" passed="2" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="2">
+					<test-suite type="TestFixture" id="1183" name="AccessManagerSpecs" fullname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs" classname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs" runstate="Runnable" testcasecount="3" result="Skipped" label="Ignored" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.063608" total="3" passed="1" failed="1" warnings="0" inconclusive="0" skipped="1" asserts="2">
+						<test-case id="1382" name="SimpleTestCase_1001" fullname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase_1001" methodname="SimpleTestCase_1001" classname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs" runstate="Runnable" seed="2048626733" result="Passed" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.002075" asserts="1" />
+						<test-case id="1381" name="SimpleTestCase_1002" fullname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase_1002" methodname="SimpleTestCase_1002" classname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs" runstate="Runnable" seed="1707572047" result="Failed" label="Error" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.001178" asserts="0">
+							<properties>
+								<property name="Description" value="SimpleTestCase2" />
+							</properties>
+							<failure>
+								<message><![CDATA[ Expected: 1 But was:  0]]></message>
+								<stack-trace><![CDATA[at Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase2() in D:\trunk\Code\Main\Tp.UnitTests\AccessManagerSpecs\AccessManagerSpecs.cs:line 178]]></stack-trace>
+							</failure>
+						</test-case>
+						<test-case id="1380" name="SimpleTestCase_1004" fullname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs.SimpleTestCase_1004" methodname="SimpleTestCase_1004" classname="Tp.BusinessObjects.Components.AccessManagerSpecs.AccessManagerSpecs" runstate="Ignored" seed="1209183328" result="Skipped" label="Ignored" start-time="2017-07-13 10:38:27Z" end-time="2017-07-13 10:38:27Z" duration="0.000020" asserts="1">
+							<properties>
+								<property name="_SKIPREASON" value="Test needs modification" />
+							</properties>
+							<reason>
+								<message><![CDATA[Test needs modification]]></message>
+							</reason>
+						</test-case>
+					</test-suite>
+				</test-suite>
+			</test-suite>
+		</test-suite>
+	</test-suite>
+</test-run>

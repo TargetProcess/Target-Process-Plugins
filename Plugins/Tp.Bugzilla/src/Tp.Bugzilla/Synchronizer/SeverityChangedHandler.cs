@@ -11,36 +11,37 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
-	public class SeverityChangedHandler : EntityChangedHandler<SeverityDTO>,
-	                                      IHandleMessages<SeverityUpdatedMessage>,
-	                                      IHandleMessages<SeverityCreatedMessage>,
-	                                      IHandleMessages<SeverityDeletedMessage>
-	{
-		public SeverityChangedHandler(IStorageRepository storage)
-			: base(storage)
-		{
-		}
+    public class SeverityChangedHandler
+        : EntityChangedHandler<SeverityDTO>,
+          IHandleMessages<SeverityUpdatedMessage>,
+          IHandleMessages<SeverityCreatedMessage>,
+          IHandleMessages<SeverityDeletedMessage>
+    {
+        public SeverityChangedHandler(IStorageRepository storage)
+            : base(storage)
+        {
+        }
 
-		public void Handle(SeverityUpdatedMessage message)
-		{
-			Update(message.Dto);
+        public void Handle(SeverityUpdatedMessage message)
+        {
+            Update(message.Dto);
 
-			Storage.GetProfile<BugzillaProfile>().SeveritiesMapping
-				.Where(m => m.Value.Id == message.Dto.ID)
-				.ForEach(m => m.Value.Name = message.Dto.Name);
-		}
+            Storage.GetProfile<BugzillaProfile>().SeveritiesMapping
+                .Where(m => m.Value.Id == message.Dto.ID)
+                .ForEach(m => m.Value.Name = message.Dto.Name);
+        }
 
-		public void Handle(SeverityCreatedMessage message)
-		{
-			Create(message.Dto);
-		}
+        public void Handle(SeverityCreatedMessage message)
+        {
+            Create(message.Dto);
+        }
 
-		public void Handle(SeverityDeletedMessage message)
-		{
-			Delete(message.Dto);
+        public void Handle(SeverityDeletedMessage message)
+        {
+            Delete(message.Dto);
 
-			Storage.GetProfile<BugzillaProfile>().SeveritiesMapping
-				.RemoveAll(m => m.Value.Id == message.Dto.ID);
-		}
-	}
+            Storage.GetProfile<BugzillaProfile>().SeveritiesMapping
+                .RemoveAll(m => m.Value.Id == message.Dto.ID);
+        }
+    }
 }

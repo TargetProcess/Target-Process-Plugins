@@ -12,47 +12,32 @@ namespace Mercurial
         /// <summary>
         /// Gets the command to execute with the Mercurial command line client.
         /// </summary>
-        string Command
-        {
-            get;
-        }
+        string Command { get; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="Command"/>, or an
         /// empty array if there are none.
         /// </summary>
-        IEnumerable<string> Arguments
-        {
-            get;
-        }
+        IEnumerable<string> Arguments { get; }
 
         /// <summary>
         /// Gets any additional arguments to the <see cref="Command"/>, or an
         /// empty collection if there are none.
         /// </summary>
-        Collection<string> AdditionalArguments
-        {
-            get;
-        }
+        Collection<string> AdditionalArguments { get; }
 
         /// <summary>
         /// Gets the <see cref="IMercurialCommandObserver"/> that will be informed of
         /// execution progress. Can be <c>null</c> in case there is no observer.
         /// </summary>
-        IMercurialCommandObserver Observer
-        {
-            get;
-        }
+        IMercurialCommandObserver Observer { get; }
 
         /// <summary>
         /// Gets the timeout in seconds for how long to wait for the command to
         /// complete successfully before terminating it and throwing an exception. A
         /// typical default value is 60.
         /// </summary>
-        int Timeout
-        {
-            get;
-        }
+        int Timeout { get; }
 
         /// <summary>
         /// Validates the command configuration. This method should throw the necessary

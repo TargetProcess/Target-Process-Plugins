@@ -9,11 +9,11 @@ using Tp.LegacyProfileConversion.Common.Testing;
 
 namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 {
-	public class TestRunImportLegacyProfileConversionUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
-	{
-		protected override Assembly PluginAssembly
-		{
-			get { return typeof(TestRunImportPluginProfile).Assembly; }
-		}
-	}
+    public class TestRunImportLegacyProfileConversionUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
+    {
+        protected override Assembly PluginAssembly
+        {
+            get { return typeof(TestRunImportPluginProfile).Assembly; }
+        }
+    }
 }

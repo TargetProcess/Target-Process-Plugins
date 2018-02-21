@@ -7,18 +7,18 @@ using System.Runtime.Serialization;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	[DataContract]
-	public class SimpleMappingElement
-	{
-		[DataMember]
-		public string First { get; set; }
+    [DataContract]
+    public class SimpleMappingElement
+    {
+        [DataMember]
+        public string First { get; set; }
 
-		[DataMember]
-		public string Second { get; set; }
+        [DataMember]
+        public string Second { get; set; }
 
-		public bool IsEmptyValue()
-		{
-			return string.IsNullOrEmpty(Second);
-		}
-	}
+        public bool IsEmptyValue()
+        {
+            return string.IsNullOrEmpty(Second);
+        }
+    }
 }

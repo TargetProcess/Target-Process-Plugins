@@ -9,26 +9,26 @@ using Tp.SourceControl.Messages;
 
 namespace Tp.SourceControl.Comments.DSL
 {
-	public class ActionFactory : IActionFactory
-	{
-		public IAction CreateAssignRevisionToEntityAction(int entityId)
-		{
-			return new AssignRevisionToEntityAction {EntityId = entityId};
-		}
+    public class ActionFactory : IActionFactory
+    {
+        public IAction CreateAssignRevisionToEntityAction(int entityId)
+        {
+            return new AssignRevisionToEntityAction { EntityId = entityId };
+        }
 
-		public IAction CreatePostTimeAction(decimal timeSpent, decimal? timeLeft)
-		{
-			return new PostTimeAction {TimeSpent = timeSpent, TimeLeft = timeLeft};
-		}
+        public IAction CreatePostTimeAction(decimal timeSpent, decimal? timeLeft)
+        {
+            return new PostTimeAction { TimeSpent = timeSpent, TimeLeft = timeLeft };
+        }
 
-		public IAction CreatePostCommentAction(string comment)
-		{
-			return new PostCommentAction {Comment = HttpUtility.HtmlEncode(comment)};
-		}
+        public IAction CreatePostCommentAction(string comment)
+        {
+            return new PostCommentAction { Comment = HttpUtility.HtmlEncode(comment) };
+        }
 
-		public IAction CreateChangeStatusAction(string status)
-		{
-			return new ChangeStatusAction {Status = status};
-		}
-	}
+        public IAction CreateChangeStatusAction(string status)
+        {
+            return new ChangeStatusAction { Status = status };
+        }
+    }
 }

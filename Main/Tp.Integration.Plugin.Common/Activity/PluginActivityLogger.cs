@@ -13,97 +13,97 @@ using log4net;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class PluginActivityLogger : IActivityLogger
-	{
-		private readonly ILogProvider _logProvider;
-		private readonly Maybe<IPluginContext> _pluginContext;
+    public class PluginActivityLogger : IActivityLogger
+    {
+        private readonly ILogProvider _logProvider;
+        private readonly Maybe<IPluginContext> _pluginContext;
 
-		public PluginActivityLogger(ILogProvider logProvider):this(logProvider, Maybe.Nothing)
-		{
-		}
+        public PluginActivityLogger(ILogProvider logProvider) : this(logProvider, Maybe.Nothing)
+        {
+        }
 
-		internal PluginActivityLogger(ILogProvider logProvider, Maybe<IPluginContext> pluginContext)
-		{
-			_logProvider = logProvider;
-			_pluginContext = pluginContext;
-		}
-		
-		public void Info(string message)
-		{
-			Log(log => log.Info(message));
-		}
+        internal PluginActivityLogger(ILogProvider logProvider, Maybe<IPluginContext> pluginContext)
+        {
+            _logProvider = logProvider;
+            _pluginContext = pluginContext;
+        }
 
-		public void Warn(string message)
-		{
-			Log(log => log.Warn(message));
-		}
+        public void Info(string message)
+        {
+            Log(log => log.Info(message));
+        }
 
-		public void Debug(string message)
-		{
-			Log(log => log.Debug(message));
-		}
+        public void Warn(string message)
+        {
+            Log(log => log.Warn(message));
+        }
 
-		public void Error(string message)
-		{
-			Log(log => log.Error(message));
-		}
+        public void Debug(string message)
+        {
+            Log(log => log.Debug(message));
+        }
 
-		public void Error(Exception ex)
-		{
-			Log(log => log.Error(ex.Message, ex));
-		}
+        public void Error(string message)
+        {
+            Log(log => log.Error(message));
+        }
 
-		public void Fatal(string message)
-		{
-			Log(log => log.Fatal(message));
-		}
+        public void Error(Exception ex)
+        {
+            Log(log => log.Error(ex.Message, ex));
+        }
 
-		public void Fatal(Exception ex)
-		{
-			Log(log => log.Fatal(ex.Message, ex));
-		}
+        public void Fatal(string message)
+        {
+            Log(log => log.Fatal(message));
+        }
 
-		public void WarnFormat(string format, params object[] args)
-		{
-			Warn(string.Format(format, args));
-		}
+        public void Fatal(Exception ex)
+        {
+            Log(log => log.Fatal(ex.Message, ex));
+        }
 
-		public void ErrorFormat(string format, params object[] args)
-		{
-			Error(string.Format(format, args));
-		}
+        public void WarnFormat(string format, params object[] args)
+        {
+            Warn(string.Format(format, args));
+        }
 
-		public void DebugFormat(string format, params object[] args)
-		{
-			Debug(string.Format(format, args));
-		}
+        public void ErrorFormat(string format, params object[] args)
+        {
+            Error(string.Format(format, args));
+        }
 
-		public void Error(string message, Exception exception)
-		{
-			Log(log => log.Error(message, exception));
-		}
+        public void DebugFormat(string format, params object[] args)
+        {
+            Debug(string.Format(format, args));
+        }
 
-		public void InfoFormat(string format, params object[] args)
-		{
-			Info(string.Format(format, args));
-		}
+        public void Error(string message, Exception exception)
+        {
+            Log(log => log.Error(message, exception));
+        }
 
-		public bool IsDebugEnabled
-		{
-			get { return GetLoggers().Any(x => x.IsDebugEnabled); }
-		}
+        public void InfoFormat(string format, params object[] args)
+        {
+            Info(string.Format(format, args));
+        }
 
-		protected virtual void Log(Action<ILog> action)
-		{
-			foreach (var log in GetLoggers())
-			{
-				action(log);
-			}
-		}
+        public bool IsDebugEnabled
+        {
+            get { return GetLoggers().Any(x => x.IsDebugEnabled); }
+        }
 
-		private IEnumerable<ILog> GetLoggers()
-		{
-			return _pluginContext.HasValue ? _logProvider.GetActivityLoggers(_pluginContext.Value) : _logProvider.GetActivityLoggers();
-		}
-	}
+        protected virtual void Log(Action<ILog> action)
+        {
+            foreach (var log in GetLoggers())
+            {
+                action(log);
+            }
+        }
+
+        private IEnumerable<ILog> GetLoggers()
+        {
+            return _pluginContext.HasValue ? _logProvider.GetActivityLoggers(_pluginContext.Value) : _logProvider.GetActivityLoggers();
+        }
+    }
 }

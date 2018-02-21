@@ -7,54 +7,54 @@ using System.Text;
 
 namespace Tp.PopEmailIntegration.LegacyProfileConversion
 {
-	public class ProfileRule
-	{
-		private readonly bool _createRequest;
-		private string _subjectContainsCondition;
-		private readonly string _projectId;
+    public class ProfileRule
+    {
+        private readonly bool _createRequest;
+        private string _subjectContainsCondition;
+        private readonly string _projectId;
 
-		public ProfileRule(string projectId)
-		{
-			_projectId = projectId;
-		}
+        public ProfileRule(string projectId)
+        {
+            _projectId = projectId;
+        }
 
-		public ProfileRule(string projectId, bool createRequest)
-		{
-			_projectId = projectId;
-			_createRequest = createRequest;
-		}
+        public ProfileRule(string projectId, bool createRequest)
+        {
+            _projectId = projectId;
+            _createRequest = createRequest;
+        }
 
-		public string ProjectId
-		{
-			get { return _projectId; }
-		}
+        public string ProjectId
+        {
+            get { return _projectId; }
+        }
 
-		public void AddSubjectContainsCondition(string value)
-		{
-			if (!string.IsNullOrEmpty(_subjectContainsCondition))
-			{
-				_subjectContainsCondition += ",";
-			}
+        public void AddSubjectContainsCondition(string value)
+        {
+            if (!string.IsNullOrEmpty(_subjectContainsCondition))
+            {
+                _subjectContainsCondition += ",";
+            }
 
-			_subjectContainsCondition += value;
-		}
+            _subjectContainsCondition += value;
+        }
 
-		public override string ToString()
-		{
-			var res = new StringBuilder();
-			if (!string.IsNullOrEmpty(_subjectContainsCondition))
-			{
-				res.AppendFormat("when subject contains '{0}' ", _subjectContainsCondition);
-			}
+        public override string ToString()
+        {
+            var res = new StringBuilder();
+            if (!string.IsNullOrEmpty(_subjectContainsCondition))
+            {
+                res.AppendFormat("when subject contains '{0}' ", _subjectContainsCondition);
+            }
 
-			res.AppendFormat("then attach to project {0}", _projectId);
+            res.AppendFormat("then attach to project {0}", _projectId);
 
-			if (_createRequest)
-			{
-				res.AppendFormat(" and create request in project {0}", _projectId);
-			}
+            if (_createRequest)
+            {
+                res.AppendFormat(" and create request in project {0}", _projectId);
+            }
 
-			return res.ToString();
-		}
-	}
+            return res.ToString();
+        }
+    }
 }

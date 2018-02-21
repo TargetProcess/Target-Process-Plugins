@@ -4,27 +4,32 @@
 // 
 
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Tp.Integration.Plugin.Common.Mapping
 {
-	public class Mappings
-	{
-		public MappingContainer States { get; set; }
+    [DataContract]
+    public class Mappings
+    {
+        [DataMember]
+        public MappingContainer States { get; set; }
 
-		public MappingContainer Severities { get; set; }
+        [DataMember]
+        public MappingContainer Severities { get; set; }
 
-		public MappingContainer Priorities { get; set; }
-	}
+        [DataMember]
+        public MappingContainer Priorities { get; set; }
+    }
 
-	public class MappingContainer : List<MappingElement>
-	{
-		public MappingLookup this[string key]
-		{
-			get
-			{
-				var mappingElement = Find(x => x.Key.ToLower().Trim() == key.ToLower().Trim());
-				return mappingElement == null ? null : mappingElement.Value;
-			}
-		}
-	}
+    public class MappingContainer : List<MappingElement>
+    {
+        public MappingLookup this[string key]
+        {
+            get
+            {
+                var mappingElement = Find(x => x.Key.ToLower().Trim() == key.ToLower().Trim());
+                return mappingElement?.Value;
+            }
+        }
+    }
 }

@@ -55,10 +55,7 @@ namespace Mercurial
         /// </summary>
         public bool Done
         {
-            get
-            {
-                return _Done;
-            }
+            get { return _Done; }
         }
 
         /// <summary>
@@ -67,10 +64,7 @@ namespace Mercurial
         /// </summary>
         public RevSpec Revision
         {
-            get
-            {
-                return _Revision;
-            }
+            get { return _Revision; }
         }
     }
 }

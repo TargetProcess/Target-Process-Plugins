@@ -37,10 +37,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Names
         {
-            get
-            {
-                return new Collection<string>(_Names);
-            }
+            get { return new Collection<string>(_Names); }
         }
 
         /// <summary>
@@ -76,15 +73,9 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool SaveBackup
         {
-            get
-            {
-                return _SaveBackup;
-            }
+            get { return _SaveBackup; }
 
-            set
-            {
-                _SaveBackup = value;
-            }
+            set { _SaveBackup = value; }
         }
 
         /// <summary>
@@ -113,11 +104,7 @@ namespace Mercurial
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date")]
         [DefaultValue(null)]
-        public DateTime? RevertToDate
-        {
-            get;
-            set;
-        }
+        public DateTime? RevertToDate { get; set; }
 
         /// <summary>
         /// Sets the <see cref="RevertToDate"/> property to the specified value and
@@ -143,11 +130,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -174,10 +157,7 @@ namespace Mercurial
         /// </summary>
         public override IEnumerable<string> Arguments
         {
-            get
-            {
-                return base.Arguments.Concat(Names);
-            }
+            get { return base.Arguments.Concat(Names); }
         }
 
         /// <summary>
@@ -193,7 +173,8 @@ namespace Mercurial
             base.Validate();
 
             if (_Names.Count == 0)
-                throw new InvalidOperationException("Must specify at least one name of a directory or file to revert before executing the RevertCommand");
+                throw new InvalidOperationException(
+                    "Must specify at least one name of a directory or file to revert before executing the RevertCommand");
         }
 
         /// <summary>

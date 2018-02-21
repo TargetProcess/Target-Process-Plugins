@@ -7,10 +7,10 @@ using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.Commands
 {
-	[DataContract]
-	public class ContentResponse
-	{
-		[DataMember]
-		public string Content { get; set; }
-	}
+    [DataContract]
+    public class ContentResponse
+    {
+        [DataMember]
+        public string Content { get; set; }
+    }
 }

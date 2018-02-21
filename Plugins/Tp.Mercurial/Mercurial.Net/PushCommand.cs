@@ -58,10 +58,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--bookmark")]
         public Collection<string> Bookmarks
         {
-            get
-            {
-                return new Collection<string>(_Bookmarks);
-            }
+            get { return new Collection<string>(_Bookmarks); }
         }
 
         /// <summary>
@@ -72,15 +69,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -91,17 +82,11 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether to verify the server certificate. If set to <c>false</c>, will ignore web.cacerts configuration.
         /// Default value is <c>true</c>.
@@ -110,10 +95,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -149,15 +131,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = (value ?? string.Empty).Trim();
-            }
+            set { _Destination = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -167,11 +143,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to allow creating a new branch in the destination
@@ -179,11 +151,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--new-branch")]
         [DefaultValue(false)]
-        public bool AllowCreatingNewBranch
-        {
-            get;
-            set;
-        }
+        public bool AllowCreatingNewBranch { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to push large repositories in chunks.
@@ -191,11 +159,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--chunked")]
         [DefaultValue(false)]
-        public bool ChunkedTransfer
-        {
-            get;
-            set;
-        }
+        public bool ChunkedTransfer { get; set; }
 
         /// <summary>
         /// Gets the collection of revisions to include when pushing.
@@ -204,10 +168,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>

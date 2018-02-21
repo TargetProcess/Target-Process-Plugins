@@ -7,16 +7,16 @@ using System.Collections.Generic;
 
 namespace Tp.BugTracking.BugFieldConverters
 {
-	public abstract class ConverterCompositeBase<T> : IBugConverter<T>
-	{
-		protected abstract IEnumerable<IBugConverter<T>> Converters { get; }
+    public abstract class ConverterCompositeBase<T> : IBugConverter<T>
+    {
+        protected abstract IEnumerable<IBugConverter<T>> Converters { get; }
 
-		public void Apply(T thirdPartyBug, ConvertedBug convertedBug)
-		{
-			foreach (var converter in Converters)
-			{
-				converter.Apply(thirdPartyBug, convertedBug);
-			}
-		}
-	}
+        public void Apply(T thirdPartyBug, ConvertedBug convertedBug)
+        {
+            foreach (var converter in Converters)
+            {
+                converter.Apply(thirdPartyBug, convertedBug);
+            }
+        }
+    }
 }

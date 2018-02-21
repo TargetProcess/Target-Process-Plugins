@@ -15,7 +15,7 @@ namespace Tp.Mercurial.VersionControlSystem
             {
                 Author = changeset.AuthorName,
                 Comment = changeset.CommitMessage,
-                Id = new RevisionId() {Time = changeset.Timestamp, Value = changeset.Hash},
+                Id = new RevisionId() { Time = changeset.Timestamp, Value = changeset.Hash },
                 Time = changeset.Timestamp,
                 Entries = changeset.PathActions
                     .Select(pa => new RevisionEntryInfo() { Path = pa.Path, Action = pa.Action.ToFileAction() }).ToArray(),

@@ -22,7 +22,7 @@ namespace Tp.Tfs.Tests.WorkItems
 				Then bugs with following names should be created in TargetProcess: 'bug1'
 					And bug in TargetProcess with name 'bug1' should have description 'important bug'
 					And bug in TargetProcess with name 'bug1' should be in 'Test'"
-                .Execute(In.Context<WorkItemsActionSteps>());    
+                .Execute(In.Context<WorkItemsActionSteps>());
         }
 
         [Test]

@@ -8,14 +8,14 @@ using log4net.Repository.Hierarchy;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	internal interface ILog4NetFileRepository
-	{
-		IEnumerable<ActivityLogRecord> GetActivityRecordsFor(Logger logger, ActivityFilter filter);
+    internal interface ILog4NetFileRepository
+    {
+        IEnumerable<ActivityLogRecord> GetActivityRecordsFor(Logger logger, ActivityFilter filter);
 
-		void RemoveFoldersFor(IEnumerable<Logger> loggers);
+        void RemoveFoldersFor(IEnumerable<Logger> loggers);
 
-		void RemoveFilesFor(Logger logger);
+        void RemoveFilesFor(Logger logger);
 
-		bool RecordsExist(Logger logger);
-	}
+        bool RecordsExist(Logger logger);
+    }
 }

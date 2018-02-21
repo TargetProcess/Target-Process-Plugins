@@ -3,10 +3,136 @@
 <!--DOCTYPE bodytemplates SYSTEM "../../dtd/bodytemplates.dtd"-->
 <bodytemplates lang="en">
 	<contents priority="1">
+		<![CDATA[Your message was automatically rejected by Dovecot Mail Delivery Agent.
+
+The following reason was given:
+{DESCRIPTION} {TO_EMAIL}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Click the link you see in the email.  This is a one-off. 
+
+Cliquez le lien qui se trouve dans le courriel.   C'est une fois pour toutes.
+
+{DESCRIPTION}.
+You have to do this only once.
+
+{BLANK}
+
+
+
+
+Spam Arrest - Take control of your inbox!
+
+------------------------------------------------------------
+You are receiving this message in response to your email to
+{TO_EMAIL}, a Spam Arrest customer.
+
+Spam Arrest requests that senders verify themselves before
+their email is delivered.
+
+When you click the above link, you will be taken to a page
+with a graphic on it. Simply read the word in the graphic, 
+type it into the form, accept the Sender Agreement, and 
+you're verified.
+
+You have to do this only once per Spam Arrest customer.
+------------------------------------------------------------
+Below are the complete headers of the message that this email 
+was generated in response to.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[The message you sent requires that you verify that you 
+are a real live human being and not a spam source.
+
+
+{DESCRIPTION} and leave
+the subject line intact or click the link below:
+
+{BLANK}
+
+The headers of the message sent from your address are shown below:
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {RECEIVED_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {TO_EMAIL}
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {TO_EMAIL}
+  Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {BLANK} <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {BLANK}
+  Original address: {TO_EMAIL}
+  Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {RECEIVED_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {BLANK} <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {TO_EMAIL}
+  Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{TO_HOST} rejected your message to the following e-mail addresses:
+{TO_EMAIL}
+
+{TO_HOST} gave this error:
+
+{DESCRIPTION}
+
+Diagnostic information for administrators:
+{REASON}
+Original message headers:
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery is delayed to these recipients or distribution lists:
+{TO_EMAIL}
+Subject: {SUBJECT}
+{DESCRIPTION}.
+
+
+Sent by Microsoft Exchange Server 2007]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery is delayed to these recipients or distribution lists:
+{TO_EMAIL}
+Subject: {SUBJECT}
+This {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
 		<![CDATA[**********************************************
     **      THIS IS A WARNING MESSAGE ONLY      **
     **  YOU DO NOT NEED TO RESEND YOUR MESSAGE  **
     **********************************************
+
 
 The original message was received at {RECEIVED_DATETIME}
 from {FROM_HOST} [{FROM_IP}]
@@ -149,6 +275,16 @@ This is a permanent error; I've given up. Sorry it didn't work out.
 {ORIG_MESSAGE}]]>
 	</contents>
 	<contents priority="1">
+		<![CDATA[Hi. This is the qmail-send program at {TO_DOMAIN}.
+I'm afraid I wasn't able to deliver your message to the following addresses.
+This is a permanent error; I've given up. Sorry it didn't work out.
+
+<{TO_EMAIL}>:
+{DESCRIPTION}
+
+--- Enclosed is a copy of the message.]]>
+	</contents>
+	<contents priority="1">
 		<![CDATA[MailEnable: Message could not be delivered to some recipients.
 The following recipient(s) could not be reached:
 
@@ -172,6 +308,21 @@ The following recipient(s) could not be reached:
 		</repeat>
 
 Message headers follow:
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[MailEnable: Message could not be delivered to some recipients.
+The following recipient(s) could not be reached:
+
+	Recipient: [SMTP:{TO_EMAIL}]
+	Reason: {DESCRIPTION}.
+
+Reason Code: {REASON}
+Error Number: {ERROR_NUM}
+
+
+Message contents follow:
 
 {ORIG_MESSAGE}]]>
 	</contents>
@@ -273,6 +424,18 @@ Failed address: {TO_EMAIL}
 {DESCRIPTION}
 --- End Transcript ---
 : Message contains [1] file attachments]]>
+		</contents>
+		<contents priority="1">
+			<![CDATA[The original message was received at {RECEIVED_DATETIME}
+from {FROM_EMAIL} [{FROM_IP}]
+
+   ----- The following addresses had permanent fatal errors -----
+{TO_EMAIL}
+    (reason: {REASON})
+    (expanded from: <{BLANK}>)
+
+   ----- Transcript of session follows -----
+{DESCRIPTION}]]>
 		</contents>
 		<contents priority="1">
 			<![CDATA[The original message was received at {RECEIVED_DATETIME}
@@ -394,6 +557,29 @@ administrator.
 {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
+		<![CDATA[*** ATTENTION ***
+
+Your e-mail is being returned to you because there was a problem with its
+delivery. The reason your mail is being returned to you is listed in the
+section labeled: "----- The delivery status notification errors -----".
+
+The line beginning with "Diagnostic-Code:" describes the specific reason
+your e-mail could not be delivered.  The following lines contains the
+RFC822 header of the original email message.
+
+Please direct further questions regarding this message to your e-mail
+administrator.
+
+--{BLANK}
+
+----- The delivery status notification errors -----
+
+
+<{TO_EMAIL}>: host {TO_HOST}[{TO_IP}]
+said:
+    {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
 		<![CDATA[This is a warning message only.
   Your message remains in the server queue,
   the server will try to send it again.
@@ -461,7 +647,21 @@ delete your own text from the message returned below.
 <{TO_EMAIL}>: {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  {TO_EMAIL}
+    (generated from {FROM_EMAIL})
+    {DESCRIPTION}
+
+------ This is a copy of the message{BLANK} headers. ------
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 
 A message that you sent could not be delivered to one or more of its
 recipients. This is a permanent error. The following address(es) failed:
@@ -476,7 +676,7 @@ recipients. This is a permanent error. The following address(es) failed:
 {ORIG_MESSAGE}]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 
 A message that you sent could not be delivered to one or more of its
 recipients. This is a permanent error. The following address(es) failed:
@@ -489,7 +689,7 @@ recipients. This is a permanent error. The following address(es) failed:
 {ORIG_MESSAGE}]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software ({MDS_NAME}).
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software ({MDS_NAME}).
 
 A message that you sent could not be delivered to one or more of its
 recipients. This is a permanent error. The following address(es) failed:
@@ -500,7 +700,21 @@ recipients. This is a permanent error. The following address(es) failed:
 {ORIG_MESSAGE}]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  {TO_EMAIL}
+    {DESCRIPTION}
+------ This is a copy of the message, including all the headers. ------
+------ {BLANK}
+------ {BLANK}.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 
 A message that you sent could not be delivered to one or more of its
 recipients. This is a permanent error. The following address(es) failed:
@@ -509,11 +723,45 @@ recipients. This is a permanent error. The following address(es) failed:
     {DESCRIPTION}
 ------ This is a copy of the message, including all the headers. ------
 {ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  {TO_EMAIL}
+    {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}This message was created automatically by the mail system ({MDS_NAME}).
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+>>> {TO_EMAIL} (after RCPT TO): {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
 		<![CDATA[This is an automatically generated Delivery Status Notification.
 {DESCRIPTION}
 {TO_EMAIL}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is an automatically generated Delivery Status Notification.
+
+{DESCRIPTION}
+
+       {TO_EMAIL}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  save to {BLANK}
+    generated by {TO_EMAIL}
+    {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
 			<![CDATA[The following mail failed to be delivered...
@@ -525,7 +773,7 @@ Subject: {SUBJECT}
 {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 A message that you sent has not yet been delivered to one or more of its
 recipients after more than {HOURS} on the queue on {TO_HOST}.
 
@@ -563,7 +811,7 @@ remains undelivered. Eventually the mail delivery software will give up,
 and when that happens, the message will be returned to you.]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 A {DESCRIPTION} after more than {HOURS} on the queue on {TO_HOST}.
 
 The message identifier is:     {REFERENCE_CODE}
@@ -580,7 +828,24 @@ remains undelivered. Eventually the mail delivery software will give up,
 and when that happens, the message will be returned to you.]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of
+its recipients. The following addresses failed:
+
+  <{TO_EMAIL}>
+
+SMTP error from remote server after RCPT command:
+host {FROM_HOST}[{FROM_IP}]:
+{DESCRIPTION} ({TO_EMAIL})
+
+
+--- The header of the original message is following. ---
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 A {DESCRIPTION} after more than {HOURS} on the queue on {TO_HOST}.
 
 The message identifier is:     {REFERENCE_CODE}
@@ -605,7 +870,7 @@ MTA Response :{ERROR_NUM}
 The original message headers are included as attachment.]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 
 A message that you sent could not be delivered to one or more of its
 recipients. This is a permanent error. The following address(es) failed:
@@ -635,7 +900,7 @@ The following recipients did not receive this message:
 Please reply to {POSTMASTER} if you feel this message to be in error.]]>
 	</contents>
 	<contents priority="1">
-		<![CDATA[This message was created automatically by mail delivery software.
+		<![CDATA[{BLANK}This message was created automatically by mail delivery software.
 A message that you sent has not yet been delivered to one or more of its
 recipients after more than {HOURS} on the queue on {TO_HOST}.
 
@@ -670,6 +935,149 @@ Your mail message:
 
   Message-id: <{REFERENCE_CODE}>
   Date: {SENT_DATETIME}
+  From: "{BLANK}"
+   <{FROM_EMAIL}>
+  To: "{BLANK}" <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {BLANK}
+  Original address: {TO_EMAIL}
+  Reason: {REASON}
+  Diagnostic code: {DESCRIPTION}
+  Remote system: {BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {BLANK} <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {BLANK}
+  Original address: {TO_EMAIL}
+  Reason: {REASON}
+  Diagnostic code: {DESCRIPTION}
+  Remote system: {BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {TO_EMAIL}
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+<repeat>  Recipient address: {TO_FORWARDEMAIL}
+  Original address: {TO_EMAIL}
+  Reason: {DESCRIPTION}
+  Diagnostic code: {REASON}
+  Remote system: {BLANK}
+({TO_HOST} ESMTP)
+</repeat>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id:
+   <{REFERENCE_CODE}>
+  Date: {RECEIVED_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {TO_EMAIL}
+  Subject: {SUBJECT}
+  NgtId: {BLANK}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {TO_EMAIL}
+  Reason: {DESCRIPTION}
+
+oversized email {BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {BLANK} <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+{DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {BLANK} <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+Your message has been enqueued and undeliverable for {HOURS}
+to the following recipients:
+
+  Recipient address: {BLANK}{TO_FORWARDEMAIL}{BLANK}
+  Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: "{BLANK}" <{FROM_EMAIL}>
+  To: {TO_EMAIL}
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {TO_EMAIL}
+  Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: "{BLANK}" <{FROM_EMAIL}>
+  To: {TO_EMAIL}
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {TO_FORWARDEMAIL}
+  Original address: {TO_EMAIL}
+  Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {TO_EMAIL}
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {TO_FORWARDEMAIL}
+  Reason: {DESCRIPTION}
+  Diagnostic code: {REASON}
+  Remote system: {BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{REFERENCE_CODE}>
+  Date: {SENT_DATETIME}
   From: {FROM_EMAIL}
   To: {TO_EMAIL}
   Subject: {SUBJECT}
@@ -680,6 +1088,7 @@ Your message cannot be delivered to the following recipients:
   Original address: {TO_EMAIL}
   Reason: {DESCRIPTION}]]>
 	</contents>
+
 	<contents priority="1">
 			<![CDATA[{DESCRIPTION} {TO_EMAIL}
 
@@ -732,6 +1141,30 @@ was undeliverable due to the following reason:
 {ORIG_MESSAGE}]]>
 	</contents>
 	<contents priority="1">
+		<![CDATA[Your message
+
+  To:      {TO_EMAIL}
+  Subject: {SUBJECT}
+  Sent:    {SENT_DATETIME_ALT2}
+
+{DESCRIPTION} to the following recipient(s):
+
+{TO_EMAIL} on {RECEIVED_DATETIME_ALT2}
+    <{TO_HOST} {REASON}>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message
+
+  To:      {BLANK}
+  Subject: {SUBJECT}
+  Sent:    {SENT_DATETIME}
+
+did not reach the following recipient(s):
+
+{TO_EMAIL} on {RECEIVED_DATETIME}
+{DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
 			<![CDATA[Your message has encountered delivery problems
 to the following recipient(s):
 
@@ -742,6 +1175,15 @@ to the following recipient(s):
 		<![CDATA[{DESCRIPTION}: {TO_EMAIL}
 
 Original message follows.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="7">
+		<![CDATA[{DESCRIPTION}:
+
+     {TO_EMAIL}
+
+----- Original message -----
 
 {ORIG_MESSAGE}]]>
 	</contents>
@@ -796,6 +1238,31 @@ Original message headers:
 	<contents priority="1">
 		<![CDATA[Delivery has failed to these recipients or distribution lists:
 
+{TO_EMAIL}<mailto:{TO_EMAIL}>
+The recipient's e-mail address was not found in the recipient's e-mail system. Microsoft Exchange will not try to redeliver this message for you. Please check the e-mail address and try resending this message, or provide the following diagnostic text to your system administrator.
+
+________________________________
+Sent by Microsoft Exchange Server 2007
+
+
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: {TO_HOST}
+
+{TO_EMAIL}
+{DESCRIPTION}
+
+Original message headers:
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery has failed to these recipients or distribution lists:
+
 '{TO_EMAIL}'<mailto:{TO_EMAIL}>
 The recipient's e-mail address was not found in the recipient's e-mail system. Microsoft Exchange will not try to redeliver this message for you. Please check the e-mail address and try resending this message, or provide the following diagnostic text to your system administrator.
 
@@ -837,6 +1304,35 @@ Original message headers:
 	<contents priority="1">
 		<![CDATA[This is the mail system at host {TO_HOST}.
 
+I'm sorry to have to inform you that your {DESCRIPTION} to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<{TO_EMAIL}>: {TO_HOST}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail system at host {TO_HOST}.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<{TO_EMAIL}>: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail system at host {TO_HOST}.
+
 I'm sorry to have to inform you that your message could not
 be delivered to one or more recipients. It's attached below.
 
@@ -848,6 +1344,36 @@ delete your own text from the attached returned message.
                    The mail system
 
 <{TO_EMAIL}>: host {FROM_HOST}[{FROM_IP}] said: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail system at host {TO_HOST}.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to <postmaster>
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<{TO_EMAIL}>: host {FROM_HOST}[{FROM_IP}] said: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail system at host {TO_HOST}.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to <postmaster>
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<{TO_EMAIL}>: {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
 		<![CDATA[This is the mail system at host {TO_HOST}.
@@ -879,21 +1405,6 @@ delete your own text from the attached returned message.
 
 <{FROM_EMAIL}> (expanded from
     <{TO_EMAIL}>): {DESCRIPTION}]]>
-	</contents>
-	<contents priority="1">
-		<![CDATA[This is the mail system at host {TO_HOST}.
-
-I'm sorry to have to inform you that your message could not
-be delivered to one or more recipients. It's attached below.
-
-For further assistance, please send mail to postmaster.
-
-If you do so, please include this problem report. You can
-delete your own text from the attached returned message.
-
-                   The mail system
-
-<{TO_EMAIL}>: {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
 		<![CDATA[We're sorry. There's a problem with the e-mail address(es) you're trying
@@ -1109,6 +1620,17 @@ LOCAL module(account {TO_EMAIL}) reports:
 	<contents priority="1">
 		<![CDATA[The following message to <{TO_EMAIL}> was undeliverable.
 The reason for the problem:
+{DESCRIPTION}
+
+The IP address of the MTA to which the message could not be sent:
+{FROM_IP}
+
+---------- A copy of the message begins below this line ----------
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[The following message to <{TO_EMAIL}> was undeliverable.
+The reason for the problem:
 {DESCRIPTION}]]>
 	</contents>
 	<contents priority="1">
@@ -1149,5 +1671,634 @@ Original message headers:
 
 {DESCRIPTION}]]>
 	</contents>
+	<contents priority="1">
+		<![CDATA[{DESCRIPTION}:
 
+{TO_EMAIL}
+
+Subject: {SUBJECT}
+
+This message hasn't been delivered yet. Delivery will continue to be
+attempted.]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{DESCRIPTION}:
+
+{TO_EMAIL}
+A problem occurred during the delivery of this message. Please try to
+resend the message later. If the problem continues, contact your
+helpdesk.
+
+
+
+
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: {FROM_HOST}
+
+{TO_EMAIL}
+{REASON}
+
+Original message headers:
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message:
+   From:    {FROM_EMAIL}
+   Subject: {SUBJECT}
+
+Could not be delivered because of
+
+{DESCRIPTION}
+
+The following recipients were affected: 
+    {TO_EMAIL}
+
+
+
+
+Additional Information
+======================
+Original Sender:    <{BLANK}>
+Sender-MTA:         <{BLANK}>
+Reporting-MTA:      <{FROM_HOST}>
+MessageName:        <{REFERENCE_CODE}>
+Last-Attempt-Date:  <{BLANK}>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{DESCRIPTION}
+  The subject title of the e-mail was: -
+  {SUBJECT}
+  The recipient address of the e-mail was: -
+  
+    {TO_EMAIL}
+
+  The email was sent on {RECEIVED_DATETIME}
+  {BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message
+Subject: {SUBJECT}
+could not be delivered to some or all of the intended recipients.
+
+
+User<{TO_EMAIL}> - ({DESCRIPTION})
+
+
+
+Additional Information
+======================
+Original Sender:    <{BLANK}>
+Sender-MTA:         <{BLANK}>
+Remote-MTA:         <{BLANK}>
+Reporting-MTA:      <{FROM_HOST}>
+MessageName:        <{REFERENCE_CODE}>
+Last-Attempt-Date:  <{BLANK}>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{DESCRIPTION}:
+{TO_EMAIL}
+Subject: {SUBJECT}
+
+
+Sent by Microsoft Exchange Server 2007]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message:
+To: {TO_EMAIL}
+Subject: {SUBJECT}
+Sent Date: {SENT_DATETIME_ALT}
+{DESCRIPTION}.]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery has failed to these recipients or distribution lists:
+{TO_EMAIL}
+The recipient's e-mail address was not found in the recipient's e-mail
+system. Microsoft Exchange will not try to redeliver this message for you.
+Please check the e-mail address and try resending this message, or provide
+the following diagnostic text to your system administrator.
+The following organization rejected your message: {TO_HOST}.
+
+
+Sent by Microsoft Exchange Server 2007 
+
+
+
+
+
+
+Diagnostic information for administrators:
+Generating server: {FROM_HOST}
+{TO_EMAIL}
+{TO_HOST} {DESCRIPTION}
+Original message headers:
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery has failed to these recipients or distribution lists:
+{TO_EMAIL}
+An error occurred while trying to deliver this message to the recipient's
+e-mail address. Microsoft Exchange will not try to redeliver this message
+for you. Please try resending this message, or provide the following
+diagnostic text to your system administrator.
+The following organization rejected your message: {TO_HOST}.
+
+
+
+
+
+
+
+Diagnostic information for administrators:
+Generating server: {FROM_HOST}
+{TO_EMAIL}
+{TO_HOST} {DESCRIPTION}
+Original message headers:
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{DESCRIPTION}:
+
+{TO_EMAIL}<mailto:{TO_EMAIL}>
+
+Subject: {SUBJECT}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[****** Message from InterScan VirusWall ******
+
+Sent >>> RCPT TO: <{TO_EMAIL}>
+Received <<< {DESCRIPTION}
+{TO_EMAIL}
+*****************     End of message     ***************]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail delivery agent at {TO_HOST}.
+I was not able to deliver your message to the following addresses.
+
+<{TO_EMAIL}>:
+{TO_IP} does not like recipient.
+Remote host said: {DESCRIPTION}
+
+
+--- Below this line is a copy of the message.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Message from {TO_HOST}.
+Unable to deliver message to the following address(es).
+
+<{TO_EMAIL}>:
+{DESCRIPTION} ({TO_EMAIL}) [-5]
+
+--- Original message follows.
+
+The original message is over 5K. Message truncated.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Message from {TO_HOST}.
+Unable to deliver message to the following address(es).
+
+<{TO_EMAIL}>:
+Sorry your message to {TO_EMAIL} {DESCRIPTION}.
+
+--- Original message follows.
+
+The original message is over 5K. Message truncated.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message to <{TO_EMAIL}> was automatically rejected:
+{DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[The attached message was undeliverable.
+
+... while talking to [{TO_IP}:{PORT}]
+	<<< RCPT TO: <{TO_EMAIL}
+	>>> {DESCRIPTION}
+
+
+******************** Message Summary ********************
+	From: {FROM_EMAIL}
+	To: {TO_EMAIL}
+	Subject: {SUBJECT} 
+	Date: {SENT_DATETIME}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{TO_HOST} rejected your message to the following e-mail addresses:
+{TO_EMAIL}
+
+{TO_HOST} gave this error:
+{REASON}
+
+Diagnostic information for administrators:
+{DESCRIPTION}
+Original message headers:
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[---------------------------------------------------------------------------------
+The message you sent to {TO_HOST}/{DESCRIPTION}
+
+The subject of the message follows: 
+Subject: {SUBJECT}
+
+
+---------------------------------------------------------------------------------]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  {TO_EMAIL}
+    {DESCRIPTION}
+
+------ This is a copy of the message's headers. ------
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail delivery agent at {TO_HOST}.
+I was not able to deliver your message to the following addresses.
+
+<{TO_EMAIL}>:
+Connected to {TO_IP} but sender was rejected.
+Remote host said: {DESCRIPTION}
+
+--- Below this line is a copy of the message.
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is the mail delivery agent at {TO_HOST}.
+
+I was unable to deliver your message to the following addresses:
+
+{TO_EMAIL}
+
+Reason: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message did not reach some or all of the intended recipients.
+
+   Sent: 
+   Subject: {SUBJECT}
+
+The following recipient(s) could not be reached:
+
+{TO_EMAIL}
+   Error Type: SMTP
+   Remote server ({TO_IP}) issued an error.
+   hMailServer sent: RCPT TO:<{TO_EMAIL}>
+   Remote server replied: {DESCRIPTION}
+
+
+
+hMailServer]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[The original message was received at {RECEIVED_DATETIME}
+from {FROM_IP} [{FROM_IP}]
+
+   ----- The following addresses had {DESCRIPTION} -----
+{TO_EMAIL}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Could not deliver message to the following recipient(s):
+
+Failed Recipient: {TO_EMAIL}
+Reason: {DESCRIPTION}
+
+   -- The header and top 20 lines of the message follows --
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{DESCRIPTION} message to the following recipient(s):
+
+Failed Recipient: {TO_EMAIL}
+
+   -- The header and top 20 lines of the message follows --
+
+NgtId:{BLANK}
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message did not reach some or all of the intended recipients.
+
+   Sent: 
+   Subject: {SUBJECT}
+
+The following recipient(s) could not be reached:
+
+{TO_EMAIL}
+{DESCRIPTION}
+
+
+
+hMailServer]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message did not reach some or all of the intended recipients.
+
+   Sent: {SENT_DATETIME}
+   Subject: {SUBJECT}
+
+The following recipient(s) could not be reached:
+
+{TO_EMAIL}
+{DESCRIPTION}
+
+
+
+hMailServer]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This message is generated by COREMAIL email system.
+I'm sorry to have to inform you that the message returned
+
+The message to {TO_EMAIL} is bounced because : {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[The original message was received at {RECEIVED_DATETIME}
+from {FROM_EMAIL}
+
+---The following addresses had delivery errors---
+
+
+{TO_EMAIL} [{DESCRIPTION}]]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery is delayed to these recipients or groups:
+{TO_EMAIL}
+Subject: {SUBJECT}
+This message hasn't been delivered yet. {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}
+
+This is an automated message from the GMOUNDREAS CO SA-BorderWare Security
+Platform
+at host {TO_HOST}.
+
+###################################################
+#################
+# THIS IS A WARNING ONLY.  YOU DO NOT NEED TO RESEND 
+YOUR MESSAGE. #
+###################################################
+#################
+{DESCRIPTION}
+
+For further assistance, please send mail to <
+{TO_EMAIL}>.
+
+Reason:{REASON}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[{BLANK}
+============================================================================
+                             Detalles Tecnicos:                             
+
+SMTP: host {TO_HOST}: {BLANK} RCPT TO:<{TO_EMAIL}> {DESCRIPTION}
+
+
+============================================================================]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is an automated message from the Extensible Content Security
+at host {TO_HOST}.
+
+{DESCRIPTION}
+
+For further assistance, please send mail to
+<{TO_EMAIL}>.
+
+If you do so, please include this problem report. You can delete
+your own text from the message returned below.
+
+Reason:{REASON}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[*Please scroll down for English.*
+
+{BLANK}
+
+Dear {FROM_EMAIL},
+
+Your message to {TO_EMAIL} was returned due to the following
+reason:
+{DESCRIPTION}.
+
+Your original message is included as attachment.
+
+----------------
+This message is generated by Coremail.
+{BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of
+its recipients. This is a permanent error. The following addresses
+failed:
+
+<repeat>
+{TO_EMAIL}:
+  {DESCRIPTION}
+</repeat>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message:
+   From:    {FROM_EMAIL}
+   Subject: {SUBJECT}
+
+Could not be delivered because the {DESCRIPTION}:
+
+{REASON} {TO_HOST} {BLANK}
+
+The following recipients were affected:{BLANK}
+    {TO_EMAIL}
+
+
+
+
+Additional Information
+{BLANK}
+Sender:             <{FROM_EMAIL}>
+Sender-MTA:         <{FROM_IP}>
+Reporting-MTA:      <{FROM_HOST}>
+MessageName:        <{BLANK}>
+Last-Attempt-Date:  <{BLANK}>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This report relates to a message you sent with the following header fields:
+
+  Message-id: <{BLANK}>
+  Date: {SENT_DATETIME}
+  From: {BLANK} <{FROM_EMAIL}>
+  To: {BLANK} <{TO_EMAIL}>
+  Subject: {SUBJECT}
+
+Your message cannot be delivered to the following recipients:
+
+  Recipient address: {BLANK}
+  Original address: {TO_EMAIL}
+  Reason: {REASON}
+  Diagnostic code: {DESCRIPTION}
+  Remote system: {BLANK}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Your message
+
+  Subject: {SUBJECT}
+
+was not delivered to:
+
+  {TO_EMAIL}
+
+because:
+
+  User {BLANK} ({TO_EMAIL}) {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery has failed to these recipients or distribution lists:
+
+{BLANK}<mailto:{TO_EMAIL}>
+{DESCRIPTION}.
+
+________________________________
+Sent by Microsoft Exchange Server 2007
+
+
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: {FROM_HOST}
+
+{TO_EMAIL}
+{REASON}
+
+Original message headers:
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery has failed to these recipients or groups:
+
+{BLANK} ({TO_EMAIL})<mailto:{TO_EMAIL}>
+{REASON}.
+
+
+
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: {FROM_HOST}
+
+{TO_EMAIL}
+{DESCRIPTION}
+
+Original message headers:
+
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This Message was undeliverable due to the following reason:
+
+{DESCRIPTION}.
+
+<{TO_EMAIL}>
+
+The following websites may contain more information to assist you:
+
+{BLANK}
+
+Please do not reply to this message, as it will go to an unread
+mailbox]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[A message (from <{BLANK}>) was received at {BLANK}.
+
+The following addresses had delivery problems:
+
+<{TO_EMAIL}>
+	Permanent Failure: {DESCRIPTION}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[This is a delivery status notification, automatically generated by MTA {TO_HOST} on {SENT_DATETIME}
+Regarding recipient(s) : {TO_EMAIL}
+Delivery status : {DESCRIPTION}
+MTA Response :{BLANK}
+The original message headers are included as attachment.]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery of a message from you has exceeded the retry time:
+From: {TO_EMAIL}
+Subject: {SUBJECT}
+
+{DESCRIPTION}:
+{TO_FORWARDEMAIL}
+ 
+ 
+ 
+Additional Information
+======================
+Sender: <{TO_EMAIL}>
+Sender-MTA: <{FROM_IP}>
+MessageName: <{BLANK}>]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery Failure Report
+
+Your document:    {BLANK}
+Message Size:    {BLANK} bytes
+was not delivered to:    {TO_EMAIL}
+
+because:    {DESCRIPTION}
+
+Message Details :
+  {ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Message Undelivered due to following problem
+
+[{DESCRIPTION}]
+
+In Response of [RCPT TO: <{TO_EMAIL}>]
+
+
+
+
+Original Message Here ...........
+{ORIG_MESSAGE}]]>
+	</contents>
+	<contents priority="1">
+		<![CDATA[Delivery to the following recipient failed permanently:
+
+     {TO_EMAIL}
+
+Technical details of permanent failure:
+{DESCRIPTION}
+
+----- Original message -----
+
+{ORIG_MESSAGE}]]>
+	</contents>
 </bodytemplates>

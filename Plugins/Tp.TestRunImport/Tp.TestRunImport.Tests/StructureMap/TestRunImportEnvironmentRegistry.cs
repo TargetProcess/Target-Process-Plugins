@@ -8,11 +8,11 @@ using Tp.TestRunImport.Tests.Context;
 
 namespace Tp.TestRunImport.Tests.StructureMap
 {
-	public class TestRunImportEnvironmentRegistry : PluginRegistry
-	{
-		public TestRunImportEnvironmentRegistry()
-		{
-			For<TestRunImportPluginContext>().HybridHttpOrThreadLocalScoped().Use<TestRunImportPluginContext>();
-		}
-	}
+    public class TestRunImportEnvironmentRegistry : PluginRegistry
+    {
+        public TestRunImportEnvironmentRegistry()
+        {
+            For<TestRunImportPluginContext>().HybridHttpOrThreadLocalScoped().Use<TestRunImportPluginContext>();
+        }
+    }
 }

@@ -7,16 +7,16 @@ using System.Runtime.Serialization;
 
 namespace Tp.Tfs.WorkItemsIntegration.FieldsMapping
 {
-	[DataContract]
-	public class WorkItemField
-	{
-		[DataMember]
-		public string Name { get; set; }
+    [DataContract]
+    public class WorkItemField
+    {
+        [DataMember]
+        public string Name { get; set; }
 
-		[DataMember]
-		public string Type { get; set; }
+        [DataMember]
+        public string Type { get; set; }
 
-		[DataMember]
-		public string Value { get; set; }
-	}
+        [DataMember]
+        public string Value { get; set; }
+    }
 }

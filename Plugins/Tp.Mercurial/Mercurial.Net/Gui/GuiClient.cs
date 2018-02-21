@@ -22,7 +22,8 @@ namespace Mercurial.Gui
         /// <summary>
         /// Initializes static members of the <see cref="GuiClient"/> class.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "To avoid calling the same methods multiple times, this is done through a static constructor.")]
+        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline",
+             Justification = "To avoid calling the same methods multiple times, this is done through a static constructor.")]
         static GuiClient()
         {
             KeyValuePair<GuiClientType, string> result = LocateClient(null);
@@ -66,10 +67,10 @@ namespace Mercurial.Gui
             if (type == null || type == GuiClientType.PyQT)
             {
                 string client =
-                    (from path in paths
-                     let executablePath = Path.Combine(path, "thg.exe")
-                     where File.Exists(executablePath)
-                     select executablePath).FirstOrDefault();
+                (from path in paths
+                    let executablePath = Path.Combine(path, "thg.exe")
+                    where File.Exists(executablePath)
+                    select executablePath).FirstOrDefault();
                 if (client != null)
                     return new KeyValuePair<GuiClientType, string>(GuiClientType.PyQT, client);
             }
@@ -77,10 +78,10 @@ namespace Mercurial.Gui
             if (type == null || type == GuiClientType.PyGTK)
             {
                 string client =
-                    (from path in paths
-                     let executablePath = Path.Combine(path, "hgtk.exe")
-                     where File.Exists(executablePath)
-                     select executablePath).FirstOrDefault();
+                (from path in paths
+                    let executablePath = Path.Combine(path, "hgtk.exe")
+                    where File.Exists(executablePath)
+                    select executablePath).FirstOrDefault();
                 if (client != null)
                     return new KeyValuePair<GuiClientType, string>(GuiClientType.PyGTK, client);
             }
@@ -118,20 +119,12 @@ namespace Mercurial.Gui
         /// Note that this value is cached from startup/override time, and does not execute the executable when
         /// you read it. If you want a fresh, up-to-date value, use the <see cref="GetVersion"/> method instead.
         /// </remarks>
-        public static Version CurrentVersion
-        {
-            get;
-            private set;
-        }
+        public static Version CurrentVersion { get; private set; }
 
         /// <summary>
         /// Gets the path to the TortoiseHg client executable.
         /// </summary>
-        public static string ClientPath
-        {
-            get;
-            private set;
-        }
+        public static string ClientPath { get; private set; }
 
         /// <summary>
         /// Gets the version of the TortoiseHg client installed and in use. Note that <see cref="System.Version.Revision"/>
@@ -143,7 +136,8 @@ namespace Mercurial.Gui
         /// <exception cref="InvalidOperationException">
         /// <para>Unable to find or interpret version number from the TortoiseHg client.</para>
         /// </exception>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Since reading the version means executing an external program, a property is not the way to go.")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate",
+             Justification = "Since reading the version means executing an external program, a property is not the way to go.")]
         public static Version GetVersion()
         {
             var command = new GuiVersionCommand();
@@ -179,7 +173,8 @@ namespace Mercurial.Gui
 
                 default:
                     throw new InvalidOperationException(
-                        string.Format(CultureInfo.InvariantCulture, "Incorrect version number length, too many or too few parts: {0}", versionString));
+                        string.Format(CultureInfo.InvariantCulture, "Incorrect version number length, too many or too few parts: {0}",
+                            versionString));
             }
         }
 
@@ -193,20 +188,18 @@ namespace Mercurial.Gui
         /// </exception>
         public static GuiClientType ClientType
         {
-            get
-            {
-                return _ClientType;
-            }
+            get { return _ClientType; }
 
             set
             {
                 if (value == _ClientType || value == GuiClientType.None)
                     return;
-                
+
                 KeyValuePair<GuiClientType, string> client = LocateClient(value);
                 if (client.Key != value)
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The client type {0} is not available on this system", value));
-                
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "The client type {0} is not available on this system", value));
+
                 ClientPath = client.Value;
                 _ClientType = client.Key;
             }
@@ -1095,7 +1088,8 @@ namespace Mercurial.Gui
         /// <remarks>
         /// This command is only available for the <see cref="GuiClientType.PyQT"/> client type.
         /// </remarks>
-        public static void RebaseGui(this Repository repository, RevSpec sourceRevision, RevSpec destinationRevision, RebaseGuiCommand command = null)
+        public static void RebaseGui(this Repository repository, RevSpec sourceRevision, RevSpec destinationRevision,
+            RebaseGuiCommand command = null)
         {
             if (repository == null)
                 throw new ArgumentNullException("repository");

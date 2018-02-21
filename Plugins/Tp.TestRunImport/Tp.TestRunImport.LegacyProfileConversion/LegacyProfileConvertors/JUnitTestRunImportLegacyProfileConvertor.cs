@@ -9,25 +9,26 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.TestRunImport.LegacyProfileConversion.LegacyProfileConvertors
 {
-	public class JUnitTestRunImportLegacyProfileConvertor : TestRunImportLegacyProfileConvertor
-	{
-		public JUnitTestRunImportLegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection) : base(args, accountCollection)
-		{
-		}
+    public class JUnitTestRunImportLegacyProfileConvertor : TestRunImportLegacyProfileConvertor
+    {
+        public JUnitTestRunImportLegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection)
+            : base(args, accountCollection)
+        {
+        }
 
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.JUnit; }
-		}
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.JUnit; }
+        }
 
-		protected override string SettingsXmlNode
-		{
-			get { return "JUnitSettings"; }
-		}
+        protected override string SettingsXmlNode
+        {
+            get { return "JUnitSettings"; }
+        }
 
-		protected override string PluginName
-		{
-			get { return "Automatic JUnit Test Run Import"; }
-		}
-	}
+        protected override string PluginName
+        {
+            get { return "Automatic JUnit Test Run Import"; }
+        }
+    }
 }

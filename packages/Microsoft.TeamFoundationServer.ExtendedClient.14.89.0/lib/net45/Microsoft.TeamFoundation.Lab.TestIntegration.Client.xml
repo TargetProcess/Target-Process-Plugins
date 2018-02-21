@@ -1,0 +1,339 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.TeamFoundation.Lab.TestIntegration.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException">
+            <summary>
+            Base class for all test integration exceptions. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException"/> with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException"/> with a specified error message
+            and a reference of the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null if no inner exception is specified</param>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ExceptionConverter">
+            <summary>
+            Convert Soap Exception thrown by service to TestIntegrationServerException exception.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestMachineConfigurationException">
+            <summary>
+            This exception is thrown when test integration service failed to configure test machine(s).
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestMachineConfigurationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestMachineConfigurationException"/> with a specified error message
+            and a reference of the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null if no inner exception is specified</param>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException">
+            <summary>
+            This exception is thrown when an error occured while performing an operation on test agent controller.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException"/> with a specified error message
+            and a reference of the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null if no inner exception is specified</param>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.InvalidEnvironmentStateException">
+            <summary>
+            This exception is thrown when lab enivronment is in a state in which it cannot be synchronized. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.InvalidEnvironmentStateException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.InvalidEnvironmentStateException"/> with a specified error message
+            and a reference of the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null if no inner exception is specified</param>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestEnvironmentInUseException">
+            <summary>
+            This exception is thrown when a user tries to synchronize the capability and an existing sync operation 
+            is already going on.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestEnvironmentInUseException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestEnvironmentInUseException"/> with a specified error message
+            and a reference of the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null if no inner exception is specified</param>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServiceProxy.SoapNamespaceUrl">
+            <summary>
+            Gets the soap namespace for this service
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServiceProxy.ServiceType">
+            <summary>
+            Gets the service name
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServiceProxy.CollectionServiceIdentifier">
+            <summary>
+            Gets the collection service identifier
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServiceProxy.ComponentName">
+            <summary>
+            Gets the component name for this service
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.LabSystemTestingCapabilityInformation">
+            <summary>
+            Describes the testing capability information of a lab system. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.LabSystemTestingCapabilityInformation.TestAgentName">
+            <summary>
+            Gets the name of the agent on test controller
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.LabSystemTestingCapabilityInformation.ComputerName">
+            <summary>
+            Gets the machine name of the test agent. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.LabSystemTestingCapabilityInformation.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.LabSystemTestingCapabilityInformation"/> 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.LabSystemTestingCapabilityInformation.ToString">
+            <summary>
+            This method is reserved for internal use and is not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestingCapabilityInformation">
+            <summary>
+            Describes the testing capability information of a lab environment. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestingCapabilityInformation.TestAgentControllerUri">
+            <summary>
+            Gets the uri of the test controller on which testing capability is configured
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestingCapabilityInformation.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestingCapabilityInformation"/> 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestingCapabilityInformation.ToString">
+            <summary>
+            This method is reserved for internal use and is not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService">
+            <summary>
+            Provides an implementation of ITestIntegrationService
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService.TeamProjectCollection">
+            <summary>
+            The Team Foundation Server object that created this IBuildServer.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService.SyncCapability(System.Uri)">
+            <summary>
+            Synchronizes the testing capability on a lab environment
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService.SyncCapability(System.Uri,System.Boolean)">
+            <summary>
+            Synchronizes the testing capability and/or lab service account on a lab environment
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService.GetCapabilityStatus(System.Uri)">
+            <summary>
+            Returns the status of testing capability on a lab environment 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService.GetCapabilityInformation(System.Uri)">
+            <summary>
+            Returns the information about testing capability on a lab environment
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationService.GetTestAgentController(System.Uri)">
+            <summary>
+            Returns the test controller on which testing capability of a lab environment is configured 
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService">
+            <summary>
+            A Project Collection Level TeamFoundation Service that integrates Lab with TestManagement components.  
+            This service is built on top of lab services and is meant to enable "testing capability" on lab 
+            environments. It provides APIs to repair (create/update/remove) the testing capability, 
+            get information about the testing capability on lab environments. 
+            
+            <example>
+            This following example demonstrates how to acquire a TestIntegrationService starting with the 
+            TFS Project Collection name or url
+            <code> 
+            // C#
+            TfsTeamProjectCollection tfsPc  = 
+                new TfsTeamProjectCollection( TfsTeamProjectCollection.GetFullyQualifiedUriForName("http://TFS.contoso.com:8080/Collection0")) 
+            ITestIntegrationService testIntegrationService = (ITestIntegrationService) tfsPc.GetService(typeof(TestIntegrationService));
+            </code>
+            </example>
+            
+            The test integration service works in tandem with <see cref="T:Microsoft.TeamFoundation.Lab.Client.LabService"/>, test management service
+            and test controller(s). Lab service provides information about the testing configuration metadata for lab environments. Test 
+            management service provides information about test controllers. Test controller provides APIs to create/update/delete 
+            test environment. 
+            
+            <example>
+            This following example demonstrates how to enable testing capability on a lab environment starting with a 
+            <see cref="T:Microsoft.TeamFoundation.Lab.Client.LabEnvironment"/> and test controller. 
+            <code> 
+            // C#
+            
+            // Find the test controller registered with project collection
+            //
+            TestManagementService testManagementService = (TestManagementService) tfsPc.GetService(typeof(TestManagementService));
+            TestController testController = testManagementService.TestControllers.Query().FirstOrDefault();
+            
+            // Enable testing capability on a lab environment identitied by 'labEnvironmentUri'
+            //
+            PropertyUpdatePack updatePack = new PropertyUpdatePack();
+            updatePack.Update(KnownEnvironmentProperties.TestControllerName, testController.Name);
+            LabEnvironmentUpdatePack updateCommand = new LabEnvironmentUpdatePack();
+            updateCommand.CustomPropertyUpdates = updatePack;
+            labService.UpdateLabEnvironment(labEnvironmentUri, updatePack);
+            </code>
+            </example>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService.SyncCapability(System.Uri)">
+            <summary>
+            Synchronizes the testing capability on a lab environment 
+            
+            The synchronization involves making sure that the testing capability is completely in sync with 
+            the configuration metadata stored in the lab environment. 
+            
+            <example>
+            If testing capability is not configured on a lab environment, then synchronization will involve 
+            removing the environment from test management components, if it not already removed. 
+            </example>
+            
+            </summary>
+            <param name="labEnvironmentUri">A Uri that uniquely identifies a lab environment</param>
+            <returns>void </returns>
+            <exception cref="T:System.ArgumentNullException">thrown when <paramref name="labEnvironmentUri"/> is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestEnvironmentInUseException">thrown if object is locked for another operation</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException">thrown when service fails to communicate with controller.</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.InvalidEnvironmentStateException">thrown when environment is not in valid state.</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException">thrown if some error occured while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService.SyncCapability(System.Uri,System.Boolean)">
+            <summary>
+            Synchronizes the testing capability and/or lab service account on a lab environment 
+            
+            The synchronization involves making sure that the testing capability is completely in sync with 
+            the testing configurations stored in the lab environment. If <paramref name="onlyLabServiceAccount"/> 
+            is true, then only the lab service account is updated on the lab environment and synchronization of the 
+            testing capability is skipped. 
+            
+            <example>
+            If testing capability is not configured on a lab environment, then synchronization will involve 
+            removing the environment from test management components, if it not already removed. 
+            </example>
+            </summary>
+            <param name="labEnvironmentUri">A Uri that uniquely identifies a lab environment</param>
+            <param name="onlyLabServiceAccount">Indicates whether to update only lab service account</param>
+            <returns>void </returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestEnvironmentInUseException">thrown if object is locked for another operation</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException">thrown when service fails to communicate with controller.</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.InvalidEnvironmentStateException">thrown when environment is not in valid state.</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException">thrown if some error occured while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService.GetCapabilityStatus(System.Uri)">
+            <summary>
+            Returns the status of testing capability on a lab environment 
+            </summary>
+            <param name="labEnvironmentUri">A Uri that uniquely identifies a lab environment</param>
+            <returns><see cref="T:Microsoft.TeamFoundation.Lab.Client.CapabilityState"/></returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException">thrown when service fails to communicate with controller.</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException">thrown if some error occured while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService.GetCapabilityInformation(System.Uri)">
+            <summary>
+            Returns the information about testing capability on a lab environment
+            </summary>
+            <param name="labEnvironmentUri">A Uri that uniquely identifies a lab environment</param>
+            <returns><see cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestingCapabilityInformation"/></returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestAgentControllerException">thrown when service fails to communicate with controller.</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException">thrown if some error occured while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService.GetTestAgentController(System.Uri)">
+            <summary>
+            Returns the test controller on which testing capability of a lab environment is configured 
+            </summary>
+            <param name="labEnvironmentUri">A Uri that uniquely identifies a lab environment</param>
+            <returns><see cref="T:System.String"/> containing the controllerUri</returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestIntegrationServerException">thrown if some error occured while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.TestRigHelper.GetCollectionUriString(Microsoft.TeamFoundation.Lab.TestIntegration.Client.ITestIntegrationService)">
+            <summary>
+            Get the Collection URI for the parameter labService. 
+            
+            It will return url of format: - http://machine:port/CollectionName
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.#cctor">
+            Creates the resource manager instance.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.Get(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.GetInt(System.String)">
+            Returns a localized integer given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.GetBool(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.Format(System.String,System.Object[])">
+            A little helper function to alleviate some typing associated with loading resources and
+            formatting the strings.  In DEBUG builds, it also asserts that the number of format
+            arguments and the length of args match.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.TestingCapablityInformation(System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Status: {0}Status message: {3}Test controller URI: {2}Virtual machines - Testing capability information: {1}  
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.TestIntegration.Client.Resource.VirtualMachineTestCapabilityInformation(System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Status: {0}Virtual Machine URI: {1}Test agent name: {2}Computer name: {3}Status message: {4}
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -33,10 +33,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec CommittedRevision
         {
-            get
-            {
-                return _CommittedRevision;
-            }
+            get { return _CommittedRevision; }
         }
 
         /// <summary>
@@ -45,10 +42,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec LeftParentRevision
         {
-            get
-            {
-                return _LeftParentRevision;
-            }
+            get { return _LeftParentRevision; }
         }
 
         /// <summary>
@@ -57,10 +51,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec RightParentRevision
         {
-            get
-            {
-                return _RightParentRevision;
-            }
+            get { return _RightParentRevision; }
         }
     }
 }

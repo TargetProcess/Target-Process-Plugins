@@ -9,16 +9,16 @@ using Tp.Integration.Messages.EntityLifecycle;
 
 namespace Tp.Integration.Plugin.Common.Tests.Activity
 {
-	public class SampleSagaMessage : ITargetProcessMessage
-	{
-		public Guid SagaId { get; set; }
-	}
+    public class SampleSagaMessage : ITargetProcessMessage
+    {
+        public Guid SagaId { get; set; }
+    }
 
-	public class SampleSagaMessageHandler : IHandleMessages<SampleSagaMessage>
-	{
-		public void Handle(SampleSagaMessage message)
-		{
-			throw new Exception("test exception to check unhandled exception logging");
-		}
-	}
+    public class SampleSagaMessageHandler : IHandleMessages<SampleSagaMessage>
+    {
+        public void Handle(SampleSagaMessage message)
+        {
+            throw new Exception("test exception to check unhandled exception logging");
+        }
+    }
 }

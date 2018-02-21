@@ -29,7 +29,8 @@ namespace Mercurial.Hooks
         /// <returns>
         /// The parsed value, which can be <c>null</c>, a <see cref="String"/>, or an array of strings.
         /// </returns>
-        [SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Will avoid overly strange return types, keeping the ref")]
+        [SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#",
+             Justification = "Will avoid overly strange return types, keeping the ref")]
         protected object ParseValue(string optionsCombined, ref int index)
         {
             switch (optionsCombined[index])
@@ -86,7 +87,9 @@ namespace Mercurial.Hooks
                         int prevIndex = index;
                         var value = ParseValue(optionsCombined, ref index);
                         if (prevIndex == index)
-                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unsupported syntax in options combined at position #{0} (0-based), did not understand value at location", index));
+                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                                "Unsupported syntax in options combined at position #{0} (0-based), did not understand value at location",
+                                index));
                         values.Add(value as string);
 
                         if (optionsCombined[index] == ',')

@@ -7,9 +7,9 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	public class NewBugImportedToTargetProcessMessage<T> : IPluginLocalMessage
-	{
-		public int? TpBugId { get; set; }
-		public T ThirdPartyBug { get; set; }
-	}
+    public class NewBugImportedToTargetProcessMessage<T> : IPluginLocalMessage
+    {
+        public int? TpBugId { get; set; }
+        public T ThirdPartyBug { get; set; }
+    }
 }

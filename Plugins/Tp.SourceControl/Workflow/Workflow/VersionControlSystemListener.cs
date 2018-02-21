@@ -15,85 +15,86 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Workflow.Workflow
 {
-	public class VersionControlSystemListener : VersionControlSystemProcessorBase, IHandleMessages<TickMessage>
-	{
-		public VersionControlSystemListener(IVersionControlSystem versionControlSystem, IRevisionIdComparer revisionComparer, ILocalBus bus,
-		                                    IStorageRepository storage, ISourceControlConnectionSettingsSource settingsSource, IActivityLogger logger) 
-			: base(revisionComparer, storage, settingsSource, versionControlSystem, bus, logger)
-		{
-		}
+    public class VersionControlSystemListener : VersionControlSystemProcessorBase, IHandleMessages<TickMessage>
+    {
+        public VersionControlSystemListener(IVersionControlSystem versionControlSystem, IRevisionIdComparer revisionComparer, ILocalBus bus,
+            IStorageRepository storage, ISourceControlConnectionSettingsSource settingsSource, IActivityLogger logger)
+            : base(revisionComparer, storage, settingsSource, versionControlSystem, bus, logger)
+        {
+        }
 
-		public void Handle(TickMessage message)
-		{
-			Logger.Info("Checking changes");
+        public void Handle(TickMessage message)
+        {
+            Logger.Info("Checking changes");
 
-			ImportRevisions();
-		}
+            ImportRevisions();
+        }
 
-		protected override RevisionRange[] RetrieveRevisionRanges()
-		{
-			var result = new RevisionRange[0];
+        protected override RevisionRange[] RetrieveRevisionRanges()
+        {
+            var result = new RevisionRange[0];
 
-			if (IsFirstRun)
-			{
-				result = VersionControlSystem.GetFromTillHead(StartRevision, PageSize);
-			}
-			else if (!IsStartRevisionChanged || IsStartRevisionWithinAlreadyProcessedRevisionRange)
-			{
-				var alreadyProcessedRevisionRange = Storage.Get<RevisionRange>().Single();
+            if (IsFirstRun)
+            {
+                result = VersionControlSystem.GetFromTillHead(StartRevision, PageSize);
+            }
+            else if (!IsStartRevisionChanged || IsStartRevisionWithinAlreadyProcessedRevisionRange)
+            {
+                var alreadyProcessedRevisionRange = Storage.Get<RevisionRange>().Single();
 
-				result = VersionControlSystem.GetAfterTillHead(alreadyProcessedRevisionRange.ToChangeset, PageSize);
-			}
-			else if (IsStartRevisionBehindAlreadyProcessedRevisionRange)
-			{
-				result = VersionControlSystem.GetAfterTillHead(StartRevision, PageSize);
-			}
-			else if (IsStartRevisionBeforeAlreadyProcessedRevisionRange)
-			{
-				var revisionRanges = new List<RevisionRange>();
-				var alreadyProcessedRevisionRange = Storage.Get<RevisionRange>().Single();
+                result = VersionControlSystem.GetAfterTillHead(alreadyProcessedRevisionRange.ToChangeset, PageSize);
+            }
+            else if (IsStartRevisionBehindAlreadyProcessedRevisionRange)
+            {
+                result = VersionControlSystem.GetAfterTillHead(StartRevision, PageSize);
+            }
+            else if (IsStartRevisionBeforeAlreadyProcessedRevisionRange)
+            {
+                var revisionRanges = new List<RevisionRange>();
+                var alreadyProcessedRevisionRange = Storage.Get<RevisionRange>().Single();
 
-				revisionRanges.AddRange(VersionControlSystem.GetFromAndBefore(StartRevision, alreadyProcessedRevisionRange.FromChangeset, PageSize));
-				revisionRanges.AddRange(VersionControlSystem.GetAfterTillHead(alreadyProcessedRevisionRange.ToChangeset, PageSize));
-				
-				result = revisionRanges.ToArray();
-			}
+                revisionRanges.AddRange(VersionControlSystem.GetFromAndBefore(StartRevision, alreadyProcessedRevisionRange.FromChangeset,
+                    PageSize));
+                revisionRanges.AddRange(VersionControlSystem.GetAfterTillHead(alreadyProcessedRevisionRange.ToChangeset, PageSize));
 
-			if (result.Any())
-			{
-				Logger.Info("New revisions found");
-			}
+                result = revisionRanges.ToArray();
+            }
 
-			return result;
-		}
+            if (result.Any())
+            {
+                Logger.Info("New revisions found");
+            }
 
-		protected bool IsStartRevisionBeforeAlreadyProcessedRevisionRange
-		{
-			get { return RevisionComparer.Is(StartRevision).Before(Storage.Get<RevisionRange>().Single()); }
-		}
+            return result;
+        }
 
-		protected bool IsStartRevisionBehindAlreadyProcessedRevisionRange
-		{
-			get { return RevisionComparer.Is(StartRevision).Behind(Storage.Get<RevisionRange>().Single()); }
-			}
+        protected bool IsStartRevisionBeforeAlreadyProcessedRevisionRange
+        {
+            get { return RevisionComparer.Is(StartRevision).Before(Storage.Get<RevisionRange>().Single()); }
+        }
 
-		protected bool IsStartRevisionWithinAlreadyProcessedRevisionRange
-		{
-			get { return RevisionComparer.Does(StartRevision).Belong(Storage.Get<RevisionRange>().Single()); }
-		}
+        protected bool IsStartRevisionBehindAlreadyProcessedRevisionRange
+        {
+            get { return RevisionComparer.Is(StartRevision).Behind(Storage.Get<RevisionRange>().Single()); }
+        }
 
-		private bool IsStartRevisionChanged
-		{
-			get
-			{
-				var alreadyProcessedRevisionRange = Storage.Get<RevisionRange>().Single();
-				return !alreadyProcessedRevisionRange.FromChangeset.Equals(StartRevision);
-			}
-		}
+        protected bool IsStartRevisionWithinAlreadyProcessedRevisionRange
+        {
+            get { return RevisionComparer.Does(StartRevision).Belong(Storage.Get<RevisionRange>().Single()); }
+        }
 
-		protected bool IsFirstRun
-		{
-			get { return Storage.Get<RevisionRange>().Empty(); }
-		}
-	}
+        private bool IsStartRevisionChanged
+        {
+            get
+            {
+                var alreadyProcessedRevisionRange = Storage.Get<RevisionRange>().Single();
+                return !alreadyProcessedRevisionRange.FromChangeset.Equals(StartRevision);
+            }
+        }
+
+        protected bool IsFirstRun
+        {
+            get { return Storage.Get<RevisionRange>().Empty(); }
+        }
+    }
 }

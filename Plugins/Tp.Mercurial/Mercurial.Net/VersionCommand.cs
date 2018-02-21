@@ -20,11 +20,7 @@ namespace Mercurial
         /// Gets the result of executing the command as a <see cref="string"/> containing the output
         /// of executing "hg version".
         /// </summary>
-        public string Result
-        {
-            get;
-            private set;
-        }
+        public string Result { get; private set; }
 
         #endregion
 

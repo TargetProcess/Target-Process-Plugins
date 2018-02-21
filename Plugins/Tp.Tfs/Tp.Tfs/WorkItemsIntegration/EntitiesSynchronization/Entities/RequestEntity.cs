@@ -5,7 +5,7 @@
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Entities
 {
-	public class RequestEntity : WorkItemEntity
-	{
-	}
+    public class RequestEntity : WorkItemEntity
+    {
+    }
 }

@@ -10,10 +10,7 @@ namespace Mercurial.Extensions.Queues
         /// </summary>
         public static bool IsInstalled
         {
-            get
-            {
-                return ClientExecutable.Configuration.ValueExists("extensions", "mq");
-            }
+            get { return ClientExecutable.Configuration.ValueExists("extensions", "mq"); }
         }
     }
 }

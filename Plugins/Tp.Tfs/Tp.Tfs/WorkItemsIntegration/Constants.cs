@@ -5,21 +5,21 @@
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	public static class Constants
-	{
-		public const string Bug = "Bug";
-		public const string UserStory = "User Story";
-		public const string Feature = "Feature";
-		public const string Request = "Request";
+    public static class Constants
+    {
+        public const string Bug = "Bug";
+        public const string UserStory = "User Story";
+        public const string Feature = "Feature";
+        public const string Request = "Request";
 
-		public const string TfsBug = "Bug";
-		public const string TfsUserStory = "User Story";
-		public const string TfsBacklogItem = "Product Backlog Item";
-		public const string TfsImpediment = "Impediment";
-		public const string TfsTask = "Task";
-		public const string TfsIssue = "Issue";
+        public const string TfsBug = "Bug";
+        public const string TfsUserStory = "User Story";
+        public const string TfsBacklogItem = "Product Backlog Item";
+        public const string TfsImpediment = "Impediment";
+        public const string TfsTask = "Task";
+        public const string TfsIssue = "Issue";
 
-		public const string FieldTypeHtml = "Html";
-		public const string FieldTypePlainText = "PlainText";
-	}
+        public const string FieldTypeHtml = "Html";
+        public const string FieldTypePlainText = "PlainText";
+    }
 }

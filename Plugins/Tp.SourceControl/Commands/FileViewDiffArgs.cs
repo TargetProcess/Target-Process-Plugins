@@ -7,13 +7,13 @@ using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.Commands
 {
-	[DataContract]
-	public class FileViewDiffArgs
-	{
-		[DataMember]
-		public int? TpRevisionId { get; set; }
+    [DataContract]
+    public class FileViewDiffArgs
+    {
+        [DataMember]
+        public int? TpRevisionId { get; set; }
 
-		[DataMember]
-		public string Path { get; set; }
-	}
+        [DataMember]
+        public string Path { get; set; }
+    }
 }

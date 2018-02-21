@@ -62,6 +62,7 @@ tau.mashups
                         StatesMapping: [],
                         SeveritiesMapping: [],
                         PrioritiesMapping: [],
+                        CustomMapping: [],
                         RolesMapping: [],
                         UserMapping: []
                     }

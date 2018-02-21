@@ -5,16 +5,16 @@
 
 namespace Tp.BugTracking.ImportToTp
 {
-	public class BugChunkSize : IBugChunkSize
-	{
-		public int Value
-		{
-			get { return 100; }
-		}
-	}
+    public class BugChunkSize : IBugChunkSize
+    {
+        public int Value
+        {
+            get { return 100; }
+        }
+    }
 
-	public interface IBugChunkSize
-	{
-		int Value { get; }
-	}
+    public interface IBugChunkSize
+    {
+        int Value { get; }
+    }
 }

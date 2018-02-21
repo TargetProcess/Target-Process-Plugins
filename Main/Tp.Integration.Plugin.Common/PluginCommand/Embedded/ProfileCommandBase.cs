@@ -13,49 +13,49 @@ using Tp.Integration.Plugin.Common.PluginLifecycle;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public abstract class ProfileCommandBase
-	{
-		private readonly IProfileCollection _profileCollection;
-		private readonly ITpBus _bus;
-		private readonly IPluginContext _pluginContext;
+    public abstract class ProfileCommandBase
+    {
+        private readonly IProfileCollection _profileCollection;
+        private readonly ITpBus _bus;
+        private readonly IPluginContext _pluginContext;
 
-		protected ProfileCommandBase(IProfileCollection profileCollection, ITpBus bus, IPluginContext pluginContext)
-		{
-			_profileCollection = profileCollection;
-			_bus = bus;
-			_pluginContext = pluginContext;
-		}
+        protected ProfileCommandBase(IProfileCollection profileCollection, ITpBus bus, IPluginContext pluginContext)
+        {
+            _profileCollection = profileCollection;
+            _bus = bus;
+            _pluginContext = pluginContext;
+        }
 
-		protected IPluginContext PluginContext
-		{
-			get { return _pluginContext; }
-		}
+        protected IPluginContext PluginContext
+        {
+            get { return _pluginContext; }
+        }
 
-		protected IProfileCollection ProfileCollection
-		{
-			get { return _profileCollection; }
-		}
+        protected IProfileCollection ProfileCollection
+        {
+            get { return _profileCollection; }
+        }
 
-		protected void ChangeProfiles(Action<IProfileCollection> changeProfilesAction)
-		{
-			changeProfilesAction(_profileCollection);
+        protected void ChangeProfiles(Action<IProfileCollection> changeProfilesAction)
+        {
+            changeProfilesAction(_profileCollection);
 
-			var message = CreatePluginInfoChangedMessage(PluginContext.AccountName,
-			                                             _profileCollection.Select(profile => profile.ConvertToPluginProfile()).
-			                                             	ToArray());
-			_bus.Send(message);
-		}
+            var message = CreatePluginInfoChangedMessage(PluginContext.AccountName,
+                _profileCollection.Select(profile => profile.ConvertToPluginProfile()).
+                    ToArray());
+            _bus.Send(message);
+        }
 
-		private PluginAccountMessageSerialized CreatePluginInfoChangedMessage(AccountName accountName,
-		                                                            params PluginProfile[] profiles)
-		{
-			var pluginAccount = PluginInfoSender.CreatePluginAccount(PluginContext.PluginName, accountName, profiles);
-			return new PluginAccountMessageSerialized {SerializedMessage = new[]{pluginAccount}.Serialize()};
-		}
+        private PluginAccountMessageSerialized CreatePluginInfoChangedMessage(AccountName accountName,
+            params PluginProfile[] profiles)
+        {
+            var pluginAccount = PluginInfoSender.CreatePluginAccount(PluginContext.PluginName, accountName, profiles);
+            return new PluginAccountMessageSerialized { SerializedMessage = new[] { pluginAccount }.Serialize() };
+        }
 
-		protected void SendProfileChangedLocalMessage(ProfileName profileName, ITargetProcessMessage profileMessage)
-		{
-			_bus.SendLocalWithContext(profileName, PluginContext.AccountName, profileMessage);
-		}
-	}
+        protected void SendProfileChangedLocalMessage(ProfileName profileName, ITargetProcessMessage profileMessage)
+        {
+            _bus.SendLocalWithContext(profileName, PluginContext.AccountName, profileMessage);
+        }
+    }
 }

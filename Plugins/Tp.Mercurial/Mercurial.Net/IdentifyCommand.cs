@@ -31,15 +31,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
 
-            set
-            {
-                _Path = (value ?? string.Empty).Trim();
-            }
+            set { _Path = (value ?? string.Empty).Trim(); }
         }
 
         #region IMercurialCommand<RevSpec> Members
@@ -47,11 +41,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a <see cref="RevSpec"/> object.
         /// </summary>
-        public RevSpec Result
-        {
-            get;
-            private set;
-        }
+        public RevSpec Result { get; private set; }
 
         #endregion
 

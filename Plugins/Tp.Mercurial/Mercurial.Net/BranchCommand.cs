@@ -38,15 +38,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
 
-            set
-            {
-                _Name = (value ?? string.Empty).Trim();
-            }
+            set { _Name = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -56,11 +50,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to clean the branch name of the current working
@@ -69,11 +59,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--clean")]
         [DefaultValue(false)]
-        public bool Clean
-        {
-            get;
-            set;
-        }
+        public bool Clean { get; set; }
 
         #region IMercurialCommand<string> Members
 
@@ -82,15 +68,9 @@ namespace Mercurial
         /// </summary>
         public string Result
         {
-            get
-            {
-                return _Result;
-            }
+            get { return _Result; }
 
-            private set
-            {
-                _Result = (value ?? string.Empty).Trim();
-            }
+            private set { _Result = (value ?? string.Empty).Trim(); }
         }
 
         #endregion

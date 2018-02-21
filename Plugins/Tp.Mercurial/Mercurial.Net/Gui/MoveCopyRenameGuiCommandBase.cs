@@ -45,15 +45,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = (value ?? string.Empty).Trim();
-            }
+            set { _Source = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -63,15 +57,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = (value ?? string.Empty).Trim();
-            }
+            set { _Destination = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -91,7 +79,7 @@ namespace Mercurial.Gui
         public T WithSource(string value)
         {
             Source = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -111,7 +99,7 @@ namespace Mercurial.Gui
         public T WithDestination(string value)
         {
             Destination = value;
-            return (T)this;
+            return (T) this;
         }
     }
 }

@@ -42,15 +42,9 @@ namespace Mercurial.Gui
         [EnumArgument(TagAction.Remove, "--remove")]
         public TagAction Action
         {
-            get
-            {
-                return _Action;
-            }
+            get { return _Action; }
 
-            set
-            {
-                _Action = value;
-            }
+            set { _Action = value; }
         }
 
         /// <summary>
@@ -79,11 +73,7 @@ namespace Mercurial.Gui
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool ReplaceExisting
-        {
-            get;
-            set;
-        }
+        public bool ReplaceExisting { get; set; }
 
         /// <summary>
         /// Sets the <see cref="ReplaceExisting"/> property to the specified value and
@@ -111,11 +101,7 @@ namespace Mercurial.Gui
         /// </summary>
         [BooleanArgument(TrueOption = "--local")]
         [DefaultValue(false)]
-        public bool IsLocal
-        {
-            get;
-            set;
-        }
+        public bool IsLocal { get; set; }
 
         /// <summary>
         /// Sets the <see cref="IsLocal"/> property to the specified value and
@@ -143,11 +129,7 @@ namespace Mercurial.Gui
         /// </summary>
         [DefaultValue(null)]
         [NullableArgument(NonNullOption = "--rev")]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -175,15 +157,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
 
-            set
-            {
-                _Name = (value ?? string.Empty).Trim();
-            }
+            set { _Name = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -213,15 +189,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string CommitMessage
         {
-            get
-            {
-                return _CommitMessage;
-            }
+            get { return _CommitMessage; }
 
-            set
-            {
-                _CommitMessage = (value ?? string.Empty).Trim();
-            }
+            set { _CommitMessage = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

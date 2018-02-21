@@ -9,25 +9,25 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.Events
 {
-	class ProfileChanged : EventArgs
-	{
-		private readonly IProfileReadonly _profile;
-		private readonly AccountName _accountName;
+    class ProfileChanged : EventArgs
+    {
+        private readonly IProfileReadonly _profile;
+        private readonly AccountName _accountName;
 
-		public ProfileChanged(IProfileReadonly profile, AccountName accountName)
-		{
-			_profile = profile;
-			_accountName = accountName;
-		}
+        public ProfileChanged(IProfileReadonly profile, AccountName accountName)
+        {
+            _profile = profile;
+            _accountName = accountName;
+        }
 
-		public IProfileReadonly Profile
-		{
-			get { return _profile; }
-		}
+        public IProfileReadonly Profile
+        {
+            get { return _profile; }
+        }
 
-		public AccountName AccountName
-		{
-			get { return _accountName; }
-		}
-	}
+        public AccountName AccountName
+        {
+            get { return _accountName; }
+        }
+    }
 }

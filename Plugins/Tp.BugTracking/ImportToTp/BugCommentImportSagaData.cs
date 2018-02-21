@@ -8,13 +8,13 @@ using NServiceBus.Saga;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	public class BugCommentImportSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
+    public class BugCommentImportSagaData : ISagaEntity
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
 
-		public int CommentsToCreateCount { get; set; }
-		public int CreatedCommentsCount { get; set; }
-	}
+        public int CommentsToCreateCount { get; set; }
+        public int CreatedCommentsCount { get; set; }
+    }
 }

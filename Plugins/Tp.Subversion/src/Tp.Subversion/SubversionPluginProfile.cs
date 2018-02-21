@@ -14,109 +14,109 @@ using Tp.SourceControl.Settings;
 
 namespace Tp.Subversion
 {
-	[Profile]
-	[DataContract]
-	public class SubversionPluginProfile : ConnectionSettings, ISynchronizableProfile, IValidatable
-	{
-		public const string StartRevisionField = "StartRevision";
+    [Profile]
+    [DataContract]
+    public class SubversionPluginProfile : ConnectionSettings, ISynchronizableProfile, IValidatable
+    {
+        public const string StartRevisionField = "StartRevision";
 
-		public SubversionPluginProfile()
-		{
-			UserMapping = new MappingContainer();
-			StartRevision = string.Empty;
-		}
+        public SubversionPluginProfile()
+        {
+            UserMapping = new MappingContainer();
+            StartRevision = string.Empty;
+        }
 
-		[IgnoreDataMember]
-		public int SynchronizationInterval
-		{
-			get { return 5; }
-			set { }
-		}
+        [IgnoreDataMember]
+        public int SynchronizationInterval
+        {
+            get { return 5; }
+            set { }
+        }
 
-		[IgnoreDataMember]
-		public bool RevisionSpecified
-		{
-			get { return !StartRevision.IsNullOrWhitespace(); }
-		}
+        [IgnoreDataMember]
+        public bool RevisionSpecified
+        {
+            get { return !StartRevision.IsNullOrWhitespace(); }
+        }
 
-		#region Validation
+        #region Validation
 
-		public bool ValidateStartRevision(PluginProfileErrorCollection errors)
-		{
-			return StartRevisionShouldNotBeEmpty(errors) && StartRevisionShouldBeNumber(errors) && StartRevisionShouldBeNonNegative(errors);
-		}
+        public bool ValidateStartRevision(PluginProfileErrorCollection errors)
+        {
+            return StartRevisionShouldNotBeEmpty(errors) && StartRevisionShouldBeNumber(errors) && StartRevisionShouldBeNonNegative(errors);
+        }
 
-		private bool StartRevisionShouldNotBeEmpty(PluginProfileErrorCollection errors)
-		{
-			if (!RevisionSpecified)
-			{
-				errors.Add(new PluginProfileError{FieldName = StartRevisionField, Message = "Start Revision should not be empty."});
-				return false;
-			}
+        private bool StartRevisionShouldNotBeEmpty(PluginProfileErrorCollection errors)
+        {
+            if (!RevisionSpecified)
+            {
+                errors.Add(new PluginProfileError { FieldName = StartRevisionField, Message = "Start Revision should not be empty." });
+                return false;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		private bool StartRevisionShouldBeNonNegative(PluginProfileErrorCollection errors)
-		{
-			int revisionNumber = int.Parse(StartRevision);
-			if (revisionNumber < 0)
-			{
-				errors.Add(new PluginProfileError { FieldName = StartRevisionField, Message = "Start Revision cannot be less than zero." });
-				return false;
-			}
-			return true;
-		}
+        private bool StartRevisionShouldBeNonNegative(PluginProfileErrorCollection errors)
+        {
+            int revisionNumber = int.Parse(StartRevision);
+            if (revisionNumber < 0)
+            {
+                errors.Add(new PluginProfileError { FieldName = StartRevisionField, Message = "Start Revision cannot be less than zero." });
+                return false;
+            }
+            return true;
+        }
 
-		private bool StartRevisionShouldBeNumber(PluginProfileErrorCollection errors)
-		{
-			int result;
-			if (!int.TryParse(StartRevision, out result))
-			{
-				errors.Add(new PluginProfileError{FieldName = StartRevisionField, Message = "Start Revision should be a number."});
-				return false;
-			}
-			return true;
-		}
+        private bool StartRevisionShouldBeNumber(PluginProfileErrorCollection errors)
+        {
+            int result;
+            if (!int.TryParse(StartRevision, out result))
+            {
+                errors.Add(new PluginProfileError { FieldName = StartRevisionField, Message = "Start Revision should be a number." });
+                return false;
+            }
+            return true;
+        }
 
-		public void Validate(PluginProfileErrorCollection errors)
-		{
-			ValidateStartRevision(errors);
-			ValidateUserMapping(errors);
-			ValidateUri(errors);
-		}
+        public void Validate(PluginProfileErrorCollection errors)
+        {
+            ValidateStartRevision(errors);
+            ValidateUserMapping(errors);
+            ValidateUri(errors);
+        }
 
-		public void ValidateUri(PluginProfileErrorCollection errors)
-		{
-			ValidateUriIsNotEmpty(errors);
-			ValidateUriIsNotSsh(errors);
-		}
+        public void ValidateUri(PluginProfileErrorCollection errors)
+        {
+            ValidateUriIsNotEmpty(errors);
+            ValidateUriIsNotSsh(errors);
+        }
 
-		private void ValidateUriIsNotEmpty(PluginProfileErrorCollection errors)
-		{
-			if (string.IsNullOrEmpty(Uri))
-			{
-				errors.Add(new PluginProfileError {FieldName = UriField, Message = "Uri should not be empty."});
-			}
-		}
+        private void ValidateUriIsNotEmpty(PluginProfileErrorCollection errors)
+        {
+            if (string.IsNullOrEmpty(Uri))
+            {
+                errors.Add(new PluginProfileError { FieldName = UriField, Message = "Uri should not be empty." });
+            }
+        }
 
-		private void ValidateUriIsNotSsh(PluginProfileErrorCollection errors)
-		{
-			if (!string.IsNullOrEmpty(Uri) && Uri.StartsWith("svn+ssh://", StringComparison.OrdinalIgnoreCase))
-			{
-				errors.Add(new PluginProfileError {FieldName = UriField, Message = "Connection via SSH is not supported."});
-			}
-		}
+        private void ValidateUriIsNotSsh(PluginProfileErrorCollection errors)
+        {
+            if (!string.IsNullOrEmpty(Uri) && Uri.StartsWith("svn+ssh://", StringComparison.OrdinalIgnoreCase))
+            {
+                errors.Add(new PluginProfileError { FieldName = UriField, Message = "Connection via SSH is not supported." });
+            }
+        }
 
-		private void ValidateUserMapping(PluginProfileErrorCollection errors)
-		{
-			if (UserMapping.Select(x => x.Key.ToLower()).Distinct().Count() != UserMapping.Count)
-			{
-				errors.Add(new PluginProfileError
-				           	{FieldName = "UserMapping", Message = "Can't map an svn user to TargetProcess user twice."});
-			}
-		}
+        private void ValidateUserMapping(PluginProfileErrorCollection errors)
+        {
+            if (UserMapping.Select(x => x.Key.ToLower()).Distinct().Count() != UserMapping.Count)
+            {
+                errors.Add(new PluginProfileError
+                    { FieldName = "UserMapping", Message = "Can't map an svn user to TargetProcess user twice." });
+            }
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

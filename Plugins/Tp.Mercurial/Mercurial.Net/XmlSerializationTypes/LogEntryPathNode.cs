@@ -14,20 +14,12 @@ namespace Mercurial.XmlSerializationTypes
         /// Gets or sets the type of action performed on the path.
         /// </summary>
         [XmlAttribute("action")]
-        public string Action
-        {
-            get;
-            set;
-        }
+        public string Action { get; set; }
 
         /// <summary>
         /// Gets or sets the path that was involved.
         /// </summary>
         [XmlText]
-        public string Path
-        {
-            get;
-            set;
-        }
+        public string Path { get; set; }
     }
 }

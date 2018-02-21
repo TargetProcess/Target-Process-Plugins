@@ -11,32 +11,33 @@ using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
+using Tp.SourceControl;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 using Tp.SourceControl.Workflow.Workflow;
 
 namespace Tp.Subversion.Workflow
 {
-	public class SubversionUserMapper : UserMapper
-	{
-		public SubversionUserMapper(Func<IStorageRepository> storageRepository, Func<IActivityLogger> logger)
-			: base(storageRepository, logger)
-		{
-		}
+    public class SubversionUserMapper : UserMapper
+    {
+        public SubversionUserMapper(Func<IStorageRepository> storageRepository, Func<IActivityLogger> logger)
+            : base(storageRepository, logger)
+        {
+        }
 
-		protected override bool AuthorIsSpecified(RevisionInfo revision)
-		{
-			return !string.IsNullOrEmpty(revision.Author);
-		}
+        protected override bool AuthorIsSpecified(RevisionInfo revision)
+        {
+            return !string.IsNullOrEmpty(revision.Author);
+        }
 
-		protected override MappingLookup GetTpUserFromMapping(RevisionInfo revision)
-		{
-			return ObjectFactory.GetInstance<ISourceControlConnectionSettingsSource>().UserMapping[revision.Author];
-		}
+        protected override MappingLookup GetTpUserFromMapping(RevisionInfo revision)
+        {
+            return ObjectFactory.GetInstance<ISourceControlConnectionSettingsSource>().UserMapping[revision.Author];
+        }
 
-		protected override UserDTO GuessUser(RevisionInfo revision, IEnumerable<UserDTO> userDtos)
-		{
-			return userDtos.FirstOrDefault(x => x.Login.ToLower() == revision.Author.ToLower());
-		}
-	}
+        protected override TpUserData GuessUser(RevisionInfo revision, ICollection<TpUserData> userDtos)
+        {
+            return userDtos.FirstOrDefault(x => x.Login.ToLower() == revision.Author.ToLower());
+        }
+    }
 }

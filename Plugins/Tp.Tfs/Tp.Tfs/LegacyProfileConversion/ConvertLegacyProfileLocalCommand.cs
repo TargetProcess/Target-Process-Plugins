@@ -20,60 +20,63 @@ using PluginProfile = Tp.LegacyProfileConvertsion.Common.PluginProfile;
 
 namespace Tp.Tfs.LegacyProfileConversion
 {
-	[Serializable]
-	public class ConvertLegacyProfileLocalMessage : IPluginLocalMessage
-	{
-		public string LegacyProfileName { get; set; }
-	}
+    [Serializable]
+    public class ConvertLegacyProfileLocalMessage : IPluginLocalMessage
+    {
+        public string LegacyProfileName { get; set; }
+    }
 
-	public class ConvertLegacyProfileHandler : IHandleMessages<ConvertLegacyProfileLocalMessage>
-	{
-		private readonly ILog _log;
+    public class ConvertLegacyProfileHandler : IHandleMessages<ConvertLegacyProfileLocalMessage>
+    {
+        private readonly ILog _log;
 
-		public ConvertLegacyProfileHandler(ILogManager logManager)
-		{
-			_log = logManager.GetLogger(GetType());
-		}
+        public ConvertLegacyProfileHandler(ILogManager logManager)
+        {
+            _log = logManager.GetLogger(GetType());
+        }
 
-		public void Handle(ConvertLegacyProfileLocalMessage message)
-		{
-			var profileName = message.LegacyProfileName;
-			var parameters = GetParams(message);
-			_log.Info("TFS legacy profile converter parsed parameters");
+        public void Handle(ConvertLegacyProfileLocalMessage message)
+        {
+            var profileName = message.LegacyProfileName;
+            var parameters = GetParams(message);
+            _log.Info("TFS legacy profile converter parsed parameters");
 
-			var runner = new LegacyConvertionRunner<LegacyProfileConvertor, PluginProfile>();
-			runner.InitRunner(new Integration.Plugin.Common.StructureMap.PluginRegistry(), parameters.ToArray());
-			_log.Info("TFS legacy profile converter inited db connections and structure map");
+            var runner = new LegacyConvertionRunner<LegacyProfileConvertor, PluginProfile>();
+            runner.InitRunner(new Integration.Plugin.Common.StructureMap.PluginRegistry(), parameters.ToArray());
+            _log.Info("TFS legacy profile converter inited db connections and structure map");
 
-			var converter = ObjectFactory.GetInstance<LegacyProfileConvertor>();
-			converter.Execute(profileName);
-			_log.Info("TFS legacy profile converter executed conversion");
-		}
+            var converter = ObjectFactory.GetInstance<LegacyProfileConvertor>();
+            converter.Execute(profileName);
+            _log.Info("TFS legacy profile converter executed conversion");
+        }
 
-		private static IEnumerable<string> GetParams(ConvertLegacyProfileLocalMessage message)
-		{
-			var pluginDb = ObjectFactory.GetInstance<IDatabaseConfiguration>().ConnectionString;
+        private static IEnumerable<string> GetParams(ConvertLegacyProfileLocalMessage message)
+        {
+            var pluginDb = ObjectFactory.GetInstance<IDatabaseConfiguration>().ConnectionString;
 
-			yield return "-plugindb";
-			yield return pluginDb;
+            yield return "-plugindb";
+            yield return pluginDb;
 
-			var tpConnectionString = String.Empty;
-			var accountName = ObjectFactory.GetInstance<IPluginContext>().AccountName;
-			if (accountName != AccountName.Empty)
-			{
-				var builder = new SqlConnectionStringBuilder(pluginDb) { InitialCatalog = accountName.Value.ToLower().Replace(".tpondemand.com", String.Empty) };
+            var tpConnectionString = String.Empty;
+            var accountName = ObjectFactory.GetInstance<IPluginContext>().AccountName;
+            if (accountName != AccountName.Empty)
+            {
+                var builder = new SqlConnectionStringBuilder(pluginDb)
+                {
+                    InitialCatalog = accountName.Value.ToLower().Replace(".tpondemand.com", String.Empty)
+                };
 
-				tpConnectionString += builder.ConnectionString;
-				yield return "-acc";
-				yield return accountName.Value;
-			}
-			else
-			{
-				tpConnectionString += pluginDb;
-			}
+                tpConnectionString += builder.ConnectionString;
+                yield return "-acc";
+                yield return accountName.Value;
+            }
+            else
+            {
+                tpConnectionString += pluginDb;
+            }
 
-			yield return "-tpdb";
-			yield return tpConnectionString;
-		}
-	}
+            yield return "-tpdb";
+            yield return tpConnectionString;
+        }
+    }
 }

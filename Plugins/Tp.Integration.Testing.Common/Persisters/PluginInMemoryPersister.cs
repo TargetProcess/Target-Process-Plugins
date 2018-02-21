@@ -7,10 +7,10 @@ using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.Integration.Testing.Common.Persisters
 {
-	public class PluginInMemoryPersister : IPluginPersister
-	{
-		public void CreateIfMissing()
-		{
-		}
-	}
+    public class PluginInMemoryPersister : IPluginPersister
+    {
+        public void CreateIfMissing()
+        {
+        }
+    }
 }

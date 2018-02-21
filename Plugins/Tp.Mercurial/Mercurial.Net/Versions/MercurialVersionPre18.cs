@@ -8,7 +8,8 @@ namespace Mercurial.Versions
     /// <summary>
     /// This base class handles Mercurial &lt; 1.8.
     /// </summary>
-    [SuppressMessage("Microsoft.Usage", "CA2243:AttributeStringLiteralsShouldParseCorrectly", Justification = "There is more advanced parsing here to handle version ranges, so this is not necessary.")]
+    [SuppressMessage("Microsoft.Usage", "CA2243:AttributeStringLiteralsShouldParseCorrectly",
+         Justification = "There is more advanced parsing here to handle version ranges, so this is not necessary.")]
     [MercurialVersion("", "1.7")]
     public class MercurialVersionPre18 : MercurialVersionBase
     {

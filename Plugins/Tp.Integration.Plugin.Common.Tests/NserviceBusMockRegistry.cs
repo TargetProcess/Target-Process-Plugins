@@ -13,29 +13,29 @@ using Tp.Integration.Messages.ServiceBus.UnicastBus;
 
 namespace Tp.Integration.Plugin.Common.Tests
 {
-	public class NServiceBusMockRegistry : Registry
-	{
-		public NServiceBusMockRegistry()
-		{
-			For<IBusExtended>().HybridHttpOrThreadLocalScoped().Use(() =>
-			                                                	{
-																	var bus = MockRepository.GenerateStub<IBusExtended>();
-			                                                		Setup(bus);
-			                                                		return bus;
-			                                                	});
-			Forward<IBusExtended, IBus>();
-		}
+    public class NServiceBusMockRegistry : Registry
+    {
+        public NServiceBusMockRegistry()
+        {
+            For<IBusExtended>().HybridHttpOrThreadLocalScoped().Use(() =>
+            {
+                var bus = MockRepository.GenerateStub<IBusExtended>();
+                Setup(bus);
+                return bus;
+            });
+            Forward<IBusExtended, IBus>();
+        }
 
-		public static void Setup(IBus bus)
-		{
-			bus.Stub(x => x.OutgoingHeaders).Return(new Dictionary<string, string>());
+        public static void Setup(IBus bus)
+        {
+            bus.Stub(x => x.OutgoingHeaders).Return(new Dictionary<string, string>());
 
-			var messageContext = MockRepository.GenerateStub<IMessageContext>();
-			messageContext.Stub(x => x.Headers).Return(new Dictionary<string, string>());
+            var messageContext = MockRepository.GenerateStub<IMessageContext>();
+            messageContext.Stub(x => x.Headers).Return(new Dictionary<string, string>());
 
-			bus.Stub(x => x.CurrentMessageContext).Return(messageContext);
-			bus.SetIn(AccountName.Empty);
-			bus.SetIn((ProfileName) string.Empty);
-		}
-	}
+            bus.Stub(x => x.CurrentMessageContext).Return(messageContext);
+            bus.SetIn(AccountName.Empty);
+            bus.SetIn((ProfileName) string.Empty);
+        }
+    }
 }

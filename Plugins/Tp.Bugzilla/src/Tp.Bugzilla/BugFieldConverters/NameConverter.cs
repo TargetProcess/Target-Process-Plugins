@@ -10,26 +10,26 @@ using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class NameConverter : IBugConverter<BugzillaBug>
-	{
-		private readonly IActivityLogger _logger;
+    public class NameConverter : IBugConverter<BugzillaBug>
+    {
+        private readonly IActivityLogger _logger;
 
-		public NameConverter(IActivityLogger logger)
-		{
-			_logger = logger;
-		}
+        public NameConverter(IActivityLogger logger)
+        {
+            _logger = logger;
+        }
 
-		public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
-		{
-			var bugName = bugzillaBug.short_desc;
-			if (bugName.Length > 255)
-			{
-				_logger.WarnFormat("Bug {0} name was shortened to 255 characters", Int32.Parse(bugzillaBug.bug_id));
-				bugName = bugName.Remove(255);
-			}
+        public void Apply(BugzillaBug bugzillaBug, ConvertedBug convertedBug)
+        {
+            var bugName = bugzillaBug.short_desc;
+            if (bugName.Length > 255)
+            {
+                _logger.WarnFormat("Bug {0} name was shortened to 255 characters", Int32.Parse(bugzillaBug.bug_id));
+                bugName = bugName.Remove(255);
+            }
 
-			convertedBug.ChangedFields.Add(BugField.Name);
-			convertedBug.BugDto.Name = bugName;
-		}
-	}
+            convertedBug.ChangedFields.Add(BugField.Name);
+            convertedBug.BugDto.Name = bugName;
+        }
+    }
 }

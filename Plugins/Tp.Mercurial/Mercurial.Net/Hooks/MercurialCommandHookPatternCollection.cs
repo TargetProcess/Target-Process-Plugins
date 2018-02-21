@@ -45,7 +45,7 @@ namespace Mercurial.Hooks
                 throw new ArgumentException("listValue must end with a closing curly brace", "listValue");
 
             int index = 0;
-            _Collection = new List<object>((object[])ParseValue(listValue, ref index));
+            _Collection = new List<object>((object[]) ParseValue(listValue, ref index));
         }
 
         /// <summary>
@@ -116,15 +116,9 @@ namespace Mercurial.Hooks
         /// </exception>
         public object this[int index]
         {
-            get
-            {
-                return _Collection[index];
-            }
+            get { return _Collection[index]; }
 
-            set
-            {
-                throw new NotSupportedException();
-            }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -198,10 +192,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public int Count
         {
-            get
-            {
-                return _Collection.Count;
-            }
+            get { return _Collection.Count; }
         }
 
         /// <summary>
@@ -212,10 +203,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public bool IsReadOnly
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         /// <summary>

@@ -9,96 +9,99 @@ tau.mashups
     .addDependency('tau/core/event')
     .addDependency('tau/core/class')
     .addDependency('tau/core/bus.reg')
-    .addDependency('tau/services/service.search')
+    .addDependency('tp/search/services/service.search')
     .addDependency('tau/services/service.navigator')
-    .addDependency('tau/models/model.search-resolver')
-    .addDependency('Searcher/SearchApplication')
-    .addDependency('tp3/mashups/topmenu')
+    .addDependency('tp/search/models/model.search.filter.resolver')
+    .addDependency('tp/search/SearchApplication')
+    .addDependency('tp/search/searchfield')
     .addDependency('tau-intl')
     .addDependency('jquery.notifyBar')
     .addDependency('jquery.tauResetableInput')
-    .addMashup(function(_, $, AppCreator, Event,
-        Class, busRegistry, ServiceSearch, ServiceNavigator,
-        SearchResolverUtils, searchApplicationCreator,
-        topMenu, intl) {
+    .addMashup(function (_, $, AppCreator, Event, Class, busRegistry, ServiceSearch, ServiceNavigator,
+        SearchResolverUtils, searchApplicationCreator, searchTemplate) {
 
-        var APP_ID = 'sp';
-        var OPEN_SEARCH_CLASS = 'tau-menu-item-search--open';
+        var APP_ID = 'searchPopup';
+        var SEARCH2_NO_CONFLICT_APP_ID = 'search1Popup';
+        var isSearchRunning = false;
+        var searchApp = null;
 
         var Processor = Class.extend({
-            init: function(bus) {
+            init: function (bus) {
                 this.bus = bus;
                 Event.subscribeOn(this);
             },
 
-            setupSearchTogglePanel: function($searchPanel) {
-                var showSearchIcon = $searchPanel.find('.i-role-show'),
-                    closeSearchIcon = $searchPanel.find('.i-role-close'),
-                    searchInput = $searchPanel.find('.i-role-search-string').tauResetableInput();
-
-                showSearchIcon.click(function() {
-                    $searchPanel.addClass(OPEN_SEARCH_CLASS);
-                    // bug #62842 - increased delay for Chrome 27
-                    setTimeout(function() {
-                        searchInput.focus();
-                    }, 200);
-                });
-                closeSearchIcon.click(function() {
-                    $searchPanel.removeClass(OPEN_SEARCH_CLASS);
-                });
+            setupSearchTogglePanel: function ($searchPanel) {
+                $searchPanel.find('.i-role-search-string').tauResetableInput();
             },
 
-            setupSearchTrigger: function($node, configurator) {
-                var $searchInput = $node.find('.i-role-search-string');
-                configurator.service('search').onClear(function(p) {
-                    $searchInput.val(p.searchString);
-                    $searchInput.trigger('input');
-                });
+            setupSearchTrigger: function ($node, configurator) {
+                this.$searchInput = $node.find('.i-role-search-string');
+                configurator.service('search').onClear(function (p) {
+                    this.$searchInput.val(p.searchString);
+                    this.$searchInput.trigger('input');
+                }.bind(this));
 
                 var $trigger = $node.find('.i-role-search-form');
                 // $trigger.on('submit') has problems in IE11:
                 // sometimes IE stops submitting form with single input on ENTER key press;
                 // therefore we listen directly for ENTER key press
-                $trigger.on('keydown', function(e) {
+                $trigger.on('keydown', function (e) {
                     if (e.keyCode !== $.ui.keyCode.ENTER) {
                         return;
                     }
-
                     e.preventDefault();
 
-                    $('body').notifyBar('remove');
-
-                    $searchInput.blur();
-
                     var searchString = _.trim($node.find('.i-role-search-string').val());
-                    configurator.service('search').params().set('searchString', searchString);
 
                     SearchResolverUtils.resolveSearchToken(searchString, configurator)
-                        .fail(function(message) {
-                            $searchInput.focus();
-
+                        .fail(function (message) {
+                            this.$searchInput.focus();
                             $('body').notifyBar({
                                 className: 'tau-system-message--error',
                                 html: '<h3>' + message + '</h3>',
                                 disableAutoClose: true
                             });
+                        }.bind(this))
+                        .done(function (r) {
+                            var isSearchResults = (r.entity === 'search');
+                            var startUrl = (isSearchResults) ? 'query/' + encodeURIComponent(searchString) : (r.entity + '/' + r.id);
+                            this.startSearch(configurator, startUrl);
+                        }.bind(this));
+                }.bind(this));
 
-                        })
-                        .done(function(r) {
-                            var targetUrl = (r.entity === 'search') ? 'search' : (r.entity + '/' + r.id);
-                            configurator.service('navigator').to(targetUrl);
-                            configurator.isBoardEdition = true;
-                            searchApplicationCreator(configurator).done(function(appBus) {
-                                //TODO Bug#121572 - investigate why 'destroy' does not fire after some actions
-                                appBus.on('destroy', function() {
-                                    configurator.service('search').params().clear();
-                                });
-                            });
-                        });
-                });
+                configurator.getHashService().onHashChange(function () {
+                    this._onHashChanged(configurator);
+                }.bind(this));
+
+                // first check on load
+                this._onHashChanged(configurator);
             },
 
-            setupSearchInput: function($node, parentConfigurator) {
+            startSearch: function (configurator, startUrl) {
+                if (isSearchRunning || _.isEmpty(startUrl)) {
+                    return;
+                }
+                isSearchRunning = true;
+
+                $('body').notifyBar('remove');
+                this.$searchInput.blur();
+
+                configurator.service('navigator').to(startUrl);
+                searchApplicationCreator(configurator)
+                    .done(function (appBus) {
+                        searchApp = appBus;
+                        //TODO Bug#121572 - investigate why 'destroy' does not fire after some actions
+                        appBus.on('destroy', function () {
+                            configurator.service('search').params().clear();
+                            configurator.service('navigator').toEmptyUrl();
+                            isSearchRunning = false;
+                            searchApp = null;
+                        });
+                    });
+            },
+
+            setupSearchInput: function ($node, parentConfigurator) {
                 var searchSettings = {
                     searchString: '',
                     entityTypeId: null,
@@ -107,10 +110,13 @@ tau.mashups
                     isAllTeams: false
                 };
 
+                var appId = parentConfigurator.getFeaturesService().isEnabled('search2')
+                    ? SEARCH2_NO_CONFLICT_APP_ID
+                    : APP_ID;
+
                 var searchViewConfigurator = parentConfigurator.createChild();
-                searchViewConfigurator.getHashService().setFakeWindow();
                 searchViewConfigurator.registerService('navigator', new ServiceNavigator(searchViewConfigurator, {
-                    parameterName: APP_ID
+                    parameterName: appId
                 }));
 
                 searchViewConfigurator.registerService('search', new ServiceSearch({
@@ -122,37 +128,23 @@ tau.mashups
                 this.setupSearchTogglePanel($node);
             },
 
-            'bus configurator.ready': function(e, configurator) {
-                var $searchInput = $([
-                    '<span ' +
-                    '   class="i-role-show tau-icon-general tau-icon-search tau-extension-board-tooltip" ' +
-                    '   data-title="' + _.escape(intl.formatMessage('Global search')) + '"></span>',
-                    '<div class="tau-main-search">',
-                    '    <div class="tau-main-search__wrap">',
-                    '        <form action="" class="i-role-search-form">',
-                    '            <div class="tau-search">',
-                    '                <div class="tau-search__wrap">',
-                    '                    <input type="text" class="tau-search__input i-role-search-string" placeholder="' + _.escape(intl.formatMessage('Search')) + '">',
-                    '                    <span class="tau-icon-general tau-icon-close-gray i-role-close" title="' + _.escape(intl.formatMessage('Close')) + '"></span>',
-                    '                </div>',
-                    '            </div>',
-                    '        </form>',
-                    '        <span class="tau-icon-general tau-icon-r-direction i-role-close" title="Close"></span>',
-                    '    </div>',
-                    '</div>'
-                ].join(''));
+            _onHashChanged: function (configurator) {
+                var url = configurator.service('navigator').getCurrent();
 
-                $searchInput = topMenu.addItem({
-                    html: $searchInput,
-                    cssClass: 'tau-menu-item-search i-role-mashup-header-search',
-                    indexSection: 2
-                }).$element;
+                if (_.isEmpty(url) && !_.isEmpty(searchApp)) {
+                    searchApp.fire('popup.close');
+                } else if (!isSearchRunning) {
+                    this.startSearch(configurator, url);
+                }
+            },
 
-                this.setupSearchInput($searchInput, configurator);
+            'bus configurator.ready': function (e, configurator) {
+                if (!configurator.getFeaturesService().isEnabled('search')) return;
+                this.setupSearchInput(searchTemplate, configurator);
             }
         });
 
-        busRegistry.getByName('board page container').then(function(masterBus) {
+        busRegistry.getByName('board page container').then(function (masterBus) {
             new Processor(masterBus);
         });
     });

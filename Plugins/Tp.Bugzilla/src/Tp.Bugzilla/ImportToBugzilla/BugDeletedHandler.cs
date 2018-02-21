@@ -13,42 +13,44 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.ImportToBugzilla
 {
-	public class BugDeletedHandler : IHandleMessages<BugDeletedMessage>
-	{
-		private readonly IStorageRepository _storage;
-		private readonly IBugzillaInfoStorageRepository _bugzillaInfoStorageRepository;
-		private readonly IActivityLogger _log;
+    public class BugDeletedHandler : IHandleMessages<BugDeletedMessage>
+    {
+        private readonly IStorageRepository _storage;
+        private readonly IBugzillaInfoStorageRepository _bugzillaInfoStorageRepository;
+        private readonly IActivityLogger _log;
 
-		public BugDeletedHandler(IStorageRepository storage, IBugzillaInfoStorageRepository bugzillaInfoStorageRepository, IActivityLogger logger)
-		{
-			_storage = storage;
-			_bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
-			_log = logger;
-		}
+        public BugDeletedHandler(IStorageRepository storage, IBugzillaInfoStorageRepository bugzillaInfoStorageRepository,
+            IActivityLogger logger)
+        {
+            _storage = storage;
+            _bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
+            _log = logger;
+        }
 
-		public void Handle(BugDeletedMessage message)
-		{
-			try
-			{
-				var bugzillaBug = _bugzillaInfoStorageRepository.RemoveBugzillaBug(message.Dto.BugID);
-				if (bugzillaBug == null)
-				{
-					return;
-				}
+        public void Handle(BugDeletedMessage message)
+        {
+            try
+            {
+                var bugzillaBug = _bugzillaInfoStorageRepository.RemoveBugzillaBug(message.Dto.BugID);
+                if (bugzillaBug == null)
+                {
+                    return;
+                }
 
-				_storage.Get<TeamDTO>().Remove(t => t.AssignableID == message.Dto.BugID);
-				_storage.Get<TargetProcessBugId>(bugzillaBug.Id).ReplaceWith(new TargetProcessBugId
-				{
-					Value = message.Dto.BugID.GetValueOrDefault(),
-					Deleted = true
-				});
+                _storage.Get<TeamDTO>().Remove(t => t.AssignableID == message.Dto.BugID);
+                _storage.Get<TargetProcessBugId>(bugzillaBug.Id).ReplaceWith(new TargetProcessBugId
+                {
+                    Value = message.Dto.BugID.GetValueOrDefault(),
+                    Deleted = true
+                });
 
-				_log.Info($"Removed BugzillaBugInfo after deleting TargetProcess Bug ID: {message.Dto.ID}; Bugzilla Bug ID: {bugzillaBug.Id}");
-			}
-			catch (Exception e)
-			{
-				_log.Error(e.Message, e);
-			}
-		}
-	}
+                _log.Info(
+                    $"Removed BugzillaBugInfo after deleting TargetProcess Bug ID: {message.Dto.ID}; Bugzilla Bug ID: {bugzillaBug.Id}");
+            }
+            catch (Exception e)
+            {
+                _log.Error(e.Message, e);
+            }
+        }
+    }
 }

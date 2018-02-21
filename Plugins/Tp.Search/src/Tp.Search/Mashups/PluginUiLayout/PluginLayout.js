@@ -1,20 +1,36 @@
 tau.mashups
-	.addDependency("libs/jquery/jquery")
-	.addMashup(function () {
+    .addDependency('libs/jquery/jquery')
+    .addDependency('tau/configurator')
+    .addMashup(function($, configurator) {
+        var intervalId;
 
-		var intervalId = setInterval(function () {
-			var pluginsBlocks = $('div.plugin-block');
-			if (pluginsBlocks.length === 0) {
-				return;
-			}
+        function fixPluginLayout() {
+            var pluginsBlocks = $('div.plugin-block');
+            if (pluginsBlocks.length === 0) {
+                return;
+            }
 
-			var mashupBlock = $.grep(pluginsBlocks, function (element) {
-				return $(element).find('h4._pluginName').text() == 'Search';
-			});
+            var mashupBlock = $(
+                $.grep(pluginsBlocks, function(element) {
+                    return $(element).find('h4._pluginName').text() === 'Search';
+                })
+            );
 
-			$(mashupBlock).find('li.delete').remove();
-			$(mashupBlock).find('div.pt-5').remove();
+            if (configurator.getFeaturesService().isEnabled('search')) {
+                mashupBlock.find('li.delete').remove();
+                mashupBlock.find('div.separator').remove();
 
-			clearInterval(intervalId);
-		}, 200);
-	});
+                var profileNameLabel = mashupBlock.find('.name.tau-profileName');
+                if (profileNameLabel.length !== 0) {
+                    mashupBlock.find('div.pt-5').remove();
+                }
+            } else {
+                mashupBlock.closest('.plugin-block').remove();
+            }
+
+            clearInterval(intervalId);
+        }
+
+        intervalId = setInterval(fixPluginLayout, 100);
+        fixPluginLayout();
+    });

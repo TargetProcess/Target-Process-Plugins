@@ -14,21 +14,25 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class WhenAutomappingRequestedSpecs
-	{
-		[SetUp]
-		public void Init()
-		{
-			ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly, new List<Assembly> { typeof(Command).Assembly })));
-		}
+    public class WhenAutomappingRequestedSpecs
+    {
+        [SetUp]
+        public void Init()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
+            ObjectFactory.Configure(
+                x =>
+                    x.For<TransportMock>()
+                        .Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly,
+                            new List<Assembly> { typeof(Command).Assembly })));
+        }
 
-		[Test]
-		public void ShouldMapUserUsingEmailFirst()
-		{
-			@"
+        [Test]
+        public void ShouldMapUserUsingEmailFirst()
+        {
+            @"
 				Given vcs history is:
 					|commit|
 					|{Author:""John@tp.com""}|
@@ -45,13 +49,13 @@ namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 					|John@tp.com|John Smith|
 					|Ilai@tp.com|Ilai Zemiakis|
 "
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldNotRemoveAlreadyMappedUsers()
-		{
-			@"
+        [Test]
+        public void ShouldNotRemoveAlreadyMappedUsers()
+        {
+            @"
 				Given vcs history is:
 					|commit|
 					|{Author:""John@tp.com""}|
@@ -75,14 +79,14 @@ namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 					And 3 users should be mapped at whole
 				And mapping result info should be: All the 2 Subversion user(s) were mapped
 "
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
 
-		[Test]
-		public void ShouldMapUserUsingFirstNameIfEmailMatchesWereNotFound()
-		{
-			@"
+        [Test]
+        public void ShouldMapUserUsingFirstNameIfEmailMatchesWereNotFound()
+        {
+            @"
 				Given vcs history is:
 					|commit|
 					|{Author:""John Smith""}|
@@ -99,13 +103,13 @@ namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 					|John Smith|John Smith|
 					|Ilai Zemiakis|Ilai Zemiakis|
 "
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMapUserUsingLoginIfEmailAndNameWereNotFound()
-		{
-			@"
+        [Test]
+        public void ShouldMapUserUsingLoginIfEmailAndNameWereNotFound()
+        {
+            @"
 				Given vcs history is:
 					|commit|
 					|{Author:""ValentinePalazkov""}|
@@ -119,13 +123,13 @@ namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 					|svnuser|tpuser|
 					|ValentinePalazkov|ValentineMalkovich|
 "
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldUseCommitsWithin1MonthForMapping()
-		{
-			@"Given vcs history is:
+        [Test]
+        public void ShouldUseCommitsWithin1MonthForMapping()
+        {
+            @"Given vcs history is:
 				|commit|
 				|{Time:""1 Jan 2010"", Author:""John Smith""}|
 				|{Time:""1 Feb 2010"", Author:""Ilai Zemiakis""}|
@@ -145,53 +149,53 @@ namespace Tp.Subversion.EditProfileFeature.AutomappingFeature
 					|Lion|Lion|
 					And 1 users should be mapped at whole
 "
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldProvideMappingResultInfo()
-		{
-			@"Given vcs history contains 20 svn users
+        [Test]
+        public void ShouldProvideMappingResultInfo()
+        {
+            @"Given vcs history contains 20 svn users
 					And 5 svn users mapped to TP users
 					And 40 unmapped TP users
 					And unsaved plugin profile
 				When automapping requested
 				Then mapping result info should be: 5 Subversion user(s) were mapped, and no matches were found for 15 Subversion user(s)"
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldProvideMappingResultInfoWhenAllSubversionUsersWereMapped()
-		{
-			@"Given vcs history contains 5 svn users
+        [Test]
+        public void ShouldProvideMappingResultInfoWhenAllSubversionUsersWereMapped()
+        {
+            @"Given vcs history contains 5 svn users
 					And 5 svn users mapped to TP users
 					And 40 unmapped TP users
 					And unsaved plugin profile
 				When automapping requested
 				Then mapping result info should be: All the 5 Subversion user(s) were mapped"
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldProvideMappingResultInfoWhenNotAllSubversionUsersWereMapped()
-		{
-			@"Given vcs history contains 15 svn users
+        [Test]
+        public void ShouldProvideMappingResultInfoWhenNotAllSubversionUsersWereMapped()
+        {
+            @"Given vcs history contains 15 svn users
 					And 5 svn users mapped to TP users
 					And unsaved plugin profile
 				When automapping requested
 				Then mapping result info should be: 5 Subversion user(s) were mapped, and no matches were found for 10 Subversion user(s)"
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ShouldProvideMappingResultInfoWhenNoneSvnUsersWereMapped()
-		{
-			@"Given vcs history contains 15 svn users
+        [Test]
+        public void ShouldProvideMappingResultInfoWhenNoneSvnUsersWereMapped()
+        {
+            @"Given vcs history contains 15 svn users
 					And 0 svn users mapped to TP users
 					And unsaved plugin profile
 				When automapping requested
 				Then mapping result info should be: No matches for Subversion user(s) found"
-				.Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
-		}
-	}
+                .Execute(In.Context<VcsPluginActionSteps>().And<CommandActionSteps>());
+        }
+    }
 }

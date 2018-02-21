@@ -9,11 +9,11 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.Storage.Repositories
 {
-	internal interface IAccountRepository
-	{
-		IList<AccountDomainObject> GetAll();
-		AccountDomainObject Add(AccountName accountName);
-		AccountDomainObject GetBy(AccountName accountName);
-		void Remove(AccountName accountName);
-	}
+    internal interface IAccountRepository
+    {
+        IList<AccountDomainObject> GetAll();
+        AccountDomainObject Add(AccountName accountName);
+        AccountDomainObject GetBy(AccountName accountName);
+        void Remove(AccountName accountName);
+    }
 }

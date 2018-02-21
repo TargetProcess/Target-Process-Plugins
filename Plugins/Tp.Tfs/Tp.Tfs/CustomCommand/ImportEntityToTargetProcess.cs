@@ -7,8 +7,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Tfs.CustomCommand
 {
-	public class ImportEntityToTargetProcessCommand<TEntity> : IPluginLocalMessage
-	{
-		public TEntity Entity { get; set; }
-	}
+    public class ImportEntityToTargetProcessCommand<TEntity> : IPluginLocalMessage
+    {
+        public TEntity Entity { get; set; }
+    }
 }

@@ -14,114 +14,114 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.Bugzilla.LegacyProfileConversion
 {
-	public class LegacyExternalDataConvertor
-	{
-		private readonly TpDatabaseDataContext _context;
+    public class LegacyExternalDataConvertor
+    {
+        private readonly TpDatabaseDataContext _context;
 
-		public LegacyExternalDataConvertor(TpDatabaseDataContext context)
-		{
-			_context = context;
-			Mapper.CreateMap<Comment, CommentDTO>();
-			Mapper.CreateMap<Attachment, AttachmentDTO>();
-		}
+        public LegacyExternalDataConvertor(TpDatabaseDataContext context)
+        {
+            _context = context;
+            Mapper.CreateMap<Comment, CommentDTO>();
+            Mapper.CreateMap<Attachment, AttachmentDTO>();
+        }
 
-		public void MigrateBugzillaEntities(IStorageRepository storageRepository, PluginProfile legacyProfile)
-		{
-			MigrateBugs(storageRepository, legacyProfile);
-		}
-		
-		private void MigrateBugs(IStorageRepository storageRepository, PluginProfile legacyProfile)
-		{
-			var bugs = _context.ExternalReferences
-				.Where(r => r.EntityTypeID == BugzillaConstants.BugEntityTypeId)
-				.Where(r => r.PluginProfileID == legacyProfile.PluginProfileID)
-				.ToList()
-				.Distinct(new ExternalIdComparer())
-				.Join(_context.Bugs, e => e.TpID, b => b.BugID, (e, b) => new {TpId = b.BugID, ExternalId = e.ExternalID})
-				.ToList();
+        public void MigrateBugzillaEntities(IStorageRepository storageRepository, PluginProfile legacyProfile)
+        {
+            MigrateBugs(storageRepository, legacyProfile);
+        }
 
-			var tpBugs = new List<int>();
-			foreach (var externalReference in bugs)
-			{
-				var tpId = externalReference.TpId;
-				var externalId = externalReference.ExternalId;
+        private void MigrateBugs(IStorageRepository storageRepository, PluginProfile legacyProfile)
+        {
+            var bugs = _context.ExternalReferences
+                .Where(r => r.EntityTypeID == BugzillaConstants.BugEntityTypeId)
+                .Where(r => r.PluginProfileID == legacyProfile.PluginProfileID)
+                .ToList()
+                .Distinct(new ExternalIdComparer())
+                .Join(_context.Bugs, e => e.TpID, b => b.BugID, (e, b) => new { TpId = b.BugID, ExternalId = e.ExternalID })
+                .ToList();
 
-				storageRepository.Get<TargetProcessBugId>(externalId).Add(new TargetProcessBugId {Value = tpId});
-				storageRepository.Get<BugzillaBugInfo>(tpId.ToString(CultureInfo.InvariantCulture))
-					.Add(new BugzillaBugInfo
-					     	{
-					     		Id = externalId,
-					     		TpId = tpId
-					     	});
+            var tpBugs = new List<int>();
+            foreach (var externalReference in bugs)
+            {
+                var tpId = externalReference.TpId;
+                var externalId = externalReference.ExternalId;
 
-				foreach (var team in _context.Teams.Where(t => t.AssignableID == tpId))
-				{
-					storageRepository.Get<TeamDTO>(team.TeamID.ToString(CultureInfo.InvariantCulture)).Clear();
-					storageRepository.Get<TeamDTO>(team.TeamID.ToString(CultureInfo.InvariantCulture)).Add(
-						new TeamDTO
-						{
-							AssignableID = team.AssignableID,
-							ID = team.TeamID,
-							RoleID = team.RoleID,
-							TeamID = team.TeamID,
-							UserID = team.UserID
-						});
-				}
+                storageRepository.Get<TargetProcessBugId>(externalId).Add(new TargetProcessBugId { Value = tpId });
+                storageRepository.Get<BugzillaBugInfo>(tpId.ToString(CultureInfo.InvariantCulture))
+                    .Add(new BugzillaBugInfo
+                    {
+                        Id = externalId,
+                        TpId = tpId
+                    });
 
-				tpBugs.Add(tpId);
-			}
+                foreach (var team in _context.Teams.Where(t => t.AssignableID == tpId))
+                {
+                    storageRepository.Get<TeamDTO>(team.TeamID.ToString(CultureInfo.InvariantCulture)).Clear();
+                    storageRepository.Get<TeamDTO>(team.TeamID.ToString(CultureInfo.InvariantCulture)).Add(
+                        new TeamDTO
+                        {
+                            AssignableID = team.AssignableID,
+                            ID = team.TeamID,
+                            RoleID = team.RoleID,
+                            TeamID = team.TeamID,
+                            UserID = team.UserID
+                        });
+                }
 
-			MigrateBugsEntities(tpBugs, storageRepository);
-		}
+                tpBugs.Add(tpId);
+            }
 
-		private void MigrateBugsEntities(List<int> tpBugs, IStorageRepository storageRepository)
-		{
-			const int take = 500;
-			var skip = 0;
-			var chain = tpBugs.Skip(skip).Take(take).ToList();
+            MigrateBugsEntities(tpBugs, storageRepository);
+        }
 
-			while (chain.Any())
-			{
-				MigrateAttachments(chain, storageRepository);
-				MigrateComments(chain, storageRepository);
+        private void MigrateBugsEntities(List<int> tpBugs, IStorageRepository storageRepository)
+        {
+            const int take = 500;
+            var skip = 0;
+            var chain = tpBugs.Skip(skip).Take(take).ToList();
 
-				skip += take;
-				chain = tpBugs.Skip(skip).Take(take).ToList();
-			}
-		}
+            while (chain.Any())
+            {
+                MigrateAttachments(chain, storageRepository);
+                MigrateComments(chain, storageRepository);
 
-		private void MigrateAttachments(IEnumerable<int> bugIds, IStorageRepository storageRepository)
-		{
-			var attachs = _context.Attachments.Where(c => c.GeneralID.HasValue && bugIds.Contains(c.GeneralID.Value)).ToList();
+                skip += take;
+                chain = tpBugs.Skip(skip).Take(take).ToList();
+            }
+        }
 
-			storageRepository.Get<AttachmentDTO>()
-				.AddRange(attachs.Select(Mapper.Map<Attachment, AttachmentDTO>));
-		}
+        private void MigrateAttachments(IEnumerable<int> bugIds, IStorageRepository storageRepository)
+        {
+            var attachs = _context.Attachments.Where(c => c.GeneralID.HasValue && bugIds.Contains(c.GeneralID.Value)).ToList();
 
-		private void MigrateComments(IEnumerable<int> bugIds, IStorageRepository storageRepository)
-		{
-			var comments =
-				_context.Comments.Where(c => c.GeneralID.HasValue && bugIds.Contains(c.GeneralID.Value)).GroupBy(c => c.GeneralID).
-					ToList();
+            storageRepository.Get<AttachmentDTO>()
+                .AddRange(attachs.Select(Mapper.Map<Attachment, AttachmentDTO>));
+        }
 
-			foreach (var comment in comments)
-			{
-				storageRepository.Get<CommentDTO>(comment.Key.Value.ToString(CultureInfo.InvariantCulture))
-					.AddRange(comment.Select(Mapper.Map<Comment, CommentDTO>));
-			}
-		}
-	}
+        private void MigrateComments(IEnumerable<int> bugIds, IStorageRepository storageRepository)
+        {
+            var comments =
+                _context.Comments.Where(c => c.GeneralID.HasValue && bugIds.Contains(c.GeneralID.Value)).GroupBy(c => c.GeneralID).
+                    ToList();
 
-	public class ExternalIdComparer : IEqualityComparer<ExternalReference>
-	{
-		public bool Equals(ExternalReference x, ExternalReference y)
-		{
-			return x.ExternalID == y.ExternalID;
-		}
+            foreach (var comment in comments)
+            {
+                storageRepository.Get<CommentDTO>(comment.Key.Value.ToString(CultureInfo.InvariantCulture))
+                    .AddRange(comment.Select(Mapper.Map<Comment, CommentDTO>));
+            }
+        }
+    }
 
-		public int GetHashCode(ExternalReference obj)
-		{
-			return obj.ExternalID.GetHashCode();
-		}
-	}
+    public class ExternalIdComparer : IEqualityComparer<ExternalReference>
+    {
+        public bool Equals(ExternalReference x, ExternalReference y)
+        {
+            return x.ExternalID == y.ExternalID;
+        }
+
+        public int GetHashCode(ExternalReference obj)
+        {
+            return obj.ExternalID.GetHashCode();
+        }
+    }
 }

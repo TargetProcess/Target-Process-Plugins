@@ -7,16 +7,17 @@ using Tp.Core;
 
 namespace Tp.Integration.Plugin.Common.FileStorage
 {
-	public class ProfileFileStorageSafeNull : SafeNull<ProfileFileStorageSafeNull, IProfileFileStorage>,
-	                                          IProfileFileStorage, INullable
-	{
-		public string GetFolder()
-		{
-			return string.Empty;
-		}
+    public class ProfileFileStorageSafeNull
+        : SafeNull<ProfileFileStorageSafeNull, IProfileFileStorage>,
+          IProfileFileStorage, INullable
+    {
+        public string GetFolder()
+        {
+            return string.Empty;
+        }
 
-		public void Clear()
-		{
-		}
-	}
+        public void Clear()
+        {
+        }
+    }
 }

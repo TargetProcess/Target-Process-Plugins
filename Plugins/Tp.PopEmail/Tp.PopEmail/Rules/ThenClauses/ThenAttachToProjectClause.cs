@@ -14,29 +14,29 @@ using Tp.PopEmailIntegration.Rules.Parsing;
 
 namespace Tp.PopEmailIntegration.Rules.ThenClauses
 {
-	public class ThenAttachToProjectClause : ThenClause
-	{
-		public ThenAttachToProjectClause(ParseNode clauseNode, ITpBus bus, IStorageRepository storage)
-			: base(clauseNode, bus, storage)
-		{
-		}
+    public class ThenAttachToProjectClause : ThenClause
+    {
+        public ThenAttachToProjectClause(ParseNode clauseNode, ITpBus bus, IStorageRepository storage)
+            : base(clauseNode, bus, storage)
+        {
+        }
 
-		public override void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
-		{
-			_bus.SendLocal(new AttachMessageToProjectCommand {MessageDto = dto, ProjectId = _projectId});
-		}
+        public override void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
+        {
+            _bus.SendLocal(new AttachMessageToProjectCommand { MessageDto = dto, ProjectId = _projectId });
+        }
 
-		public static IThenClause Create(ParseNode clauseNode)
-		{
-			return new ThenAttachToProjectClause(clauseNode, ObjectFactory.GetInstance<ITpBus>(),
-			                                     ObjectFactory.GetInstance<IStorageRepository>());
-		}
-	}
+        public static IThenClause Create(ParseNode clauseNode)
+        {
+            return new ThenAttachToProjectClause(clauseNode, ObjectFactory.GetInstance<ITpBus>(),
+                ObjectFactory.GetInstance<IStorageRepository>());
+        }
+    }
 
-	[Serializable]
-	public class AttachMessageToProjectCommand : IPluginLocalMessage
-	{
-		public MessageDTO MessageDto { get; set; }
-		public int ProjectId { get; set; }
-	}
+    [Serializable]
+    public class AttachMessageToProjectCommand : IPluginLocalMessage
+    {
+        public MessageDTO MessageDto { get; set; }
+        public int ProjectId { get; set; }
+    }
 }

@@ -18,57 +18,58 @@ using Tp.Search.Model.Entity;
 
 namespace Tp.Search.Bus.Workflow
 {
-	public class AssignableSquadChangedSaga : TpSaga<AssignableSquadChangeSagaData>,
-	                                          IAmStartedByMessages<AssignableSquadChangedLocalMessage>,
-			                                      IHandleMessages<CommentQueryResult>
-	{
-		private readonly IEntityIndexer _entityIndexer;
+    public class AssignableSquadChangedSaga
+        : TpSaga<AssignableSquadChangeSagaData>,
+          IAmStartedByMessages<AssignableSquadChangedLocalMessage>,
+          IHandleMessages<CommentQueryResult>
+    {
+        private readonly IEntityIndexer _entityIndexer;
 
-		public AssignableSquadChangedSaga()
-		{
-		}
+        public AssignableSquadChangedSaga()
+        {
+        }
 
-		public AssignableSquadChangedSaga(IEntityIndexer entityIndexer)
-		{
-			_entityIndexer = entityIndexer;
-		}
+        public AssignableSquadChangedSaga(IEntityIndexer entityIndexer)
+        {
+            _entityIndexer = entityIndexer;
+        }
 
-		public void Handle(AssignableSquadChangedLocalMessage message)
-		{
-			Data.SquadId = message.SquadId;
-			if (message.AssignableId > 0)
-			{
-				Send(new CommentQuery { GeneralId = message.AssignableId, IgnoreMessageSizeOverrunFailure = true });
-			}
-			else
-			{
-				MarkAsComplete();
-			}
-		}
+        public void Handle(AssignableSquadChangedLocalMessage message)
+        {
+            Data.SquadId = message.SquadId;
+            if (message.AssignableId > 0)
+            {
+                Send(new CommentQuery { GeneralId = message.AssignableId, IgnoreMessageSizeOverrunFailure = true });
+            }
+            else
+            {
+                MarkAsComplete();
+            }
+        }
 
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<AssignableSquadChangedLocalMessage>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
-		}
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<AssignableSquadChangedLocalMessage>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
+        }
 
-		public void Handle(CommentQueryResult message)
-		{
-			foreach (var comment in message.Dtos)
-			{
-				_entityIndexer.UpdateCommentIndex(comment, new List<CommentField>(), false, true, DocumentIndexOptimizeSetup.NoOptimize);
-			}
-			_entityIndexer.OptimizeCommentIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
-			MarkAsComplete();
-		}
-	}
+        public void Handle(CommentQueryResult message)
+        {
+            foreach (var comment in message.Dtos)
+            {
+                _entityIndexer.UpdateCommentIndex(comment, new List<CommentField>(), false, true, DocumentIndexOptimizeSetup.NoOptimize);
+            }
+            _entityIndexer.OptimizeCommentIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
+            MarkAsComplete();
+        }
+    }
 
-	public class AssignableSquadChangeSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
-		public int? SquadId { get; set; }
-	}
+    public class AssignableSquadChangeSagaData : ISagaEntity
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
+        public int? SquadId { get; set; }
+    }
 }

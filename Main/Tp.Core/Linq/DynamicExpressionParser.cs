@@ -3,119 +3,158 @@ using System.Linq.Expressions;
 using System.Reflection;
 using StructureMap;
 using Tp.Core;
+using Tp.Core.Annotations;
 using Tp.Core.Linq;
 
 // ReSharper disable once CheckNamespace
 
 namespace System.Linq.Dynamic
 {
-	public class DynamicExpressionParser
-	{
-		private readonly Func<string, Expression, Maybe<Expression>> _surrogates;
+    public class DynamicExpressionParser
+    {
+        private const string EMPTY_EXPRESSION = "{}";
 
-		private static readonly Dictionary<string, ISurrogateMethod> _registeredSurrogates = ObjectFactory.GetAllInstances<ISurrogateMethod>()
-			.ToDictionary(x => x.Name, StringComparer.InvariantCultureIgnoreCase);
+        private static readonly Lazy<DynamicExpressionParser> _parserLazy = Lazy.Create(() => new DynamicExpressionParser(
+            DefaultKnownTypes, DefaultExtensionMethods, DefaultSurrogateGenerator, fixIntegerDivision: true));
 
-		public static readonly DynamicExpressionParser Instance =
-			new DynamicExpressionParser
-			{
-				FixIntegerDivision = true
-			};
+        public static DynamicExpressionParser Instance => _parserLazy.Value;
 
-		public DynamicExpressionParser(
-			IEnumerable<MethodInfo> extensionMethods = null,
-			Func<string, Expression, Maybe<Expression>> surrogates = null,
-			IReadOnlyDictionary<string, Type> knownTypes = null)
-		{
-			Func<string, Expression, Maybe<Expression>> defaultSurrogate =
-				(s, e) => _registeredSurrogates.GetValue(s).Select(x => x.GetMethodExpression(e));
+        private static readonly Lazy<IReadOnlyDictionary<string, Type>> _defaultKnownTypes =
+            Lazy.Create(() => GetKnownTypes(ObjectFactory.Container));
 
-			_surrogates = surrogates == null ? defaultSurrogate : ((s, e) => surrogates(s, e).OrElse(() => defaultSurrogate(s, e)));
+        public static IReadOnlyDictionary<string, Type> DefaultKnownTypes => _defaultKnownTypes.Value;
 
-			_methodProviders = extensionMethods
-				?? ObjectFactory.GetAllInstances<IMethodProvider>().SelectMany(x => x.GetExtensionMethodInfo()).ToArray();
-			_knownTypes = knownTypes
-				?? ObjectFactory.GetAllInstances<ITypeProvider>()
-					.SelectMany(x => x.GetKnownTypes())
-					.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
-		}
+        [Pure]
+        [NotNull]
+        public static IReadOnlyDictionary<string, Type> GetKnownTypes(IContainer container) =>
+            ObjectFactory.Container
+                .GetAllInstances<ITypeProvider>().SelectMany(x => x.GetKnownTypes())
+                .ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
 
-		public bool FixIntegerDivision { get; set; }
+        private static readonly Lazy<IReadOnlyCollection<MethodInfo>> _defaultExtensionMethods =
+            Lazy.Create(() => GetExtensionMethods(ObjectFactory.Container));
 
-		private readonly IEnumerable<MethodInfo> _methodProviders;
-		private readonly IReadOnlyDictionary<string, Type> _knownTypes;
+        public static IReadOnlyCollection<MethodInfo> DefaultExtensionMethods => _defaultExtensionMethods.Value;
 
-		private const string EMPTY_EXPRESSION = "{}";
+        [Pure]
+        [NotNull]
+        [ItemNotNull]
+        public static IReadOnlyCollection<MethodInfo> GetExtensionMethods(IContainer container) =>
+            ObjectFactory.Container
+                .GetAllInstances<IMethodProvider>()
+                .SelectMany(x => x.GetExtensionMethodInfo())
+                .ToList();
 
-		public Expression Parse(Type resultType, string expression, params object[] values)
-		{
-			var parser = CreateExpressionParser(null, Maybe<Type>.Nothing, expression, values);
-			return parser.Parse(resultType);
-		}
+        private static readonly Lazy<SurrogateGenerator> _defaultSurrogateGenerator =
+            Lazy.Create(() => CreateSurrogateGenerator(ObjectFactory.Container));
 
-		public LambdaExpression ParseLambda(Type itType, Type resultType, Maybe<Type> baseTypeForNewClass, string expression,
-			params object[] values)
-		{
-			return ParseLambda(new[] { Expression.Parameter(itType, null) }, resultType, baseTypeForNewClass, expression, values);
-		}
+        public static SurrogateGenerator DefaultSurrogateGenerator => _defaultSurrogateGenerator.Value;
 
-		public LambdaExpression ParseLambda(Type itType, Type resultType, string expression, params object[] values)
-		{
-			return ParseLambda(itType, resultType, Maybe<Type>.Nothing, expression, values);
-		}
+        [Pure]
+        [NotNull]
+        public static SurrogateGenerator CreateSurrogateGenerator(IContainer container)
+        {
+            var registeredSurrogates = container
+                .GetAllInstances<ISurrogateMethod>()
+                .ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
 
-		public LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression, params object[] values)
-		{
-			if (expression == EMPTY_EXPRESSION)
-			{
-				return Expression.Lambda(Expression.Constant(new object()), parameters);
-			}
+            return (name, expression) => registeredSurrogates
+                .GetValue(name)
+                .Select(x => x.GetMethodExpression(expression));
+        }
 
-			var parser = CreateExpressionParser(parameters, Maybe<Type>.Nothing, expression, values);
-			return Expression.Lambda(parser.Parse(resultType), parameters);
-		}
+        public DynamicExpressionParser(
+            [NotNull] IReadOnlyDictionary<string, Type> knownTypes,
+            [NotNull] [ItemNotNull] IReadOnlyCollection<MethodInfo> extensionMethods,
+            [CanBeNull] SurrogateGenerator surrogates,
+            bool fixIntegerDivision = false)
+        {
+            _knownTypes = Argument.NotNull(nameof(knownTypes), knownTypes);
+            _methodProviders = Argument.NotNull(nameof(extensionMethods), extensionMethods);
+            _surrogates = Argument.NotNull(nameof(surrogates), surrogates);
+            _fixIntegerDivision = fixIntegerDivision;
+        }
 
-		private LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, Maybe<Type> baseTypeForNewClass, string expression,
-			params object[] values)
-		{
-			if (expression == EMPTY_EXPRESSION)
-			{
-				return Expression.Lambda(Expression.Constant(new object()), parameters);
-			}
+        private readonly SurrogateGenerator _surrogates;
 
-			var parser = CreateExpressionParser(parameters, baseTypeForNewClass, expression, values);
-			return Expression.Lambda(parser.Parse(resultType), parameters);
-		}
+        private readonly IReadOnlyCollection<MethodInfo> _methodProviders;
 
-		public Expression<Func<TParameter, TResult>> ParseLambda<TParameter, TResult>(string expression, params object[] values)
-		{
-			return (Expression<Func<TParameter, TResult>>) ParseLambda(typeof(TParameter), typeof(TResult), expression, values);
-		}
+        private readonly IReadOnlyDictionary<string, Type> _knownTypes;
 
-		public static Type CreateClass(params DynamicProperty[] properties)
-		{
-			return ClassFactory.Instance.GetDynamicClass(properties);
-		}
+        private readonly bool _fixIntegerDivision;
 
-		public static Type CreateClass(IEnumerable<DynamicProperty> properties, Type baseType = null)
-		{
-			return ClassFactory.Instance.GetDynamicClass(properties, baseType);
-		}
+        [NotNull]
+        public Expression Parse(
+            [NotNull] Type resultType,
+            [NotNull] string expression,
+            [CanBeNull] params object[] values)
+        {
+            var parser = CreateExpressionParser(null, Maybe<Type>.Nothing, expression, values);
+            return parser.Parse(resultType);
+        }
 
-		public IEnumerable<DynamicOrdering> ParseOrdering(string ordering, object[] values, ParameterExpression[] parameters)
-		{
-			var parser = CreateExpressionParser(parameters, Maybe<Type>.Nothing, ordering, values);
-			IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();
-			return orderings;
-		}
+        [NotNull]
+        public LambdaExpression ParseLambda(
+            [CanBeNull] ParameterExpression[] parameters,
+            [CanBeNull] Type resultType,
+            Maybe<Type> baseTypeForNewClass,
+            [NotNull] string expression,
+            [CanBeNull] params object[] values)
+        {
+            if (expression == EMPTY_EXPRESSION)
+            {
+                return Expression.Lambda(Expression.Constant(new object()), parameters);
+            }
 
-		private ExtendedExpressionParser CreateExpressionParser(ParameterExpression[] parameters, Maybe<Type> baseTypeForNewClass,
-			string expression, object[] values)
-		{
-			return new ExtendedExpressionParser(parameters, expression, values, _methodProviders, _surrogates, _knownTypes, baseTypeForNewClass)
-			{
-				FixIntegerDivision = FixIntegerDivision
-			};
-		}
-	}
+            var parser = CreateExpressionParser(parameters, baseTypeForNewClass, expression, values);
+            return Expression.Lambda(parser.Parse(resultType), parameters);
+        }
+
+        [NotNull]
+        public LambdaExpression ParseLambda(
+            [NotNull] Type itType,
+            [CanBeNull] Type resultType,
+            [NotNull] string expression,
+            [CanBeNull] params object[] values)
+        {
+            return ParseLambda(new[] { Expression.Parameter(itType, null) }, resultType, Maybe<Type>.Nothing, expression, values);
+        }
+
+        [NotNull]
+        public Expression<Func<TParameter, TResult>> ParseLambda<TParameter, TResult>(string expression, params object[] values)
+        {
+            return (Expression<Func<TParameter, TResult>>) ParseLambda(typeof(TParameter), typeof(TResult), expression, values);
+        }
+
+        [NotNull]
+        public static Type CreateClass(IEnumerable<DynamicProperty> properties, Type baseType = null) =>
+            ClassFactory.Instance.GetDynamicClass(properties, baseType);
+
+        [Pure]
+        [NotNull]
+        [ItemNotNull]
+        public IEnumerable<DynamicOrdering> ParseOrdering(
+            [NotNull] string ordering,
+            [CanBeNull] IReadOnlyList<object> values,
+            [CanBeNull] IReadOnlyList<ParameterExpression> parameters)
+        {
+            var parser = CreateExpressionParser(parameters, Maybe<Type>.Nothing, ordering, values);
+            IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();
+            return orderings;
+        }
+
+        [NotNull]
+        private ExtendedExpressionParser CreateExpressionParser(
+            [CanBeNull] IReadOnlyList<ParameterExpression> parameters,
+            Maybe<Type> baseTypeForNewClass,
+            [NotNull] string expression,
+            [CanBeNull] IReadOnlyList<object> values)
+        {
+            return new ExtendedExpressionParser(parameters, expression, values, _methodProviders, _surrogates, _knownTypes,
+                baseTypeForNewClass)
+            {
+                FixIntegerDivision = _fixIntegerDivision
+            };
+        }
+    }
 }

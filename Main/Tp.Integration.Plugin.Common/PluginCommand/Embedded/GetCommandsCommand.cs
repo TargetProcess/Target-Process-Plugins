@@ -12,27 +12,32 @@ using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public class GetCommandsCommand : IPluginCommand
-	{
-		private readonly IPluginCommandRepository _pluginCommandRepository;
+    public class GetCommandsCommand : IPluginCommand
+    {
+        private readonly IPluginCommandRepository _pluginCommandRepository;
 
-		public GetCommandsCommand(IPluginCommandRepository pluginCommandRepository)
-		{
-			_pluginCommandRepository = pluginCommandRepository;
-		}
+        public GetCommandsCommand(IPluginCommandRepository pluginCommandRepository)
+        {
+            _pluginCommandRepository = pluginCommandRepository;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage
-			       	{
-						ResponseData = _pluginCommandRepository.Select(x => x.Name).Where(x => x != DeleteUnusedQueuesCommand.Deleteunusedqueues).OrderBy(x => x).ToArray().Serialize(),
-			       		PluginCommandStatus = PluginCommandStatus.Succeed
-			       	};
-		}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage
+            {
+                ResponseData =
+                    _pluginCommandRepository.Select(x => x.Name)
+                        .Where(x => x != DeleteUnusedQueuesCommand.Deleteunusedqueues)
+                        .OrderBy(x => x)
+                        .ToArray()
+                        .Serialize(),
+                PluginCommandStatus = PluginCommandStatus.Succeed
+            };
+        }
 
-		public string Name
-		{
-			get { return EmbeddedPluginCommands.GetCommands; }
-		}
-	}
+        public string Name
+        {
+            get { return EmbeddedPluginCommands.GetCommands; }
+        }
+    }
 }

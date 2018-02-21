@@ -14,15 +14,15 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[TestFixture]
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class AssignmentsFromBugzillaSyncSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void ShouldCreateAssignmentByEmail()
-		{
-			@"
+    [TestFixture]
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class AssignmentsFromBugzillaSyncSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void ShouldCreateAssignmentByEmail()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -43,13 +43,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And QA 'Dowson' should be newly assigned on TargetProcess bug with name 'bug1'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotCreateEmptyAssignments()
-		{
-			@"
+        [Test]
+        public void ShouldNotCreateEmptyAssignments()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -68,13 +68,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And QA 'Dowson' should be newly assigned on TargetProcess bug with name 'bug1'
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateAssignmentOnBugUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldCreateAssignmentOnBugUpdated()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -97,13 +97,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have developer 'Lansie'
 					And TargetProcess bug with name 'bug1' should have QA 'Dowson'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldUpdateAssignmentOnBugUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldUpdateAssignmentOnBugUpdated()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -126,13 +126,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have developer 'Lansie'
 					And TargetProcess bug with name 'bug1' should have QA 'Dowson'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldDeleteExistingAssignmentOnBugUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldDeleteExistingAssignmentOnBugUpdated()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -155,13 +155,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And TargetProcess bug with name 'bug1' should have QA 'Dowson'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotAssignAnyPersonIfNoMathingRolesCanBeFoundInTargetProcess()
-		{
-			@"
+        [Test]
+        public void ShouldNotAssignAnyPersonIfNoMathingRolesCanBeFoundInTargetProcess()
+        {
+            @"
 				Given Role 'Team Lead' created in TargetProcess
 					And following users created in TargetProcess:
 					|userLogin|userEmail|
@@ -179,13 +179,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And TargetProcess bug with name 'bug1' should no QA assigned
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotAssignAnyPersonIfNoMathingUsersCanBeFoundInTargetProcess()
-		{
-			@"
+        [Test]
+        public void ShouldNotAssignAnyPersonIfNoMathingUsersCanBeFoundInTargetProcess()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And following users created in TargetProcess:
@@ -204,13 +204,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And TargetProcess bug with name 'bug1' should no QA assigned
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldUnassignPersonOnUpdateIfNoMathingUsersCanBeFoundInTargetProcess()
-		{
-			@"
+        [Test]
+        public void ShouldUnassignPersonOnUpdateIfNoMathingUsersCanBeFoundInTargetProcess()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And following users created in TargetProcess:
@@ -231,13 +231,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And TargetProcess bug with name 'bug1' should have QA 'Dowson'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateAssignmentByMapping()
-		{
-			@"
+        [Test]
+        public void ShouldCreateAssignmentByMapping()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -260,13 +260,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And developer 'Dowson' should be newly assigned on TargetProcess bug with name 'bug1'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldUpdateAssignmentByMapping()
-		{
-			@"
+        [Test]
+        public void ShouldUpdateAssignmentByMapping()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -292,13 +292,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And developer 'Johnson' should be newly assigned on TargetProcess bug with name 'bug1'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateAssignmentByWildcardMapping()
-		{
-			@"
+        [Test]
+        public void ShouldCreateAssignmentByWildcardMapping()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And following users created in TargetProcess:
@@ -323,13 +323,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have QA 'Johnson'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldAssignUsersIgnoreCase()
-		{
-			@"
+        [Test]
+        public void ShouldAssignUsersIgnoreCase()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					
@@ -353,13 +353,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have QA 'Lansie'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateEmptyAssignmentByEmailIfUserIsInactive()
-		{
-			@"
+        [Test]
+        public void ShouldCreateEmptyAssignmentByEmailIfUserIsInactive()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -379,13 +379,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateEmptyAssignmentByEmailIfUserIsDeleted()
-		{
-			@"
+        [Test]
+        public void ShouldCreateEmptyAssignmentByEmailIfUserIsDeleted()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -405,13 +405,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateEmptyAssignmentByEmailIfFewTpUsersArePresentWithSuchEmail()
-		{
-			@"
+        [Test]
+        public void ShouldCreateEmptyAssignmentByEmailIfFewTpUsersArePresentWithSuchEmail()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -429,13 +429,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldCreateEmptyAssignmentByMappingIfMappedUserIsInactiveInTp()
-		{
-			@"
+        [Test]
+        public void ShouldCreateEmptyAssignmentByMappingIfMappedUserIsInactiveInTp()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -457,98 +457,104 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And TargetProcess bug with name 'bug1' should have no developer assigned
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>());
+        }
 
-		[Given(
-			"bugzilla profile user mapping created for bugzilla user '$bugzillaUserEmail' and target process user '$targetProcessUserLogin'"
-			)]
-		public void MapBugzillaAndTargetProcessUser(string bugzillaUserEmail, string targetProcessUserLogin)
-		{
-			var user = Context.Users.Single(u => u.Login == targetProcessUserLogin);
-			Profile.GetProfile<BugzillaProfile>().UserMapping = new MappingContainer
-			                                                    	{
-			                                                    		new MappingElement
-			                                                    			{
-			                                                    				Key = bugzillaUserEmail,
-			                                                    				Value =
-			                                                    					new MappingLookup {Id = user.ID.Value, Name = user.Login}
-			                                                    			}
-			                                                    	};
-		}
+        [Given(
+             "bugzilla profile user mapping created for bugzilla user '$bugzillaUserEmail' and target process user '$targetProcessUserLogin'"
+         )]
+        public void MapBugzillaAndTargetProcessUser(string bugzillaUserEmail, string targetProcessUserLogin)
+        {
+            var user = Context.Users.Single(u => u.Login == targetProcessUserLogin);
+            Profile.GetProfile<BugzillaProfile>().UserMapping = new MappingContainer
+            {
+                new MappingElement
+                {
+                    Key = bugzillaUserEmail,
+                    Value =
+                        new MappingLookup { Id = user.ID.Value, Name = user.Login }
+                }
+            };
+        }
 
-		[Given("inactive user '$userLogin' with email '$userEmail' created")]
-		public void CreateInactiveUser(string userLogin, string userEmail)
-		{
-			Context.Users.Add(new UserDTO {Login = userLogin, Email = userEmail, ID = Context.GetNextId(), IsActive = false});
-		}
+        [Given("inactive user '$userLogin' with email '$userEmail' created")]
+        public void CreateInactiveUser(string userLogin, string userEmail)
+        {
+            Context.Users.Add(new UserDTO { Login = userLogin, Email = userEmail, ID = Context.GetNextId(), IsActive = false });
+        }
 
-		[Given("deleted user '$userLogin' with email '$userEmail' created")]
-		public void CreateDeletedUser(string userLogin, string userEmail)
-		{
-			Context.Users.Add(new UserDTO
-			                  	{
-			                  		Login = userLogin,
-			                  		Email = userEmail,
-			                  		ID = Context.GetNextId(),
-			                  		IsActive = true,
-			                  		DeleteDate = CurrentDate.Value
-			                  	});
-		}
+        [Given("deleted user '$userLogin' with email '$userEmail' created")]
+        public void CreateDeletedUser(string userLogin, string userEmail)
+        {
+            Context.Users.Add(new UserDTO
+            {
+                Login = userLogin,
+                Email = userEmail,
+                ID = Context.GetNextId(),
+                IsActive = true,
+                DeleteDate = CurrentDate.Value
+            });
+        }
 
-		[Given("TargetProcess user '$tpLogin' is inactive")]
-		public void SetUserInactive(string tpLogin)
-		{
-			var user = Context.Users.Single(u => u.Login == tpLogin);
-			user.IsActive = false;
-		}
+        [Given("TargetProcess user '$tpLogin' is inactive")]
+        public void SetUserInactive(string tpLogin)
+        {
+            var user = Context.Users.Single(u => u.Login == tpLogin);
+            user.IsActive = false;
+        }
 
-		[Then("TargetProcess bug with name '$bugName' should have developer '$login'")]
-		public void CheckDeveloper(string bugName, string login)
-		{
-			CheckAssignable(bugName, login, "Developer");
-		}
+        [Then("TargetProcess bug with name '$bugName' should have developer '$login'")]
+        public void CheckDeveloper(string bugName, string login)
+        {
+            CheckAssignable(bugName, login, "Developer");
+        }
 
-		[Then("TargetProcess bug with name '$bugName' should have QA '$login'")]
-		public void CheckQa(string bugName, string login)
-		{
-			CheckAssignable(bugName, login, "QA Engineer");
-		}
+        [Then("TargetProcess bug with name '$bugName' should have QA '$login'")]
+        public void CheckQa(string bugName, string login)
+        {
+            CheckAssignable(bugName, login, "QA Engineer");
+        }
 
-		[Then("developer '$developerLogin' should be newly assigned on TargetProcess bug with name '$bugName'")]
-		public void CheckAddedDeveloper(string developerLogin, string bugName)
-		{
-			CheckAssignable(bugName, developerLogin, "Developer");
-		}
+        [Then("developer '$developerLogin' should be newly assigned on TargetProcess bug with name '$bugName'")]
+        public void CheckAddedDeveloper(string developerLogin, string bugName)
+        {
+            CheckAssignable(bugName, developerLogin, "Developer");
+        }
 
-		[Then("QA '$qaLogin' should be newly assigned on TargetProcess bug with name '$bugName'")]
-		public void CheckQA(string qaLogin, string bugName)
-		{
-			CheckAssignable(bugName, qaLogin, "QA Engineer");
-		}
+        [Then("QA '$qaLogin' should be newly assigned on TargetProcess bug with name '$bugName'")]
+        public void CheckQA(string qaLogin, string bugName)
+        {
+            CheckAssignable(bugName, qaLogin, "QA Engineer");
+        }
 
-		[Then("TargetProcess bug with name '$bugName' should have no developer assigned")]
-		public void CheckThereIsNoDeveloperAssignment(string name)
-		{
-			var roleId = Context.Roles.Where(x => x.Name == "Developer").Select(x => x.ID).SingleOrDefault();
-			Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty, "Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty)");
-		}
+        [Then("TargetProcess bug with name '$bugName' should have no developer assigned")]
+        public void CheckThereIsNoDeveloperAssignment(string name)
+        {
+            var roleId = Context.Roles.Where(x => x.Name == "Developer").Select(x => x.ID).SingleOrDefault();
+            Profile.Get<TeamDTO>()
+                .Where(x => x.RoleID == roleId)
+                .Should(Be.Empty, "Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty)");
+        }
 
-		[Then("TargetProcess bug with name '$bugName' should no QA assigned")]
-		public void CheckThereIsNoQaAssigned(string bugName)
-		{
-			var roleId = Context.Roles.Where(x => x.Name == "QA Engineer").Select(x => x.ID).SingleOrDefault();
-			Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty, "Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty)");
-		}
+        [Then("TargetProcess bug with name '$bugName' should no QA assigned")]
+        public void CheckThereIsNoQaAssigned(string bugName)
+        {
+            var roleId = Context.Roles.Where(x => x.Name == "QA Engineer").Select(x => x.ID).SingleOrDefault();
+            Profile.Get<TeamDTO>()
+                .Where(x => x.RoleID == roleId)
+                .Should(Be.Empty, "Profile.Get<TeamDTO>().Where(x => x.RoleID == roleId).Should(Be.Empty)");
+        }
 
-		private void CheckAssignable(string bugName, string tpLogin, string role)
-		{
-			var teams = Profile.Get<TeamDTO>();
+        private void CheckAssignable(string bugName, string tpLogin, string role)
+        {
+            var teams = Profile.Get<TeamDTO>();
 
-			teams.Where(x => x.RoleID == Context.Roles.Single(r => r.Name == role).ID)
-				.Where(x => x.UserID == Context.Users.Single(y => y.Login == tpLogin).UserID)
-				.Where(x => x.AssignableID == Context.TpBugs.Single(y => y.Name == bugName).BugID)
-				.Count().Should(Be.EqualTo(1), "teams.Where(x => x.RoleID == Context.Roles.Single(r => r.Name == role).ID).Where(x => x.UserID == Context.Users.Single(y => y.Login == tpLogin).UserID).Where(x => x.AssignableID == Context.TpBugs.Single(y => y.Name == bugName).BugID).Count().Should(Be.EqualTo(1))");
-		}
-	}
+            teams.Where(x => x.RoleID == Context.Roles.Single(r => r.Name == role).ID)
+                .Where(x => x.UserID == Context.Users.Single(y => y.Login == tpLogin).UserID)
+                .Where(x => x.AssignableID == Context.TpBugs.Single(y => y.Name == bugName).BugID)
+                .Count()
+                .Should(Be.EqualTo(1),
+                    "teams.Where(x => x.RoleID == Context.Roles.Single(r => r.Name == role).ID).Where(x => x.UserID == Context.Users.Single(y => y.Login == tpLogin).UserID).Where(x => x.AssignableID == Context.TpBugs.Single(y => y.Name == bugName).BugID).Count().Should(Be.EqualTo(1))");
+        }
+    }
 }

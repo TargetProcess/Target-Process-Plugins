@@ -24,13 +24,11 @@ namespace Mercurial.Hooks
         /// <summary>
         /// Gets the url from which the changes will come in.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Cannot guarantee this is a valid Uri, but it is still given as an Url from Mercurial")]
+        [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings",
+             Justification = "Cannot guarantee this is a valid Uri, but it is still given as an Url from Mercurial")]
         public string Url
         {
-            get
-            {
-                return _Url;
-            }
+            get { return _Url; }
         }
     }
 }

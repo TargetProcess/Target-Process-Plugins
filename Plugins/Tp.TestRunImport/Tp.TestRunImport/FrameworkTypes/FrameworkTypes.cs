@@ -5,12 +5,12 @@
 
 namespace Tp.Integration.Plugin.TestRunImport.FrameworkTypes
 {
-	public enum FrameworkTypes
-	{
-		None,
-		NUnit,
-		JUnit,
-		Selenium,
-		JenkinsHudson//http://jenkinsmaster-hv:8080/job/BuildCustomerCenter
-	}
+    public enum FrameworkTypes
+    {
+        None,
+        NUnit,
+        JUnit,
+        Selenium,
+        JenkinsHudson //http://jenkinsmaster-hv:8080/job/BuildCustomerCenter
+    }
 }

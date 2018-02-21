@@ -8,16 +8,16 @@ using Tp.MashupManager.CustomCommands.Args;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class UpdateMashupCommand : CrudMashupCommand<UpdateMashupCommandArg>
-	{
-		protected override PluginProfileErrorCollection ExecuteOperation(UpdateMashupCommandArg mashup)
-		{
-			return MashupRepository.Update(mashup);
-		}
+    public class UpdateMashupCommand : CrudMashupCommand<UpdateMashupCommandArg>
+    {
+        protected override PluginProfileErrorCollection ExecuteOperation(UpdateMashupCommandArg mashup)
+        {
+            return MashupRepository.Update(mashup);
+        }
 
-		public override string Name
-		{
-			get { return "UpdateMashup"; }
-		}
-	}
+        public override string Name
+        {
+            get { return "UpdateMashup"; }
+        }
+    }
 }

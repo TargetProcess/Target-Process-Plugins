@@ -2,25 +2,22 @@ using System;
 
 namespace Tp.Core.PropertyBag
 {
-	public class TypedKey<T> : TypedKey
-	{
-		public TypedKey() : base(typeof(T))
-		{
-		}
-	}
+    public class TypedKey<T> : TypedKey
+    {
+        public TypedKey(string name = "") : base(typeof(T), name)
+        {
+        }
+    }
 
-	public class TypedKey
-	{
-		private readonly Type _type;
+    public class TypedKey
+    {
+        public TypedKey(Type type, string name)
+        {
+            Type = type;
+            Name = name;
+        }
 
-		public TypedKey(Type type)
-		{
-			_type = type;
-		}
-
-		public Type Type
-		{
-			get { return _type; }
-		}
-	}
+        public Type Type { get; }
+        public string Name { get; }
+    }
 }

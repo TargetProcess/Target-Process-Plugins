@@ -34,10 +34,7 @@ namespace Mercurial.Gui
         [RepeatableArgument]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return _Revisions;
-            }
+            get { return _Revisions; }
         }
 
         /// <summary>

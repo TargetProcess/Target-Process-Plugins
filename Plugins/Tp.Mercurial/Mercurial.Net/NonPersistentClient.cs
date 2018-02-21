@@ -40,10 +40,7 @@ namespace Mercurial
         /// </summary>
         public string RepositoryPath
         {
-            get
-            {
-                return _RepositoryPath;
-            }
+            get { return _RepositoryPath; }
         }
 
         /// <summary>
@@ -99,7 +96,7 @@ namespace Mercurial
                 throw new ArgumentNullException("command");
 
             ClientExecutable.LazyInitialize();
-            var specialArguments = (IEnumerable<string>)new[]
+            var specialArguments = (IEnumerable<string>) new[]
             {
                 "--noninteractive", "--encoding", "utf-8",
             };
@@ -114,7 +111,7 @@ namespace Mercurial
             }
             finally
             {
-                MercurialVersionBase.Current.WaitForLocksToDissipate(repositoryPath);    
+                MercurialVersionBase.Current.WaitForLocksToDissipate(repositoryPath);
             }
         }
 

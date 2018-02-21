@@ -7,34 +7,34 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 {
-	public abstract class DomainObjectConcurrencyTest : SqlPersisterSpecBase
-	{
-		protected IAccountCollection AccountCollection { get; private set; }
+    public abstract class DomainObjectConcurrencyTest : SqlPersisterSpecBase
+    {
+        protected IAccountCollection AccountCollection { get; private set; }
 
-		protected override void OnInit()
-		{
-			base.OnInit();
-			AccountCollection = ObjectFactory.GetInstance<IAccountCollection>();
-		}
+        protected override void OnInit()
+        {
+            base.OnInit();
+            AccountCollection = ObjectFactory.GetInstance<IAccountCollection>();
+        }
 
-		protected void ExecuteConcurrently(Action firstAction, Action secondAction)
-		{
-			Exception threadException = null;
-			var thread = new Thread(() =>
-			{
-				try
-				{
-					firstAction();
-				}
-				catch (Exception e)
-				{
-					threadException = e;
-				}
-			});
-			thread.Start();
-			secondAction();
-			thread.Join();
-			threadException.Should(Be.Null, "threadException.Should(Be.Null)");
-		}
-	}
+        protected void ExecuteConcurrently(Action firstAction, Action secondAction)
+        {
+            Exception threadException = null;
+            var thread = new Thread(() =>
+            {
+                try
+                {
+                    firstAction();
+                }
+                catch (Exception e)
+                {
+                    threadException = e;
+                }
+            });
+            thread.Start();
+            secondAction();
+            thread.Join();
+            threadException.Should(Be.Null, "threadException.Should(Be.Null)");
+        }
+    }
 }

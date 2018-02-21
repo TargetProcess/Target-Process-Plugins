@@ -24,11 +24,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -70,10 +66,6 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public IEnumerable<string> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<string> Result { get; private set; }
     }
 }

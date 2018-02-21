@@ -7,37 +7,37 @@ using System.Runtime.Serialization;
 
 namespace Tp.Integration.Plugin.Common.Mapping
 {
-	[DataContract]
-	public class MappingLookup
-	{
-		[DataMember]
-		public int Id { get; set; }
+    [DataContract]
+    public class MappingLookup
+    {
+        [DataMember]
+        public int Id { get; set; }
 
-		[DataMember]
-		public string Name { get; set; }
+        [DataMember]
+        public string Name { get; set; }
 
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as MappingLookup);
-		}
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as MappingLookup);
+        }
 
-		public bool Equals(MappingLookup other)
-		{
-			if (ReferenceEquals(null, other))
-			{
-				return false;
-			}
-			if (ReferenceEquals(this, other))
-			{
-				return true;
-			}
+        public bool Equals(MappingLookup other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
 
-			return other.Id == Id;
-		}
+            return other.Id == Id;
+        }
 
-		public override int GetHashCode()
-		{
-			return Id;
-		}
-	}
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+    }
 }

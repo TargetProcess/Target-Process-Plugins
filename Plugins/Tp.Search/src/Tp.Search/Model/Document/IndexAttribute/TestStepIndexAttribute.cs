@@ -10,19 +10,19 @@ using Tp.Integration.Common;
 
 namespace Tp.Search.Model.Document.IndexAttribute
 {
-	[AttributeUsage(AttributeTargets.Field)]
-	internal class TestStepIndexAttribute : Attribute, IIndexFieldsProvider
-	{
-		private readonly IEnumerable<Enum> _fields;
+    [AttributeUsage(AttributeTargets.Field)]
+    internal class TestStepIndexAttribute : Attribute, IIndexFieldsProvider
+    {
+        private readonly IEnumerable<Enum> _fields;
 
-		public TestStepIndexAttribute(TestStepField[] fields)
-		{
-			_fields = fields.Cast<Enum>().ToList();
-		}
+        public TestStepIndexAttribute(TestStepField[] fields)
+        {
+            _fields = fields.Cast<Enum>().ToList();
+        }
 
-		public IEnumerable<Enum> IndexFields
-		{
-			get { return _fields; }
-		}
-	}
+        public IEnumerable<Enum> IndexFields
+        {
+            get { return _fields; }
+        }
+    }
 }

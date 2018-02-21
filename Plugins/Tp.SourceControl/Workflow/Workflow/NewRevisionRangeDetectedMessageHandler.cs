@@ -16,48 +16,48 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Workflow.Workflow
 {
-	public class NewRevisionRangeDetectedMessageHandler : IHandleMessages<NewRevisionRangeDetectedLocalMessage>
-	{
-		private readonly IVersionControlSystem _versionControlSystem;
-		private readonly ILocalBus _bus;
-		private readonly IActivityLogger _logger;
-		private readonly CommentParser _parser;
+    public class NewRevisionRangeDetectedMessageHandler : IHandleMessages<NewRevisionRangeDetectedLocalMessage>
+    {
+        private readonly IVersionControlSystem _versionControlSystem;
+        private readonly ILocalBus _bus;
+        private readonly IActivityLogger _logger;
+        private readonly CommentParser _parser;
 
-		public NewRevisionRangeDetectedMessageHandler(IVersionControlSystem versionControlSystem, ILocalBus bus, IActivityLogger logger)
-		{
-			_versionControlSystem = versionControlSystem;
-			_bus = bus;
-			_logger = logger;
-			_parser = new CommentParser();
-		}
+        public NewRevisionRangeDetectedMessageHandler(IVersionControlSystem versionControlSystem, ILocalBus bus, IActivityLogger logger)
+        {
+            _versionControlSystem = versionControlSystem;
+            _bus = bus;
+            _logger = logger;
+            _parser = new CommentParser();
+        }
 
-		public void Handle(NewRevisionRangeDetectedLocalMessage message)
-		{
-			_logger.Info("Retrieving new revisions");
-			var revisions = _versionControlSystem.GetRevisions(message.Range);
-			_logger.Info("Filtering out non-assignable revisions");
-			revisions = revisions.Where(ContainsEntityId).ToArray();
+        public void Handle(NewRevisionRangeDetectedLocalMessage message)
+        {
+            _logger.Info("Retrieving new revisions");
+            var revisions = _versionControlSystem.GetRevisions(message.Range);
+            _logger.Info("Filtering out non-assignable revisions");
+            revisions = revisions.Where(ContainsEntityId).ToArray();
 
-			_logger.InfoFormat("Revisions retrieved. Revision IDs: {0}", string.Join(", ", revisions.Select(x => x.Id.Value).ToArray()));
+            _logger.InfoFormat("Revisions retrieved. Revision IDs: {0}", string.Join(", ", revisions.Select(x => x.Id.Value).ToArray()));
 
-			SendLocal(revisions);
-		}
+            SendLocal(revisions);
+        }
 
-		private bool ContainsEntityId(RevisionInfo revisionInfo)
-		{
-			return !_parser.ParseAssignToEntityAction(revisionInfo).Empty();
-		}
+        private bool ContainsEntityId(RevisionInfo revisionInfo)
+        {
+            return !_parser.ParseAssignToEntityAction(revisionInfo).Empty();
+        }
 
-		private void SendLocal(IEnumerable<RevisionInfo> revisions)
-		{
-			var messages = revisions.Select(x => new NewRevisionDetectedLocalMessage {Revision = x});
-			messages.ForEach(x => _bus.SendLocal(x));
-		}
-	}
+        private void SendLocal(IEnumerable<RevisionInfo> revisions)
+        {
+            var messages = revisions.Select(x => new NewRevisionDetectedLocalMessage { Revision = x });
+            messages.ForEach(x => _bus.SendLocal(x));
+        }
+    }
 
-	[Serializable]
-	public class NewRevisionRangeDetectedLocalMessage : IPluginLocalMessage
-	{
-		public RevisionRange Range { get; set; }
-	}
+    [Serializable]
+    public class NewRevisionRangeDetectedLocalMessage : IPluginLocalMessage
+    {
+        public RevisionRange Range { get; set; }
+    }
 }

@@ -9,22 +9,22 @@ using Tp.Integration.Testing.Common;
 
 namespace Tp.Tfs.Tests.Context
 {
-	public class CreateCommandExpectations
-	{
-		private readonly Type _dtoType;
-		private Func<CreateCommand, ISagaMessage> _message;
-		private readonly TransportMock _transport;
+    public class CreateCommandExpectations
+    {
+        private readonly Type _dtoType;
+        private Func<CreateCommand, ISagaMessage> _message;
+        private readonly TransportMock _transport;
 
-		public CreateCommandExpectations(Type dtoType, TransportMock transport)
-		{
-			_dtoType = dtoType;
-			_transport = transport;
-		}
+        public CreateCommandExpectations(Type dtoType, TransportMock transport)
+        {
+            _dtoType = dtoType;
+            _transport = transport;
+        }
 
-		public void Reply(Func<CreateCommand, ISagaMessage> message)
-		{
-			_message = message;
-			_transport.On<CreateCommand>(x => _dtoType.IsAssignableFrom(x.Dto.GetType())).Reply(x => _message(x));
-		}
-	}
+        public void Reply(Func<CreateCommand, ISagaMessage> message)
+        {
+            _message = message;
+            _transport.On<CreateCommand>(x => _dtoType.IsAssignableFrom(x.Dto.GetType())).Reply(x => _message(x));
+        }
+    }
 }

@@ -44,10 +44,7 @@ namespace Mercurial
         /// </summary>
         public MergeConflictState State
         {
-            get
-            {
-                return _State;
-            }
+            get { return _State; }
         }
 
         /// <summary>
@@ -55,10 +52,7 @@ namespace Mercurial
         /// </summary>
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
         }
 
         /// <summary>
@@ -99,7 +93,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(MergeConflict))
                 return false;
-            return Equals((MergeConflict)obj);
+            return Equals((MergeConflict) obj);
         }
 
         /// <summary>

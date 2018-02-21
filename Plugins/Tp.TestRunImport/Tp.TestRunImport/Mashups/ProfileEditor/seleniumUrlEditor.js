@@ -30,7 +30,7 @@
 				'			<input type="text" id="resultsUrl" class="input" name="RemoteResultsUrl" value="${RemoteResultsUrl}" readonly="readonly" style="width: 100%;" />' +
 				'		</p>' +
 				'		<p class="message-error pb-10" style="display: none;">Login failed. You have entered incorrect or non-existent login.</p>' +
-				'		<a href="javascript:void(0);" id="generateUrl" class="button">Generate Selenium URL</a><span class="preloader" style="display:none"></span>' +
+				'		<a href="javascript:void(0);" id="generateUrl" class="tau-btn">Generate Selenium URL</a><span class="preloader" style="display:none"></span>' +
 				'	</div>' +
 				'</div>',
 

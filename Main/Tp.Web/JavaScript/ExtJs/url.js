@@ -212,7 +212,9 @@ Tp.AcidURL = Ext.extend(Tp.URL, {
 
 	toString: function () {
 		var acid = new Tp.URL(document.location.href).getAcid();
-		this.setAcid(acid);
+		if (acid) {
+			this.setAcid(acid);
+		}
 		return Tp.AcidURL.superclass.toString.call(this);
 	}
 });

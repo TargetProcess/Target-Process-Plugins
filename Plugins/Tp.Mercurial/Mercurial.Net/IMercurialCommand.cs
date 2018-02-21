@@ -13,10 +13,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        TResult Result
-        {
-            get;
-        }
+        TResult Result { get; }
     }
 
     /// <summary>

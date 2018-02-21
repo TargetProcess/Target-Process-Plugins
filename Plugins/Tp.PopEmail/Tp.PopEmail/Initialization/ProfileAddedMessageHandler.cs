@@ -10,21 +10,21 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.PopEmailIntegration.Initialization
 {
-	public class ProfileAddedMessageHandler : IHandleMessages<ProfileAddedMessage>
-	{
-		private readonly IStorageRepository _storageRepository;
+    public class ProfileAddedMessageHandler : IHandleMessages<ProfileAddedMessage>
+    {
+        private readonly IStorageRepository _storageRepository;
 
-		public ProfileAddedMessageHandler(IStorageRepository storageRepository)
-		{
-			_storageRepository = storageRepository;
-		}
+        public ProfileAddedMessageHandler(IStorageRepository storageRepository)
+        {
+            _storageRepository = storageRepository;
+        }
 
-		public void Handle(ProfileAddedMessage message)
-		{
-			var profile = _storageRepository.GetProfile<ProjectEmailProfile>();
-			var profileServerAndLogins = _storageRepository.Get<ProfileServerAndLogin>();
-			profileServerAndLogins.Add(new ProfileServerAndLogin
-			                           	{MailServer = profile.MailServer, Login = profile.Login});
-		}
-	}
+        public void Handle(ProfileAddedMessage message)
+        {
+            var profile = _storageRepository.GetProfile<ProjectEmailProfile>();
+            var profileServerAndLogins = _storageRepository.Get<ProfileServerAndLogin>();
+            profileServerAndLogins.Add(new ProfileServerAndLogin
+                { MailServer = profile.MailServer, Login = profile.Login });
+        }
+    }
 }

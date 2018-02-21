@@ -18,128 +18,129 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.Bugzilla.ImportToTp
 {
-	public class ImportAssignmentSaga : TpSaga<ImportAssignmentSagaData>,
-	                                    IAmStartedByMessages<NewBugImportedToTargetProcessMessage<BugzillaBug>>,
-	                                    IAmStartedByMessages<ExistingBugImportedToTargetProcessMessage<BugzillaBug>>,
-	                                    IHandleMessages<TeamCreatedMessage>,
-	                                    IHandleMessages<TeamDeletedMessage>
-	{
-		private readonly IStorageRepository _storageRepository;
-		private readonly IUserMapper _userMapper;
-		private readonly IActivityLogger _logger;
+    public class ImportAssignmentSaga
+        : TpSaga<ImportAssignmentSagaData>,
+          IAmStartedByMessages<NewBugImportedToTargetProcessMessage<BugzillaBug>>,
+          IAmStartedByMessages<ExistingBugImportedToTargetProcessMessage<BugzillaBug>>,
+          IHandleMessages<TeamCreatedMessage>,
+          IHandleMessages<TeamDeletedMessage>
+    {
+        private readonly IStorageRepository _storageRepository;
+        private readonly IUserMapper _userMapper;
+        private readonly IActivityLogger _logger;
 
-		public ImportAssignmentSaga()
-		{
-		}
+        public ImportAssignmentSaga()
+        {
+        }
 
-		public ImportAssignmentSaga(IStorageRepository storageRepository, IUserMapper userMapper, IActivityLogger logger)
-		{
-			_storageRepository = storageRepository;
-			_userMapper = userMapper;
-			_logger = logger;
-		}
+        public ImportAssignmentSaga(IStorageRepository storageRepository, IUserMapper userMapper, IActivityLogger logger)
+        {
+            _storageRepository = storageRepository;
+            _userMapper = userMapper;
+            _logger = logger;
+        }
 
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<TeamCreatedMessage>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<TeamDeletedMessage>(saga => saga.Id, message => message.SagaId);
-		}
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<TeamCreatedMessage>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<TeamDeletedMessage>(saga => saga.Id, message => message.SagaId);
+        }
 
-		public void Handle(NewBugImportedToTargetProcessMessage<BugzillaBug> message)
-		{
-			AssignDeveloperToBug(message.TpBugId, message.ThirdPartyBug);
-			AssignQAToBug(message.TpBugId, message.ThirdPartyBug);
+        public void Handle(NewBugImportedToTargetProcessMessage<BugzillaBug> message)
+        {
+            AssignDeveloperToBug(message.TpBugId, message.ThirdPartyBug);
+            AssignQAToBug(message.TpBugId, message.ThirdPartyBug);
 
-			CompleteIfNecessary();
-		}
+            CompleteIfNecessary();
+        }
 
-		public void Handle(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message)
-		{
-			var role = _storageRepository.GetProfile<BugzillaProfile>().GetAssigneeRole();
+        public void Handle(ExistingBugImportedToTargetProcessMessage<BugzillaBug> message)
+        {
+            var role = _storageRepository.GetProfile<BugzillaProfile>().GetAssigneeRole();
 
-			UnassignUsersInTargetProcess(role.Name, message.TpBugId);
-			AssignDeveloperToBug(message.TpBugId, message.ThirdPartyBug);
+            UnassignUsersInTargetProcess(role.Name, message.TpBugId);
+            AssignDeveloperToBug(message.TpBugId, message.ThirdPartyBug);
 
-			CompleteIfNecessary();
-		}
+            CompleteIfNecessary();
+        }
 
-		public void Handle(TeamCreatedMessage message)
-		{
-			_storageRepository.Get<TeamDTO>(message.Dto.ID.ToString()).Add(message.Dto);
+        public void Handle(TeamCreatedMessage message)
+        {
+            _storageRepository.Get<TeamDTO>(message.Dto.ID.ToString()).Add(message.Dto);
 
-			DoNotContinueDispatchingCurrentMessageToHandlers();
+            DoNotContinueDispatchingCurrentMessageToHandlers();
 
-			Data.ActionsInProgress--;
-			CompleteIfNecessary();
-		}
+            Data.ActionsInProgress--;
+            CompleteIfNecessary();
+        }
 
-		public void Handle(TeamDeletedMessage message)
-		{
-			_storageRepository.Get<TeamDTO>(message.Dto.ID.ToString()).Clear();
+        public void Handle(TeamDeletedMessage message)
+        {
+            _storageRepository.Get<TeamDTO>(message.Dto.ID.ToString()).Clear();
 
-			DoNotContinueDispatchingCurrentMessageToHandlers();
+            DoNotContinueDispatchingCurrentMessageToHandlers();
 
-			Data.ActionsInProgress--;
-			CompleteIfNecessary();
-		}
+            Data.ActionsInProgress--;
+            CompleteIfNecessary();
+        }
 
-		private void CompleteIfNecessary()
-		{
-			if (Data.ActionsInProgress == 0)
-				MarkAsComplete();
-		}
+        private void CompleteIfNecessary()
+        {
+            if (Data.ActionsInProgress == 0)
+                MarkAsComplete();
+        }
 
-		private void AssignQAToBug(int? tpBugId, BugzillaBug bugzillaBug)
-		{
-			var role = _storageRepository.GetProfile<BugzillaProfile>().GetReporterRole();
-			var tpUserId = _userMapper.GetTpIdBy(bugzillaBug.reporter);
+        private void AssignQAToBug(int? tpBugId, BugzillaBug bugzillaBug)
+        {
+            var role = _storageRepository.GetProfile<BugzillaProfile>().GetReporterRole();
+            var tpUserId = _userMapper.GetTpIdBy(bugzillaBug.reporter);
 
-			AssignUserToBug(tpBugId, tpUserId, role);
-		}
+            AssignUserToBug(tpBugId, tpUserId, role);
+        }
 
-		private void AssignDeveloperToBug(int? tpBugId, BugzillaBug bugzillaBug)
-		{
-			var role = _storageRepository.GetProfile<BugzillaProfile>().GetAssigneeRole();
-			var tpUserId = _userMapper.GetTpIdBy(bugzillaBug.assigned_to);
+        private void AssignDeveloperToBug(int? tpBugId, BugzillaBug bugzillaBug)
+        {
+            var role = _storageRepository.GetProfile<BugzillaProfile>().GetAssigneeRole();
+            var tpUserId = _userMapper.GetTpIdBy(bugzillaBug.assigned_to);
 
-			AssignUserToBug(tpBugId, tpUserId, role);
-		}
+            AssignUserToBug(tpBugId, tpUserId, role);
+        }
 
-		private void AssignUserToBug(int? tpBugId, int? tpUserId, MappingLookup role)
-		{
-			if (role != null && tpUserId.HasValue)
-			{
-				_logger.InfoFormat("Assigning user. TargetProcess Bug ID: {0}; User ID: {1}; Role: {2}", tpBugId, tpUserId, role.Name);
-				Data.ActionsInProgress++;
-				Send(new CreateTeamCommand(new TeamDTO
-				                           	{
-				                           		AssignableID = tpBugId.GetValueOrDefault(),
-				                           		UserID = tpUserId,
-				                           		RoleID = role.Id
-				                           	}));
-			}
-		}
+        private void AssignUserToBug(int? tpBugId, int? tpUserId, MappingLookup role)
+        {
+            if (role != null && tpUserId.HasValue)
+            {
+                _logger.InfoFormat("Assigning user. TargetProcess Bug ID: {0}; User ID: {1}; Role: {2}", tpBugId, tpUserId, role.Name);
+                Data.ActionsInProgress++;
+                Send(new CreateTeamCommand(new TeamDTO
+                {
+                    AssignableID = tpBugId.GetValueOrDefault(),
+                    UserID = tpUserId,
+                    RoleID = role.Id
+                }));
+            }
+        }
 
-		private void UnassignUsersInTargetProcess(string roleName, int? bugId)
-		{
-			var role = GetDefaultRole(roleName);
-			if (role == null)
-				return;
+        private void UnassignUsersInTargetProcess(string roleName, int? bugId)
+        {
+            var role = GetDefaultRole(roleName);
+            if (role == null)
+                return;
 
-			var bugTeams = _storageRepository.Get<TeamDTO>().Where(t => t.AssignableID == bugId);
-			var tpTeam = bugTeams.Where(t => t.RoleID == role.ID);
+            var bugTeams = _storageRepository.Get<TeamDTO>().Where(t => t.AssignableID == bugId);
+            var tpTeam = bugTeams.Where(t => t.RoleID == role.ID);
 
-			tpTeam.ForEach(x =>
-			               	{
-								_logger.InfoFormat("Unassigning user. TargetProcess Bug ID: {0}; Role: {1}", bugId, role.Name);
-			               		Data.ActionsInProgress++;
-			               		Send(new DeleteTeamCommand(x.ID.GetValueOrDefault()));
-			               	});
-		}
+            tpTeam.ForEach(x =>
+            {
+                _logger.InfoFormat("Unassigning user. TargetProcess Bug ID: {0}; Role: {1}", bugId, role.Name);
+                Data.ActionsInProgress++;
+                Send(new DeleteTeamCommand(x.ID.GetValueOrDefault()));
+            });
+        }
 
-		private RoleDTO GetDefaultRole(string roleName)
-		{
-			return _storageRepository.Get<RoleDTO>().SingleOrDefault(r => r.Name == roleName);
-		}
-	}
+        private RoleDTO GetDefaultRole(string roleName)
+        {
+            return _storageRepository.Get<RoleDTO>().SingleOrDefault(r => r.Name == roleName);
+        }
+    }
 }

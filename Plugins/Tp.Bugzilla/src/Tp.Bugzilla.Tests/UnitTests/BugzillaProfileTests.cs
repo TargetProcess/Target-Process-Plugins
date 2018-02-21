@@ -8,28 +8,28 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.UnitTests
 {
-	[TestFixture]
-    [Category("PartPlugins0")]
-	internal class BugzillaProfileTests
-	{
-		[Test]
-		public void ShouldRemoveWhitespacesFromQueryField()
-		{
-			var profile = new BugzillaProfile
-			              	{
-			              		SavedSearches = " query1, query2 "
-			              	};
-			profile.SavedSearches.Should(Be.EqualTo("query1,query2"), "profile.SavedSearches.Should(Be.EqualTo(\"query1,query2\"))");
-		}
+    [TestFixture]
+    [Category("PartPlugins1")]
+    internal class BugzillaProfileTests
+    {
+        [Test]
+        public void ShouldRemoveWhitespacesFromQueryField()
+        {
+            var profile = new BugzillaProfile
+            {
+                SavedSearches = " query1, query2 "
+            };
+            profile.SavedSearches.Should(Be.EqualTo("query1,query2"), "profile.SavedSearches.Should(Be.EqualTo(\"query1,query2\"))");
+        }
 
-		[Test]
-		public void ShouldRemoveWhitespacesFromUrlField()
-		{
-			var profile = new BugzillaProfile
-			              	{
-			              		Url = " http://url "
-			              	};
-			profile.Url.Should(Be.EqualTo("http://url"), "profile.Url.Should(Be.EqualTo(\"http://url\"))");
-		}
-	}
+        [Test]
+        public void ShouldRemoveWhitespacesFromUrlField()
+        {
+            var profile = new BugzillaProfile
+            {
+                Url = " http://url "
+            };
+            profile.Url.Should(Be.EqualTo("http://url"), "profile.Url.Should(Be.EqualTo(\"http://url\"))");
+        }
+    }
 }

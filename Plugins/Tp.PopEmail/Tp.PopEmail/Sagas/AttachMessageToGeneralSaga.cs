@@ -14,51 +14,52 @@ using Tp.PopEmailIntegration.Rules.ThenClauses;
 
 namespace Tp.PopEmailIntegration.Sagas
 {
-	public class AttachMessageToGeneralSaga : TpSaga<AttachMessageToGeneralSagaData>,
-	                                          IAmStartedByMessages<AttachMessageToProjectCommand>,
-	                                          IHandleMessages<MessageAttachedToGeneralMessage>,
-	                                          IHandleMessages<TargetProcessExceptionThrownMessage>
-	{
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<MessageAttachedToGeneralMessage>(
-				saga => saga.Id,
-				message => message.SagaId
-				);
-			ConfigureMapping<TargetProcessExceptionThrownMessage>(
-				saga => saga.Id,
-				message => message.SagaId
-				);
-		}
+    public class AttachMessageToGeneralSaga
+        : TpSaga<AttachMessageToGeneralSagaData>,
+          IAmStartedByMessages<AttachMessageToProjectCommand>,
+          IHandleMessages<MessageAttachedToGeneralMessage>,
+          IHandleMessages<TargetProcessExceptionThrownMessage>
+    {
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<MessageAttachedToGeneralMessage>(
+                saga => saga.Id,
+                message => message.SagaId
+            );
+            ConfigureMapping<TargetProcessExceptionThrownMessage>(
+                saga => saga.Id,
+                message => message.SagaId
+            );
+        }
 
-		public void Handle(AttachMessageToProjectCommand message)
-		{
-			var attachMessageToGeneralCommand = new AttachMessageToGeneralCommand
-			                                    	{
-			                                    		GeneralId = message.ProjectId,
-			                                    		MessageId = message.MessageDto.ID
-			                                    	};
-			Send(attachMessageToGeneralCommand);
-		}
+        public void Handle(AttachMessageToProjectCommand message)
+        {
+            var attachMessageToGeneralCommand = new AttachMessageToGeneralCommand
+            {
+                GeneralId = message.ProjectId,
+                MessageId = message.MessageDto.ID
+            };
+            Send(attachMessageToGeneralCommand);
+        }
 
-		public void Handle(MessageAttachedToGeneralMessage message)
-		{
-			MarkAsComplete();
-		}
+        public void Handle(MessageAttachedToGeneralMessage message)
+        {
+            MarkAsComplete();
+        }
 
-		public void Handle(TargetProcessExceptionThrownMessage message)
-		{
-			Log().Error("Failed to attach message to project", message.GetException());
-			MarkAsComplete();
-		}
-	}
+        public void Handle(TargetProcessExceptionThrownMessage message)
+        {
+            Log().Error("Failed to attach message to project", message.GetException());
+            MarkAsComplete();
+        }
+    }
 
-	public class AttachMessageToGeneralSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
+    public class AttachMessageToGeneralSagaData : ISagaEntity
+    {
+        public Guid Id { get; set; }
 
-		public string Originator { get; set; }
+        public string Originator { get; set; }
 
-		public string OriginalMessageId { get; set; }
-	}
+        public string OriginalMessageId { get; set; }
+    }
 }

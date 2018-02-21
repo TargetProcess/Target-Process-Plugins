@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AlexPilotti.FTPS.Client, Version=1.2.3.27902, Culture=neutral, PublicKeyToken=48316da1e84b328d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\AlexFTPSv2.1.1.7\lib\AlexPilotti.FTPS.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
     </Reference>
@@ -42,6 +46,9 @@
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net.Ext.Json, Version=1.2.13.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\log4net.Ext.Json.1.2.10.1.2.10.20140804\lib\net20-full\log4net.Ext.Json.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -60,8 +67,9 @@
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
       <HintPath>..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -87,6 +95,11 @@
     <Compile Include="Commands\SeleniumResultsCommand.cs" />
     <Compile Include="Commands\ValidateProfileForMappingCommand.cs" />
     <Compile Include="Commands\ValidateProfileForSeleniumUrlCommand.cs" />
+    <Compile Include="Ftps\DirectoryListParser.cs" />
+    <Compile Include="Ftps\FileTransferCallback.cs" />
+    <Compile Include="Ftps\FtpsClient.cs" />
+    <Compile Include="Ftps\FtpStream.cs" />
+    <Compile Include="Ftps\FtpStreamCallback.cs" />
     <Compile Include="Mappers\MappingChecker.cs" />
     <Compile Include="Mappers\MappingProfileProfileValidator.cs" />
     <Compile Include="Mappers\NamesMapper.cs" />
@@ -123,6 +136,9 @@
     <Compile Include="Workflow\CreateTestPlanRunSaga.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Mashups\ProfileEditor\testPlansPopoverWidget.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="n-j-s-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

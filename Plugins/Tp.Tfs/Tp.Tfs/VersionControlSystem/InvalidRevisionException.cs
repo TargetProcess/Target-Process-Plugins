@@ -7,13 +7,13 @@ using System;
 
 namespace Tp.Tfs.VersionControlSystem
 {
-	public class InvalidRevisionException : Exception
-	{
-		private const string Msg = "Specify a start revision number in the range of 1 - 2147483647.";
+    public class InvalidRevisionException : Exception
+    {
+        private const string Msg = "Specify a start revision number in the range of 1 - 2147483647.";
 
-		public override string Message
-		{
-			get { return Msg; }
-		}
-	}
+        public override string Message
+        {
+            get { return Msg; }
+        }
+    }
 }

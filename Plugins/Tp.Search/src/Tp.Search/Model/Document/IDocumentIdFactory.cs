@@ -5,12 +5,12 @@
 
 namespace Tp.Search.Model.Document
 {
-	public interface IDocumentIdFactory
-	{
-		string CreateEntityTypeId(int entityTypeId);
-		string CreateSquadId(int squadId);
-		string CreateEntityStateId(int entityStateId);
-		string CreateProjectId(int projectId);
-		int ParseProjectId(string projectId);
-	}
+    public interface IDocumentIdFactory
+    {
+        string CreateEntityTypeId(int entityTypeId);
+        string CreateSquadId(int squadId);
+        string CreateEntityStateId(int entityStateId);
+        string CreateProjectId(int projectId);
+        int ParseProjectId(string projectId);
+    }
 }

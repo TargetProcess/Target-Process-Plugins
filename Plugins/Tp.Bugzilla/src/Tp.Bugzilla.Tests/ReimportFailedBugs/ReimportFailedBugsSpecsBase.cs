@@ -15,47 +15,47 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 {
-	[ActionSteps]
-	public class ReimportFailedBugsSpecsBase<T> : BugzillaTestBase
-		where T : class, IBugzillaServiceFailMock, IBugzillaService
-	{
-		public override void Init()
-		{
-			base.Init();
+    [ActionSteps]
+    public class ReimportFailedBugsSpecsBase<T> : BugzillaTestBase
+        where T : class, IBugzillaServiceFailMock, IBugzillaService
+    {
+        public override void Init()
+        {
+            base.Init();
 
-			ObjectFactory.Configure(x =>
-			                        	{
-			                        		x.For<IBugzillaService>().HybridHttpOrThreadLocalScoped().Use<T>();
-			                        		x.Forward<IBugzillaService, T>();
+            ObjectFactory.Configure(x =>
+            {
+                x.For<IBugzillaService>().HybridHttpOrThreadLocalScoped().Use<T>();
+                x.Forward<IBugzillaService, T>();
 
-											x.For<IBugzillaServiceFailMock>().HybridHttpOrThreadLocalScoped().Use<T>();
-			                        		x.Forward<IBugzillaServiceFailMock, T>();
-			                        	});
-		}
+                x.For<IBugzillaServiceFailMock>().HybridHttpOrThreadLocalScoped().Use<T>();
+                x.Forward<IBugzillaServiceFailMock, T>();
+            });
+        }
 
-		protected void FailSynchronization()
-		{
-			ObjectFactory.GetInstance<IBugzillaServiceFailMock>().Fail = true;
-			((IBugzillaServiceFailMock)ObjectFactory.GetInstance<IBugzillaService>()).Fail = true;
-			new BugSyncActionSteps().SynchronizeBugs();
-		}
+        protected void FailSynchronization()
+        {
+            ObjectFactory.GetInstance<IBugzillaServiceFailMock>().Fail = true;
+            ((IBugzillaServiceFailMock) ObjectFactory.GetInstance<IBugzillaService>()).Fail = true;
+            new BugSyncActionSteps().SynchronizeBugs();
+        }
 
-		[Given("bugzilla contains bug $id and name '$name' created on '$created'")]
-		public void CreateBugzillaBug(int id, string name, string created)
-		{
-			Context.BugzillaBugs.Add(new bug
-			{
-				bug_id = id.ToString(),
-				short_desc = name,
-				creation_ts = DateTime.Parse(created).ToString("dd MMM yyyy HH':'mm")
-			});
-		}
+        [Given("bugzilla contains bug $id and name '$name' created on '$created'")]
+        public void CreateBugzillaBug(int id, string name, string created)
+        {
+            Context.BugzillaBugs.Add(new bug
+            {
+                bug_id = id.ToString(),
+                short_desc = name,
+                creation_ts = DateTime.Parse(created).ToString("dd MMM yyyy HH':'mm")
+            });
+        }
 
-		[Given("last synchronization date is '$lastSyncDate'")]
-		public void SetLastSyncDate(string lastSyncDate)
-		{
-			ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().ReplaceWith(
-				new LastSyncDate(DateTime.Parse(lastSyncDate)));
-		}
-	}
+        [Given("last synchronization date is '$lastSyncDate'")]
+        public void SetLastSyncDate(string lastSyncDate)
+        {
+            ObjectFactory.GetInstance<IStorageRepository>().Get<LastSyncDate>().ReplaceWith(
+                new LastSyncDate(DateTime.Parse(lastSyncDate)));
+        }
+    }
 }

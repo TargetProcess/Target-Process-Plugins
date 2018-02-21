@@ -30,15 +30,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string FieldToFocus
         {
-            get
-            {
-                return _FieldToFocus;
-            }
+            get { return _FieldToFocus; }
 
-            set
-            {
-                _FieldToFocus = (value ?? string.Empty).Trim();
-            }
+            set { _FieldToFocus = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

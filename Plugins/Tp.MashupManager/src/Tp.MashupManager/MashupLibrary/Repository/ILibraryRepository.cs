@@ -8,11 +8,11 @@ using Tp.MashupManager.MashupLibrary.Package;
 
 namespace Tp.MashupManager.MashupLibrary.Repository
 {
-	public interface ILibraryRepository
-	{
-		void Refresh();
-		IEnumerable<LibraryPackage> GetPackages();
-		Mashup GetPackageMashup(string packageName);
-		LibraryPackageDetailed GetPackageDetailed(string packageName);
-	}
+    public interface ILibraryRepository
+    {
+        void Refresh();
+        IEnumerable<LibraryPackage> GetPackages();
+        Mashup GetPackageMashup(string packageName);
+        LibraryPackageDetailed GetPackageDetailed(string packageName);
+    }
 }

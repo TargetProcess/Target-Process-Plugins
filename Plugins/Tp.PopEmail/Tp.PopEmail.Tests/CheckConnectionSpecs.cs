@@ -13,69 +13,71 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.PopEmailIntegration
 {
-	[TestFixture, ActionSteps]
-    [Category("PartPlugins0")]
-	public class CheckConnectionSpecs
-	{
-		private ConnectionSettings _settings;
-		private readonly PluginProfileErrorCollection _errors = new PluginProfileErrorCollection();
-		
-		[Test, Ignore]
-		public void ShouldCheckValidPop3Connection()
-		{
-			@"
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class CheckConnectionSpecs
+    {
+        private ConnectionSettings _settings;
+        private readonly PluginProfileErrorCollection _errors = new PluginProfileErrorCollection();
+
+        [Test, Ignore]
+        public void ShouldCheckValidPop3Connection()
+        {
+            @"
 				Given server set to 'pop.targetprocess.com', port to '110', use ssl to 'false', credentials to 'test3@targetprocess.com:test3'
 				When check connection
 				Then connection should be resolved as valid
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test, Ignore]
-		public void ShouldCheckInValidCredentials()
-		{
-			@"
+        [Test, Ignore]
+        public void ShouldCheckInValidCredentials()
+        {
+            @"
 				Given server set to 'pop.targetprocess.com', port to '110', use ssl to 'false', credentials to 'login:pass'
 				When check connection
 				Then server should not login
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Given("server set to '$server', port to '$port', use ssl to '$ssl', credentials to '$credentials")]
-		public void InitMailSettings(string server, int port, bool ssl, string credentials)
-		{
-			var credentialsPair = credentials.Split(':');
+        [Given("server set to '$server', port to '$port', use ssl to '$ssl', credentials to '$credentials")]
+        public void InitMailSettings(string server, int port, bool ssl, string credentials)
+        {
+            var credentialsPair = credentials.Split(':');
 
-			_settings = new ConnectionSettings
-			            	{
-			            		Login = credentialsPair[0],
-			            		Password = credentialsPair[1],
-			            		MailServer = server,
-			            		Port = port,
-			            		Protocol = "pop3",
-			            		UseSSL = ssl
-			            	};
-		}
+            _settings = new ConnectionSettings
+            {
+                Login = credentialsPair[0],
+                Password = credentialsPair[1],
+                MailServer = server,
+                Port = port,
+                Protocol = "pop3",
+                UseSSL = ssl
+            };
+        }
 
-		[When("check connection")]
-		public void CheckConnection()
-		{
-			var client = new MailBeeEmailClient(_settings);
-			client.CheckConnection(_errors);
-		}
+        [When("check connection")]
+        public void CheckConnection()
+        {
+            var client = new MailBeeEmailClient(_settings);
+            client.CheckConnection(_errors);
+        }
 
-		[Then("connection should be resolved as valid")]
-		public void CheckConnectionIsValid()
-		{
-			_errors.Any().Should(Be.False, "_errors.Any().Should(Be.False)");
-		}
+        [Then("connection should be resolved as valid")]
+        public void CheckConnectionIsValid()
+        {
+            _errors.Any().Should(Be.False, "_errors.Any().Should(Be.False)");
+        }
 
-		[Then("server should not login")]
-		public void ShouldNotLogin()
-		{
-			_errors.Count().Should(Be.EqualTo(2), "_errors.Count().Should(Be.EqualTo(2))");
-			_errors.Select(e => e.FieldName).Should(Be.EquivalentTo(new []{"Login", "Password"}), "_errors.Select(e => e.FieldName).Should(Be.EquivalentTo(new []{\"Login\", \"Password\"}))");
-		}
-	}
+        [Then("server should not login")]
+        public void ShouldNotLogin()
+        {
+            _errors.Count().Should(Be.EqualTo(2), "_errors.Count().Should(Be.EqualTo(2))");
+            _errors.Select(e => e.FieldName)
+                .Should(Be.EquivalentTo(new[] { "Login", "Password" }),
+                    "_errors.Select(e => e.FieldName).Should(Be.EquivalentTo(new []{\"Login\", \"Password\"}))");
+        }
+    }
 }

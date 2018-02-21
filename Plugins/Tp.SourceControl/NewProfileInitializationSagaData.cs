@@ -8,14 +8,14 @@ using NServiceBus.Saga;
 
 namespace Tp.SourceControl
 {
-	public class NewProfileInitializationSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
+    public class NewProfileInitializationSagaData : ISagaEntity
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
 
-		public int AllUsersCount { get; set; }
+        public int AllUsersCount { get; set; }
 
-		public int UsersRetrievedCount { get; set; }
-	}
+        public int UsersRetrievedCount { get; set; }
+    }
 }

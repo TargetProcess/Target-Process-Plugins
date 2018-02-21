@@ -10,40 +10,40 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.MashupManager
 {
-	public interface ISingleProfile
-	{
-		IProfile Profile { get; }
-	}
+    public interface ISingleProfile
+    {
+        IProfile Profile { get; }
+    }
 
-	public class SingleProfile : ISingleProfile
-	{
-		private readonly IActivityLogger _logger;
+    public class SingleProfile : ISingleProfile
+    {
+        private readonly IActivityLogger _logger;
 
-		public SingleProfile(IActivityLogger logger)
-		{
-			_logger = logger;
-		}
+        public SingleProfile(IActivityLogger logger)
+        {
+            _logger = logger;
+        }
 
-		public IProfile Profile
-		{
-			get
-			{
-				var profiles = ObjectFactory.GetInstance<IProfileCollection>();
-				var count = profiles.Count();
-				if (count == 0)
-				{
-					return null;
-				}
+        public IProfile Profile
+        {
+            get
+            {
+                var profiles = ObjectFactory.GetInstance<IProfileCollection>();
+                var count = profiles.Count();
+                if (count == 0)
+                {
+                    return null;
+                }
 
-				if (count == 1)
-				{
-					return profiles.Single();
-				}
+                if (count == 1)
+                {
+                    return profiles.Single();
+                }
 
-				_logger.Error("There are more than one profile for Mashup Manager plugin");
+                _logger.Error("There are more than one profile for Mashup Manager plugin");
 
-				return profiles.First();
-			}
-		}
-	}
+                return profiles.First();
+            }
+        }
+    }
 }

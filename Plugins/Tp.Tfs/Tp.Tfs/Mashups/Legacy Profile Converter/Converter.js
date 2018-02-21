@@ -56,7 +56,7 @@ tau.mashups
 						profileNameSpan.append('<span style="color:red;font-weight:bold;">'+ converting +'</span>');
 					}
 
-					var convertLink = $('<a class="button smaller primary mr-5" title="Convert to new profile" href="#" onclick="event.preventDefault();">Convert to new profile</a>');
+					var convertLink = $('<a class="button tau-btn tau-primary mr-5" title="Convert to new profile" href="#" onclick="event.preventDefault();">Convert to new profile</a>');
 					td.prepend(convertLink);
 					convertLink.click(executeConvert($(el), profileName));
 				});

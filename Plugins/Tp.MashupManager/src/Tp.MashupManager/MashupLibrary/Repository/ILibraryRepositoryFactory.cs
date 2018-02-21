@@ -7,8 +7,8 @@ using Tp.MashupManager.MashupLibrary.Repository.Config;
 
 namespace Tp.MashupManager.MashupLibrary.Repository
 {
-	public interface ILibraryRepositoryFactory
-	{
-		ILibraryRepository GetRepository(ILibraryRepositoryConfig config);
-	}
+    public interface ILibraryRepositoryFactory
+    {
+        ILibraryRepository GetRepository(ILibraryRepositoryConfig config);
+    }
 }

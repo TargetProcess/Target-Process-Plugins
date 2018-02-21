@@ -13,44 +13,43 @@ using Tp.Integration.Plugin.Common.Storage;
 
 namespace Tp.Integration.Plugin.Common.Mashup
 {
-	/// <summary>
-	/// Represents a mashup for editing plugin profile.
-	/// </summary>
-	public class PluginProfileEditorMashup : PluginMashup
-	{
-		/// <summary>
-		/// Creates a new instance of PluginProfileEditorMashup.
-		/// </summary>
-		/// <param name="filePaths">The collection of paths to files to be included in mashup. Paths may be relative or absolute.</param>
-		public PluginProfileEditorMashup(IEnumerable<string> filePaths)
-			: base(ProfileEditorMashupName.ProfileEditorMashupPrefix, filePaths, new string[] {})
-		{
-			
-		}
+    /// <summary>
+    /// Represents a mashup for editing plugin profile.
+    /// </summary>
+    public class PluginProfileEditorMashup : PluginMashup
+    {
+        /// <summary>
+        /// Creates a new instance of PluginProfileEditorMashup.
+        /// </summary>
+        /// <param name="filePaths">The collection of paths to files to be included in mashup. Paths may be relative or absolute.</param>
+        public PluginProfileEditorMashup(IEnumerable<string> filePaths)
+            : base(ProfileEditorMashupName.ProfileEditorMashupPrefix, filePaths, new string[] { })
+        {
+        }
 
-		/// <summary>
-		/// Add default placeholder if no explicit configuration
-		/// </summary>
-		/// <returns></returns>
-		public override PluginMashupScript[] GetScripts()
-		{
-			var scripts = base.GetScripts();
-			if (HasExplicitConfig) return scripts;
+        /// <summary>
+        /// Add default placeholder if no explicit configuration
+        /// </summary>
+        /// <returns></returns>
+        public override PluginMashupScript[] GetScripts()
+        {
+            var scripts = base.GetScripts();
+            if (HasExplicitConfig) return scripts;
 
-			var newScripts = new List<PluginMashupScript>(scripts)
-			                 	{
-			                 		new PluginMashupScript
-			                 			{
-			                 				FileName = string.Format("{0}.cfg", ProfileEditorMashupName.ProfileEditorMashupPrefix), 
-											ScriptContent = string.Format("Placeholders:{0}", GetDefaultPlaceholderName())
-			                 			}
-			                 	};
-			return newScripts.ToArray();
-		}
+            var newScripts = new List<PluginMashupScript>(scripts)
+            {
+                new PluginMashupScript
+                {
+                    FileName = string.Format("{0}.cfg", ProfileEditorMashupName.ProfileEditorMashupPrefix),
+                    ScriptContent = string.Format("Placeholders:{0}", GetDefaultPlaceholderName())
+                }
+            };
+            return newScripts.ToArray();
+        }
 
-		private static string GetDefaultPlaceholderName()
-		{
-			return new ProfileEditorMashupName(ObjectFactory.GetInstance<IPluginContext>().PluginName.Value).Value;
-		}
-	}
+        private static string GetDefaultPlaceholderName()
+        {
+            return new ProfileEditorMashupName(ObjectFactory.GetInstance<IPluginContext>().PluginName.Value).Value;
+        }
+    }
 }

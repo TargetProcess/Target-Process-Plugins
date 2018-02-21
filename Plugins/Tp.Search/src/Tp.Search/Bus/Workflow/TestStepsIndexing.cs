@@ -12,63 +12,63 @@ using Tp.Search.Model.Entity;
 
 namespace Tp.Search.Bus.Workflow
 {
-	public interface ITestStepIndexingSagaData
-	{
-		int TestStepsRetrievedCount { get; set; }
-		int TestStepsCurrentDataWindowSize { get; set; }
-	}
+    public interface ITestStepIndexingSagaData
+    {
+        int TestStepsRetrievedCount { get; set; }
+        int TestStepsCurrentDataWindowSize { get; set; }
+    }
 
-	internal class TestStepsIndexing : IndexAlgorithm<TestStepDTO, ITestStepIndexingSagaData, TestStepQuery>
-	{
-		private readonly Action<TestStepDTO, IEntityIndexer> _indexMethod;
+    internal class TestStepsIndexing : IndexAlgorithm<TestStepDTO, ITestStepIndexingSagaData, TestStepQuery>
+    {
+        private readonly Action<TestStepDTO, IEntityIndexer> _indexMethod;
 
-		public TestStepsIndexing(IEntityIndexer entityIndexer, Func<ITestStepIndexingSagaData> data,
-			IEntityTypeProvider entityTypesProvider, Action<ITestStepIndexingSagaData> onComplete,
-			Action<TestStepQuery> sendQuery, IActivityLogger logger, Action<TestStepDTO, IEntityIndexer> indexMethod)
-			: base(entityIndexer, data, entityTypesProvider, onComplete, sendQuery, logger, "testStep")
-		{
-			_indexMethod = indexMethod;
-		}
+        public TestStepsIndexing(IEntityIndexer entityIndexer, Func<ITestStepIndexingSagaData> data,
+            IEntityTypeProvider entityTypesProvider, Action<ITestStepIndexingSagaData> onComplete,
+            Action<TestStepQuery> sendQuery, IActivityLogger logger, Action<TestStepDTO, IEntityIndexer> indexMethod)
+            : base(entityIndexer, data, entityTypesProvider, onComplete, sendQuery, logger, "testStep")
+        {
+            _indexMethod = indexMethod;
+        }
 
-		protected override void IndexEntity(TestStepDTO dto)
-		{
-			_indexMethod(dto, EntityIndexer);
-		}
+        protected override void IndexEntity(TestStepDTO dto)
+        {
+            _indexMethod(dto, EntityIndexer);
+        }
 
-		protected override void OptimizeIndex()
-		{
-			EntityIndexer.OptimizeTestStepIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
-		}
+        protected override void OptimizeIndex()
+        {
+            EntityIndexer.OptimizeTestStepIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
+        }
 
-		protected override void IncrementCounters(int count)
-		{
-			Data.TestStepsRetrievedCount += count;
-			Data.TestStepsCurrentDataWindowSize += count;
-		}
+        protected override void IncrementCounters(int count)
+        {
+            Data.TestStepsRetrievedCount += count;
+            Data.TestStepsCurrentDataWindowSize += count;
+        }
 
-		protected override int GetCurrentDataWindowSize()
-		{
-			return Data.TestStepsCurrentDataWindowSize;
-		}
+        protected override int GetCurrentDataWindowSize()
+        {
+            return Data.TestStepsCurrentDataWindowSize;
+        }
 
-		protected override void ResetCurrentDataWindowSize()
-		{
-			Data.TestStepsCurrentDataWindowSize = 0;
-		}
+        protected override void ResetCurrentDataWindowSize()
+        {
+            Data.TestStepsCurrentDataWindowSize = 0;
+        }
 
-		protected override int GetTotalRetrievedEntitiesCount()
-		{
-			return Data.TestStepsRetrievedCount;
-		}
+        protected override int GetTotalRetrievedEntitiesCount()
+        {
+            return Data.TestStepsRetrievedCount;
+        }
 
-		protected override void ResetTotalRetrievedEntitiesCount()
-		{
-			Data.TestStepsRetrievedCount = 0;
-		}
+        protected override void ResetTotalRetrievedEntitiesCount()
+        {
+            Data.TestStepsRetrievedCount = 0;
+        }
 
-		protected override TestStepQuery CreateQuery()
-		{
-			return new TestStepQuery();
-		}
-	}
+        protected override TestStepQuery CreateQuery()
+        {
+            return new TestStepQuery();
+        }
+    }
 }

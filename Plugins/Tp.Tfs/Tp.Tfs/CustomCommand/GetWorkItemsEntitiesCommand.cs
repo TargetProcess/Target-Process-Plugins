@@ -13,38 +13,35 @@ using Tp.Tfs.WorkItemsIntegration;
 
 namespace Tp.Tfs.CustomCommand
 {
-	public class GetWorkItemsEntitiesCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage
-					{
-						ResponseData = OnExecute(args),
-						PluginCommandStatus = PluginCommandStatus.Succeed
-					};
-		}
+    public class GetWorkItemsEntitiesCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage
+            {
+                ResponseData = OnExecute(args),
+                PluginCommandStatus = PluginCommandStatus.Succeed
+            };
+        }
 
-		private string OnExecute(string args)
-		{
-			var profile = args.DeserializeProfile();
+        private string OnExecute(string args)
+        {
+            var profile = args.DeserializeProfile();
 
-			try
-			{
-				var workItemsTypes = TfsConnectionHelper.GetWorkItemTypesForProject(profile.Settings as TfsPluginProfile);
-				return workItemsTypes.Where(type => WorkItemsTypes.Instance.AllTypes.Contains(type)).Serialize();
-			}
-			catch
-			{
-				return string.Empty;
-			}
-		}
+            try
+            {
+                var workItemsTypes = TfsConnectionHelper.GetWorkItemTypesForProject(profile.Settings as TfsPluginProfile);
+                return workItemsTypes.Where(type => WorkItemsTypes.Instance.AllTypes.Contains(type)).Serialize();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
 
-		public string Name
-		{
-			get
-			{
-				return "GetWorkItemsEntities";
-			}
-		}
-	}
+        public string Name
+        {
+            get { return "GetWorkItemsEntities"; }
+        }
+    }
 }

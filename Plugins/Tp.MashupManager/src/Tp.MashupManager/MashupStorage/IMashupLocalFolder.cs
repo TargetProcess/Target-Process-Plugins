@@ -5,8 +5,8 @@
 
 namespace Tp.MashupManager.MashupStorage
 {
-	public interface IMashupLocalFolder
-	{
-		string Path { get; }
-	}
+    public interface IMashupLocalFolder
+    {
+        string Path { get; }
+    }
 }

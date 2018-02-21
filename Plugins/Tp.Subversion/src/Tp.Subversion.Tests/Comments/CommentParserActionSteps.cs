@@ -17,35 +17,37 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Subversion.Comments
 {
-	[ActionSteps]
-	public class CommentParserActionSteps
-	{
-		private IEnumerable<IAction> _parsedActions;
-		private string _comment;
+    [ActionSteps]
+    public class CommentParserActionSteps
+    {
+        private IEnumerable<IAction> _parsedActions;
+        private string _comment;
 
-		[BeforeScenario]
-		public void BeforeScenario()
-		{
-			ObjectFactory.Initialize(x => x.For<IActionFactory>().Use<ActionFactory>());
-		}
+        [BeforeScenario]
+        public void BeforeScenario()
+        {
+            ObjectFactory.Initialize(x => x.For<IActionFactory>().Use<ActionFactory>());
+        }
 
-		[Given("comment: $comment")]
-		public void GivenComment(string comment)
-		{
-			_comment = comment;
-		}
+        [Given("comment: $comment")]
+        public void GivenComment(string comment)
+        {
+            _comment = comment;
+        }
 
-		[When("parsed")]
-		public void WhenParsed()
-		{
-			_parsedActions = new CommentParser().Parse(new RevisionDTO {Description = _comment}, 0);
-		}
+        [When("parsed")]
+        public void WhenParsed()
+        {
+            _parsedActions = new CommentParser().Parse(new RevisionDTO { Description = _comment }, 0);
+        }
 
-		[Then("attach to entity $id message should be created")]
-		public void EntityIdFoundMessageShouldBeCreated(int id)
-		{
-			_parsedActions.OfType<AssignRevisionToEntityAction>()
-				.SingleOrDefault(x => x.EntityId == id).Should(Be.Not.Null, "_parsedActions.OfType<AssignRevisionToEntityAction>().SingleOrDefault(x => x.EntityId == id).Should(Be.Not.Null)");
-		}
-	}
+        [Then("attach to entity $id message should be created")]
+        public void EntityIdFoundMessageShouldBeCreated(int id)
+        {
+            _parsedActions.OfType<AssignRevisionToEntityAction>()
+                .SingleOrDefault(x => x.EntityId == id)
+                .Should(Be.Not.Null,
+                    "_parsedActions.OfType<AssignRevisionToEntityAction>().SingleOrDefault(x => x.EntityId == id).Should(Be.Not.Null)");
+        }
+    }
 }

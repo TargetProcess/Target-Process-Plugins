@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
 using StructureMap;
@@ -13,41 +8,31 @@ using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager
 {
-	public class MashupsOnTargetProcessStartSender : IHandleMessages<TargetProcessStartedMessage>
-	{
-		private IEnumerable<IAccountReadonly> Accounts
-		{
-			get { return ObjectFactory.GetInstance<IAccountCollection>(); }
-		}
+    public class MashupsOnTargetProcessStartSender : IHandleMessages<TargetProcessStartedMessage>
+    {
+        private IEnumerable<IAccountReadonly> Accounts => ObjectFactory.GetInstance<IAccountCollection>();
 
-		private IMashupScriptStorage MashupStorage
-		{
-			get { return ObjectFactory.GetInstance<IMashupScriptStorage>(); }
-		}
+        private IMashupScriptStorage MashupStorage => ObjectFactory.GetInstance<IMashupScriptStorage>();
 
-		public void Handle(TargetProcessStartedMessage message)
-		{
-			foreach (var account in Accounts)
-			{
-				if (!account.Profiles.Any())
-				{
-					continue;
-				}
+        public void Handle(TargetProcessStartedMessage message)
+        {
+            foreach (var account in Accounts)
+            {
+                if (!account.Profiles.Any())
+                {
+                    continue;
+                }
 
-				var profile = account.Profiles.First();
-				var mashupNames = profile.GetProfile<MashupManagerProfile>().MashupNames;
-				var bus = ObjectFactory.GetInstance<IBus>();
+                var profile = account.Profiles.First();
+                var mashupManagerProfile = profile.GetProfile<MashupManagerProfile>();
+                var bus = ObjectFactory.GetInstance<IBus>();
 
-				foreach (var mashupName in mashupNames)
-				{
-					var mashup = MashupStorage.GetMashup(account.Name, mashupName);
-
-					if (mashup != null)
-					{
-						bus.Send(mashup.CreatePluginMashupMessage(account.Name));
-					}
-				}
-			}
-		}
-	}
+                mashupManagerProfile.MashupNames
+                    .Select(mashupName => MashupStorage.GetMashup(account.Name, mashupName))
+                    .Where(mashup => mashup != null)
+                    .Select(mashup => mashup.CreatePluginMashupMessage(account.Name))
+                    .ForEach(mashupMessage => bus.Send(mashupMessage));
+            }
+        }
+    }
 }

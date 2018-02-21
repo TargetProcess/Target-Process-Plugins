@@ -12,32 +12,42 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
-	public class ConnectionValidator : Validator
-	{
-		public ConnectionValidator(IBugTrackingConnectionSettingsSource connectionSettings)
-			: base(connectionSettings)
-		{
-		}
+    public class ConnectionValidator : Validator
+    {
+        public ConnectionValidator(IBugTrackingConnectionSettingsSource connectionSettings)
+            : base(connectionSettings)
+        {
+        }
 
-		protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
-		{
-			try
-			{
-				var url = new BugzillaUrl(ConnectionSettings);
-				WebClient webClient = new TpWebClient(errors) {Encoding = Encoding.UTF8};
-				webClient.DownloadString(url.Url);
-			}
-			catch (WebException webException)
-			{
-				if (webException.Status != WebExceptionStatus.TrustFailure)
-				{
-					errors.Add(new PluginProfileError { FieldName = BugzillaProfile.UrlField, Message = webException.Message, AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString() });
-				}
-			}
-			catch (Exception exception)
-			{
-				errors.Add(new PluginProfileError {FieldName = BugzillaProfile.UrlField, Message = exception.Message, AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString()});
-			}
-		}
-	}
+        protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
+        {
+            try
+            {
+                var url = new BugzillaUrl(ConnectionSettings);
+                WebClient webClient = new TpWebClient(errors) { Encoding = Encoding.UTF8 };
+                webClient.DownloadString(url.Url);
+            }
+            catch (WebException webException)
+            {
+                if (webException.Status != WebExceptionStatus.TrustFailure)
+                {
+                    errors.Add(new PluginProfileError
+                    {
+                        FieldName = BugzillaProfile.UrlField,
+                        Message = webException.Message,
+                        AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString()
+                    });
+                }
+            }
+            catch (Exception exception)
+            {
+                errors.Add(new PluginProfileError
+                {
+                    FieldName = BugzillaProfile.UrlField,
+                    Message = exception.Message,
+                    AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString()
+                });
+            }
+        }
+    }
 }

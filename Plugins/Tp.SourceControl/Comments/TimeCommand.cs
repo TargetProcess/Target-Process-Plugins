@@ -5,15 +5,15 @@
 
 namespace Tp.SourceControl.Comments
 {
-	public class TimeCommand
-	{
-		public decimal TimeSpent { get; set; }
-		public decimal TimeLeft { get; set; }
+    public class TimeCommand
+    {
+        public decimal TimeSpent { get; set; }
+        public decimal TimeLeft { get; set; }
 
-		public TimeCommand(decimal timeSpent, decimal timeLeft)
-		{
-			TimeSpent = timeSpent;
-			TimeLeft = timeLeft;
-		}
-	}
+        public TimeCommand(decimal timeSpent, decimal timeLeft)
+        {
+            TimeSpent = timeSpent;
+            TimeLeft = timeLeft;
+        }
+    }
 }

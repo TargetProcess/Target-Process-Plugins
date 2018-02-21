@@ -16,21 +16,22 @@ using Tp.Integration.Plugin.Common;
 
 namespace Tp.PopEmailIntegration.Sagas
 {
-    public class AttachRequestersToRequestSaga : TpSaga<AttachRequestersToRequestSagaData>,
-                                              IAmStartedByMessages<AttachRequestersToRequestCommandInternal>,
-                                              IHandleMessages<GeneralUserAttachedToRequestMessage>,
-                                              IHandleMessages<TargetProcessExceptionThrownMessage>
+    public class AttachRequestersToRequestSaga
+        : TpSaga<AttachRequestersToRequestSagaData>,
+          IAmStartedByMessages<AttachRequestersToRequestCommandInternal>,
+          IHandleMessages<GeneralUserAttachedToRequestMessage>,
+          IHandleMessages<TargetProcessExceptionThrownMessage>
     {
         public override void ConfigureHowToFindSaga()
         {
             ConfigureMapping<GeneralUserAttachedToRequestMessage>(
                 saga => saga.Id,
                 message => message.SagaId
-                );
+            );
             ConfigureMapping<TargetProcessExceptionThrownMessage>(
                 saga => saga.Id,
                 message => message.SagaId
-                );
+            );
         }
 
         public void Handle(AttachRequestersToRequestCommandInternal message)
@@ -41,13 +42,12 @@ namespace Tp.PopEmailIntegration.Sagas
             {
                 Log().Info(string.Format("Attaching requester with Id {0} to request with id {1}", requesterId, message.RequestId));
                 var attachGeneralUserToRequestCommand = new AttachGeneralUserToRequestCommand
-                                                        {
-                                                            RequestId = message.RequestId,
-                                                            RequesterId = requesterId
-                                                        };
+                {
+                    RequestId = message.RequestId,
+                    RequesterId = requesterId
+                };
                 Send(attachGeneralUserToRequestCommand);
             }
-
         }
 
         public void Handle(GeneralUserAttachedToRequestMessage message)

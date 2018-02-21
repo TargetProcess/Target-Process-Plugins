@@ -17,70 +17,77 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration
 {
-	public class PopEmailIntegrationContext
-	{
-		public PopEmailIntegrationContext()
-		{
-			var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof (ProjectEmailProfile).Assembly,
-			                                                                 new List<Assembly>
-			                                                                 	{typeof (ExceptionThrownLocalMessage).Assembly},
-			                                                                 new Assembly[] {});
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(transportMock));
+    public class PopEmailIntegrationContext
+    {
+        public PopEmailIntegrationContext()
+        {
+            var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof(ProjectEmailProfile).Assembly,
+                new List<Assembly>
+                    { typeof(ExceptionThrownLocalMessage).Assembly },
+                new Assembly[] { });
+            ObjectFactory.Configure(x => x.For<TransportMock>().Use(transportMock));
 
-			ObjectFactory.Configure(x => x.For<PopEmailIntegrationContext>().Use(this));
+            ObjectFactory.Configure(x => x.For<PopEmailIntegrationContext>().Use(this));
 
-			Transport.On<RetrieveAllUsersQuery>().Reply(x => new UserQueryResult {QueryResultCount = 0});
-			Transport.On<RetrieveAllProjectsQuery>().Reply(x => new ProjectQueryResult {QueryResultCount = 0});
-			Transport.On<RetrieveAllRequestersQuery>().Reply(x => new RequesterQueryResult {QueryResultCount = 0});
-			Transport.On<RetrieveAllMessageUidsQuery>().Reply(x => new MessageUidQueryResult {QueryResultCount = 0});
-			Transport.On<RetrieveGlobalSettingQuery>().Reply(x => new GlobalSettingQueryResult{Dtos =  new []{new GlobalSettingDTO {SMTPSender = Guid.NewGuid().ToString()}}, QueryResultCount = 1});
+            Transport.On<RetrieveAllUsersQuery>().Reply(x => new UserQueryResult { QueryResultCount = 0 });
+            Transport.On<RetrieveAllProjectsQuery>().Reply(x => new ProjectQueryResult { QueryResultCount = 0 });
+            Transport.On<RetrieveAllRequestersQuery>().Reply(x => new RequesterQueryResult { QueryResultCount = 0 });
+            Transport.On<RetrieveAllMessageUidsQuery>().Reply(x => new MessageUidQueryResult { QueryResultCount = 0 });
+            Transport.On<RetrieveGlobalSettingQuery>()
+                .Reply(
+                    x =>
+                        new GlobalSettingQueryResult
+                        {
+                            Dtos = new[] { new GlobalSettingDTO { SMTPSender = Guid.NewGuid().ToString() } },
+                            QueryResultCount = 1
+                        });
 
-			Profile = Transport.AddProfile("Profile_1", GetProfileSettings());
-		}
+            Profile = Transport.AddProfile("Profile_1", GetProfileSettings());
+        }
 
-		public IProfileReadonly Profile { get; private set; }
+        public IProfileReadonly Profile { get; private set; }
 
-		private static ProjectEmailProfile GetProfileSettings()
-		{
-			return new ProjectEmailProfile
-			       	{
-			       		Login = "login", 
-						MailServer = "server", 
-						Password = "pass", 
-						Port = 2, 
-						Protocol = "pop3", 
-						Rules = "then attach to project 100 and create request in project 100",
-						UseSSL = true
-			       	};
-		}
+        private static ProjectEmailProfile GetProfileSettings()
+        {
+            return new ProjectEmailProfile
+            {
+                Login = "login",
+                MailServer = "server",
+                Password = "pass",
+                Port = 2,
+                Protocol = "pop3",
+                Rules = "then attach to project 100 and create request in project 100",
+                UseSSL = true
+            };
+        }
 
-		public TransportMock Transport
-		{
-			get { return ObjectFactory.GetInstance<TransportMock>(); }
-		}
+        public TransportMock Transport
+        {
+            get { return ObjectFactory.GetInstance<TransportMock>(); }
+        }
 
-		public IProfileReadonly Storage
-		{
-			get { return ObjectFactory.GetInstance<IProfileReadonly>(); }
-		}
+        public IProfileReadonly Storage
+        {
+            get { return ObjectFactory.GetInstance<IProfileReadonly>(); }
+        }
 
-		public UserRepository UserRepository
-		{
-			get { return ObjectFactory.GetInstance<UserRepository>(); }
-		}
+        public UserRepository UserRepository
+        {
+            get { return ObjectFactory.GetInstance<UserRepository>(); }
+        }
 
-		public MessageDTO Message { get; set; }
+        public MessageDTO Message { get; set; }
 
-		public string TargetProcessEmail
-		{
-			set
-			{
-				var globalSettings = Profile.Get<GlobalSettingDTO>();
-				var globalSetting = globalSettings.Single();
-				globalSetting.SMTPSender = value;
-				globalSettings.Clear();
-				globalSettings.Add(globalSetting);
-			}
-		}
-	}
+        public string TargetProcessEmail
+        {
+            set
+            {
+                var globalSettings = Profile.Get<GlobalSettingDTO>();
+                var globalSetting = globalSettings.Single();
+                globalSetting.SMTPSender = value;
+                globalSettings.Clear();
+                globalSettings.Add(globalSetting);
+            }
+        }
+    }
 }

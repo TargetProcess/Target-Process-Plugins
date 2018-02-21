@@ -50,22 +50,14 @@ namespace Mercurial
         [EnumArgument(FileStatusIncludes.Modified, "--modified", IsBitmask = true)]
         [EnumArgument(FileStatusIncludes.Removed, "--removed", IsBitmask = true)]
         [EnumArgument(FileStatusIncludes.Unknown, "--unknown", IsBitmask = true)]
-        public FileStatusIncludes Include
-        {
-            get;
-            set;
-        }
+        public FileStatusIncludes Include { get; set; }
 
         #region IMercurialCommand<IEnumerable<FileStatus>> Members
 
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="FileStatus"/> objects.
         /// </summary>
-        public IEnumerable<FileStatus> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<FileStatus> Result { get; private set; }
 
         #endregion
 
@@ -107,14 +99,14 @@ namespace Mercurial
 
             var re = new Regex(@"^(?<status>[MARC!?I ])\s+(?<path>.*)$");
             var statusEntries = from line in standardOutput.Split('\n', '\r')
-                                where !StringEx.IsNullOrWhiteSpace(line)
-                                let ma = re.Match(line)
-                                where ma.Success
-                                select new
-                                {
-                                    status = ma.Groups["status"].Value[0],
-                                    path = ma.Groups["path"].Value
-                                };
+                where !StringEx.IsNullOrWhiteSpace(line)
+                let ma = re.Match(line)
+                where ma.Success
+                select new
+                {
+                    status = ma.Groups["status"].Value[0],
+                    path = ma.Groups["path"].Value
+                };
             foreach (var entry in statusEntries)
             {
                 FileState state;
@@ -123,10 +115,12 @@ namespace Mercurial
                 else
                 {
                     if (entry.status == ' ')
-                        throw new InvalidOperationException("Status does not yet support the Added sub-state to show where the file was added from");
+                        throw new InvalidOperationException(
+                            "Status does not yet support the Added sub-state to show where the file was added from");
                     throw new InvalidOperationException(
                         string.Format(
-                            CultureInfo.InvariantCulture, "Unknown status code reported by Mercurial: '{0}', I do not know how to handle that",
+                            CultureInfo.InvariantCulture,
+                            "Unknown status code reported by Mercurial: '{0}', I do not know how to handle that",
                             entry.status));
                 }
             }

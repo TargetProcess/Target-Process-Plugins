@@ -10,33 +10,33 @@ using Tp.PopEmailIntegration.Rules.ThenClauses;
 
 namespace Tp.PopEmailIntegration.Rules
 {
-	internal class ThenClauseFactory : ClauseFactory
-	{
-		public ThenClauseFactory()
-		{
-			_thenClauses[TokenType.AttachToProjectClause] = ThenAttachToProjectClause.Create;
-			_thenClauses[TokenType.CreateRequestClause] = ThenCreateRequestClause.CreatePrivateRequest;
-			_thenClauses[TokenType.CreatePrivateRequestClause] = ThenCreateRequestClause.CreatePrivateRequest;
-			_thenClauses[TokenType.CreatePublicRequestClause] = ThenCreateRequestClause.CreatePublicRequest;
-		}
+    internal class ThenClauseFactory : ClauseFactory
+    {
+        public ThenClauseFactory()
+        {
+            _thenClauses[TokenType.AttachToProjectClause] = ThenAttachToProjectClause.Create;
+            _thenClauses[TokenType.CreateRequestClause] = ThenCreateRequestClause.CreatePrivateRequest;
+            _thenClauses[TokenType.CreatePrivateRequestClause] = ThenCreateRequestClause.CreatePrivateRequest;
+            _thenClauses[TokenType.CreatePublicRequestClause] = ThenCreateRequestClause.CreatePublicRequest;
+        }
 
-		public ThenClauseComposite CreateBy(ParseNode clauseSubtree)
-		{
-			var result = new ThenClauseComposite();
-			foreach (var whenClause in _thenClauses.Keys)
-			{
-				var clause = FindRecursive(whenClause, clauseSubtree.Nodes.ToArray());
-				if (clause == null)
-				{
-					continue;
-				}
+        public ThenClauseComposite CreateBy(ParseNode clauseSubtree)
+        {
+            var result = new ThenClauseComposite();
+            foreach (var whenClause in _thenClauses.Keys)
+            {
+                var clause = FindRecursive(whenClause, clauseSubtree.Nodes.ToArray());
+                if (clause == null)
+                {
+                    continue;
+                }
 
-				result.Add(_thenClauses[whenClause](clause));
-			}
-			return result;
-		}
+                result.Add(_thenClauses[whenClause](clause));
+            }
+            return result;
+        }
 
-		private readonly Dictionary<TokenType, Func<ParseNode, IThenClause>>
-			_thenClauses = new Dictionary<TokenType, Func<ParseNode, IThenClause>>();
-	}
+        private readonly Dictionary<TokenType, Func<ParseNode, IThenClause>>
+            _thenClauses = new Dictionary<TokenType, Func<ParseNode, IThenClause>>();
+    }
 }

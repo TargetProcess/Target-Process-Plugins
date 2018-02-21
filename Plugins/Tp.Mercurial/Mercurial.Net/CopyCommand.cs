@@ -37,15 +37,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = (value ?? string.Empty).Trim();
-            }
+            set { _Source = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -54,15 +48,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = (value ?? string.Empty).Trim();
-            }
+            set { _Destination = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -71,11 +59,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "-A")]
         [DefaultValue(false)]
-        public bool RecordCopiesAfterTheFact
-        {
-            get;
-            set;
-        }
+        public bool RecordCopiesAfterTheFact { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to force overwriting an existing managed file.
@@ -83,11 +67,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "-f")]
         [DefaultValue(false)]
-        public bool ForceOverwrite
-        {
-            get;
-            set;
-        }
+        public bool ForceOverwrite { get; set; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="CommandBase{T}.Command"/>, or an

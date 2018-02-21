@@ -18,14 +18,14 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 {
-	[TestFixture, ActionSteps]
-    [Category("PartPlugins0")]
-	public class RolesMappingSpecs : MappingTestBase<RoleDTO>
-	{
-		[Test]
-		public void ShouldCreateAssignmentWhenRolesMapped()
-		{
-			@"
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class RolesMappingSpecs : MappingTestBase<RoleDTO>
+    {
+        [Test]
+        public void ShouldCreateAssignmentWhenRolesMapped()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -49,13 +49,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 					And QA 'Dowson' should be newly assigned on TargetProcess bug with name 'bug1'
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotCreateAssingmentWhenRoleIsNotMapped()
-		{
-			@"
+        [Test]
+        public void ShouldNotCreateAssingmentWhenRoleIsNotMapped()
+        {
+            @"
 				Given Role 'QA Engineer' created in TargetProcess
 					And following users created in TargetProcess:
 						|userLogin|userEmail|
@@ -73,13 +73,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 					And TargetProcess bug with name 'bug1' should no QA assigned
 					And import should be completed
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldUpdateRolesMappingIfRoleIsUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldUpdateRolesMappingIfRoleIsUpdated()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And bugzilla profile created
@@ -93,13 +93,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|Assignee|Developer|
 						|Reporter|Verifier|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldDeleteRolesMappingIfRoleIsDeleted()
-		{
-			@"
+        [Test]
+        public void ShouldDeleteRolesMappingIfRoleIsDeleted()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And bugzilla profile created
@@ -113,80 +113,83 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|key|value|
 						|Assignee|Developer|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<RolesMappingSpecs>());
+        }
 
-		#region MappingTestBase
+        #region MappingTestBase
 
-		protected override MappingSourceEntry Source
-		{
-			get { return Context.MappingSource.Roles; }
-		}
+        protected override MappingSourceEntry Source
+        {
+            get { return Context.MappingSource.Roles; }
+        }
 
-		protected override MappingContainer Mapping
-		{
-			get { return Profile.GetProfile<BugzillaProfile>().RolesMapping; }
-		}
+        protected override MappingContainer Mapping
+        {
+            get { return Profile.GetProfile<BugzillaProfile>().RolesMapping; }
+        }
 
-		protected override List<RoleDTO> StoredEntities
-		{
-			get { return Context.Roles; }
-		}
+        protected override List<RoleDTO> StoredEntities
+        {
+            get { return Context.Roles; }
+        }
 
-		protected override MappingContainer GetFromMappings(Mappings mappings)
-		{
-			return null;
-		}
+        protected override MappingContainer GetFromMappings(Mappings mappings)
+        {
+            return null;
+        }
 
-		protected override Func<int, string, RoleDTO> CreateEntityForTargetProcess
-		{
-			get { return (id, name) => new RoleDTO {ID = id, Name = name}; }
-		}
+        protected override Func<int, string, RoleDTO> CreateEntityForTargetProcess
+        {
+            get { return (id, name) => new RoleDTO { ID = id, Name = name }; }
+        }
 
-		#endregion
+        #endregion
 
-		[Given("profile role mapping is the following:")]
-		public void CreateRoleMapping(string key, string value)
-		{
-			var role = Context.Roles
-				.Where(x => x.Name == value)
-				.Select(x => new MappingLookup {Id = x.ID.Value, Name = value})
-				.Single();
-			Profile.GetProfile<BugzillaProfile>().RolesMapping.Add(new MappingElement {Key = key, Value = role});
-		}
+        [Given("profile role mapping is the following:")]
+        public void CreateRoleMapping(string key, string value)
+        {
+            var role = Context.Roles
+                .Where(x => x.Name == value)
+                .Select(x => new MappingLookup { Id = x.ID.Value, Name = value })
+                .Single();
+            Profile.GetProfile<BugzillaProfile>().RolesMapping.Add(new MappingElement { Key = key, Value = role });
+        }
 
-		[When("role '$roleName' has been renamed to '$newRoleName' in TargetProcess")]
-		public void RenameRole(string roleName, string newRoleName)
-		{
-			var role = Context.Roles.Where(x => x.Name == roleName).Single();
-			TransportMock.HandleMessageFromTp(new RoleUpdatedMessage
-			{
-				Dto = new RoleDTO { ID = role.ID, Name = newRoleName },
-				ChangedFields = new[] { RoleField.Name }
-			});
-		}
+        [When("role '$roleName' has been renamed to '$newRoleName' in TargetProcess")]
+        public void RenameRole(string roleName, string newRoleName)
+        {
+            var role = Context.Roles.Where(x => x.Name == roleName).Single();
+            TransportMock.HandleMessageFromTp(new RoleUpdatedMessage
+            {
+                Dto = new RoleDTO { ID = role.ID, Name = newRoleName },
+                ChangedFields = new[] { RoleField.Name }
+            });
+        }
 
-		[When("role '$roleName' has been removed in TargetProcess")]
-		public void RemoveRole(string roleName)
-		{
-			var role = Context.Roles.Where(x => x.Name == roleName).Single();
-			Context.Roles.Remove(role);
-			TransportMock.HandleMessageFromTp(new RoleDeletedMessage
-			{
-				Dto = role
-			});
-		}
+        [When("role '$roleName' has been removed in TargetProcess")]
+        public void RemoveRole(string roleName)
+        {
+            var role = Context.Roles.Where(x => x.Name == roleName).Single();
+            Context.Roles.Remove(role);
+            TransportMock.HandleMessageFromTp(new RoleDeletedMessage
+            {
+                Dto = role
+            });
+        }
 
-		[Then("resulting mapping is the following:")]
-		public void CheckMappingResults(string key, string value)
-		{
-			Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value), "Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value))");
-		}
+        [Then("resulting mapping is the following:")]
+        public void CheckMappingResults(string key, string value)
+        {
+            Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value),
+                "Profile.GetProfile<BugzillaProfile>().RolesMapping[key].Name.Should(Be.EqualTo(value))");
+        }
 
-		[Then("resulting mapping count should be equal to bugzilla roles count")]
-		public void CheckMappingsItemsCount()
-		{
-			Profile.GetProfile<BugzillaProfile>().RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count), "Profile.GetProfile<BugzillaProfile>().RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count))");
-		}
-	}
+        [Then("resulting mapping count should be equal to bugzilla roles count")]
+        public void CheckMappingsItemsCount()
+        {
+            Profile.GetProfile<BugzillaProfile>()
+                .RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count),
+                    "Profile.GetProfile<BugzillaProfile>().RolesMapping.Count.Should(Be.EqualTo(Context.Roles.Count))");
+        }
+    }
 }

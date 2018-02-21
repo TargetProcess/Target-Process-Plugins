@@ -11,75 +11,81 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
-	public class SettingsValidator : Validator
-	{
-		private readonly DeserializeValidator _deserializeValidator;
+    public class SettingsValidator : Validator
+    {
+        private readonly DeserializeValidator _deserializeValidator;
 
-		public const string BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_PLUGIN = "Version of Bugzilla '{0}' is not supported by this plugin. We can't guarantee that Bugzilla plugin will work correctly.";
-		public const string BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_TP2_CGI = "Bugzilla version '{0}' is not supported by 'tp2.cgi'. Please update 'tp2.cgi' and try again.";
-		public const string TP2_CGI_IS_NOT_SUPPORTED_BY_THIS_PLUGIN = "The 'tp2.cgi' script version '{0}' is not supported by this plugin. Please update your 'tp2.cgi' script and try again.";
+        public const string BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_PLUGIN =
+            "Version of Bugzilla '{0}' is not supported by this plugin. We can't guarantee that Bugzilla plugin will work correctly.";
 
-		public SettingsValidator(IBugTrackingConnectionSettingsSource connectionSettings, DeserializeValidator deserializeValidator)
-			: base(connectionSettings)
-		{
-			_deserializeValidator = deserializeValidator;
-		}
+        public const string BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_TP2_CGI =
+            "Bugzilla version '{0}' is not supported by 'tp2.cgi'. Please update 'tp2.cgi' and try again.";
 
-		protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
-		{
-			CheckVersions(_deserializeValidator.Data, errors);
-		}
+        public const string TP2_CGI_IS_NOT_SUPPORTED_BY_THIS_PLUGIN =
+            "The 'tp2.cgi' script version '{0}' is not supported by this plugin. Please update your 'tp2.cgi' script and try again.";
 
-		private static void CheckVersions(bugzilla_properties bugzillaProperties, PluginProfileErrorCollection errors)
-		{
-			if (!ScriptVersionIsValid(bugzillaProperties.script_version))
-			{
-				errors.Add(
-					new PluginProfileError
-						{
-							Message = string.Format(
-								TP2_CGI_IS_NOT_SUPPORTED_BY_THIS_PLUGIN,
-								string.IsNullOrEmpty(bugzillaProperties.script_version) ? "undefined" : bugzillaProperties.script_version),
-							AdditionalInfo = ValidationErrorType.InvalidTpCgiVersion.ToString()
-						});
-			}
+        public SettingsValidator(IBugTrackingConnectionSettingsSource connectionSettings, DeserializeValidator deserializeValidator)
+            : base(connectionSettings)
+        {
+            _deserializeValidator = deserializeValidator;
+        }
 
-			if (!errors.Any() && !BugzillaVersionIsSupported(bugzillaProperties.version))
-			{
-				errors.Add(new PluginProfileError
-				           	{
-				           		Message = string.Format(
-				           			BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_PLUGIN,
-				           			bugzillaProperties.version),
-									AdditionalInfo = ValidationErrorType.InvalidBugzillaVersion.ToString()
-				           	});
-			}
+        protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
+        {
+            CheckVersions(_deserializeValidator.Data, errors);
+        }
 
-			if (!errors.Any() && !ScriptSupportsProvidedBugzillaVersion(bugzillaProperties.version, bugzillaProperties.supported_bugzilla_version))
-			{
-				errors.Add(new PluginProfileError
-				           	{
-								Message = string.Format(
-									BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_TP2_CGI,
-									bugzillaProperties.version),
-								AdditionalInfo = ValidationErrorType.InvalidTpCgiVersion.ToString()
-							});
-			}
-		}
+        private static void CheckVersions(bugzilla_properties bugzillaProperties, PluginProfileErrorCollection errors)
+        {
+            if (!ScriptVersionIsValid(bugzillaProperties.script_version))
+            {
+                errors.Add(
+                    new PluginProfileError
+                    {
+                        Message = string.Format(
+                            TP2_CGI_IS_NOT_SUPPORTED_BY_THIS_PLUGIN,
+                            string.IsNullOrEmpty(bugzillaProperties.script_version) ? "undefined" : bugzillaProperties.script_version),
+                        AdditionalInfo = ValidationErrorType.InvalidTpCgiVersion.ToString()
+                    });
+            }
 
-		public static bool ScriptVersionIsValid(string scriptVersion)
-		{
-			return scriptVersion.StartsWith(BugzillaInfo.SupportedCgiScriptVersion);
-		}
+            if (!errors.Any() && !BugzillaVersionIsSupported(bugzillaProperties.version))
+            {
+                errors.Add(new PluginProfileError
+                {
+                    Message = string.Format(
+                        BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_PLUGIN,
+                        bugzillaProperties.version),
+                    AdditionalInfo = ValidationErrorType.InvalidBugzillaVersion.ToString()
+                });
+            }
 
-		public static bool BugzillaVersionIsSupported(string bugzillaVersion)
-		{
-			return BugzillaInfo.SupportedVersions.Any(bugzillaVersion.StartsWith);
-		}
+            if (!errors.Any()
+                && !ScriptSupportsProvidedBugzillaVersion(bugzillaProperties.version, bugzillaProperties.supported_bugzilla_version))
+            {
+                errors.Add(new PluginProfileError
+                {
+                    Message = string.Format(
+                        BUGZILLA_VERSION_IS_NOT_SUPPORTED_BY_TP2_CGI,
+                        bugzillaProperties.version),
+                    AdditionalInfo = ValidationErrorType.InvalidTpCgiVersion.ToString()
+                });
+            }
+        }
 
-		public static bool ScriptSupportsProvidedBugzillaVersion(string bugzillaVersion, string supportedBugzillaVersion)
-		{
-			return string.IsNullOrEmpty(supportedBugzillaVersion) || bugzillaVersion.StartsWith(supportedBugzillaVersion);
-		}
-	}
+        public static bool ScriptVersionIsValid(string scriptVersion)
+        {
+            return scriptVersion.StartsWith(BugzillaInfo.SupportedCgiScriptVersion);
+        }
+
+        public static bool BugzillaVersionIsSupported(string bugzillaVersion)
+        {
+            return BugzillaInfo.SupportedVersions.Any(bugzillaVersion.StartsWith);
+        }
+
+        public static bool ScriptSupportsProvidedBugzillaVersion(string bugzillaVersion, string supportedBugzillaVersion)
+        {
+            return string.IsNullOrEmpty(supportedBugzillaVersion) || bugzillaVersion.StartsWith(supportedBugzillaVersion);
+        }
+    }
 }

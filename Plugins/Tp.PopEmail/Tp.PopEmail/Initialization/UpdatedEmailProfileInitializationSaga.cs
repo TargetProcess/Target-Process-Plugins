@@ -13,47 +13,48 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration.Initialization
 {
-	public class UpdatedEmailProfileInitializationSaga :
-		UpdatedProfileInitializationSaga<UpdatedEmailProfileInitializationSagaData>,
-		IHandleMessages<MessageUidsLoadedMessageInternal>
-	{
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<MessageUidsLoadedMessageInternal>(saga => saga.Id, message => message.SagaId);
-		}
+    public class UpdatedEmailProfileInitializationSaga
+        :
+            UpdatedProfileInitializationSaga<UpdatedEmailProfileInitializationSagaData>,
+            IHandleMessages<MessageUidsLoadedMessageInternal>
+    {
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<MessageUidsLoadedMessageInternal>(saga => saga.Id, message => message.SagaId);
+        }
 
-		protected override void OnStartInitialization()
-		{
-			var profileServerAndLogins = StorageRepository().Get<ProfileServerAndLogin>();
-			var severAndLogin = profileServerAndLogins.FirstOrDefault();
-			var profile = StorageRepository().GetProfile<ProjectEmailProfile>();
+        protected override void OnStartInitialization()
+        {
+            var profileServerAndLogins = StorageRepository().Get<ProfileServerAndLogin>();
+            var severAndLogin = profileServerAndLogins.FirstOrDefault();
+            var profile = StorageRepository().GetProfile<ProjectEmailProfile>();
 
-			if (severAndLogin != null)
-			{
-				if (severAndLogin.MailServer == profile.MailServer && severAndLogin.Login == profile.Login)
-				{
-					MarkAsComplete();
-					return;
-				}
-			}
+            if (severAndLogin != null)
+            {
+                if (severAndLogin.MailServer == profile.MailServer && severAndLogin.Login == profile.Login)
+                {
+                    MarkAsComplete();
+                    return;
+                }
+            }
 
-			profileServerAndLogins.ReplaceWith(new ProfileServerAndLogin {MailServer = profile.MailServer, Login = profile.Login});
+            profileServerAndLogins.ReplaceWith(new ProfileServerAndLogin { MailServer = profile.MailServer, Login = profile.Login });
 
-			ObjectFactory.GetInstance<MessageUidRepository>().RemoveAll();
+            ObjectFactory.GetInstance<MessageUidRepository>().RemoveAll();
 
-			SendLocal(new LoadMessageUidsCommandInternal {OuterSagaId = Data.Id});
-		}
+            SendLocal(new LoadMessageUidsCommandInternal { OuterSagaId = Data.Id });
+        }
 
-		public void Handle(MessageUidsLoadedMessageInternal message)
-		{
-			MarkAsComplete();
-		}
-	}
+        public void Handle(MessageUidsLoadedMessageInternal message)
+        {
+            MarkAsComplete();
+        }
+    }
 
-	public class UpdatedEmailProfileInitializationSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
-	}
+    public class UpdatedEmailProfileInitializationSagaData : ISagaEntity
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
+    }
 }

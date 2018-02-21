@@ -32,66 +32,42 @@ namespace Tp.Tfs.Tests
 
         public string TestCollection
         {
-            get
-            {
-                return GetAppSettingsValue("TestCollection", "http://localhost:8080/tfs/testcollection");
-            }
+            get { return GetAppSettingsValue("TestCollection", "http://localhost:8080/tfs/testcollection"); }
         }
 
         public string Login
         {
-            get
-            {
-                return GetAppSettingsValue("Login", "operator");
-            }
+            get { return GetAppSettingsValue("Login", "operator"); }
         }
 
         public string Domen
         {
-            get
-            {
-                return GetAppSettingsValue("Domen", string.Empty);
-            }
+            get { return GetAppSettingsValue("Domen", string.Empty); }
         }
 
         public string Password
         {
-            get
-            {
-                return GetAppSettingsValue("Password", "trustMIND");
-            }
+            get { return GetAppSettingsValue("Password", "trustMIND"); }
         }
 
         public string TestCollectionProject
         {
-            get
-            {
-                return GetAppSettingsValue("TestCollectionProject", "TeamProject1");
-            }
+            get { return GetAppSettingsValue("TestCollectionProject", "TeamProject1"); }
         }
 
         public int RevisionFrom
         {
-            get
-            {
-                return GetAppSettingsIntValue("RevisionFrom", 1);
-            }
+            get { return GetAppSettingsIntValue("RevisionFrom", 1); }
         }
 
         public int RevisionTill
         {
-            get
-            {
-                return GetAppSettingsIntValue("RevisionTill", 200);
-            }
+            get { return GetAppSettingsIntValue("RevisionTill", 200); }
         }
 
         public int PageSize
         {
-            get
-            {
-                return GetAppSettingsIntValue("PageSize", 100);
-            }
+            get { return GetAppSettingsIntValue("PageSize", 100); }
         }
 
         private int GetAppSettingsIntValue(string key, int defaultValue)
@@ -110,7 +86,5 @@ namespace Tp.Tfs.Tests
             var value = ConfigurationManager.AppSettings[key];
             return string.IsNullOrEmpty(value) ? defaultValue : value;
         }
-
-
     }
 }

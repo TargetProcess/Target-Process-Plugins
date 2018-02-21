@@ -52,11 +52,7 @@ namespace Mercurial
         /// </remarks>
         [BooleanArgument(TrueOption = "--after")]
         [DefaultValue(false)]
-        public bool RecordOnly
-        {
-            get;
-            set;
-        }
+        public bool RecordOnly { get; set; }
 
         /// <summary>
         /// Sets the value of the <see cref="RecordOnly"/> property to the
@@ -74,7 +70,7 @@ namespace Mercurial
         public T WithRecordOnly(bool value)
         {
             RecordOnly = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -83,11 +79,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Sets the value of the <see cref="Force"/> property to the
@@ -105,7 +97,7 @@ namespace Mercurial
         public T WithForce(bool value)
         {
             Force = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -118,15 +110,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = value;
-            }
+            set { _Source = value; }
         }
 
         /// <summary>
@@ -145,7 +131,7 @@ namespace Mercurial
         public T WithSource(string value)
         {
             Source = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -158,15 +144,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = value;
-            }
+            set { _Destination = value; }
         }
 
         /// <summary>
@@ -185,7 +165,7 @@ namespace Mercurial
         public T WithDestination(string value)
         {
             Destination = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -230,9 +210,11 @@ namespace Mercurial
             base.Validate();
 
             if (StringEx.IsNullOrWhiteSpace(Source))
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The Source property must be set before executing a {0}", GetType().Name));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                    "The Source property must be set before executing a {0}", GetType().Name));
             if (StringEx.IsNullOrWhiteSpace(Destination))
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The Destination property must be set before executing a {0}", GetType().Name));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                    "The Destination property must be set before executing a {0}", GetType().Name));
         }
     }
 }

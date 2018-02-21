@@ -5,9 +5,9 @@
 
 namespace Tp.MashupManager.MashupLibrary.Package
 {
-	public class LibraryPackage
-	{
-		public string Name { get; set; }
-		public LibraryPackageBaseInfo BaseInfo { get; set; }
-	}
+    public class LibraryPackage
+    {
+        public string Name { get; set; }
+        public LibraryPackageBaseInfo BaseInfo { get; set; }
+    }
 }

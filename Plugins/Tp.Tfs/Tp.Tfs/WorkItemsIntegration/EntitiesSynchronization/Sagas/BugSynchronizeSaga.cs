@@ -16,66 +16,67 @@ using Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Sagas;
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization
 {
-	public class BugSynchronizeSaga :
-			EntitySynchronizeSaga<BugEntity, BugDTO>,
-			IAmStartedByMessages<BugSynchronizationMessage>,
-			IHandleMessages<BugCreatedMessage>,
-			IHandleMessages<BugUpdatedMessage>,
-			IHandleMessages<TargetProcessExceptionThrownMessage>
-	{
-		public BugSynchronizeSaga()
-		{
-		}
+    public class BugSynchronizeSaga
+        :
+            EntitySynchronizeSaga<BugEntity, BugDTO>,
+            IAmStartedByMessages<BugSynchronizationMessage>,
+            IHandleMessages<BugCreatedMessage>,
+            IHandleMessages<BugUpdatedMessage>,
+            IHandleMessages<TargetProcessExceptionThrownMessage>
+    {
+        public BugSynchronizeSaga()
+        {
+        }
 
-		public BugSynchronizeSaga(IActivityLogger logger)
-		{
-			Logger = logger;
-		}
+        public BugSynchronizeSaga(IActivityLogger logger)
+        {
+            Logger = logger;
+        }
 
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureHowToFindSagaInternal<BugDTO, BugField, BugCreatedMessage, BugUpdatedMessage>();
-		}
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureHowToFindSagaInternal<BugDTO, BugField, BugCreatedMessage, BugUpdatedMessage>();
+        }
 
-		public void Handle(BugSynchronizationMessage message)
-		{
-			HandleInternal(message.WorkItem);
-		}
+        public void Handle(BugSynchronizationMessage message)
+        {
+            HandleInternal(message.WorkItem);
+        }
 
-		public void Handle(BugCreatedMessage message)
-		{
-			HandleCreatedInternal(message);
-		}
+        public void Handle(BugCreatedMessage message)
+        {
+            HandleCreatedInternal(message);
+        }
 
-		public void Handle(BugUpdatedMessage message)
-		{
-			HandleUpdatedInternal<BugUpdatedMessage, BugField>(message);
-		}
+        public void Handle(BugUpdatedMessage message)
+        {
+            HandleUpdatedInternal<BugUpdatedMessage, BugField>(message);
+        }
 
-		public void Handle(TargetProcessExceptionThrownMessage message)
-		{
-			HandleErrorInternal(message);
-		}
+        public void Handle(TargetProcessExceptionThrownMessage message)
+        {
+            HandleErrorInternal(message);
+        }
 
-		protected override void SendUpdateCommand(BugDTO bugDTO, WorkItemInfo itemInfo)
-		{
-			Send(new UpdateBugCommand(bugDTO) { ChangedFields = itemInfo.ChangedFields });
-		}
+        protected override void SendUpdateCommand(BugDTO bugDTO, WorkItemInfo itemInfo)
+        {
+            Send(new UpdateBugCommand(bugDTO) { ChangedFields = itemInfo.ChangedFields });
+        }
 
-		protected override void SendCreateCommand(BugDTO bugDTO)
-		{
-			Send(new CreateBugCommand(bugDTO));
-			Data.CreatingEntity = true;
-		}
+        protected override void SendCreateCommand(BugDTO bugDTO)
+        {
+            Send(new CreateBugCommand(bugDTO));
+            Data.CreatingEntity = true;
+        }
 
-		protected override BugDTO CreateEntityDTO(WorkItemInfo workItem)
-		{
-			BugDTO bugDto = base.CreateEntityDTO(workItem);
+        protected override BugDTO CreateEntityDTO(WorkItemInfo workItem)
+        {
+            BugDTO bugDto = base.CreateEntityDTO(workItem);
 
-			bugDto.ProjectName = workItem.TpProjectName;
-			bugDto.ProjectID = workItem.TpProjectId;
+            bugDto.ProjectName = workItem.TpProjectName;
+            bugDto.ProjectID = workItem.TpProjectId;
 
-			return bugDto;
-		}
-	}
+            return bugDto;
+        }
+    }
 }

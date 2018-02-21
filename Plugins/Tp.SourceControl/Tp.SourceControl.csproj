@@ -32,17 +32,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="NServiceBus, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+    <Reference Include="NServiceBus.Host, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+      <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -59,10 +69,11 @@
     <Compile Include="Commands\GetImportedRevisionsCommand.cs" />
     <Compile Include="Commands\ICheckConnectionErrorResolver.cs" />
     <Compile Include="Comments\DSL\NodeParser.cs" />
+    <Compile Include="TpUserData.cs" />
+    <Compile Include="UserStorageMigrator.cs" />
     <Compile Include="VersionControlSystem\VersionControlSystemFactory.cs" />
     <Compile Include="VersionControlSystem\IVersionControlSystemFactory.cs" />
     <Compile Include="Commands\ViewDiffCommand.cs" />
-    <Compile Include="Diff\ChunkParser.cs" />
     <Compile Include="Diff\Diff.cs" />
     <Compile Include="Diff\DiffActionType.cs" />
     <Compile Include="Diff\DiffChunk.cs" />
@@ -133,9 +144,15 @@
       <Project>{3692E1DB-2933-4F02-A5E6-BA303F1825B1}</Project>
       <Name>Tp.Integration.Plugin.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TP.Plugins.Toolkit\Tp.Plugins.Toolkit\Tp.Plugins.Toolkit.csproj">
+      <Project>{CD5AEB5D-48D4-4AD5-A0EB-6294EF827DDA}</Project>
+      <Name>Tp.Plugins.Toolkit</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Comments\DSL\VcsCommentParserLangDefinition.tpg" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

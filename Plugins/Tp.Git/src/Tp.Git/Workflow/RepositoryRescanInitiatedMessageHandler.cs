@@ -8,23 +8,25 @@ using Tp.SourceControl.Workflow.Workflow;
 
 namespace Tp.Git.Workflow
 {
-	public class RepositoryRescanInitiatedMessageHandler : VersionControlSystemProcessorBase, IHandleMessages<RepositoryRescanInitiatedMessage>
-	{
-		public RepositoryRescanInitiatedMessageHandler(IVersionControlSystem versionControlSystem, IRevisionIdComparer revisionComparer, ILocalBus bus, ISourceControlConnectionSettingsSource settingsSource, IStorageRepository storage, IActivityLogger logger) 
-			: base(revisionComparer, storage, settingsSource, versionControlSystem, bus, logger)
-		{
-		}
+    public class RepositoryRescanInitiatedMessageHandler
+        : VersionControlSystemProcessorBase, IHandleMessages<RepositoryRescanInitiatedMessage>
+    {
+        public RepositoryRescanInitiatedMessageHandler(IVersionControlSystem versionControlSystem, IRevisionIdComparer revisionComparer,
+            ILocalBus bus, ISourceControlConnectionSettingsSource settingsSource, IStorageRepository storage, IActivityLogger logger)
+            : base(revisionComparer, storage, settingsSource, versionControlSystem, bus, logger)
+        {
+        }
 
-		public void Handle(RepositoryRescanInitiatedMessage message)
-		{
-			Logger.Info("Repository rescan started");
+        public void Handle(RepositoryRescanInitiatedMessage message)
+        {
+            Logger.Info("Repository rescan started");
 
-			ImportRevisions();
-		}
+            ImportRevisions();
+        }
 
-		protected override RevisionRange[] RetrieveRevisionRanges()
-		{
-			return VersionControlSystem.GetFromTillHead(StartRevision, PageSize);
-		}
-	}
+        protected override RevisionRange[] RetrieveRevisionRanges()
+        {
+            return VersionControlSystem.GetFromTillHead(StartRevision, PageSize);
+        }
+    }
 }

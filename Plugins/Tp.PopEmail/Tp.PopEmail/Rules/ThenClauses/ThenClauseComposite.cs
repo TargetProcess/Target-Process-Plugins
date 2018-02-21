@@ -10,26 +10,26 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration.Rules.ThenClauses
 {
-	public class ThenClauseComposite : IThenClause
-	{
-		private readonly List<IThenClause> _clauses = new List<IThenClause>();
+    public class ThenClauseComposite : IThenClause
+    {
+        private readonly List<IThenClause> _clauses = new List<IThenClause>();
 
-		public void Add(IThenClause thenClause)
-		{
-			_clauses.Add(thenClause);
-		}
+        public void Add(IThenClause thenClause)
+        {
+            _clauses.Add(thenClause);
+        }
 
-		public void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
-		{
-			foreach (var thenClause in _clauses)
-			{
-				thenClause.Execute(dto, attachments, requesters);
-			}
-		}
+        public void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
+        {
+            foreach (var thenClause in _clauses)
+            {
+                thenClause.Execute(dto, attachments, requesters);
+            }
+        }
 
-		public bool IsMatched(EmailMessage message)
-		{
-			return _clauses.Any(x => x.IsMatched(message));
-		}
-	}
+        public bool IsMatched(EmailMessage message)
+        {
+            return _clauses.Any(x => x.IsMatched(message));
+        }
+    }
 }

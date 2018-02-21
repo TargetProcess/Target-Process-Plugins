@@ -20,109 +20,100 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Mercurial.Tests
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class UserMapperSpecs
-	{
-		private const string _tpName = "someone great";
-		private const string _tpLogin = "someone";
-		private const string _tpEmail = "someone@somewhere.com";
-		private const int _tpId = 1;
+    public class UserMapperSpecs
+    {
+        private const string _tpName = "someone great";
+        private const string _tpLogin = "someone";
+        private const string _tpEmail = "someone@somewhere.com";
+        private const int _tpId = 1;
 
-		private static VcsPluginContext Context
-		{
-			get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
-		}
+        private static VcsPluginContext Context
+        {
+            get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
+        }
 
-		private static UserMapper Mapper
-		{
-			get { return ObjectFactory.GetInstance<UserMapper>(); }
-		}
+        private static UserMapper Mapper
+        {
+            get { return ObjectFactory.GetInstance<UserMapper>(); }
+        }
 
-		public static UserDTO User
-		{
-			get { return Context.UserDtos.Single(x => x.Login == _tpLogin); }
-		}
+        public static UserDTO User
+        {
+            get { return Context.UserDtos.Single(x => x.Login == _tpLogin); }
+        }
 
-		[SetUp]
-		public void Setup()
-		{
-		    try
-		    {
-                ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
-                ObjectFactory.Configure(
-                    x =>
+        [SetUp]
+        public void Setup()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
+            ObjectFactory.Configure(
+                x =>
                     x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(MercurialPluginProfile).Assembly,
-                                                                                            new List<Assembly> { typeof(Command).Assembly })));
-		    }
-		    catch (Exception e)
-		    {
-		        
-		        throw;
-		    }
-			
+                        new List<Assembly> { typeof(Command).Assembly })));
 
-			Context.CreateTpUser(_tpName, _tpLogin, _tpEmail, _tpId);
-			InitializeProfile();
-		}
+            Context.CreateTpUser(_tpName, _tpLogin, _tpEmail, _tpId);
+            InitializeProfile();
+        }
 
         private MercurialPluginProfile InitializeProfile()
-		{
-			return Context.Profile;
-		}
+        {
+            return Context.Profile;
+        }
 
-		[Test]
-		public void ShouldMapUsersByEmail()
-		{
-			var vcsEmail = "someone@somewhere.com";
+        [Test]
+        public void ShouldMapUsersByEmail()
+        {
+            var vcsEmail = "someone@somewhere.com";
 
-			Context.MapUser(vcsEmail, _tpName);
+            Context.MapUser(vcsEmail, _tpName);
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = vcsEmail});
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = vcsEmail });
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
 
-		[Test]
-		public void ShouldMapUserByName()
-		{
-			var vcsName = "someone great";
+        [Test]
+        public void ShouldMapUserByName()
+        {
+            var vcsName = "someone great";
 
-			Context.MapUser(vcsName, _tpName);
+            Context.MapUser(vcsName, _tpName);
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Author = vcsName});
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Author = vcsName });
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
 
-		[Test]
-		public void ShouldGuessUserByEmail()
-		{
-			var vcsEmail = "someone@somewhere.com";
+        [Test]
+        public void ShouldGuessUserByEmail()
+        {
+            var vcsEmail = "someone@somewhere.com";
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = vcsEmail});
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = vcsEmail });
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
 
-		[Test]
-		public void ShouldGuessUserByName()
-		{
-			var vcsName = _tpName;
+        [Test]
+        public void ShouldGuessUserByName()
+        {
+            var vcsName = _tpName;
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = "other@mail.com", Author = vcsName});
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
 
-		[Test]
-		public void ShouldGuessUserByLogin()
-		{
-			var vcsName = _tpLogin;
+        [Test]
+        public void ShouldGuessUserByLogin()
+        {
+            var vcsName = _tpLogin;
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
-	}
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
+    }
 }

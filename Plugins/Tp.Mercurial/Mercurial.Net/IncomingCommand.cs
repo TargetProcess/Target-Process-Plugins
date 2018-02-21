@@ -69,10 +69,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -108,15 +105,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = (value ?? string.Empty).Trim();
-            }
+            set { _Source = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -125,11 +116,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Gets the collection of branches to include in the changesets. If empty, include all branches.
@@ -138,10 +125,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--branch")]
         public Collection<string> Branches
         {
-            get
-            {
-                return new Collection<string>(_Branches);
-            }
+            get { return new Collection<string>(_Branches); }
         }
 
         /// <summary>
@@ -151,10 +135,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>
@@ -165,10 +146,7 @@ namespace Mercurial
         [DefaultValue(false)]
         public bool RecurseSubRepositories
         {
-            get
-            {
-                return _RecurseSubRepositories;
-            }
+            get { return _RecurseSubRepositories; }
 
             set
             {
@@ -185,15 +163,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string BundleFileName
         {
-            get
-            {
-                return _BundleFileName;
-            }
+            get { return _BundleFileName; }
 
-            set
-            {
-                _BundleFileName = (value ?? string.Empty).Trim();
-            }
+            set { _BundleFileName = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -204,15 +176,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -223,15 +189,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
 
         #region IMercurialCommand<IEnumerable<Changeset>> Members
@@ -256,11 +216,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="Changeset"/> objects.
         /// </summary>
-        public IEnumerable<Changeset> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Changeset> Result { get; private set; }
 
         #endregion
 

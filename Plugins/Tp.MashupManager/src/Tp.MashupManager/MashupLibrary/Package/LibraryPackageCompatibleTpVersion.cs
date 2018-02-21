@@ -5,8 +5,8 @@
 
 namespace Tp.MashupManager.MashupLibrary.Package
 {
-	public class LibraryPackageCompatibleTpVersion
-	{
-		public string Minimum { get; set; }
-	}
+    public class LibraryPackageCompatibleTpVersion
+    {
+        public string Minimum { get; set; }
+    }
 }

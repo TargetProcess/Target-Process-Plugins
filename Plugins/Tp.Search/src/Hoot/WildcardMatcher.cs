@@ -10,6 +10,7 @@
         /// Pattern against which strings are matched.
         /// </summary>
         string Pattern { get; }
+
         /// <summary>
         /// Tests whether <paramref name="value"/> is matched by the pattern specified
         /// by the <see cref="Pattern"/> property.
@@ -23,14 +24,13 @@
     /// Implements string matching algorithm which tries to match pattern containing wildcard characters
     /// with the given input string.
     /// </summary>
-    public class WildcardMatcher: IStringMatcher
+    public class WildcardMatcher : IStringMatcher
     {
-
         /// <summary>
         /// Constructor which initializes pattern against which input strings are matched.
         /// </summary>
         /// <param name="pattern">Pattern used to match input strings.</param>
-        public WildcardMatcher(string pattern): this(pattern, DefaultSingleWildcard, DefaultMultipleWildcard)
+        public WildcardMatcher(string pattern) : this(pattern, DefaultSingleWildcard, DefaultMultipleWildcard)
         {
         }
 
@@ -47,9 +47,9 @@
             SingleWildcard = singleWildcard;
             MultipleWildcard = multipleWildcard;
             var wildcardChars = new[] { singleWildcard, multipleWildcard };
-	         _isStringContainsPatternAction =  !string.IsNullOrEmpty(pattern) && pattern[0] == MultipleWildcard &&
-			                                        pattern[pattern.Length - 1] == MultipleWildcard && pattern.Length > 2 &&
-																							pattern.IndexOfAny(wildcardChars, 1, pattern.Length - 2) == -1;
+            _isStringContainsPatternAction = !string.IsNullOrEmpty(pattern) && pattern[0] == MultipleWildcard &&
+                pattern[pattern.Length - 1] == MultipleWildcard && pattern.Length > 2 &&
+                pattern.IndexOfAny(wildcardChars, 1, pattern.Length - 2) == -1;
         }
 
         /// <summary>
@@ -60,10 +60,7 @@
         /// </summary>
         public string Pattern
         {
-            get
-            {
-                return _pattern;
-            }
+            get { return _pattern; }
         }
 
         /// <summary>
@@ -76,21 +73,24 @@
             // Check if a string contains pattern for optomization
             if (_isStringContainsPatternAction)
             {
-							return value.Contains(Pattern.Substring(1, Pattern.Length - 2));
+                return value.Contains(Pattern.Substring(1, Pattern.Length - 2));
             }
 
-            var inputPosStack = new int[(value.Length + 1) * (Pattern.Length + 1)];   // Stack containing input positions that should be tested for further matching
-            var patternPosStack = new int[inputPosStack.Length];                      // Stack containing pattern positions that should be tested for further matching
-            int stackPos = -1;                                                          // Points to last occupied entry in stack; -1 indicates that stack is empty
-            var pointTested = new bool[value.Length + 1, Pattern.Length + 1];       // Each true value indicates that input position vs. pattern position has been tested
+            var inputPosStack = new int[(value.Length + 1) * (Pattern.Length + 1)];
+                // Stack containing input positions that should be tested for further matching
+            var patternPosStack = new int[inputPosStack.Length];
+                // Stack containing pattern positions that should be tested for further matching
+            int stackPos = -1; // Points to last occupied entry in stack; -1 indicates that stack is empty
+            var pointTested = new bool[value.Length + 1, Pattern.Length + 1];
+                // Each true value indicates that input position vs. pattern position has been tested
 
-            int inputPos = 0;   // Position in input matched up to the first multiple wildcard in pattern
+            int inputPos = 0; // Position in input matched up to the first multiple wildcard in pattern
             int patternPos = 0; // Position in pattern matched up to the first multiple wildcard in pattern
 
             // Match beginning of the string until first multiple wildcard in pattern
             while (inputPos < value.Length && patternPos < Pattern.Length &&
-                   Pattern[patternPos] != MultipleWildcard &&
-                   (value[inputPos] == Pattern[patternPos] || Pattern[patternPos] == SingleWildcard))
+                Pattern[patternPos] != MultipleWildcard &&
+                (value[inputPos] == Pattern[patternPos] || Pattern[patternPos] == SingleWildcard))
             {
                 inputPos++;
                 patternPos++;
@@ -109,13 +109,14 @@
             // Repeat matching until either string is matched against the pattern or no more parts remain on stack to test
             while (stackPos >= 0 && !matched)
             {
-                inputPos = inputPosStack[stackPos];         // Pop input and pattern positions from stack
-                patternPos = patternPosStack[stackPos--];   // Matching will succeed if rest of the input string matches rest of the pattern
+                inputPos = inputPosStack[stackPos]; // Pop input and pattern positions from stack
+                patternPos = patternPosStack[stackPos--]; // Matching will succeed if rest of the input string matches rest of the pattern
 
                 if (inputPos == value.Length && patternPos == Pattern.Length)
-                    matched = true;     // Reached end of both pattern and input string, hence matching is successful
+                    matched = true; // Reached end of both pattern and input string, hence matching is successful
                 else if (patternPos == Pattern.Length - 1)
-                    matched = true;     // Current pattern character is multiple wildcard and it will match all the remaining characters in the input string
+                    matched = true;
+                        // Current pattern character is multiple wildcard and it will match all the remaining characters in the input string
                 else
                 {
                     // First character in next pattern block is guaranteed to be multiple wildcard
@@ -126,8 +127,8 @@
                         int curPatternPos = patternPos + 1;
 
                         while (curInputPos < value.Length && curPatternPos < Pattern.Length &&
-                               Pattern[curPatternPos] != MultipleWildcard &&
-                               (value[curInputPos] == Pattern[curPatternPos] || Pattern[curPatternPos] == SingleWildcard))
+                            Pattern[curPatternPos] != MultipleWildcard &&
+                            (value[curInputPos] == Pattern[curPatternPos] || Pattern[curPatternPos] == SingleWildcard))
                         {
                             curInputPos++;
                             curPatternPos++;
@@ -139,7 +140,7 @@
                         // At the same time, pair (input position, pattern position) will be marked as tested,
                         // so that it will not be pushed to stack later again.
                         if (((curPatternPos == Pattern.Length && curInputPos == value.Length) ||
-                             (curPatternPos < Pattern.Length && Pattern[curPatternPos] == MultipleWildcard)) &&
+                                (curPatternPos < Pattern.Length && Pattern[curPatternPos] == MultipleWildcard)) &&
                             !pointTested[curInputPos, curPatternPos])
                         {
                             pointTested[curInputPos, curPatternPos] = true;
@@ -164,7 +165,7 @@
         /// </summary>
         public char MultipleWildcard { get; private set; }
 
-				private readonly bool _isStringContainsPatternAction;
+        private readonly bool _isStringContainsPatternAction;
 
         /// <summary>
         /// Pattern against which input strings are matched; may contain wildcard characters.

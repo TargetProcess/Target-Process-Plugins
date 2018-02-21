@@ -10,10 +10,7 @@ namespace Mercurial.Extensions.CaseGuard
         /// </summary>
         public static bool IsInstalled
         {
-            get
-            {
-                return ClientExecutable.Configuration.ValueExists("extensions", "caseguard");
-            }
+            get { return ClientExecutable.Configuration.ValueExists("extensions", "caseguard"); }
         }
     }
 }

@@ -5,11 +5,11 @@
 
 namespace Tp.MashupManager.MashupLibrary.Repository.Config
 {
-	public struct LibraryRepositoryConfig : ILibraryRepositoryConfig
-	{
-		public string Name { get; set; }
-		public string Uri { get; set; }
-		public string Login { get; set; }
-		public string Password { get; set; }
-	}
+    public struct LibraryRepositoryConfig : ILibraryRepositoryConfig
+    {
+        public string Name { get; set; }
+        public string Uri { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+    }
 }

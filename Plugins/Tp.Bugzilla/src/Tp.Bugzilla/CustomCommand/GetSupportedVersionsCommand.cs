@@ -11,20 +11,20 @@ using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 
 namespace Tp.Bugzilla.CustomCommand
 {
-	public class GetSupportedVersionsCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage
-			       	{
-			       		PluginCommandStatus = PluginCommandStatus.Succeed,
-			       		ResponseData = BugzillaInfo.SupportedVersions.OrderBy(x => x).ToArray().Serialize()
-			       	};
-		}
+    public class GetSupportedVersionsCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage
+            {
+                PluginCommandStatus = PluginCommandStatus.Succeed,
+                ResponseData = BugzillaInfo.SupportedVersions.OrderBy(x => x).ToArray().Serialize()
+            };
+        }
 
-		public string Name
-		{
-			get { return "GetSupportedVersions"; }
-		}
-	}
+        public string Name
+        {
+            get { return "GetSupportedVersions"; }
+        }
+    }
 }

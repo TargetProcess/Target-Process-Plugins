@@ -57,11 +57,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--update")]
         [DefaultValue(false)]
-        public bool Update
-        {
-            get;
-            set;
-        }
+        public bool Update { get; set; }
 
         /// <summary>
         /// Gets or sets the ssh command to use when cloning.
@@ -71,15 +67,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -90,15 +80,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -109,10 +93,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -184,11 +165,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Gets or sets the source to pull from. If <see cref="string.Empty"/>, pull from the
@@ -198,15 +175,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = (value ?? string.Empty).Trim();
-            }
+            set { _Source = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -216,10 +187,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--branch")]
         public Collection<string> Branches
         {
-            get
-            {
-                return new Collection<string>(_Branches);
-            }
+            get { return new Collection<string>(_Branches); }
         }
 
         /// <summary>
@@ -229,10 +197,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>

@@ -9,10 +9,10 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Search.Messages
 {
-	[Serializable]
-	public class AssignableSquadChangedLocalMessage : SagaMessage, IPluginLocalMessage
-	{
-		public int AssignableId { get; set; }
-		public int? SquadId { get; set; }
-	}
+    [Serializable]
+    public class AssignableSquadChangedLocalMessage : SagaMessage, IPluginLocalMessage
+    {
+        public int AssignableId { get; set; }
+        public int? SquadId { get; set; }
+    }
 }

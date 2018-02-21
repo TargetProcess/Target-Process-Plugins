@@ -61,10 +61,7 @@ namespace Mercurial
         /// </summary>
         public string Section
         {
-            get
-            {
-                return _Section;
-            }
+            get { return _Section; }
         }
 
         /// <summary>
@@ -72,10 +69,7 @@ namespace Mercurial
         /// </summary>
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
         }
 
         /// <summary>
@@ -83,10 +77,7 @@ namespace Mercurial
         /// </summary>
         public string Value
         {
-            get
-            {
-                return _Value;
-            }
+            get { return _Value; }
         }
     }
 }

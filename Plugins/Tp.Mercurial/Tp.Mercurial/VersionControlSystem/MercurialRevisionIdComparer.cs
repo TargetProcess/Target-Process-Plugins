@@ -10,75 +10,77 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.Mercurial.VersionControlSystem
 {
-	public class MercurialRevisionIdComparer : IRevisionIdComparer, ICompareRevisionSecondArg
-	{
-		private MercurialRevisionId _firstArg;
+    public class MercurialRevisionIdComparer : IRevisionIdComparer, ICompareRevisionSecondArg
+    {
+        private MercurialRevisionId _firstArg;
 
-		public ICompareRevisionSecondArg Is(RevisionId firstArg)
-		{
-			_firstArg = firstArg;
-			return this;
-		}
+        public ICompareRevisionSecondArg Is(RevisionId firstArg)
+        {
+            _firstArg = firstArg;
+            return this;
+        }
 
-		public ICompareRevisionSecondArg Does(RevisionId firstArg)
-		{
-			_firstArg = firstArg;
-			return this;
-		}
+        public ICompareRevisionSecondArg Does(RevisionId firstArg)
+        {
+            _firstArg = firstArg;
+            return this;
+        }
 
-		public RevisionId FindMinFromRevision(RevisionRange[] revisionRanges)
-		{
-			var result =
-				(from revisionRange in revisionRanges orderby revisionRange.FromChangeset.Time ascending select revisionRange).
-					FirstOrDefault();
-			
-			return result != null ? result.FromChangeset : new RevisionId {Time = MercurialRevisionId.UtcTimeMin};
-		}
+        public RevisionId FindMinFromRevision(RevisionRange[] revisionRanges)
+        {
+            var result =
+                (from revisionRange in revisionRanges orderby revisionRange.FromChangeset.Time ascending select revisionRange).
+                    FirstOrDefault();
 
-		public RevisionId FindMaxToRevision(RevisionRange[] revisionRanges)
-		{
-			var result =
-				(from revisionRange in revisionRanges orderby revisionRange.ToChangeset.Time descending select revisionRange).
-					FirstOrDefault();
+            return result != null ? result.FromChangeset : new RevisionId { Time = MercurialRevisionId.UtcTimeMin };
+        }
+
+        public RevisionId FindMaxToRevision(RevisionRange[] revisionRanges)
+        {
+            var result =
+                (from revisionRange in revisionRanges orderby revisionRange.ToChangeset.Time descending select revisionRange).
+                    FirstOrDefault();
 
             return result != null ? result.ToChangeset : new RevisionId { Time = MercurialRevisionId.UtcTimeMin };
-		}
+        }
 
-		public RevisionId ConvertToRevisionId(string startRevision)
-		{
-		    DateTime startDate;
-            if (!DateTime.TryParse(startRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal, out startDate))
+        public RevisionId ConvertToRevisionId(string startRevision)
+        {
+            DateTime startDate;
+            if (
+                !DateTime.TryParse(startRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal,
+                    out startDate))
                 throw new FormatException("StartRevision argument is in invalid datetime format.");
 
-			var revisionId = new MercurialRevisionId() { Time = startDate };
+            var revisionId = new MercurialRevisionId() { Time = startDate };
 
-			return revisionId;
-		}
+            return revisionId;
+        }
 
-		bool ICompareRevisionSecondArg.Before(RevisionRange revisionRange)
-		{
-            return _firstArg.Time < ((MercurialRevisionId)revisionRange.FromChangeset).Time;
-		}
+        bool ICompareRevisionSecondArg.Before(RevisionRange revisionRange)
+        {
+            return _firstArg.Time < ((MercurialRevisionId) revisionRange.FromChangeset).Time;
+        }
 
-		bool ICompareRevisionSecondArg.Behind(RevisionRange revisionRange)
-		{
-            return _firstArg.Time > ((MercurialRevisionId)revisionRange.ToChangeset).Time;
-		}
+        bool ICompareRevisionSecondArg.Behind(RevisionRange revisionRange)
+        {
+            return _firstArg.Time > ((MercurialRevisionId) revisionRange.ToChangeset).Time;
+        }
 
-		bool ICompareRevisionSecondArg.Belong(RevisionRange revisionRange)
-		{
-            return _firstArg.Time >= ((MercurialRevisionId)revisionRange.FromChangeset).Time &&
-                   _firstArg.Time <= ((MercurialRevisionId)revisionRange.ToChangeset).Time;
-		}
+        bool ICompareRevisionSecondArg.Belong(RevisionRange revisionRange)
+        {
+            return _firstArg.Time >= ((MercurialRevisionId) revisionRange.FromChangeset).Time &&
+                _firstArg.Time <= ((MercurialRevisionId) revisionRange.ToChangeset).Time;
+        }
 
-		bool ICompareRevisionSecondArg.GreaterThan(RevisionId revisionId)
-		{
-            return _firstArg.Time > ((MercurialRevisionId)revisionId).Time;
-		}
+        bool ICompareRevisionSecondArg.GreaterThan(RevisionId revisionId)
+        {
+            return _firstArg.Time > ((MercurialRevisionId) revisionId).Time;
+        }
 
-		bool ICompareRevisionSecondArg.LessThan(RevisionId revisionId)
-		{
-            return _firstArg.Time < ((MercurialRevisionId)revisionId).Time;
-		}
-	}
+        bool ICompareRevisionSecondArg.LessThan(RevisionId revisionId)
+        {
+            return _firstArg.Time < ((MercurialRevisionId) revisionId).Time;
+        }
+    }
 }

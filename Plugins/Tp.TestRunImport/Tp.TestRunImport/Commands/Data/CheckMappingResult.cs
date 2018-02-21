@@ -9,13 +9,13 @@ using Tp.Integration.Plugin.TestRunImport.Mappers;
 
 namespace Tp.Integration.Plugin.TestRunImport.Commands.Data
 {
-	public class CheckMappingResult
-	{
-		public int Mapped { get; set; }
-		public int NotMappedTestCases { get; set; }
-		public int NotMappedUnitTests { get; set; }
-		public int OverMappedUnitTests { get; set; }
-		public IList<NamesMapper> NamesMappers { get; set; }
-		public PluginProfileErrorCollection Errors { get; set; }
-	}
+    public class CheckMappingResult
+    {
+        public int Mapped { get; set; }
+        public int NotMappedTestCases { get; set; }
+        public int NotMappedUnitTests { get; set; }
+        public int OverMappedUnitTests { get; set; }
+        public IList<NamesMapper> NamesMappers { get; set; }
+        public PluginProfileErrorCollection Errors { get; set; }
+    }
 }

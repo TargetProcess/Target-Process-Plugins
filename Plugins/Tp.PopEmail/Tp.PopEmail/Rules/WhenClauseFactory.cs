@@ -11,32 +11,32 @@ using Tp.PopEmailIntegration.Rules.WhenClauses;
 
 namespace Tp.PopEmailIntegration.Rules
 {
-	internal class WhenClauseFactory : ClauseFactory
-	{
-		private readonly Dictionary<TokenType, Func<ParseNode, IWhenClause>> _whenClauses =
-			new Dictionary<TokenType, Func<ParseNode, IWhenClause>>();
+    internal class WhenClauseFactory : ClauseFactory
+    {
+        private readonly Dictionary<TokenType, Func<ParseNode, IWhenClause>> _whenClauses =
+            new Dictionary<TokenType, Func<ParseNode, IWhenClause>>();
 
-		public WhenClauseFactory(IThenClause thenClause)
-		{
-			_whenClauses[TokenType.SubjectContainsClause] = WhenSubjectContainsClause.Create;
+        public WhenClauseFactory(IThenClause thenClause)
+        {
+            _whenClauses[TokenType.SubjectContainsClause] = WhenSubjectContainsClause.Create;
 
-			_whenClauses[TokenType.CompanyMatchedClause] = WhenSenderAndProjectCompanyMatched.Create;
-		}
+            _whenClauses[TokenType.CompanyMatchedClause] = WhenSenderAndProjectCompanyMatched.Create;
+        }
 
-		public WhenClauseComposite CreateBy(ParseNode clauseSubtree)
-		{
-			var result = new WhenClauseComposite();
-			foreach (var whenClause in _whenClauses.Keys)
-			{
-				var clause = FindRecursive(whenClause, clauseSubtree.Nodes.ToArray());
-				if (clause == null)
-				{
-					continue;
-				}
+        public WhenClauseComposite CreateBy(ParseNode clauseSubtree)
+        {
+            var result = new WhenClauseComposite();
+            foreach (var whenClause in _whenClauses.Keys)
+            {
+                var clause = FindRecursive(whenClause, clauseSubtree.Nodes.ToArray());
+                if (clause == null)
+                {
+                    continue;
+                }
 
-				result.Add(_whenClauses[whenClause](clause));
-			}
-			return result;
-		}
-	}
+                result.Add(_whenClauses[whenClause](clause));
+            }
+            return result;
+        }
+    }
 }

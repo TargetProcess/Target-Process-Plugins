@@ -7,23 +7,23 @@ using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.Diff
 {
-	[DataContract]
-	public class DiffLineData
-	{
-		public DiffLineData(string line, DiffActionType action, int lineNumber)
-		{
-			Line = line.Replace("\t", "    ");
-			Action = action;
-			LineNumber = lineNumber;
-		}
+    [DataContract]
+    public class DiffLineData
+    {
+        public DiffLineData(string line, DiffActionType action, int lineNumber)
+        {
+            Line = line.Replace("\t", "    ");
+            Action = action;
+            LineNumber = lineNumber;
+        }
 
-		[DataMember]
-		public int LineNumber { get; set; }
+        [DataMember]
+        public int LineNumber { get; set; }
 
-		[DataMember]
-		public string Line { get; set; }
+        [DataMember]
+        public string Line { get; set; }
 
-		[DataMember]
-		public DiffActionType Action { get; set; }
-	}
+        [DataMember]
+        public DiffActionType Action { get; set; }
+    }
 }

@@ -12,38 +12,38 @@ using Tp.Integration.Testing.Common;
 
 namespace Tp.Bugzilla.Tests
 {
-	public class BugzillaTestBase
-	{
-		[SetUp]
-		public virtual void Init()
-		{
-			ObjectFactory.Initialize(x => x.AddRegistry<BugzillaContextRegistry>());
-			ObjectFactory.GetInstance<BugzillaContext>().Initialize();
-		}
+    public class BugzillaTestBase
+    {
+        [SetUp]
+        public virtual void Init()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<BugzillaContextRegistry>());
+            ObjectFactory.GetInstance<BugzillaContext>().Initialize();
+        }
 
-		protected BugzillaContext Context
-		{
-			get { return ObjectFactory.GetInstance<BugzillaContext>(); }
-		}
+        protected BugzillaContext Context
+        {
+            get { return ObjectFactory.GetInstance<BugzillaContext>(); }
+        }
 
-		protected static IProfileReadonly Profile
-		{
-			get { return ObjectFactory.GetInstance<IProfileReadonly>(); }
-		}
+        protected static IProfileReadonly Profile
+        {
+            get { return ObjectFactory.GetInstance<IProfileReadonly>(); }
+        }
 
-		protected TransportMock TransportMock
-		{
-			get { return ObjectFactory.GetInstance<TransportMock>(); }
-		}
+        protected TransportMock TransportMock
+        {
+            get { return ObjectFactory.GetInstance<TransportMock>(); }
+        }
 
-		protected BugDTO GetBug(string bugName)
-		{
-			return Context.TpBugs.Single(x => x.Name == bugName);
-		}
+        protected BugDTO GetBug(string bugName)
+        {
+            return Context.TpBugs.Single(x => x.Name == bugName);
+        }
 
-		protected BugDTO GetBug(int bugId)
-		{
-			return Context.TpBugs.Single(x => x.ID == bugId);
-		}
-	}
+        protected BugDTO GetBug(int bugId)
+        {
+            return Context.TpBugs.Single(x => x.ID == bugId);
+        }
+    }
 }

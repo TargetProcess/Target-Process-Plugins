@@ -15,15 +15,15 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 {
-	[ActionSteps]
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class PrioritiesMappingSpecs : MappingTestBase<PriorityDTO>
-	{
-		[Test]
-		public void ShouldMapPrioritiesByNameDuringProfileCreation()
-		{
-			@"
+    [ActionSteps]
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class PrioritiesMappingSpecs : MappingTestBase<PriorityDTO>
+    {
+        [Test]
+        public void ShouldMapPrioritiesByNameDuringProfileCreation()
+        {
+            @"
 				Given following priorities created in TargetProcess:
 						|id|name|
 						|1|Must Have|
@@ -40,13 +40,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|Must Have|{Id:1, Name:""Must Have""}|
 						|High|null|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<PrioritiesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<PrioritiesMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldMapPrioritiesByNameDuringProfileEditing()
-		{
-			@"
+        [Test]
+        public void ShouldMapPrioritiesByNameDuringProfileEditing()
+        {
+            @"
 				Given bugzilla profile created
 					And profile has following priorities mapping:
 						|key|value|
@@ -72,13 +72,13 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|Great|{Id:3, Name:""Great""}|
 						|Average|null|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<PrioritiesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<PrioritiesMappingSpecs>());
+        }
 
-		[Test]
-		public void ShouldValidateAndMapPrioritiesByNameDuringProfileEditing()
-		{
-			@"
+        [Test]
+        public void ShouldValidateAndMapPrioritiesByNameDuringProfileEditing()
+        {
+            @"
 				Given bugzilla profile created
 					And profile has following priorities mapping:
 						|key|value|
@@ -102,68 +102,68 @@ namespace Tp.Bugzilla.Tests.Synchronization.Mapping
 						|Average|{Id:3, Name:""Average""}|
 						|Normal|null|
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<PrioritiesMappingSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<PrioritiesMappingSpecs>());
+        }
 
-		[Given("following priorities created in TargetProcess:")]
-		public void CreatePrioritiesInTargetProcess(int id, string name)
-		{
-			CreateEntityInTargetProcessBase(id, name);
-		}
+        [Given("following priorities created in TargetProcess:")]
+        public void CreatePrioritiesInTargetProcess(int id, string name)
+        {
+            CreateEntityInTargetProcessBase(id, name);
+        }
 
-		[Given("following priorities created in Bugzilla:")]
-		public void CreatePrioritiesInBugzilla(string name)
-		{
-			CreateInBugzillaBase(name);
-		}
+        [Given("following priorities created in Bugzilla:")]
+        public void CreatePrioritiesInBugzilla(string name)
+        {
+            CreateInBugzillaBase(name);
+        }
 
-		[Given("profile has following priorities mapping:")]
-		public void CreatePrioritiesMappingForProfile(string key, string value)
-		{
-			CreateMappingForProfileBase(key, value);
-		}
+        [Given("profile has following priorities mapping:")]
+        public void CreatePrioritiesMappingForProfile(string key, string value)
+        {
+            CreateMappingForProfileBase(key, value);
+        }
 
-		[When("mapping priorities")]
-		public void Map()
-		{
-			MapBase();
-		}
+        [When("mapping priorities")]
+        public void Map()
+        {
+            MapBase();
+        }
 
-		[Then("resulting mapping count should be equal to bugzilla priorities count")]
-		public void CheckMappingsItemsCount()
-		{
-			CheckMappingsItemsCountBase();
-		}
+        [Then("resulting mapping count should be equal to bugzilla priorities count")]
+        public void CheckMappingsItemsCount()
+        {
+            CheckMappingsItemsCountBase();
+        }
 
-		[Then("resulting mapping is the following:")]
-		public void CheckMappingResults(string key, string value)
-		{
-			CheckMappingResultBase(key, value);
-		}
+        [Then("resulting mapping is the following:")]
+        public void CheckMappingResults(string key, string value)
+        {
+            CheckMappingResultBase(key, value);
+        }
 
-		protected override MappingSourceEntry Source
-		{
-			get { return Context.MappingSource.Priorities; }
-		}
+        protected override MappingSourceEntry Source
+        {
+            get { return Context.MappingSource.Priorities; }
+        }
 
-		protected override MappingContainer Mapping
-		{
-			get { return Profile.GetProfile<BugzillaProfile>().PrioritiesMapping; }
-		}
+        protected override MappingContainer Mapping
+        {
+            get { return Profile.GetProfile<BugzillaProfile>().PrioritiesMapping; }
+        }
 
-		protected override List<PriorityDTO> StoredEntities
-		{
-			get { return Context.Priorities; }
-		}
+        protected override List<PriorityDTO> StoredEntities
+        {
+            get { return Context.Priorities; }
+        }
 
-		protected override MappingContainer GetFromMappings(Mappings mappings)
-		{
-			return mappings.Priorities;
-		}
+        protected override MappingContainer GetFromMappings(Mappings mappings)
+        {
+            return mappings.Priorities;
+        }
 
-		protected override Func<int, string, PriorityDTO> CreateEntityForTargetProcess
-		{
-			get { return (id, name) => new PriorityDTO { PriorityID = id, Name = name }; }
-		}
-	}
+        protected override Func<int, string, PriorityDTO> CreateEntityForTargetProcess
+        {
+            get { return (id, name) => new PriorityDTO { PriorityID = id, Name = name }; }
+        }
+    }
 }

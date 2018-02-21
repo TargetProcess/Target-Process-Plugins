@@ -13,32 +13,39 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
-	internal class RouterChildTagsSource : IRouterChildTagsSource
-	{
-		private readonly IAccountCollection _accountCollection;
-		private readonly IMsmqTransport _transport;
+    internal class RouterChildTagsSource : IRouterChildTagsSource
+    {
+        private readonly IAccountCollection _accountCollection;
+        private readonly IMsmqTransport _transport;
+        private readonly IDisabledAccountCollection _disabledAccountCollection;
 
-		public RouterChildTagsSource(IAccountCollection accountCollection, IMsmqTransport transport)
-		{
-			_accountCollection = accountCollection;
-			_transport = transport;
-		}
+        public RouterChildTagsSource(IAccountCollection accountCollection, IMsmqTransport transport, IDisabledAccountCollection disabledAccountCollection)
+        {
+            _accountCollection = accountCollection;
+            _transport = transport;
+            _disabledAccountCollection = disabledAccountCollection;
+        }
 
-		public IEnumerable<string> GetChildTags()
-		{
-			return _accountCollection.Where(a => a.Profiles.Any()).Select(x => _transport.GetQueueName(x.Name.Value));
-		}
+        public IEnumerable<string> GetChildTags()
+        {
+            return _accountCollection.Where(a => a.Profiles.Any()).Select(x => _transport.GetQueueName(x.Name.Value));
+        }
 
-		public bool NeedToHandleMessage(MessageEx message)
-		{
-			if (_accountCollection.GetOrCreate(message.AccountTag).Profiles.Any())
-			{
-				return true;
-			}
-			var conditionalMessageRouter = ObjectFactory.TryGetInstance<ITargetProcessConditionalMessageRouter>();
+        public bool NeedToHandleMessage(MessageEx message)
+        {
+            if (_disabledAccountCollection.Contains(message.AccountTag))
+            {
+                return false;
+            }
 
-			return Properties.Settings.Default.AlwaysRouteMessage ||
-			       conditionalMessageRouter != null && conditionalMessageRouter.Handle(message);
-		}
-	}
+            if (_accountCollection.GetOrCreate(message.AccountTag).Profiles.Any())
+            {
+                return true;
+            }
+            var conditionalMessageRouter = ObjectFactory.TryGetInstance<ITargetProcessConditionalMessageRouter>();
+
+            return Properties.Settings.Default.AlwaysRouteMessage
+                || conditionalMessageRouter != null && conditionalMessageRouter.Handle(message);
+        }
+    }
 }

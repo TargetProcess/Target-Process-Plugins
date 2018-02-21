@@ -82,28 +82,9 @@ tau.mashups
 				self._status.custom('saving', '<img src="' + relativeLoaderUrl + '" /><span>Starting to rebuild indexes...</span>', 30000, 'fast');
 				self._bus.publish('SaveProfile');
 			});
-			rendered.find('#enabled-for-tp2').click(function () {
-			    var relativeLoaderUrl = appPath.get() + '/Javascript/tau/css/images/loader-yellow.gif';
-			    self._status.custom('saving', '<img src="' + relativeLoaderUrl + '" /><span>Profile is being saved...</span>', 30000, 'fast');
-		        self._commandGateway.executeForProfile('SetEnableForTp2',
-		            $(this).prop('checked'),
-		            $.proxy(self._enableForTp2Succeed, self),
-		            $.proxy(self._enableForTp2Failed, self),
-		            $.proxy(self._enableForTp2Error, self)
-		        );
-		    });
 			this._bus.unsubscribe('ProfileControlsBlock');
 			rendered.appendTo(this.placeHolder);
 		},
-		_enableForTp2Succeed: function (data) {
-		    this._status.success(data);
-		},
-		_enableForTp2Failed: function (err) {
-		    this._status.error(err);
-	    },
-		_enableForTp2Error: function (err) {
-		    this._status.error(err);
-	    },
 		_isEditMode: function () {
 			return profileNameSource.getProfileName() != null;
 		},
@@ -130,12 +111,10 @@ tau.mashups
 		},
 
 		_getProfileFromEditor: function () {
-			var enabledForTp2CheckBox = this._find('input#enabled-for-tp2');
 			return {
 				Name: 'Now running',
 				Settings: {
-					SynchronizationInterval: 5,
-					EnabledForTp2: enabledForTp2CheckBox.length > 0 ? enabledForTp2CheckBox.prop('checked') : false
+					SynchronizationInterval: 5
 				}
 			};
 		}

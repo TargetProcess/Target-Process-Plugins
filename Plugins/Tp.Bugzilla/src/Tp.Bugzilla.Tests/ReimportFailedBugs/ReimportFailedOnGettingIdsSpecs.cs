@@ -11,15 +11,15 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 {
-	[TestFixture]
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class ReimportFailedOnGettingIdsSpecs : ReimportFailedBugsSpecsBase<BugzillaServiceWithTransportErrorOnGetIdsMock>
-	{
-		[Test]
-		public void ShouldReimportBugsIfTransportErrorOccuredOnFirstGettingBugIds()
-		{
-			@"
+    [TestFixture]
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class ReimportFailedOnGettingIdsSpecs : ReimportFailedBugsSpecsBase<BugzillaServiceWithTransportErrorOnGetIdsMock>
+    {
+        [Test]
+        public void ShouldReimportBugsIfTransportErrorOccuredOnFirstGettingBugIds()
+        {
+            @"
 				Given bugzilla profile created 
 					And bugzilla contains bug 1 and name 'bug1' created on '2011-07-14 10:59:17'
 					And bugzilla contains bug 2 and name 'bug2' created on '2011-07-14 10:59:17'
@@ -31,13 +31,13 @@ namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 				Then 3 bugs should be created in TargetProcess
 					And bugs with following names should be created in TargetProcess: bug1, bug2, bug3
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingIdsSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingIdsSpecs>());
+        }
 
-		[Test]
-		public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugIds()
-		{
-			@"
+        [Test]
+        public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugIds()
+        {
+            @"
 				Given bugzilla profile created 
 					And bugzilla contains bug 1 and name 'bug1' created on '2011-07-14 10:59:17'
 					And bugzilla contains bug 2 and name 'bug2' created on '2011-07-14 10:59:17'
@@ -50,13 +50,13 @@ namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 				Then 3 bugs should be created in TargetProcess
 					And bugs with following names should be created in TargetProcess: bug1, bug2, bug3
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingIdsSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingIdsSpecs>());
+        }
 
-		[Test]
-		public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugIdsTwice()
-		{
-			@"
+        [Test]
+        public void ShouldReimportBugsIfTransportErrorOccuredOnGettingBugIdsTwice()
+        {
+            @"
 				Given bugzilla profile created 
 					And bugzilla contains bug 1 and name 'bug1' created on '2011-07-14 10:59:17'
 					And bugzilla contains bug 2 and name 'bug2' created on '2011-07-14 10:59:17'
@@ -70,13 +70,13 @@ namespace Tp.Bugzilla.Tests.ReimportFailedBugs
 				Then 3 bugs should be created in TargetProcess
 					And bugs with following names should be created in TargetProcess: bug1, bug2, bug3
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingIdsSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<ReimportFailedOnGettingIdsSpecs>());
+        }
 
-		[When("transport error occured on getting bug ids during synchronization")]
-		public void ErrorWhenGettingChangedIds()
-		{
-			FailSynchronization();
-		}
-	}
+        [When("transport error occured on getting bug ids during synchronization")]
+        public void ErrorWhenGettingChangedIds()
+        {
+            FailSynchronization();
+        }
+    }
 }

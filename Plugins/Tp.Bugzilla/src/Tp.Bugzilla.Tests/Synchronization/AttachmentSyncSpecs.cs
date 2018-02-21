@@ -27,50 +27,50 @@ using AttachmentPartAddedMessage = Tp.Integration.Messages.EntityLifecycle.Comma
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[TestFixture]
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class AttachmentSyncSpecs : BugzillaTestBase
-	{
-		public override void Init()
-		{
-			base.Init();
+    [TestFixture]
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class AttachmentSyncSpecs : BugzillaTestBase
+    {
+        public override void Init()
+        {
+            base.Init();
 
-			var mockBufferSize = MockRepository.GenerateStub<IBufferSize>();
-			mockBufferSize.Stub(x => x.Value).Return(1000);
-			ObjectFactory.Configure(x => x.For<IBufferSize>().HybridHttpOrThreadLocalScoped().Use(mockBufferSize));
+            var mockBufferSize = MockRepository.GenerateStub<IBufferSize>();
+            mockBufferSize.Stub(x => x.Value).Return(1000);
+            ObjectFactory.Configure(x => x.For<IBufferSize>().HybridHttpOrThreadLocalScoped().Use(mockBufferSize));
 
-			ObjectFactory.GetInstance<TransportMock>().On<AddAttachmentPartToMessageCommand>()
-				.Reply(x =>
-				       	{
-				       		if (!x.IsLastPart)
-				       		{
-				       			return new AttachmentPartAddedMessage {FileName = x.FileName};
-				       		}
-				       		return new AttachmentCreatedMessage
-				       		       	{
-				       		       		Dto = new AttachmentDTO
-				       		       		      	{
-				       		       		      		OriginalFileName = x.FileName,
-				       		       		      		GeneralID = x.GeneralId,
-				       		       		      		CreateDate = x.CreateDate,
-													OwnerID = x.OwnerId,
-													Description = x.Description
-				       		       		      	}
-				       		       	};
-				       	});
-		}
+            ObjectFactory.GetInstance<TransportMock>().On<AddAttachmentPartToMessageCommand>()
+                .Reply(x =>
+                {
+                    if (!x.IsLastPart)
+                    {
+                        return new AttachmentPartAddedMessage { FileName = x.FileName };
+                    }
+                    return new AttachmentCreatedMessage
+                    {
+                        Dto = new AttachmentDTO
+                        {
+                            OriginalFileName = x.FileName,
+                            GeneralID = x.GeneralId,
+                            CreateDate = x.CreateDate,
+                            OwnerID = x.OwnerId,
+                            Description = x.Description
+                        }
+                    };
+                });
+        }
 
-		[TearDown]
-		public void TearDown()
-		{
-			Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path, true);
-		}
+        [TearDown]
+        public void TearDown()
+        {
+            Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path, true);
+        }
 
-		[Test]
-		public void ShouldImportAttachmentsOnBugCreated()
-		{
-			@"
+        [Test]
+        public void ShouldImportAttachmentsOnBugCreated()
+        {
+            @"
 				Given bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
@@ -83,13 +83,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
 					And bug in TargetProcess with name 'bug1' should have attachment 'file2' with content '123456' created on '2010-10-10 13:13'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldImportAttachmentOnBugCreatedWithDescriptionAndOwner()
-		{
-			@"
+        [Test]
+        public void ShouldImportAttachmentOnBugCreatedWithDescriptionAndOwner()
+        {
+            @"
 				Given user 'Johnson' with email 'Johnson@mail.com' created in TargetProcess
 					And bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
@@ -105,13 +105,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
 					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with owner 'Johnson' and description 'attach description'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotImportAttachmentsIfThereIsNoAttachments()
-		{
-			@"
+        [Test]
+        public void ShouldNotImportAttachmentsIfThereIsNoAttachments()
+        {
+            @"
 				Given bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
@@ -119,13 +119,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bugs with following names should be created in TargetProcess: bug1
 					And bug in TargetProcess with name 'bug1' should have 0 attachments
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldAddNewOnlyAttachmentsOnBugUpdated()
-		{
-			@"
+        [Test]
+        public void ShouldAddNewOnlyAttachmentsOnBugUpdated()
+        {
+            @"
 				Given bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
@@ -142,13 +142,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have attachment 'file3' with content 'mnbvc' created on '2010-10-11 13:13'
 					And no attachments should present on disk
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldRemoveAttachmentsFromDiskIfBugCreationFailed()
-		{
-			@"
+        [Test]
+        public void ShouldRemoveAttachmentsFromDiskIfBugCreationFailed()
+        {
+            @"
 				Given bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
@@ -157,13 +157,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When synchronizing bugzilla bugs
 				Then no attachments should present on disk
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotTryToImportObsoleteAttachments()
-		{
-			@"
+        [Test]
+        public void ShouldNotTryToImportObsoleteAttachments()
+        {
+            @"
 				Given bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
@@ -176,13 +176,13 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
 					And no attachments should present on disk
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotTryToImportDeletedAttachments()
-		{
-			@"
+        [Test]
+        public void ShouldNotTryToImportDeletedAttachments()
+        {
+            @"
 				Given bugzilla profile for project 1 created
 					And bugzilla contains bug with id 1
 					And bug 1 has name 'bug1'
@@ -195,129 +195,144 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug in TargetProcess with name 'bug1' should have attachment 'file1' with content 'abcdefj' created on '2010-10-10 13:13'
 					And no attachments should present on disk
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
-		}
-		
-		[Given("bug $bugId has attachment '$fileName' with content '$content' created on '$creationDate'")]
-		public void AddAttachmentToBug(int bugId, string fileName, string content, string creationDate)
-		{
-			CreateAttachment(bugId, fileName, content, creationDate, isobsolete._0);
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<AttachmentSyncSpecs>());
+        }
 
-		[Given("bug $bugId has obsolete attachment '$fileName' with content '$content' created on '$creationDate'")]
-		public void AddObsoleteAttachmentToBug(int bugId, string fileName, string content, string creationDate)
-		{
-			CreateAttachment(bugId, fileName, content, creationDate, isobsolete._1);
-		}
+        [Given("bug $bugId has attachment '$fileName' with content '$content' created on '$creationDate'")]
+        public void AddAttachmentToBug(int bugId, string fileName, string content, string creationDate)
+        {
+            CreateAttachment(bugId, fileName, content, creationDate, isobsolete._0);
+        }
 
-		[Given("bug $bugId has deleted attachment '$fileName' created on '$creationDate'")]
-		public void AddDeletededAttachmentToBug(int bugId, string fileName, string creationDate)
-		{
-			CreateAttachment(bugId, fileName, null, creationDate, isobsolete._1);
-		}
+        [Given("bug $bugId has obsolete attachment '$fileName' with content '$content' created on '$creationDate'")]
+        public void AddObsoleteAttachmentToBug(int bugId, string fileName, string content, string creationDate)
+        {
+            CreateAttachment(bugId, fileName, content, creationDate, isobsolete._1);
+        }
 
-		private void CreateAttachment(int bugId, string fileName, string content, string creationDate, isobsolete isobsolete)
-		{
-			Context.BugzillaBugs.AddAttachment(bugId,
-			                                   new attachment
-				                                   {
-					                                   filename = fileName,
-					                                   date = creationDate,
-					                                   data = string.IsNullOrEmpty(content) ? null :
-						                                   new data {Value = Convert.ToBase64String(Encoding.ASCII.GetBytes(content))},
-					                                   isobsolete = isobsolete
-				                                   });
-		}
+        [Given("bug $bugId has deleted attachment '$fileName' created on '$creationDate'")]
+        public void AddDeletededAttachmentToBug(int bugId, string fileName, string creationDate)
+        {
+            CreateAttachment(bugId, fileName, null, creationDate, isobsolete._1);
+        }
 
-		[Given("attachment for bug $bugId '$fileName' has creation date '$createDate'")]
-		public void AddCreateDateToAttachment(int bugId, string fileName, string createDate)
-		{
-			Context.BugzillaBugs.SetAttachmentTime(bugId, fileName, createDate);
-		}
+        private void CreateAttachment(int bugId, string fileName, string content, string creationDate, isobsolete isobsolete)
+        {
+            Context.BugzillaBugs.AddAttachment(bugId,
+                new attachment
+                {
+                    filename = fileName,
+                    date = creationDate,
+                    data = string.IsNullOrEmpty(content)
+                        ? null
+                        : new data { Value = Convert.ToBase64String(Encoding.ASCII.GetBytes(content)) },
+                    isobsolete = isobsolete
+                });
+        }
 
-		[Given("attachment for bug $bugId '$fileName' has content '$content'")]
-		public void AddContentToAttachment(int bugId, string fileName, string content)
-		{
-			Context.BugzillaBugs.SetAttachmentContent(bugId, fileName, new data { Value = Convert.ToBase64String(Encoding.ASCII.GetBytes(content)) });
-		}
+        [Given("attachment for bug $bugId '$fileName' has creation date '$createDate'")]
+        public void AddCreateDateToAttachment(int bugId, string fileName, string createDate)
+        {
+            Context.BugzillaBugs.SetAttachmentTime(bugId, fileName, createDate);
+        }
 
-		[Given("bug $bugId has attachment '$fileName'")]
-		public void AddAttachmentToBug(int bugId, string fileName)
-		{
-			Context.BugzillaBugs.AddAttachment(bugId,
-											   new attachment
-											   {
-												   filename = fileName
-											   });
-		}
+        [Given("attachment for bug $bugId '$fileName' has content '$content'")]
+        public void AddContentToAttachment(int bugId, string fileName, string content)
+        {
+            Context.BugzillaBugs.SetAttachmentContent(bugId, fileName,
+                new data { Value = Convert.ToBase64String(Encoding.ASCII.GetBytes(content)) });
+        }
 
-		[Given("attachment for bug $bugId '$fileName' has owner '$owner'")]
-		public void AddOwnerToAttachment(int bugId, string fileName, string owner)
-		{
-			Context.BugzillaBugs.SetAttachmentOwner(bugId, fileName, owner);
-		}
+        [Given("bug $bugId has attachment '$fileName'")]
+        public void AddAttachmentToBug(int bugId, string fileName)
+        {
+            Context.BugzillaBugs.AddAttachment(bugId,
+                new attachment
+                {
+                    filename = fileName
+                });
+        }
 
-		[Given("attachment for bug $bugId '$fileName' has description '$description'")]
-		public void AddDescriptionToAttachment(int bugId, string fileName, string description)
-		{
-			Context.BugzillaBugs.SetAttachmentDescription(bugId, fileName, description);
-		}
+        [Given("attachment for bug $bugId '$fileName' has owner '$owner'")]
+        public void AddOwnerToAttachment(int bugId, string fileName, string owner)
+        {
+            Context.BugzillaBugs.SetAttachmentOwner(bugId, fileName, owner);
+        }
 
-		[Given("TargetProcess is down")]
-		public void TargetProcessIsDown()
-		{
-			TransportMock.ResetAllOnMessageHandlers();
-			TransportMock.OnCreateEntityCommand<BugDTO>().Reply(
-				x => new TargetProcessExceptionThrownMessage {ExceptionString = "TargetProcess is down."});
-		}
+        [Given("attachment for bug $bugId '$fileName' has description '$description'")]
+        public void AddDescriptionToAttachment(int bugId, string fileName, string description)
+        {
+            Context.BugzillaBugs.SetAttachmentDescription(bugId, fileName, description);
+        }
 
-		[Then("bug in TargetProcess with name '$bugName' should have $count attachments")]
-		public void CheckAttachmentsCount(string bugName, int count)
-		{
-			TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Count().Should(Be.EqualTo(count), "TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Count().Should(Be.EqualTo(count))");
-		}
+        [Given("TargetProcess is down")]
+        public void TargetProcessIsDown()
+        {
+            TransportMock.ResetAllOnMessageHandlers();
+            TransportMock.OnCreateEntityCommand<BugDTO>().Reply(
+                x => new TargetProcessExceptionThrownMessage { ExceptionString = "TargetProcess is down." });
+        }
 
-		[Then(
-			"bug in TargetProcess with name '$bugName' should have attachment '$fileName' with content '$content' created on '$creationDate'"
-			)]
-		public void CheckAttachment(string bugName, string fileName, string content, string creationDate)
-		{
-			var part = GetCreatedAttachmentByName(fileName);
+        [Then("bug in TargetProcess with name '$bugName' should have $count attachments")]
+        public void CheckAttachmentsCount(string bugName, int count)
+        {
+            TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>()
+                .Count()
+                .Should(Be.EqualTo(count),
+                    "TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Count().Should(Be.EqualTo(count))");
+        }
 
-			part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)), "part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)))");
+        [Then(
+             "bug in TargetProcess with name '$bugName' should have attachment '$fileName' with content '$content' created on '$creationDate'"
+         )]
+        public void CheckAttachment(string bugName, string fileName, string content, string creationDate)
+        {
+            var part = GetCreatedAttachmentByName(fileName);
 
-			Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content), "Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content))");
-		}
+            part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)),
+                "part.CreateDate.Should(Be.EqualTo(CreateDateConverter.ParseFromBugzillaLocalTime(creationDate)))");
 
-		private AddAttachmentPartToMessageCommand GetCreatedAttachmentByName(string fileName)
-		{
-			var attachments = new List<AttachmentDTO>();
+            Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64))
+                .Should(Be.EqualTo(content),
+                    "Encoding.ASCII.GetString(Convert.FromBase64String(part.BytesSerializedToBase64)).Should(Be.EqualTo(content))");
+        }
 
-			foreach (var message in TransportMock.LocalQueue.GetMessages<AttachmentsPushedToTPMessageInternal>())
-			{
-				attachments.AddRange(message.AttachmentDtos);
-			}
+        private AddAttachmentPartToMessageCommand GetCreatedAttachmentByName(string fileName)
+        {
+            var attachments = new List<AttachmentDTO>();
 
-			attachments.FirstOrDefault(x => x.OriginalFileName == fileName).Should(Be.Not.Null, "attachments.FirstOrDefault(x => x.OriginalFileName == fileName).Should(Be.Not.Null)");
+            foreach (var message in TransportMock.LocalQueue.GetMessages<AttachmentsPushedToTPMessageInternal>())
+            {
+                attachments.AddRange(message.AttachmentDtos);
+            }
 
-			var part =
-				TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Single(x => x.FileName == fileName);
-			return part;
-		}
+            attachments.FirstOrDefault(x => x.OriginalFileName == fileName)
+                .Should(Be.Not.Null, "attachments.FirstOrDefault(x => x.OriginalFileName == fileName).Should(Be.Not.Null)");
 
-		[Then("bug in TargetProcess with name '$bugName' should have attachment '$fileName' with owner '$ownerLogin' and description '$description'")]
-		public void CheckAttachmentDescriptionAndOwner(string bugName, string fileName, string ownerLogin, string description)
-		{
-			var part = GetCreatedAttachmentByName(fileName);
+            var part =
+                TransportMock.TpQueue.GetMessages<AddAttachmentPartToMessageCommand>().Single(x => x.FileName == fileName);
+            return part;
+        }
 
-			part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID), "part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID))");
-			part.Description.Should(Be.EqualTo(description), "part.Description.Should(Be.EqualTo(description))");
-		}
+        [Then(
+             "bug in TargetProcess with name '$bugName' should have attachment '$fileName' with owner '$ownerLogin' and description '$description'"
+         )]
+        public void CheckAttachmentDescriptionAndOwner(string bugName, string fileName, string ownerLogin, string description)
+        {
+            var part = GetCreatedAttachmentByName(fileName);
 
-		[Then("no attachments should present on disk")]
-		public void CheckThatThereIsNoAttachments()
-		{
-			Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0), "Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0))");
-		}
-	}
+            part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID),
+                "part.OwnerId.Should(Be.EqualTo(Context.Users.Single(u => u.Login == ownerLogin).ID))");
+            part.Description.Should(Be.EqualTo(description), "part.Description.Should(Be.EqualTo(description))");
+        }
+
+        [Then("no attachments should present on disk")]
+        public void CheckThatThereIsNoAttachments()
+        {
+            Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path)
+                .Count()
+                .Should(Be.EqualTo(0),
+                    "Directory.GetFiles(ObjectFactory.GetInstance<PluginDataFolder>().Path).Count().Should(Be.EqualTo(0))");
+        }
+    }
 }

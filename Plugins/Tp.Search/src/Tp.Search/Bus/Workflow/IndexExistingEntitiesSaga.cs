@@ -18,138 +18,148 @@ using Tp.Search.Model.Entity;
 
 namespace Tp.Search.Bus.Workflow
 {
-	class IndexExistingEntitiesSaga : TpSaga<IndexExistingEntitiesSagaData>,
-									  IAmStartedByMessages<IndexExistingEntitiesLocalMessage>,
-									  IHandleMessages<TargetProcessExceptionThrownMessage>,
-									  IHandleMessages<GeneralQueryResult>,
-									  IHandleMessages<AssignableQueryResult>,
-									  IHandleMessages<TestStepQueryResult>,
-									  IHandleMessages<ImpedimentQueryResult>,
-									  IHandleMessages<CommentQueryResult>,
-									  IHandleMessages<ReleaseProjectQueryResult>,
-									  IHandleMessages<AssignableSquadQueryResult>
-	{
-		private readonly IDocumentIndexProvider _documentIndexProvider;
-		private readonly IPluginContext _pluginContext;
-		private readonly IActivityLogger _logger;
-		private readonly SagaServices _sagaServices;
-		private readonly GeneralsIndexing _generalsIndexing;
-		private readonly AssignablesIndexing _assignablesIndexing;
-		private readonly TestStepsIndexing _testStepsIndexing;
-		private readonly ImpedimentsIndexing _impedimentsIndexing;
-		private readonly CommentsIndexing _commentsIndexing;
-		private readonly ReleaseProjectIndexing _releaseProjectIndexing;
-		private readonly AssignableSquadIndexing _assignableSquadIndexing;
+    class IndexExistingEntitiesSaga
+        : TpSaga<IndexExistingEntitiesSagaData>,
+          IAmStartedByMessages<IndexExistingEntitiesLocalMessage>,
+          IHandleMessages<TargetProcessExceptionThrownMessage>,
+          IHandleMessages<GeneralQueryResult>,
+          IHandleMessages<AssignableQueryResult>,
+          IHandleMessages<TestStepQueryResult>,
+          IHandleMessages<ImpedimentQueryResult>,
+          IHandleMessages<CommentQueryResult>,
+          IHandleMessages<ReleaseProjectQueryResult>,
+          IHandleMessages<AssignableSquadQueryResult>
+    {
+        private readonly IDocumentIndexProvider _documentIndexProvider;
+        private readonly IPluginContext _pluginContext;
+        private readonly IActivityLogger _logger;
+        private readonly SagaServices _sagaServices;
+        private readonly GeneralsIndexing _generalsIndexing;
+        private readonly AssignablesIndexing _assignablesIndexing;
+        private readonly TestStepsIndexing _testStepsIndexing;
+        private readonly ImpedimentsIndexing _impedimentsIndexing;
+        private readonly CommentsIndexing _commentsIndexing;
+        private readonly ReleaseProjectIndexing _releaseProjectIndexing;
+        private readonly AssignableSquadIndexing _assignableSquadIndexing;
 
-		public IndexExistingEntitiesSaga()
-		{
-		}
+        public IndexExistingEntitiesSaga()
+        {
+        }
 
-		public IndexExistingEntitiesSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider, IDocumentIndexProvider documentIndexProvider, IPluginContext pluginContext, IActivityLogger logger, SagaServices sagaServices)
-		{
-			_documentIndexProvider = documentIndexProvider;
-			_pluginContext = pluginContext;
-			_logger = logger;
-			_sagaServices = sagaServices;
-			_generalsIndexing = new GeneralsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _assignablesIndexing.Start(), q => Send(q), _logger);
-			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testStepsIndexing.Start(), q => Send(q), _logger);
-			_testStepsIndexing = new TestStepsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _impedimentsIndexing.Start(), q => Send(q), _logger, (dto, indexer) => indexer.AddTestStepIndex(dto, DocumentIndexOptimizeSetup.NoOptimize));
-			_impedimentsIndexing = new ImpedimentsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _releaseProjectIndexing.Start(), q => Send(q), _logger);
-			_releaseProjectIndexing = new ReleaseProjectIndexing(entityIndexer, () => Data, entityTypesProvider, d => _assignableSquadIndexing.Start(), q => Send(q), _logger);
-			_assignableSquadIndexing = new AssignableSquadIndexing(entityIndexer, () => Data, entityTypesProvider, d => _commentsIndexing.Start(), q => Send(q), _logger);
-			_commentsIndexing = new CommentsIndexing(entityIndexer, () => Data, entityTypesProvider, d =>
-				{
-					SendLocal(new IndexExistingEntitiesDoneLocalMessage { SagaId = Data.OuterSagaId });
-					MarkAsComplete();
-				}, q => Send(q), _logger, (dto, indexer) => indexer.AddCommentIndex(dto, DocumentIndexOptimizeSetup.NoOptimize));
-		}
+        public IndexExistingEntitiesSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider,
+            IDocumentIndexProvider documentIndexProvider, IPluginContext pluginContext, IActivityLogger logger, SagaServices sagaServices)
+        {
+            _documentIndexProvider = documentIndexProvider;
+            _pluginContext = pluginContext;
+            _logger = logger;
+            _sagaServices = sagaServices;
+            _generalsIndexing = new GeneralsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _assignablesIndexing.Start(),
+                q => Send(q), _logger);
+            _assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => _testStepsIndexing.Start(),
+                q => Send(q), _logger);
+            _testStepsIndexing = new TestStepsIndexing(entityIndexer, () => Data, entityTypesProvider, d => _impedimentsIndexing.Start(),
+                q => Send(q), _logger, (dto, indexer) => indexer.AddTestStepIndex(dto, DocumentIndexOptimizeSetup.NoOptimize));
+            _impedimentsIndexing = new ImpedimentsIndexing(entityIndexer, () => Data, entityTypesProvider,
+                d => _releaseProjectIndexing.Start(), q => Send(q), _logger);
+            _releaseProjectIndexing = new ReleaseProjectIndexing(entityIndexer, () => Data, entityTypesProvider,
+                d => _assignableSquadIndexing.Start(), q => Send(q), _logger);
+            _assignableSquadIndexing = new AssignableSquadIndexing(entityIndexer, () => Data, entityTypesProvider,
+                d => _commentsIndexing.Start(), q => Send(q), _logger);
+            _commentsIndexing = new CommentsIndexing(entityIndexer, () => Data, entityTypesProvider, d =>
+            {
+                SendLocal(new IndexExistingEntitiesDoneLocalMessage { SagaId = Data.OuterSagaId });
+                MarkAsComplete();
+            }, q => Send(q), _logger, (dto, indexer) => indexer.AddCommentIndex(dto, DocumentIndexOptimizeSetup.NoOptimize));
+        }
 
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<GeneralQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<AssignableQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<TestStepQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<ImpedimentQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<ReleaseProjectQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<AssignableSquadQueryResult>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
-		}
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<GeneralQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<AssignableQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<TestStepQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<ImpedimentQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<ReleaseProjectQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<AssignableSquadQueryResult>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<CommentQueryResult>(saga => saga.Id, message => message.SagaId);
+        }
 
-		public void Handle(IndexExistingEntitiesLocalMessage message)
-		{
-			_sagaServices.TryCompleteInprogressSaga<IndexExistingEntitiesSagaData>(Data.Id);
-			_documentIndexProvider.ShutdownDocumentIndexes(_pluginContext, new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: true), _logger);
-			Data.OuterSagaId = message.OuterSagaId;
-			_generalsIndexing.Start();
-		}
+        public void Handle(IndexExistingEntitiesLocalMessage message)
+        {
+            _sagaServices.TryCompleteInprogressSaga<IndexExistingEntitiesSagaData>(Data.Id);
+            _documentIndexProvider.ShutdownDocumentIndexes(_pluginContext,
+                new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: true), _logger);
+            Data.OuterSagaId = message.OuterSagaId;
+            _generalsIndexing.Start();
+        }
 
-		public void Handle(GeneralQueryResult message)
-		{
-			_generalsIndexing.Handle(message);
-		}
+        public void Handle(GeneralQueryResult message)
+        {
+            _generalsIndexing.Handle(message);
+        }
 
-		public void Handle(AssignableQueryResult message)
-		{
-			_assignablesIndexing.Handle(message);
-		}
-		
-		public void Handle(TestStepQueryResult message)
-		{
-			_testStepsIndexing.Handle(message);
-		}
+        public void Handle(AssignableQueryResult message)
+        {
+            _assignablesIndexing.Handle(message);
+        }
 
-		public void Handle(ImpedimentQueryResult message)
-		{
-			_impedimentsIndexing.Handle(message);
-		}
+        public void Handle(TestStepQueryResult message)
+        {
+            _testStepsIndexing.Handle(message);
+        }
 
-		public void Handle(CommentQueryResult message)
-		{
-			_commentsIndexing.Handle(message);
-		}
+        public void Handle(ImpedimentQueryResult message)
+        {
+            _impedimentsIndexing.Handle(message);
+        }
 
-		public void Handle(ReleaseProjectQueryResult message)
-		{
-			_releaseProjectIndexing.Handle(message);
-		}
+        public void Handle(CommentQueryResult message)
+        {
+            _commentsIndexing.Handle(message);
+        }
 
-		public void Handle(AssignableSquadQueryResult message)
-		{
-			_assignableSquadIndexing.Handle(message);
-		}
+        public void Handle(ReleaseProjectQueryResult message)
+        {
+            _releaseProjectIndexing.Handle(message);
+        }
 
-		public void Handle(TargetProcessExceptionThrownMessage message)
-		{
-			_logger.Error("Build indexes failed", new Exception(message.ExceptionString));
-			SendLocal(new IndexExistingEntitiesDoneLocalMessage { SagaId = Data.OuterSagaId });
-			MarkAsComplete();
-		}
-	}
+        public void Handle(AssignableSquadQueryResult message)
+        {
+            _assignableSquadIndexing.Handle(message);
+        }
 
-	[Serializable]
-	public class IndexExistingEntitiesSagaData : ISagaEntity, IAssignableIndexingSagaData, ICommentIndexingSagaData, ITestStepIndexingSagaData
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
+        public void Handle(TargetProcessExceptionThrownMessage message)
+        {
+            _logger.Error("Build indexes failed", new Exception(message.ExceptionString));
+            SendLocal(new IndexExistingEntitiesDoneLocalMessage { SagaId = Data.OuterSagaId });
+            MarkAsComplete();
+        }
+    }
 
-		public Guid OuterSagaId { get; set; }
+    [Serializable]
+    public class IndexExistingEntitiesSagaData
+        : ISagaEntity, IAssignableIndexingSagaData, ICommentIndexingSagaData, ITestStepIndexingSagaData
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
 
-		public int GeneralsRetrievedCount { get; set; }
-		public int AssignablesRetrievedCount { get; set; }
-		public int TestStepsRetrievedCount { get; set; }
-		public int ReleaseProjectsRetrievedCount { get; set; }
-		public int AssignableSquadsRetrievedCount { get; set; }
-		public int ImpedimentsRetrievedCount { get; set; }
-		public int CommentsRetrievedCount { get; set; }
+        public Guid OuterSagaId { get; set; }
 
-		public int GeneralsCurrentDataWindowSize { get; set; }
-		public int AssignablesCurrentDataWindowSize { get; set; }
-		public int TestStepsCurrentDataWindowSize { get; set; }
-		public int ReleaseProjectsCurrentDataWindowSize { get; set; }
-		public int AssignableSquadsCurrentDataWindowSize { get; set; }
-		public int ImpedimentsCurrentDataWindowSize { get; set; }
-		public int CommentsCurrentDataWindowSize { get; set; }
-	}
+        public int GeneralsRetrievedCount { get; set; }
+        public int AssignablesRetrievedCount { get; set; }
+        public int TestStepsRetrievedCount { get; set; }
+        public int ReleaseProjectsRetrievedCount { get; set; }
+        public int AssignableSquadsRetrievedCount { get; set; }
+        public int ImpedimentsRetrievedCount { get; set; }
+        public int CommentsRetrievedCount { get; set; }
+
+        public int GeneralsCurrentDataWindowSize { get; set; }
+        public int AssignablesCurrentDataWindowSize { get; set; }
+        public int TestStepsCurrentDataWindowSize { get; set; }
+        public int ReleaseProjectsCurrentDataWindowSize { get; set; }
+        public int AssignableSquadsCurrentDataWindowSize { get; set; }
+        public int ImpedimentsCurrentDataWindowSize { get; set; }
+        public int CommentsCurrentDataWindowSize { get; set; }
+    }
 }

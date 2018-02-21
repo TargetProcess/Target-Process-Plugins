@@ -7,7 +7,7 @@ namespace Tp.PopEmailIntegration.Rules.Parsing
 {
     #region Parser
 
-    public partial class Parser 
+    public partial class Parser
     {
         private Scanner scanner;
         private ParseTree tree;

@@ -33,10 +33,7 @@ namespace Mercurial
         [RepeatableArgument]
         public Collection<string> FileNames
         {
-            get
-            {
-                return new Collection<string>(_FileNames);
-            }
+            get { return new Collection<string>(_FileNames); }
         }
 
         /// <summary>
@@ -45,11 +42,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--update")]
         [DefaultValue(false)]
-        public bool Update
-        {
-            get;
-            set;
-        }
+        public bool Update { get; set; }
 
         /// <summary>
         /// Adds the value to the <see cref="FileNames"/> collection property and

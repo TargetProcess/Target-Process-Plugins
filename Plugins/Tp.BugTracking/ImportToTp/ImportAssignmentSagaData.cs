@@ -8,11 +8,11 @@ using NServiceBus.Saga;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	public class ImportAssignmentSagaData : ISagaEntity
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
-		public int ActionsInProgress { get; set; }
-	}
+    public class ImportAssignmentSagaData : ISagaEntity
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
+        public int ActionsInProgress { get; set; }
+    }
 }

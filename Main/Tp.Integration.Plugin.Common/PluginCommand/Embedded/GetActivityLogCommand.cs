@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -13,27 +13,27 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public class GetActivityLogCommand : IPluginCommand
-	{
-		private readonly IProfile _profile;
+    public class GetActivityLogCommand : IPluginCommand
+    {
+        private readonly IProfile _profile;
 
-		public GetActivityLogCommand(IProfile profile)
-		{
-			_profile = profile;
-		}
+        public GetActivityLogCommand(IProfile profile)
+        {
+            _profile = profile;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var filter = args.Deserialize<ActivityFilter>();
-			var activity = _profile.Log.GetBy(filter);
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var filter = args.Deserialize<ActivityFilter>();
+            var activity = _profile.Log.GetBy(filter);
 
-			return new PluginCommandResponseMessage
-			       	{ResponseData = activity.Serialize(), PluginCommandStatus = PluginCommandStatus.Succeed};
-		}
+            return new PluginCommandResponseMessage
+            {
+                ResponseData = activity.Serialize(),
+                PluginCommandStatus = PluginCommandStatus.Succeed
+            };
+        }
 
-		public string Name
-		{
-			get { return EmbeddedPluginCommands.GetActivityLog; }
-		}
-	}
+        public string Name => EmbeddedPluginCommands.GetActivityLog;
+    }
 }

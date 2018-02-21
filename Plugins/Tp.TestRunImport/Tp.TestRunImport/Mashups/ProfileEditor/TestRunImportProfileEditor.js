@@ -5,12 +5,13 @@ tau.mashups
 	.addDependency("TestRunImport/editorTemplate")
 	.addDependency("TestRunImport/seleniumButtons")
 	.addDependency("TestRunImport/seleniumUrlEditor")
+	.addDependency("TestRunImport/testPlansPopoverWidget")
 	.addDependency("TestRunImport/jquery/iphone-switch")
 	.addDependency("TestRunImport/jquery/numeric")
 	.addDependency("libs/jquery/jquery")
 	.addDependency("libs/jquery/jquery.tmpl")
 	.addDependency("TestRunImport/jquery.utils")
-	.addModule("TestRunImport/testRunImportProfileEditor", function (bus, errorMessageContainer, profileControlsBlock, editorTemplate, seleniumButtons, seleniumUrlEditor) {
+	.addModule("TestRunImport/testRunImportProfileEditor", function (bus, errorMessageContainer, profileControlsBlock, editorTemplate, seleniumButtons, seleniumUrlEditor, testPlansPopoverWidget) {
 		function testRunImportProfileEditor(config) {
 			this._create(config);
 		}
@@ -49,34 +50,25 @@ tau.mashups
 			_onProfileReceived: function (profile) {
 				var callback = function (data) {
 					profile = profile || this._getDefaultProfile();
-					if (data && data.Items && data.Items.length > 0) {
-						var d = [];
-						$.each(data.Items, function (i, v) { if (v['TestPlans-Count'] > 0) d.push(v); });
-						profile.projects = d;
-					} else {
-						profile.projects = [];
-					}
-					this.projects = profile.projects;
-					this._sortArrayByField(profile.projects, 'Name');
+					this.projects = profile.projects = data.items ? data.items : [];
 					profile.Settings.SynchronizationInterval = profile.Settings.SynchronizationInterval / 60;
 					if (!this._isEditMode() || !this._isProjectAvailable(profile.Settings.Project)) {
-						profile.projects.splice(0, 0, { Id: 0, Name: ' - Select Project - ' });
-						profile.testplans = [{ Id: 0, Name: ' - Select Test Plan - '}];
+						profile.projects.splice(0, 0, { id: 0, name: ' - Select Project - ' });
+						profile.testplan = {};
 					}
 					else {
-						return $.getJSON(this._getTestPlansUrl(profile.Settings.Project), $.proxy(function (data) {
-							profile.testplans = data.Items ? data.Items : [];
-							this._sortArrayByField(profile.testplans, 'Name');
-							if (!this._isEditMode() || !this._isTestPlanAvailable(profile.testplans, profile.Settings.TestPlan)) {
-								profile.testplans.splice(0, 0, { Id: 0, Name: ' - Select Test Plan - ' });
-							}
+						return $.getJSON(this._getTestPlanUrl(profile.Settings.Project, profile.Settings.TestPlan), $.proxy(function (data) {
+							profile.testplan = data.items && data.items.length ? data.items[0] : {};
 							this._renderProfile(profile);
+							var testPlansSelect = this._find('input.tptestplan');
+							this.popoverWidget = new testPlansPopoverWidget({ elements: testPlansSelect, projectId: profile.Settings.Project });
+							testPlansSelect.enabled(this._isEditMode());
 						}, this));
 					}
 					this._renderProfile(profile);
 				};
 
-				$.getJSON(new Tp.WebServiceURL('/api/v1/Projects.asmx/?include=[Id,Name,TestPlans-Count]&Take=1000').url, $.proxy(callback, this));
+				$.getJSON(new Tp.WebServiceURL('/api/v2/Project?select={id,name}&where=TestPlans.Count%20>%200&orderBy=name%20asc&take=1000').url, $.proxy(callback, this));
 			},
 
 			_getDefaultProfile: function () {
@@ -107,7 +99,7 @@ tau.mashups
 				rendered.find('#switch').iphoneSwitch(
 					profile.Settings.PassiveMode ? 'on' : 'off', $.proxy(this._onSwitch, this), $.proxy(this._onSwitch, this),
 					{ switch_on_container_path: '../javascript/tau/css/images/plugins/switch_on.png', switch_off_container_path: '../javascript/tau/css/images/plugins/switch_off.png', switch_path: '../javascript/tau/css/images/plugins/switch.png' }
-		);
+				);
 
 				var projectsSelect = rendered.find('#projectsDropDown'), testPlansSelect = rendered.find('#testPlansDropDown'), frameworkSelect = rendered.find('#frameworkDropDown');
 				if (this._isEditMode() && this._isProjectAvailable(profile.Settings.Project)) {
@@ -152,7 +144,7 @@ tau.mashups
 
 			_isObjectWithIdInArray: function (arr, id) {
 				var r = false;
-				$.each(arr, function (i, v) { if (v.Id == id) r = true; });
+				$.each(arr, function (i, v) { if (v.id === id) r = true; });
 				return r;
 			},
 
@@ -170,29 +162,17 @@ tau.mashups
 				}
 			},
 
-			_sortArrayByField: function (arr, field) {
-				if (arr && field) {
-					arr.sort(function (a, b) {
-						var compA = a[field].toUpperCase(), compB = b[field].toUpperCase();
-						return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-					});
-				}
-			},
-
 			_projectChange: function (e) {
-				var select = $(e.target), testPlansSelect = this._find('#testPlansDropDown');
-				select.find('option[value="0"]').remove();
-				testPlansSelect.enabled(false);
-				$.getJSON(this._getTestPlansUrl(select.val()), $.proxy(function (data) {
-					testPlansSelect.find('option').remove().end().append('<option value="0"> - Select Test Plan - </option>').val('0');
-					if (data.Items) {
-						this._sortArrayByField(data.Items, 'Name');
-						$.each(data.Items, function (i, obj) {
-							testPlansSelect.append($('<option></option>').val(obj.Id).html($('<div />').text(obj.Name).html()));
-						});
-					}
-					testPlansSelect.enabled(true);
-				}, this));
+				var select = $(e.target), testPlansSelect = this._find('input.tptestplan');
+				if (this.popoverWidget) {
+					this.popoverWidget.destroy();
+					this.popoverWidget = null;
+				}
+				var projectId = parseInt(select.val());
+				testPlansSelect.removeAttr('testplanid').val('').enabled(projectId);
+				if (projectId) {
+					this.popoverWidget = new testPlansPopoverWidget({ elements: testPlansSelect, projectId: projectId });
+				};
 			},
 
 			_createUrlEditorIfNeeded: function (container, url, authUserId) {
@@ -257,12 +237,8 @@ tau.mashups
 				return this._isObjectWithIdInArray(this.projects, projectId);
 			},
 
-			_isTestPlanAvailable: function (arrTestPlans, testPlanId) {
-				return this._isObjectWithIdInArray(arrTestPlans, testPlanId);
-			},
-
-			_getTestPlansUrl: function (projectId) {
-				return new Tp.WebServiceURL('/api/v1/Projects/{ProjectId}/TestPlans?include=[Name,Id]&Take=1000'.replace(/{ProjectId}/g, projectId)).url;
+			_getTestPlanUrl: function (projectId, testPlanId) {
+				return new Tp.WebServiceURL('/api/v2/TestPlan?select={id,name}&where=Project.Id%20=%20{ProjectId}%20and%20Id%20=%20{TestPlanId}'.replace(/{ProjectId}/g, projectId).replace(/{TestPlanId}/g, testPlanId)).url;
 			},
 
 			_saveProfile: function () {
@@ -372,10 +348,10 @@ tau.mashups
 						SynchronizationInterval: postToRemote ? 24 : this._getSynchronizationInterval(),
 						AuthTokenUserId: postToRemote ? this._find('input.tpuser').attr('userId') : 0,
 						RemoteResultsUrl: postToRemote ? this.seleniumUrlEditor.getSeleniumUrl() : '',
-						PassiveMode: state == 'on',
+						PassiveMode: state === 'on',
 						RegExp: this._find('#regExp').val(),
 						Project: this._find('#projectsDropDown').val() || 0,
-						TestPlan: this._find('#testPlansDropDown').val() || 0,
+						TestPlan: this._find('input.tptestplan').attr('testplanid') || 0,
 						FrameworkType: this._find('#frameworkDropDown').val() || 0,
 						PostResultsToRemoteUrl: postToRemote
 					}

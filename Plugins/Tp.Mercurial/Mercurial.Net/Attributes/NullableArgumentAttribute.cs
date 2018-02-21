@@ -16,22 +16,14 @@ namespace Mercurial.Attributes
         /// property value is <c>null</c>. If <see cref="string.Empty"/>,
         /// no option will be passed in this case.
         /// </summary>
-        public string NullOption
-        {
-            get;
-            set;
-        }
+        public string NullOption { get; set; }
 
         /// <summary>
         /// Gets or sets the option to specify before the property value when
         /// passing it to the Mercurial executable. If <see cref="string.Empty"/>,
         /// only the property value itself will be passed.
         /// </summary>
-        public string NonNullOption
-        {
-            get;
-            set;
-        }
+        public string NonNullOption { get; set; }
 
         /// <summary>
         /// Gets a collection of options or arguments to pass to the Mercurial

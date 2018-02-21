@@ -8,18 +8,18 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.Gateways
 {
-	internal class ProfileGatewayFactory : IProfileGatewayFactory
-	{
-		private readonly ITpBus _tpBus;
+    internal class ProfileGatewayFactory : IProfileGatewayFactory
+    {
+        private readonly ITpBus _tpBus;
 
-		public ProfileGatewayFactory(ITpBus tpBus)
-		{
-			_tpBus = tpBus;
-		}
+        public ProfileGatewayFactory(ITpBus tpBus)
+        {
+            _tpBus = tpBus;
+        }
 
-		public IProfileGateway Create(AccountName accountName, IProfileReadonly profile)
-		{
-			return new ProfileGateway(profile, accountName, _tpBus);
-		}
-	}
+        public IProfileGateway Create(AccountName accountName, IProfileReadonly profile)
+        {
+            return new ProfileGateway(profile, accountName, _tpBus);
+        }
+    }
 }

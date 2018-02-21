@@ -8,27 +8,28 @@ using Tp.Search.Model.Document;
 
 namespace Tp.Search.Bus
 {
-	[Profile, Serializable, DataContract]
-	public class SearcherProfile : IValidatable, ISynchronizableProfile
-	{
-		public const string Name = "Now running";
-		public SearcherProfile()
-		{
-			EnabledForTp2 = false;
-		}
+    [Profile, Serializable, DataContract]
+    public class SearcherProfile : IValidatable, ISynchronizableProfile
+    {
+        public const string Name = "Now running";
 
-		[DataMember]
-		public int SynchronizationInterval
-		{
-			get { return ObjectFactory.GetInstance<DocumentIndexSetup>().CheckIntervalInMinutes; }
-			set { }
-		}
+        public SearcherProfile()
+        {
+            EnabledForTp2 = false;
+        }
 
-		[DataMember]
-		public bool EnabledForTp2 { get; set; }
+        [DataMember]
+        public int SynchronizationInterval
+        {
+            get { return ObjectFactory.GetInstance<DocumentIndexSetup>().CheckIntervalInMinutes; }
+            set { }
+        }
 
-		public void Validate(PluginProfileErrorCollection errors)
-		{
-		}
-	}
+        [DataMember]
+        public bool EnabledForTp2 { get; set; }
+
+        public void Validate(PluginProfileErrorCollection errors)
+        {
+        }
+    }
 }

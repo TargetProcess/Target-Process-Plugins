@@ -14,152 +14,153 @@ using Tp.Integration.Plugin.Common.Storage.Persisters.ProfileStoragePersistanceS
 
 namespace Tp.Integration.Plugin.Common.Storage.Persisters
 {
-	internal class ProfileToStorageAdapter<T> : IStorage<T>
-	{
-		private readonly TypeNameWithoutVersion _key;
-		private readonly ProfileId _profileId;
-		private readonly IStoragePersistanceStrategy _persistanceStrategy;
+    internal class ProfileToStorageAdapter<T> : IStorage<T>
+    {
+        private readonly TypeNameWithoutVersion _key;
+        private readonly ProfileId _profileId;
+        private readonly IStoragePersistanceStrategy _persistanceStrategy;
 
-		public ProfileToStorageAdapter(ProfileId profileId, IProfileStoragePersister persister)
-			: this(profileId, persister, typeof (T), null)
-		{
-		}
+        public ProfileToStorageAdapter(ProfileId profileId, IProfileStoragePersister persister)
+            : this(profileId, persister, typeof(T), null)
+        {
+        }
 
-		public ProfileToStorageAdapter(ProfileId profileId, IProfileStoragePersister persister, params StorageName[] storageNames)
-			: this(profileId, persister, typeof(T), storageNames)
-		{
-		}
+        public ProfileToStorageAdapter(ProfileId profileId, IProfileStoragePersister persister, params StorageName[] storageNames)
+            : this(profileId, persister, typeof(T), storageNames)
+        {
+        }
 
-		public ProfileToStorageAdapter(ProfileId profileId, IProfileStoragePersister persister, Type keyType, params StorageName[] storageNames)
-		{
-			_profileId = profileId;
-			_key = ProfileStorage.Key(keyType);
+        public ProfileToStorageAdapter(ProfileId profileId, IProfileStoragePersister persister, Type keyType,
+            params StorageName[] storageNames)
+        {
+            _profileId = profileId;
+            _key = ProfileStorage.Key(keyType);
 
-			if (storageNames == null)
-			{
-				_persistanceStrategy = new NotNamedStoragePersistanceStrategy(persister, profileId, _key);
-		}
-			else
-			{
-				_persistanceStrategy = new NamedStoragePersistanceStrategy(persister, profileId, _key, storageNames);
-			}
-		}
+            if (storageNames == null)
+            {
+                _persistanceStrategy = new NotNamedStoragePersistanceStrategy(persister, profileId, _key);
+            }
+            else
+            {
+                _persistanceStrategy = new NamedStoragePersistanceStrategy(persister, profileId, _key, storageNames);
+            }
+        }
 
-		#region IStorage<T> Members
+        #region IStorage<T> Members
 
-		public void ReplaceWith(params T[] value)
-		{
-			_persistanceStrategy.Clear();
-			AddRange(value);
-		}
+        public void ReplaceWith(params T[] value)
+        {
+            _persistanceStrategy.Clear();
+            AddRange(value);
+        }
 
-		public void Update(T value, Predicate<T> condition)
-		{
-			var storages = _persistanceStrategy.GetAllStorages();
-			var itemToUpdate = storages.FirstOrDefault(x => condition(x.GetValue<T>()));
-			if (itemToUpdate == null) return;
-		
-			itemToUpdate.SetValue(value);
-			_persistanceStrategy.Update(itemToUpdate);
-		}
+        public void Update(T value, Predicate<T> condition)
+        {
+            var storages = _persistanceStrategy.GetAllStorages();
+            var itemToUpdate = storages.FirstOrDefault(x => condition(x.GetValue<T>()));
+            if (itemToUpdate == null) return;
 
-		public bool IsNull
-		{
-			get { return false; }
-		}
+            itemToUpdate.SetValue(value);
+            _persistanceStrategy.Update(itemToUpdate);
+        }
 
-		public IEnumerator<T> GetEnumerator()
-		{
-			return _persistanceStrategy.GetAllStorages().Select(x => x.GetValue<T>()).GetEnumerator();
-		}
+        public bool IsNull
+        {
+            get { return false; }
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _persistanceStrategy.GetAllStorages().Select(x => x.GetValue<T>()).GetEnumerator();
+        }
 
-		public Expression Expression
-		{
-			get { return _persistanceStrategy.GetAllStorages().Select(x => x.GetValue<T>()).AsQueryable().Expression; }
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		public Type ElementType
-		{
-			get { return typeof (T); }
-		}
+        public Expression Expression
+        {
+            get { return _persistanceStrategy.GetAllStorages().Select(x => x.GetValue<T>()).AsQueryable().Expression; }
+        }
 
-		public IQueryProvider Provider
-		{
-			get { return _persistanceStrategy.GetAllStorages().AsQueryable().Provider; }
-		}
+        public Type ElementType
+        {
+            get { return typeof(T); }
+        }
 
-		public void Add(T item)
-		{
-			AddRange(new[] {item});
-		}
+        public IQueryProvider Provider
+        {
+            get { return _persistanceStrategy.GetAllStorages().AsQueryable().Provider; }
+        }
 
-		public void AddRange(IEnumerable<T> items)
-		{
-			var profileStorages = items.Select(ConvertToProfileStorage).ToArray();
-			_persistanceStrategy.Insert(profileStorages);
-		}
+        public void Add(T item)
+        {
+            AddRange(new[] { item });
+        }
 
-		public void Remove(Predicate<T> condition)
-		{
-			var storages = _persistanceStrategy.GetAllStorages();
-			var itemsToRemove = storages.Where(x => condition(x.GetValue<T>())).ToArray();
-			_persistanceStrategy.Delete(itemsToRemove);
-		}
+        public void AddRange(IEnumerable<T> items)
+        {
+            var profileStorages = items.Select(ConvertToProfileStorage).ToArray();
+            _persistanceStrategy.Insert(profileStorages);
+        }
 
-		public void Clear()
-		{
-			_persistanceStrategy.Clear();
-		}
+        public void Remove(Predicate<T> condition)
+        {
+            var storages = _persistanceStrategy.GetAllStorages();
+            var itemsToRemove = storages.Where(x => condition(x.GetValue<T>())).ToArray();
+            _persistanceStrategy.Delete(itemsToRemove);
+        }
 
-		public bool Contains(T item)
-		{
-			return _persistanceStrategy.Contains(item);
-		}
+        public void Clear()
+        {
+            _persistanceStrategy.Clear();
+        }
 
-		public void CopyTo(T[] array, int arrayIndex)
-		{
-			var values2Copy = _persistanceStrategy.GetAllStorages().Skip(arrayIndex).Select(x => x.GetValue<T>()).ToArray();
-			values2Copy.CopyTo(array, 0);
-		}
+        public bool Contains(T item)
+        {
+            return _persistanceStrategy.Contains(item);
+        }
 
-		public bool Remove(T item)
-		{
-			var item2Remove = FindProfileStorageByValue(item);
-			if (item2Remove != null)
-			{
-				_persistanceStrategy.Delete(item2Remove);
-				return true;
-			}
-			return false;
-		}
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            var values2Copy = _persistanceStrategy.GetAllStorages().Skip(arrayIndex).Select(x => x.GetValue<T>()).ToArray();
+            values2Copy.CopyTo(array, 0);
+        }
 
-		public int Count
-		{
-			get { return _persistanceStrategy.GetAllStorages().Count(); }
-		}
+        public bool Remove(T item)
+        {
+            var item2Remove = FindProfileStorageByValue(item);
+            if (item2Remove != null)
+            {
+                _persistanceStrategy.Delete(item2Remove);
+                return true;
+            }
+            return false;
+        }
 
-		public bool IsReadOnly
-		{
-			get { return false; }
-		}
+        public int Count
+        {
+            get { return _persistanceStrategy.GetAllStorages().Count(); }
+        }
 
-		#endregion IStorage<T> Members
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
-		private ProfileStorage ConvertToProfileStorage(T value)
-		{
-			var result = new ProfileStorage(_key) {ProfileId = _profileId.Value};
-			result.SetValue(value);
-			return result;
-		}
+        #endregion IStorage<T> Members
 
-		private ProfileStorage FindProfileStorageByValue(T item)
-		{
-			return _persistanceStrategy.FindBy(item);
-		}
-	}
+        private ProfileStorage ConvertToProfileStorage(T value)
+        {
+            var result = new ProfileStorage(_key) { ProfileId = _profileId.Value };
+            result.SetValue(value);
+            return result;
+        }
+
+        private ProfileStorage FindProfileStorageByValue(T item)
+        {
+            return _persistanceStrategy.FindBy(item);
+        }
+    }
 }

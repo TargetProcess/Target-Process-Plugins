@@ -3,8 +3,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Integration.Messages.Ticker
 {
-	[Serializable]
-	public class SyncNowMessage : IPluginLocalMessage
-	{
-	}
+    [Serializable]
+    public class SyncNowMessage : IPluginLocalMessage
+    {
+    }
 }

@@ -44,10 +44,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "-I")]
         public Collection<string> IncludePatterns
         {
-            get
-            {
-                return new Collection<string>(_IncludePatterns);
-            }
+            get { return new Collection<string>(_IncludePatterns); }
         }
 
         /// <summary>
@@ -57,10 +54,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "-X")]
         public Collection<string> ExcludePatterns
         {
-            get
-            {
-                return new Collection<string>(_ExcludePatterns);
-            }
+            get { return new Collection<string>(_ExcludePatterns); }
         }
 
         /// <summary>
@@ -85,7 +79,7 @@ namespace Mercurial
                 throw new ArgumentNullException("value");
 
             IncludePatterns.Add(value);
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -110,7 +104,7 @@ namespace Mercurial
                 throw new ArgumentNullException("value");
 
             ExcludePatterns.Add(value);
-            return (T)this;
+            return (T) this;
         }
     }
 }

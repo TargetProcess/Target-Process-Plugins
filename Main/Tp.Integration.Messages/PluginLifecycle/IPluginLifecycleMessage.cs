@@ -2,7 +2,7 @@
 
 namespace Tp.Integration.Messages.PluginLifecycle
 {
-	public interface IPluginLifecycleMessage : IMessage
-	{
-	}
+    public interface IPluginLifecycleMessage : IMessage
+    {
+    }
 }

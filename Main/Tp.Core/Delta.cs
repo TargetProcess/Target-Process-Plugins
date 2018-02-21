@@ -1,107 +1,110 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Tp.Core
 {
-	public class Delta
-	{
-		protected Delta(object original, object changed, IEnumerable<string> changedFields)
-		{
-			Original = original;
-			Changed = changed;
-			ChangedFields = changedFields;
-		}
+    public class Delta
+    {
+        private static readonly ReadOnlyCollection<string> EmptyChangedFields = new ReadOnlyCollection<string>(new string[0]);
 
-		public object Original { get; }
+        protected Delta(object original, object changed, IReadOnlyList<string> changedFields)
+        {
+            Original = original;
+            Changed = changed;
+            ChangedFields = changedFields;
+        }
 
-		public object Changed { get; }
+        public object Original { get; }
 
-		public IEnumerable<string> ChangedFields { get; }
+        public object Changed { get; }
 
-		public override string ToString()
-		{
-			return "Delta. Original: {0}, Changed: {1}".Fmt(Original, Changed);
-		}
+        public IReadOnlyList<string> ChangedFields { get; }
 
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as Delta);
-		}
+        public override string ToString()
+        {
+            return "Delta. Original: {0}, Changed: {1}".Fmt(Original, Changed);
+        }
 
-		private bool Equals(Delta other)
-		{
-			if (other == null)
-			{
-				return false;
-			}
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Delta);
+        }
 
-			return Equals(Original, other.Original) && Equals(Changed, other.Changed);
-		}
+        private bool Equals(Delta other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return ((Original?.GetHashCode() ?? 0) * 397) ^ (Changed?.GetHashCode() ?? 0);
-			}
-		}
+            return Equals(Original, other.Original) && Equals(Changed, other.Changed);
+        }
 
-		public static Delta<T> Create<T>(T original, T changed, IEnumerable<string> changedFields = null)
-		{
-			return new Delta<T>(original, changed, changedFields ?? Enumerable.Empty<string>());
-		}
-	}
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Original?.GetHashCode() ?? 0) * 397) ^ (Changed?.GetHashCode() ?? 0);
+            }
+        }
 
-	public class Delta<TData> : Delta
-	{
-		public Delta(TData original, TData changed, IEnumerable<string> changedFields) : base(original, changed, changedFields)
-		{
-		}
+        public static Delta<T> Create<T>(T original, T changed, IReadOnlyList<string> changedFields = null)
+        {
+            return new Delta<T>(original, changed, changedFields ?? EmptyChangedFields);
+        }
+    }
 
-		public new TData Original => (TData) base.Original;
+    public class Delta<TData> : Delta
+    {
+        public Delta(TData original, TData changed, IReadOnlyList<string> changedFields) : base(original, changed, changedFields)
+        {
+        }
 
-		public new TData Changed => (TData) base.Changed;
+        public new TData Original => (TData) base.Original;
 
-		public Delta<TData> WithNewChangedFields(IEnumerable<string> changedFields) =>
-			new Delta<TData>(Original, Changed, changedFields);
+        public new TData Changed => (TData) base.Changed;
 
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as Delta<TData>);
-		}
+        public Delta<TData> WithNewChangedFields(IReadOnlyList<string> changedFields) =>
+            new Delta<TData>(Original, Changed, changedFields);
 
-		private bool Equals(Delta<TData> other)
-		{
-			if (other == null)
-			{
-				return false;
-			}
+        public Delta<TData> WithAppendedChangedFields(IEnumerable<string> changedFields) =>
+            WithNewChangedFields(ChangedFields.Concat(changedFields).Distinct().ToList());
 
-			return Equals(Changed, other.Changed);
-		}
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Delta<TData>);
+        }
 
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return Changed != null ? Changed.GetHashCode() : 0;
-			}
-		}
-	}
+        private bool Equals(Delta<TData> other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-	public static class DeltaExtensions
-	{
-		public static string Dump(this IEnumerable<Delta> deltas) =>
-			string.Join(Environment.NewLine, deltas.Select(x => x.ToString()));
+            return Equals(Changed, other.Changed);
+        }
 
-		public static Delta<TResult> Select<T, TResult>(this Delta<T> delta, Func<T, TResult> map) =>
-			new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
+        public override int GetHashCode()
+        {
+            return Changed != null ? Changed.GetHashCode() : 0;
+        }
+    }
 
-		public static Delta<TResult> Select<TResult>(this Delta delta, Func<object, TResult> map) =>
-			new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
+    public static class DeltaExtensions
+    {
+        public static string Dump(this IEnumerable<Delta> deltas) =>
+            string.Join(Environment.NewLine, deltas.Select(x => x.ToString()));
 
-		public static T GetChangedOrOriginal<T>(this Delta<Maybe<T>> delta) =>
-			delta.Changed.OrElse(() => delta.Original).Value;
-	}
+        public static Delta<TResult> Select<T, TResult>(this Delta<T> delta, Func<T, TResult> map) =>
+            new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
+
+        public static Delta<TResult> Select<TResult>(this Delta delta, Func<object, TResult> map) =>
+            new Delta<TResult>(map(delta.Original), map(delta.Changed), delta.ChangedFields);
+
+        public static T GetChangedOrOriginal<T>(this Delta<Maybe<T>> delta) =>
+            delta.Changed.OrElse(() => delta.Original).Value;
+    }
 }

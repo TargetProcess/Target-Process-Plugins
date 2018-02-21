@@ -58,15 +58,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Message
         {
-            get
-            {
-                return _Message;
-            }
+            get { return _Message; }
 
-            set
-            {
-                _Message = (value ?? string.Empty).Trim();
-            }
+            set { _Message = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -75,11 +69,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--addremove")]
         [DefaultValue(false)]
-        public bool AddRemove
-        {
-            get;
-            set;
-        }
+        public bool AddRemove { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to mark a branch as closed, hiding it from the branch list.
@@ -87,11 +77,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--close-branch")]
         [DefaultValue(false)]
-        public bool CloseBranch
-        {
-            get;
-            set;
-        }
+        public bool CloseBranch { get; set; }
 
         /// <summary>
         /// Gets or sets the username to use when committing;
@@ -102,15 +88,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string OverrideAuthor
         {
-            get
-            {
-                return _OverrideAuthor;
-            }
+            get { return _OverrideAuthor; }
 
-            set
-            {
-                _OverrideAuthor = (value ?? string.Empty).Trim();
-            }
+            set { _OverrideAuthor = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -119,11 +99,7 @@ namespace Mercurial
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date")]
         [DefaultValue(null)]
-        public DateTime? OverrideTimestamp
-        {
-            get;
-            set;
-        }
+        public DateTime? OverrideTimestamp { get; set; }
 
         /// <summary>
         /// Gets the collection of files to commit. If left empty, will commit all
@@ -131,10 +107,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Paths
         {
-            get
-            {
-                return _Paths.Collection;
-            }
+            get { return _Paths.Collection; }
         }
 
         #region IMercurialCommand<RevSpec> Members
@@ -177,11 +150,7 @@ namespace Mercurial
         /// Gets or sets the result of executing the command as a <see cref="RevSpec"/> identifying the
         /// new changeset that was committed.
         /// </summary>
-        public RevSpec Result
-        {
-            get;
-            set;
-        }
+        public RevSpec Result { get; set; }
 
         #endregion
 
@@ -313,7 +282,8 @@ namespace Mercurial
         /// </summary>
         protected override void Prepare()
         {
-            _MessageFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", string.Empty).ToLowerInvariant() + ".txt");
+            _MessageFilePath = Path.Combine(Path.GetTempPath(),
+                Guid.NewGuid().ToString().Replace("-", string.Empty).ToLowerInvariant() + ".txt");
             File.WriteAllText(_MessageFilePath, Message, _Encoding);
         }
 

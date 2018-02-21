@@ -18,53 +18,57 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Subversion.Subversion
 {
-	[TestFixture, ActionSteps]
+    [TestFixture, ActionSteps]
     [Category("PartPlugins1")]
-	public class VcsPluginIntegrationSpecs
-	{
-		private VcsPluginContext Context
-		{
-			get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
-		}
+    public class VcsPluginIntegrationSpecs
+    {
+        private VcsPluginContext Context
+        {
+            get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
+        }
 
-		[SetUp]
-		public void Init()
-		{
-			ObjectFactory.Initialize(x => x.AddRegistry<VcsEnvironmentRegistry>());
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly, new List<Assembly> { typeof(Command).Assembly })));
-		}
+        [SetUp]
+        public void Init()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<VcsEnvironmentRegistry>());
+            ObjectFactory.Configure(
+                x =>
+                    x.For<TransportMock>()
+                        .Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly,
+                            new List<Assembly> { typeof(Command).Assembly })));
+        }
 
-		[Test]
-		public void ShouldScanForRevisions()
-		{
-			@"Given plugin profile
+        [Test]
+        public void ShouldScanForRevisions()
+        {
+            @"Given plugin profile
 					And local repository is 'TestRepository' 
 					And Start Revision is 2
 				When plugin started up
 				Then revisions should be created in TP"
-				.Execute(In.Context<VcsPluginIntegrationSpecs>().And<VcsPluginActionSteps>());
-		}
+                .Execute(In.Context<VcsPluginIntegrationSpecs>().And<VcsPluginActionSteps>());
+        }
 
-		[Given("plugin profile")]
-		public void CreatePluginProfile()
-		{
-		}
+        [Given("plugin profile")]
+        public void CreatePluginProfile()
+        {
+        }
 
-		[Given("local repository is '$repoPath'")]
-		public void SetLocalRepository(string repoPath)
-		{
-			var settings = LocalRepositorySettings.Create(repoPath);
-			Context.Profile.Uri = settings.Uri;
-			Context.Profile.Login = settings.Login;
-			Context.Profile.Password = settings.Password;
-		}
+        [Given("local repository is '$repoPath'")]
+        public void SetLocalRepository(string repoPath)
+        {
+            var settings = LocalRepositorySettings.Create(repoPath);
+            Context.Profile.Uri = settings.Uri;
+            Context.Profile.Login = settings.Login;
+            Context.Profile.Password = settings.Password;
+        }
 
-		[Given("Start Revision is $startRevision")]
-		public void SetStartRevision(string startRevision)
-		{
-			var profile = Context.Profile;
-			profile.StartRevision = startRevision;
-		}
+        [Given("Start Revision is $startRevision")]
+        public void SetStartRevision(string startRevision)
+        {
+            var profile = Context.Profile;
+            profile.StartRevision = startRevision;
+        }
 
 //		[When("plugin started up")]
 //		public void PluginStartedUp()
@@ -72,10 +76,11 @@ namespace Tp.Subversion.Subversion
 //			Context.StartPlugin();
 //		}
 
-		[Then("revisions should be created in TP")]
-		public void RevisionsShoulBeCreated()
-		{
-			Context.Transport.TpQueue.GetMessages<CreateCommand>().Should(Be.Not.Empty, "Context.Transport.TpQueue.GetMessages<CreateCommand>().Should(Be.Not.Empty)");
-		}
-	}
+        [Then("revisions should be created in TP")]
+        public void RevisionsShoulBeCreated()
+        {
+            Context.Transport.TpQueue.GetMessages<CreateCommand>()
+                .Should(Be.Not.Empty, "Context.Transport.TpQueue.GetMessages<CreateCommand>().Should(Be.Not.Empty)");
+        }
+    }
 }

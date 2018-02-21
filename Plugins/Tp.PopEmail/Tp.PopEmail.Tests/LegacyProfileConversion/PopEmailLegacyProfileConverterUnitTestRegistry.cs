@@ -8,11 +8,11 @@ using Tp.LegacyProfileConversion.Common.Testing;
 
 namespace Tp.PopEmailIntegration.LegacyProfileConversion
 {
-	public class PopEmailLegacyProfileConverterUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
-	{
-		protected override Assembly PluginAssembly
-		{
-			get { return typeof (ProjectEmailProfile).Assembly; }
-		}
-	}
+    public class PopEmailLegacyProfileConverterUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
+    {
+        protected override Assembly PluginAssembly
+        {
+            get { return typeof(ProjectEmailProfile).Assembly; }
+        }
+    }
 }

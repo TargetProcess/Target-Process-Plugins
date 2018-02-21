@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.TeamFoundation.Git.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.TeamFoundation.Git.Client.GitClientProxy">
+            <summary>
+            Base class for all proxy objects in the VersionControl.Client namespace.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Git.Client.GitClientProxy.ComponentName">
+            <summary>
+            For the IRegistration service
+            </summary>
+        </member>
+    </members>
+</doc>

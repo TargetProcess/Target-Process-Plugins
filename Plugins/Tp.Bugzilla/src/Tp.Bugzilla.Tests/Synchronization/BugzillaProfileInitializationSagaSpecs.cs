@@ -11,14 +11,14 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class BugzillaProfileInitializationSagaSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void CheckInitialization()
-		{
-			@"
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class BugzillaProfileInitializationSagaSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void CheckInitialization()
+        {
+            @"
 				Given TargetProcess contains following severities : 1-blocking,2-critical
 					And TargetProcess contains bug entity states for project 1 : 1-Open,2-Done
 					And TargetProcess contains user story entity states for project 1 : 1-Open,2-Done
@@ -43,23 +43,23 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And priorities storage should contain item with id 1 and name 'great'
 					And priorities storage should contain item with id 2 and name 'good'
 					"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugzillaProfileInitializationSagaSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugzillaProfileInitializationSagaSpecs>());
+        }
 
-		[Given(@"TargetProcess contains following projects : (?<projects>([^,]+,?\s*)+)")]
-		public void CreatePrjectsInTargetProcess(string[] projects)
-		{
-			Context.Projects.AddRange(projects.Select(name =>
-			{
-				var pair = name.Split('-');
+        [Given(@"TargetProcess contains following projects : (?<projects>([^,]+,?\s*)+)")]
+        public void CreatePrjectsInTargetProcess(string[] projects)
+        {
+            Context.Projects.AddRange(projects.Select(name =>
+            {
+                var pair = name.Split('-');
 
-				return new ProjectDTO
-				{
-					ID = int.Parse(pair[0]),
-					ProjectID = int.Parse(pair[0]),
-					Name = pair[1]
-				};
-			}));
-		}
-	}
+                return new ProjectDTO
+                {
+                    ID = int.Parse(pair[0]),
+                    ProjectID = int.Parse(pair[0]),
+                    Name = pair[1]
+                };
+            }));
+        }
+    }
 }

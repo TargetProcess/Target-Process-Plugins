@@ -18,12 +18,14 @@ namespace Mercurial.Hooks
         /// <summary>
         /// This is the backing field for the <see cref="Options"/> property.
         /// </summary>
-        private readonly MercurialCommandHookDictionary _Options = new MercurialCommandHookDictionary(Environment.GetEnvironmentVariable("HG_OPTS") ?? "{}");
+        private readonly MercurialCommandHookDictionary _Options =
+            new MercurialCommandHookDictionary(Environment.GetEnvironmentVariable("HG_OPTS") ?? "{}");
 
         /// <summary>
         /// This is the backing field for the <see cref="Patterns"/> property.
         /// </summary>
-        private readonly MercurialCommandHookPatternCollection _Patterns = new MercurialCommandHookPatternCollection(Environment.GetEnvironmentVariable("HG_PATS") ?? "[]");
+        private readonly MercurialCommandHookPatternCollection _Patterns =
+            new MercurialCommandHookPatternCollection(Environment.GetEnvironmentVariable("HG_PATS") ?? "[]");
 
         /// <summary>
         /// This is the backing field for the <see cref="ExitCode"/> property.
@@ -35,10 +37,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public MercurialCommandHookArgumentsCollection Arguments
         {
-            get
-            {
-                return _Arguments;
-            }
+            get { return _Arguments; }
         }
 
         /// <summary>
@@ -46,10 +45,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public int ExitCode
         {
-            get
-            {
-                return _ExitCode;
-            }
+            get { return _ExitCode; }
         }
 
         /// <summary>
@@ -57,10 +53,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public MercurialCommandHookDictionary Options
         {
-            get
-            {
-                return _Options;
-            }
+            get { return _Options; }
         }
 
         /// <summary>
@@ -68,10 +61,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public MercurialCommandHookPatternCollection Patterns
         {
-            get
-            {
-                return _Patterns;
-            }
+            get { return _Patterns; }
         }
     }
 }

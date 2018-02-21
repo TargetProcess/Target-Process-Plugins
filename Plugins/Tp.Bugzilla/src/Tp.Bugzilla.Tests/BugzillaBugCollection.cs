@@ -12,189 +12,194 @@ using Tp.Core;
 
 namespace Tp.Bugzilla.Tests
 {
-	public class BugzillaBugCollection : IEnumerable<bug>
-	{
-		private readonly List<bug> _bugs = new List<bug>();
+    public class BugzillaBugCollection : IEnumerable<bug>
+    {
+        private readonly List<bug> _bugs = new List<bug>();
 
-		public IEnumerator<bug> GetEnumerator()
-		{
-			return _bugs.GetEnumerator();
-		}
+        public IEnumerator<bug> GetEnumerator()
+        {
+            return _bugs.GetEnumerator();
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		public bug GetById(int bugId)
-		{
-			return _bugs.Single(x => x.bug_id == bugId.ToString());
-		}
+        public bug GetById(int bugId)
+        {
+            return _bugs.Single(x => x.bug_id == bugId.ToString());
+        }
 
-		public void Add(int bugId)
-		{
-			_bugs.Add(new bug {bug_id = bugId.ToString(), creation_ts = CurrentDate.Value.ToString("dd MMM yyyy HH':'mm")});
-		}
+        public void Add(int bugId)
+        {
+            _bugs.Add(new bug { bug_id = bugId.ToString(), creation_ts = CurrentDate.Value.ToString("dd MMM yyyy HH':'mm") });
+        }
 
-		public void Add(int bugId, string name)
-		{
-			_bugs.Add(new bug { bug_id = bugId.ToString(), creation_ts = CurrentDate.Value.ToString("dd MMM yyyy HH':'mm"), short_desc = name});
-		}
+        public void Add(int bugId, string name)
+        {
+            _bugs.Add(new bug
+            {
+                bug_id = bugId.ToString(),
+                creation_ts = CurrentDate.Value.ToString("dd MMM yyyy HH':'mm"),
+                short_desc = name
+            });
+        }
 
-		public void Add(bug bug)
-		{
-			_bugs.Add(bug);
-		}
+        public void Add(bug bug)
+        {
+            _bugs.Add(bug);
+        }
 
-		public void Add(int bugId, DateTime createdDate)
-		{
-			_bugs.Add(new bug {bug_id = bugId.ToString(), creation_ts = createdDate.ToString("dd MMM yyyy HH':'mm")});
-		}
+        public void Add(int bugId, DateTime createdDate)
+        {
+            _bugs.Add(new bug { bug_id = bugId.ToString(), creation_ts = createdDate.ToString("dd MMM yyyy HH':'mm") });
+        }
 
-		public void SetBugDescription(int bugId, string bugDescription)
-		{
-			var bug = GetById(bugId);
+        public void SetBugDescription(int bugId, string bugDescription)
+        {
+            var bug = GetById(bugId);
 
-			if (bug.long_descCollection == null)
-			{
-				bug.long_descCollection = new long_descCollection();
-			}
+            if (bug.long_descCollection == null)
+            {
+                bug.long_descCollection = new long_descCollection();
+            }
 
-			if (bug.long_descCollection.Count > 0)
-			{
-				bug.long_descCollection[0] = new long_desc {thetext = bugDescription};
-			}
-			else
-			{
-				bug.long_descCollection.Add(new long_desc {thetext = bugDescription});
-			}
-		}
+            if (bug.long_descCollection.Count > 0)
+            {
+                bug.long_descCollection[0] = new long_desc { thetext = bugDescription };
+            }
+            else
+            {
+                bug.long_descCollection.Add(new long_desc { thetext = bugDescription });
+            }
+        }
 
-		public void SetBugStatus(int bugId, string bugStatus)
-		{
-			GetById(bugId).bug_status = bugStatus;
-		}
+        public void SetBugStatus(int bugId, string bugStatus)
+        {
+            GetById(bugId).bug_status = bugStatus;
+        }
 
-		public void SetBugSeverity(int bugId, string severity)
-		{
-			GetById(bugId).bug_severity = severity;
-		}
+        public void SetBugSeverity(int bugId, string severity)
+        {
+            GetById(bugId).bug_severity = severity;
+        }
 
-		public void SetBugPriority(int bugId, string priority)
-		{
-			GetById(bugId).priority = priority;
-		}
+        public void SetBugPriority(int bugId, string priority)
+        {
+            GetById(bugId).priority = priority;
+        }
 
-		public void SetBugCreationDate(int bugId, string creationDate)
-		{
-			GetById(bugId).creation_ts = creationDate;
-		}
+        public void SetBugCreationDate(int bugId, string creationDate)
+        {
+            GetById(bugId).creation_ts = creationDate;
+        }
 
-		public void SetBugReporter(int bugId, string reporterEmail)
-		{
-			GetById(bugId).reporter = reporterEmail;
-		}
+        public void SetBugReporter(int bugId, string reporterEmail)
+        {
+            GetById(bugId).reporter = reporterEmail;
+        }
 
-		public void SetBugAssignee(int bugId, string assingneeEmail)
-		{
-			GetById(bugId).assigned_to = assingneeEmail;
-		}
+        public void SetBugAssignee(int bugId, string assingneeEmail)
+        {
+            GetById(bugId).assigned_to = assingneeEmail;
+        }
 
-		public void AddComment(int bugId, long_desc comment)
-		{
-			SetBugDescription(bugId, "description");
+        public void AddComment(int bugId, long_desc comment)
+        {
+            SetBugDescription(bugId, "description");
 
-			var bug = GetById(bugId);
-			bug.long_descCollection.Add(comment);
-		}
+            var bug = GetById(bugId);
+            bug.long_descCollection.Add(comment);
+        }
 
-		public void AddAttachment(int bugId, attachment attachment)
-		{
-			var bug = GetById(bugId);
+        public void AddAttachment(int bugId, attachment attachment)
+        {
+            var bug = GetById(bugId);
 
-			if (bug.attachmentCollection == null)
-				bug.attachmentCollection = new attachmentCollection();
+            if (bug.attachmentCollection == null)
+                bug.attachmentCollection = new attachmentCollection();
 
-			bug.attachmentCollection.Add(attachment);
-		}
+            bug.attachmentCollection.Add(attachment);
+        }
 
-		public void SetComponent(int bugId, string component)
-		{
-			GetById(bugId).component = component;
-		}
+        public void SetComponent(int bugId, string component)
+        {
+            GetById(bugId).component = component;
+        }
 
-		public void SetVersion(int bugId, string version)
-		{
-			GetById(bugId).version = version;
-		}
+        public void SetVersion(int bugId, string version)
+        {
+            GetById(bugId).version = version;
+        }
 
-		public void SetPlatform(int bugId, string platform)
-		{
-			GetById(bugId).rep_platform = platform;
-		}
+        public void SetPlatform(int bugId, string platform)
+        {
+            GetById(bugId).rep_platform = platform;
+        }
 
-		public void SetOperatingSystem(int bugId, string os)
-		{
-			GetById(bugId).op_sys = os;
-		}
+        public void SetOperatingSystem(int bugId, string os)
+        {
+            GetById(bugId).op_sys = os;
+        }
 
-		public void SetClassification(int bugId, string classification)
-		{
-			GetById(bugId).classification = classification;
-		}
+        public void SetClassification(int bugId, string classification)
+        {
+            GetById(bugId).classification = classification;
+        }
 
-		public void SetCustomField(int bugId, string fieldName, string fieldValue)
-		{
-			var bug = EnsureCustomFields(bugId);
+        public void SetCustomField(int bugId, string fieldName, string fieldValue)
+        {
+            var bug = EnsureCustomFields(bugId);
 
-			bug.custom_fieldCollection.Add(new custom_field{cf_name = fieldName, cf_value = fieldValue});
-		}
-		
-		public void SetCustomField(int bugId, string fieldName, string[] fieldValue)
-		{
-			var bug = EnsureCustomFields(bugId);
+            bug.custom_fieldCollection.Add(new custom_field { cf_name = fieldName, cf_value = fieldValue });
+        }
 
-			var values = new cf_valueCollection();
-			fieldValue.ToList().ForEach(v => values.Add(v));
+        public void SetCustomField(int bugId, string fieldName, string[] fieldValue)
+        {
+            var bug = EnsureCustomFields(bugId);
 
-			bug.custom_fieldCollection.Add(new custom_field
-			                               	{
-			                               		cf_name = fieldName, 
-												cf_type = "Multiple-Selection Box",
-												cf_values = new cf_values
-												            	{
-												            		cf_valueCollection = values
-												            	}
-			                               	});
-		}
+            var values = new cf_valueCollection();
+            fieldValue.ToList().ForEach(v => values.Add(v));
 
-		private bug EnsureCustomFields(int bugId)
-		{
-			var bug = GetById(bugId);
-			if(bug.custom_fieldCollection == null)
-				bug.custom_fieldCollection = new custom_fieldCollection();
+            bug.custom_fieldCollection.Add(new custom_field
+            {
+                cf_name = fieldName,
+                cf_type = "Multiple-Selection Box",
+                cf_values = new cf_values
+                {
+                    cf_valueCollection = values
+                }
+            });
+        }
 
-			return bug;
-		}
+        private bug EnsureCustomFields(int bugId)
+        {
+            var bug = GetById(bugId);
+            if (bug.custom_fieldCollection == null)
+                bug.custom_fieldCollection = new custom_fieldCollection();
 
-		public void SetAttachmentOwner(int bugId, string fileName, string owner)
-		{
-			GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).attacher = owner;
-		}
+            return bug;
+        }
 
-		public void SetAttachmentDescription(int bugId, string fileName, string description)
-		{
-			GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).desc = description;
-		}
+        public void SetAttachmentOwner(int bugId, string fileName, string owner)
+        {
+            GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).attacher = owner;
+        }
 
-		public void SetAttachmentContent(int bugId, string fileName, data data)
-		{
-			GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).data = data;
-		}
+        public void SetAttachmentDescription(int bugId, string fileName, string description)
+        {
+            GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).desc = description;
+        }
 
-		public void SetAttachmentTime(int bugId, string fileName, string createDate)
-		{
-			GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).date = createDate;
-		}
-	}
+        public void SetAttachmentContent(int bugId, string fileName, data data)
+        {
+            GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).data = data;
+        }
+
+        public void SetAttachmentTime(int bugId, string fileName, string createDate)
+        {
+            GetById(bugId).attachmentCollection.Cast<attachment>().Single(a => a.filename == fileName).date = createDate;
+        }
+    }
 }

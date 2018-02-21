@@ -7,15 +7,15 @@ using System.Collections.Generic;
 
 namespace Tp.Integration.Plugin.Common.Storage.Persisters.ProfileStoragePersistanceStrategies
 {
-	internal interface IStoragePersistanceStrategy
-	{
-		void Insert(params ProfileStorage[] profileStorages);
-		void Update(ProfileStorage itemToUpdate);
-		void Delete(params ProfileStorage[] itemsToRemove);
-		void Clear();
+    internal interface IStoragePersistanceStrategy
+    {
+        void Insert(params ProfileStorage[] profileStorages);
+        void Update(ProfileStorage itemToUpdate);
+        void Delete(params ProfileStorage[] itemsToRemove);
+        void Clear();
 
-		IEnumerable<ProfileStorage> GetAllStorages();
-		ProfileStorage FindBy<T>(T item);
-		bool Contains<T>(T item);
-	}
+        IEnumerable<ProfileStorage> GetAllStorages();
+        ProfileStorage FindBy<T>(T item);
+        bool Contains<T>(T item);
+    }
 }

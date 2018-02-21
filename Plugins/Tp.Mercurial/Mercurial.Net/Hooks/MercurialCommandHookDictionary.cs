@@ -53,25 +53,30 @@ namespace Mercurial.Hooks
                 // Grab name of key/value pair
                 var key = ParseValue(dictionaryValue, ref index) as string;
                 if (prevIndex == index)
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unsupported syntax in options combined at position #{0} (0-based), did not understand value at location", index));
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "Unsupported syntax in options combined at position #{0} (0-based), did not understand value at location", index));
                 if (key == null)
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unsupported syntax in options combined at position #{0} (0-based), expected name as string", prevIndex));
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "Unsupported syntax in options combined at position #{0} (0-based), expected name as string", prevIndex));
 
                 // Skip colon
                 if (dictionaryValue[index] != ':')
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unsupported syntax in options combined at position #{0} (0-based), expected colon (:)", prevIndex));
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "Unsupported syntax in options combined at position #{0} (0-based), expected colon (:)", prevIndex));
                 index++;
 
                 // Skip space
                 if (dictionaryValue[index] != ' ')
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unsupported syntax in options combined at position #{0} (0-based), expected space after colon", prevIndex));
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "Unsupported syntax in options combined at position #{0} (0-based), expected space after colon", prevIndex));
                 index++;
 
                 // Grab value
                 prevIndex = index;
                 object value = ParseValue(dictionaryValue, ref index);
                 if (prevIndex == index)
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unsupported syntax in options combined at position #{0} (0-based), did not understand value at location", index));
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "Unsupported syntax in options combined at position #{0} (0-based), did not understand value at location", index));
 
                 // Store
                 _Collection[key] = value;
@@ -134,10 +139,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public ICollection<string> Keys
         {
-            get
-            {
-                return _Collection.Keys;
-            }
+            get { return _Collection.Keys; }
         }
 
         /// <summary>
@@ -188,10 +190,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public ICollection<object> Values
         {
-            get
-            {
-                return _Collection.Values;
-            }
+            get { return _Collection.Values; }
         }
 
         /// <summary>
@@ -214,15 +213,9 @@ namespace Mercurial.Hooks
         /// </exception>
         public object this[string key]
         {
-            get
-            {
-                return _Collection[key];
-            }
+            get { return _Collection[key]; }
 
-            set
-            {
-                throw new NotSupportedException("This dictionary is read-only");
-            }
+            set { throw new NotSupportedException("This dictionary is read-only"); }
         }
 
         /// <summary>
@@ -290,7 +283,7 @@ namespace Mercurial.Hooks
         /// </exception>
         public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
         {
-            ((ICollection<KeyValuePair<string, object>>)_Collection).CopyTo(array, arrayIndex);
+            ((ICollection<KeyValuePair<string, object>>) _Collection).CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -301,10 +294,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public int Count
         {
-            get
-            {
-                return _Collection.Count;
-            }
+            get { return _Collection.Count; }
         }
 
         /// <summary>
@@ -315,10 +305,7 @@ namespace Mercurial.Hooks
         /// </returns>
         public bool IsReadOnly
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         /// <summary>

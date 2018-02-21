@@ -141,7 +141,6 @@
     <Compile Include="DiffCommand.cs" />
     <Compile Include="DiffIgnores.cs" />
     <Compile Include="Extensions\Churn\ChurnGroup.cs" />
-    <Compile Include="Extensions\Churn\ChurnExtension.cs" />
     <Compile Include="Extensions\Churn\ChurnCommand.cs" />
     <Compile Include="Extensions\Churn\ChurnUnit.cs" />
     <Compile Include="Hooks\MercurialCommandHookDataStructureBase.cs" />
@@ -195,9 +194,7 @@
     <Compile Include="NonPersistentClientFactory.cs" />
     <Compile Include="OutputParsingUtilities.cs" />
     <Compile Include="ParentsCommand.cs" />
-    <Compile Include="PathEx.cs" />
     <Compile Include="PersistentClient.cs" />
-    <Compile Include="PersistentClientFactory.cs" />
     <Compile Include="RecoverCommand.cs" />
     <Compile Include="RemoteInitCommand.cs" />
     <Compile Include="RenameCommand.cs" />
@@ -271,10 +268,7 @@
     <Compile Include="NoChangesFoundMercurialExecutionException.cs" />
     <Compile Include="DebugObserver.cs" />
     <Compile Include="Attributes\EnumArgumentAttribute.cs" />
-    <Compile Include="Extensions\CaseGuard\CaseGuardAddCommandExtensions.cs" />
-    <Compile Include="Extensions\CaseGuard\CaseGuardAddRemoveCommandExtensions.cs" />
     <Compile Include="Extensions\CaseGuard\CaseGuardExtension.cs" />
-    <Compile Include="Extensions\Queues\QueueCommandBaseExtensions.cs" />
     <Compile Include="Extensions\Queues\QueueExtension.cs" />
     <Compile Include="FileState.cs" />
     <Compile Include="FileStatus.cs" />

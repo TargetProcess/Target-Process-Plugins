@@ -117,7 +117,7 @@ namespace Mercurial
             if (typeValue == -1)
                 return false;
 
-            type = (char)typeValue;
+            type = (char) typeValue;
             switch (type)
             {
                 case 'o':
@@ -164,7 +164,7 @@ namespace Mercurial
                 int unencodedByte = reader.Read();
                 if (unencodedByte == -1)
                     return null;
-                buffer[index] = (byte)unencodedByte;
+                buffer[index] = (byte) unencodedByte;
             }
 
             return _Encoding.GetString(buffer);

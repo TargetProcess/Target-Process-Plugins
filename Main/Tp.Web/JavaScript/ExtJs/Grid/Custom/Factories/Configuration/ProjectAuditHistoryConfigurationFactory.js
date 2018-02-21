@@ -22,7 +22,11 @@ Tp.controls.grid.ProjectAuditHistoryConfigurationFactory = Ext.extend(Tp.control
             editable: false,
             insertEmptyOption: false
         });
-        
+
+        if (window.projectId && config.gridDataRequest.Cnt) {
+            config.gridDataRequest.Cnt.ProjectID = window.projectId;
+        }
+
         if (config.gridDataRequest.Cnt && config.gridDataRequest.Cnt.EntityTypeID)
             this.entitySelect.setValue(config.gridDataRequest.Cnt.EntityTypeID);
 

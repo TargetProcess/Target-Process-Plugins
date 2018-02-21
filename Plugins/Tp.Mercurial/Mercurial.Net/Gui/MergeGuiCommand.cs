@@ -22,11 +22,7 @@ namespace Mercurial.Gui
         /// Gets or sets the <see cref="RevSpec"/> identifying the revision to merge with.
         /// </summary>
         [NullableArgument(NonNullOption = "--rev"), DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and

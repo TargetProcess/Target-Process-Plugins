@@ -8,7 +8,7 @@ using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand
 {
-	public interface IPluginCommandRepository : IEnumerable<IPluginCommand>
-	{
-	}
+    public interface IPluginCommandRepository : IEnumerable<IPluginCommand>
+    {
+    }
 }

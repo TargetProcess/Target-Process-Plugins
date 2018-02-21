@@ -8,16 +8,16 @@ using System.Runtime.Serialization;
 
 namespace Tp.MashupManager
 {
-	[DataContract, Serializable]
-	public class MashupFile
-	{
-		/// <summary>
-		/// File name without path
-		/// </summary>
-		[DataMember]
-		public string FileName { get; set; }
+    [DataContract, Serializable]
+    public class MashupFile
+    {
+        /// <summary>
+        /// File name without path
+        /// </summary>
+        [DataMember]
+        public string FileName { get; set; }
 
-		[DataMember]
-		public string Content { get; set; }
-	}
+        [DataMember]
+        public string Content { get; set; }
+    }
 }

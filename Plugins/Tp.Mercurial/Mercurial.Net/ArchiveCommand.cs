@@ -51,15 +51,9 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool PassThroughDecoders
         {
-            get
-            {
-                return _PassThroughDecoders;
-            }
+            get { return _PassThroughDecoders; }
 
-            set
-            {
-                _PassThroughDecoders = value;
-            }
+            set { _PassThroughDecoders = value; }
         }
 
         /// <summary>
@@ -70,15 +64,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string DirectoryPrefix
         {
-            get
-            {
-                return _DirectoryPrefix;
-            }
+            get { return _DirectoryPrefix; }
 
-            set
-            {
-                _DirectoryPrefix = (value ?? string.Empty).Trim();
-            }
+            set { _DirectoryPrefix = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -86,11 +74,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Gets or sets the type of archive to produce.
@@ -106,15 +90,9 @@ namespace Mercurial
         [DefaultValue(ArchiveType.Automatic)]
         public ArchiveType ArchiveType
         {
-            get
-            {
-                return _ArchiveType;
-            }
+            get { return _ArchiveType; }
 
-            set
-            {
-                _ArchiveType = value;
-            }
+            set { _ArchiveType = value; }
         }
 
         /// <summary>
@@ -128,10 +106,7 @@ namespace Mercurial
         [DefaultValue(false)]
         public bool RecurseSubRepositories
         {
-            get
-            {
-                return _RecurseSubRepositories;
-            }
+            get { return _RecurseSubRepositories; }
 
             set
             {
@@ -150,15 +125,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = (value ?? string.Empty).Trim();
-            }
+            set { _Destination = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

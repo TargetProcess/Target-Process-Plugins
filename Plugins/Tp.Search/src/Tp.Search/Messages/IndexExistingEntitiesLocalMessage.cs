@@ -8,9 +8,9 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Search.Messages
 {
-	[Serializable]
-	public class IndexExistingEntitiesLocalMessage : IPluginLocalMessage
-	{
-		public Guid OuterSagaId { get; set; }
-	}
+    [Serializable]
+    public class IndexExistingEntitiesLocalMessage : IPluginLocalMessage
+    {
+        public Guid OuterSagaId { get; set; }
+    }
 }

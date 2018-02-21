@@ -14,44 +14,44 @@ using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class GetMashupInfoCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
-		{
-			var name = args.Deserialize<MashupName>();
+    public class GetMashupInfoCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
+        {
+            var name = args.Deserialize<MashupName>();
 
-			var mashup = ObjectFactory.GetInstance<IMashupScriptStorage>().GetMashup(name.Value);
+            var mashup = ObjectFactory.GetInstance<IMashupScriptStorage>().GetMashup(name.Value);
 
-			if (mashup != null)
-			{
-				return new PluginCommandResponseMessage
-				       	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = mashup.Serialize()};
-			}
+            if (mashup != null)
+            {
+                return new PluginCommandResponseMessage
+                    { PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = mashup.Serialize() };
+            }
 
-			return GetErrorResponse(string.Format("Mashup with name \"{0}\" doesn't exist", name.Value));
-		}
+            return GetErrorResponse(string.Format("Mashup with name \"{0}\" doesn't exist", name.Value));
+        }
 
-		public string Name
-		{
-			get { return "GetMashupInfo"; }
-		}
+        public string Name
+        {
+            get { return "GetMashupInfo"; }
+        }
 
-		private PluginCommandResponseMessage GetErrorResponse(string message)
-		{
-			return new PluginCommandResponseMessage
-			       	{
-			       		PluginCommandStatus = PluginCommandStatus.Fail,
-			       		ResponseData =
-			       			new PluginProfileErrorCollection
-			       				{new PluginProfileError {FieldName = Mashup.NameField, Message = message}}.Serialize()
-			       	};
-		}
-	}
+        private PluginCommandResponseMessage GetErrorResponse(string message)
+        {
+            return new PluginCommandResponseMessage
+            {
+                PluginCommandStatus = PluginCommandStatus.Fail,
+                ResponseData =
+                    new PluginProfileErrorCollection
+                        { new PluginProfileError { FieldName = Mashup.NameField, Message = message } }.Serialize()
+            };
+        }
+    }
 
-	[DataContract]
-	public class MashupName
-	{
-		[DataMember]
-		public string Value { get; set; }
-	}
+    [DataContract]
+    public class MashupName
+    {
+        [DataMember]
+        public string Value { get; set; }
+    }
 }

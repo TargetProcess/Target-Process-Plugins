@@ -47,10 +47,7 @@ namespace Mercurial.Gui
         /// </summary>
         public Collection<string> Files
         {
-            get
-            {
-                return _Files;
-            }
+            get { return _Files; }
         }
 
         /// <summary>
@@ -72,7 +69,7 @@ namespace Mercurial.Gui
                 foreach (string value in values)
                     Files.Add(value);
 
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>

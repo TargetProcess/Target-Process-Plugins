@@ -11,10 +11,10 @@ using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.SourceControl.Comments
 {
-	public interface IAction : IPluginLocalMessage
-	{
-		void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger);
+    public interface IAction : IPluginLocalMessage
+    {
+        void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger);
 
-		List<IAction> Children { get; }
-	}
+        List<IAction> Children { get; }
+    }
 }

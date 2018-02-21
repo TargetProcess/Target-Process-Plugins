@@ -7,10 +7,10 @@ using System.Collections.Generic;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class ActivityDto
-	{
-		public IEnumerable<ActivityLogRecord> Records { get; set; }
+    public class ActivityDto
+    {
+        public IEnumerable<ActivityLogRecord> Records { get; set; }
 
-		public ActivityType Type { get; set; }
-	}
+        public ActivityType Type { get; set; }
+    }
 }

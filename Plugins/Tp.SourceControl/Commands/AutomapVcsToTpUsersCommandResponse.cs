@@ -9,19 +9,19 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.SourceControl.Commands
 {
-	[DataContract]
-	public class AutomapVcsToTpUsersCommandResponse
-	{
-		public AutomapVcsToTpUsersCommandResponse()
-		{
-			UserLookups = new Dictionary<string, MappingLookup>();
-			Comment = string.Empty;
-		}
+    [DataContract]
+    public class AutomapVcsToTpUsersCommandResponse
+    {
+        public AutomapVcsToTpUsersCommandResponse()
+        {
+            UserLookups = new Dictionary<string, MappingLookup>();
+            Comment = string.Empty;
+        }
 
-		[DataMember]
-		public Dictionary<string, MappingLookup> UserLookups { get; set; }
+        [DataMember]
+        public Dictionary<string, MappingLookup> UserLookups { get; set; }
 
-		[DataMember]
-		public string Comment { get; set; }
-	}
+        [DataMember]
+        public string Comment { get; set; }
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Dynamic;
 using Jeffijoe.MessageFormat;
 using Tp.Core.Annotations;
 using Tp.I18n;
@@ -7,40 +8,52 @@ using Tp.I18n;
 
 namespace System
 {
-	public static class StringLocalizationExtensions
-	{
-		public static IIntl Intl => new Intl(new MessageFormatter(locale: "en", useCache: false));
+    public static class StringLocalizationExtensions
+    {
+        [NotNull]
+        public static IIntl Intl => new Intl(new MessageFormatter(locale: "en", useCache: false));
 
-		[Pure]
-		public static IFormattedMessage Localize(this string token) =>
-			Intl.GetFormattedMessage(token);
+        [Pure]
+        [NotNull]
+        public static IFormattedMessage Localize([NotNull] this string token) =>
+            Intl.GetFormattedMessage(token);
 
-		[Pure]
-		public static IFormattedMessage Localize(this string token, object data) =>
-			Intl.GetFormattedMessage(token, data);
+        [Pure]
+        [NotNull]
+        public static IFormattedMessage Localize([NotNull] this string token, [NotNull] object data) =>
+            Intl.GetFormattedMessage(token, data);
 
-		[Pure]
-		public static IFormattedMessage AsLocalizable(this string token) =>
-			new FormattedMessage(token, new Dictionary<string, object>(), token);
+        [Pure]
+        [NotNull]
+        [PublicApiMethod]
+        public static IFormattedMessage AsLocalizable(this string token) =>
+            new FormattedMessage(token, new Dictionary<string, object>(), token);
 
-		[Pure]
-		public static IFormattedMessage AsLocalized(this string message) =>
-			"{message}".Localize(new { message });
+        [Pure]
+        [NotNull]
+        public static IFormattedMessage AsLocalized(this string message) =>
+            "{message}".Localize(new { message });
 
-		private const string CombineToken = "{part1}{part2}";
+        private const string CombineToken = "{part1}{part2}";
 
-		[Pure]
-		public static IFormattedMessage Combine(this IFormattedMessage part1, IFormattedMessage part2)
-		{
-			var parts = new { part1, part2 };
-			return CombineToken.Localize(parts);
-		}
+        [Pure]
+        [NotNull]
+        public static IFormattedMessage Combine(
+            [NotNull] this IFormattedMessage part1,
+            [NotNull] IFormattedMessage part2)
+        {
+            var parts = new { part1, part2 };
+            return CombineToken.Localize(parts);
+        }
 
-		[Pure]
-		public static IFormattedMessage Combine(this IFormattedMessage part1, string part2)
-		{
-			var parts = new { part1, part2 };
-			return CombineToken.Localize(parts);
-		}
-	}
+        [Pure]
+        [NotNull]
+        public static IFormattedMessage Combine(
+            [NotNull] this IFormattedMessage part1,
+            [NotNull] string part2)
+        {
+            var parts = new { part1, part2 };
+            return CombineToken.Localize(parts);
+        }
+    }
 }

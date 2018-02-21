@@ -7,13 +7,13 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.SourceControl.Settings
 {
-	public interface ISourceControlConnectionSettingsSource
-	{
-		string Uri { get; }
-		string Login { get; }
-		string Password { get; }
-		string StartRevision { get; set; }
+    public interface ISourceControlConnectionSettingsSource
+    {
+        string Uri { get; }
+        string Login { get; }
+        string Password { get; }
+        string StartRevision { get; set; }
 
-		MappingContainer UserMapping { get; set; }
-	}
+        MappingContainer UserMapping { get; set; }
+    }
 }

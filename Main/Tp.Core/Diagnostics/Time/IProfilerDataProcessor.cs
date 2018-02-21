@@ -2,8 +2,8 @@
 
 namespace Tp.Core.Diagnostics.Time
 {
-	public interface IProfilerDataProcessor
-	{
-		void Process(IEnumerable<TimeInterval> data, string context);
-	}
+    public interface IProfilerDataProcessor
+    {
+        void Process(IEnumerable<TimeInterval> data, string context);
+    }
 }

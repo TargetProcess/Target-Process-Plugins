@@ -179,10 +179,7 @@ namespace Mercurial
         /// </summary>
         public string Output
         {
-            get
-            {
-                return _Output;
-            }
+            get { return _Output; }
         }
     }
 }

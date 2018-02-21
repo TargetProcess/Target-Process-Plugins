@@ -9,13 +9,13 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.BugTracking.Commands.Dtos
 {
-	[DataContract]
-	public class MappingSourceEntry
-	{
-		[DataMember]
-		public List<MappingLookup> TpItems { get; set; }
+    [DataContract]
+    public class MappingSourceEntry
+    {
+        [DataMember]
+        public List<MappingLookup> TpItems { get; set; }
 
-		[DataMember]
-		public List<string> ThirdPartyItems { get; set; }
-	}
+        [DataMember]
+        public List<string> ThirdPartyItems { get; set; }
+    }
 }

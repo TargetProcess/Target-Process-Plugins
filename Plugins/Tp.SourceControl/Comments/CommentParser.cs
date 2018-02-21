@@ -16,57 +16,58 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Comments
 {
-	public class CommentParser
-	{
-		private readonly Parser _parser = new Parser(new Scanner());
-		private readonly IActivityLogger _log = ObjectFactory.GetInstance<IActivityLogger>();
+    public class CommentParser
+    {
+        private readonly Parser _parser = new Parser(new Scanner());
+        private readonly IActivityLogger _log = ObjectFactory.GetInstance<IActivityLogger>();
 
-		public IEnumerable<AssignRevisionToEntityAction> ParseAssignToEntityAction(RevisionDTO revision)
-		{
-			return ParseAssignToEntityAction(revision.Description);
-		}
-		public IEnumerable<AssignRevisionToEntityAction> ParseAssignToEntityAction(RevisionInfo revision)
-		{
-			return ParseAssignToEntityAction(revision.Comment);
-		}
+        public IEnumerable<AssignRevisionToEntityAction> ParseAssignToEntityAction(RevisionDTO revision)
+        {
+            return ParseAssignToEntityAction(revision.Description);
+        }
 
-		private IEnumerable<AssignRevisionToEntityAction> ParseAssignToEntityAction(string revisionComment)
-		{
-			return GetActions(revisionComment);
-		}
+        public IEnumerable<AssignRevisionToEntityAction> ParseAssignToEntityAction(RevisionInfo revision)
+        {
+            return ParseAssignToEntityAction(revision.Comment);
+        }
 
-		public IEnumerable<IAction> Parse(RevisionDTO revision, int entityId)
-		{
-			return GetActions(revision.Description)
-				.Where(x => x.EntityId == entityId)
-				.SelectMany(x => x.Children.FillChangeStatusActionComment());
-		}
+        private IEnumerable<AssignRevisionToEntityAction> ParseAssignToEntityAction(string revisionComment)
+        {
+            return GetActions(revisionComment);
+        }
 
-		private IEnumerable<AssignRevisionToEntityAction> GetActions(string description)
-		{
-			if (string.IsNullOrEmpty(description))
-			{
-				return Enumerable.Empty<AssignRevisionToEntityAction>();
-			}
+        public IEnumerable<IAction> Parse(RevisionDTO revision, int entityId)
+        {
+            return GetActions(revision.Description)
+                .Where(x => x.EntityId == entityId)
+                .SelectMany(x => x.Children.FillChangeStatusActionComment());
+        }
 
-			try
-			{
-				var commandTree = _parser.Parse(description.Trim() + " ");
+        private IEnumerable<AssignRevisionToEntityAction> GetActions(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+            {
+                return Enumerable.Empty<AssignRevisionToEntityAction>();
+            }
 
-				if (commandTree.Errors.Count > 0)
-				{
-					_log.Error(new CommentFailedToParseException(commandTree.Errors, description));
-				}
+            try
+            {
+                var commandTree = _parser.Parse(description.Trim() + " ");
 
-				var actions = (List<AssignRevisionToEntityAction>)commandTree.Eval();
+                if (commandTree.Errors.Count > 0)
+                {
+                    _log.Error(new CommentFailedToParseException(commandTree.Errors, description));
+                }
 
-				return actions.MergeActionsWithSameEntityId();
-			}
-			catch(Exception exception)
-			{
-				_log.Error(string.Format("Failed to parse comment {0}", description), exception);
-				return Enumerable.Empty<AssignRevisionToEntityAction>();
-			}
-		}
-	}
+                var actions = (List<AssignRevisionToEntityAction>) commandTree.Eval();
+
+                return actions.MergeActionsWithSameEntityId();
+            }
+            catch (Exception exception)
+            {
+                _log.Error(string.Format("Failed to parse comment {0}", description), exception);
+                return Enumerable.Empty<AssignRevisionToEntityAction>();
+            }
+        }
+    }
 }

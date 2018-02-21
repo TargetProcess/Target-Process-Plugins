@@ -35,6 +35,8 @@ Tp.controls.grid.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on("beforeedit", this.onBeforeEdit, this);
         this.on("afteredit", this.onAfterEdit, this);
         this.on("headermousedown", this.onHeaderMouseDown, this);
+
+        registerViewOpeningInParent('#' + config.renderTo);
     },
 
     onPreInit: function(config) {

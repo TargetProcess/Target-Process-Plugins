@@ -51,6 +51,18 @@ tau.mashups
                     onAutomap: $.proxy(this.automap, this)
                 });
 
+                this.customView = new view({
+                    placeholder: this.placeholder,
+                    mappingTemplate: 'batched',
+                    key: 'CustomMapping',
+                    Caption: 'Custom Mapping',
+                    Description: 'Example: cf_tpbugid <span class="mapping-notes-chain">&nbsp;</span> BugID',
+                    KeyName: 'Bugzilla CustomField',
+                    ValueName: 'TargetProcess BugField',
+                    HowTo: 'Map TargetProcess Bug Fields with Custom Fields in Bugzilla (avialable from Bugzilla 5.0 with updated tp2.cgi)',
+                    onAutomap: $.proxy(this.automap, this)
+                });
+
                 this.rolesView = new view({
                     placeholder: this.placeholder,
                     mappingTemplate: 'standalone',
@@ -70,13 +82,40 @@ tau.mashups
                 this.rolesView.render('.bugzilla-settings.roles')(roles);
 
                 var that = this;
-                this.restService.getBugInfo(profile.Settings.Project, function (tpItems) {
-                    that._onGetMappingSuccess(tpItems)(
-                        {
-                            States: profile.Settings.StatesMapping,
-                            Priorities: profile.Settings.PrioritiesMapping,
-                            Severities: profile.Settings.SeveritiesMapping
+
+                var requestsInProgress = 2;
+
+                var tpItems = {};
+
+                var onSuccess = function () {
+                    that._onGetMappingSuccess(tpItems)({
+                        States: profile.Settings.StatesMapping,
+                        Priorities: profile.Settings.PrioritiesMapping,
+                        Severities: profile.Settings.SeveritiesMapping,
+                        CustomFields: profile.Settings.CustomMapping
+                    });
+                }
+
+                if (parseInt(profile.Settings.Project) <= 0) {
+                    requestsInProgress--;
+                } else {
+                    that.commandGateway.executeForProfile('GetBugFields', null,
+                        function(bugfields) {
+                            requestsInProgress--;
+                            tpItems.bugfields = bugfields;
+                            if (requestsInProgress === 0)
+                                onSuccess();
                         });
+                }
+
+                this.restService.getBugInfo(profile.Settings.Project, function (tpData) {
+                    requestsInProgress--;
+                    tpItems.states = tpData.states;
+                    tpItems.severities = tpData.severities;
+                    tpItems.priorities = tpData.priorities;
+                    tpItems.roles = tpData.roles;
+                    if (requestsInProgress === 0)
+                        onSuccess();
                 });
             },
 
@@ -89,31 +128,49 @@ tau.mashups
                 var that = this;
                 return function (data) {
                     that.placeholder.find('span#automapPreloader').show();
+
+                    var dataSource = {
+                        States: { ThirdPartyItems: data.Statuses },
+                        Severities: { ThirdPartyItems: data.Severities },
+                        Priorities: { ThirdPartyItems: data.Priorities },
+                        CustomFields: { ThirdPartyItems: data.CustomFields },
+                        Roles: {
+                            ThirdPartyItems: $.map(profile.Settings.RolesMapping, function (element) {
+                                return element.Key;
+                            })
+                        }
+                    };
+
+                    var requestsInProgress = 2;
+
+                    var onSuccess = function () {
+                        that.commandGateway.executeForProfile('GetMapping', dataSource,
+                            $.proxy(that._onGetMappingSuccess({
+                                states: dataSource.States.TpItems,
+                                severities: dataSource.Severities.TpItems,
+                                priorities: dataSource.Priorities.TpItems,
+                                bugfields: dataSource.CustomFields.TpItems,
+                                roles: dataSource.Roles.TpItems
+                            }, that)));
+                    }
+
+                    that.commandGateway.executeForProfile('GetBugFields', null,
+                        function (bugfields) {
+                            requestsInProgress--;
+                            dataSource.CustomFields.TpItems = bugfields;
+                            if (requestsInProgress === 0)
+                                onSuccess();
+                        });
+
                     that.restService.getBugInfo(profile.Settings.Project,
                         function (tpInfo) {
-                            var dataSource = {
-                                States: {
-                                    TpItems: tpInfo.states,
-                                    ThirdPartyItems: data.Statuses
-                                },
-                                Severities: {
-                                    TpItems: tpInfo.severities,
-                                    ThirdPartyItems: data.Severities
-                                },
-                                Priorities: {
-                                    TpItems: tpInfo.priorities,
-                                    ThirdPartyItems: data.Priorities
-                                },
-                                Roles: {
-                                    TpItems: profile.roles,
-                                    ThirdPartyItems: $.map(profile.Settings.RolesMapping, function (element) {
-                                        return element.Key;
-                                    })
-                                }
-                            };
-                            that.commandGateway.executeForProfile('GetMapping',
-                                dataSource,
-                                $.proxy(that._onGetMappingSuccess(tpInfo), that));
+                            requestsInProgress--;
+                            dataSource.States.TpItems = tpInfo.states;
+                            dataSource.Severities.TpItems = tpInfo.severities;
+                            dataSource.Priorities.TpItems = tpInfo.priorities;
+                            dataSource.Roles.TpItems = profile.roles;
+                            if (requestsInProgress === 0)
+                                onSuccess();
                         }
                     );
                 };
@@ -131,6 +188,10 @@ tau.mashups
                 return this.prioritiesView.getMappings();
             },
 
+            getCustomMapping: function () {
+                return this.customView.getMappings();
+            },
+
             getRolesMapping: function () {
                 return this.rolesView.getMappings();
             },
@@ -146,6 +207,10 @@ tau.mashups
 
                     var priorities = (typeof data != 'undefined') ? that._transformDataSource(data.Priorities, tpItems.priorities) : [];
                     that.prioritiesView.render('.bugzilla-map.priorities')(priorities);
+
+                    var custom = (typeof data != 'undefined') ? that._transformDataSource(data.CustomFields, tpItems.bugfields) : [];
+                    that.customView.render('.bugzilla-map.custom')(custom);
+
                     that.placeholder.find('span#automapPreloader').hide();
                 };
             },

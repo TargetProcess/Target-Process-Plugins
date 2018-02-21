@@ -17,9 +17,21 @@ namespace Tp.Testing.Common.NUnit
 			return new CollectionEquivalentConstraint(array);
 		}
 
+		public static CollectionItemsEqualConstraint EquivalentTo<T>(IEnumerable<T> expected, IEqualityComparer<T> comparer)
+		{
+			var array = expected as T[] ?? expected.ToArray();
+
+			return new CollectionEquivalentConstraint(array).Using(comparer);
+		}
+
 		public static CollectionContainsConstraint Containing<T>(T expected)
 		{
 			return new CollectionContainsConstraint(expected);
+		}
+
+		public static JsonEqualConstraint JsonEqual(object expected)
+		{
+			return new JsonEqualConstraint(expected);
 		}
 
 		public static Constraint Nothing => new NothingConstraint();

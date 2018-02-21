@@ -4,13 +4,15 @@ Tp.controls.grid.Handlers = new Object();
 
 Tp.controls.grid.Handlers.getPrintReportHandler = function(componentId) {
 	return function() {
-		redirectToHandler(componentId, 'print.ashx');
+	    const url = redirectToHandler(componentId, 'print.ashx');
+	    window.open(url);
 	};
 };
 
 Tp.controls.grid.Handlers.getReportExportToExcelHandler = function(componentId) {
 	return function() {
-		redirectToHandler(componentId, 'csv.ashx');
+	    const url = redirectToHandler(componentId, 'csv.ashx');
+	    document.location.href = url;
 	};
 };
 
@@ -29,7 +31,7 @@ function redirectToHandler(componentId, handler) {
 			url += "?" + customReportIDParam;
 		}
 	}
-	document.location.href = url;
+    return url;
 }
 
 Tp.controls.grid.Handlers.getReportEditHandler = function(componentId) {
@@ -43,7 +45,7 @@ Tp.controls.grid.Handlers.getReportEditHandler = function(componentId) {
 Tp.controls.grid.Handlers.refreshGrid = function(gridId) {
 	return function() {
 		var grid = Ext.ComponentMgr.get(gridId);
-		grid.getStore().reload();   
+		grid.getStore().reload();
 	}
 };
 

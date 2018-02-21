@@ -29,11 +29,7 @@ namespace Mercurial.Gui
         /// </summary>
         [BooleanArgument(TrueOption = "--keep")]
         [DefaultValue(false)]
-        public bool KeepOriginalChangesets
-        {
-            get;
-            set;
-        }
+        public bool KeepOriginalChangesets { get; set; }
 
         /// <summary>
         /// Sets the <see cref="KeepOriginalChangesets"/> property to the specified value and
@@ -61,11 +57,7 @@ namespace Mercurial.Gui
         /// </summary>
         [BooleanArgument(TrueOption = "--keep")]
         [DefaultValue(false)]
-        public bool DetachFromOriginalBranch
-        {
-            get;
-            set;
-        }
+        public bool DetachFromOriginalBranch { get; set; }
 
         /// <summary>
         /// Sets the <see cref="DetachFromOriginalBranch"/> property to the specified value and
@@ -93,11 +85,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--source")]
         [DefaultValue(null)]
-        public RevSpec SourceRevision
-        {
-            get;
-            set;
-        }
+        public RevSpec SourceRevision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="SourceRevision"/> property to the specified value and
@@ -125,11 +113,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--dest")]
         [DefaultValue(null)]
-        public RevSpec DestinationRevision
-        {
-            get;
-            set;
-        }
+        public RevSpec DestinationRevision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="DestinationRevision"/> property to the specified value and

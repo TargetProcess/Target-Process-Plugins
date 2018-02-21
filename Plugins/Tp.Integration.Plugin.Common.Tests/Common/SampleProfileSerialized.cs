@@ -12,22 +12,22 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
-	[Profile, Serializable, DataContract]
-	public class SampleProfileSerialized : ISynchronizableProfile, IValidatable
-	{
-		[DataMember]
-		public string StringValue { get; set; }
+    [Profile, Serializable, DataContract]
+    public class SampleProfileSerialized : ISynchronizableProfile, IValidatable
+    {
+        [DataMember]
+        public string StringValue { get; set; }
 
-		[DataMember]
-		public int SynchronizationInterval { get; set; }
+        [DataMember]
+        public int SynchronizationInterval { get; set; }
 
-		public void Validate(PluginProfileErrorCollection errors)
-		{
-			var logger = ObjectFactory.TryGetInstance<IActivityLogger>();
-			if (logger != null)
-			{
-				logger.Info("validation is in progress");
-			}
-		}
-	}
+        public void Validate(PluginProfileErrorCollection errors)
+        {
+            var logger = ObjectFactory.TryGetInstance<IActivityLogger>();
+            if (logger != null)
+            {
+                logger.Info("validation is in progress");
+            }
+        }
+    }
 }

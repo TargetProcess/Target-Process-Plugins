@@ -5,16 +5,16 @@
 
 namespace Tp.Bugzilla.BugzillaQueries
 {
-	public class BugzillaTimezoneQuery : IBugzillaQuery
-	{
-		public string Value()
-		{
-			return "cmd=get_timezone";
-		}
+    public class BugzillaTimezoneQuery : IBugzillaQuery
+    {
+        public string Value()
+        {
+            return "cmd=get_timezone";
+        }
 
-		public string GetOperationDescription()
-		{
-			return "Get bugzilla timezone";
-		}
-	}
+        public string GetOperationDescription()
+        {
+            return "Get bugzilla timezone";
+        }
+    }
 }

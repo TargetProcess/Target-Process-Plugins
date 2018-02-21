@@ -1,78 +1,69 @@
 tau.mashups
-    .addDependency('jQuery')
-    .addDependency('Underscore')
     .addDependency('tau/core/event')
     .addDependency('tau/mashup.manager/services/service.mashup.manager.base')
-    .addModule('tau/mashup.manager/services/service.mashup.manager', function ($, _, Event, ServiceMashupManagerBase) {
+    .addDependency('tau/mashup.manager/services/service.mashup.manager.messages')
+    .addModule('tau/mashup.manager/services/service.mashup.manager', function(Event, ServiceMashupManagerBase,
+        messages) {
+
         var ServiceMashupManager = ServiceMashupManagerBase.extend({
-            _orderMashupsInProfile: function(profile){
-                if (profile.Settings.MashupNames && profile.Settings.MashupNames.length > 0) {
-                    profile.Settings.MashupNames = profile.Settings.MashupNames.sort(function (a, b) {
-                        return a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase());
-                    });
-                }
-                return profile;
-            },
-            getProfile: function () {
+            getProfile: function() {
                 return this._getOrCreateProfile();
             },
-            getMashupByName: function (mashupName) {
+            getMashupByName: function(mashupName) {
                 return this._executeProfileRequiredCommand('GetMashupInfo', {Value: mashupName})
-                    .fail(_.bind(function (error) {
+                    .fail(function(error) {
                         this.status.error('An error occurred when loading the mashup: ' + error);
-                    }, this));
+                    }.bind(this));
             },
-            addMashup: function (mashup, failHandler) {
+            addMashup: function(mashup, failHandler) {
                 return this._executeSaveCommand('AddMashup', mashup, failHandler)
-                    .done(_.bind(function(){
+                    .done(function() {
                         this.fire('mashupAdded', mashup);
-                    }, this));
+                    }.bind(this));
             },
-            updateMashup: function (mashup, failHandler) {
+            updateMashup: function(mashup, failHandler) {
                 return this._executeSaveCommand('UpdateMashup', mashup, failHandler)
-                    .done(_.bind(function(){
+                    .done(function() {
                         this.fire('mashupUpdated', mashup);
-                    }, this));
+                    }.bind(this));
             },
-            deleteMashup: function (mashupName) {
-                return this._executeProfileRequiredCommand('DeleteMashup', {
-                        Name:mashupName
-                    })
-                    .fail(_.bind(function (error) {
+            deleteMashup: function(mashupName) {
+                return this._executeProfileRequiredCommand('DeleteMashup', {Name: mashupName})
+                    .fail(function(error) {
                         this.status.error('An error occurred when deleting the mashup: ' + error);
-                    }, this))
-                    .done(_.bind(function () {
-                        this.status.success('Mashup has been deleted successfully');
+                    }.bind(this))
+                    .done(function() {
+                        this.status.success(messages.DELETED_MESSAGE, messages.TIMEOUT);
                         this.fire('mashupDeleted', mashupName);
-                    }, this));
+                    }.bind(this));
             },
-            getLibraryRepositories: function () {
+            getLibraryRepositories: function() {
                 return this._executeProfileRequiredCommand('GetLibraryRepositories', null)
-                    .fail(_.bind(function (error) {
+                    .fail(function(error) {
                         this.status.error('An error occurred when getting the mashup library repositories: ' + error);
-                    }, this));
+                    }.bind(this));
             },
-            refreshLibrary: function () {
+            refreshLibrary: function() {
                 return this._executeProfileRequiredCommand('RefreshLibrary', null)
-                    .fail(_.bind(function (error) {
+                    .fail(function(error) {
                         this.status.error('An error occurred when refreshing the mashup library: ' + error);
-                    }, this));
+                    }.bind(this));
             },
-            installPackage: function (mashupPackage) {
+            installPackage: function(mashupPackage) {
                 return this._executeProfileRequiredCommand('InstallPackage', mashupPackage)
-                    .fail(_.bind(function (error) {
+                    .fail(function(error) {
                         this.status.error('An error occurred when installing the mashup: ' + error);
-                    }, this))
-                    .done(_.bind(function () {
-                        this.status.success('Mashup has been installed successfully');
+                    }.bind(this))
+                    .done(function() {
+                        this.status.success(messages.INSTALLED_MESSAGE, messages.TIMEOUT);
                         this.fire('packageInstalled', mashupPackage);
-                    }, this));
+                    }.bind(this));
             },
-            getPackageDetailed: function (mashupPackage) {
+            getPackageDetailed: function(mashupPackage) {
                 return this._executeProfileRequiredCommand('GetPackageDetailed', mashupPackage)
-                    .fail(_.bind(function (error) {
+                    .fail(function(error) {
                         this.status.error('An error occurred when getting the mashup details: ' + error);
-                    }, this));
+                    }.bind(this));
             }
         });
 

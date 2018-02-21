@@ -9,18 +9,18 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration.Rules.WhenClauses
 {
-	public class WhenClauseComposite
-	{
-		private readonly List<IWhenClause> _whenClauses = new List<IWhenClause>();
+    public class WhenClauseComposite
+    {
+        private readonly List<IWhenClause> _whenClauses = new List<IWhenClause>();
 
-		public void Add(IWhenClause clause)
-		{
-			_whenClauses.Add(clause);
-		}
+        public void Add(IWhenClause clause)
+        {
+            _whenClauses.Add(clause);
+        }
 
-		public bool IsMatched(EmailMessage emailMessage)
-		{
-			return _whenClauses.All(whenClause => whenClause.IsMatched(emailMessage));
-		}
-	}
+        public bool IsMatched(EmailMessage emailMessage)
+        {
+            return _whenClauses.All(whenClause => whenClause.IsMatched(emailMessage));
+        }
+    }
 }

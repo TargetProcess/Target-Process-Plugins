@@ -62,15 +62,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = (value ?? string.Empty).Trim();
-            }
+            set { _Source = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -84,16 +78,13 @@ namespace Mercurial.Gui
         [DefaultValue(true)]
         public bool Update
         {
-            get
-            {
-                return _Update;
-            }
+            get { return _Update; }
 
             set
             {
                 if (_Update == value)
                     return;
-                
+
                 EnsurePropertyAvailability("Update", GuiClientType.PyQT);
                 _Update = value;
             }
@@ -110,16 +101,13 @@ namespace Mercurial.Gui
         [DefaultValue(false)]
         public bool UsePullProtocol
         {
-            get
-            {
-                return _UsePullProtocol;
-            }
+            get { return _UsePullProtocol; }
 
             set
             {
                 if (_UsePullProtocol == value)
                     return;
-                
+
                 EnsurePropertyAvailability("UsePullProtocol", GuiClientType.PyQT);
                 _UsePullProtocol = value;
             }
@@ -136,16 +124,13 @@ namespace Mercurial.Gui
         [DefaultValue(null)]
         public RevSpec UpdateToRevision
         {
-            get
-            {
-                return _UpdateToRevision;
-            }
+            get { return _UpdateToRevision; }
 
             set
             {
                 if (_UpdateToRevision == value)
                     return;
-                
+
                 EnsurePropertyAvailability("UpdateToRevision", GuiClientType.PyQT);
                 _UpdateToRevision = value;
             }
@@ -162,16 +147,13 @@ namespace Mercurial.Gui
         [DefaultValue(true)]
         public bool CompressedTransfer
         {
-            get
-            {
-                return _CompressedTransfer;
-            }
+            get { return _CompressedTransfer; }
 
             set
             {
                 if (_CompressedTransfer == value)
                     return;
-                
+
                 EnsurePropertyAvailability("CompressedTransfer", GuiClientType.PyQT);
                 _CompressedTransfer = value;
             }
@@ -189,16 +171,13 @@ namespace Mercurial.Gui
         [DefaultValue(null)]
         public RevSpec IncludeRevision
         {
-            get
-            {
-                return _IncludeRevision;
-            }
+            get { return _IncludeRevision; }
 
             set
             {
                 if (_IncludeRevision == value)
                     return;
-                
+
                 EnsurePropertyAvailability("IncludeRevision", GuiClientType.PyQT);
                 _IncludeRevision = value;
             }
@@ -215,16 +194,13 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string Branch
         {
-            get
-            {
-                return _Branch;
-            }
+            get { return _Branch; }
 
             set
             {
                 if (_Branch == value)
                     return;
-                
+
                 EnsurePropertyAvailability("Branch", GuiClientType.PyQT);
                 _Branch = (value ?? string.Empty).Trim();
             }

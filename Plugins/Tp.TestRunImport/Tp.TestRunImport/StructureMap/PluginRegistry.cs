@@ -11,15 +11,15 @@ using Tp.Integration.Plugin.TestRunImport.TestRunImportReaders;
 
 namespace Tp.Integration.Plugin.TestRunImport.StructureMap
 {
-	public class PluginRegistry : Registry
-	{
-		public PluginRegistry()
-		{
-			For<ITestRunImportResultsReaderFactory>().Singleton().Use<SimpleTestRunImportResultsReaderFactory>();
-			For<ITestCaseResolverFactory>().Singleton().Use<SimpleTestCaseResolverFactory>();
-			For<IStreamFactory>().Singleton().Use<SimpleStreamFactory>();
-			For<IMappingProfileValidator>().Use<MappingProfileProfileValidator>();
-			For<IMappingChecker>().Use<MappingChecker>();
-		}
-	}
+    public class PluginRegistry : Registry
+    {
+        public PluginRegistry()
+        {
+            For<ITestRunImportResultsReaderFactory>().Singleton().Use<SimpleTestRunImportResultsReaderFactory>();
+            For<ITestCaseResolverFactory>().Singleton().Use<SimpleTestCaseResolverFactory>();
+            For<IStreamFactory>().Singleton().Use<SimpleStreamFactory>();
+            For<IMappingProfileValidator>().Use<MappingProfileProfileValidator>();
+            For<IMappingChecker>().Use<MappingChecker>();
+        }
+    }
 }

@@ -46,7 +46,9 @@ namespace Mercurial
                     new Regex(@"^update:\s((?<new>\d+)\snew changesets? \(update\))$", RegexOptions.IgnoreCase),
                     ParseUpdate),
                 new KeyValuePair<Regex, Action<RepositorySummary, string, Match>>(
-                    new Regex(@"^commit:\s((?<modified>\d+) modified(, )?)?((?<unknown>\d+) unknown(, )?)?((?<unresolved>\d+) unresolved(, )?)?(?<inmerge> \(merge\))?( ?\(clean\))?$", RegexOptions.IgnoreCase),
+                    new Regex(
+                        @"^commit:\s((?<modified>\d+) modified(, )?)?((?<unknown>\d+) unknown(, )?)?((?<unresolved>\d+) unresolved(, )?)?(?<inmerge> \(merge\))?( ?\(clean\))?$",
+                        RegexOptions.IgnoreCase),
                     ParseCommit)
             };
 
@@ -58,7 +60,7 @@ namespace Mercurial
                     Match ma = parser.Key.Match(line);
                     if (!ma.Success)
                         continue;
-                    
+
                     parser.Value(summary, line, ma);
                 }
             }
@@ -146,21 +148,14 @@ namespace Mercurial
         /// <summary>
         /// Gets the raw output from the <c>hg summary</c> command.
         /// </summary>
-        public string RawOutput
-        {
-            get;
-            private set;
-        }
+        public string RawOutput { get; private set; }
 
         /// <summary>
         /// Gets the collection of parent revision numbers for the current working folder.
         /// </summary>
         public IEnumerable<int> ParentRevisionNumbers
         {
-            get
-            {
-                return _ParentRevisionNumbers;
-            }
+            get { return _ParentRevisionNumbers; }
         }
 
         /// <summary>
@@ -171,11 +166,7 @@ namespace Mercurial
         /// not the branch name the working folder had before any changes were done to it. There is apparently
         /// no way to know if the name reported is the old or the new name.
         /// </remarks>
-        public string Branch
-        {
-            get;
-            private set;
-        }
+        public string Branch { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether an update is possible to perform, basically the working
@@ -183,56 +174,33 @@ namespace Mercurial
         /// </summary>
         public bool UpdatePossible
         {
-            get
-            {
-                return NumberOfNewChangesets > 0;
-            }
+            get { return NumberOfNewChangesets > 0; }
         }
 
         /// <summary>
         /// Gets the number of new changesets that exists in the history following the one that the
         /// working state is at.
         /// </summary>
-        public int NumberOfNewChangesets
-        {
-            get;
-            private set;
-        }
+        public int NumberOfNewChangesets { get; private set; }
 
         /// <summary>
         /// Gets the number of modified files in the working directory.
         /// </summary>
-        public int NumberOfModifiedFiles
-        {
-            get;
-            private set;
-        }
+        public int NumberOfModifiedFiles { get; private set; }
 
         /// <summary>
         /// Gets the number of unknown files in the working directory.
         /// </summary>
-        public int NumberOfUnknownFiles
-        {
-            get;
-            private set;
-        }
+        public int NumberOfUnknownFiles { get; private set; }
 
         /// <summary>
         /// Gets the number of unresolved files in the currently pending merge.
         /// </summary>
-        public int NumberOfUnresolvedFiles
-        {
-            get;
-            private set;
-        }
+        public int NumberOfUnresolvedFiles { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the current working directory is currently in a pending merge.
         /// </summary>
-        public bool IsInMerge
-        {
-            get;
-            private set;
-        }
+        public bool IsInMerge { get; private set; }
     }
 }

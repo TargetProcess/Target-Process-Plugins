@@ -15,53 +15,54 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Subversion.ValidateProfileUponSaveFeature
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class WhenProfileIsSavingSpecs
-	{
-		[SetUp]
-		public void SetUp()
-		{
-			ObjectFactory.Initialize(x => x.AddRegistry<VcsEnvironmentRegistry>());
-			ObjectFactory.Configure(x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly)));
-		}
+    public class WhenProfileIsSavingSpecs
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<VcsEnvironmentRegistry>());
+            ObjectFactory.Configure(
+                x => x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly)));
+        }
 
-		[Test]
-		public void ValidationShouldFailOnNegativeRevision()
-		{
-			@"Given unsaved plugin profile
+        [Test]
+        public void ValidationShouldFailOnNegativeRevision()
+        {
+            @"Given unsaved plugin profile
 				And profile start revision is -1
 			When saved
 			Then error should occur for StartRevision: ""Start Revision cannot be less than zero.""
 			".Execute(
-				In.Context<CommandActionSteps>());
-		}
+                In.Context<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ValidationShouldFailOnNonNumericRevision()
-		{
-			@"Given unsaved plugin profile
+        [Test]
+        public void ValidationShouldFailOnNonNumericRevision()
+        {
+            @"Given unsaved plugin profile
 				And profile start revision is startrevision
 			When saved
 			Then error should occur for StartRevision: ""Start Revision should be a number.""
 			".Execute(
-				In.Context<CommandActionSteps>());
-		}
+                In.Context<CommandActionSteps>());
+        }
 
-		[Test]
-		public void ValidationShouldFailOnEmptyUri()
-		{
-			@"Given unsaved plugin profile
+        [Test]
+        public void ValidationShouldFailOnEmptyUri()
+        {
+            @"Given unsaved plugin profile
 			When saved
 			Then error should occur for Uri: ""Uri should not be empty.""
 			".Execute(
-				In.Context<CommandActionSteps>());
-		}
+                In.Context<CommandActionSteps>());
+        }
 
-		[Test]
-		public void OnlyUniqueSvnUsersShouldBeAllowed()
-		{
-			@"Given unsaved plugin profile
+        [Test]
+        public void OnlyUniqueSvnUsersShouldBeAllowed()
+        {
+            @"Given unsaved plugin profile
 			And user mapping is:
 			|subversion|targetprocess|
 			|svnuser1|tpuser1|
@@ -69,7 +70,7 @@ namespace Tp.Subversion.ValidateProfileUponSaveFeature
 				When saved
 				Then error should occur for UserMapping: ""Can't map an svn user to TargetProcess user twice.""
 				"
-				.Execute(In.Context<CommandActionSteps>());
-		}
-	}
+                .Execute(In.Context<CommandActionSteps>());
+        }
+    }
 }

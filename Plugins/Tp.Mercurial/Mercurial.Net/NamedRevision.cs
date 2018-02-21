@@ -43,10 +43,7 @@ namespace Mercurial
         /// </summary>
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
         }
 
         /// <summary>
@@ -54,10 +51,7 @@ namespace Mercurial
         /// </summary>
         public int RevisionNumber
         {
-            get
-            {
-                return _RevisionNumber;
-            }
+            get { return _RevisionNumber; }
         }
 
         /// <summary>
@@ -98,7 +92,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(NamedRevision))
                 return false;
-            return Equals((NamedRevision)obj);
+            return Equals((NamedRevision) obj);
         }
 
         /// <summary>

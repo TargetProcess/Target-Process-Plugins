@@ -40,10 +40,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>
@@ -52,11 +49,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument(NonNullOption = "--change")]
         [DefaultValue(null)]
-        public RevSpec ChangeIntroducedByRevision
-        {
-            get;
-            set;
-        }
+        public RevSpec ChangeIntroducedByRevision { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to omit dates from diff headers.
@@ -64,11 +57,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--nodates")]
         [DefaultValue(false)]
-        public bool OmitDatesFromHeaders
-        {
-            get;
-            set;
-        }
+        public bool OmitDatesFromHeaders { get; set; }
 
         /// <summary>
         /// Adds the specified value to the <see cref="Revisions"/> property and
@@ -94,10 +83,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Names
         {
-            get
-            {
-                return _Names.Collection;
-            }
+            get { return _Names.Collection; }
         }
 
         /// <summary>
@@ -127,11 +113,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--git")]
         [DefaultValue(false)]
-        public bool UseGitDiffFormat
-        {
-            get;
-            set;
-        }
+        public bool UseGitDiffFormat { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to treat all files as text.
@@ -139,11 +121,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--text")]
         [DefaultValue(false)]
-        public bool TreatAllFilesAsText
-        {
-            get;
-            set;
-        }
+        public bool TreatAllFilesAsText { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show which function each change is in.
@@ -151,11 +129,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--show-function")]
         [DefaultValue(false)]
-        public bool ShowFunctions
-        {
-            get;
-            set;
-        }
+        public bool ShowFunctions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to produce a reversal diff, one that would undo
@@ -164,11 +138,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--reverse")]
         [DefaultValue(false)]
-        public bool ProduceReverseDiff
-        {
-            get;
-            set;
-        }
+        public bool ProduceReverseDiff { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to recurse into subrepositories.
@@ -176,33 +146,21 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--subrepos")]
         [DefaultValue(false)]
-        public bool RecurseSubRepositories
-        {
-            get;
-            set;
-        }
+        public bool RecurseSubRepositories { get; set; }
 
         /// <summary>
         /// Gets or sets the types of changes to ignore.
         /// Default value is <see cref="DiffIgnores.None"/>.
         /// </summary>
         [DefaultValue(DiffIgnores.None)]
-        public DiffIgnores Ignore
-        {
-            get;
-            set;
-        }
+        public DiffIgnores Ignore { get; set; }
 
         /// <summary>
         /// Gets or sets the number of lines of context to show for each diff. Use 0 to leave at default.
         /// Default value is <c>0</c>.
         /// </summary>
         [DefaultValue(0)]
-        public int ContextLineCount
-        {
-            get;
-            set;
-        }
+        public int ContextLineCount { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to output diffstat-style of summary of changes instead
@@ -211,11 +169,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--stat")]
         [DefaultValue(false)]
-        public bool SummaryOnly
-        {
-            get;
-            set;
-        }
+        public bool SummaryOnly { get; set; }
 
         /// <summary>
         /// Sets the <see cref="RecurseSubRepositories"/> property to the specified value and
@@ -464,11 +418,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public string Result
-        {
-            get;
-            private set;
-        }
+        public string Result { get; private set; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="CommandBase{T}.Command"/>, or an

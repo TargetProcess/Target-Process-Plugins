@@ -1,8 +1,9 @@
 // 
-// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,116 +13,127 @@ using StructureMap;
 
 namespace Tp.SourceControl.Testing.Repository.Git
 {
-	public class GitTestRepository : VcsTestRepository<GitTestRepository>
-	{
-		public GitTestRepository()
-		{
-			ObjectFactory.Configure(x => x.For<GitTestRepository>().HybridHttpOrThreadLocalScoped().Use(this));
-		}
+    internal static class Extensions
+    {
+        public static readonly long EpochTicks;
 
-		private NGit.Api.Git _git;
+        static Extensions()
+        {
+            EpochTicks = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
+        }
 
-		private string ClonedRepoFolder
-		{
-			get { return LocalRepositoryPath + "Cloned"; }
-		}
+        public static long ToMillisecondsSinceEpoch(this DateTime dateTime)
+        {
+            if (dateTime.Kind != DateTimeKind.Utc)
+            {
+                throw new ArgumentException("dateTime is expected to be expressed as a UTC DateTime", nameof(dateTime));
+            }
+            return new DateTimeOffset(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc), TimeSpan.Zero).ToMillisecondsSinceEpoch();
+        }
 
-		protected override void OnTestRepositoryDeployed()
-		{
-			base.OnTestRepositoryDeployed();
+        public static long ToMillisecondsSinceEpoch(this DateTimeOffset dateTimeOffset)
+        {
+            return (dateTimeOffset.Ticks - dateTimeOffset.Offset.Ticks - EpochTicks) / TimeSpan.TicksPerMillisecond;
+        }
+    }
 
-			EnsureUserHomePathForSystemUser();
+    public class GitTestRepository : VcsTestRepository<GitTestRepository>
+    {
+        public GitTestRepository()
+        {
+            ObjectFactory.Configure(x => x.For<GitTestRepository>().HybridHttpOrThreadLocalScoped().Use(this));
+        }
 
-			_git = NGit.Api.Git.CloneRepository()
-				.SetURI(LocalRepositoryPath)
-				.SetDirectory(ClonedRepoFolder).Call();
+        private NGit.Api.Git _git;
 
-			BatchingProgressMonitor.ShutdownNow();
-		}
+        private static int _testCount;
 
-		protected override string Name
-		{
-			get { return "TestRepository"; }
-		}
+        protected override void OnTestRepositoryDeployed()
+        {
+            base.OnTestRepositoryDeployed();
 
-		public override string Login
-		{
-			get { return "test"; }
-		}
+            EnsureUserHomePathForSystemUser();
 
-		public override string Password
-		{
-			get { return "test"; }
-		}
+            var clonedRepoFolder = CreateUniqueTestFolderPrefix();
 
-		public override void Commit(string commitComment)
-		{
-			Commit("secondFile.txt", "my changed content", commitComment);
-		}
+            _git = NGit.Api.Git.CloneRepository()
+                .SetURI(LocalRepositoryPath)
+                .SetDirectory(clonedRepoFolder).Call();
+        }
 
-		public override string Commit(string filePath, string changedContent, string commitComment)
-		{
-			using (var file = File.OpenWrite(Path.Combine(ClonedRepoFolder, filePath)))
-			{
-				var changes = new UTF8Encoding(true).GetBytes(changedContent);
-				file.Write(changes, 0, changes.Length);
-			}
+        private static string CreateUniqueTestFolderPrefix()
+        {
+            return Path.Combine(GetExecutingDirectory(), "trash", $"{DateTime.UtcNow.ToMillisecondsSinceEpoch()}_{_testCount++}");
+        }
 
-			_git.Add().AddFilepattern(filePath).Call();
-			var commit = _git.Commit().SetMessage(commitComment).SetAuthor(Login, "admin@admin.com").Call();
-			_git.Push().Call();
+        protected override string Name => "TestRepository";
 
-			BatchingProgressMonitor.ShutdownNow();
+        public override string Login => "test";
 
-			return commit.Id.Name;
-		}
+        public override string Password => "test";
 
-		public override void CheckoutBranch(string branch)
-		{
-			var fullBranchName = "refs/heads/" + branch;
-			var list = _git.BranchList().Call();
-			var branchExists = list.Any(x => x.GetName() == fullBranchName);
-			if (!branchExists)
-			{
-				var remoteBranchName = "refs/remotes/origin/" + branch;
-				_git.BranchCreate().SetStartPoint(remoteBranchName).SetName(branch).Call();
-			}
-			_git.Checkout().SetName(branch).Call();
+        public override void Commit(string commitComment)
+        {
+            Commit("secondFile.txt", "my changed content", commitComment);
+        }
 
-			BatchingProgressMonitor.ShutdownNow();
-		}
+        public override string Commit(string filePath, string changedContent, string commitComment)
+        {
+            using (var file = File.OpenWrite(Path.Combine(_git.GetRepository().WorkTree.ToString(), filePath)))
+            {
+                var changes = new UTF8Encoding(true).GetBytes(changedContent);
+                file.Write(changes, 0, changes.Length);
+            }
 
-		public override string CherryPick(string revisionId)
-		{
-			var result = _git.CherryPick().Include(ObjectId.FromString(revisionId)).Call();
-			_git.Push().Call();
+            _git.Add().AddFilepattern(filePath).Call();
+            var commit = _git.Commit().SetMessage(commitComment).SetAuthor(Login, "admin@admin.com").Call();
+            _git.Push().Call();
 
-			BatchingProgressMonitor.ShutdownNow();
+            return commit.Id.Name;
+        }
 
-			return result.GetCherryPickedRefs().Select(x => x.GetName()).First();
-		}
+        public override void CheckoutBranch(string branch)
+        {
+            var fullBranchName = "refs/heads/" + branch;
+            var list = _git.BranchList().Call();
+            var branchExists = list.Any(x => x.GetName() == fullBranchName);
+            if (!branchExists)
+            {
+                var remoteBranchName = "refs/remotes/origin/" + branch;
+                _git.BranchCreate().SetStartPoint(remoteBranchName).SetName(branch).Call();
+            }
+            _git.Checkout().SetName(branch).Call();
+        }
 
-		private void EnsureUserHomePathForSystemUser()
-		{
-			using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent())
-			{
-				if (identity == null || !identity.IsSystem) return;
-				var type = typeof (Sharpen.FilePath).Assembly.GetTypes().FirstOrDefault(ta => ta.Name == "Runtime");
-				if (type != null)
-				{
-					var method = type.GetMethod("GetProperties", BindingFlags.Public | BindingFlags.Static);
-					method.Invoke(null, null);
-					var field = type.GetField("properties", BindingFlags.NonPublic | BindingFlags.Static);
-					if (field != null)
-					{
-						var properties = (System.Collections.Hashtable) field.GetValue(null);
-						if (string.IsNullOrEmpty(properties["user.home"] as string))
-						{
-							properties["user.home"] = Path.Combine(Path.Combine(GetExecutingDirectory(), "App_Data"), "git");
-						}
-					}
-				}
-			}
-		}
-	}
+        public override string CherryPick(string revisionId)
+        {
+            var result = _git.CherryPick().Include(ObjectId.FromString(revisionId)).Call();
+            _git.Push().Call();
+
+            return result.GetCherryPickedRefs().Select(x => x.GetName()).First();
+        }
+
+        private void EnsureUserHomePathForSystemUser()
+        {
+            using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent())
+            {
+                if (!identity.IsSystem) return;
+                var type = typeof(Sharpen.FilePath).Assembly.GetTypes().FirstOrDefault(ta => ta.Name == "Runtime");
+                if (type != null)
+                {
+                    var method = type.GetMethod("GetProperties", BindingFlags.Public | BindingFlags.Static);
+                    method.Invoke(null, null);
+                    var field = type.GetField("properties", BindingFlags.NonPublic | BindingFlags.Static);
+                    if (field != null)
+                    {
+                        var properties = (System.Collections.Hashtable) field.GetValue(null);
+                        if (string.IsNullOrEmpty(properties["user.home"] as string))
+                        {
+                            properties["user.home"] = Path.Combine(Path.Combine(GetExecutingDirectory(), "App_Data"), "git");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

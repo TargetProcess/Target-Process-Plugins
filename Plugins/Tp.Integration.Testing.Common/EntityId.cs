@@ -5,13 +5,13 @@
 
 namespace Tp.Integration.Testing.Common
 {
-	public class EntityId
-	{
-		private static int _nextUserId;
+    public class EntityId
+    {
+        private static int _nextUserId;
 
-		public static int Next()
-		{
-			return ++_nextUserId;
-		}
-	}
+        public static int Next()
+        {
+            return ++_nextUserId;
+        }
+    }
 }

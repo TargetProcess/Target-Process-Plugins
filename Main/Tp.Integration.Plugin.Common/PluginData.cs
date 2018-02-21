@@ -5,37 +5,37 @@
 
 namespace Tp.Integration.Plugin.Common
 {
-	/// <summary>
-	/// Provides information from <see cref="PluginAssemblyAttribute"/>.
-	/// </summary>
-	public class PluginData
-	{
-		internal PluginData(string name, string description, string category, string iconFilePath)
-		{
-			Name = name;
-			Description = description;
-			Category = category;
-			IconFilePath = iconFilePath;
-		}
+    /// <summary>
+    /// Provides information from <see cref="PluginAssemblyAttribute"/>.
+    /// </summary>
+    public class PluginData
+    {
+        internal PluginData(string name, string description, string category, string iconFilePath)
+        {
+            Name = name;
+            Description = description;
+            Category = category;
+            IconFilePath = iconFilePath;
+        }
 
-		/// <summary>
-		/// The plugin Name.
-		/// </summary>
-		public string Name { get; private set; }
+        /// <summary>
+        /// The plugin Name.
+        /// </summary>
+        public string Name { get; private set; }
 
-		/// <summary>
-		/// The plugin description.
-		/// </summary>
-		public string Description { get; private set; }
+        /// <summary>
+        /// The plugin description.
+        /// </summary>
+        public string Description { get; private set; }
 
-		/// <summary>
-		/// The plugin category.
-		/// </summary>
-		public string Category { get; private set; }
+        /// <summary>
+        /// The plugin category.
+        /// </summary>
+        public string Category { get; private set; }
 
-		/// <summary>
-		/// Relative Path to plugin icon file.
-		/// </summary>
-		public string IconFilePath { get; private set; }
-	}
+        /// <summary>
+        /// Relative Path to plugin icon file.
+        /// </summary>
+        public string IconFilePath { get; private set; }
+    }
 }

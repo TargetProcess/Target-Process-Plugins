@@ -9,57 +9,57 @@ using Tp.Integration.Common;
 
 namespace Tp.PopEmailIntegration.Data
 {
-	[Serializable]
-	public class UserLite
-	{
-		public int? Id { get; set; }
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string Login { get; set; }
-		public string Email { get; set; }
-		public UserType UserType { get; set; }
-		public bool? IsActive { get; set; }
-		public DateTime? DeleteDate { get; set; }
-		public int? CompanyId { get; set; }
+    [Serializable]
+    public class UserLite
+    {
+        public int? Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Login { get; set; }
+        public string Email { get; set; }
+        public UserType UserType { get; set; }
+        public bool? IsActive { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public int? CompanyId { get; set; }
 
-		public static UserLite Create(RequesterDTO requesterDto)
-		{
-			var userLite = new UserLite();
-			Mapper.DynamicMap(requesterDto, userLite);
-			userLite.UserType = UserType.Requester;
-			return userLite;
-		}
+        public static UserLite Create(RequesterDTO requesterDto)
+        {
+            var userLite = new UserLite();
+            Mapper.DynamicMap(requesterDto, userLite);
+            userLite.UserType = UserType.Requester;
+            return userLite;
+        }
 
-		public static UserLite Create(UserDTO userDto)
-		{
-			var userLite = new UserLite();
-			Mapper.DynamicMap(userDto, userLite);
-			userLite.UserType = UserType.User;
-			return userLite;
-		}
+        public static UserLite Create(UserDTO userDto)
+        {
+            var userLite = new UserLite();
+            Mapper.DynamicMap(userDto, userLite);
+            userLite.UserType = UserType.User;
+            return userLite;
+        }
 
-		public bool IsDeleted
-		{
-			get { return DeleteDate != null; }
-		}
+        public bool IsDeleted
+        {
+            get { return DeleteDate != null; }
+        }
 
-		public bool IsDeletedOrInactiveUser
-		{
-			get
-			{
-				if (UserType != UserType.User)
-					return false;
+        public bool IsDeletedOrInactiveUser
+        {
+            get
+            {
+                if (UserType != UserType.User)
+                    return false;
 
-				if (IsDeleted)
-					return true;
+                if (IsDeleted)
+                    return true;
 
-				return IsActive == false;
-			}
-		}
+                return IsActive == false;
+            }
+        }
 
-		public bool IsDeletedRequester
-		{
-			get { return UserType == UserType.Requester && IsDeleted; }
-		}
-	}
+        public bool IsDeletedRequester
+        {
+            get { return UserType == UserType.Requester && IsDeleted; }
+        }
+    }
 }

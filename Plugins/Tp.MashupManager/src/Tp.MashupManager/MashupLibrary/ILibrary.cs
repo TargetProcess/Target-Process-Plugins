@@ -9,10 +9,10 @@ using Tp.MashupManager.CustomCommands.Dtos;
 
 namespace Tp.MashupManager.MashupLibrary
 {
-	public interface ILibrary
-	{
-		void Refresh();
-		IEnumerable<LibraryRepositoryDto> GetRepositories();
-		PackageDetailedDto GetPackageDetailed(PackageCommandArg commandArg);
-	}
+    public interface ILibrary
+    {
+        void Refresh();
+        IEnumerable<LibraryRepositoryDto> GetRepositories();
+        PackageDetailedDto GetPackageDetailed(PackageCommandArg commandArg);
+    }
 }

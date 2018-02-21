@@ -8,11 +8,11 @@ using Tp.Mercurial.Tests.Context;
 
 namespace Tp.Mercurial.Tests.StructureMap
 {
-	public class VcsEnvironmentRegistry : MercurialRegistry
-	{
-		public VcsEnvironmentRegistry()
-		{
-			For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
-		}
-	}
+    public class VcsEnvironmentRegistry : MercurialRegistry
+    {
+        public VcsEnvironmentRegistry()
+        {
+            For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
+        }
+    }
 }

@@ -37,16 +37,13 @@ namespace Mercurial.Gui
         [DefaultValue(false)]
         public bool ForceDiscardUncommittedChanges
         {
-            get
-            {
-                return _ForceDiscardUncommittedChanges;
-            }
+            get { return _ForceDiscardUncommittedChanges; }
 
             set
             {
                 if (_ForceDiscardUncommittedChanges == value)
                     return;
-                
+
                 EnsurePropertyAvailability("ForceDiscardUncommittedChanges", GuiClientType.PyQT);
                 _ForceDiscardUncommittedChanges = value;
             }
@@ -80,16 +77,13 @@ namespace Mercurial.Gui
         [DefaultValue(true)]
         public bool CreateBackup
         {
-            get
-            {
-                return _CreateBackup;
-            }
+            get { return _CreateBackup; }
 
             set
             {
                 if (_CreateBackup == value)
                     return;
-                
+
                 EnsurePropertyAvailability("CreateBackup", GuiClientType.PyQT);
                 _CreateBackup = value;
             }
@@ -121,11 +115,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and

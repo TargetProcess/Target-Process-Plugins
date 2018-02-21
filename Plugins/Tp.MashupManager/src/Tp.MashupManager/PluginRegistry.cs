@@ -17,32 +17,32 @@ using Tp.MashupManager.MashupStorage;
 
 namespace Tp.MashupManager
 {
-	public class PluginRegistry : Registry
-	{
-		public PluginRegistry()
-		{
-			For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use
-				<MashupManagerPluginSpecifyMessageHandlerOrdering>();
-			For<IMashupInfoRepository>().Use<MashupInfoRepository>();
-			For<ISingleProfile>().Singleton().Use<SingleProfile>();
-			For<IMashupScriptStorage>().Use<MashupScriptStorage>();
-			For<IMashupLocalFolder>().Use<MashupLocalFolder>();
-			For<ILibrary>().Use<Library>();
-			For<ILibraryLocalFolder>().Use<LibraryLocalFolder>();
-			For<ILibraryRepositoryFactory>().Use<LibraryRepositoryFactory>();
-			For<ILibraryRepositorySynchronizer>().Singleton().Use<LibraryRepositorySynchronizer>();
-			For<ILibraryRepositoryConfigStorage>().Use<LibraryRepositoryConfigStorage>();
-			For<IMashupLoader>().Use<MashupLoader>();
-			
-			SystemReader.SetInstance(new MockSystemReader(SystemReader.GetInstance()));
-		}
+    public class PluginRegistry : Registry
+    {
+        public PluginRegistry()
+        {
+            For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use
+                <MashupManagerPluginSpecifyMessageHandlerOrdering>();
+            For<IMashupInfoRepository>().Use<MashupInfoRepository>();
+            For<ISingleProfile>().Singleton().Use<SingleProfile>();
+            For<IMashupScriptStorage>().Use<MashupScriptStorage>();
+            For<IMashupLocalFolder>().Use<MashupLocalFolder>();
+            For<ILibrary>().Use<Library>();
+            For<ILibraryLocalFolder>().Use<LibraryLocalFolder>();
+            For<ILibraryRepositoryFactory>().Use<LibraryRepositoryFactory>();
+            For<ILibraryRepositorySynchronizer>().Singleton().Use<LibraryRepositorySynchronizer>();
+            For<ILibraryRepositoryConfigStorage>().Use<LibraryRepositoryConfigStorage>();
+            For<IMashupLoader>().Use<MashupLoader>();
 
-		public class MashupManagerPluginSpecifyMessageHandlerOrdering : ICustomPluginSpecifyMessageHandlerOrdering
-		{
-			public void SpecifyHandlersOrder(First<PluginGateway> ordering)
-			{
-				ordering.AndThen<DeleteProfileCommandHandler>().AndThen<PluginCommandHandler>();
-			}
-		}
-	}
+            SystemReader.SetInstance(new MockSystemReader(SystemReader.GetInstance()));
+        }
+
+        public class MashupManagerPluginSpecifyMessageHandlerOrdering : ICustomPluginSpecifyMessageHandlerOrdering
+        {
+            public void SpecifyHandlersOrder(First<PluginGateway> ordering)
+            {
+                ordering.AndThen<DeleteProfileCommandHandler>().AndThen<PluginCommandHandler>();
+            }
+        }
+    }
 }

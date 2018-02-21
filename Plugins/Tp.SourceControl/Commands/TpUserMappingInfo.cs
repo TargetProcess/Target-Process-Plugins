@@ -7,19 +7,19 @@ using System.Runtime.Serialization;
 
 namespace Tp.SourceControl.Commands
 {
-	[DataContract]
-	public class TpUserMappingInfo
-	{
-		[DataMember]
-		public int Id { get; set; }
+    [DataContract]
+    public class TpUserMappingInfo
+    {
+        [DataMember]
+        public int Id { get; set; }
 
-		[DataMember]
-		public string Name { get; set; }
+        [DataMember]
+        public string Name { get; set; }
 
-		[DataMember]
-		public string Email { get; set; }
+        [DataMember]
+        public string Email { get; set; }
 
-		[DataMember]
-		public string Login { get; set; }
-	}
+        [DataMember]
+        public string Login { get; set; }
+    }
 }

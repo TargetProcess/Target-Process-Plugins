@@ -9,8 +9,8 @@ using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.Integration.Plugin.Common.Storage.Repositories
 {
-	internal interface IProfileFactory
-	{
-		ProfileDomainObject Create(Profile profile, AccountName accountName);
-	}
+    internal interface IProfileFactory
+    {
+        ProfileDomainObject Create(Profile profile, AccountName accountName);
+    }
 }

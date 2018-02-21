@@ -35,10 +35,6 @@ namespace Mercurial.Gui
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public string Result
-        {
-            get;
-            private set;
-        }
+        public string Result { get; private set; }
     }
 }

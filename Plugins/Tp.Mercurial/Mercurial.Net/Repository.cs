@@ -98,10 +98,7 @@ namespace Mercurial
         /// </value>
         public string Path
         {
-            get
-            {
-                return _Client.RepositoryPath;
-            }
+            get { return _Client.RepositoryPath; }
         }
 
         /// <summary>
@@ -109,10 +106,7 @@ namespace Mercurial
         /// </summary>
         public IClient Client
         {
-            get
-            {
-                return _Client;
-            }
+            get { return _Client; }
         }
 
         /// <summary>
@@ -234,7 +228,7 @@ namespace Mercurial
                 throw new ArgumentException("invalid IAsyncResult object passed to CommandProcessor.EndExecute", "result");
             executeDelegate.EndInvoke(result);
 
-            return ((IMercurialCommand<TResult>)result.AsyncState).Result;
+            return ((IMercurialCommand<TResult>) result.AsyncState).Result;
         }
 
         /// <summary>

@@ -7,25 +7,25 @@ using Tp.Integration.Messages;
 
 namespace Tp.Integration.Plugin.Common.Domain
 {
-	public class ProfileCreationArgs
-	{
-		private readonly ProfileName _profileName;
-		private readonly object _settings;
+    public class ProfileCreationArgs
+    {
+        private readonly ProfileName _profileName;
+        private readonly object _settings;
 
-		public ProfileCreationArgs(ProfileName profileName, object settings)
-		{
-			_profileName = profileName;
-			_settings = settings;
-		}
+        public ProfileCreationArgs(ProfileName profileName, object settings)
+        {
+            _profileName = profileName;
+            _settings = settings;
+        }
 
-		public object Settings
-		{
-			get { return _settings; }
-		}
+        public object Settings
+        {
+            get { return _settings; }
+        }
 
-		public ProfileName ProfileName
-		{
-			get { return _profileName; }
-		}
-	}
+        public ProfileName ProfileName
+        {
+            get { return _profileName; }
+        }
+    }
 }

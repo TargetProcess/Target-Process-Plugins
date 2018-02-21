@@ -5,8 +5,8 @@
 
 namespace Tp.Integration.Plugin.Common.Events.Aggregator
 {
-	interface IEventAggregator
-	{
-		TEvent Get<TEvent>() where TEvent : EventBase, new();
-	}
+    interface IEventAggregator
+    {
+        TEvent Get<TEvent>() where TEvent : EventBase, new();
+    }
 }

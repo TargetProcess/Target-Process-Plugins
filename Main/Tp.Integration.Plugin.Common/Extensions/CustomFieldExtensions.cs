@@ -5,15 +5,15 @@ using Tp.Integration.Messages.Entities;
 
 namespace Tp.Integration.Plugin.Common.Extensions
 {
-	public static class CustomFieldExtensions
-	{
-		public static Try<ICustomFieldConfigHolder> GetConfig(this ICustomFieldDTO customField)
-		{
-			return Try.Create(() =>
-			{
-				var config = customField.Config.Deserialize<CustomFieldConfigHolderDto>();
-				return (ICustomFieldConfigHolder) config;
-			});
-		}
-	}
+    public static class CustomFieldExtensions
+    {
+        public static Try<ICustomFieldConfigHolder> GetConfig(this ICustomFieldDTO customField)
+        {
+            return Try.Create(() =>
+            {
+                var config = customField.Config.Deserialize<CustomFieldConfigHolderDto>();
+                return (ICustomFieldConfigHolder) config;
+            });
+        }
+    }
 }

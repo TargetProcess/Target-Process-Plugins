@@ -10,35 +10,36 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.TestRunImport.LegacyProfileConversion.LegacyProfileConvertors
 {
-	public class SeleniumTestRunImportLegacyProfileConvertor : TestRunImportLegacyProfileConvertor
-	{
-		public SeleniumTestRunImportLegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection) : base(args, accountCollection)
-		{
-		}
+    public class SeleniumTestRunImportLegacyProfileConvertor : TestRunImportLegacyProfileConvertor
+    {
+        public SeleniumTestRunImportLegacyProfileConvertor(IConvertorArgs args, IAccountCollection accountCollection)
+            : base(args, accountCollection)
+        {
+        }
 
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.Selenium; }
-		}
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.Selenium; }
+        }
 
-		protected override string SettingsXmlNode
-		{
-			get { return "SeleniumSettings"; }
-		}
+        protected override string SettingsXmlNode
+        {
+            get { return "SeleniumSettings"; }
+        }
 
-		protected override string PluginName
-		{
-			get { return "Automatic Selenium Test Run Import"; }
-		}
+        protected override string PluginName
+        {
+            get { return "Automatic Selenium Test Run Import"; }
+        }
 
-		protected override void OnBeforeProfileMigrate(TestRunImportPluginProfile profile)
-		{
-			base.OnBeforeProfileMigrate(profile);
+        protected override void OnBeforeProfileMigrate(TestRunImportPluginProfile profile)
+        {
+            base.OnBeforeProfileMigrate(profile);
 
-			if (string.IsNullOrEmpty(profile.ResultsFilePath))
-			{
-				profile.PostResultsToRemoteUrl = true;
-			}
-		}
-	}
+            if (string.IsNullOrEmpty(profile.ResultsFilePath))
+            {
+                profile.PostResultsToRemoteUrl = true;
+            }
+        }
+    }
 }

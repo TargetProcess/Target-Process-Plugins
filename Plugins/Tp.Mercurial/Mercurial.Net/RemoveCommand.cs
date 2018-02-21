@@ -32,10 +32,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Paths
         {
-            get
-            {
-                return _Paths.Collection;
-            }
+            get { return _Paths.Collection; }
         }
 
         /// <summary>
@@ -45,11 +42,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool ForceRemoval
-        {
-            get;
-            set;
-        }
+        public bool ForceRemoval { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to record deletes for missing files after
@@ -58,11 +51,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--after")]
         [DefaultValue(false)]
-        public bool RecordDeletes
-        {
-            get;
-            set;
-        }
+        public bool RecordDeletes { get; set; }
 
         /// <summary>
         /// Adds the value to the <see cref="Paths"/> collection property and
@@ -136,7 +125,8 @@ namespace Mercurial
             base.Validate();
 
             if (!RecordDeletes && Paths.Count == 0)
-                throw new InvalidOperationException("The 'remove' command requires at least one path specified, unless RecordDeletes is true");
+                throw new InvalidOperationException(
+                    "The 'remove' command requires at least one path specified, unless RecordDeletes is true");
         }
 
         /// <summary>
@@ -145,10 +135,7 @@ namespace Mercurial
         /// </summary>
         public override IEnumerable<string> Arguments
         {
-            get
-            {
-                return base.Arguments.Concat(_Paths.GetArguments());
-            }
+            get { return base.Arguments.Concat(_Paths.GetArguments()); }
         }
 
         /// <summary>

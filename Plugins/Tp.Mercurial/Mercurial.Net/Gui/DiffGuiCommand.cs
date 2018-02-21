@@ -30,15 +30,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string BundleFile
         {
-            get
-            {
-                return _BundleFile;
-            }
+            get { return _BundleFile; }
 
-            set
-            {
-                _BundleFile = value;
-            }
+            set { _BundleFile = value; }
         }
 
         /// <summary>
@@ -65,11 +59,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--change")]
         [DefaultValue(null)]
-        public RevSpec Changeset
-        {
-            get;
-            set;
-        }
+        public RevSpec Changeset { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Changeset"/> property to the specified value and
@@ -97,11 +87,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revisions
-        {
-            get;
-            set;
-        }
+        public RevSpec Revisions { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revisions"/> property to the specified value and

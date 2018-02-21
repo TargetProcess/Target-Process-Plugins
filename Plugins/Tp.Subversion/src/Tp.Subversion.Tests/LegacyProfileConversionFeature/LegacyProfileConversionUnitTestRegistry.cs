@@ -8,11 +8,11 @@ using Tp.LegacyProfileConversion.Common.Testing;
 
 namespace Tp.Subversion.LegacyProfileConversionFeature
 {
-	public class SubversionLegacyProfileConversionUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
-	{
-		protected override Assembly PluginAssembly
-		{
-			get { return typeof (SubversionPluginProfile).Assembly; }
-		}
-	}
+    public class SubversionLegacyProfileConversionUnitTestRegistry : LegacyProfileConverterUnitTestRegistry
+    {
+        protected override Assembly PluginAssembly
+        {
+            get { return typeof(SubversionPluginProfile).Assembly; }
+        }
+    }
 }

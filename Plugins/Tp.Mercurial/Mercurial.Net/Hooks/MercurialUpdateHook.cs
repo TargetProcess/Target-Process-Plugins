@@ -29,10 +29,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec LeftParentRevision
         {
-            get
-            {
-                return _LeftParentRevision;
-            }
+            get { return _LeftParentRevision; }
         }
 
         /// <summary>
@@ -40,10 +37,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec RightParentRevision
         {
-            get
-            {
-                return _RightParentRevision;
-            }
+            get { return _RightParentRevision; }
         }
 
         /// <summary>
@@ -51,10 +45,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public bool IsMerge
         {
-            get
-            {
-                return _LeftParentRevision != null && _RightParentRevision != null;
-            }
+            get { return _LeftParentRevision != null && _RightParentRevision != null; }
         }
 
         /// <summary>
@@ -62,10 +53,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public bool WasSuccessful
         {
-            get
-            {
-                return _WasSuccessful;
-            }
+            get { return _WasSuccessful; }
         }
     }
 }

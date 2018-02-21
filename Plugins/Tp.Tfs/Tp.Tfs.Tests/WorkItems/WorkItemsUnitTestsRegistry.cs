@@ -21,8 +21,8 @@ namespace Tp.Tfs.Tests.WorkItems
                     typeof(TfsPluginProfile).Assembly,
                     new List<Assembly>
                     {
-                        typeof (ExceptionThrownLocalMessage).Assembly,
-                        typeof (TfsPluginProfile).Assembly
+                        typeof(ExceptionThrownLocalMessage).Assembly,
+                        typeof(TfsPluginProfile).Assembly
                     },
                     new Assembly[] { }));
         }

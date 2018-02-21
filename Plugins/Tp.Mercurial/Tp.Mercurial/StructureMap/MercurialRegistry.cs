@@ -19,42 +19,42 @@ using Tp.SourceControl.Workflow.Workflow;
 
 namespace Tp.Mercurial.StructureMap
 {
-	public class MercurialRegistry : SourceControlRegistry
-	{
+    public class MercurialRegistry : SourceControlRegistry
+    {
         public MercurialRegistry()
         {
             For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use<PluginSpecifyMessageHandlerOrdering>();
         }
 
-		protected override void ConfigureCheckConnectionErrorResolver()
-		{
-			For<ICheckConnectionErrorResolver>().Use<MercurialCheckConnectionErrorResolver>();
-		}
+        protected override void ConfigureCheckConnectionErrorResolver()
+        {
+            For<ICheckConnectionErrorResolver>().Use<MercurialCheckConnectionErrorResolver>();
+        }
 
-		protected override void ConfigureSourceControlConnectionSettingsSource()
-		{
-			For<ISourceControlConnectionSettingsSource>().Use<MercurialCurrentProfileToConnectionSettingsAdapter>();
-		}
+        protected override void ConfigureSourceControlConnectionSettingsSource()
+        {
+            For<ISourceControlConnectionSettingsSource>().Use<MercurialCurrentProfileToConnectionSettingsAdapter>();
+        }
 
-		protected override void ConfigureRevisionIdComparer()
-		{
-			For<IRevisionIdComparer>().HybridHttpOrThreadLocalScoped().Use<MercurialRevisionIdComparer>();
-		}
+        protected override void ConfigureRevisionIdComparer()
+        {
+            For<IRevisionIdComparer>().HybridHttpOrThreadLocalScoped().Use<MercurialRevisionIdComparer>();
+        }
 
-		protected override void ConfigureVersionControlSystem()
-		{
-			For<IVersionControlSystem>().Use<MercurialVersionControlSystem>();
-		}
+        protected override void ConfigureVersionControlSystem()
+        {
+            For<IVersionControlSystem>().Use<MercurialVersionControlSystem>();
+        }
 
-		protected override void ConfigureRevisionStorage()
-		{
-			For<IRevisionStorageRepository>().Use<MercurialRevisionStorageRepository>();
-		}
+        protected override void ConfigureRevisionStorage()
+        {
+            For<IRevisionStorageRepository>().Use<MercurialRevisionStorageRepository>();
+        }
 
-		protected override void ConfigureUserMapper()
-		{
-			For<UserMapper>().Use<MercurialUserMapper>();
-		}
+        protected override void ConfigureUserMapper()
+        {
+            For<UserMapper>().Use<MercurialUserMapper>();
+        }
 
         public class PluginSpecifyMessageHandlerOrdering : ICustomPluginSpecifyMessageHandlerOrdering
         {
@@ -63,5 +63,5 @@ namespace Tp.Mercurial.StructureMap
                 ordering.AndThen<DeleteProfileCommandHandler>().AndThen<PluginCommandHandler>();
             }
         }
-	}
+    }
 }

@@ -15,125 +15,126 @@ using Tp.Integration.Plugin.Common;
 
 namespace Tp.Plugin.Core.Attachments
 {
-	public class PushAttachmentsToTpSaga : TpSaga<PushAttachmentsToTPSagaData>,
-	                                       IAmStartedByMessages<PushAttachmentsToTpCommandInternal>,
-	                                       IHandleMessages<AttachmentCreatedMessageInternal>,
-	                                       IHandleMessages<ExceptionThrownLocalMessage>
-	{
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<AttachmentCreatedMessageInternal>(
-				saga => saga.Id,
-				message => message.SagaId
-				);
-			ConfigureMapping<ExceptionThrownLocalMessage>(
-				saga => saga.Id,
-				message => message.SagaId
-				);
-		}
+    public class PushAttachmentsToTpSaga
+        : TpSaga<PushAttachmentsToTPSagaData>,
+          IAmStartedByMessages<PushAttachmentsToTpCommandInternal>,
+          IHandleMessages<AttachmentCreatedMessageInternal>,
+          IHandleMessages<ExceptionThrownLocalMessage>
+    {
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<AttachmentCreatedMessageInternal>(
+                saga => saga.Id,
+                message => message.SagaId
+            );
+            ConfigureMapping<ExceptionThrownLocalMessage>(
+                saga => saga.Id,
+                message => message.SagaId
+            );
+        }
 
-		public void Handle(PushAttachmentsToTpCommandInternal message)
-		{
-			Data.OuterSagaId = message.OuterSagaId;
-			Data.AttachmentsCount = message.LocalStoredAttachments.Count();
-			Data.MessageId = message.MessageId;
-			Data.FileIds = message.LocalStoredAttachments.Select(a => a.FileId);
+        public void Handle(PushAttachmentsToTpCommandInternal message)
+        {
+            Data.OuterSagaId = message.OuterSagaId;
+            Data.AttachmentsCount = message.LocalStoredAttachments.Count();
+            Data.MessageId = message.MessageId;
+            Data.FileIds = message.LocalStoredAttachments.Select(a => a.FileId);
 
-			message.LocalStoredAttachments.ToList().ForEach(
-				x =>
-				SendLocal(new PushAttachmentToTPCommandInternal
-				          	{
-				          		OuterSagaId = Data.Id,
-				          		LocalStoredAttachment = x,
-				          		MessageId = message.MessageId,
-				          		GeneralId = message.GeneralId,
-				          	}));
+            message.LocalStoredAttachments.ToList().ForEach(
+                x =>
+                    SendLocal(new PushAttachmentToTPCommandInternal
+                    {
+                        OuterSagaId = Data.Id,
+                        LocalStoredAttachment = x,
+                        MessageId = message.MessageId,
+                        GeneralId = message.GeneralId,
+                    }));
 
-			if (message.LocalStoredAttachments.Count() == 0)
-			{
-				SendSuccessfullMessage();
-			}
-		}
+            if (message.LocalStoredAttachments.Count() == 0)
+            {
+                SendSuccessfullMessage();
+            }
+        }
 
-		public void Handle(AttachmentCreatedMessageInternal message)
-		{
-			var attachments = new List<AttachmentDTO>(Data.ProcessedAttachments) {message.AttachmentDto};
-			Data.ProcessedAttachments = attachments.ToArray();
-			if (Data.ProcessedAttachments.Count() == Data.AttachmentsCount)
-			{
-				if (Data.MessageId.HasValue)
-				{
-					Log().InfoFormat("Attachments {0} were added to message with id {1}",
-					                 Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(","), Data.MessageId);
-				}
-				else
-				{
-					Log().InfoFormat("Attachments {0} were added to general with id {1}",
-					                 Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(","), Data.GeneralId);
-				}
+        public void Handle(AttachmentCreatedMessageInternal message)
+        {
+            var attachments = new List<AttachmentDTO>(Data.ProcessedAttachments) { message.AttachmentDto };
+            Data.ProcessedAttachments = attachments.ToArray();
+            if (Data.ProcessedAttachments.Count() == Data.AttachmentsCount)
+            {
+                if (Data.MessageId.HasValue)
+                {
+                    Log().InfoFormat("Attachments {0} were added to message with id {1}",
+                        Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(","), Data.MessageId);
+                }
+                else
+                {
+                    Log().InfoFormat("Attachments {0} were added to general with id {1}",
+                        Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(","), Data.GeneralId);
+                }
 
-				AttachmentFolder.Delete(Data.FileIds);
+                AttachmentFolder.Delete(Data.FileIds);
 
-				SendSuccessfullMessage();
-			}
-		}
+                SendSuccessfullMessage();
+            }
+        }
 
-		private void SendSuccessfullMessage()
-		{
-			SendLocal(new AttachmentsPushedToTPMessageInternal
-			          	{SagaId = Data.OuterSagaId, AttachmentDtos = Data.ProcessedAttachments});
+        private void SendSuccessfullMessage()
+        {
+            SendLocal(new AttachmentsPushedToTPMessageInternal
+                { SagaId = Data.OuterSagaId, AttachmentDtos = Data.ProcessedAttachments });
 
-			MarkAsComplete();
-		}
+            MarkAsComplete();
+        }
 
-		public void Handle(ExceptionThrownLocalMessage message)
-		{
-			message.SagaId = Data.OuterSagaId;
-			AttachmentFolder.Delete(Data.FileIds);
-			SendLocal(message);
-			MarkAsComplete();
-		}
-	}
+        public void Handle(ExceptionThrownLocalMessage message)
+        {
+            message.SagaId = Data.OuterSagaId;
+            AttachmentFolder.Delete(Data.FileIds);
+            SendLocal(message);
+            MarkAsComplete();
+        }
+    }
 
-	[Serializable]
-	public class PushAttachmentToTPCommandInternal : IPluginLocalMessage
-	{
-		public Guid OuterSagaId { get; set; }
-		public int? MessageId { get; set; }
-		public int? GeneralId { get; set; }
-		public LocalStoredAttachment LocalStoredAttachment { get; set; }
-	}
+    [Serializable]
+    public class PushAttachmentToTPCommandInternal : IPluginLocalMessage
+    {
+        public Guid OuterSagaId { get; set; }
+        public int? MessageId { get; set; }
+        public int? GeneralId { get; set; }
+        public LocalStoredAttachment LocalStoredAttachment { get; set; }
+    }
 
-	public class PushAttachmentsToTPSagaData : ISagaEntity
-	{
-		public PushAttachmentsToTPSagaData()
-		{
-			ProcessedAttachments = new AttachmentDTO[] {};
-		}
+    public class PushAttachmentsToTPSagaData : ISagaEntity
+    {
+        public PushAttachmentsToTPSagaData()
+        {
+            ProcessedAttachments = new AttachmentDTO[] { };
+        }
 
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
-		public Guid OuterSagaId { get; set; }
-		public AttachmentDTO[] ProcessedAttachments { get; set; }
-		public int AttachmentsCount { get; set; }
-		public int? MessageId { get; set; }
-		public int? GeneralId { get; set; }
-		public IEnumerable<FileId> FileIds { get; set; }
-	}
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
+        public Guid OuterSagaId { get; set; }
+        public AttachmentDTO[] ProcessedAttachments { get; set; }
+        public int AttachmentsCount { get; set; }
+        public int? MessageId { get; set; }
+        public int? GeneralId { get; set; }
+        public IEnumerable<FileId> FileIds { get; set; }
+    }
 
-	[Serializable]
-	public class AttachmentsPushedToTPMessageInternal : SagaMessage, IPluginLocalMessage
-	{
-		public AttachmentDTO[] AttachmentDtos { get; set; }
-	}
+    [Serializable]
+    public class AttachmentsPushedToTPMessageInternal : SagaMessage, IPluginLocalMessage
+    {
+        public AttachmentDTO[] AttachmentDtos { get; set; }
+    }
 
-	[Serializable]
-	public class PushAttachmentsToTpCommandInternal : IPluginLocalMessage
-	{
-		public Guid OuterSagaId { get; set; }
-		public int? MessageId { get; set; }
-		public int? GeneralId { get; set; }
-		public LocalStoredAttachment[] LocalStoredAttachments { get; set; }
-	}
+    [Serializable]
+    public class PushAttachmentsToTpCommandInternal : IPluginLocalMessage
+    {
+        public Guid OuterSagaId { get; set; }
+        public int? MessageId { get; set; }
+        public int? GeneralId { get; set; }
+        public LocalStoredAttachment[] LocalStoredAttachments { get; set; }
+    }
 }

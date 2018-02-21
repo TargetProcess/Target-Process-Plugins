@@ -12,14 +12,14 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.PopEmailIntegration.BusinessScenarios.RuleProcessingFeature
 {
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class WhenRuleContainsSeveralClauses
-	{
-		[Test]
-		public void ShouldProcessRuleWhenAllWhenClausesMatched()
-		{
-			@"Given requester with email 'sender@company.com'
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class WhenRuleContainsSeveralClauses
+    {
+        [Test]
+        public void ShouldProcessRuleWhenAllWhenClausesMatched()
+        {
+            @"Given requester with email 'sender@company.com'
 					And sender email is 'sender@company.com'
 					And email subject is 'Jira extra bug'
 					And project 7
@@ -28,7 +28,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.RuleProcessingFeature
 				Then message from requester with email 'sender@company.com' should be created
 					And the message should have subject 'Jira extra bug'
 					And the message should be attached to project 7"
-				.Execute(In.Context<EmailProcessingSagaActionSteps>());
-		}
-	}
+                .Execute(In.Context<EmailProcessingSagaActionSteps>());
+        }
+    }
 }

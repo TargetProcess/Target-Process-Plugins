@@ -38,7 +38,7 @@ namespace Mercurial
             var serializer = new XmlSerializer(typeof(LogEntryNode));
             foreach (string entryXml in LazyExtractChangesetXmlPieces(xml))
             {
-                var entry = (LogEntryNode)serializer.Deserialize(new StringReader(entryXml));
+                var entry = (LogEntryNode) serializer.Deserialize(new StringReader(entryXml));
                 var changeset = new Changeset
                 {
                     Timestamp = entry.Timestamp,
@@ -160,8 +160,8 @@ namespace Mercurial
         public static Changeset[] Parse(string xml)
         {
             return (from changeset in LazyParse(xml)
-                    orderby changeset.RevisionNumber descending
-                    select changeset).ToArray();
+                orderby changeset.RevisionNumber descending
+                select changeset).ToArray();
         }
     }
 }

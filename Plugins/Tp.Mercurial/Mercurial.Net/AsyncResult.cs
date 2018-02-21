@@ -42,10 +42,7 @@ namespace Mercurial
         /// </summary>
         public IAsyncResult InnerResult
         {
-            get
-            {
-                return _InnerResult;
-            }
+            get { return _InnerResult; }
         }
 
         /// <summary>
@@ -56,10 +53,7 @@ namespace Mercurial
         /// </returns>
         public object AsyncState
         {
-            get
-            {
-                return _InnerResult.AsyncState;
-            }
+            get { return _InnerResult.AsyncState; }
         }
 
         /// <summary>
@@ -70,10 +64,7 @@ namespace Mercurial
         /// </returns>
         public WaitHandle AsyncWaitHandle
         {
-            get
-            {
-                return _InnerResult.AsyncWaitHandle;
-            }
+            get { return _InnerResult.AsyncWaitHandle; }
         }
 
         /// <summary>
@@ -84,10 +75,7 @@ namespace Mercurial
         /// </returns>
         public bool CompletedSynchronously
         {
-            get
-            {
-                return _InnerResult.CompletedSynchronously;
-            }
+            get { return _InnerResult.CompletedSynchronously; }
         }
 
         /// <summary>
@@ -98,10 +86,7 @@ namespace Mercurial
         /// </returns>
         public bool IsCompleted
         {
-            get
-            {
-                return _InnerResult.CompletedSynchronously;
-            }
+            get { return _InnerResult.CompletedSynchronously; }
         }
 
         #endregion

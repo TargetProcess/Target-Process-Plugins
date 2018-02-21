@@ -53,11 +53,7 @@ namespace Mercurial
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date", Format = "yyyy-MM-dd")]
         [DefaultValue(null)]
-        public DateTime? Date
-        {
-            get;
-            set;
-        }
+        public DateTime? Date { get; set; }
 
         /// <summary>
         /// Gets the collection of case-insensitive keywords to search the log for.
@@ -66,10 +62,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--keyword")]
         public Collection<string> Keywords
         {
-            get
-            {
-                return new Collection<string>(_Keywords);
-            }
+            get { return new Collection<string>(_Keywords); }
         }
 
         /// <summary>
@@ -78,11 +71,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--follow")]
         [DefaultValue(false)]
-        public bool FollowRenamesAndMoves
-        {
-            get;
-            set;
-        }
+        public bool FollowRenamesAndMoves { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to only follow the first parent of merge changesets.
@@ -90,11 +79,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--follow-first")]
         [DefaultValue(false)]
-        public bool OnlyFollowFirstParent
-        {
-            get;
-            set;
-        }
+        public bool OnlyFollowFirstParent { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to include path actions (which files were modified, and the
@@ -102,11 +87,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--verbose")]
         [DefaultValue(false)]
-        public bool IncludePathActions
-        {
-            get;
-            set;
-        }
+        public bool IncludePathActions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to include hidden changesets.
@@ -116,10 +97,7 @@ namespace Mercurial
         [DefaultValue(false)]
         public bool IncludeHiddenChangesets
         {
-            get
-            {
-                return _IncludeHiddenChangesets;
-            }
+            get { return _IncludeHiddenChangesets; }
 
             set
             {
@@ -136,15 +114,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
 
-            set
-            {
-                _Path = (value ?? string.Empty).Trim();
-            }
+            set { _Path = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -154,10 +126,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--user")]
         public Collection<string> Users
         {
-            get
-            {
-                return new Collection<string>(_Users);
-            }
+            get { return new Collection<string>(_Users); }
         }
 
         /// <summary>
@@ -166,10 +135,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         #region IMercurialCommand<IEnumerable<Changeset>> Members
@@ -194,11 +160,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="Changeset"/> objects.
         /// </summary>
-        public IEnumerable<Changeset> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Changeset> Result { get; private set; }
 
         #endregion
 

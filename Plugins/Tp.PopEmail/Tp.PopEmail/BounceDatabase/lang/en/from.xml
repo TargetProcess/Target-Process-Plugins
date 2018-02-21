@@ -16,11 +16,12 @@
 		<fromaddress keyword="Systemadministrator" />
 		<fromaddress keyword="System Administrator" />
 		<fromaddress keyword="Microsoft Exchange" />
+		<fromaddress keyword="Microsoft Outlook" />
 		<fromaddress keyword="Mailer Daemon" />
 	</fromnames>
 	<fromemails>
-		<fromaddress keyword="admin" />
-		<fromaddress keyword="administrator" />
+		<fromaddress keyword="alert" />
+		<fromaddress keyword="bounce" />
 		<fromaddress keyword="nothere" />
 		<fromaddress keyword="NAVMSE-MAILSERVER" />
 		<fromaddress keyword="postmaster" />
@@ -29,10 +30,13 @@
 		<fromaddress keyword="webadmin" />
 		<fromaddress keyword="Mailer-Daemon" />
 		<fromaddress keyword="MDaemon" />
+		<fromaddress keyword="mailmarshal" />
+		<fromaddress keyword="no-reply" />
 		<fromaddress keyword="AntiVirus_SMTP_Gateway" />
 		<fromaddress keyword="LAPOP_SMTP_Gateway" />
 		<fromaddress keyword="Microsoft Exchange" />
 		<fromaddress keyword="Mailer Daemon" />
+		<fromaddress keyword="isvw" />
 	</fromemails>
 	<fromremarks>
 		<fromaddress keyword="Mail Delivery System" />

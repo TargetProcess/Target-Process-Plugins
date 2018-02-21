@@ -38,10 +38,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Collection
         {
-            get
-            {
-                return _Collection;
-            }
+            get { return _Collection; }
         }
 
         /// <summary>
@@ -54,9 +51,9 @@ namespace Mercurial
         public string[] GetArguments()
         {
             var arguments =
-                (from argument in _Collection
-                 where !StringEx.IsNullOrWhiteSpace(argument)
-                 select argument.Trim()).ToArray();
+            (from argument in _Collection
+                where !StringEx.IsNullOrWhiteSpace(argument)
+                select argument.Trim()).ToArray();
 
             if (arguments.Length == 0)
                 return arguments;

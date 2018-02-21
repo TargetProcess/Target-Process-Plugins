@@ -11,20 +11,20 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.PopEmailIntegration.TargetProcessStateTracking
 {
-	public class GlobalSetttingUpdatedMessageHandler : IHandleMessages<GlobalSettingUpdatedMessage>
-	{
-		private readonly IStorageRepository _storageRepo;
+    public class GlobalSetttingUpdatedMessageHandler : IHandleMessages<GlobalSettingUpdatedMessage>
+    {
+        private readonly IStorageRepository _storageRepo;
 
-		public GlobalSetttingUpdatedMessageHandler(IStorageRepository storageRepo)
-		{
-			_storageRepo = storageRepo;
-		}
+        public GlobalSetttingUpdatedMessageHandler(IStorageRepository storageRepo)
+        {
+            _storageRepo = storageRepo;
+        }
 
-		public void Handle(GlobalSettingUpdatedMessage message)
-		{
-			var storage = _storageRepo.Get<GlobalSettingDTO>();
-			storage.Clear();
-			storage.Add(message.Dto);
-		}
-	}
+        public void Handle(GlobalSettingUpdatedMessage message)
+        {
+            var storage = _storageRepo.Get<GlobalSettingDTO>();
+            storage.Clear();
+            storage.Add(message.Dto);
+        }
+    }
 }

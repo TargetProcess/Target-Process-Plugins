@@ -10,14 +10,14 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.MashupManager.Tests.Mashups
 {
-	[ActionSteps, TestFixture]
-    [Category("PartPlugins0")]
-	public class MashupsOnTargetProcessStartSenderSpecs : MashupManagerTestBase
-	{
-		[Test]
-		public void ShouldSendMashupsToTpOnTpStart()
-		{
-			@"
+    [ActionSteps, TestFixture]
+    [Category("PartPlugins1")]
+    public class MashupsOnTargetProcessStartSenderSpecs : MashupManagerTestBase
+    {
+        [Test]
+        public void ShouldSendMashupsToTpOnTpStart()
+        {
+            @"
 				Given profile 'profile1' created for account 'Account1'
 					And profile mashups are: first, second
 					And profile 'profile2' created for account 'Account2'
@@ -29,24 +29,24 @@ namespace Tp.MashupManager.Tests.Mashups
 					And default mashup 'third' with accounts 'Account2' should be sent to TP
 					And default mashup 'fourth' with accounts 'Account2' should be sent to TP
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldNotSendMashupsWhenNoProfiles()
-		{
-			@"
+        [Test]
+        public void ShouldNotSendMashupsWhenNoProfiles()
+        {
+            @"
 				Given no profiles created
 				When TargetProcess starts
 				Then 0 mashups should be sent to TP
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[When("TargetProcess starts")]
-		public void ProfileStart()
-		{
-			new MashupsOnTargetProcessStartSender().Handle(new TargetProcessStartedMessage());
-		}
-	}
+        [When("TargetProcess starts")]
+        public void ProfileStart()
+        {
+            new MashupsOnTargetProcessStartSender().Handle(new TargetProcessStartedMessage());
+        }
+    }
 }

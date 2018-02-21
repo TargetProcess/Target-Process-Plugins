@@ -5,7 +5,7 @@
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Messages
 {
-	public class UserStorySynchronizationMessage : EntitySynchronizationMessage
-	{
-	}
+    public class UserStorySynchronizationMessage : EntitySynchronizationMessage
+    {
+    }
 }

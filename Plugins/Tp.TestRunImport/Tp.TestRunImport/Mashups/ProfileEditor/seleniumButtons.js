@@ -9,9 +9,9 @@
 			rendered: null,
 			active: null,
 			seleniumButtonsTemplate:
-				'<div class="button-group" style="display: none;" >' +
-					'	<a href="javascript:void(0)" id="path" class="button">Result File</a>' +
-						'	<a href="javascript:void(0)" id="url" class="button">Postback results URL</a>' +
+				'<div class="controls-group" style="display: none;" >' +
+					'	<a href="javascript:void(0)" id="path" class="tau-btn">Result File</a>' +
+						'	<a href="javascript:void(0)" id="url" class="tau-btn">Postback results URL</a>' +
 							'</div>',
 
 			_create: function (config) {

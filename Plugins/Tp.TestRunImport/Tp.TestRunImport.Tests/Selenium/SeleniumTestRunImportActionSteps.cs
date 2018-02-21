@@ -14,97 +14,101 @@ using Tp.Integration.Plugin.TestRunImport.FrameworkTypes;
 
 namespace Tp.TestRunImport.Tests.Selenium
 {
-	[ActionSteps]
-	public class SeleniumTestRunImportActionSteps : ImportResultsTestRunImportActionSteps
-	{
-		[Given("post results to remote Url")]
-		public void PostResultsToRemoteUrl()
-		{
-			Settings.PostResultsToRemoteUrl = true;
-		}
+    [ActionSteps]
+    public class SeleniumTestRunImportActionSteps : ImportResultsTestRunImportActionSteps
+    {
+        [Given("post results to remote Url")]
+        public void PostResultsToRemoteUrl()
+        {
+            Settings.PostResultsToRemoteUrl = true;
+        }
 
-		[Given("command SeleniumResults is sent to TargetProcess")]
-		public void SeleniumResultsCommandIsSent()
-		{
-			var command = new ExecutePluginCommandCommand { CommandName = "SeleniumResults", Arguments = ReadSeleniumResourceFileForCurrentProfile() };
-			Context.Transport.HandleMessageFromTp(Context.CurrentProfile, command);
-		}
+        [Given("command SeleniumResults is sent to TargetProcess")]
+        public void SeleniumResultsCommandIsSent()
+        {
+            var command = new ExecutePluginCommandCommand
+            {
+                CommandName = "SeleniumResults",
+                Arguments = ReadSeleniumResourceFileForCurrentProfile()
+            };
+            Context.Transport.HandleMessageFromTp(Context.CurrentProfile, command);
+        }
 
-		[Given("results remote Url is '$remoteUrl'")]
-		public void ResultsRemoteUrl(string remoteUrl)
-		{
-			Settings.RemoteResultsUrl = remoteUrl;
-		}
+        [Given("results remote Url is '$remoteUrl'")]
+        public void ResultsRemoteUrl(string remoteUrl)
+        {
+            Settings.RemoteResultsUrl = remoteUrl;
+        }
 
-		[Given("authenticaton user Id is '$authTokenUserId'")]
-		public void AuthTokenUserId(int authTokenUserId)
-		{
-			Settings.AuthTokenUserId = authTokenUserId;
-		}
+        [Given("authenticaton user Id is '$authTokenUserId'")]
+        public void AuthTokenUserId(int authTokenUserId)
+        {
+            Settings.AuthTokenUserId = authTokenUserId;
+        }
 
-		private string ReadSeleniumResourceFileForCurrentProfile()
-		{
-			var builder = new StringBuilder();
-			using (var stream = GetTypeManifestResourceStream())
-			{
-				if (stream != null)
-				{
-					using (var sr = new StreamReader(stream))
-					{
-						string input;
-						while ((input = sr.ReadLine()) != null)
-						{
-							builder.Append(input);
-						}
-						sr.Close();
-					}
-					stream.Close();
-				}
-			}
-			return HttpUtility.UrlEncode(builder.ToString());
-		}
+        private string ReadSeleniumResourceFileForCurrentProfile()
+        {
+            var builder = new StringBuilder();
+            using (var stream = GetTypeManifestResourceStream())
+            {
+                if (stream != null)
+                {
+                    using (var sr = new StreamReader(stream))
+                    {
+                        string input;
+                        while ((input = sr.ReadLine()) != null)
+                        {
+                            builder.Append(input);
+                        }
+                        sr.Close();
+                    }
+                    stream.Close();
+                }
+            }
+            return HttpUtility.UrlEncode(builder.ToString());
+        }
 
-		private Stream GetTypeManifestResourceStream()
-		{
-			return Assembly.GetExecutingAssembly().GetManifestResourceStream(
-				string.Format("{0}.{1}", TypeResourceLocation, ResourceFileNameForCurrentProfile));
-		}
+        private Stream GetTypeManifestResourceStream()
+        {
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                string.Format("{0}.{1}", TypeResourceLocation, ResourceFileNameForCurrentProfile));
+        }
 
-		private string ResourceFileNameForCurrentProfile
-		{
-			get
-			{
-				var profile = Context.CurrentProfile.GetProfile<TestRunImportPluginProfile>();
-				if (string.IsNullOrEmpty(profile.RegExp))
-				{
-					return SimpleResultsFile;
-				}
-				if (profile.RegExp.Contains("<testId>"))
-				{
-					return TestIdRegExpResultsFile;
-				}
-				return profile.RegExp.Contains("<testName>") ? TestNameRegExpResultsFile : string.Empty;
-			}
-		}
+        private string ResourceFileNameForCurrentProfile
+        {
+            get
+            {
+                var profile = Context.CurrentProfile.GetProfile<TestRunImportPluginProfile>();
+                if (string.IsNullOrEmpty(profile.RegExp))
+                {
+                    return SimpleResultsFile;
+                }
+                if (profile.RegExp.Contains("<testId>"))
+                {
+                    return TestIdRegExpResultsFile;
+                }
+                return profile.RegExp.Contains("<testName>") ? TestNameRegExpResultsFile : string.Empty;
+            }
+        }
 
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.Selenium; }
-		}
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.Selenium; }
+        }
 
-		private string SimpleResultsFile
-		{
-			get { return "SimpleSeleniumTestResult.txt"; }
-		}
+        private string SimpleResultsFile
+        {
+            get { return "SimpleSeleniumTestResult.txt"; }
+        }
 
-		private string TestIdRegExpResultsFile
-		{
-			get { return "TestIdRegExpSeleniumTestResult.txt"; }
-		}
+        private string TestIdRegExpResultsFile
+        {
+            get { return "TestIdRegExpSeleniumTestResult.txt"; }
+        }
 
-		private string TestNameRegExpResultsFile
-		{
-			get { return "TestNameRegExpSeleniumTestResult.txt"; }
-		}
-	}
+        private string TestNameRegExpResultsFile
+        {
+            get { return "TestNameRegExpSeleniumTestResult.txt"; }
+        }
+    }
 }

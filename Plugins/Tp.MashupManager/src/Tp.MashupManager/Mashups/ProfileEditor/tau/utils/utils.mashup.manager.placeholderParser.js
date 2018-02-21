@@ -1,9 +1,7 @@
 tau.mashups
-    .addDependency('Underscore')
     .addDependency('tau/mashup.manager/utils/utils.mashup.manager.placeholderUtils')
-    .addDependency('jQuery')
-    .addDependency('libs/jquery/jquery.fieldSelection')
-    .addModule('tau/mashup.manager/utils/utils.mashup.manager.placeholderParser', function(_, PlaceholderUtils, $) {
+    .addModule('tau/mashup.manager/utils/utils.mashup.manager.placeholderParser', function(PlaceholderUtils) {
+
         var PlaceholderParser = function() {
             this.placeholderUtils = new PlaceholderUtils();
             this.savedcontent = '';
@@ -11,15 +9,15 @@ tau.mashups
         };
 
         PlaceholderParser.prototype = {
-            attach: function(placeholder) {
-                placeholder.on('paste', _.bind(function(event) {
-                    this.handlepaste(placeholder, event);
-                }, this));
+            attach: function($placeholder) {
+                $placeholder.on('paste', function(event) {
+                    this.handlepaste($placeholder, event);
+                }.bind(this));
             },
 
             handlepaste: function(elem, e) {
                 this.savedcontent = elem.val();
-                this.selection = elem.fieldSelection();
+                this.selection = this._getSelection(elem[0]);
 
                 if (e && e.clipboardData && e.clipboardData.getData) {
                     // Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
@@ -59,31 +57,58 @@ tau.mashups
 
             processpaste: function(elem) {
                 var pasteddata = elem.val();
-
-                var value = this.savedcontent;
                 var pasted = this.placeholderUtils.urlToPlaceholder(pasteddata);
 
-                var firstPart = value.substr(0, this.selection.start) + pasted;
+                var value = this.savedcontent;
+                var firstPart = value.substr(0, this.selection.start);
                 var secondPart = value.substr(this.selection.end, value.length);
 
-                elem.val(firstPart + secondPart);
+                elem.val(firstPart + pasted + secondPart);
 
-                this._selectRange(elem, firstPart.length, firstPart.length);
+                this._selectRange(elem[0], firstPart.length, firstPart.length);
             },
 
-            _selectRange: function(el, start, end) {
-                return el.each(function() {
-                    if (this.setSelectionRange) {
-                        this.focus();
-                        this.setSelectionRange(start, end);
-                    } else if (el.createTextRange) {
-                        var range = el.createTextRange();
-                        range.collapse(true);
-                        range.moveEnd('character', end);
-                        range.moveStart('character', start);
-                        range.select();
+            _getSelection: function(elem) {
+                var data = {start: 0, end: elem.value.length, length: 0};
+
+                if (elem.selectionStart >= 0) {
+                    // DOM 3
+                    data.start = elem.selectionStart;
+                    data.end = elem.selectionEnd;
+                    data.length = data.end - data.start;
+                    data.text = elem.value.substr(data.start, data.length);
+                } else if (elem.ownerDocument.selection) {
+                    // IE
+                    var range = elem.ownerDocument.selection.createRange();
+                    if (!range) {
+                        return data;
                     }
-                });
+                    var textRange = elem.createTextRange();
+                    var dTextRange = textRange.duplicate();
+
+                    textRange.moveToBookmark(range.getBookmark());
+                    dTextRange.setEndPoint('EndToStart', textRange);
+
+                    data.start = dTextRange.text.length;
+                    data.end = data.start + range.text.length;
+                    data.length = range.text.length;
+                    data.text = range.text;
+                }
+
+                return data;
+            },
+
+            _selectRange: function(elem, start, end) {
+                if (elem.setSelectionRange) {
+                    elem.focus();
+                    elem.setSelectionRange(start, end);
+                } else if (elem.createTextRange) {
+                    var range = elem.createTextRange();
+                    range.collapse(true);
+                    range.moveEnd('character', end);
+                    range.moveStart('character', start);
+                    range.select();
+                }
             }
         };
 

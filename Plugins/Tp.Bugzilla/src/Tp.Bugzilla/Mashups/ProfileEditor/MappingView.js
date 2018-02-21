@@ -67,7 +67,7 @@ tau.mashups
                 });
 
                 return $.grep(mappings, function (mapping) {
-                    return (mapping).Key != '' && (mapping).Value != '';
+                    return (mapping).Key !== '' && (mapping).Value !== '';
                 });
             }
         };

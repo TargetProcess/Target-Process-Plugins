@@ -80,7 +80,9 @@ namespace Mercurial
         {
             if (ClientExecutable.CurrentVersion < requiredVersion)
             {
-                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "The {0} requires version {1} in order to be used; current version is {2}", whatRequiresTheSpecifiedVersion, requiredVersion, ClientExecutable.CurrentVersion));
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture,
+                    "The {0} requires version {1} in order to be used; current version is {2}", whatRequiresTheSpecifiedVersion,
+                    requiredVersion, ClientExecutable.CurrentVersion));
             }
         }
     }

@@ -17,10 +17,7 @@ namespace Mercurial.Gui.Clients
         /// </summary>
         public override string FileListOption
         {
-            get
-            {
-                return "--listfileutf8";
-            }
+            get { return "--listfileutf8"; }
         }
 
         /// <summary>
@@ -28,10 +25,7 @@ namespace Mercurial.Gui.Clients
         /// </summary>
         public override Encoding FileListEncoding
         {
-            get
-            {
-                return _Utf8EncodingWithoutBOM;
-            }
+            get { return _Utf8EncodingWithoutBOM; }
         }
     }
 }

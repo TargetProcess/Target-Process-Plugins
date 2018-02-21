@@ -28,11 +28,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--active")]
         [DefaultValue(false)]
-        public bool OnlyActive
-        {
-            get;
-            set;
-        }
+        public bool OnlyActive { get; set; }
 
         /// <summary>
         /// Sets the <see cref="OnlyActive"/> property to the specified value and
@@ -60,11 +56,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--closed")]
         [DefaultValue(false)]
-        public bool IncludeClosedBranches
-        {
-            get;
-            set;
-        }
+        public bool IncludeClosedBranches { get; set; }
 
         /// <summary>
         /// Sets the <see cref="IncludeClosedBranches"/> property to the specified value and
@@ -89,11 +81,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public IEnumerable<BranchHead> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<BranchHead> Result { get; private set; }
 
         /// <summary>
         /// This method should parse and store the appropriate execution result output

@@ -9,7 +9,8 @@ namespace Mercurial
     /// <summary>
     /// This helper class is used to control a merge, providing help and data structures for the job.
     /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This class is first and foremost a helper class, and not a collection, leaving name as-is.")]
+    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix",
+         Justification = "This class is first and foremost a helper class, and not a collection, leaving name as-is.")]
     public class MergeJob : IEnumerable<MergeJobConflict>
     {
         /// <summary>
@@ -75,10 +76,7 @@ namespace Mercurial
         /// </summary>
         public MergeCommand MergeCommand
         {
-            get
-            {
-                return _MergeCommand;
-            }
+            get { return _MergeCommand; }
         }
 
         /// <summary>
@@ -86,10 +84,7 @@ namespace Mercurial
         /// </summary>
         public Repository Repository
         {
-            get
-            {
-                return _Repository;
-            }
+            get { return _Repository; }
         }
 
         /// <summary>
@@ -116,7 +111,7 @@ namespace Mercurial
         {
             if (_LocalParent != null)
                 return;
-            
+
             Changeset[] parents = Repository.Parents().ToArray();
             _LocalParent = parents[0];
             _OtherParent = parents[1];

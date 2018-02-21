@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 
 namespace TinyPG
 {
+
     #region Scanner
 
     public partial class Scanner
@@ -106,8 +107,6 @@ namespace TinyPG
             regex = new Regex(@"(?i)((?!#)(?!(id|time|status|state|comment|comm|comments|cmt):).)", RegexOptions.Compiled);
             Patterns.Add(TokenType.ANY_SYMBOL, regex);
             Tokens.Add(TokenType.ANY_SYMBOL);
-
-
         }
 
         public void Init(string input)
@@ -128,7 +127,7 @@ namespace TinyPG
             return t;
         }
 
-         /// <summary>
+        /// <summary>
         /// executes a lookahead of the next token
         /// and will advance the scan on the input string
         /// </summary>
@@ -156,8 +155,8 @@ namespace TinyPG
 
             // this prevents double scanning and matching
             // increased performance
-            if (LookAheadToken != null 
-                && LookAheadToken.Type != TokenType._UNDETERMINED_ 
+            if (LookAheadToken != null
+                && LookAheadToken.Type != TokenType._UNDETERMINED_
                 && LookAheadToken.Type != TokenType._NONE_) return LookAheadToken;
 
             // if no scantokens specified, then scan for all of them (= backward compatible)
@@ -171,9 +170,8 @@ namespace TinyPG
 
             do
             {
-
                 int len = -1;
-                TokenType index = (TokenType)int.MaxValue;
+                TokenType index = (TokenType) int.MaxValue;
                 string input = Input.Substring(startpos);
 
                 tok = new Token(startpos, EndPos);
@@ -182,10 +180,10 @@ namespace TinyPG
                 {
                     Regex r = Patterns[scantokens[i]];
                     Match m = r.Match(input);
-                    if (m.Success && m.Index == 0 && ((m.Length > len) || (scantokens[i] < index && m.Length == len )))
+                    if (m.Success && m.Index == 0 && ((m.Length > len) || (scantokens[i] < index && m.Length == len)))
                     {
                         len = m.Length;
-                        index = scantokens[i];  
+                        index = scantokens[i];
                     }
                 }
 
@@ -211,8 +209,7 @@ namespace TinyPG
                     tok.Skipped = Skipped; // assign prior skips to this token
                     Skipped = new List<Token>(); //reset skips
                 }
-            }
-            while (SkipList.Contains(tok.Type));
+            } while (SkipList.Contains(tok.Type));
 
             LookAheadToken = tok;
             return tok;
@@ -225,38 +222,37 @@ namespace TinyPG
 
     public enum TokenType
     {
+        //Non terminal tokens:
+        _NONE_ = 0,
+        _UNDETERMINED_ = 1,
 
-            //Non terminal tokens:
-            _NONE_  = 0,
-            _UNDETERMINED_= 1,
+        //Non terminal tokens:
+        Start = 2,
+        ActionNode = 3,
+        EntityIdClause = 4,
+        PostTimeClause = 5,
+        ChangeStatusClause = 6,
+        PostCommentClause = 7,
 
-            //Non terminal tokens:
-            Start   = 2,
-            ActionNode= 3,
-            EntityIdClause= 4,
-            PostTimeClause= 5,
-            ChangeStatusClause= 6,
-            PostCommentClause= 7,
-
-            //Terminal tokens:
-            IdKeyword1= 8,
-            IdKeyword2= 9,
-            TimeKeyword= 10,
-            StatusKeyword1= 11,
-            StatusKeyword2= 12,
-            CommentKeyword1= 13,
-            CommentKeyword2= 14,
-            CommentKeyword3= 15,
-            CommentKeyword4= 16,
-            EOF     = 17,
-            SPACE   = 18,
-            Delimiter= 19,
-            PUNCTUATIONMARK= 20,
-            COMMA   = 21,
-            NUMBER  = 22,
-            DECIMAL = 23,
-            ANY_TEXT= 24,
-            ANY_SYMBOL= 25
+        //Terminal tokens:
+        IdKeyword1 = 8,
+        IdKeyword2 = 9,
+        TimeKeyword = 10,
+        StatusKeyword1 = 11,
+        StatusKeyword2 = 12,
+        CommentKeyword1 = 13,
+        CommentKeyword2 = 14,
+        CommentKeyword3 = 15,
+        CommentKeyword4 = 16,
+        EOF = 17,
+        SPACE = 18,
+        Delimiter = 19,
+        PUNCTUATIONMARK = 20,
+        COMMA = 21,
+        NUMBER = 22,
+        DECIMAL = 23,
+        ANY_TEXT = 24,
+        ANY_SYMBOL = 25
     }
 
     public class Token
@@ -269,36 +265,42 @@ namespace TinyPG
         // contains all prior skipped symbols
         private List<Token> skipped;
 
-        public int StartPos { 
-            get { return startpos;} 
+        public int StartPos
+        {
+            get { return startpos; }
             set { startpos = value; }
         }
 
-        public int Length { 
-            get { return endpos - startpos;} 
+        public int Length
+        {
+            get { return endpos - startpos; }
         }
 
-        public int EndPos { 
-            get { return endpos;} 
+        public int EndPos
+        {
+            get { return endpos; }
             set { endpos = value; }
         }
 
-        public string Text { 
-            get { return text;} 
+        public string Text
+        {
+            get { return text; }
             set { text = value; }
         }
 
-        public List<Token> Skipped { 
-            get { return skipped;} 
+        public List<Token> Skipped
+        {
+            get { return skipped; }
             set { skipped = value; }
         }
-        public object Value { 
-            get { return value;} 
+
+        public object Value
+        {
+            get { return value; }
             set { this.value = value; }
         }
 
-        [XmlAttribute]
-        public TokenType Type;
+        [XmlAttribute] public TokenType Type;
 
         public Token()
             : this(0, 0)

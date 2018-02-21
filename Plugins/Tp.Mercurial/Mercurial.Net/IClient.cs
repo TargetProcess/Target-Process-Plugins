@@ -27,10 +27,7 @@ namespace Mercurial
         /// Gets the path to the repository (or not-yet-repository) that the client
         /// is managing.
         /// </summary>
-        string RepositoryPath
-        {
-            get;
-        }
+        string RepositoryPath { get; }
 
         /// <summary>
         /// Stops command executing.

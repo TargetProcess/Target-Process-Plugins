@@ -7,12 +7,12 @@ using NServiceBus;
 
 namespace Tp.Integration.Plugin.Common.PluginLifecycle
 {
-	public class PluginInitializer : PluginInfoSender, IWantCustomInitialization
-	{
-		public void Init()
-		{
-			SendInfoMessages();
-			SendPluginScriptMessages();
-		}
-	}
+    public class PluginInitializer : PluginInfoSender, IWantCustomInitialization
+    {
+        public void Init()
+        {
+            SendInfoMessages();
+            SendPluginScriptMessages();
+        }
+    }
 }

@@ -12,65 +12,66 @@ using Tp.Integration.Plugin.Common.Storage.Persisters;
 
 namespace Tp.Integration.Plugin.Common.Storage.Repositories
 {
-	internal class AccountRepository : IAccountRepository
-	{
-		private readonly IProfileRepository _profileRepository;
-		private readonly IProfileFactory _profileFactory;
-		private readonly IAccountPersister _accountPersister;
-		private readonly IEventAggregator _eventAggregator;
+    internal class AccountRepository : IAccountRepository
+    {
+        private readonly IProfileRepository _profileRepository;
+        private readonly IProfileFactory _profileFactory;
+        private readonly IAccountPersister _accountPersister;
+        private readonly IEventAggregator _eventAggregator;
 
-		public AccountRepository(IProfileRepository profileRepository, IProfileFactory profileFactory, IAccountPersister accountPersister, IEventAggregator eventAggregator)
-		{
-			_profileRepository = profileRepository;
-			_profileFactory = profileFactory;
-			_accountPersister = accountPersister;
-			_eventAggregator = eventAggregator;
-		}
+        public AccountRepository(IProfileRepository profileRepository, IProfileFactory profileFactory, IAccountPersister accountPersister,
+            IEventAggregator eventAggregator)
+        {
+            _profileRepository = profileRepository;
+            _profileFactory = profileFactory;
+            _accountPersister = accountPersister;
+            _eventAggregator = eventAggregator;
+        }
 
-		public IList<AccountDomainObject> GetAll()
-		{
-			return _accountPersister.GetAll()
-									.Select(CreateAccount)
-									.ToList()
-									.AsReadOnly();
-		}
+        public IList<AccountDomainObject> GetAll()
+        {
+            return _accountPersister.GetAll()
+                .Select(CreateAccount)
+                .ToList()
+                .AsReadOnly();
+        }
 
-		public AccountDomainObject Add(AccountName accountName)
-		{
-			var newAccount = _accountPersister.Add(accountName);
-			return CreateAccount(newAccount.Name, Enumerable.Empty<Profile>());
-		}
+        public AccountDomainObject Add(AccountName accountName)
+        {
+            var newAccount = _accountPersister.Add(accountName);
+            return CreateAccount(newAccount.Name, Enumerable.Empty<Profile>());
+        }
 
-		public AccountDomainObject GetBy(AccountName accountName)
-		{
-			var account = _accountPersister.GetBy(accountName);
-			if(account == null)
-			{
-				return null;
-			}
+        public AccountDomainObject GetBy(AccountName accountName)
+        {
+            var account = _accountPersister.GetBy(accountName);
+            if (account == null)
+            {
+                return null;
+            }
 
-			return CreateAccount(account);
-		}
+            return CreateAccount(account);
+        }
 
-		public void Remove(AccountName accountName)
-		{
-			_accountPersister.Remove(accountName);
-		}
+        public void Remove(AccountName accountName)
+        {
+            _accountPersister.Remove(accountName);
+        }
 
-		private AccountDomainObject CreateAccount(Account account)
-		{
-			return CreateAccount(account.Name, account.Profiles);
-		}
+        private AccountDomainObject CreateAccount(Account account)
+        {
+            return CreateAccount(account.Name, account.Profiles);
+        }
 
-		private AccountDomainObject CreateAccount(AccountName accountName, IEnumerable<Profile> profiles)
-		{
-			var profileDomainObjects = profiles.Select(p => _profileFactory.Create(p, accountName)).ToList();
-			var profileCollection = new ProfileCollection(accountName, profileDomainObjects)
-			                        	{
-			                        		EventAggregator = _eventAggregator,
-											ProfileRepository = _profileRepository
-			                        	};
-			return new AccountDomainObject(accountName, profileCollection);
-		}
-	}
+        private AccountDomainObject CreateAccount(AccountName accountName, IEnumerable<Profile> profiles)
+        {
+            var profileDomainObjects = profiles.Select(p => _profileFactory.Create(p, accountName)).ToList();
+            var profileCollection = new ProfileCollection(accountName, profileDomainObjects)
+            {
+                EventAggregator = _eventAggregator,
+                ProfileRepository = _profileRepository
+            };
+            return new AccountDomainObject(accountName, profileCollection);
+        }
+    }
 }

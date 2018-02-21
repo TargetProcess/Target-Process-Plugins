@@ -2,8 +2,8 @@
 
 namespace hOOt
 {
-	public interface ITokensParser
-	{
-		Dictionary<string, int> Parse(string text);
-	}
+    public interface ITokensParser
+    {
+        Dictionary<string, int> Parse(string text);
+    }
 }

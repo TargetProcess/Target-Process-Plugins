@@ -27,26 +27,26 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Subversion.SerializationPatches
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class PatchTests
-	{
-		[SetUp]
-		public void Init()
-		{
-			ObjectFactory.Initialize(x => x.AddRegistry<SubversionRegistry>());
-			ObjectFactory.Configure(
-				x =>
-				x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof (SubversionPluginProfile).Assembly,
-				                                                                        new List<Assembly>
-				                                                                        	{typeof (Command).Assembly})));
-		}
+    public class PatchTests
+    {
+        [SetUp]
+        public void Init()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<SubversionRegistry>());
+            ObjectFactory.Configure(
+                x =>
+                    x.For<TransportMock>().Use(TransportMock.CreateWithoutStructureMapClear(typeof(SubversionPluginProfile).Assembly,
+                        new List<Assembly>
+                            { typeof(Command).Assembly })));
+        }
 
-		[Test]
-		public void NewRevisionRangeDetectedLocalMessagePatch()
-		{
-			const string oldMessage =
-				@"<?xml version=""1.0"" encoding=""utf-8""?>
+        [Test]
+        public void NewRevisionRangeDetectedLocalMessagePatch()
+        {
+            const string oldMessage =
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
 <object name="""" type=""TK0"" assembly="""">
 	<!-- Data section : Don't edit any attributes ! -->
 	<items>
@@ -131,35 +131,37 @@ namespace Tp.Subversion.SerializationPatches
 	</typedictionary>
 </object>";
 
-			var newRevisionRangeDetectedLocalMessage = Deserialize(oldMessage);
-			((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.FromChangeset.Value.Should(
-				Be.EqualTo("1"), "((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.FromChangeset.Value.Should(Be.EqualTo(\"1\"))");
-			((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.ToChangeset.Value.Should(
-				Be.EqualTo("2"), "((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.ToChangeset.Value.Should(Be.EqualTo(\"2\"))");
-		}
+            var newRevisionRangeDetectedLocalMessage = Deserialize(oldMessage);
+            ((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.FromChangeset.Value.Should(
+                Be.EqualTo("1"),
+                "((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.FromChangeset.Value.Should(Be.EqualTo(\"1\"))");
+            ((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.ToChangeset.Value.Should(
+                Be.EqualTo("2"),
+                "((NewRevisionRangeDetectedLocalMessage) newRevisionRangeDetectedLocalMessage[0]).Range.ToChangeset.Value.Should(Be.EqualTo(\"2\"))");
+        }
 
-		[Test]
-		public void RevisionRangeInProfileStorage()
-		{
-			const string oldXml =
-				@"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+        [Test]
+        public void RevisionRangeInProfileStorage()
+        {
+            const string oldXml =
+                @"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <Type>Tp.Subversion.VersionControlSystem.RevisionRange, Tp.Subversion</Type>
   <Version>2</Version>
   <string>{""__type"":""RevisionRange:#Tp.Subversion.VersionControlSystem"",""FromChangeset"":{""__type"":""SvnRevisionId:#Tp.Subversion.Subversion"",""_value"":1},""ToChangeset"":{""__type"":""SvnRevisionId:#Tp.Subversion.Subversion"",""_value"":2}}</string>
 </Value>
 ";
-			var result =
-				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(RevisionRange)).Value) as
-				RevisionRange;
-			result.FromChangeset.Value.Should(Be.EqualTo("1"), "result.FromChangeset.Value.Should(Be.EqualTo(\"1\"))");
-			result.ToChangeset.Value.Should(Be.EqualTo("2"), "result.ToChangeset.Value.Should(Be.EqualTo(\"2\"))");
-		}
+            var result =
+                BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(RevisionRange)).Value) as
+                    RevisionRange;
+            result.FromChangeset.Value.Should(Be.EqualTo("1"), "result.FromChangeset.Value.Should(Be.EqualTo(\"1\"))");
+            result.ToChangeset.Value.Should(Be.EqualTo("2"), "result.ToChangeset.Value.Should(Be.EqualTo(\"2\"))");
+        }
 
-		[Test]
-		public void NewRevisionDetectedLocalMessagePatch()
-		{
-			const string oldMessage =
-				@"<?xml version=""1.0"" encoding=""utf-8""?>
+        [Test]
+        public void NewRevisionDetectedLocalMessagePatch()
+        {
+            const string oldMessage =
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
 <object name="""" type=""TK0"" assembly="""">
 	<!-- Data section : Don't edit any attributes ! -->
 	<items>
@@ -319,29 +321,30 @@ namespace Tp.Subversion.SerializationPatches
 	</typedictionary>
 </object>";
 
-			var newRevisionDetectedLocalMessage = Deserialize(oldMessage);
-			var revisionInfo = ((NewRevisionDetectedLocalMessage) newRevisionDetectedLocalMessage[0]).Revision;
-			revisionInfo.Author.Should(Be.EqualTo("author"), "revisionInfo.Author.Should(Be.EqualTo(\"author\"))");
-			revisionInfo.Comment.Should(Be.EqualTo("comment"), "revisionInfo.Comment.Should(Be.EqualTo(\"comment\"))");
-			revisionInfo.Id.Value.Should(Be.EqualTo("1"), "revisionInfo.Id.Value.Should(Be.EqualTo(\"1\"))");
-			revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add), "revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add))");
-			revisionInfo.Entries[0].Path.Should(Be.EqualTo("path"), "revisionInfo.Entries[0].Path.Should(Be.EqualTo(\"path\"))");
-		}
+            var newRevisionDetectedLocalMessage = Deserialize(oldMessage);
+            var revisionInfo = ((NewRevisionDetectedLocalMessage) newRevisionDetectedLocalMessage[0]).Revision;
+            revisionInfo.Author.Should(Be.EqualTo("author"), "revisionInfo.Author.Should(Be.EqualTo(\"author\"))");
+            revisionInfo.Comment.Should(Be.EqualTo("comment"), "revisionInfo.Comment.Should(Be.EqualTo(\"comment\"))");
+            revisionInfo.Id.Value.Should(Be.EqualTo("1"), "revisionInfo.Id.Value.Should(Be.EqualTo(\"1\"))");
+            revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add),
+                "revisionInfo.Entries[0].Action.Should(Be.EqualTo(FileActionEnum.Add))");
+            revisionInfo.Entries[0].Path.Should(Be.EqualTo("path"), "revisionInfo.Entries[0].Path.Should(Be.EqualTo(\"path\"))");
+        }
 
-		private static object[] Deserialize(string oldMessage)
-		{
-			var byteArray = Encoding.ASCII.GetBytes(oldMessage);
-			var stream = new MemoryStream(byteArray);
+        private static object[] Deserialize(string oldMessage)
+        {
+            var byteArray = Encoding.ASCII.GetBytes(oldMessage);
+            var stream = new MemoryStream(byteArray);
 
-			var newRevisionRangeDetectedLocalMessage = new AdvancedXmlSerializer().Deserialize(stream) as object[];
-			return newRevisionRangeDetectedLocalMessage;
-		}
+            var newRevisionRangeDetectedLocalMessage = new AdvancedXmlSerializer().Deserialize(stream) as object[];
+            return newRevisionRangeDetectedLocalMessage;
+        }
 
-		[Test]
-		public void RevisionCreateLocalMessagePatch()
-		{
-			const string oldMessage =
-				@"<?xml version=""1.0"" encoding=""utf-8""?>
+        [Test]
+        public void RevisionCreateLocalMessagePatch()
+        {
+            const string oldMessage =
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
 <object name="""" type=""TK0"" assembly="""">
 	<!-- Data section : Don't edit any attributes ! -->
 	<items>
@@ -406,16 +409,16 @@ namespace Tp.Subversion.SerializationPatches
 		</items>
 	</typedictionary>
 </object>";
-			var revisionCreatedLocalMessage = Deserialize(oldMessage);
-			var dto = ((RevisionCreatedLocalMessage) revisionCreatedLocalMessage[0]).Dto;
-			dto.ID.Should(Be.EqualTo(1), "dto.ID.Should(Be.EqualTo(1))");
-		}
+            var revisionCreatedLocalMessage = Deserialize(oldMessage);
+            var dto = ((RevisionCreatedLocalMessage) revisionCreatedLocalMessage[0]).Dto;
+            dto.ID.Should(Be.EqualTo(1), "dto.ID.Should(Be.EqualTo(1))");
+        }
 
-		[Test]
-		public void ActionPatch()
-		{
-			const string oldMessage =
-				@"<?xml version=""1.0"" encoding=""utf-8""?>
+        [Test]
+        public void ActionPatch()
+        {
+            const string oldMessage =
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
 <object name="""" type=""TK0"" assembly="""">
 	<!-- Data section : Don't edit any attributes ! -->
 	<items>
@@ -579,55 +582,67 @@ namespace Tp.Subversion.SerializationPatches
 	</typedictionary>
 </object>";
 
-			var revisionCreatedLocalMessage = Deserialize(oldMessage);
-			var assignRevisionToEntityAction = revisionCreatedLocalMessage[0] as AssignRevisionToEntityAction;
-			assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1), "assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1))");
+            var revisionCreatedLocalMessage = Deserialize(oldMessage);
+            var assignRevisionToEntityAction = revisionCreatedLocalMessage[0] as AssignRevisionToEntityAction;
+            assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1), "assignRevisionToEntityAction.Dto.ID.Should(Be.EqualTo(1))");
 
-			assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>(), "assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>())");
-			((ChangeStatusAction)assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo("status"), "((ChangeStatusAction)assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo(\"status\"))");
+            assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>(),
+                "assignRevisionToEntityAction.Children[0].Should(Be.TypeOf<ChangeStatusAction>())");
+            ((ChangeStatusAction) assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo("status"),
+                "((ChangeStatusAction)assignRevisionToEntityAction.Children[0]).Status.Should(Be.EqualTo(\"status\"))");
 
-			assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>(), "assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>())");
-			((PostCommentAction)assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo("comment"), "((PostCommentAction)assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo(\"comment\"))");
+            assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>(),
+                "assignRevisionToEntityAction.Children[1].Should(Be.TypeOf<PostCommentAction>())");
+            ((PostCommentAction) assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo("comment"),
+                "((PostCommentAction)assignRevisionToEntityAction.Children[1]).Comment.Should(Be.EqualTo(\"comment\"))");
 
-			assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>(), "assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>())");
-			((PostTimeAction)assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10), "((PostTimeAction)assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10))");
-		}
+            assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>(),
+                "assignRevisionToEntityAction.Children[2].Should(Be.TypeOf<PostTimeAction>())");
+            ((PostTimeAction) assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10),
+                "((PostTimeAction)assignRevisionToEntityAction.Children[2]).TimeSpent.Should(Be.EqualTo(10))");
+        }
 
-		[Test]
-		public void CreateRevisionSaga()
-		{
-			const string oldXml =
-				@"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+        [Test]
+        public void CreateRevisionSaga()
+        {
+            const string oldXml =
+                @"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <Type>Tp.Subversion.Workflow.CreateRevisionSagaData, Tp.Subversion</Type>
   <Version>2</Version>
   <string>{""__type"":""CreateRevisionSagaData:#Tp.Subversion.Workflow"",""&lt;Id&gt;k__BackingField"":""baf1a9ae-b874-44ea-827d-9fb400b48a78"",""&lt;OriginalMessageId&gt;k__BackingField"":""b4a0874e-6a92-4920-8e29-bea29a8ff361\\5498259"",""&lt;Originator&gt;k__BackingField"":""Tp.SubversionIntegration@TRUHTANOV"",""&lt;RevisionEntries&gt;k__BackingField"":[{""Action"":3,""Path"":""\/New\/test.txt""}],""&lt;RevisionFilesCreated&gt;k__BackingField"":0,""&lt;RevisionId&gt;k__BackingField"":0}</string>
 </Value>
 ";
-			var result =
-				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(CreateRevisionSagaData)).Value) as
-				CreateRevisionSagaData;
-			result.Id.ToString().Should(Be.EqualTo("baf1a9ae-b874-44ea-827d-9fb400b48a78"), "result.Id.ToString().Should(Be.EqualTo(\"baf1a9ae-b874-44ea-827d-9fb400b48a78\"))");
-			result.RevisionId.Should(Be.EqualTo(0), "result.RevisionId.Should(Be.EqualTo(0))");
-			result.RevisionFilesCreated.Should(Be.EqualTo(0), "result.RevisionFilesCreated.Should(Be.EqualTo(0))");
-			result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify), "result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify))");
-			result.RevisionEntries[0].Path.Should(Be.EqualTo(@"/New/test.txt"), "result.RevisionEntries[0].Path.Should(Be.EqualTo(@\"/New/test.txt\"))");
-		}
+            var result =
+                BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(CreateRevisionSagaData)).Value) as
+                    CreateRevisionSagaData;
+            result.Id.ToString()
+                .Should(Be.EqualTo("baf1a9ae-b874-44ea-827d-9fb400b48a78"),
+                    "result.Id.ToString().Should(Be.EqualTo(\"baf1a9ae-b874-44ea-827d-9fb400b48a78\"))");
+            result.RevisionId.Should(Be.EqualTo(0), "result.RevisionId.Should(Be.EqualTo(0))");
+            result.RevisionFilesCreated.Should(Be.EqualTo(0), "result.RevisionFilesCreated.Should(Be.EqualTo(0))");
+            result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify),
+                "result.RevisionEntries[0].Action.Should(Be.EqualTo(FileActionEnum.Modify))");
+            result.RevisionEntries[0].Path.Should(Be.EqualTo(@"/New/test.txt"),
+                "result.RevisionEntries[0].Path.Should(Be.EqualTo(@\"/New/test.txt\"))");
+        }
 
-		[Test, Ignore]
-		public void AttachToEntitySaga()
-		{
-			const string oldXml =
-				@"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+        [Test, Ignore]
+        public void AttachToEntitySaga()
+        {
+            const string oldXml =
+                @"<Value xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
 	<Type>Tp.Subversion.Workflow.AttachToEntitySagaData, Tp.Subversion</Type>
 	<Version>2</Version>
 	<string>{""__type"":""AttachToEntitySagaData:#Tp.Subversion.Workflow"",""EntityId"":0,""Id"":""c2afc097-6ea3-4a0e-8170-9fb400bb8bbe"",""OriginalMessageId"":""b4a0874e-6a92-4920-8e29-bea29a8ff361\\5498359"",""Originator"":""Tp.SubversionIntegration@TRUHTANOV"",""RevisionDto"":{""&lt;ID&gt;k__BackingField"":null,""&lt;AuthorID&gt;k__BackingField"":null,""&lt;CommitDate&gt;k__BackingField"":null,""&lt;Description&gt;k__BackingField"":null,""&lt;PluginProfileID&gt;k__BackingField"":null,""&lt;ProjectID&gt;k__BackingField"":null,""&lt;ProjectName&gt;k__BackingField"":null,""&lt;RevisionID&gt;k__BackingField"":1,""&lt;SourceControlID&gt;k__BackingField"":null}}</string>
 </Value>
 ";
-			var result =
-				BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(AttachToEntitySagaData)).Value) as
-				AttachToEntitySagaData;
-			result.Id.ToString().Should(Be.EqualTo("c2afc097-6ea3-4a0e-8170-9fb400bb8bbe"), "result.Id.ToString().Should(Be.EqualTo(\"c2afc097-6ea3-4a0e-8170-9fb400bb8bbe\"))");
-			result.RevisionDto.ID.Should(Be.EqualTo(1), "result.RevisionDto.ID.Should(Be.EqualTo(1))");
-		}
-	}
+            var result =
+                BlobSerializer.Deserialize(XDocument.Parse(oldXml), new TypeNameWithoutVersion(typeof(AttachToEntitySagaData)).Value) as
+                    AttachToEntitySagaData;
+            result.Id.ToString()
+                .Should(Be.EqualTo("c2afc097-6ea3-4a0e-8170-9fb400bb8bbe"),
+                    "result.Id.ToString().Should(Be.EqualTo(\"c2afc097-6ea3-4a0e-8170-9fb400bb8bbe\"))");
+            result.RevisionDto.ID.Should(Be.EqualTo(1), "result.RevisionDto.ID.Should(Be.EqualTo(1))");
+        }
+    }
 }

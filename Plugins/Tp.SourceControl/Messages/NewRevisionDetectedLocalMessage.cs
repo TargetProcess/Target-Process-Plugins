@@ -9,8 +9,8 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Messages
 {
-	public class NewRevisionDetectedLocalMessage : SagaMessage, IPluginLocalMessage
-	{
-		public RevisionInfo Revision { get; set; }
-	}
+    public class NewRevisionDetectedLocalMessage : SagaMessage, IPluginLocalMessage
+    {
+        public RevisionInfo Revision { get; set; }
+    }
 }

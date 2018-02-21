@@ -8,48 +8,50 @@ using System;
 namespace Tp.SourceControl.Testing.Repository.Tfs
 {
     public class TfsTestRepositoryWithMergeCommit : IVcsRepository
-	{
-		protected string Name
-		{
-			get { return "TestRepositoryWithMergeCommit"; }
-		}
+    {
+        protected string Name
+        {
+            get { return "TestRepositoryWithMergeCommit"; }
+        }
 
         public Uri Uri
         {
             get
             {
-                return new Uri(string.Concat(ConfigHelper.Instance.TestCollectionWithMergeCommit, "/", ConfigHelper.Instance.TestProjectWithMergeCommit));
+                return
+                    new Uri(string.Concat(ConfigHelper.Instance.TestCollectionWithMergeCommit, "/",
+                        ConfigHelper.Instance.TestProjectWithMergeCommit));
             }
         }
 
         public string Login
-		{
+        {
             get { return ConfigHelper.Instance.Login; }
-		}
+        }
 
-		public string Password
-		{
+        public string Password
+        {
             get { return ConfigHelper.Instance.Password; }
-		}
+        }
 
-		public void Commit(string commitComment)
-		{
-			throw new System.NotImplementedException();
-		}
+        public void Commit(string commitComment)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public string Commit(string filePath, string changedContent, string commitComment)
-		{
-			throw new System.NotImplementedException();
-		}
+        public string Commit(string filePath, string changedContent, string commitComment)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public void CheckoutBranch(string branch)
-		{
-			throw new System.NotImplementedException();
-		}
+        public void CheckoutBranch(string branch)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public string CherryPick(string revisionId)
-		{
-			throw new System.NotImplementedException();
-		}
-	}
+        public string CherryPick(string revisionId)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

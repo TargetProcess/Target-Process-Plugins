@@ -8,14 +8,14 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.PopEmailIntegration.LegacyProfileConversion
 {
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class LegacyProfileConverterSpecs
-	{
-		[Test]
-		public void ShouldConvertAllProjectEmailSettingsIntoProjectEmailPluginProfiles()
-		{
-			@"Given project 'Pr' created
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class LegacyProfileConverterSpecs
+    {
+        [Test]
+        public void ShouldConvertAllProjectEmailSettingsIntoProjectEmailPluginProfiles()
+        {
+            @"Given project 'Pr' created
 					And account name is 'Account'
 					And project 'Pr' InboundMailCreateRequests email setting is set to true
 					And project 'Pr' IsInboundMailEnabled email setting is set to true
@@ -38,24 +38,24 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 					And InboundMailPassword email plugin profile should be 'password'
 					And SyncInterval email plugin profile should be 5'
 					And email plugin profile should have exact rule : 'then attach to project ProjectId and create request in project ProjectId' where ProjectId is id of project 'Pr'"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMigrateProfilesForProjectsWithEmailIntegrationEnabledOnly()
-		{
-			@"Given project 'Pr' created
+        [Test]
+        public void ShouldMigrateProfilesForProjectsWithEmailIntegrationEnabledOnly()
+        {
+            @"Given project 'Pr' created
 					And account name is 'Account'
 					And project 'Pr' IsInboundMailEnabled email setting is set to false
 				When email settings from Target Process converted to e-mail plugin profile
 				Then 0 plugin profile should be created"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldAddProfilesWhenConverterRunTheSecondTime()
-		{
-			@"Given project 'Pr' created
+        [Test]
+        public void ShouldAddProfilesWhenConverterRunTheSecondTime()
+        {
+            @"Given project 'Pr' created
 					And account name is 'Account'
 					And project 'Pr' IsInboundMailEnabled email setting is set to true
 					And email settings from Target Process converted to e-mail plugin profile
@@ -63,13 +63,13 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 				When email settings from Target Process converted to e-mail plugin profile
 				Then 3 plugin profile should be created
 					And plugin profile names should be unique"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMigrateUsersAndProjectsToProfile()
-		{
-			@"Given project 'Pr' created
+        [Test]
+        public void ShouldMigrateUsersAndProjectsToProfile()
+        {
+            @"Given project 'Pr' created
 					And account name is 'Account'
 					And user 'User' created
 					And requester 'Requester' created
@@ -79,13 +79,13 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 					And profile storage should contain user 'User'
 					And profile storage should contain requester 'Requester'
 					And profile storage should contain project 'Pr'"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMigrateUidsToProfile()
-		{
-			@"Given project 'Pr' created
+        [Test]
+        public void ShouldMigrateUidsToProfile()
+        {
+            @"Given project 'Pr' created
 					And project 'Pr' InboundMailServer is set to 'company.pop3.server'
 					And project 'Pr' InboundMailLogin is set to 'login'
 					And project 'Pr' IsInboundMailEnabled email setting is set to true
@@ -96,24 +96,24 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 				Then 1 plugin profile should be created
 					And profile storage should contain messageUid with uid 'uid1' for server 'company.pop3.server' and login 'login'
 					And profile storage should not contain messageUid with uid 'uid2'"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldUseTpDatabaseAsPluginWhenNoPluginDbProvided()
-		{
-			@"Given project 'Pr' created
+        [Test]
+        public void ShouldUseTpDatabaseAsPluginWhenNoPluginDbProvided()
+        {
+            @"Given project 'Pr' created
 					And account name is 'Account'
 					And project 'Pr' IsInboundMailEnabled email setting is set to true
 				When email settings from Target Process converted to e-mail plugin profile without Plugin DB specified
 				Then 1 plugin profile should be created"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMigrateDataFromBindEmailToProjectPlugin()
-		{
-			@"Given project 'Pr' created
+        [Test]
+        public void ShouldMigrateDataFromBindEmailToProjectPlugin()
+        {
+            @"Given project 'Pr' created
 					And account name is 'Account'
 					And project 'Pr' IsInboundMailEnabled email setting is set to true
 					And bind email plugin has active profile 'Profile1'
@@ -127,13 +127,13 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 					And 1 plugin profile should be created
 					And email plugin profile should contains rule : 'when subject contains 'Jira1,Jira2,Jira4' then attach to project ProjectId' where ProjectId is id of project 'Pr'
 					And email plugin profile should contains rule : 'then attach to project ProjectId' where ProjectId is id of project 'Pr'"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMigrateBinderProfilesToEachPopProfile()
-		{
-			@"Given project 'Pr1' created
+        [Test]
+        public void ShouldMigrateBinderProfilesToEachPopProfile()
+        {
+            @"Given project 'Pr1' created
 					And project 'Pr2' created
 					And account name is 'Account'
 					And project 'Pr1' IsInboundMailEnabled email setting is set to true
@@ -146,13 +146,13 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 					And 1 plugin profile should be created
 					And email plugin profile should contains rule : 'when subject contains 'Jira1' then attach to project ProjectId and create request in project ProjectId' where ProjectId is id of project 'Pr2'
 					And email plugin profile should contains rule : 'then attach to project ProjectId' where ProjectId is id of project 'Pr1'"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
 
-		[Test]
-		public void ShouldMergeProfilesIfMappedToTheSameInbox()
-		{
-			@"Given project 'Pr1' created
+        [Test]
+        public void ShouldMergeProfilesIfMappedToTheSameInbox()
+        {
+            @"Given project 'Pr1' created
 					And project 'Pr2' created
 					And account name is 'Account'
 					And project 'Pr1' InboundMailServer is set to 'company.pop3.server'
@@ -171,7 +171,7 @@ namespace Tp.PopEmailIntegration.LegacyProfileConversion
 					And email plugin profile should contains rule : 'when subject contains 'Jira1' then attach to project ProjectId and create request in project ProjectId' where ProjectId is id of project 'Pr2'
 					And email plugin profile should contains rule : 'then attach to project ProjectId and create request in project ProjectId' where ProjectId is id of project 'Pr1'
 					And email plugin profile should contains rule : 'then attach to project ProjectId' where ProjectId is id of project 'Pr2'"
-				.Execute(In.Context<LegacyProfileConverterActionSteps>());
-		}
-	}
+                .Execute(In.Context<LegacyProfileConverterActionSteps>());
+        }
+    }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.TeamFoundation.DeleteTeamProject</name>
+    </assembly>
+    <members>
+        <member name="P:Microsoft.TeamFoundation.Client.TeamProjectDeleter.HasWssToDelete">
+            <summary>
+            Indicates whether the project has a WSS site to delete.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Client.TeamProjectDeleter.ExcludeWss">
+            <summary>
+            Indicates that the WSS site should not be deleted.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.Initialize">
+            <summary>
+            Initialize the project information, proxies, and catalog info.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.Delete">
+            <summary>
+            Attempts to delete the team project.  Throws an exception if it cannot.  If the 'force'
+            parameter is set in the constructor, will not throw exceptions if it cannot delete any one
+            part of the project, but will continue trying to delete individual components.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.DetachWssSite">
+            <summary>
+            Detaches the WSS site from TFS.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.DoDelete(System.String,System.String,System.String)">
+             <summary>
+             Calls the delete method on the specified service for the specified project.
+             </summary>
+             <param name="friendlyName"></param>
+             <param name="serviceUri"></param>
+             <param name="projectUri"></param>
+             <returns>
+             if 'force' is false, 
+                 this method will either return 'true' or it will throw an exception.
+             if 'force' is true, 
+                 this method will return 'true' if there were no exceptions while deleting the project, 'false' otherwise
+            </returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.ReportSiteExists">
+            <summary>
+            Checks for the existence of the report folder.
+            </summary>
+            <returns>true if the report folder exists, false otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.InitializeWss">
+            <summary>
+            Initializes the WSS Admin proxy and ensures that either the service is unavailable
+            or that the service is present and we can access it.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Client.TeamProjectDeleter.InitializeRosetta">
+            <summary>
+            Initializes the Rosetta proxy and ensures that either the service is unavailable
+            or that the service is present and we can access it.
+            </summary>
+        </member>
+    </members>
+</doc>

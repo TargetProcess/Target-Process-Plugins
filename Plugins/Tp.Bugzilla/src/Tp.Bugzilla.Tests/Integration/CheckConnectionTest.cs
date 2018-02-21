@@ -17,22 +17,26 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Integration
 {
-	[TestFixture, ActionSteps]
-	[Category("PartPlugins0")]
-	public class CheckConnectionTest : BugzillaTestBase
-	{
-		private readonly PluginProfileErrorCollection _errors = new PluginProfileErrorCollection();
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class CheckConnectionTest : BugzillaTestBase
+    {
+        private readonly PluginProfileErrorCollection _errors = new PluginProfileErrorCollection();
 
-		[SetUp]
-		public void Setup()
-		{
-			ObjectFactory.Configure(x => x.For<TransportMock>().HybridHttpOrThreadLocalScoped().Use(TransportMock.CreateWithoutStructureMapClear(typeof (BugzillaProfile).Assembly)));
-		}
+        [SetUp]
+        public void Setup()
+        {
+            ObjectFactory.Configure(
+                x =>
+                    x.For<TransportMock>()
+                        .HybridHttpOrThreadLocalScoped()
+                        .Use(TransportMock.CreateWithoutStructureMapClear(typeof(BugzillaProfile).Assembly)));
+        }
 
-		[Test]
-		public void ShouldCheckValidConnection()
-		{
-			@"
+        [Test]
+        public void ShouldCheckValidConnection()
+        {
+            @"
 				Given bugzilla profile created
 					And Bugzilla url set to 'default'
 					And login set to 'default'
@@ -41,13 +45,13 @@ namespace Tp.Bugzilla.Tests.Integration
 				When check connection to Bugzilla
 				Then connection should be successful
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldCheckConnectionWithInvalidPath()
-		{
-			@"
+        [Test]
+        public void ShouldCheckConnectionWithInvalidPath()
+        {
+            @"
 				Given bugzilla profile created
 					And Bugzilla url set to 'http://new-bugzilla/bugzillaSomeNumbers'
 					And login set to 'default'
@@ -55,13 +59,13 @@ namespace Tp.Bugzilla.Tests.Integration
 				When check connection to Bugzilla
 				Then connection should be failed
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldCheckConnectionWithInvalidCredentials()
-		{
-			@"
+        [Test]
+        public void ShouldCheckConnectionWithInvalidCredentials()
+        {
+            @"
 				Given bugzilla profile created
 					And Bugzilla url set to 'default'
 					And login set to 'invalid@email.com'
@@ -69,13 +73,13 @@ namespace Tp.Bugzilla.Tests.Integration
 				When check connection to Bugzilla
 				Then authentication should be failed
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldCheckConnectionWithInvalidQuery()
-		{
-			@"
+        [Test]
+        public void ShouldCheckConnectionWithInvalidQuery()
+        {
+            @"
 				Given bugzilla profile created
 					And Bugzilla url set to 'default'
 					And login set to 'default'
@@ -84,13 +88,13 @@ namespace Tp.Bugzilla.Tests.Integration
 				When check connection to Bugzilla
 				Then query validation should be failed
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test, Ignore("Move to functional test because of test searches presetup is needed")]
-		public void ShouldCheckValidConnectionWhenQueriesSeparatedWithSpaces()
-		{
-			@"
+        [Test, Ignore("Move to functional test because of test searches presetup is needed")]
+        public void ShouldCheckValidConnectionWhenQueriesSeparatedWithSpaces()
+        {
+            @"
 				Given bugzilla profile created
 					And Bugzilla url set to 'default'
 					And login set to 'default'
@@ -99,96 +103,98 @@ namespace Tp.Bugzilla.Tests.Integration
 				When check connection to Bugzilla
 				Then connection should be successful
 			"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Given("bugzilla profile created")]
-		public void CreateBugzillaProfile()
-		{
-			Context.AddProfile("Profile_1", 1);
-		}
+        [Given("bugzilla profile created")]
+        public void CreateBugzillaProfile()
+        {
+            Context.AddProfile("Profile_1", 1);
+        }
 
-		[Given("Bugzilla url set to '$bugzillaUrl'")]
-		public void SetBugzillaPath(string bugzillaUrl)
-		{
-			Profile.GetProfile<BugzillaProfile>().Url = GivenStepValueSelector.Select(bugzillaUrl, BugzillaTestConstants.Url);
-		}
+        [Given("Bugzilla url set to '$bugzillaUrl'")]
+        public void SetBugzillaPath(string bugzillaUrl)
+        {
+            Profile.GetProfile<BugzillaProfile>().Url = GivenStepValueSelector.Select(bugzillaUrl, BugzillaTestConstants.Url);
+        }
 
-		[Given("login set to '$login'")]
-		public void SetLogin(string login)
-		{
-			Profile.GetProfile<BugzillaProfile>().Login = GivenStepValueSelector.Select(login, BugzillaTestConstants.Login);
-		}
+        [Given("login set to '$login'")]
+        public void SetLogin(string login)
+        {
+            Profile.GetProfile<BugzillaProfile>().Login = GivenStepValueSelector.Select(login, BugzillaTestConstants.Login);
+        }
 
-		[Given("password set to '$password'")]
-		public void SetBugzillaPassword(string password)
-		{
-			Profile.GetProfile<BugzillaProfile>().Password = GivenStepValueSelector.Select(password, BugzillaTestConstants.Password);
-		}
+        [Given("password set to '$password'")]
+        public void SetBugzillaPassword(string password)
+        {
+            Profile.GetProfile<BugzillaProfile>().Password = GivenStepValueSelector.Select(password, BugzillaTestConstants.Password);
+        }
 
-		[Given("query set to '$query'")]
-		public void SetBugzillaQuery(string query)
-		{
-			Profile.GetProfile<BugzillaProfile>().SavedSearches = GivenStepValueSelector.Select(query, BugzillaTestConstants.Queries);
-		}
+        [Given("query set to '$query'")]
+        public void SetBugzillaQuery(string query)
+        {
+            Profile.GetProfile<BugzillaProfile>().SavedSearches = GivenStepValueSelector.Select(query, BugzillaTestConstants.Queries);
+        }
 
-		private static class GivenStepValueSelector
-		{
-			public static string Select(string value, string defaultValue)
-			{
-				return value == "default" ? defaultValue : value;
-			}
-		}
+        private static class GivenStepValueSelector
+        {
+            public static string Select(string value, string defaultValue)
+            {
+                return value == "default" ? defaultValue : value;
+            }
+        }
 
-		[When("check connection to Bugzilla")]
-		public void CheckConnection()
-		{
-			try
-			{
-				new BugzillaService().CheckConnection(Profile.GetProfile<BugzillaProfile>());
-			}
-			catch (BugzillaPluginProfileException e)
-			{
-				foreach (var error in e.ErrorCollection)
-				{
-					_errors.Add(error);
-				}
-			}
-		}
+        [When("check connection to Bugzilla")]
+        public void CheckConnection()
+        {
+            try
+            {
+                new BugzillaService().CheckConnection(Profile.GetProfile<BugzillaProfile>());
+            }
+            catch (BugzillaPluginProfileException e)
+            {
+                foreach (var error in e.ErrorCollection)
+                {
+                    _errors.Add(error);
+                }
+            }
+        }
 
-		[Then("connection should be successful")]
-		public void ConnectionShouldBeSuccessful()
-		{
-			var sb = _errors.Aggregate(new StringBuilder(), (acc, err) => acc.AppendLine(err.Message));
-			if (sb.Length != 0)
-			{
-				Console.WriteLine("ConnectionShouldBeSuccessful errors:");
-				Console.WriteLine(sb);
-			}
-			_errors.Should(Be.Empty, "_errors.Should(Be.Empty)");
-		}
+        [Then("connection should be successful")]
+        public void ConnectionShouldBeSuccessful()
+        {
+            var sb = _errors.Aggregate(new StringBuilder(), (acc, err) => acc.AppendLine(err.Message));
+            if (sb.Length != 0)
+            {
+                Console.WriteLine("ConnectionShouldBeSuccessful errors:");
+                Console.WriteLine(sb);
+            }
+            _errors.Should(Be.Empty, "_errors.Should(Be.Empty)");
+        }
 
-		[Then("authentication should be failed")]
-		public void ConnectionShouldBeFailedForInvalidCredentials()
-		{
-			CheckErrorFields(new[] {BugzillaProfile.PasswordField, BugzillaProfile.LoginField});
-		}
+        [Then("authentication should be failed")]
+        public void ConnectionShouldBeFailedForInvalidCredentials()
+        {
+            CheckErrorFields(new[] { BugzillaProfile.PasswordField, BugzillaProfile.LoginField });
+        }
 
-		[Then("connection should be failed")]
-		public void ConnectionShouldBeFailed()
-		{
-			CheckErrorFields(new[] {BugzillaProfile.UrlField});
-		}
+        [Then("connection should be failed")]
+        public void ConnectionShouldBeFailed()
+        {
+            CheckErrorFields(new[] { BugzillaProfile.UrlField });
+        }
 
-		[Then("query validation should be failed")]
-		public void QueryValidationShouldBeFailed()
-		{
-			CheckErrorFields(new[] {BugzillaProfile.QueriesField});
-		}
+        [Then("query validation should be failed")]
+        public void QueryValidationShouldBeFailed()
+        {
+            CheckErrorFields(new[] { BugzillaProfile.QueriesField });
+        }
 
-		private void CheckErrorFields(IEnumerable<string> errorFields)
-		{
-			_errors.Select(e => e.FieldName).ToList().Should(Be.EquivalentTo(errorFields), "_errors.Select(e => e.FieldName).ToList().Should(Be.EquivalentTo(errorFields))");
-		}
-	}
+        private void CheckErrorFields(IEnumerable<string> errorFields)
+        {
+            _errors.Select(e => e.FieldName)
+                .ToList()
+                .Should(Be.EquivalentTo(errorFields), "_errors.Select(e => e.FieldName).ToList().Should(Be.EquivalentTo(errorFields))");
+        }
+    }
 }

@@ -8,9 +8,9 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	[Serializable]
-	public class SyncronizeWorkItemsMessage : IPluginLocalMessage
-	{
-		public WorkItemInfo WorkItem { get; set; }
-	}
+    [Serializable]
+    public class SyncronizeWorkItemsMessage : IPluginLocalMessage
+    {
+        public WorkItemInfo WorkItem { get; set; }
+    }
 }

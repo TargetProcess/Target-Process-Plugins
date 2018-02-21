@@ -13,33 +13,33 @@ using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class GetProfileInfoCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user=null)
-		{
-			IProfile profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
+    public class GetProfileInfoCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
+        {
+            IProfile profile = ObjectFactory.GetInstance<ISingleProfile>().Profile;
 
-			return profile == null ? GetEmptyResponseMessage() : GetResponseMessage(profile);
-		}
+            return profile == null ? GetEmptyResponseMessage() : GetResponseMessage(profile);
+        }
 
-		public string Name
-		{
-			get { return "GetProfileInfo"; }
-		}
+        public string Name
+        {
+            get { return "GetProfileInfo"; }
+        }
 
-		private PluginCommandResponseMessage GetResponseMessage(IProfile profile)
-		{
-			var command = ObjectFactory.GetInstance<GetProfileCommand>();
-			return command.Execute(profile.Name.Value, null);
-		}
+        private PluginCommandResponseMessage GetResponseMessage(IProfile profile)
+        {
+            var command = ObjectFactory.GetInstance<GetProfileCommand>();
+            return command.Execute(profile.Name.Value, null);
+        }
 
-		private PluginCommandResponseMessage GetEmptyResponseMessage()
-		{
-			return new PluginCommandResponseMessage
-				{
-					PluginCommandStatus = PluginCommandStatus.Succeed,
-					ResponseData = new PluginProfileDto {Name = string.Empty, Settings = new MashupManagerProfile()}.Serialize()
-				};
-		}
-	}
+        private PluginCommandResponseMessage GetEmptyResponseMessage()
+        {
+            return new PluginCommandResponseMessage
+            {
+                PluginCommandStatus = PluginCommandStatus.Succeed,
+                ResponseData = new PluginProfileDto { Name = string.Empty, Settings = new MashupManagerProfile() }.Serialize()
+            };
+        }
+    }
 }

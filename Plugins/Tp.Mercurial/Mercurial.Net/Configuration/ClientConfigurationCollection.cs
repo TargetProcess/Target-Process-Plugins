@@ -13,7 +13,8 @@ namespace Mercurial.Configuration
         /// <summary>
         /// This is the backing field for this <see cref="ClientConfigurationCollection"/>.
         /// </summary>
-        private readonly Dictionary<string, Dictionary<string, string>> _Configuration = new Dictionary<string, Dictionary<string, string>>();
+        private readonly Dictionary<string, Dictionary<string, string>> _Configuration =
+            new Dictionary<string, Dictionary<string, string>>();
 
         /// <summary>
         /// Gets a collection of section names from the configuration.
@@ -42,10 +43,10 @@ namespace Mercurial.Configuration
             lock (_Configuration)
             {
                 result = (from kvp1 in _Configuration
-                          from kvp2 in kvp1.Value
-                          select new ConfigurationEntry(kvp1.Key, kvp2.Key, kvp2.Value)).ToArray();
+                    from kvp2 in kvp1.Value
+                    select new ConfigurationEntry(kvp1.Key, kvp2.Key, kvp2.Value)).ToArray();
             }
-            return ((IEnumerable<ConfigurationEntry>)result).GetEnumerator();
+            return ((IEnumerable<ConfigurationEntry>) result).GetEnumerator();
         }
 
         /// <summary>

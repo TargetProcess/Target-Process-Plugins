@@ -13,25 +13,25 @@ using Tp.SourceControl.Settings;
 
 namespace Tp.Mercurial
 {
-	public class DeleteProfileCommandHandler : IHandleMessages<ExecutePluginCommandCommand>
-	{
-		private readonly IStorageRepository _storage;
+    public class DeleteProfileCommandHandler : IHandleMessages<ExecutePluginCommandCommand>
+    {
+        private readonly IStorageRepository _storage;
 
-		public DeleteProfileCommandHandler(IStorageRepository storage)
-		{
-			_storage = storage;
-		}
+        public DeleteProfileCommandHandler(IStorageRepository storage)
+        {
+            _storage = storage;
+        }
 
-		public void Handle(ExecutePluginCommandCommand message)
-		{
-			if (message.CommandName == EmbeddedPluginCommands.DeleteProfile)
-			{
+        public void Handle(ExecutePluginCommandCommand message)
+        {
+            if (message.CommandName == EmbeddedPluginCommands.DeleteProfile)
+            {
                 var folder = _storage.Get<MercurialRepositoryFolder>().FirstOrDefault();
                 if (folder != null)
                 {
                     folder.Delete();
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 }

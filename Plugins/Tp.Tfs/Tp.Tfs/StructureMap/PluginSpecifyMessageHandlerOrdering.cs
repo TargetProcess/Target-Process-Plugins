@@ -11,11 +11,11 @@ using Tp.Tfs.Handlers;
 
 namespace Tp.Tfs.StructureMap
 {
-	public class PluginSpecifyMessageHandlerOrdering : ICustomPluginSpecifyMessageHandlerOrdering
-	{
-		public void SpecifyHandlersOrder(First<PluginGateway> ordering)
-		{
-			ordering.AndThen<TfsWorkItemsListener>().AndThen<VersionControlSystemListener>();
-		}
-	}
+    public class PluginSpecifyMessageHandlerOrdering : ICustomPluginSpecifyMessageHandlerOrdering
+    {
+        public void SpecifyHandlersOrder(First<PluginGateway> ordering)
+        {
+            ordering.AndThen<TfsWorkItemsListener>().AndThen<VersionControlSystemListener>();
+        }
+    }
 }

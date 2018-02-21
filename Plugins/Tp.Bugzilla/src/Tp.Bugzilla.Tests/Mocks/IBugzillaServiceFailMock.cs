@@ -5,8 +5,8 @@
 
 namespace Tp.Bugzilla.Tests.Mocks
 {
-	public interface IBugzillaServiceFailMock
-	{
-		bool Fail { get; set; }
-	}
+    public interface IBugzillaServiceFailMock
+    {
+        bool Fail { get; set; }
+    }
 }

@@ -20,37 +20,37 @@ using Repository = Mercurial.Repository;
 
 namespace Tp.Mercurial.VersionControlSystem
 {
-	public class MercurialClient
-	{
-	    private readonly Repository _repository;
-		private readonly ISourceControlConnectionSettingsSource _settings;
+    public class MercurialClient
+    {
+        private readonly Repository _repository;
+        private readonly ISourceControlConnectionSettingsSource _settings;
         private readonly IStorage<MercurialRepositoryFolder> _folder;
 
         public MercurialClient(ISourceControlConnectionSettingsSource settings, IStorage<MercurialRepositoryFolder> folder)
-		{
+        {
             _settings = settings;
             _folder = folder;
-			_repository = GetClient(settings);
-		}
+            _repository = GetClient(settings);
+        }
 
         public IEnumerable<RevisionRange> GetFromTillHead(DateTime from, int pageSize)
         {
-	        var command = new LogCommand().WithAdditionalArgument("-d >{0:yyyy-MM-dd}".Fmt(from));
+            var command = new LogCommand().WithAdditionalArgument("-d >{0:yyyy-MM-dd}".Fmt(from));
             var pages = _repository.Log(command)
-				.Where(ch => ch.Timestamp >= from)
-				.OrderBy(ch => ch.Timestamp)
-				.ToArray()
-				.Split(pageSize);
+                .Where(ch => ch.Timestamp >= from)
+                .OrderBy(ch => ch.Timestamp)
+                .ToArray()
+                .Split(pageSize);
 
-		    var result = pages.Select(page => new RevisionRange(page.First().ToRevisionId(), page.Last().ToRevisionId()));
+            var result = pages.Select(page => new RevisionRange(page.First().ToRevisionId(), page.Last().ToRevisionId()));
 
-		    return result;
-		}
+            return result;
+        }
 
         public IEnumerable<RevisionRange> GetAfterTillHead(RevisionId revisionId, int pageSize)
         {
-	        var revSpec = new RevSpec(revisionId.Value);
-			var command = new LogCommand().WithRevision(RevSpec.From(revSpec) && !new RevSpec(revisionId.Value));
+            var revSpec = new RevSpec(revisionId.Value);
+            var command = new LogCommand().WithRevision(RevSpec.From(revSpec) && !new RevSpec(revisionId.Value));
             var pages = _repository.Log(command)
                 .OrderBy(ch => ch.Timestamp)
                 .ToArray()
@@ -63,34 +63,36 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public IEnumerable<RevisionRange> GetFromAndBefore(RevisionId fromRevision, RevisionId toRevision, int pageSize)
         {
-	        var command = new LogCommand();
-			if (string.IsNullOrEmpty(fromRevision.Value))
-			{
-				if (string.IsNullOrEmpty(toRevision.Value))
-				{
-					command = command.WithAdditionalArgument("-d {0:yyyy-MM-dd} to {1:yyyy-MM-dd}".Fmt(fromRevision.Time.Value, toRevision.Time.Value));
-				}
-				else
-				{
-					var to = new RevSpec(toRevision.Value);
-					command = command.WithRevision(RevSpec.To(to));
-					command = command.WithAdditionalArgument("-d >{0:yyyy-MM-dd}".Fmt(fromRevision.Time.Value));
-				}
-			}
-			else
-			{
-				var from = new RevSpec(fromRevision.Value);
-				if (string.IsNullOrEmpty(toRevision.Value))
-				{
-					command = command.WithAdditionalArgument("-d <{0:yyyy-MM-dd}".Fmt(toRevision.Time.Value));
-					command = command.WithRevision(RevSpec.From(from));
-				}
-				else
-				{
-					var to = new RevSpec(toRevision.Value);
-					command = command.WithRevision(RevSpec.Range(from, to));
-				}
-			}
+            var command = new LogCommand();
+            if (string.IsNullOrEmpty(fromRevision.Value))
+            {
+                if (string.IsNullOrEmpty(toRevision.Value))
+                {
+                    command =
+                        command.WithAdditionalArgument("-d {0:yyyy-MM-dd} to {1:yyyy-MM-dd}".Fmt(fromRevision.Time.Value,
+                            toRevision.Time.Value));
+                }
+                else
+                {
+                    var to = new RevSpec(toRevision.Value);
+                    command = command.WithRevision(RevSpec.To(to));
+                    command = command.WithAdditionalArgument("-d >{0:yyyy-MM-dd}".Fmt(fromRevision.Time.Value));
+                }
+            }
+            else
+            {
+                var from = new RevSpec(fromRevision.Value);
+                if (string.IsNullOrEmpty(toRevision.Value))
+                {
+                    command = command.WithAdditionalArgument("-d <{0:yyyy-MM-dd}".Fmt(toRevision.Time.Value));
+                    command = command.WithRevision(RevSpec.From(from));
+                }
+                else
+                {
+                    var to = new RevSpec(toRevision.Value);
+                    command = command.WithRevision(RevSpec.Range(from, to));
+                }
+            }
 
             var pages = _repository.Log(command)
                 .OrderBy(ch => ch.Timestamp)
@@ -106,13 +108,13 @@ namespace Tp.Mercurial.VersionControlSystem
         {
             var command = new LogCommand().WithRevision(new RevSpec("{0}^".Fmt(commit.Hash))).WithIncludePathActions();
             var changesets = _repository.Log(command);
-			var changeset = changesets.FirstOrDefault();
+            var changeset = changesets.FirstOrDefault();
             return changeset;
         }
 
         public Changeset GetCommit(RevisionId id)
         {
-			var command = new LogCommand().WithRevision(RevSpec.ById(id.Value)).WithIncludePathActions();
+            var command = new LogCommand().WithRevision(RevSpec.ById(id.Value)).WithIncludePathActions();
             var changeset = _repository.Log(command).FirstOrDefault(ch => ch.Hash == id.Value);
             return changeset;
         }
@@ -130,10 +132,10 @@ namespace Tp.Mercurial.VersionControlSystem
         }
 
         public RevisionInfo[] GetRevisions(RevisionId fromChangeset, RevisionId toChangeset)
-		{
-			var from = new RevSpec(fromChangeset.Value);
-			var to = new RevSpec(toChangeset.Value);
-			var command = new LogCommand().WithRevision(RevSpec.Range(from, to)).WithIncludePathActions();
+        {
+            var from = new RevSpec(fromChangeset.Value);
+            var to = new RevSpec(toChangeset.Value);
+            var command = new LogCommand().WithRevision(RevSpec.Range(from, to)).WithIncludePathActions();
             var revisionInfos = _repository.Log(command)
                 .Where(ch => ch.Timestamp >= fromChangeset.Time.Value && ch.Timestamp <= toChangeset.Time.Value)
                 .Select(ch => ch.ToRevisionInfo())
@@ -143,15 +145,15 @@ namespace Tp.Mercurial.VersionControlSystem
         }
 
         public string GetFileContent(Changeset commit, string path)
-		{
+        {
             var command = new CatCommand().WithFile(path);
-			if (commit != null)
-			{
-				command = command.WithAdditionalArgument(string.Format("-r {0}", commit.RevisionNumber));
-			}
+            if (commit != null)
+            {
+                command = command.WithAdditionalArgument(string.Format("-r {0}", commit.RevisionNumber));
+            }
             _repository.Execute(command);
             return command.RawStandardOutput;
-		}
+        }
 
         private Repository GetClient(ISourceControlConnectionSettingsSource settings)
         {
@@ -197,7 +199,7 @@ namespace Tp.Mercurial.VersionControlSystem
                 throw new ArgumentException(
                     MercurialCheckConnectionErrorResolver.MERCURIAL_IS_NOT_INSTALLED_ERROR_MESSAGE, e);
             }
-            
+
             return repository;
         }
 
@@ -209,7 +211,7 @@ namespace Tp.Mercurial.VersionControlSystem
                 _folder.ReplaceWith(repositoryFolder);
                 return repositoryFolder;
             }
-            
+
             MercurialRepositoryFolder folder = _folder.Single();
             if (!folder.CheckFolder(_folder))
             {
@@ -227,5 +229,5 @@ namespace Tp.Mercurial.VersionControlSystem
         {
             return (settings.Uri.ToLower() != repositoryFolder.RepoUri.ToLower()) && repositoryFolder.Exists();
         }
-	}
+    }
 }

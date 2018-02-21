@@ -9,14 +9,14 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.TestRunImport.Tests.Selenium
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class SeleniumCreateTestPlanRunSagaSpecs : CreateTestPlanRunSagaSpecsBase
-	{
-		[Test]
-		public void ShouldCreateTestPlanRunForProfileWithoutRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+    public class SeleniumCreateTestPlanRunSagaSpecs : CreateTestPlanRunSagaSpecsBase
+    {
+        [Test]
+        public void ShouldCreateTestPlanRunForProfileWithoutRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -41,13 +41,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunForProfileWithTestIdRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunForProfileWithTestIdRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -73,13 +73,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunForProfileWithTestNameRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunForProfileWithTestNameRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -105,13 +105,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunFromResultsOnHttpForProfileWithoutRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunFromResultsOnHttpForProfileWithoutRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -136,13 +136,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunFromResultsOnHttpForProfileWithTestIdRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunFromResultsOnHttpForProfileWithTestIdRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -168,13 +168,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunFromResultsOnHttpForProfileWithTestNameRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunFromResultsOnHttpForProfileWithTestNameRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -200,13 +200,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunFromResultsOnFtpForProfileWithoutRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunFromResultsOnFtpForProfileWithoutRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -231,13 +231,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunFromResultsOnFtpForProfileWithTestIdRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunFromResultsOnFtpForProfileWithTestIdRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -263,13 +263,13 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		[Test]
-		public void ShouldCreateTestPlanRunFromResultsOnFtpForProfileWithTestNameRegExpSpecified()
-		{
-			@"Given a list of test cases in test plan:
+        [Test]
+        public void ShouldCreateTestPlanRunFromResultsOnFtpForProfileWithTestNameRegExpSpecified()
+        {
+            @"Given a list of test cases in test plan:
 					|Name             |
 					|Build Up         |
 					|Bad Password     |
@@ -295,12 +295,12 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
 			"
-				.Execute(In.Context<SeleniumTestRunImportActionSteps>());
-		}
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
+        }
 
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.Selenium; }
-		}
-	}
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.Selenium; }
+        }
+    }
 }

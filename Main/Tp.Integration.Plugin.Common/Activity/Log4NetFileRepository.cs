@@ -16,237 +16,237 @@ using log4net.Repository.Hierarchy;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	internal class Log4NetFileRepository : ILog4NetFileRepository
-	{
-		private readonly Locker _locker;
-		private readonly ILogManager _logManager;
+    internal class Log4NetFileRepository : ILog4NetFileRepository
+    {
+        private readonly Locker _locker;
+        private readonly ILogManager _logManager;
 
-		public Log4NetFileRepository(ILogManager logManager, Locker locker)
-		{
-			_logManager = logManager;
-			_locker = locker;
-		}
+        public Log4NetFileRepository(ILogManager logManager, Locker locker)
+        {
+            _logManager = logManager;
+            _locker = locker;
+        }
 
-		#region Get Records By
+        #region Get Records By
 
-		public virtual IEnumerable<ActivityLogRecord> GetActivityRecordsFor(Logger logger, ActivityFilter filter)
-		{
-			IEnumerable<string> filesList = GetSuitableFiles(logger, filter);
+        public virtual IEnumerable<ActivityLogRecord> GetActivityRecordsFor(Logger logger, ActivityFilter filter)
+        {
+            IEnumerable<string> filesList = GetSuitableFiles(logger, filter);
 
-			var result = new List<ActivityLogRecord>();
+            var result = new List<ActivityLogRecord>();
 
-			foreach (string file in filesList)
-			{
-				result.AddRange(GetRecordsFromFile(filter, file));
-			}
+            foreach (string file in filesList)
+            {
+                result.AddRange(GetRecordsFromFile(filter, file));
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		protected virtual IEnumerable<string> GetSuitableFiles(Logger logger, ActivityFilter filter)
-		{
-			string[] files = GetFilesForLogger(logger);
-			int[] suitableItems = FilterFileNames(files, filter);
+        protected virtual IEnumerable<string> GetSuitableFiles(Logger logger, ActivityFilter filter)
+        {
+            string[] files = GetFilesForLogger(logger);
+            int[] suitableItems = FilterFileNames(files, filter);
 
-			if (!suitableItems.Any())
-			{
-				return Enumerable.Empty<string>();
-			}
+            if (!suitableItems.Any())
+            {
+                return Enumerable.Empty<string>();
+            }
 
-			int firstItemIndex = suitableItems.Min(x => x);
-			int lastItemIndex = suitableItems.Max(x => x) + 1;
+            int firstItemIndex = suitableItems.Min(x => x);
+            int lastItemIndex = suitableItems.Max(x => x) + 1;
 
-			var filesList = new List<string>();
-			if (!filter.DateRange.StartDate.HasValue)
-			{
-				filesList.Add(files[firstItemIndex]);
-			}
-			else
-			{
-				filesList.AddRange(files.Skip(firstItemIndex).Take(lastItemIndex - firstItemIndex + 1));
-			}
+            var filesList = new List<string>();
+            if (!filter.DateRange.StartDate.HasValue)
+            {
+                filesList.Add(files[firstItemIndex]);
+            }
+            else
+            {
+                filesList.AddRange(files.Skip(firstItemIndex).Take(lastItemIndex - firstItemIndex + 1));
+            }
 
-			return filesList;
-		}
+            return filesList;
+        }
 
-		protected virtual string[] GetFilesForLogger(Logger logger)
-		{
-			string logFileName = GetLogFilePathFromLogger(logger);
+        protected virtual string[] GetFilesForLogger(Logger logger)
+        {
+            string logFileName = GetLogFilePathFromLogger(logger);
 
-			if (string.IsNullOrEmpty(logFileName))
-			{
-				return Enumerable.Empty<string>().ToArray();
-			}
+            if (string.IsNullOrEmpty(logFileName))
+            {
+                return Enumerable.Empty<string>().ToArray();
+            }
 
-			var directory = new DirectoryInfo(logFileName.GetDirectoryName());
+            var directory = new DirectoryInfo(logFileName.GetDirectoryName());
 
-			if (!directory.Exists)
-			{
-				return Enumerable.Empty<string>().ToArray();
-			}
+            if (!directory.Exists)
+            {
+                return Enumerable.Empty<string>().ToArray();
+            }
 
-			return new[] {logFileName}
-				.Concat(directory
-					        .GetFiles(ActivityLogFile.GetWildcartPatternFor(logFileName))
-					        .Select(x => x.FullName))
-				.OrderBy(ActivityLogFile.GetOrder)
-				.ToArray();
-		}
+            return new[] { logFileName }
+                .Concat(directory
+                    .GetFiles(ActivityLogFile.GetWildcartPatternFor(logFileName))
+                    .Select(x => x.FullName))
+                .OrderBy(ActivityLogFile.GetOrder)
+                .ToArray();
+        }
 
-		protected virtual string GetLogFilePathFromLogger(Logger logger)
-		{
-			if (logger == null)
-			{
-				return String.Empty;
-			}
+        protected virtual string GetLogFilePathFromLogger(Logger logger)
+        {
+            if (logger == null)
+            {
+                return String.Empty;
+            }
 
-			PluginRollingFileAppender appender = logger.Appenders.OfType<PluginRollingFileAppender>().FirstOrDefault();
-			if (appender != null)
-			{
-				return appender.File;
-			}
+            PluginRollingFileAppender appender = logger.Appenders.OfType<PluginRollingFileAppender>().FirstOrDefault();
+            if (appender != null)
+            {
+                return appender.File;
+            }
 
-			return String.Empty;
-		}
+            return String.Empty;
+        }
 
-		private static int[] FilterFileNames(IEnumerable<string> files, ActivityFilter filter)
-		{
-			return files.Select((x, i) => new {Item = x, Index = i})
-			            .Where(x => filter.DateRange.IsInRangeIncludingEndDate(ActivityLogFile.GetDate(x.Item)))
-			            .Select(x => x.Index)
-			            .ToArray();
-		}
+        private static int[] FilterFileNames(IEnumerable<string> files, ActivityFilter filter)
+        {
+            return files.Select((x, i) => new { Item = x, Index = i })
+                .Where(x => filter.DateRange.IsInRangeIncludingEndDate(ActivityLogFile.GetDate(x.Item)))
+                .Select(x => x.Index)
+                .ToArray();
+        }
 
-		protected virtual IEnumerable<ActivityLogRecord> GetRecordsFromFile(ActivityFilter filter, string file)
-		{
-			return GetFromLog(file, Enumerable.Empty<ActivityLogRecord>(),
-			                  (csvReader, defaultValue) =>
-				                  {
-					                  var records = new List<ActivityLogRecord>();
-					                  while (csvReader.Read())
-					                  {
-						                  ActivityLogRecord record = GetActivityRecord(csvReader);
-						                  if (filter.DateRange.IsInRangeIncludingEndDate(record.DateTime))
-						                  {
-							                  records.Add(record);
-						                  }
-					                  }
+        protected virtual IEnumerable<ActivityLogRecord> GetRecordsFromFile(ActivityFilter filter, string file)
+        {
+            return GetFromLog(file, Enumerable.Empty<ActivityLogRecord>(),
+                (csvReader, defaultValue) =>
+                {
+                    var records = new List<ActivityLogRecord>();
+                    while (csvReader.Read())
+                    {
+                        ActivityLogRecord record = GetActivityRecord(csvReader);
+                        if (filter.DateRange.IsInRangeIncludingEndDate(record.DateTime))
+                        {
+                            records.Add(record);
+                        }
+                    }
 
-					                  return records;
-				                  });
-		}
+                    return records;
+                });
+        }
 
-		private static ActivityLogRecord GetActivityRecord(CsvReader csvReader)
-		{
-			return new ActivityLogRecord
-				       {
-					       DateTime = DateTime.ParseExact(csvReader[0], CsvLayout.DATE_TIME_FORMAT, CultureInfo.InvariantCulture),
-					       Level = csvReader[1],
-					       Message = csvReader[2],
-					       Details = csvReader[3]
-				       };
-		}
+        private static ActivityLogRecord GetActivityRecord(CsvReader csvReader)
+        {
+            return new ActivityLogRecord
+            {
+                DateTime = DateTime.ParseExact(csvReader[0], CsvLayout.DATE_TIME_FORMAT, CultureInfo.InvariantCulture),
+                Level = csvReader[1],
+                Message = csvReader[2],
+                Details = csvReader[3]
+            };
+        }
 
-		#endregion
+        #endregion
 
-		#region Remove Folders For
+        #region Remove Folders For
 
-		public virtual void RemoveFoldersFor(IEnumerable<Logger> loggers)
-		{
-			IEnumerable<string> folders = loggers
-				.SelectMany(GetLoggerFolders)
-				.Distinct();
+        public virtual void RemoveFoldersFor(IEnumerable<Logger> loggers)
+        {
+            IEnumerable<string> folders = loggers
+                .SelectMany(GetLoggerFolders)
+                .Distinct();
 
-			RemoveFolders(folders);
-		}
+            RemoveFolders(folders);
+        }
 
-		protected virtual IEnumerable<string> GetLoggerFolders(IAppenderAttachable logger)
-		{
-			return logger.Appenders.OfType<PluginRollingFileAppender>().Select(x => x.File.GetDirectoryName());
-		}
+        protected virtual IEnumerable<string> GetLoggerFolders(IAppenderAttachable logger)
+        {
+            return logger.Appenders.OfType<PluginRollingFileAppender>().Select(x => x.File.GetDirectoryName());
+        }
 
-		protected virtual void RemoveFolders(IEnumerable<string> folders)
-		{
-			try
-			{
-				foreach (string folder in folders.Where(Directory.Exists))
-				{
-					Directory.Delete(folder, true);
-				}
-			}
-			catch (IOException e)
-			{
-				_logManager.GetLogger(GetType()).Error(string.Format("Failed to delete activity log. Folder : {0}. Reason : ",
-				                                                     string.Join(",", folders.ToArray())), e);
-			}
-		}
+        protected virtual void RemoveFolders(IEnumerable<string> folders)
+        {
+            try
+            {
+                foreach (string folder in folders.Where(Directory.Exists))
+                {
+                    Directory.Delete(folder, true);
+                }
+            }
+            catch (IOException e)
+            {
+                _logManager.GetLogger(GetType()).Error(string.Format("Failed to delete activity log. Folder : {0}. Reason : ",
+                    string.Join(",", folders.ToArray())), e);
+            }
+        }
 
-		protected virtual IEnumerable<string> GetLoggerFiles(IAppenderAttachable logger)
-		{
-			return logger.Appenders.OfType<PluginRollingFileAppender>().Select(x => x.File);
-		}
+        protected virtual IEnumerable<string> GetLoggerFiles(IAppenderAttachable logger)
+        {
+            return logger.Appenders.OfType<PluginRollingFileAppender>().Select(x => x.File);
+        }
 
-		#endregion
+        #endregion
 
-		#region Remove Files For
+        #region Remove Files For
 
-		public void RemoveFilesFor(Logger logger)
-		{
-			IEnumerable<string> files = GetLoggerFiles(logger)
-				.SelectMany(GetFilesFromFolderByPattern)
-				.Distinct();
+        public void RemoveFilesFor(Logger logger)
+        {
+            IEnumerable<string> files = GetLoggerFiles(logger)
+                .SelectMany(GetFilesFromFolderByPattern)
+                .Distinct();
 
-			RemoveFiles(files);
-		}
+            RemoveFiles(files);
+        }
 
-		protected virtual IEnumerable<string> GetFilesFromFolderByPattern(string fileName)
-		{
-			string folder = fileName.GetDirectoryName();
-			string pattern = fileName.GetFileNameWithoutExtension() + "*";
+        protected virtual IEnumerable<string> GetFilesFromFolderByPattern(string fileName)
+        {
+            string folder = fileName.GetDirectoryName();
+            string pattern = fileName.GetFileNameWithoutExtension() + "*";
 
-			var directory = new DirectoryInfo(folder);
-			if (directory.Exists)
-			{
-				return directory.GetFiles(pattern).Select(x => x.FullName);
-			}
+            var directory = new DirectoryInfo(folder);
+            if (directory.Exists)
+            {
+                return directory.GetFiles(pattern).Select(x => x.FullName);
+            }
 
-			return Enumerable.Empty<string>();
-		}
+            return Enumerable.Empty<string>();
+        }
 
-		protected virtual void RemoveFiles(IEnumerable<string> files)
-		{
-			foreach (string file in files.Where(File.Exists))
-			{
-				File.Delete(file);
-			}
-		}
+        protected virtual void RemoveFiles(IEnumerable<string> files)
+        {
+            foreach (string file in files.Where(File.Exists))
+            {
+                File.Delete(file);
+            }
+        }
 
-		#endregion
+        #endregion
 
-		public bool RecordsExist(Logger logger)
-		{
-			return GetLoggerFiles(logger)
-				.Aggregate(false,
-				           (current, file) => current | (File.Exists(file) && GetFromLog(file, false, (reader, _) => reader.Read())));
-		}
+        public bool RecordsExist(Logger logger)
+        {
+            return GetLoggerFiles(logger)
+                .Aggregate(false,
+                    (current, file) => current | (File.Exists(file) && GetFromLog(file, false, (reader, _) => reader.Read())));
+        }
 
-		private T GetFromLog<T>(string fileName, T defaultValue, Func<CsvReader, T, T> func)
-		{
-			if (!File.Exists(fileName))
-			{
-				return defaultValue;
-			}
+        private T GetFromLog<T>(string fileName, T defaultValue, Func<CsvReader, T, T> func)
+        {
+            if (!File.Exists(fileName))
+            {
+                return defaultValue;
+            }
 
-			var result = _locker.TryAcquireLockAndExecute(fileName, () =>
-				                                  {
-					                                  using (var reader = new StreamReader(fileName))
-					                                  using (var csvReader = new CsvReader(reader, CsvLayout.DELIMITER))
-					                                  {
-						                                  return func(csvReader, defaultValue);
-					                                  }
-				                                  });
+            var result = _locker.TryAcquireLockAndExecute(fileName, () =>
+            {
+                using (var reader = new StreamReader(fileName))
+                using (var csvReader = new CsvReader(reader, CsvLayout.DELIMITER))
+                {
+                    return func(csvReader, defaultValue);
+                }
+            });
 
-			return result.HasValue ? result.Value : defaultValue;
-		}
-	}
+            return result.HasValue ? result.Value : defaultValue;
+        }
+    }
 }

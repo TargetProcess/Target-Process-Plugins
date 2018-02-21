@@ -9,15 +9,18 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common.ServiceBus
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	internal class QueueNameParsingTests
-	{
-		[Test]
-		public void PopulateUiQueueFromFullQueueName()
-		{
-			UnicastBus.GetUiQueueName("input@truhtanov").Should(Be.EqualTo("inputUI@truhtanov"), "UnicastBus.GetUiQueueName(\"input@truhtanov\").Should(Be.EqualTo(\"inputUI@truhtanov\"))");
-			UnicastBus.GetUiQueueName("input").Should(Be.EqualTo("inputUI"), "UnicastBus.GetUiQueueName(\"input\").Should(Be.EqualTo(\"inputUI\"))");
-		}
-	}
+    internal class QueueNameParsingTests
+    {
+        [Test]
+        public void PopulateUiQueueFromFullQueueName()
+        {
+            UnicastBus.GetUiQueueName("input@truhtanov")
+                .Should(Be.EqualTo("inputUI@truhtanov"),
+                    "UnicastBus.GetUiQueueName(\"input@truhtanov\").Should(Be.EqualTo(\"inputUI@truhtanov\"))");
+            UnicastBus.GetUiQueueName("input")
+                .Should(Be.EqualTo("inputUI"), "UnicastBus.GetUiQueueName(\"input\").Should(Be.EqualTo(\"inputUI\"))");
+        }
+    }
 }

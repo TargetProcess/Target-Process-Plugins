@@ -8,9 +8,9 @@ using Tp.PopEmailIntegration.Data;
 
 namespace Tp.PopEmailIntegration.Rules.ThenClauses
 {
-	public interface IThenClause
-	{
-		void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
-		bool IsMatched(EmailMessage message);
-	}
+    public interface IThenClause
+    {
+        void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
+        bool IsMatched(EmailMessage message);
+    }
 }

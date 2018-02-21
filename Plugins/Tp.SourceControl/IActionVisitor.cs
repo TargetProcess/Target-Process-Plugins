@@ -8,11 +8,11 @@ using Tp.SourceControl.Messages;
 
 namespace Tp.SourceControl
 {
-	public interface IActionVisitor
-	{
-		void Accept(PostTimeAction action);
-		void Accept(AssignRevisionToEntityAction action);
-		void Accept(PostCommentAction action);
-		void Accept(ChangeStatusAction action);
-	}
+    public interface IActionVisitor
+    {
+        void Accept(PostTimeAction action);
+        void Accept(AssignRevisionToEntityAction action);
+        void Accept(PostCommentAction action);
+        void Accept(ChangeStatusAction action);
+    }
 }

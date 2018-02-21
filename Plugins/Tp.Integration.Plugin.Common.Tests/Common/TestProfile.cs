@@ -8,10 +8,10 @@ using System.Runtime.Serialization;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
-	[Serializable, DataContract]
-	public class TestProfile
-	{
-		[DataMember]
-		public string TestProperty { get; set; }
-	}
+    [Serializable, DataContract]
+    public class TestProfile
+    {
+        [DataMember]
+        public string TestProperty { get; set; }
+    }
 }

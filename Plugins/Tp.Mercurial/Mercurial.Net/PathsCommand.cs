@@ -24,11 +24,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result of executing the command as a collection of <see cref="RemoteRepositoryPath"/> objects.
         /// </summary>
-        public IEnumerable<RemoteRepositoryPath> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<RemoteRepositoryPath> Result { get; private set; }
 
         #endregion
 

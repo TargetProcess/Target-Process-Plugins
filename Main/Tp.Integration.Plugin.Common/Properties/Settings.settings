@@ -15,13 +15,13 @@
       <Value Profile="(Default)">Tp.InputCommand</Value>
     </Setting>
     <Setting Name="pluginDatabaseConnectionString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcess;user id=sa;password=sa</Value>
+      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcess;Integrated Security=SSPI</Value>
     </Setting>
     <Setting Name="PluginInputQueue" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Tp.SomePlugin</Value>
     </Setting>
-    <Setting Name="IsTransactional" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="TransactionMode" Type="Tp.Integration.Messages.ServiceBus.Transport.TransportTransactionMode" Scope="Application">
+      <Value Profile="(Default)">None</Value>
     </Setting>
     <Setting Name="RoutableTransportMode" Type="System.String" Scope="Application">
       <Value Profile="(Default)">OnSite</Value>
@@ -55,6 +55,12 @@
     <Setting Name="CustomSettings" Type="Tp.Core.XmlSerializableStringDictionary" Scope="Application">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;stringDictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Value>
+    </Setting>
+    <Setting Name="MaxRetries" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="SqlCommandTimeoutSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">600</Value>
     </Setting>
   </Settings>
 </SettingsFile>

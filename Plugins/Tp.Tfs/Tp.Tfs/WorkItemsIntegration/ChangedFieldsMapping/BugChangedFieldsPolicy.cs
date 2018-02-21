@@ -9,15 +9,15 @@ using Tp.Integration.Common;
 
 namespace Tp.Tfs.WorkItemsIntegration.ChangedFieldsMapping
 {
-	public class BugChangedFieldsPolicy : ChangedFieldsPolicyBase
-	{
-		public BugChangedFieldsPolicy()
-		{
-			FieldsMap = new Dictionary<string, Enum>
-			{
-				{ "Name", BugField.Name },
-				{ "Description", BugField.Description }
-			};
-		}
-	}
+    public class BugChangedFieldsPolicy : ChangedFieldsPolicyBase
+    {
+        public BugChangedFieldsPolicy()
+        {
+            FieldsMap = new Dictionary<string, Enum>
+            {
+                { "Name", BugField.Name },
+                { "Description", BugField.Description }
+            };
+        }
+    }
 }

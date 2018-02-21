@@ -33,15 +33,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Topic
         {
-            get
-            {
-                return _Topic;
-            }
+            get { return _Topic; }
 
-            set
-            {
-                _Topic = (value ?? string.Empty).Trim();
-            }
+            set { _Topic = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -50,22 +44,14 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "-v")]
         [DefaultValue(false)]
-        public bool IncludeGlobalHelp
-        {
-            get;
-            set;
-        }
+        public bool IncludeGlobalHelp { get; set; }
 
         #region IMercurialCommand<string> Members
 
         /// <summary>
         /// Gets the result of executing the command as a string containing the help text for the <see cref="Topic"/>.
         /// </summary>
-        public string Result
-        {
-            get;
-            private set;
-        }
+        public string Result { get; private set; }
 
         #endregion
 

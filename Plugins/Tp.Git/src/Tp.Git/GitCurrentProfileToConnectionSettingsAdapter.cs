@@ -8,11 +8,11 @@ using Tp.SourceControl;
 
 namespace Tp.Git
 {
-	public class GitCurrentProfileToConnectionSettingsAdapter : CurrentProfileToConnectionSettingsAdapter<GitPluginProfile>
-	{
-		public GitCurrentProfileToConnectionSettingsAdapter(IStorageRepository repository)
-			: base(repository)
-		{
-		}
-	}
+    public class GitCurrentProfileToConnectionSettingsAdapter : CurrentProfileToConnectionSettingsAdapter<GitPluginProfile>
+    {
+        public GitCurrentProfileToConnectionSettingsAdapter(IStorageRepository repository)
+            : base(repository)
+        {
+        }
+    }
 }

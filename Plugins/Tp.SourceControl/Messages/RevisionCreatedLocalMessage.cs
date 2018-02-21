@@ -8,8 +8,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.SourceControl.Messages
 {
-	public class RevisionCreatedLocalMessage : IPluginLocalMessage
-	{
-		public RevisionDTO Dto { get; set; }
-	}
+    public class RevisionCreatedLocalMessage : IPluginLocalMessage
+    {
+        public RevisionDTO Dto { get; set; }
+    }
 }

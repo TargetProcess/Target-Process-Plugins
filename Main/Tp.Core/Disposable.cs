@@ -2,44 +2,44 @@ using System;
 
 namespace Tp.Core
 {
-	public class Disposable : IDisposable
-	{
-		private readonly Action _action;
+    public class Disposable : IDisposable
+    {
+        private readonly Action _action;
 
-		protected Disposable(Action action)
-		{
-			_action = action;
-		}
+        protected Disposable(Action action)
+        {
+            _action = action;
+        }
 
-		public void Dispose()
-		{
-			_action();
-		}
+        public void Dispose()
+        {
+            _action();
+        }
 
-		public static IDisposable Create(Action onExit) =>
-			new Disposable(onExit);
+        public static IDisposable Create(Action onExit) =>
+            new Disposable(onExit);
 
-		public static IDisposable Empty =>
-			DefaultDisposable.Instance;
+        public static IDisposable Empty =>
+            DefaultDisposable.Instance;
 
-		public static IDisposable Composite(params IDisposable[] disposables) =>
-			new CompositeDisposable(disposables);
+        public static IDisposable Composite(params IDisposable[] disposables) =>
+            new CompositeDisposable(disposables);
 
-		private class DefaultDisposable : IDisposable
-		{
-			public static readonly DefaultDisposable Instance = new DefaultDisposable();
+        private class DefaultDisposable : IDisposable
+        {
+            public static readonly DefaultDisposable Instance = new DefaultDisposable();
 
-			static DefaultDisposable()
-			{
-			}
+            static DefaultDisposable()
+            {
+            }
 
-			private DefaultDisposable()
-			{
-			}
+            private DefaultDisposable()
+            {
+            }
 
-			public void Dispose()
-			{
-			}
-		}
-	}
+            public void Dispose()
+            {
+            }
+        }
+    }
 }

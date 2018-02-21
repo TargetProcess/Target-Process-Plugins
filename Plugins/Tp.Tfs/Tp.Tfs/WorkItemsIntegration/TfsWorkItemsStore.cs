@@ -9,33 +9,33 @@ using Tp.SourceControl.Settings;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	public class TfsWorkItemsStore : IWorkItemsStore
-	{
-		private readonly TfsWorkItemStoreClient _workItemStore;
+    public class TfsWorkItemsStore : IWorkItemsStore
+    {
+        private readonly TfsWorkItemStoreClient _workItemStore;
 
-		public TfsWorkItemsStore(ISourceControlConnectionSettingsSource settings)
-		{
-			_workItemStore = new TfsWorkItemStoreClient(settings);
-		}
+        public TfsWorkItemsStore(ISourceControlConnectionSettingsSource settings)
+        {
+            _workItemStore = new TfsWorkItemStoreClient(settings);
+        }
 
-		public WorkItem[] GetWorkItemsFrom(string workItemNumber)
-		{
-			return _workItemStore.GetWorkItemsFrom(workItemNumber);
-		}
+        public WorkItem[] GetWorkItemsFrom(string workItemNumber)
+        {
+            return _workItemStore.GetWorkItemsFrom(workItemNumber);
+        }
 
-		public WorkItem[] GetWorkItemsFrom(DateTime from)
-		{
-			return _workItemStore.GetWorkItemsFrom(from);
-		}
+        public WorkItem[] GetWorkItemsFrom(DateTime from)
+        {
+            return _workItemStore.GetWorkItemsFrom(from);
+        }
 
-		public WorkItem[] GetWorkItemsBetween(string projectName, string[] importedTypes, int minId, int maxId, DateTime lastSync)
-		{
-			return _workItemStore.GetWorkItemsBetween(projectName, importedTypes, minId, maxId, lastSync);
-		}
+        public WorkItem[] GetWorkItemsBetween(string projectName, string[] importedTypes, int minId, int maxId, DateTime lastSync)
+        {
+            return _workItemStore.GetWorkItemsBetween(projectName, importedTypes, minId, maxId, lastSync);
+        }
 
-		public WorkItem GetWorkItem(int id)
-		{
-			return _workItemStore.GetWorkItem(id);
-		}
-	}
+        public WorkItem GetWorkItem(int id)
+        {
+            return _workItemStore.GetWorkItem(id);
+        }
+    }
 }

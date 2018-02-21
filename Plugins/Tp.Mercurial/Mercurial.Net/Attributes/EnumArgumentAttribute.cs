@@ -58,10 +58,7 @@ namespace Mercurial.Attributes
         /// </summary>
         public object Value
         {
-            get
-            {
-                return _Value;
-            }
+            get { return _Value; }
         }
 
         /// <summary>
@@ -98,11 +95,7 @@ namespace Mercurial.Attributes
         /// Gets or sets a value indicating whether the enum value is a bitmask value (see <see cref="FlagsAttribute"/>)
         /// or not.
         /// </summary>
-        public bool IsBitmask
-        {
-            get;
-            set;
-        }
+        public bool IsBitmask { get; set; }
 
         /// <summary>
         /// Gets a collection of options or arguments to pass to the Mercurial

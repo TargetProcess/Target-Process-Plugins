@@ -1,7 +1,7 @@
 namespace Tp.Core
 {
-	public interface ITextProvider
-	{
-		string GetText();
-	}
+    public interface ITextProvider
+    {
+        string GetText();
+    }
 }

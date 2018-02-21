@@ -8,8 +8,8 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.BugTracking.Mappers
 {
-	public interface IThirdPartyFieldsMapper
-	{
-		Mappings Map(MappingSource source);
-	}
+    public interface IThirdPartyFieldsMapper
+    {
+        Mappings Map(MappingSource source);
+    }
 }

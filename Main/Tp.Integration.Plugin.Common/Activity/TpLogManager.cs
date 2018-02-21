@@ -12,41 +12,42 @@ using log4net;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	internal class TpLogManager : ILogManager, ILogProvider
-	{
-		private readonly IActivityLogPathProvider _path;
-		private readonly IPluginContext _context;
-		public TpLogManager(IActivityLogPathProvider path, IPluginContext context)
-		{
-			_path = path;
-			_context = context;
-		}
+    internal class TpLogManager : ILogManager, ILogProvider
+    {
+        private readonly IActivityLogPathProvider _path;
+        private readonly IPluginContext _context;
 
-		public ILog GetLogger(Type type)
-		{
-			return GetLogger(type.FullName);
-		}
+        public TpLogManager(IActivityLogPathProvider path, IPluginContext context)
+        {
+            _path = path;
+            _context = context;
+        }
 
-		public ILog GetLogger(string name)
-		{
-			return ActivityLoggerRegistry.IsKnownLogger(name)
-					? GetLogger(_path, name, _context)
-			       	: LogManager.GetLogger(name);
-		}
+        public ILog GetLogger(Type type)
+        {
+            return GetLogger(type.FullName);
+        }
 
-		public IEnumerable<ILog> GetActivityLoggers()
-		{
-			return GetActivityLoggers(_context);
-		}
+        public ILog GetLogger(string name)
+        {
+            return ActivityLoggerRegistry.IsKnownLogger(name)
+                ? GetLogger(_path, name, _context)
+                : LogManager.GetLogger(name);
+        }
 
-		public IEnumerable<ILog> GetActivityLoggers(IPluginContext context)
-		{
-			return ActivityLoggerRegistry.LoggersNames.Select(n => GetLogger(_path, n, context)).Concat(GetLogger(typeof(TpLogManager)));
-		}
+        public IEnumerable<ILog> GetActivityLoggers()
+        {
+            return GetActivityLoggers(_context);
+        }
 
-		private static ILog GetLogger(IActivityLogPathProvider path, string name, IPluginContext context)
-		{
-			return LogManager.GetLogger(path.GetLogPathFor(context.AccountName.Value, context.ProfileName.Value, name));
-		}
-	}
+        public IEnumerable<ILog> GetActivityLoggers(IPluginContext context)
+        {
+            return ActivityLoggerRegistry.LoggersNames.Select(n => GetLogger(_path, n, context)).Concat(GetLogger(typeof(TpLogManager)));
+        }
+
+        private static ILog GetLogger(IActivityLogPathProvider path, string name, IPluginContext context)
+        {
+            return LogManager.GetLogger(path.GetLogPathFor(context.AccountName.Value, context.ProfileName.Value, name));
+        }
+    }
 }

@@ -18,14 +18,14 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[TestFixture, ActionSteps]
-	[Category("PartPlugins0")]
-	public class CommentsFromTargetProcessSyncSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void ShouldImportComments()
-		{
-			@"
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class CommentsFromTargetProcessSyncSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void ShouldImportComments()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -40,14 +40,14 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 1 in bugzilla should have comment 'comment 1' created by 'Dowson@mail.com'
 					And bug 1 in bugzilla should have comment 'comment 2' created by 'Lansie@mail.com'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-								.And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
+                    .And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldImportCommentsForAFewBugs()
-		{
-			@"
+        [Test]
+        public void ShouldImportCommentsForAFewBugs()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -70,14 +70,14 @@ namespace Tp.Bugzilla.Tests.Synchronization
 					And bug 2 in bugzilla should have comment 'comment 2' created by 'Lansie@mail.com'
 					And bug 2 in bugzilla should have comment 'comment 2.1' created by 'Dowson@mail.com'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-								.And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
+                    .And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotImportCommentsForUnsyncBugs()
-		{
-			@"
+        [Test]
+        public void ShouldNotImportCommentsForUnsyncBugs()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -91,14 +91,14 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 in bugzilla should have 1 comments
 					And bug 1 in bugzilla should have comment 'comment 1' created by 'Dowson@mail.com'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-								.And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
+                    .And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotImportDefaultComment()
-		{
-			string.Format(@"
+        [Test]
+        public void ShouldNotImportDefaultComment()
+        {
+            string.Format(@"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 
 					And bugzilla profile for project 1 created
@@ -111,14 +111,14 @@ namespace Tp.Bugzilla.Tests.Synchronization
 
 				Then bug 1 in bugzilla should have 1 comments
 			", CommentConverter.StateIsChangedComment)
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-								.And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
+                    .And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldImportCommentsWithValidTimeOffset()
-		{
-			@"
+        [Test]
+        public void ShouldImportCommentsWithValidTimeOffset()
+        {
+            @"
 				Given user 'Lansie' with email 'Lansie@mail.com' created in TargetProcess
 					And user 'Dowson' with email 'Dowson@mail.com' created in TargetProcess
 
@@ -132,86 +132,90 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 in bugzilla should have 1 comments
 					And bug 1 in bugzilla should have comment 'comment 1' created on '2010-10-10 15:13:00' by 'Lansie@mail.com'
 			"
-				.Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
-								.And<CommentsFromBugzillaSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>().And<BugSyncSpecs>().And<CommentsFromTargetProcessSyncSpecs>()
+                    .And<CommentsFromBugzillaSyncSpecs>());
+        }
 
-		[Given("bugzilla has timezone $timeOffset UTC")]
-		public void SetBugzillaOffset(int timeOffset)
-		{
-			ObjectFactory.GetInstance<BugzillaServiceMock>().SetTimeOffset(new TimeSpan(timeOffset, 0, 0));
-		}
+        [Given("bugzilla has timezone $timeOffset UTC")]
+        public void SetBugzillaOffset(int timeOffset)
+        {
+            ObjectFactory.GetInstance<BugzillaServiceMock>().SetTimeOffset(new TimeSpan(timeOffset, 0, 0));
+        }
 
-		[When("comment '$commentText' for bug '$bugName' was created by '$owner' in TargetProcess")]
-		public void CreateCommentInTargetProcess(string commentText, string bugName, string owner)
-		{
-			CreateCommentInTargetProcess(commentText, owner, Context.TpBugs.Single(b => b.Name == bugName).ID);
-		}
+        [When("comment '$commentText' for bug '$bugName' was created by '$owner' in TargetProcess")]
+        public void CreateCommentInTargetProcess(string commentText, string bugName, string owner)
+        {
+            CreateCommentInTargetProcess(commentText, owner, Context.TpBugs.Single(b => b.Name == bugName).ID);
+        }
 
-		[When("comment '$commentText' for unsync bug was created by '$owner' in TargetProcess")]
-		public void CreateCommentForUnsyncBug(string commentText, string owner)
-		{
-			CreateCommentInTargetProcess(commentText, owner, Context.GetNextId());
-		}
+        [When("comment '$commentText' for unsync bug was created by '$owner' in TargetProcess")]
+        public void CreateCommentForUnsyncBug(string commentText, string owner)
+        {
+            CreateCommentInTargetProcess(commentText, owner, Context.GetNextId());
+        }
 
-		[When("comment '$commentText' for bug '$bugName' was created on '$createDate' by '$owner' in TargetProcess")]
-		public void CreateCommentInTargetProcess(string commentText, string bugName, string createDate, string owner)
-		{
-			CreateCommentInTargetProcess(commentText, owner, Context.TpBugs.Single(b => b.Name == bugName).ID, DateTime.Parse(createDate));
-		}
+        [When("comment '$commentText' for bug '$bugName' was created on '$createDate' by '$owner' in TargetProcess")]
+        public void CreateCommentInTargetProcess(string commentText, string bugName, string createDate, string owner)
+        {
+            CreateCommentInTargetProcess(commentText, owner, Context.TpBugs.Single(b => b.Name == bugName).ID, DateTime.Parse(createDate));
+        }
 
-		[Then("bug $bugId in bugzilla should have $count comments")]
-		public void CheckCommentsCount(int bugId, int count)
-		{
-			Context.BugzillaBugs.GetById(bugId).long_descCollection.Count.Should(Be.EqualTo(count + 1), "Context.BugzillaBugs.GetById(bugId).long_descCollection.Count.Should(Be.EqualTo(count + 1))");
-		}
+        [Then("bug $bugId in bugzilla should have $count comments")]
+        public void CheckCommentsCount(int bugId, int count)
+        {
+            Context.BugzillaBugs.GetById(bugId)
+                .long_descCollection.Count.Should(Be.EqualTo(count + 1),
+                    "Context.BugzillaBugs.GetById(bugId).long_descCollection.Count.Should(Be.EqualTo(count + 1))");
+        }
 
-		[Then("bug $bugId in bugzilla should have comment '$commentText' created by '$ownerEmail'")]
-		public long_desc CheckBugComment(int bugId, string commentText, string ownerEmail)
-		{
-			Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Where(c => c.thetext == commentText).ToList().Should
-				(Be.Not.Empty, "Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Where(c => c.thetext == commentText).ToList().Should(Be.Not.Empty)");
+        [Then("bug $bugId in bugzilla should have comment '$commentText' created by '$ownerEmail'")]
+        public long_desc CheckBugComment(int bugId, string commentText, string ownerEmail)
+        {
+            Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Where(c => c.thetext == commentText).ToList().Should
+            (Be.Not.Empty,
+                "Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Where(c => c.thetext == commentText).ToList().Should(Be.Not.Empty)");
 
-			var comment =
-				Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Single(c => c.thetext == commentText);
-			comment.who.Should(Be.EqualTo(ownerEmail), "comment.who.Should(Be.EqualTo(ownerEmail))");
+            var comment =
+                Context.BugzillaBugs.GetById(bugId).long_descCollection.Cast<long_desc>().Single(c => c.thetext == commentText);
+            comment.who.Should(Be.EqualTo(ownerEmail), "comment.who.Should(Be.EqualTo(ownerEmail))");
 
-			return comment;
-		}
+            return comment;
+        }
 
-		[Then("bug $bugId in bugzilla should have comment '$commentText' without owner")]
-		public void CheckCommentWithoutOwner(int bugId, string commentText)
-		{
-			CheckBugComment(bugId, commentText, null);
-		}
+        [Then("bug $bugId in bugzilla should have comment '$commentText' without owner")]
+        public void CheckCommentWithoutOwner(int bugId, string commentText)
+        {
+            CheckBugComment(bugId, commentText, null);
+        }
 
-		[Then("bug $bugId in bugzilla should have comment '$commentText' created on '$createDate' by '$ownerEmail'")]
-		public void CheckBugComment(int bugId, string commentText, string createDate, string ownerEmail)
-		{
-			var comment = CheckBugComment(bugId, commentText, ownerEmail);
+        [Then("bug $bugId in bugzilla should have comment '$commentText' created on '$createDate' by '$ownerEmail'")]
+        public void CheckBugComment(int bugId, string commentText, string createDate, string ownerEmail)
+        {
+            var comment = CheckBugComment(bugId, commentText, ownerEmail);
 
-			comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString("u")), "comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString(\"u\")))");
-		}
+            comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString("u")),
+                "comment.bug_when.Should(Be.EqualTo(DateTime.Parse(createDate).ToString(\"u\")))");
+        }
 
-		private void CreateCommentInTargetProcess(string commentText, string owner, int? bugId, DateTime createDate)
-		{
-			var comment = new CommentDTO
-			              	{
-			              		Description = commentText,
-			              		OwnerID = Context.Users.Single(u => u.Login == owner).ID,
-			              		GeneralID = bugId,
-								CreateDate = createDate
-			              	};
+        private void CreateCommentInTargetProcess(string commentText, string owner, int? bugId, DateTime createDate)
+        {
+            var comment = new CommentDTO
+            {
+                Description = commentText,
+                OwnerID = Context.Users.Single(u => u.Login == owner).ID,
+                GeneralID = bugId,
+                CreateDate = createDate
+            };
 
-			TransportMock.HandleMessageFromTp(new CommentCreatedMessage
-			                                  	{
-			                                  		Dto = comment
-			                                  	});
-		}
+            TransportMock.HandleMessageFromTp(new CommentCreatedMessage
+            {
+                Dto = comment
+            });
+        }
 
-		private void CreateCommentInTargetProcess(string commentText, string owner, int? bugId)
-		{
-			CreateCommentInTargetProcess(commentText, owner, bugId, DateTime.Now);
-		}
-	}
+        private void CreateCommentInTargetProcess(string commentText, string owner, int? bugId)
+        {
+            CreateCommentInTargetProcess(commentText, owner, bugId, DateTime.Now);
+        }
+    }
 }

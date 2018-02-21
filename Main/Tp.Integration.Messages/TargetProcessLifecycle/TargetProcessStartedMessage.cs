@@ -2,8 +2,8 @@
 
 namespace Tp.Integration.Messages.TargetProcessLifecycle
 {
-	[Serializable]
-	public class TargetProcessStartedMessage : ITargetProcessLifecycleMessage
-	{
-	}
+    [Serializable]
+    public class TargetProcessStartedMessage : ITargetProcessLifecycleMessage
+    {
+    }
 }

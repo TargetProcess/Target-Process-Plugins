@@ -9,15 +9,15 @@ using Tp.Integration.Common;
 
 namespace Tp.Tfs.WorkItemsIntegration.ChangedFieldsMapping
 {
-	public class UserStoryChangedFieldsPolicy : ChangedFieldsPolicyBase
-	{
-		public UserStoryChangedFieldsPolicy()
-		{
-			FieldsMap = new Dictionary<string, Enum>
-			{
-				{ "Name", UserStoryField.Name },
-				{ "Description", UserStoryField.Description }
-			};
-		}
-	}
+    public class UserStoryChangedFieldsPolicy : ChangedFieldsPolicyBase
+    {
+        public UserStoryChangedFieldsPolicy()
+        {
+            FieldsMap = new Dictionary<string, Enum>
+            {
+                { "Name", UserStoryField.Name },
+                { "Description", UserStoryField.Description }
+            };
+        }
+    }
 }

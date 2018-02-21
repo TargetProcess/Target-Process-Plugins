@@ -3,23 +3,20 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System.Collections.Generic;
-using System.Text;
-using System;
 using NUnit.Framework;
 using Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature;
 using Tp.Testing.Common.NBehave;
 
 namespace Tp.PopEmailIntegration.BusinessScenarios.RuleProcessingFeature
 {
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class WhenRoleContainsUnicodeSymbols
-	{
-		[Test]
-		public void ShouldProcessRuleWithUnicodeSymbol()
-		{
-			@"Given requester with email 'sender@company.com'
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class WhenRoleContainsUnicodeSymbols
+    {
+        [Test]
+        public void ShouldProcessRuleWithUnicodeSymbol()
+        {
+            @"Given requester with email 'sender@company.com'
 					And sender email is 'sender@company.com'
 					And email subject is 'Ä extra bug'
 					And project 7
@@ -28,7 +25,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.RuleProcessingFeature
 				Then message from requester with email 'sender@company.com' should be created
 					And the message should have subject 'Ä extra bug'
 					And the message should be attached to project 7"
-				.Execute(In.Context<EmailProcessingSagaActionSteps>());
-		}
-	}
+                .Execute(In.Context<EmailProcessingSagaActionSteps>());
+        }
+    }
 }

@@ -21,150 +21,160 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.PopEmailIntegration
 {
-	[TestFixture, ActionSteps]
-	[Category("PartPlugins0")]
-	public class UpdateMessageBodySagaSpecs
-	{
-		private const string EXCEPTION_STRING = "Exception";
+    [TestFixture, ActionSteps]
+    [Category("PartPlugins1")]
+    public class UpdateMessageBodySagaSpecs
+    {
+        private const string EXCEPTION_STRING = "Exception";
 
-		private static UpdateMessageBodySagaContext Context
-		{
-			get { return ObjectFactory.GetInstance<UpdateMessageBodySagaContext>(); }
-		}
+        private static UpdateMessageBodySagaContext Context
+        {
+            get { return ObjectFactory.GetInstance<UpdateMessageBodySagaContext>(); }
+        }
 
-		[Test]
-		public void ShouldUpdateMessageBodyIfAttachmentFound()
-		{
-			Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
-				x => new MessageUpdatedMessage {Dto = x.Dto as MessageDTO});
+        [Test]
+        public void ShouldUpdateMessageBodyIfAttachmentFound()
+        {
+            Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
+                x => new MessageUpdatedMessage { Dto = x.Dto as MessageDTO });
 
-			@"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
+            @"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
 				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' was created in TP
 			When UpdateMessageBodyCommandInternal received
 			Then message body should be updated to '<img src=""~/Attachment.aspx?AttachmentID=20"">'"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldEscapeSpecialCharactersInAttachmentName()
-		{
-			Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
-				x => new MessageUpdatedMessage {Dto = x.Dto as MessageDTO});
+        [Test]
+        public void ShouldEscapeSpecialCharactersInAttachmentName()
+        {
+            Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
+                x => new MessageUpdatedMessage { Dto = x.Dto as MessageDTO });
 
-			@"Given message with body '<img src=""cid:image1.gif@01CBF3???????75.60E6C210"">'
+            @"Given message with body '<img src=""cid:image1.gif@01CBF3???????75.60E6C210"">'
 				And attachment with id 20 and file name 'image1.gif@01CBF3???????75.60E6C210' was created in TP
 			When UpdateMessageBodyCommandInternal received
 			Then message body should be updated to '<img src=""~/Attachment.aspx?AttachmentID=20"">'"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldNotUpdateMessageBodyIfBodyIsEmpty()
-		{
-			@"Given message with empty body
+        [Test]
+        public void ShouldNotUpdateMessageBodyIfBodyIsEmpty()
+        {
+            @"Given message with empty body
 				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' was created in TP
 			When UpdateMessageBodyCommandInternal received
 			Then body should not be updated"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[SetUp]
-		public void BeforeScenarioInit()
-		{
-			ObjectFactory.Initialize(x => { });
-		}
+        [SetUp]
+        public void BeforeScenarioInit()
+        {
+            ObjectFactory.Initialize(x => { });
+        }
 
-		[Test]
-		public void ShouldNotUpdatebodyIfNoAttachmentsFound()
-		{
-			Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
-				x => new MessageUpdatedMessage {Dto = x.Dto as MessageDTO});
+        [Test]
+        public void ShouldNotUpdatebodyIfNoAttachmentsFound()
+        {
+            Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
+                x => new MessageUpdatedMessage { Dto = x.Dto as MessageDTO });
 
-			@"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
+            @"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
 			When UpdateMessageBodyCommandInternal received
 			Then message body should remain '<img src=""cid:image1.gif@01CBF375.60E6C210"">'"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void ShouldHandleExceptionCorrectly()
-		{
-			@"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
+        [Test]
+        public void ShouldHandleExceptionCorrectly()
+        {
+            @"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
 				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' was created in TP
 				And message body cannot be updated
 			When UpdateMessageBodyCommandInternal received
 			Then exception message should be sent"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Given(@"message with body '$messageBody'")]
-		public void SetMessageBody(string messageBody)
-		{
-			Context.Command.MessageDto.Body = messageBody;
-		}
+        [Given(@"message with body '$messageBody'")]
+        public void SetMessageBody(string messageBody)
+        {
+            Context.Command.MessageDto.Body = messageBody;
+        }
 
-		[Given("message with empty body")]
-		public void SetEmptyBody()
-		{
-			Context.Command.MessageDto.Body = null;
-		}
+        [Given("message with empty body")]
+        public void SetEmptyBody()
+        {
+            Context.Command.MessageDto.Body = null;
+        }
 
-		[Given("attachment with id $attachmentId and file name '$attachmentFileName' was created in TP")]
-		public void CreateAttachmentInTP(int attachmentId, string attachmentFileName)
-		{
-			var attachments = new List<AttachmentDTO>(Context.Command.AttachmentDtos)
-			{new AttachmentDTO {AttachmentID = attachmentId, OriginalFileName = attachmentFileName}};
-			Context.Command.AttachmentDtos = attachments.ToArray();
-		}
+        [Given("attachment with id $attachmentId and file name '$attachmentFileName' was created in TP")]
+        public void CreateAttachmentInTP(int attachmentId, string attachmentFileName)
+        {
+            var attachments = new List<AttachmentDTO>(Context.Command.AttachmentDtos)
+                { new AttachmentDTO { AttachmentID = attachmentId, OriginalFileName = attachmentFileName } };
+            Context.Command.AttachmentDtos = attachments.ToArray();
+        }
 
-		[Given("message body cannot be updated")]
-		public void MessageBodyCannotBeUpdated()
-		{
-			Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
-				x => new TargetProcessExceptionThrownMessage {ExceptionString = EXCEPTION_STRING});
-		}
+        [Given("message body cannot be updated")]
+        public void MessageBodyCannotBeUpdated()
+        {
+            Context.Transport.On<UpdateCommand>(x => x.Dto is MessageDTO).Reply(
+                x => new TargetProcessExceptionThrownMessage { ExceptionString = EXCEPTION_STRING });
+        }
 
-		[When("UpdateMessageBodyCommandInternal received")]
-		public void SendUpdateMessageBodyCommandInternal()
-		{
-			Context.Transport.HandleLocalMessage(Context.Storage, Context.Command);
-		}
+        [When("UpdateMessageBodyCommandInternal received")]
+        public void SendUpdateMessageBodyCommandInternal()
+        {
+            Context.Transport.HandleLocalMessage(Context.Storage, Context.Command);
+        }
 
-		[Then(@"message body should be updated to '$messageBodyUpdated'")]
-		public void MessageBodyShouldBeUpdated(string messageBodyUpdated)
-		{
-			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1))");
+        [Then(@"message body should be updated to '$messageBodyUpdated'")]
+        public void MessageBodyShouldBeUpdated(string messageBodyUpdated)
+        {
+            Context.Transport.TpQueue.GetMessages<UpdateCommand>()
+                .Where(x => x.Dto is MessageDTO)
+                .Count()
+                .Should(Be.EqualTo(1),
+                    "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1))");
 
-			var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
-			message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated), "message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated))");
-			message.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "message.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
-		}
+            var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
+            message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated), "message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated))");
+            message.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "message.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
+        }
 
-		[Then(@"message body should remain '$messageBody'")]
-		public void MessageBodyShouldNotBeUpdated(string messageBody)
-		{
-			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty)");
+        [Then(@"message body should remain '$messageBody'")]
+        public void MessageBodyShouldNotBeUpdated(string messageBody)
+        {
+            Context.Transport.TpQueue.GetMessages<UpdateCommand>()
+                .Where(x => x.Dto is MessageDTO)
+                .Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty)");
 
-			var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
-			message.MessageDto.Body.Should(Be.EqualTo(messageBody), "message.MessageDto.Body.Should(Be.EqualTo(messageBody))");
-			message.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "message.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
-		}
+            var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
+            message.MessageDto.Body.Should(Be.EqualTo(messageBody), "message.MessageDto.Body.Should(Be.EqualTo(messageBody))");
+            message.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "message.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
+        }
 
-		[Then("exception message should be sent")]
-		public void ExceptionShouldBeSent()
-		{
-			var exceptionMessage = Context.Transport.LocalQueue.GetMessages<ExceptionThrownLocalMessage>().First();
-			exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING), "exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING))");
-			exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId), "exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
-		}
+        [Then("exception message should be sent")]
+        public void ExceptionShouldBeSent()
+        {
+            var exceptionMessage = Context.Transport.LocalQueue.GetMessages<ExceptionThrownLocalMessage>().First();
+            exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING),
+                "exceptionMessage.ExceptionString.Should(Be.EqualTo(EXCEPTION_STRING))");
+            exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId),
+                "exceptionMessage.SagaId.Should(Be.EqualTo(Context.OuterSagaId))");
+        }
 
-		[Then("body should not be updated")]
-		public void BodyShouldNotBeUpdated()
-		{
-			Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty)");
-			var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
-			message.MessageDto.Body.Should(Be.EqualTo(null), "message.MessageDto.Body.Should(Be.EqualTo(null))");
-			ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Should(Be.Empty, "Saga is not completed");
-		}
-	}
+        [Then("body should not be updated")]
+        public void BodyShouldNotBeUpdated()
+        {
+            Context.Transport.TpQueue.GetMessages<UpdateCommand>()
+                .Where(x => x.Dto is MessageDTO)
+                .Should(Be.Empty, "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Should(Be.Empty)");
+            var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
+            message.MessageDto.Body.Should(Be.EqualTo(null), "message.MessageDto.Body.Should(Be.EqualTo(null))");
+            ObjectFactory.GetInstance<TpInMemorySagaPersister>().Get<ISagaEntity>().Should(Be.Empty, "Saga is not completed");
+        }
+    }
 }

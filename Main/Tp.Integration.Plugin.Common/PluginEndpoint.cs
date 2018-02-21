@@ -1,18 +1,19 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using log4net.Config;
+using NServiceBus;
+using NServiceBus.Config;
+using NServiceBus.Config.ConfigurationSource;
+using StructureMap;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Transactions;
-using NServiceBus;
-using NServiceBus.Config;
-using NServiceBus.Config.ConfigurationSource;
-using StructureMap;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Messages.ServiceBus.Serialization;
 using Tp.Integration.Messages.ServiceBus.Transport;
@@ -22,160 +23,162 @@ using Tp.Integration.Messages.ServiceBus.UnicastBus;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Gateways;
 using Tp.Integration.Plugin.Common.Properties;
-using log4net.Config;
+using Tp.Integration.Plugin.Common.Activity;
 
 namespace Tp.Integration.Plugin.Common
 {
-	public class PluginEndpoint : IConfigureThisEndpoint, IWantCustomInitialization
-	{
-		public void Init()
-		{
-			SetLoggingLibrary.Log4Net(XmlConfigurator.Configure);
+    public class PluginEndpoint : IConfigureThisEndpoint, IWantCustomInitialization
+    {
+        public void Init()
+        {
+            SetLoggingLibrary.Log4Net(XmlConfigurator.Configure);
 
-			ObjectFactory.Initialize(x => x.Scan(y =>
-			                                     	{
-														var assembliesToSkip = AssembliesToSkip().Select(Path.GetFileNameWithoutExtension);
-			                                     		y.AssembliesFromApplicationBaseDirectory(assembly => !assembliesToSkip.Contains(assembly.GetName().Name));
-			                                     		y.LookForRegistries();
-			                                     	}));
+            ObjectFactory.Initialize(x => x.Scan(y =>
+            {
+                var assembliesToSkip = AssembliesToSkip().Select(Path.GetFileNameWithoutExtension);
+                y.AssembliesFromApplicationBaseDirectory(assembly => !assembliesToSkip.Contains(assembly.GetName().Name));
+                y.LookForRegistries();
+            }));
 
-			var config = Configure.With(AssembliesToScan())
-				.CustomConfigurationSource(new PluginConfigurationSource())
-				.StructureMapBuilder(ObjectFactory.Container)
-				.AdvancedXmlSerializer();
+            var config = Configure.With(AssembliesToScan())
+                .CustomConfigurationSource(new PluginConfigurationSource())
+                .StructureMapBuilder(ObjectFactory.Container)
+                .AdvancedXmlSerializer();
 
-			if (Transport == Transport.UiPriority)
-			{
-				config = config.MsmqTransport<MsmqUiPriorityTransport>().IsTransactional(IsTransactional).IsolationLevel(IsolationLevel.ReadUncommitted)
-					.PurgeOnStartup(false);
-			}
-			else if (Transport == Transport.Routable)
-			{
-				config = config.MsmqTransport<MsmqRoutableTransport>().IsTransactional(IsTransactional).IsolationLevel(IsolationLevel.ReadUncommitted)
-					.HostingMode(RoutableTransportMode)
-					.PurgeOnStartup(false);
-			}
+            if (Transport == Transport.UiPriority)
+            {
+                config = config.MsmqTransport<MsmqUiPriorityTransport>()
+                    .TransactionMode(TransactionMode)
+                    .IsolationLevel(IsolationLevel.ReadUncommitted)
+                    .PurgeOnStartup(false);
+            }
+            else if (Transport == Transport.Routable)
+            {
+                config = config.MsmqTransport<MsmqRoutableTransport>()
+                    .TransactionMode(TransactionMode)
+                    .IsolationLevel(IsolationLevel.ReadUncommitted)
+                    .HostingMode(RoutableTransportMode)
+                    .PurgeOnStartup(false)
+                    .MaxRetries(MaxRetries);
+            }
 
-			var bus = config.Sagas()
-				.TpDatabaseSagaPersister()
-				.TpUnicastBus()
-				//.ImpersonateSender(true)
-				.LoadMessageHandlers(GetHandlersOrder()).CreateBus();
+            var bus = config.Sagas()
+                .TpDatabaseSagaPersister()
+                .TpUnicastBus()
+                //.ImpersonateSender(true)
+                .LoadMessageHandlers(GetHandlersOrder()).CreateBus();
 
-			bus.Start();
-		}
+            new ActivityLogInitializer().Init();
 
-		private static RoutableTransportMode RoutableTransportMode
-		{
-			get { return (RoutableTransportMode) Enum.Parse(typeof (RoutableTransportMode), Settings.Default.RoutableTransportMode); }
-		}
+            RunBeforeBusStart();
 
-		private static Transport Transport
-		{
-			get { return (Transport) Enum.Parse(typeof (Transport), Settings.Default.Transport); }
-		}
+            bus.Start();
+        }
+        
+        private static RoutableTransportMode RoutableTransportMode
+            => (RoutableTransportMode) Enum.Parse(typeof(RoutableTransportMode), Settings.Default.RoutableTransportMode);
 
-		protected bool IsTransactional
-		{
-			get { return Settings.Default.IsTransactional; }
-		}
+        private static Transport Transport => (Transport) Enum.Parse(typeof(Transport), Settings.Default.Transport);
 
-		private static IEnumerable<Assembly> AssembliesToScan()
-		{
-			var result = AllAssemblies.Except(AssembliesToSkip()[0]);
-			AssembliesToSkip().Skip(1).ForEach(x => result.And(x));
-			var excludedAssemblyNames = ObjectFactory.TryGetInstance<IExcludedAssemblyNamesSource>();
-			if (excludedAssemblyNames != null)
-			{
-				result = excludedAssemblyNames.Aggregate(result,
-				                                         (current, excludedAssemblyName) => current.And(excludedAssemblyName));
-			}
+        protected TransportTransactionMode TransactionMode => Settings.Default.TransactionMode;
 
-			return result.ToArray();
-		}
+        private static IEnumerable<Assembly> AssembliesToScan()
+        {
+            var result = AllAssemblies.Except(AssembliesToSkip()[0]);
+            AssembliesToSkip().Skip(1).ForEach(x => result.And(x));
+            var excludedAssemblyNames = ObjectFactory.TryGetInstance<IExcludedAssemblyNamesSource>();
+            if (excludedAssemblyNames != null)
+            {
+                result = excludedAssemblyNames.Aggregate(result,
+                    (current, excludedAssemblyName) => current.And(excludedAssemblyName));
+            }
 
-		private static string[] AssembliesToSkip()
-		{
-			return new[] { "Tp.Integration.Plugin.UninstallUtil.exe", "Tp.LegacyProfileConversion.Common.dll" };
-		}
+            return result.ToArray();
+        }
 
-		private static First<PluginGateway> GetHandlersOrder()
-		{
-			var ordering = First<PluginGateway>.Then<PluginGateway>();
-			var messageHandlerOrdering = ObjectFactory.TryGetInstance<ICustomPluginSpecifyMessageHandlerOrdering>();
-			if (messageHandlerOrdering != null)
-			{
-				messageHandlerOrdering.SpecifyHandlersOrder(ordering);
-			}
+        private static string[] AssembliesToSkip()
+        {
+            return new[] { "Tp.Integration.Plugin.UninstallUtil.exe", "Tp.LegacyProfileConversion.Common.dll" };
+        }
 
-			return ordering;
-		}
+        private static First<PluginGateway> GetHandlersOrder()
+        {
+            var ordering = First<PluginGateway>.Then<PluginGateway>();
+            var messageHandlerOrdering = ObjectFactory.TryGetInstance<ICustomPluginSpecifyMessageHandlerOrdering>();
+            messageHandlerOrdering?.SpecifyHandlersOrder(ordering);
 
-		#region PluginConfigurationSource
+            return ordering;
+        }
 
-		public class PluginConfigurationSource : IConfigurationSource
-		{
-			public T GetConfiguration<T>() where T : class
-			{
-				{
-					if (typeof (T) == typeof (MsmqTransportConfig))
-					{
-						return new MsmqTransportConfig
-						       	{
-						       		ErrorQueue = "Tp.Error",
-						       		InputQueue = ObjectFactory.GetInstance<IPluginSettings>().PluginInputQueue,
-						       		MaxRetries = 1,
-						       		NumberOfWorkerThreads = 1
-						       	} as T;
-					}
+        protected int MaxRetries => Settings.Default.MaxRetries;
 
-					if (typeof (T) == typeof (UnicastBusConfig))
-					{
-						var mappings = new MessageEndpointMappingCollection
-						               	{
-						               		new MessageEndpointMapping
-						               			{Messages = "Tp.Integration.Messages", Endpoint = TargetProcessInputQueue}
-						               	};
-						foreach (var mapping in GetExtraMappings())
-						{
-							mappings.Add(mapping);
-						}
+        private static void RunBeforeBusStart()
+        {
+            ObjectFactory.GetAllInstances<IWantToRunBeforeBusStart>().ForEach(x => x.Run());
+        }
 
-						return new UnicastBusConfig
-						       	{
-						       		MessageEndpointMappings = mappings
-						       	} as T;
-					}
+        #region PluginConfigurationSource
 
-					return null;
-				}
-			}
+        public class PluginConfigurationSource : IConfigurationSource
+        {
+            public T GetConfiguration<T>() where T : class
+            {
+                {
+                    if (typeof(T) == typeof(MsmqTransportConfig))
+                    {
+                        return new MsmqTransportConfig
+                        {
+                            ErrorQueue = "Tp.Error",
+                            InputQueue = ObjectFactory.GetInstance<IPluginSettings>().PluginInputQueue,
+                            MaxRetries = 1,
+                            NumberOfWorkerThreads = 1
+                        } as T;
+                    }
 
-			protected string TargetProcessInputQueue
-			{
-				get { return Settings.Default.TargetProcessInputQueue; }
-			}
+                    if (typeof(T) == typeof(UnicastBusConfig))
+                    {
+                        var mappings = new MessageEndpointMappingCollection
+                        {
+                            new MessageEndpointMapping
+                                { Messages = "Tp.Integration.Messages", Endpoint = TargetProcessInputQueue }
+                        };
+                        foreach (var mapping in GetExtraMappings())
+                        {
+                            mappings.Add(mapping);
+                        }
 
-			protected virtual IEnumerable<MessageEndpointMapping> GetExtraMappings()
-			{
-				return new MessageEndpointMapping[] {};
-			}
+                        return new UnicastBusConfig
+                        {
+                            MessageEndpointMappings = mappings
+                        } as T;
+                    }
 
-			public static PluginInfo PluginInfo
-			{
-				get
-				{
-					var pluginAssemblyAttribute = ObjectFactory.GetInstance<IPluginMetadata>().PluginData;
-					return new PluginInfo
-					       	{
-					       		Name = pluginAssemblyAttribute.Name,
-					       		Description = pluginAssemblyAttribute.Description,
-					       		Category = pluginAssemblyAttribute.Category
-					       	};
-				}
-			}
-		}
+                    return null;
+                }
+            }
 
-		#endregion
-	}
+            protected string TargetProcessInputQueue => Settings.Default.TargetProcessInputQueue;
+
+            protected virtual IEnumerable<MessageEndpointMapping> GetExtraMappings()
+            {
+                return new MessageEndpointMapping[] { };
+            }
+
+            public static PluginInfo PluginInfo
+            {
+                get
+                {
+                    var pluginAssemblyAttribute = ObjectFactory.GetInstance<IPluginMetadata>().PluginData;
+                    return new PluginInfo
+                    {
+                        Name = pluginAssemblyAttribute.Name,
+                        Description = pluginAssemblyAttribute.Description,
+                        Category = pluginAssemblyAttribute.Category
+                    };
+                }
+            }
+        }
+
+        #endregion
+    }
 }

@@ -11,33 +11,33 @@ using Tp.SourceControl.Comments;
 
 namespace Tp.SourceControl
 {
-	public abstract class Action : IAction
-	{
-		protected Action()
-		{
-			Children = new List<IAction>();
-		}
+    public abstract class Action : IAction
+    {
+        protected Action()
+        {
+            Children = new List<IAction>();
+        }
 
-		protected abstract void Visit(IActionVisitor visitor);
+        protected abstract void Visit(IActionVisitor visitor);
 
-		public void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger)
-		{
-			Visit(visitor);
+        public void Execute(IActionVisitor visitor, Action<ITargetProcessCommand> executor, IActivityLogger logger)
+        {
+            Visit(visitor);
 
-			if (CanBeExecuted)
-			{
-				Log(logger);
+            if (CanBeExecuted)
+            {
+                Log(logger);
 
-				executor(CreateCommand());
-			}
-		}
+                executor(CreateCommand());
+            }
+        }
 
-		public List<IAction> Children { get; private set; }
+        public List<IAction> Children { get; private set; }
 
-		protected abstract bool CanBeExecuted { get; }
+        protected abstract bool CanBeExecuted { get; }
 
-		protected abstract ITargetProcessCommand CreateCommand();
+        protected abstract ITargetProcessCommand CreateCommand();
 
-		protected abstract void Log(IActivityLogger logger);
-	}
+        protected abstract void Log(IActivityLogger logger);
+    }
 }

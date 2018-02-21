@@ -19,6 +19,7 @@
 
 	<!ENTITY templ_en SYSTEM "lang/en/bodytemplates.xml">
 	<!ENTITY templ_ru SYSTEM "lang/ru/bodytemplates.xml">
+	<!ENTITY templ_fr SYSTEM "lang/fr/bodytemplates.xml">
 
 	%types;
 	%from;
@@ -42,5 +43,6 @@
 
 &templ_en;
 &templ_ru;
+&templ_fr;
 
 </notification>

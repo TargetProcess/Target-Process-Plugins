@@ -5,8 +5,8 @@
 
 namespace Tp.BugTracking.ConnectionValidators
 {
-	public interface IDataHolder<T>
-	{
-		T Data { get; }
-	}
+    public interface IDataHolder<T>
+    {
+        T Data { get; }
+    }
 }

@@ -7,8 +7,8 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.SourceControl.Commands
 {
-	public interface ICheckConnectionErrorResolver
-	{
-		void HandleConnectionError(Exception exception, PluginProfileErrorCollection errors);
-	}
+    public interface ICheckConnectionErrorResolver
+    {
+        void HandleConnectionError(Exception exception, PluginProfileErrorCollection errors);
+    }
 }

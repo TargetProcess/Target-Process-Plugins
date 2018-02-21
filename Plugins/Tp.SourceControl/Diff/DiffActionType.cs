@@ -5,11 +5,11 @@
 
 namespace Tp.SourceControl.Diff
 {
-	public enum DiffActionType
-	{
-		None = 0,
-		Added = 10,
-		Updated = 20,
-		Deleted = 30
-	}
+    public enum DiffActionType
+    {
+        None = 0,
+        Added = 10,
+        Updated = 20,
+        Deleted = 30
+    }
 }

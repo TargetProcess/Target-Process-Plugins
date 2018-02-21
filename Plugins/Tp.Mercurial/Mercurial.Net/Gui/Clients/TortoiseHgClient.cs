@@ -15,11 +15,7 @@ namespace Mercurial.Gui.Clients
         /// <summary>
         /// Gets the current <see cref="TortoiseHgClient"/> implementation in use.
         /// </summary>
-        public static TortoiseHgClient Current
-        {
-            get;
-            private set;
-        }
+        public static TortoiseHgClient Current { get; private set; }
 
         /// <summary>
         /// Assigns the <see cref="Current"/> <see cref="TortoiseHgClient"/> implementation based on the
@@ -102,17 +98,11 @@ namespace Mercurial.Gui.Clients
         /// <summary>
         /// Gets the option to pass to the TortoiseHg command line client to read in the file list.
         /// </summary>
-        public abstract string FileListOption
-        {
-            get;
-        }
+        public abstract string FileListOption { get; }
 
         /// <summary>
         /// Gets the <see cref="Encoding"/> to use when saving the file list to disk.
         /// </summary>
-        public abstract Encoding FileListEncoding
-        {
-            get;
-        }
+        public abstract Encoding FileListEncoding { get; }
     }
 }

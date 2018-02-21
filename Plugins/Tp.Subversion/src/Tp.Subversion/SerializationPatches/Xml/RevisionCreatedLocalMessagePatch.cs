@@ -7,18 +7,18 @@ using Tp.Integration.Messages.SerializationPatches;
 
 namespace Tp.Subversion.SerializationPatches.Xml
 {
-	public class RevisionCreatedLocalMessagePatch : IPatch
-	{
-		public bool NeedToApply(string text)
-		{
-			return text.Contains(">Tp.Subversion.Messages.RevisionCreatedLocalMessage<") && text.Contains(">Tp.Subversion<");
-		}
+    public class RevisionCreatedLocalMessagePatch : IPatch
+    {
+        public bool NeedToApply(string text)
+        {
+            return text.Contains(">Tp.Subversion.Messages.RevisionCreatedLocalMessage<") && text.Contains(">Tp.Subversion<");
+        }
 
-		public string Apply(string text)
-		{
-			return text.Replace(">Tp.Subversion.Messages.RevisionCreatedLocalMessage<",
-			                    ">Tp.SourceControl.Messages.RevisionCreatedLocalMessage<")
-				.Replace(">Tp.Subversion<", ">Tp.SourceControl<");
-		}
-	}
+        public string Apply(string text)
+        {
+            return text.Replace(">Tp.Subversion.Messages.RevisionCreatedLocalMessage<",
+                    ">Tp.SourceControl.Messages.RevisionCreatedLocalMessage<")
+                .Replace(">Tp.Subversion<", ">Tp.SourceControl<");
+        }
+    }
 }

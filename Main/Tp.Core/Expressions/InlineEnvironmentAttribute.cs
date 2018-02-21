@@ -2,7 +2,7 @@
 
 namespace Tp.Core.Expressions
 {
-	public class InlineEnvironmentAttribute : Attribute
-	{
-	}
+    public class InlineEnvironmentAttribute : Attribute
+    {
+    }
 }

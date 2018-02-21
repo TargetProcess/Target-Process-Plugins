@@ -7,8 +7,8 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.BugTracking.ConnectionValidators
 {
-	public interface IValidator
-	{
-		void Execute(PluginProfileErrorCollection errors);
-	}
+    public interface IValidator
+    {
+        void Execute(PluginProfileErrorCollection errors);
+    }
 }

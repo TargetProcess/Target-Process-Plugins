@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -16,38 +16,35 @@ using Tp.Integration.Plugin.TestRunImport.Mappers;
 
 namespace Tp.Integration.Plugin.TestRunImport.Commands
 {
-	public class CheckMappingCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage
-			       	{ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed};
-		}
+    public class CheckMappingCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage
+                { ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed };
+        }
 
-		private static string OnExecute(string args)
-		{
-			var data = args.Deserialize(typeof (CheckMappingData));
+        private static string OnExecute(string args)
+        {
+            var data = args.Deserialize(typeof(CheckMappingData));
 
-			return
-				CheckMapping((TestRunImportPluginProfile) (((CheckMappingData) data).Profile).Settings,
-				             ((CheckMappingData) data).TestCases).Serialize();
-		}
+            return
+                CheckMapping((TestRunImportPluginProfile) (((CheckMappingData) data).Profile).Settings,
+                    ((CheckMappingData) data).TestCases).Serialize();
+        }
 
-		private static CheckMappingResult CheckMapping(TestRunImportPluginProfile settings,
-		                                               IEnumerable<TestCaseLightDto> testCases)
-		{
-			var testCaseTestPlanDtos =
-				testCases.Select(
-					testCaseLightDto =>
-					new TestCaseTestPlanDTO {TestCaseID = testCaseLightDto.Id, TestCaseName = testCaseLightDto.Name}).ToList();
-			var errors = new PluginProfileErrorCollection();
-			settings.ValidateMapperData(errors);
-			return ObjectFactory.GetInstance<IMappingChecker>().CheckMapping(settings, testCaseTestPlanDtos, errors);
-		}
+        private static CheckMappingResult CheckMapping(TestRunImportPluginProfile settings,
+            IEnumerable<TestCaseLightDto> testCases)
+        {
+            var testCaseTestPlanDtos =
+                testCases.Select(
+                    testCaseLightDto =>
+                            new TestCaseTestPlanDTO { TestCaseID = testCaseLightDto.Id, TestCaseName = testCaseLightDto.Name }).ToList();
+            var errors = new PluginProfileErrorCollection();
+            settings.ValidateMapperData(errors);
+            return ObjectFactory.GetInstance<IMappingChecker>().CheckMapping(settings, testCaseTestPlanDtos, errors);
+        }
 
-		public string Name
-		{
-			get { return "CheckMapping"; }
-		}
-	}
+        public string Name => "CheckMapping";
+    }
 }

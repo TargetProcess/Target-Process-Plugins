@@ -14,91 +14,85 @@ using Tp.Integration.Plugin.Common.Storage.Repositories;
 
 namespace Tp.Integration.Plugin.Common.Domain
 {
-	[DebuggerDisplay("AccountName =  {_accountName.Value}, ProfilesCount = {_profiles.Count}")]
-	internal class ProfileCollection : IProfileCollection, IProfileCollectionReadonly
-	{
-		private readonly AccountName _accountName;
-		private readonly Dictionary<ProfileName, ProfileDomainObject> _profiles;
-		
-		public ProfileCollection(AccountName accountName, IEnumerable<ProfileDomainObject> profiles)
-		{
-			_accountName = accountName;
-			_profiles = profiles.ToDictionary(p => p.Name);
-			ProfileRepository = null;
-			EventAggregator = null;
-		}
+    [DebuggerDisplay("AccountName =  {_accountName.Value}, ProfilesCount = {_profiles.Count}")]
+    internal class ProfileCollection : IProfileCollection, IProfileCollectionReadonly
+    {
+        private readonly AccountName _accountName;
+        private readonly Dictionary<ProfileName, ProfileDomainObject> _profiles;
 
-		public ProfileCollection(ProfileCollection other)
-		{
-			_accountName = other._accountName;
-			_profiles = other.Profiles.Values.Select(p => new ProfileDomainObject(p)).ToDictionary(p => p.Name);
-			ProfileRepository = other.ProfileRepository;
-			EventAggregator = other.EventAggregator;
-		}
+        public ProfileCollection(AccountName accountName, IEnumerable<ProfileDomainObject> profiles)
+        {
+            _accountName = accountName;
+            _profiles = profiles.ToDictionary(p => p.Name);
+            ProfileRepository = null;
+            EventAggregator = null;
+        }
 
-		public IProfile this[ProfileName profileName]
-		{
-			get
-			{
-				return (profileName.IsEmpty || !Profiles.ContainsKey(profileName))
-				       	? ProfileSafeNull.Instance
-				       	: Profiles[profileName];
-			}
-		}
+        public ProfileCollection(ProfileCollection other)
+        {
+            _accountName = other._accountName;
+            _profiles = other.Profiles.Values.Select(p => new ProfileDomainObject(p)).ToDictionary(p => p.Name);
+            ProfileRepository = other.ProfileRepository;
+            EventAggregator = other.EventAggregator;
+        }
 
-		IProfileReadonly IProfileCollectionReadonly.this[ProfileName profileName]
-		{
-			get { return this[profileName]; }
-		}
+        public IProfile this[ProfileName profileName]
+        {
+            get
+            {
+                return (profileName.IsEmpty || !Profiles.ContainsKey(profileName))
+                    ? ProfileSafeNull.Instance
+                    : Profiles[profileName];
+            }
+        }
 
-		public IProfile Add(ProfileCreationArgs profileCreationArgs)
-		{
-			ProfileDomainObject newProfile = ProfileRepository.Add(profileCreationArgs, _accountName);
-			Profiles.Add(newProfile.Name, newProfile);
-			RaiseProfileCollectionChanged();
-			return newProfile;
-		}
+        IProfileReadonly IProfileCollectionReadonly.this[ProfileName profileName]
+        {
+            get { return this[profileName]; }
+        }
 
-		public void Remove(IProfile profile)
-		{
-			ProfileRepository.Delete(profile.Name, _accountName);
-			Profiles.Remove(profile.Name);
-			RaiseProfileCollectionChanged();
-		}
+        public IProfile Add(ProfileCreationArgs profileCreationArgs)
+        {
+            ProfileDomainObject newProfile = ProfileRepository.Add(profileCreationArgs, _accountName);
+            Profiles.Add(newProfile.Name, newProfile);
+            RaiseProfileCollectionChanged();
+            return newProfile;
+        }
 
-		private void RaiseProfileCollectionChanged()
-		{
-			EventAggregator.Get<Event<ProfileCollectionChanged>>().Raise(new ProfileCollectionChanged(this, _accountName));
-		}
+        public void Remove(IProfile profile)
+        {
+            ProfileRepository.Delete(profile.Name, _accountName);
+            Profiles.Remove(profile.Name);
+            RaiseProfileCollectionChanged();
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        private void RaiseProfileCollectionChanged()
+        {
+            EventAggregator.Get<Event<ProfileCollectionChanged>>().Raise(new ProfileCollectionChanged(this, _accountName));
+        }
 
-		public IEnumerator<IProfile> GetEnumerator()
-		{
-			return Profiles.Values.GetEnumerator();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		IEnumerator<IProfileReadonly> IEnumerable<IProfileReadonly>.GetEnumerator()
-		{
-			return Profiles.Values.GetEnumerator();
-		}
+        public IEnumerator<IProfile> GetEnumerator()
+        {
+            return Profiles.Values.GetEnumerator();
+        }
 
-		public IEventAggregator EventAggregator
-		{
-			private get; set;
-		}
+        IEnumerator<IProfileReadonly> IEnumerable<IProfileReadonly>.GetEnumerator()
+        {
+            return Profiles.Values.GetEnumerator();
+        }
 
-		public IProfileRepository ProfileRepository
-		{
-			private get; set;
-		}
+        public IEventAggregator EventAggregator { private get; set; }
 
-		private IDictionary<ProfileName, ProfileDomainObject> Profiles
-		{
-			get { return _profiles; }
-		}
-	}
+        public IProfileRepository ProfileRepository { private get; set; }
+
+        private IDictionary<ProfileName, ProfileDomainObject> Profiles
+        {
+            get { return _profiles; }
+        }
+    }
 }

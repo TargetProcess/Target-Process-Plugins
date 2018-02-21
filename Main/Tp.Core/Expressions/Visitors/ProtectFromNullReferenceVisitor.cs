@@ -1,56 +1,118 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using Tp.Core.Annotations;
+using Tp.Core.Features;
 
 namespace Tp.Core.Expressions.Visitors
 {
-	class ProtectFromNullReferenceVisitor : ExpressionVisitor
-	{
-		protected override Expression VisitMember(MemberExpression memberExpression)
-		{
-			if (memberExpression.Expression != null)
-			{
-				return ProtectFromNull(memberExpression, memberExpression.Expression);
-			}
-			return base.VisitMember(memberExpression);
-		}
+    internal class ProtectFromNullReferenceVisitor : ExpressionVisitor
+    {
+        private static readonly Type _nullableOpenType = typeof(Nullable<>);
 
-		protected override Expression VisitIndex(IndexExpression node)
-		{
-			return ProtectFromNull(node, node.Object);
-		}
+        protected override Expression VisitMember(MemberExpression memberExpression)
+        {
+            if (memberExpression.Expression != null && CanBeNull(memberExpression))
+            {
+                return ProtectFromNull(memberExpression, memberExpression.Expression);
+            }
+            return base.VisitMember(memberExpression);
+        }
 
-		protected override Expression VisitMethodCall(MethodCallExpression node)
-		{
-			if (node.Method.IsSpecialName && node.Method.Name == "get_Item")
-			{
-				return ProtectFromNull(node, node.Object);
-			}
-			return base.VisitMethodCall(node);
-		}
+        protected override Expression VisitIndex(IndexExpression node)
+        {
+            return ProtectFromNull(node, node.Object);
+        }
 
-		protected override Expression VisitUnary(UnaryExpression node)
-		{
-			if (node.NodeType == ExpressionType.Convert && node.Type.IsValueType && !node.Operand.Type.IsValueType)
-			{
-				return ProtectFromNull(node, node.Operand);
-			}
+        private static readonly MethodInfo _toStringMethod = Reflect<object>.GetMethod(o => o.ToString());
+        private static bool CanBeNull(Expression expression)
+        {
+            if (expression == null)
+            {
+                return true;
+            }
+            
+            return expression
+                .Match(true)
+                .Case<MethodCallExpression>(c => !(c.Method.GetCustomAttribute<NotNullAttribute>().HasValue || c.Method.GetBaseDefinition() == _toStringMethod))
+                .Case<MemberExpression>(a => !a.Member.GetCustomAttribute<NotNullAttribute>().HasValue)
+                .End(true);
+        }
 
-			return base.VisitUnary(node);
-		}
+        protected override Expression VisitMethodCall(MethodCallExpression node)
+        {
+            if (!CanBeNull(node.Object) || !ShouldProtectMethodCall(node))
+            {
+                return base.VisitMethodCall(node);
+            }
 
-		private Expression ProtectFromNull(Expression memberExpression, Expression target)
-		{
-			var targetType = target.Type;
-			if (targetType.IsValueType)
-			{
-				return memberExpression;
-			}
+            var args = node.Arguments.Select(a => a.ProtectFromNullReference());
+            var newNode = Expression.Call(node.Object, node.Method, args);
+            return ProtectFromNull(newNode, newNode.Object);
+        }
 
-			var condition = Expression.ReferenceEqual(Visit(target), Expression.Constant(null, target.Type));
+        private static bool ShouldProtectMethodCall(MethodCallExpression node)
+        {
+            var method = node.Method;
+            if (TpFeature.RestProtectAllMethodCallsFromNull.IsEnabled())
+            {
+                if (method.IsStatic)
+                {
+                    // This skips protection for extension methods as well, because they may be called on null values and can have logic for them. 
+                    // E.g. StringExtensions.Contains() protects from nulls inside itself.
+                    return false;
+                }
 
-			var @true = Expression.Constant(memberExpression.Type.DefaultValue(), memberExpression.Type);
-			var @false = memberExpression;
-			return Expression.Condition(condition, @true, @false);
-		}
-	}
+                if (node.Object?.NodeType == ExpressionType.Constant)
+                {
+                    // This removes redundant null checks in EnumerableProjector.Project etc
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (method.Name == "ToString" && !method.IsStatic) return true;
+            if (method.IsSpecialName && method.Name == "get_Item") return true;
+            return false;
+        }
+
+        protected override Expression VisitUnary(UnaryExpression node)
+        {
+            if (node.NodeType == ExpressionType.Convert && node.Type.IsValueType && !node.Operand.Type.IsValueType)
+            {
+                return ProtectFromNull(node, node.Operand);
+            }
+
+            return base.VisitUnary(node);
+        }
+
+        private Expression ProtectFromNull(Expression memberExpression, Expression target)
+        {
+            var targetType = target.Type;
+
+            Expression condition;
+
+            if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == _nullableOpenType)
+            {
+                // Nullable<> is a value type, but we still need to compare it with null using regular equality (not reference equality)
+                condition = Expression.Equal(Visit(target), Expression.Constant(null, targetType));
+            }
+            else if (targetType.IsValueType)
+            {
+                // Non-nullable value types can't be null, so no protection is required
+                return memberExpression;
+            }
+            else
+            {
+                // Reference types should should use reference equality comparison
+                condition = Expression.ReferenceEqual(Visit(target), Expression.Constant(null, target.Type));
+            }
+
+            var @true = Expression.Constant(memberExpression.Type.DefaultValue(), memberExpression.Type);
+            var @false = memberExpression;
+            return Expression.Condition(condition, @true, @false);
+        }
+    }
 }

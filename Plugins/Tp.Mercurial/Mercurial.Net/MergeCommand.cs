@@ -32,11 +32,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Force"/> property to the specified value and
@@ -64,10 +60,7 @@ namespace Mercurial
         [DefaultValue("")]
         public string MergeTool
         {
-            get
-            {
-                return _MergeTool;
-            }
+            get { return _MergeTool; }
 
             set
             {
@@ -102,11 +95,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -179,11 +168,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public MergeResult Result
-        {
-            get;
-            private set;
-        }
+        public MergeResult Result { get; private set; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="CommandBase{T}.Command"/>, or an

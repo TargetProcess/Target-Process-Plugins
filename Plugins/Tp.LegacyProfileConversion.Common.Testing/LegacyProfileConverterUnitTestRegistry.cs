@@ -16,18 +16,18 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.LegacyProfileConversion.Common.Testing
 {
-	public abstract class LegacyProfileConverterUnitTestRegistry : Registry
-	{
-		protected LegacyProfileConverterUnitTestRegistry()
-		{
-			IncludeRegistry<PluginRegistry>();
-			IncludeRegistry<NServiceBusMockRegistry>();
-			For<IConvertorArgs>().HybridHttpOrThreadLocalScoped().Use(MockRepository.GenerateStub<IConvertorArgs>());
-			For<IPluginContext>().HybridHttpOrThreadLocalScoped().Use(MockRepository.GenerateStub<IPluginContext>());
-			For<IAssembliesHost>().Singleton().Use(new PredefinedAssembliesHost(new[] {PluginAssembly}));
-			For<IProfileStoragePersister>().HybridHttpOrThreadLocalScoped().Use<ProfileStorageSqlPersister>();
-		}
+    public abstract class LegacyProfileConverterUnitTestRegistry : Registry
+    {
+        protected LegacyProfileConverterUnitTestRegistry()
+        {
+            IncludeRegistry<PluginRegistry>();
+            IncludeRegistry<NServiceBusMockRegistry>();
+            For<IConvertorArgs>().HybridHttpOrThreadLocalScoped().Use(MockRepository.GenerateStub<IConvertorArgs>());
+            For<IPluginContext>().HybridHttpOrThreadLocalScoped().Use(MockRepository.GenerateStub<IPluginContext>());
+            For<IAssembliesHost>().Singleton().Use(new PredefinedAssembliesHost(new[] { PluginAssembly }));
+            For<IProfileStoragePersister>().HybridHttpOrThreadLocalScoped().Use<ProfileStorageSqlPersister>();
+        }
 
-		protected abstract Assembly PluginAssembly { get; }
-	}
+        protected abstract Assembly PluginAssembly { get; }
+    }
 }

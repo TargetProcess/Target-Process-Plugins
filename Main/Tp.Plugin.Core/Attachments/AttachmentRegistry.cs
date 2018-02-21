@@ -7,11 +7,11 @@ using StructureMap.Configuration.DSL;
 
 namespace Tp.Plugin.Core.Attachments
 {
-	public class AttachmentRegistry : Registry
-	{
-		public AttachmentRegistry()
-		{
-			For<IBufferSize>().Singleton().Use(new BufferSize(1000000));
-		}
-	}
+    public class AttachmentRegistry : Registry
+    {
+        public AttachmentRegistry()
+        {
+            For<IBufferSize>().Singleton().Use(new BufferSize(1000000));
+        }
+    }
 }

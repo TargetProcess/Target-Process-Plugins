@@ -7,13 +7,13 @@ using Tp.BugTracking.BugFieldConverters;
 
 namespace Tp.Bugzilla.BugFieldConverters
 {
-	public class CommentConverter : IBugConverter<BugzillaBug>
-	{
-		public const string StateIsChangedComment = "State is changed by Bugzilla plugin";
+    public class CommentConverter : IBugConverter<BugzillaBug>
+    {
+        public const string StateIsChangedComment = "State is changed by Bugzilla plugin";
 
-		public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
-		{
-			convertedBug.BugDto.CommentOnChangingState = StateIsChangedComment;
-		}
-	}
+        public void Apply(BugzillaBug thirdPartyBug, ConvertedBug convertedBug)
+        {
+            convertedBug.BugDto.CommentOnChangingState = StateIsChangedComment;
+        }
+    }
 }

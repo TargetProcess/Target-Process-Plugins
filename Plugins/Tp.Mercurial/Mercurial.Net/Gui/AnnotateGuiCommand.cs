@@ -36,15 +36,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string File
         {
-            get
-            {
-                return _File;
-            }
+            get { return _File; }
 
-            set
-            {
-                _File = (value ?? string.Empty).Trim();
-            }
+            set { _File = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -72,11 +66,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--line")]
         [DefaultValue(0)]
-        public int? LineNumber
-        {
-            get;
-            set;
-        }
+        public int? LineNumber { get; set; }
 
         /// <summary>
         /// Sets the <see cref="LineNumber"/> property to the specified value and

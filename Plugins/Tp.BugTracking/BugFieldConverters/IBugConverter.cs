@@ -5,8 +5,8 @@
 
 namespace Tp.BugTracking.BugFieldConverters
 {
-	public interface IBugConverter<T>
-	{
-		void Apply(T thirdPartyBug, ConvertedBug convertedBug);
-	}
+    public interface IBugConverter<T>
+    {
+        void Apply(T thirdPartyBug, ConvertedBug convertedBug);
+    }
 }

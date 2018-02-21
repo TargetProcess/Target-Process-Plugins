@@ -9,14 +9,14 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.PopEmailIntegration.EmailReader.Client
 {
-	public interface IEmailClient : IDisposable
-	{
-		void Connect();
-		void Login();
-		void Disconnect();
-		string[] GetServerUids();
-		void CheckConnection(PluginProfileErrorCollection errors);
-		MailMessage DownloadMessage(string uid);
-		bool IsDsnMessage(MailMessage message);
-	}
+    public interface IEmailClient : IDisposable
+    {
+        void Connect();
+        void Login();
+        void Disconnect();
+        string[] GetServerUids();
+        void CheckConnection(PluginProfileErrorCollection errors);
+        MailMessage DownloadMessage(string uid);
+        bool IsDsnMessage(MailMessage message);
+    }
 }

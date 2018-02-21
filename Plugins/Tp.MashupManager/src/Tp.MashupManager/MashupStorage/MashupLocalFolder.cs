@@ -8,11 +8,11 @@ using Tp.Integration.Plugin.Common;
 
 namespace Tp.MashupManager.MashupStorage
 {
-	public class MashupLocalFolder : IMashupLocalFolder
-	{
-		public string Path
-		{
-			get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
-		}
-	}
+    public class MashupLocalFolder : IMashupLocalFolder
+    {
+        public string Path
+        {
+            get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
+        }
+    }
 }

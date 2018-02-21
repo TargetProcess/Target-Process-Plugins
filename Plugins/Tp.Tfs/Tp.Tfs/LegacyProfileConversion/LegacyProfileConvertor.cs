@@ -17,224 +17,231 @@ using Tp.Integration.Plugin.Common.PluginLifecycle;
 using Tp.LegacyProfileConvertsion.Common;
 using Tp.SourceControl.RevisionStorage;
 using log4net;
+using Tp.Plugins.Toolkit.Repositories;
+using Tp.SourceControl;
 using PluginProfile = Tp.LegacyProfileConvertsion.Common.PluginProfile;
 
 namespace Tp.Tfs.LegacyProfileConversion
 {
-	public class LegacyProfileConvertor : LegacyProfileConvertorBase<PluginProfile>
-	{
-		public const string PluginName = "Team Foundation Server Integration";
-		private const string Converting = " _converting...";
+    public class LegacyProfileConvertor : LegacyProfileConvertorBase<PluginProfile>
+    {
+        public const string PluginName = "Team Foundation Server Integration";
+        private const string Converting = " _converting...";
 
-		private readonly PluginInfoSender _initializer;
-		private readonly ILog _log;
+        private readonly PluginInfoSender _initializer;
+        private readonly ILog _log;
 
-		public LegacyProfileConvertor(
-				IConvertorArgs args,
-				IAccountCollection accountCollection,
-				ILogManager logManager,
-				PluginInitializer initializer)
-			: base(args, accountCollection)
-		{
-			_log = logManager.GetLogger(GetType());
-			_initializer = initializer;
-		}
+        public LegacyProfileConvertor(
+            IConvertorArgs args,
+            IAccountCollection accountCollection,
+            ILogManager logManager,
+            PluginInitializer initializer)
+            : base(args, accountCollection)
+        {
+            _log = logManager.GetLogger(GetType());
+            _initializer = initializer;
+        }
 
-		public void Execute(string legacyProfileName)
-		{
-			var legacyProfile = GetLegacyProfile(legacyProfileName);
+        public void Execute(string legacyProfileName)
+        {
+            var legacyProfile = GetLegacyProfile(legacyProfileName);
 
-			_log.Info("TFS legacy profile converter disabling legacy profile");
-			DisableLegacyProfile(legacyProfile);
-			_log.Info("TFS legacy profile converter disabled legacy profile");
+            _log.Info("TFS legacy profile converter disabling legacy profile");
+            DisableLegacyProfile(legacyProfile);
+            _log.Info("TFS legacy profile converter disabled legacy profile");
 
-			var profile = legacyProfile;
-			profile.ProfileName = legacyProfileName;
+            var profile = legacyProfile;
+            profile.ProfileName = legacyProfileName;
 
-			_log.InfoFormat("TFS legacy profile converter processing conversion for profile '{0}'", legacyProfileName);
-			ExecuteForProfile(profile, GetAccount());
-			_log.InfoFormat("TFS legacy profile converter processed conversion for profile '{0}'", legacyProfileName);
+            _log.InfoFormat("TFS legacy profile converter processing conversion for profile '{0}'", legacyProfileName);
+            ExecuteForProfile(profile, GetAccount());
+            _log.InfoFormat("TFS legacy profile converter processed conversion for profile '{0}'", legacyProfileName);
 
-			_log.Info("TFS legacy profile converter updating legacy profile name");
-			UpdateLegacyProfileName(legacyProfile);
-			_log.Info("TFS legacy profile converter updated legacy profile name");
-		}
+            _log.Info("TFS legacy profile converter updating legacy profile name");
+            UpdateLegacyProfileName(legacyProfile);
+            _log.Info("TFS legacy profile converter updated legacy profile name");
+        }
 
-		private PluginProfile GetLegacyProfile(string name)
-		{
-			return _context.PluginProfiles.SingleOrDefault(x => x.PluginName == PluginName && x.ProfileName == name);
-		}
+        private PluginProfile GetLegacyProfile(string name)
+        {
+            return _context.PluginProfiles.SingleOrDefault(x => x.PluginName == PluginName && x.ProfileName == name);
+        }
 
-		private void DisableLegacyProfile(PluginProfile legacyProfile)
-		{
-			legacyProfile.Active = false;
+        private void DisableLegacyProfile(PluginProfile legacyProfile)
+        {
+            legacyProfile.Active = false;
 
-			_context.SubmitChanges();
-		}
+            _context.SubmitChanges();
+        }
 
-		private void UpdateLegacyProfileName(PluginProfile legacyProfile)
-		{
-			legacyProfile.ProfileName = legacyProfile.ProfileName.Replace(Converting, string.Empty);
+        private void UpdateLegacyProfileName(PluginProfile legacyProfile)
+        {
+            legacyProfile.ProfileName = legacyProfile.ProfileName.Replace(Converting, string.Empty);
 
-			_context.SubmitChanges();
-		}
+            _context.SubmitChanges();
+        }
 
-		protected override void CreateNewProfileName(PluginProfileDto pluginProfile, IAccount account)
-		{
-			do
-			{
-				pluginProfile.Name = String.Concat(pluginProfile.Name, "_converted");
-			} while (account.Profiles.Any(x => x.Name == pluginProfile.Name));
-		}
+        protected override void CreateNewProfileName(PluginProfileDto pluginProfile, IAccount account)
+        {
+            do
+            {
+                pluginProfile.Name = String.Concat(pluginProfile.Name, "_converted");
+            } while (account.Profiles.Any(x => x.Name == pluginProfile.Name));
+        }
 
-		protected override void OnProfileMigrated(IStorageRepository storageRepository, PluginProfile legacyProfile)
-		{
-			_initializer.SendInfoMessages();
+        protected override void OnProfileMigrated(IStorageRepository storageRepository, PluginProfile legacyProfile)
+        {
+            _initializer.SendInfoMessages();
 
-			MigrateUsers(storageRepository);
-			MigrateRevisions(legacyProfile, storageRepository);
-		}
+            MigrateUsers(storageRepository);
+            MigrateRevisions(legacyProfile, storageRepository);
+        }
 
-		public void MigrateRevisions(PluginProfile legacyProfile, IStorageRepository storageRepository)
-		{
-			var alreadyImportedRevisions = _context.Revisions.Where(x => x.PluginProfileID == legacyProfile.PluginProfileID);
+        public void MigrateRevisions(PluginProfile legacyProfile, IStorageRepository storageRepository)
+        {
+            var alreadyImportedRevisions = _context.Revisions.Where(x => x.PluginProfileID == legacyProfile.PluginProfileID);
 
-			foreach (var revision in alreadyImportedRevisions)
-			{
-				storageRepository.Get<RevisionIdRelation>(revision.RevisionID.ToString())
-					.ReplaceWith(new RevisionIdRelation { RevisionId = revision.SourceControlID.ToString(), TpId = revision.RevisionID });
-			}
-		}
+            foreach (var revision in alreadyImportedRevisions)
+            {
+                storageRepository.Get<RevisionIdRelation>(revision.RevisionID.ToString())
+                    .ReplaceWith(new RevisionIdRelation { RevisionId = revision.SourceControlID.ToString(), TpId = revision.RevisionID });
+            }
+        }
 
-		private void MigrateUsers(IStorageRepository storageRepository)
-		{
-			if (storageRepository == null)
-			{
-				throw new ArgumentNullException("storageRepository");
-			}
-			Mapper.CreateMap<TpUser, UserDTO>();
-			foreach (var tpUser in _context.TpUsers.Where(x => x.Type == 1 || x.Type == 4))
-			{
-				storageRepository.Get<UserDTO>().Add(Mapper.Map<TpUser, UserDTO>(tpUser));
-			}
-		}
+        private void MigrateUsers(IStorageRepository storageRepository)
+        {
+            if (storageRepository == null)
+            {
+                throw new ArgumentNullException("storageRepository");
+            }
+            Mapper.CreateMap<TpUser, TpUserData>();
+            var repository = new DataRepository<TpUserData>(storageRepository);
+            var users = _context.TpUsers
+                .Where(x => x.Type == 1 || x.Type == 4)
+                .Where(x => x.DeleteDate == null)
+                .Where(x => x.IsActive == true);
+            foreach (var tpUser in users)
+            {
+                repository.Add(Mapper.Map<TpUser, TpUserData>(tpUser));
+            }
+        }
 
-		protected override IEnumerable<PluginProfile> GetLegacyProfiles()
-		{
-			return _context.PluginProfiles.Where(x => x.Active == true && x.PluginName == "Team Foundation Server Integration");
-		}
+        protected override IEnumerable<PluginProfile> GetLegacyProfiles()
+        {
+            return _context.PluginProfiles.Where(x => x.Active == true && x.PluginName == "Team Foundation Server Integration");
+        }
 
-		private static XmlDocument ConvertToXmlDocument(PluginProfile profile)
-		{
-			var document = new XmlDocument();
-			document.LoadXml(profile.Settings);
-			return document;
-		}
+        private static XmlDocument ConvertToXmlDocument(PluginProfile profile)
+        {
+            var document = new XmlDocument();
+            document.LoadXml(profile.Settings);
+            return document;
+        }
 
-		protected override PluginProfileDto ConvertToPluginProfile(PluginProfile legacyProfile)
-		{
-			var pluginProfileDto = new PluginProfileDto { Name = legacyProfile.ProfileName };
+        protected override PluginProfileDto ConvertToPluginProfile(PluginProfile legacyProfile)
+        {
+            var pluginProfileDto = new PluginProfileDto { Name = legacyProfile.ProfileName };
 
-			var document = ConvertToXmlDocument(legacyProfile);
-			var converted = Parse(legacyProfile, document);
-			pluginProfileDto.Settings = converted;
+            var document = ConvertToXmlDocument(legacyProfile);
+            var converted = Parse(legacyProfile, document);
+            pluginProfileDto.Settings = converted;
 
-			return pluginProfileDto;
-		}
+            return pluginProfileDto;
+        }
 
-		private TfsPluginProfile Parse(PluginProfile legacyProfile, XmlDocument document)
-		{
-			var result = new TfsPluginProfile();
-			var root = document.SelectSingleNode("./Settings");
+        private TfsPluginProfile Parse(PluginProfile legacyProfile, XmlDocument document)
+        {
+            var result = new TfsPluginProfile();
+            var root = document.SelectSingleNode("./Settings");
 
-			string server = GetValueByName(root, "ServerName").TrimEnd('/');
-			string projectName = GetValueByName(root, "TeamProjectName");
-			result.Uri = string.Concat(server, "/", projectName);
+            string server = GetValueByName(root, "ServerName").TrimEnd('/');
+            string projectName = GetValueByName(root, "TeamProjectName");
+            result.Uri = string.Concat(server, "/", projectName);
 
-			var syncIntervalValue = GetValueByName(root, "SyncInterval");
-			if (!string.IsNullOrEmpty(syncIntervalValue))
-			{
-				result.SynchronizationInterval = Int32.Parse(syncIntervalValue);
-			}
+            var syncIntervalValue = GetValueByName(root, "SyncInterval");
+            if (!string.IsNullOrEmpty(syncIntervalValue))
+            {
+                result.SynchronizationInterval = Int32.Parse(syncIntervalValue);
+            }
 
-			result.Login = GetValueByName(root, "Login");
-			result.Password = GetValueByName(root, "Password");
+            result.Login = GetValueByName(root, "Login");
+            result.Password = GetValueByName(root, "Password");
 
-			result.StartRevision = GetStartRevision(legacyProfile, root);
+            result.StartRevision = GetStartRevision(legacyProfile, root);
 
-			var userMapping = GetValueByName(root, "Maps");
-			var parser = new LegacyMappingParser();
-			if (!string.IsNullOrEmpty(userMapping))
-			{
-				parser.Maps = userMapping;
-			}
-			foreach (string tfsUser in parser.Users.Keys)
-			{
-				var tpUser = GetUserBy(parser.Users[tfsUser], x => x.Login);
-				if (tpUser != null)
-				{
-					result.UserMapping.Add(new MappingElement { Key = tfsUser, Value = Create(tpUser) });
-					continue;
-				}
+            var userMapping = GetValueByName(root, "Maps");
+            var parser = new LegacyMappingParser();
+            if (!string.IsNullOrEmpty(userMapping))
+            {
+                parser.Maps = userMapping;
+            }
+            foreach (string tfsUser in parser.Users.Keys)
+            {
+                var tpUser = GetUserBy(parser.Users[tfsUser], x => x.Login);
+                if (tpUser != null)
+                {
+                    result.UserMapping.Add(new MappingElement { Key = tfsUser, Value = Create(tpUser) });
+                    continue;
+                }
 
-				tpUser = GetUserBy(parser.Users[tfsUser], x => x.Email);
-				if (tpUser != null)
-				{
-					result.UserMapping.Add(new MappingElement { Key = tfsUser, Value = Create(tpUser) });
-				}
-			}
+                tpUser = GetUserBy(parser.Users[tfsUser], x => x.Email);
+                if (tpUser != null)
+                {
+                    result.UserMapping.Add(new MappingElement { Key = tfsUser, Value = Create(tpUser) });
+                }
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		protected override bool IsUserTypeCorrect(TpUser user)
-		{
-			return user.Type == 1;
-		}
+        protected override bool IsUserTypeCorrect(TpUser user)
+        {
+            return user.Type == 1;
+        }
 
-		private static MappingLookup Create(TpUser tpUser)
-		{
-			return new MappingLookup { Id = tpUser.UserID, Name = tpUser.Login };
-		}
+        private static MappingLookup Create(TpUser tpUser)
+        {
+            return new MappingLookup { Id = tpUser.UserID, Name = tpUser.Login };
+        }
 
-		protected TpUser GetUserByEmail(string userMail)
-		{
-			return _context.TpUsers.FirstOrDefault(x => x.Email.ToLower() == userMail.ToLower() && x.DeleteDate == null);
-		}
+        protected TpUser GetUserByEmail(string userMail)
+        {
+            return _context.TpUsers.FirstOrDefault(x => x.Email.ToLower() == userMail.ToLower() && x.DeleteDate == null);
+        }
 
-		private string GetStartRevision(PluginProfile legacyProfile, XmlNode root)
-		{
-			var pluginProfileID = legacyProfile.PluginProfileID;
-			var alreadyImportedRevisions = _context.Revisions.Where(x => x.PluginProfileID == pluginProfileID);
-			var revisionFromLegacyProfile = RevisionFromLegacyProfile(root);
+        private string GetStartRevision(PluginProfile legacyProfile, XmlNode root)
+        {
+            var pluginProfileID = legacyProfile.PluginProfileID;
+            var alreadyImportedRevisions = _context.Revisions.Where(x => x.PluginProfileID == pluginProfileID);
+            var revisionFromLegacyProfile = RevisionFromLegacyProfile(root);
 
-			if (!alreadyImportedRevisions.Empty())
-			{
-				var lastImportedRevision = alreadyImportedRevisions.Max(x => x.SourceControlID);
+            if (!alreadyImportedRevisions.Empty())
+            {
+                var lastImportedRevision = alreadyImportedRevisions.Max(x => x.SourceControlID);
 
-				return (lastImportedRevision >= revisionFromLegacyProfile
-									? (lastImportedRevision + 1).ToString()
-									: revisionFromLegacyProfile.ToString());
-			}
+                return (lastImportedRevision >= revisionFromLegacyProfile
+                    ? (lastImportedRevision + 1).ToString()
+                    : revisionFromLegacyProfile.ToString());
+            }
 
-			return revisionFromLegacyProfile.ToString();
-		}
+            return revisionFromLegacyProfile.ToString();
+        }
 
-		private static long RevisionFromLegacyProfile(XmlNode root)
-		{
-			string revisionFromLegacyProfile = GetValueByName(root, "StartRevision");
-			if (string.IsNullOrEmpty(revisionFromLegacyProfile) || revisionFromLegacyProfile == "0")
-			{
-				return 1;
-			}
+        private static long RevisionFromLegacyProfile(XmlNode root)
+        {
+            string revisionFromLegacyProfile = GetValueByName(root, "StartRevision");
+            if (string.IsNullOrEmpty(revisionFromLegacyProfile) || revisionFromLegacyProfile == "0")
+            {
+                return 1;
+            }
 
-			return Convert.ToInt64(revisionFromLegacyProfile);
-		}
+            return Convert.ToInt64(revisionFromLegacyProfile);
+        }
 
-		private static string GetValueByName(XmlNode root, string pathtoproject)
-		{
-			var node = root.SelectSingleNode(pathtoproject);
-			return node != null ? node.InnerText : string.Empty;
-		}
-	}
+        private static string GetValueByName(XmlNode root, string pathtoproject)
+        {
+            var node = root.SelectSingleNode(pathtoproject);
+            return node != null ? node.InnerText : string.Empty;
+        }
+    }
 }

@@ -7,30 +7,31 @@ using log4net.Layout;
 
 namespace Tp.Integration.Plugin.Common.Logging
 {
-	public class CsvLayout : PatternLayout
-	{
-		public const string DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss,FFF tt";
-		public const char DELIMITER = '\t';
+    public class CsvLayout : PatternLayout
+    {
+        public const string DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss,FFF tt";
+        public const char DELIMITER = '\t';
 
-		private static readonly string PATTERN = string.Format(@"""%date{{{1}}}""{0}%-5level{0}""%messagecsv""{0}""%exceptioncsv""%newline", DELIMITER, DATE_TIME_FORMAT);
+        private static readonly string PATTERN = string.Format(
+            @"""%date{{{1}}}""{0}%-5level{0}""%messagecsv""{0}""%exceptioncsv""%newline", DELIMITER, DATE_TIME_FORMAT);
 
-		public CsvLayout() : base(PATTERN)
-		{
-		}
+        public CsvLayout() : base(PATTERN)
+        {
+        }
 
-		public CsvLayout(string format)
-			: this()
-		{
-		}
+        public CsvLayout(string format)
+            : this()
+        {
+        }
 
-		public override void ActivateOptions()
-		{
-			AddConverter("messagecsv", typeof(CsvMessagePatternConverter));
-			AddConverter("exceptioncsv", typeof(CsvExceptionPatternConverter));
+        public override void ActivateOptions()
+        {
+            AddConverter("messagecsv", typeof(CsvMessagePatternConverter));
+            AddConverter("exceptioncsv", typeof(CsvExceptionPatternConverter));
 
-			IgnoresException = false;
+            IgnoresException = false;
 
-			base.ActivateOptions();
-		}
-	}
+            base.ActivateOptions();
+        }
+    }
 }

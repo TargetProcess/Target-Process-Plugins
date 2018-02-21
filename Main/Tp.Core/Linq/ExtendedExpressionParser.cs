@@ -9,118 +9,146 @@ using Tp.Core.Annotations;
 
 namespace System.Linq.Dynamic
 {
-	internal class ExtendedExpressionParser : ExpressionParser
-	{
-		private readonly Func<string, Expression, Maybe<Expression>> _surrogateGenerator;
-		private readonly IReadOnlyDictionary<string, Type> _knownTypes;
-		private readonly Maybe<Type> _baseTypeForNewClass;
-		private readonly IEnumerable<MethodInfo> _allowedExtensionMethods;
+    public delegate Maybe<Expression> SurrogateGenerator([NotNull] string name, [CanBeNull] Expression target);
 
-		public ExtendedExpressionParser(IReadOnlyList<ParameterExpression> parameters,
-			string expression,
-			object[] values,
-			[NotNull] IEnumerable<MethodInfo> allowedExtensionMethods,
-			[NotNull] Func<string, Expression, Maybe<Expression>> surrogateGenerator,
-			[NotNull] IReadOnlyDictionary<string, Type> knownTypes,
-			Maybe<Type> baseTypeForNewClass)
-			: base(parameters, expression, values)
-		{
-			_allowedExtensionMethods = allowedExtensionMethods;
-			_surrogateGenerator = surrogateGenerator;
-			_knownTypes = knownTypes;
-			_baseTypeForNewClass = baseTypeForNewClass;
-		}
+    internal class ExtendedExpressionParser : ExpressionParser
+    {
+        private readonly SurrogateGenerator _surrogateGenerator;
+        private readonly IReadOnlyDictionary<string, Type> _knownTypes;
+        private readonly Maybe<Type> _baseTypeForNewClass;
+        private readonly IReadOnlyCollection<MethodInfo> _allowedExtensionMethods;
 
-		private Maybe<Expression> ExtensionMethod(Expression instance, string methodName, Lazy<Expression[]> args, int errorPos, bool prefixed)
-		{
-			MethodBase method;
-			Expression[] newArguments = prefixed ? args.Value : new[] { instance }.Concat(args.Value).ToArray();
-			int count = FindBestMethod(_allowedExtensionMethods, methodName, newArguments, out method);
-			if (count == 1)
-			{
-				return Expression.Call((MethodInfo) method, newArguments);
-			}
-			if (count > 1)
-			{
-				throw new ParseException("There are several methods named {methodName}.".Localize(new { methodName }), errorPos);
-			}
-			return Maybe.Nothing;
-		}
+        public ExtendedExpressionParser(
+            [CanBeNull] IReadOnlyList<ParameterExpression> parameters,
+            [NotNull] string expression,
+            [CanBeNull] IReadOnlyList<object> values,
+            [NotNull] [ItemNotNull] IReadOnlyCollection<MethodInfo> allowedExtensionMethods,
+            [NotNull] SurrogateGenerator surrogateGenerator,
+            [NotNull] IReadOnlyDictionary<string, Type> knownTypes,
+            Maybe<Type> baseTypeForNewClass)
+            : base(parameters, expression, values)
+        {
+            _allowedExtensionMethods = Argument.NotNull(nameof(allowedExtensionMethods), allowedExtensionMethods);
+            _surrogateGenerator = Argument.NotNull(nameof(surrogateGenerator), surrogateGenerator);
+            _knownTypes = Argument.NotNull(nameof(knownTypes), knownTypes);
+            _baseTypeForNewClass = baseTypeForNewClass;
+        }
 
-		protected override Maybe<Expression> GenerateMethodCall(Type type, Expression instance, int errorPos, string id,
-			Lazy<Expression[]> argumentList)
-		{
-			return GenerateMethodCallImpl(type, instance, errorPos, id, argumentList)
-				.OrElse(() => PropagateToNullMethod(type, instance, errorPos, id, argumentList));
-		}
+        [Pure]
+        private Maybe<Expression> ExtensionMethod(
+            [CanBeNull] Expression instance,
+            [NotNull] string methodName,
+            [NotNull] Lazy<Expression[]> args, int errorPos, bool prefixed)
+        {
+            var newArguments = prefixed ? args.Value : new[] { instance }.Concat(args.Value).ToArray();
 
-		/// <summary>
-		/// Convert <c>Foo(a,b,c)</c>=><c>(a!=null && b!=null)?Foo(a.Value,b.Value):null;</c>
-		/// </summary>
-		private Maybe<Expression> PropagateToNullMethod(Type type, Expression instance, int errorPos, string id, Lazy<Expression[]> argumentList)
-		{
+            var methodCandidateInfo = FindBestMethod(_allowedExtensionMethods, methodName, newArguments);
 
-			var newArgs = argumentList.Value.Select(a => a.Type.IsNullable() ? Expression.Property(a, "Value") : a).ToArray();
-			var methodCall = GenerateMethodCallImpl(type, instance, errorPos, id, Lazy.Create(newArgs));
-			return methodCall.Select(e =>
-			{
+            if (methodCandidateInfo.IsSingle)
+            {
+                return Expression.Call(methodCandidateInfo.GetSingleOrThrow(), newArguments);
+            }
 
-				var test = argumentList.Value.Where(x => x.Type.IsNullable())
-					.Select(x => Expression.NotEqual(x, Expression.Constant(null, x.Type)))
-					.CombineAnd();
+            if (methodCandidateInfo.HasSeveral)
+            {
+                throw new ParseException("There are several methods named {methodName}.".Localize(new { methodName }), errorPos);
+            }
 
-				var needToNullate = e.Type.IsValueType;
+            return Maybe.Nothing;
+        }
 
-				var resultType = needToNullate ? typeof(Nullable<>).MakeGenericType(e.Type) : e.Type;
+        protected override Maybe<Expression> GenerateMethodCall(
+            Type type, Expression instance, int errorPos, string id,
+            Lazy<Expression[]> argumentList)
+        {
+            return GenerateMethodCallImpl(type, instance, errorPos, id, argumentList)
+                .OrElse(() => TreatNullableBoolAsBool(type, instance, errorPos, id, argumentList))
+                .OrElse(() => PropagateToNullMethod(type, instance, errorPos, id, argumentList));
+        }
 
-				var ifTrue = needToNullate ? Expression.Convert(e, resultType) : e;
+        private Maybe<Expression> TreatNullableBoolAsBool(Type type, Expression instance, int errorPos, string id,
+            Lazy<Expression[]> argumentList)
+        {
+            var newArgs = argumentList.Value
+                .Select(ConvertNullableBoolToBoolExpression)
+                .ToArray();
+            return GenerateMethodCallImpl(type, instance, errorPos, id, Lazy.Create(newArgs));
+        }
 
-				var ifFalse = Expression.Constant(null, resultType);
+        /// <summary>
+        /// Convert <c>Foo(a,b,c)</c>=><c>(a!=null && b!=null)?Foo(a.Value,b.Value):null;</c>
+        /// </summary>
+        [Pure]
+        private Maybe<Expression> PropagateToNullMethod(
+            [NotNull] Type type,
+            [CanBeNull] Expression instance,
+            int errorPos,
+            [NotNull] string id,
+            [NotNull] Lazy<Expression[]> argumentList)
+        {
+            var newArgs = argumentList.Value.Select(a => a.Type.IsNullable() ? Expression.Property(a, "Value") : a).ToArray();
+            var methodCall = GenerateMethodCallImpl(type, instance, errorPos, id, Lazy.Create(newArgs));
+            return methodCall.Select<Expression, Expression>(e =>
+            {
+                var test = argumentList.Value.Where(x => x.Type.IsNullable())
+                    .Select(x => Expression.NotEqual(x, Expression.Constant(null, x.Type)))
+                    .CombineAnd();
+                var needToNullate = e.Type.IsValueType;
+                var resultType = needToNullate ? typeof(Nullable<>).MakeGenericType(e.Type) : e.Type;
+                var ifTrue = needToNullate ? Expression.Convert(e, resultType) : e;
+                var ifFalse = Expression.Constant(null, resultType);
 
+                return Expression.Condition(test, ifTrue, ifFalse);
+            });
+        }
 
-				return (Expression)Expression.Condition(test, ifTrue, ifFalse);
-			});
+        [Pure]
+        private Maybe<Expression> GenerateMethodCallImpl(
+            [NotNull] Type type, [CanBeNull] Expression instance,
+            int errorPos, [NotNull] string id,
+            [NotNull] Lazy<Expression[]> argumentList)
+        {
+            return base.GenerateMethodCall(type, instance, errorPos, id, argumentList)
+                .OrElse(() => ExtensionMethod(instance, id, argumentList, errorPos, prefixed: false))
+                .OrElse(() => ExtensionMethod(instance, id, argumentList, errorPos, prefixed: true))
+                .OrElse(() => SurrogateExpression(instance, id));
+        }
 
-		}
+        [Pure]
+        private Maybe<Expression> SurrogateExpression(
+            [CanBeNull] Expression instance, [NotNull] string name)
+        {
+            return _surrogateGenerator(name, instance);
+        }
 
-	private Maybe<Expression> GenerateMethodCallImpl(Type type, Expression instance, int errorPos, string id, Lazy<Expression[]> argumentList)
-		{
-			return base.GenerateMethodCall(type, instance, errorPos, id, argumentList)
-				.OrElse(() => ExtensionMethod(instance, id, argumentList, errorPos, prefixed: false))
-				.OrElse(() => ExtensionMethod(instance, id, argumentList, errorPos, prefixed: true))
-				.OrElse(() => SurrogateExpression(instance, id));
-		}
+        protected override Try<Expression> TryParseMemberAccess(
+            Type type, Expression instance, TokenId nextToken, int errorPos, string name)
+        {
+            if (name.EqualsIgnoreCase("as"))
+            {
+                return Try.Create(() => ParseAs(instance));
+            }
+            return base.TryParseMemberAccess(type, instance, nextToken, errorPos, name);
+        }
 
-		private Maybe<Expression> SurrogateExpression(Expression instance, string name)
-		{
-			return _surrogateGenerator(name, instance);
-		}
+        [Pure]
+        [NotNull]
+        private Expression ParseAs([NotNull] Expression instance)
+        {
+            ValidateToken(TokenId.LessThan, Res.AngleBracketsExpected);
+            NextToken();
+            var castTypeName = GetIdentifier();
+            NextToken();
+            ValidateToken(TokenId.GreaterThan, Res.AngleBracketsExpected);
+            NextToken();
 
-		protected override Try<Expression> TryParseMemberAccess(Type type, Expression instance, TokenId nextToken, int errorPos, string name)
-		{
-			if (name.EqualsIgnoreCase("as"))
-			{
-				return Try.Create(() => ParseAs(instance));
-			}
-			return base.TryParseMemberAccess(type, instance, nextToken, errorPos, name);
-		}
+            var castType = _knownTypes.GetValue(castTypeName).GetOrThrow(() => ParseError(Res.UnknownType(castTypeName)));
+            return Expression.TypeAs(instance, castType);
+        }
 
-		private Expression ParseAs(Expression instance)
-		{
-			ValidateToken(TokenId.LessThan, Res.AngleBracketsExpected);
-			NextToken();
-			var castTypeName = GetIdentifier();
-			NextToken();
-			ValidateToken(TokenId.GreaterThan, Res.AngleBracketsExpected);
-			NextToken();
-
-			var castType = _knownTypes.GetValue(castTypeName).GetOrThrow(() => ParseError(Res.UnknownType(castTypeName)));
-			return Expression.TypeAs(instance, castType);
-		}
-
-		protected override Type GenerateDynamicClassType(IReadOnlyList<DynamicProperty> properties)
-		{
-			return DynamicExpressionParser.CreateClass(properties, _baseTypeForNewClass.GetOrDefault());
-		}
-	}
+        protected override Type GenerateDynamicClassType(IReadOnlyList<DynamicProperty> properties)
+        {
+            return DynamicExpressionParser.CreateClass(properties, _baseTypeForNewClass.GetOrDefault());
+        }
+    }
 }

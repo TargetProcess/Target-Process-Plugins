@@ -33,15 +33,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string FileName
         {
-            get
-            {
-                return _FileName;
-            }
+            get { return _FileName; }
 
-            set
-            {
-                _FileName = (value ?? string.Empty).Trim();
-            }
+            set { _FileName = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

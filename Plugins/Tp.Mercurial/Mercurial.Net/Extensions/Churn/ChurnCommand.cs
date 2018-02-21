@@ -41,11 +41,7 @@ namespace Mercurial.Extensions.Churn
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date", Format = "yyyy-MM-dd")]
         [DefaultValue(null)]
-        public DateTime? Date
-        {
-            get;
-            set;
-        }
+        public DateTime? Date { get; set; }
 
         /// <summary>
         /// Gets the collection of <see cref="Revisions"/> to process/include.
@@ -53,10 +49,7 @@ namespace Mercurial.Extensions.Churn
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>
@@ -65,11 +58,7 @@ namespace Mercurial.Extensions.Churn
         [EnumArgument(ChurnUnit.Changesets, "--changesets")]
         [EnumArgument(ChurnUnit.Lines, "")]
         [DefaultValue(ChurnUnit.Lines)]
-        public ChurnUnit Unit
-        {
-            get;
-            set;
-        }
+        public ChurnUnit Unit { get; set; }
 
         /// <summary>
         /// Gets or sets the formatting template to group changesets/lines by.
@@ -78,15 +67,9 @@ namespace Mercurial.Extensions.Churn
         [DefaultValue("")]
         public string GroupTemplate
         {
-            get
-            {
-                return _GroupTemplate;
-            }
+            get { return _GroupTemplate; }
 
-            set
-            {
-                _GroupTemplate = (value ?? string.Empty).Trim();
-            }
+            set { _GroupTemplate = (value ?? string.Empty).Trim(); }
         }
 
         #region IMercurialCommand<IEnumerable<ChurnGroup>> Members
@@ -101,15 +84,9 @@ namespace Mercurial.Extensions.Churn
         [DefaultValue(600)]
         public override int Timeout
         {
-            get
-            {
-                return base.Timeout;
-            }
+            get { return base.Timeout; }
 
-            set
-            {
-                base.Timeout = value;
-            }
+            set { base.Timeout = value; }
         }
 
         /// <summary>
@@ -136,11 +113,7 @@ namespace Mercurial.Extensions.Churn
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public IEnumerable<ChurnGroup> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<ChurnGroup> Result { get; private set; }
 
         #endregion
 

@@ -7,11 +7,11 @@ using Tp.LegacyProfileConvertsion.Common;
 
 namespace Tp.PopEmailIntegration.LegacyProfileConversion
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			new LegacyConvertionRunner<LegacyProfileConvertor, Project[]>().Execute(args);
-		}
-	}
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            new LegacyConvertionRunner<LegacyProfileConvertor, Project[]>().Execute(args);
+        }
+    }
 }

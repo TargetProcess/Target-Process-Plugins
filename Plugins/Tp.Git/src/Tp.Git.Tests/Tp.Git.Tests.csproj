@@ -41,9 +41,9 @@
     <Reference Include="Common.Logging.Log4Net">
       <HintPath>..\..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\Libs\ICSharpCode.SharpZipLib.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
@@ -51,21 +51,25 @@
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Libs\NGit\Mono.Posix.dll</HintPath>
+    <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Posix.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Libs\NGit\Mono.Security.dll</HintPath>
+    <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Security.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NGit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Libs\NGit\NGit.dll</HintPath>
+    <Reference Include="Mono.Security.Win32, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Security.Win32.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NGit, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\NGit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NSch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Libs\NGit\NSch.dll</HintPath>
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\NSch.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
@@ -89,11 +93,16 @@
       <HintPath>..\..\..\..\Libs\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="Sharpen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Libs\NGit\Sharpen.dll</HintPath>
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Sharpen.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sharpen.Unix, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Sharpen.Unix.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\Libs\StructureMap\StructureMap.dll</HintPath>
+      <HintPath>..\..\..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -107,12 +116,15 @@
     <Compile Include="Context\CreateCommandExpectations.cs" />
     <Compile Include="Context\VcsPluginContext.cs" />
     <Compile Include="GitPluginProfileSpecs.cs" />
-    <Compile Include="GitRevisionStorageRepositorySpecs.cs" />
+    <Compile Include="NewProfileInitializationSagaTests.cs" />
+    <Compile Include="LibgitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RevisionStorageTests\GitRevisionStorageRepositoryTests.cs" />
     <Compile Include="StructureMap\VcsEnvironmentRegistry.cs" />
     <Compile Include="StructureMap\VcsMockEnvironmentRegistry.cs" />
     <Compile Include="StructureMap\VersionControlSystemMock.cs" />
     <Compile Include="UserMapperSpecs.cs" />
+    <Compile Include="UserStorageSynchronizerTests.cs" />
     <Compile Include="VersionControlSystem\GitRevisionIdComparerSpecs.cs" />
     <Compile Include="VersionControlSystem\GitRevisionIdSpecs.cs" />
     <Compile Include="VersionControlSystem\GitSpecs.cs" />
@@ -138,6 +150,10 @@
       <Project>{81C641A5-43FE-4870-9C50-4908CBB5775E}</Project>
       <Name>Tp.Integration.Testing.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\TP.Plugins.Toolkit\Tp.Plugins.Toolkit\Tp.Plugins.Toolkit.csproj">
+      <Project>{cd5aeb5d-48d4-4ad5-a0eb-6294ef827dda}</Project>
+      <Name>Tp.Plugins.Toolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tp.SourceControl.Testing\Tp.SourceControl.Testing.csproj">
       <Project>{35D5084D-F8CD-49F1-A3A7-FB1F4A0F538E}</Project>
       <Name>Tp.SourceControl.Testing</Name>
@@ -153,6 +169,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="TestRepos\AuthorVsCommitter.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestRepos\Clone.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestRepos\MergeCommits.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

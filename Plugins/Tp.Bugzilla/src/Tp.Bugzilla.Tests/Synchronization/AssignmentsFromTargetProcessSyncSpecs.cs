@@ -13,15 +13,15 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.Synchronization
 {
-	[TestFixture]
-	[ActionSteps]
-    [Category("PartPlugins0")]
-	public class AssignmentsFromTargetProcessSyncSpecs : BugzillaTestBase
-	{
-		[Test]
-		public void ShouldReassignUserByEmail()
-		{
-			@"
+    [TestFixture]
+    [ActionSteps]
+    [Category("PartPlugins1")]
+    public class AssignmentsFromTargetProcessSyncSpecs : BugzillaTestBase
+    {
+        [Test]
+        public void ShouldReassignUserByEmail()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -40,15 +40,15 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 in bugzilla should have reporter 'Dowson@mail.com'
 					And bug 1 in bugzilla should have assignee 'Johnson@mail.com'
 			"
-				.Execute(
-					In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
-						());
-		}
+                .Execute(
+                    In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
+                        ());
+        }
 
-		[Test]
-		public void ShouldReassignUserByMapping()
-		{
-			@"
+        [Test]
+        public void ShouldReassignUserByMapping()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -70,15 +70,15 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				Then bug 1 in bugzilla should have reporter 'Dowson@mail.com'
 					And bug 1 in bugzilla should have assignee 'BugzillaUser@mail.com'
 			"
-				.Execute(
-					In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
-						());
-		}
+                .Execute(
+                    In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
+                        ());
+        }
 
-		[Test]
-		public void ShouldNotAssignUserIfMultipleBugzillaUsersMappedToSameTpUser()
-		{
-			@"
+        [Test]
+        public void ShouldNotAssignUserIfMultipleBugzillaUsersMappedToSameTpUser()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And user 'Johnson' with email 'Johnson@mail.com' created in TargetProcess
@@ -98,15 +98,15 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When user 'Johnson' assigned to bug 'bug1' as Developer in TargetProcess
 				Then bug 1 in bugzilla should have default assignee
 			"
-				.Execute(In.Context<BugSyncActionSteps>()
-				         	.And<AssignmentsFromBugzillaSyncSpecs>()
-				         	.And<AssignmentsFromTargetProcessSyncSpecs>());
-		}
+                .Execute(In.Context<BugSyncActionSteps>()
+                    .And<AssignmentsFromBugzillaSyncSpecs>()
+                    .And<AssignmentsFromTargetProcessSyncSpecs>());
+        }
 
-		[Test]
-		public void ShouldNotAssignUserIfWildcardBugzillaUserMappedToTpUser()
-		{
-			@"
+        [Test]
+        public void ShouldNotAssignUserIfWildcardBugzillaUserMappedToTpUser()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And user 'Johnson' with email 'Johnson@mail.com' created in TargetProcess
@@ -126,15 +126,15 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When user 'Johnson' assigned to bug 'bug1' as Developer in TargetProcess
 				Then bug 1 in bugzilla should have default assignee
 			"
-				.Execute(
-					In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
-						());
-		}
+                .Execute(
+                    In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
+                        ());
+        }
 
-		[Test]
-		public void ShouldRemoveAssignee()
-		{
-			@"
+        [Test]
+        public void ShouldRemoveAssignee()
+        {
+            @"
 				Given Role 'Developer' created in TargetProcess
 					And Role 'QA Engineer' created in TargetProcess
 					And Role 'Team Lead' created in TargetProcess
@@ -152,71 +152,76 @@ namespace Tp.Bugzilla.Tests.Synchronization
 				When user reassign Developer from bug 'bug1' in TargetProcess
 				Then bug 1 in bugzilla should have default assignee 
 			"
-				.Execute(
-					In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
-						());
-		}
+                .Execute(
+                    In.Context<BugSyncActionSteps>().And<AssignmentsFromBugzillaSyncSpecs>().And<AssignmentsFromTargetProcessSyncSpecs>
+                        ());
+        }
 
-		[When("user '$userLogin' assigned to bug '$bugName' as Developer in TargetProcess")]
-		public void AssignDeveloper(string userLogin, string bugName)
-		{
-			BugDTO bug = Context.TpBugs.Single(b => b.Name == bugName);
-			RoleDTO developerRole = Context.Roles.Single(r => r.Name == "Developer");
-			UserDTO user = Context.Users.Single(u => u.Login == userLogin);
+        [When("user '$userLogin' assigned to bug '$bugName' as Developer in TargetProcess")]
+        public void AssignDeveloper(string userLogin, string bugName)
+        {
+            BugDTO bug = Context.TpBugs.Single(b => b.Name == bugName);
+            RoleDTO developerRole = Context.Roles.Single(r => r.Name == "Developer");
+            UserDTO user = Context.Users.Single(u => u.Login == userLogin);
 
-			var existingDeveloperTeam =
-				Context.TpTeams.Where(t => t.AssignableID == bug.ID)
-					.Where(t => t.RoleID == developerRole.ID)
-					.Single();
+            var existingDeveloperTeam =
+                Context.TpTeams.Where(t => t.AssignableID == bug.ID)
+                    .Where(t => t.RoleID == developerRole.ID)
+                    .Single();
 
-			TransportMock.HandleMessageFromTp(new TeamCreatedMessage
-			                                  	{
-			                                  		Dto =
-			                                  			new TeamDTO
-			                                  				{
-			                                  					ID = Context.GetNextId(),
-			                                  					AssignableID = bug.ID,
-			                                  					RoleID = developerRole.ID,
-			                                  					RoleName = developerRole.Name,
-			                                  					UserID = user.ID
-			                                  				}
-			                                  	});
+            TransportMock.HandleMessageFromTp(new TeamCreatedMessage
+            {
+                Dto =
+                    new TeamDTO
+                    {
+                        ID = Context.GetNextId(),
+                        AssignableID = bug.ID,
+                        RoleID = developerRole.ID,
+                        RoleName = developerRole.Name,
+                        UserID = user.ID
+                    }
+            });
 
-			existingDeveloperTeam.RoleName = developerRole.Name;
-			TransportMock.HandleMessageFromTp(new TeamDeletedMessage { Dto = existingDeveloperTeam });
-		}
+            existingDeveloperTeam.RoleName = developerRole.Name;
+            TransportMock.HandleMessageFromTp(new TeamDeletedMessage { Dto = existingDeveloperTeam });
+        }
 
-		[When("user reassign Developer from bug '$bugName' in TargetProcess")]
-		public void ReassignDeveloper(string bugName)
-		{
-			BugDTO bug = Context.TpBugs.Single(b => b.Name == bugName);
-			RoleDTO developerRole = Context.Roles.Single(r => r.Name == "Developer");
-			
-			var existingDeveloperTeam =
-				Context.TpTeams.Where(t => t.AssignableID == bug.ID)
-					.Where(t => t.RoleID == developerRole.ID)
-					.Single();
+        [When("user reassign Developer from bug '$bugName' in TargetProcess")]
+        public void ReassignDeveloper(string bugName)
+        {
+            BugDTO bug = Context.TpBugs.Single(b => b.Name == bugName);
+            RoleDTO developerRole = Context.Roles.Single(r => r.Name == "Developer");
 
-			existingDeveloperTeam.RoleName = developerRole.Name;
-			TransportMock.HandleMessageFromTp(new TeamDeletedMessage { Dto = existingDeveloperTeam });
-		}
+            var existingDeveloperTeam =
+                Context.TpTeams.Where(t => t.AssignableID == bug.ID)
+                    .Where(t => t.RoleID == developerRole.ID)
+                    .Single();
 
-		[Then("bug $bugId in bugzilla should have reporter '$email'")]
-		public void CheckReporter(string bugId, string email)
-		{
-			Context.BugzillaBugs.Single(b => b.bug_id == bugId).reporter.Should(Be.EqualTo(email), "Context.BugzillaBugs.Single(b => b.bug_id == bugId).reporter.Should(Be.EqualTo(email))");
-		}
+            existingDeveloperTeam.RoleName = developerRole.Name;
+            TransportMock.HandleMessageFromTp(new TeamDeletedMessage { Dto = existingDeveloperTeam });
+        }
 
-		[Then("bug $bugId in bugzilla should have assignee '$email'")]
-		public void CheckAssignee(string bugId, string email)
-		{
-			Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.EqualTo(email), "Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.EqualTo(email))");
-		}
+        [Then("bug $bugId in bugzilla should have reporter '$email'")]
+        public void CheckReporter(string bugId, string email)
+        {
+            Context.BugzillaBugs.Single(b => b.bug_id == bugId)
+                .reporter.Should(Be.EqualTo(email), "Context.BugzillaBugs.Single(b => b.bug_id == bugId).reporter.Should(Be.EqualTo(email))");
+        }
 
-		[Then("bug $bugId in bugzilla should have default assignee")]
-		public void CheckDefaultReporter(string bugId)
-		{
-			Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.Null.Or.Empty, "Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.Null.Or.Empty)");
-		}
-	}
+        [Then("bug $bugId in bugzilla should have assignee '$email'")]
+        public void CheckAssignee(string bugId, string email)
+        {
+            Context.BugzillaBugs.Single(b => b.bug_id == bugId)
+                .assigned_to.Should(Be.EqualTo(email),
+                    "Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.EqualTo(email))");
+        }
+
+        [Then("bug $bugId in bugzilla should have default assignee")]
+        public void CheckDefaultReporter(string bugId)
+        {
+            Context.BugzillaBugs.Single(b => b.bug_id == bugId)
+                .assigned_to.Should(Be.Null.Or.Empty,
+                    "Context.BugzillaBugs.Single(b => b.bug_id == bugId).assigned_to.Should(Be.Null.Or.Empty)");
+        }
+    }
 }

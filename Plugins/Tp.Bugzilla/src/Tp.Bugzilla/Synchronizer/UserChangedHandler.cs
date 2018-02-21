@@ -13,65 +13,66 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
-	public class UserChangedHandler : IHandleMessages<UserUpdatedMessage>,
-	                                  IHandleMessages<UserCreatedMessage>,
-	                                  IHandleMessages<UserDeletedMessage>
-	{
-		private readonly IStorageRepository _storage;
+    public class UserChangedHandler
+        : IHandleMessages<UserUpdatedMessage>,
+          IHandleMessages<UserCreatedMessage>,
+          IHandleMessages<UserDeletedMessage>
+    {
+        private readonly IStorageRepository _storage;
 
-		public UserChangedHandler(IStorageRepository storage)
-		{
-			_storage = storage;
-		}
+        public UserChangedHandler(IStorageRepository storage)
+        {
+            _storage = storage;
+        }
 
-		public void Handle(UserUpdatedMessage message)
-		{
-			var userByIdStorage = UserByIdStorage(message.Dto);
-			var userByEmailStorage = GetChangedUserEmailStorage(message, userByIdStorage);
+        public void Handle(UserUpdatedMessage message)
+        {
+            var userByIdStorage = UserByIdStorage(message.Dto);
+            var userByEmailStorage = GetChangedUserEmailStorage(message, userByIdStorage);
 
-			userByEmailStorage.Clear();
-			userByIdStorage.Clear();
+            userByEmailStorage.Clear();
+            userByIdStorage.Clear();
 
-			Create(message.Dto);
-		}
+            Create(message.Dto);
+        }
 
-		public void Handle(UserCreatedMessage message)
-		{
-			Create(message.Dto);
-		}
+        public void Handle(UserCreatedMessage message)
+        {
+            Create(message.Dto);
+        }
 
-		public void Handle(UserDeletedMessage message)
-		{
-			UserByIdStorage(message.Dto).Clear();
-			UserByEmailStorage(message.Dto).Clear();
-		}
+        public void Handle(UserDeletedMessage message)
+        {
+            UserByIdStorage(message.Dto).Clear();
+            UserByEmailStorage(message.Dto).Clear();
+        }
 
-		private IStorage<UserDTO> GetChangedUserEmailStorage(UserUpdatedMessage message, IEnumerable<UserDTO> userByIdStorage)
-		{
-			var user = message.ChangedFields.Contains(UserField.Email)
-			           	? userByIdStorage.Single()
-			           	: message.Dto;
+        private IStorage<UserDTO> GetChangedUserEmailStorage(UserUpdatedMessage message, IEnumerable<UserDTO> userByIdStorage)
+        {
+            var user = message.ChangedFields.Contains(UserField.Email)
+                ? userByIdStorage.Single()
+                : message.Dto;
 
-			return UserByEmailStorage(user);
-		}
+            return UserByEmailStorage(user);
+        }
 
-		private void Create(UserDTO dto)
-		{
-			if (!dto.IsNotDeletedUser())
-				return;
+        private void Create(UserDTO dto)
+        {
+            if (!dto.IsNotDeletedUser())
+                return;
 
-			UserByIdStorage(dto).Add(dto);
-			UserByEmailStorage(dto).Add(dto);
-		}
+            UserByIdStorage(dto).Add(dto);
+            UserByEmailStorage(dto).Add(dto);
+        }
 
-		private IStorage<UserDTO> UserByIdStorage(UserDTO user)
-		{
-			return _storage.Get<UserDTO>(user.ID.ToString());
-		}
+        private IStorage<UserDTO> UserByIdStorage(UserDTO user)
+        {
+            return _storage.Get<UserDTO>(user.ID.ToString());
+        }
 
-		private IStorage<UserDTO> UserByEmailStorage(UserDTO user)
-		{
-			return _storage.Get<UserDTO>(user.Email);
-		}
-	}
+        private IStorage<UserDTO> UserByEmailStorage(UserDTO user)
+        {
+            return _storage.Get<UserDTO>(user.Email);
+        }
+    }
 }

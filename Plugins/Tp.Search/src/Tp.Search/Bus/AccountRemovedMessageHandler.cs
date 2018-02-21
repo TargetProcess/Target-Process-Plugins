@@ -12,27 +12,29 @@ using Tp.Search.Model.Document;
 
 namespace Tp.Search.Bus
 {
-	class AccountRemovedMessageHandler : IHandleMessages<AccountRemovedMessage>
-	{
-		private readonly IDocumentIndexProvider _documentIndexProvider;
-		private readonly IActivityLogger _log;
-		private readonly IPluginContext _context;
+    class AccountRemovedMessageHandler : IHandleMessages<AccountRemovedMessage>
+    {
+        private readonly IDocumentIndexProvider _documentIndexProvider;
+        private readonly IActivityLogger _log;
+        private readonly IPluginContext _context;
 
-		public AccountRemovedMessageHandler()
-		{
-		}
+        public AccountRemovedMessageHandler()
+        {
+        }
 
-		public AccountRemovedMessageHandler(IDocumentIndexProvider documentIndexProvider, IActivityLogger log, IPluginContext context)
-		{
-			_documentIndexProvider = documentIndexProvider;
-			_log = log;
-			_context = context;
-		}
+        public AccountRemovedMessageHandler(IDocumentIndexProvider documentIndexProvider, IActivityLogger log, IPluginContext context)
+        {
+            _documentIndexProvider = documentIndexProvider;
+            _log = log;
+            _context = context;
+        }
 
-		public void Handle(AccountRemovedMessage message)
-		{
-			_documentIndexProvider.ShutdownDocumentIndexes(new PluginContextSnapshot(message.AccountName, new ProfileName(string.Empty), _context.PluginName), new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: true), _log);
-			_log.Info(string.Format("Account {0} removed with all indexes", message.AccountName));
-		}
-	}
+        public void Handle(AccountRemovedMessage message)
+        {
+            _documentIndexProvider.ShutdownDocumentIndexes(
+                new PluginContextSnapshot(message.AccountName, new ProfileName(string.Empty), _context.PluginName),
+                new DocumentIndexShutdownSetup(forceShutdown: true, cleanStorage: true), _log);
+            _log.Info(string.Format("Account {0} removed with all indexes", message.AccountName));
+        }
+    }
 }

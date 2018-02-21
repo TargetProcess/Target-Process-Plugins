@@ -1,7 +1,7 @@
 namespace Tp.Core
 {
-	public interface IInvariant
-	{
-		void CheckInvariant();
-	}
+    public interface IInvariant
+    {
+        void CheckInvariant();
+    }
 }

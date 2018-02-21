@@ -28,235 +28,239 @@ using ISagaMessage = Tp.Integration.Messages.EntityLifecycle.ISagaMessage;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
-	[TestFixture, ActionSteps]
+    [TestFixture, ActionSteps]
     [Category("PartPlugins1")]
-	public class InitializationSagaSpecs
-	{
-		private TransportMock _transport;
-		private IProfileReadonly _profile;
+    public class InitializationSagaSpecs
+    {
+        private TransportMock _transport;
+        private IProfileReadonly _profile;
 
-		[Test, Ignore("This test is useful but now is covered by plugins tests, not here. Consider to enable it")]
-		public void ShouldMarkProfileAsInitializedUponInitializationCompletion()
-		{
-			@"Given bug initialization saga defined
+        [Test, Ignore("This test is useful but now is covered by plugins tests, not here. Consider to enable it")]
+        public void ShouldMarkProfileAsInitializedUponInitializationCompletion()
+        {
+            @"Given bug initialization saga defined
 				When not initialized profile added
 				Then profile should be marked as initialized"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test, Ignore("This test is useful but now is covered by plugins tests, not here. Consider to enable it")]
-		public void WhenInitializationSagaExistThenJustAddedProfileShouldBeNotInitialized()
-		{
-			@"Given bug initialization saga defined
+        [Test, Ignore("This test is useful but now is covered by plugins tests, not here. Consider to enable it")]
+        public void WhenInitializationSagaExistThenJustAddedProfileShouldBeNotInitialized()
+        {
+            @"Given bug initialization saga defined
 					And target process is not able to support initialization workflow
 				When not initialized profile added
 				Then profile should remained not initialized"
-				.Execute();
-		}
+                .Execute();
+        }
 
-		[Test]
-		public void NewProfileShouldBeCreatedAsNotInitializedIfNewProfileInitializationSagaDefined()
-		{
-			var assemblyScannerRegistry = new AssemblyScannerMockRegistry(typeof (BugInitializationSaga).Assembly);
-			ObjectFactory.Initialize(x => x.AddRegistry(assemblyScannerRegistry));
-			var profile = new Profile();
-			profile.Initialized.Should(Be.False, "profile.Initialized.Should(Be.False)");
-		}
+        [Test]
+        public void NewProfileShouldBeCreatedAsNotInitializedIfNewProfileInitializationSagaDefined()
+        {
+            var assemblyScannerRegistry = new AssemblyScannerMockRegistry(typeof(BugInitializationSaga).Assembly);
+            ObjectFactory.Initialize(x => x.AddRegistry(assemblyScannerRegistry));
+            var profile = new Profile();
+            profile.Initialized.Should(Be.False, "profile.Initialized.Should(Be.False)");
+        }
 
-		[Test]
-		public void DoNotCallInitializationSagaTwice()
-		{
-			var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof(BugInitializationSaga).Assembly,
-																		Assembly.GetExecutingAssembly());
+        [Test]
+        public void DoNotCallInitializationSagaTwice()
+        {
+            var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof(BugInitializationSaga).Assembly,
+                Assembly.GetExecutingAssembly());
 
-			var profile = transportMock.AddProfile("Profile");
-			profile.MarkAsInitialized();
-			profile.Save();
+            var profile = transportMock.AddProfile("Profile");
+            profile.MarkAsInitialized();
+            profile.Save();
 
-			new BugInitializationSaga().Handle(new ProfileAddedMessage());
+            new BugInitializationSaga().Handle(new ProfileAddedMessage());
 
-			BugInitializationSaga.CallCount.Should(Be.EqualTo(0), "BugInitializationSaga.CallCount.Should(Be.EqualTo(0))");
-		}
+            BugInitializationSaga.CallCount.Should(Be.EqualTo(0), "BugInitializationSaga.CallCount.Should(Be.EqualTo(0))");
+        }
 
-		[Test]
-		public void NewProfileShouldBeCreatedAsInitializedIfNewProfileInitializationSagaNotDefined()
-		{
-			var transportMock = TransportMock.CreateWithoutStructureMapClear(GetType().Assembly,
-																		Assembly.GetExecutingAssembly());
+        [Test]
+        public void NewProfileShouldBeCreatedAsInitializedIfNewProfileInitializationSagaNotDefined()
+        {
+            var transportMock = TransportMock.CreateWithoutStructureMapClear(GetType().Assembly,
+                Assembly.GetExecutingAssembly());
 
-			StubPluginMetadataWithNoInitializationSagas();
+            StubPluginMetadataWithNoInitializationSagas();
 
-			var profile = transportMock.AddProfile("Profile");
-			profile.MarkAsInitialized();
-			profile.Save();
+            var profile = transportMock.AddProfile("Profile");
+            profile.MarkAsInitialized();
+            profile.Save();
 
-			profile.Initialized.Should(Be.True, "profile.Initialized.Should(Be.True)");
-		}
+            profile.Initialized.Should(Be.True, "profile.Initialized.Should(Be.True)");
+        }
 
-		[Test]
-		public void UpdatedProfileShouldBeMarkedAsNotInitializedIfUpdatedProfileInitializationSagaDefined()
-		{
-			var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof (BugUpdateInitializationSaga).Assembly,
-			                                                                 Assembly.GetExecutingAssembly());
+        [Test]
+        public void UpdatedProfileShouldBeMarkedAsNotInitializedIfUpdatedProfileInitializationSagaDefined()
+        {
+            var transportMock = TransportMock.CreateWithoutStructureMapClear(typeof(BugUpdateInitializationSaga).Assembly,
+                Assembly.GetExecutingAssembly());
 
-			var profile = transportMock.AddProfile("Profile");
-			profile.MarkAsInitialized();
-			profile.Save();
+            var profile = transportMock.AddProfile("Profile");
+            profile.MarkAsInitialized();
+            profile.Save();
 
-			BugUpdateInitializationSaga._freezeSaga = true;
-			UpdateProfile(transportMock, profile);
+            BugUpdateInitializationSaga._freezeSaga = true;
+            UpdateProfile(transportMock, profile);
 
-			var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(AccountName.Empty);
-			account.Profiles["Profile"].Initialized.Should(Be.EqualTo(false), "account.Profiles[\"Profile\"].Initialized.Should(Be.EqualTo(false))");
-		}
+            var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(AccountName.Empty);
+            account.Profiles["Profile"].Initialized.Should(Be.EqualTo(false),
+                "account.Profiles[\"Profile\"].Initialized.Should(Be.EqualTo(false))");
+        }
 
-		private static void UpdateProfile(TransportMock transportMock, IProfileReadonly profile)
-		{
-			var addOrUpdateProfileCmd = new ExecutePluginCommandCommand
-			                            	{
-			                            		CommandName = EmbeddedPluginCommands.AddOrUpdateProfile,
-			                            		Arguments = profile.ConvertToDto().Serialize()
-			                            	};
-			transportMock.HandleMessageFromTp(
-				new List<HeaderInfo> {new HeaderInfo {Key = BusExtensions.ACCOUNTNAME_KEY, Value = AccountName.Empty.Value}},
-				addOrUpdateProfileCmd);
-		}
+        private static void UpdateProfile(TransportMock transportMock, IProfileReadonly profile)
+        {
+            var addOrUpdateProfileCmd = new ExecutePluginCommandCommand
+            {
+                CommandName = EmbeddedPluginCommands.AddOrUpdateProfile,
+                Arguments = profile.ConvertToDto().Serialize()
+            };
+            transportMock.HandleMessageFromTp(
+                new List<HeaderInfo> { new HeaderInfo { Key = BusExtensions.ACCOUNTNAME_KEY, Value = AccountName.Empty.Value } },
+                addOrUpdateProfileCmd);
+        }
 
-		[Test]
-		public void UpdatedProfileShouldBeMarkedAsInitializedIfUpdatedProfileInitializationSagaNotDefined()
-		{
-			var transportMock = TransportMock.CreateWithoutStructureMapClear(GetType().Assembly,
-			                                                                 Assembly.GetExecutingAssembly());
+        [Test]
+        public void UpdatedProfileShouldBeMarkedAsInitializedIfUpdatedProfileInitializationSagaNotDefined()
+        {
+            var transportMock = TransportMock.CreateWithoutStructureMapClear(GetType().Assembly,
+                Assembly.GetExecutingAssembly());
 
-			StubPluginMetadataWithNoInitializationSagas();
+            StubPluginMetadataWithNoInitializationSagas();
 
-			var profile = transportMock.AddProfile("Profile");
-			profile.MarkAsInitialized();
-			profile.Save();
+            var profile = transportMock.AddProfile("Profile");
+            profile.MarkAsInitialized();
+            profile.Save();
 
-			UpdateProfile(transportMock, profile);
+            UpdateProfile(transportMock, profile);
 
-			var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(AccountName.Empty);
-			account.Profiles["Profile"].Initialized.Should(Be.EqualTo(true), "account.Profiles[\"Profile\"].Initialized.Should(Be.EqualTo(true))");
-		}
+            var account = ObjectFactory.GetInstance<IAccountCollection>().GetOrCreate(AccountName.Empty);
+            account.Profiles["Profile"].Initialized.Should(Be.EqualTo(true),
+                "account.Profiles[\"Profile\"].Initialized.Should(Be.EqualTo(true))");
+        }
 
-		private static void StubPluginMetadataWithNoInitializationSagas()
-		{
-			var metadata = ObjectFactory.GetInstance<IPluginMetadata>();
-			var metadataMock = MockRepository.GenerateStub<IPluginMetadata>();
-			metadataMock.Stub(y => y.IsNewProfileInitializable).Return(false);
-			metadataMock.Stub(y => y.IsUpdatedProfileInitializable).Return(false);
-			metadataMock.Stub(y => y.ProfileType).Return(metadata.ProfileType);
-			metadataMock.Stub(y => y.PluginData).Return(metadata.PluginData);
-			ObjectFactory.EjectAllInstancesOf<IPluginMetadata>();
-			ObjectFactory.Configure(x => x.For<IPluginMetadata>().Singleton().Use(metadataMock));
-		}
+        private static void StubPluginMetadataWithNoInitializationSagas()
+        {
+            var metadata = ObjectFactory.GetInstance<IPluginMetadata>();
+            var metadataMock = MockRepository.GenerateStub<IPluginMetadata>();
+            metadataMock.Stub(y => y.IsNewProfileInitializable).Return(false);
+            metadataMock.Stub(y => y.IsUpdatedProfileInitializable).Return(false);
+            metadataMock.Stub(y => y.ProfileType).Return(metadata.ProfileType);
+            metadataMock.Stub(y => y.PluginData).Return(metadata.PluginData);
+            ObjectFactory.EjectAllInstancesOf<IPluginMetadata>();
+            ObjectFactory.Configure(x => x.For<IPluginMetadata>().Singleton().Use(metadataMock));
+        }
 
-		[Given("bug initialization saga defined")]
-		public void CreateBugInitializationSaga()
-		{
-			_transport = TransportMock.CreateWithoutStructureMapClear(typeof (BugInitializationSaga).Assembly,
-			                                                          Assembly.GetExecutingAssembly());
-		}
+        [Given("bug initialization saga defined")]
+        public void CreateBugInitializationSaga()
+        {
+            _transport = TransportMock.CreateWithoutStructureMapClear(typeof(BugInitializationSaga).Assembly,
+                Assembly.GetExecutingAssembly());
+        }
 
-		[Given("target process is not able to support initialization workflow")]
-		public void AddBugInitializationSagaWorkflowSupport()
-		{
-			ObjectFactory.Configure(x => x.For<TargetProcessState>().Use(new TargetProcessState(true)));
-		}
+        [Given("target process is not able to support initialization workflow")]
+        public void AddBugInitializationSagaWorkflowSupport()
+        {
+            ObjectFactory.Configure(x => x.For<TargetProcessState>().Use(new TargetProcessState(true)));
+        }
 
-		[When("not initialized profile added")]
-		public void ReceiveProfileAddedMessage()
-		{
-			_profile = _transport.AddProfile("Profile_1");
-		}
+        [When("not initialized profile added")]
+        public void ReceiveProfileAddedMessage()
+        {
+            _profile = _transport.AddProfile("Profile_1");
+        }
 
-		[Then("profile should be marked as initialized")]
-		public void ProfileShouldBeInitialized()
-		{
-			_profile.Initialized.Should(Be.True, "_profile.Initialized.Should(Be.True)");
-		}
+        [Then("profile should be marked as initialized")]
+        public void ProfileShouldBeInitialized()
+        {
+            _profile.Initialized.Should(Be.True, "_profile.Initialized.Should(Be.True)");
+        }
 
-		[Then("profile should remained not initialized")]
-		public void ProfileShouldBeNotInitialized()
-		{
-			_profile.Initialized.Should(Be.False, "_profile.Initialized.Should(Be.False)");
-		}
+        [Then("profile should remained not initialized")]
+        public void ProfileShouldBeNotInitialized()
+        {
+            _profile.Initialized.Should(Be.False, "_profile.Initialized.Should(Be.False)");
+        }
 
-		#region TestSaga
+        #region TestSaga
 
-		//Test assembly is scanned for sagas in TransportMock. So this saga should set profile to initialized by default.
-		public class BugInitializationSaga : NewProfileInitializationSaga<BugInitializationSaga.BugInitializationSagaData>,
-		                                     IHandleMessages<TestBugQueryResult>
-		{
-			public static int CallCount;
-			[Serializable]
-			public class BugInitializationSagaData : ISagaEntity
-			{
-				public Guid Id { get; set; }
-				public string Originator { get; set; }
-				public string OriginalMessageId { get; set; }
-			}
+        //Test assembly is scanned for sagas in TransportMock. So this saga should set profile to initialized by default.
+        public class BugInitializationSaga
+            : NewProfileInitializationSaga<BugInitializationSaga.BugInitializationSagaData>,
+              IHandleMessages<TestBugQueryResult>
+        {
+            public static int CallCount;
 
-			public override void ConfigureHowToFindSaga()
-			{
-				ConfigureMapping<TestBugQueryResult>(x => x.Id, y => y.SagaId);
-			}
+            [Serializable]
+            public class BugInitializationSagaData : ISagaEntity
+            {
+                public Guid Id { get; set; }
+                public string Originator { get; set; }
+                public string OriginalMessageId { get; set; }
+            }
 
-			protected override void OnStartInitialization()
-			{
-				CallCount++;
-				MarkAsComplete();
-			}
+            public override void ConfigureHowToFindSaga()
+            {
+                ConfigureMapping<TestBugQueryResult>(x => x.Id, y => y.SagaId);
+            }
 
-			public void Handle(TestBugQueryResult message)
-			{
-				MarkAsComplete();
-			}
-		}
+            protected override void OnStartInitialization()
+            {
+                CallCount++;
+                MarkAsComplete();
+            }
 
-		public class BugUpdateInitializationSaga :
-			UpdatedProfileInitializationSaga<BugInitializationSaga.BugInitializationSagaData>
-		{
-			public static bool _freezeSaga;
+            public void Handle(TestBugQueryResult message)
+            {
+                MarkAsComplete();
+            }
+        }
 
-			protected override void OnStartInitialization()
-			{
-				if (_freezeSaga)
-				{
-					_freezeSaga = false;
-				}
-				else
-				{
-					MarkAsComplete();
-				}
-			}
-		}
+        public class BugUpdateInitializationSaga :
+            UpdatedProfileInitializationSaga<BugInitializationSaga.BugInitializationSagaData>
+        {
+            public static bool _freezeSaga;
 
-		public class TestBugQuery : ITargetProcessMessage
-		{
-		}
+            protected override void OnStartInitialization()
+            {
+                if (_freezeSaga)
+                {
+                    _freezeSaga = false;
+                }
+                else
+                {
+                    MarkAsComplete();
+                }
+            }
+        }
 
-		public class TestBugQueryResult : ISagaMessage
-		{
-			public Guid SagaId { get; set; }
-		}
+        public class TestBugQuery : ITargetProcessMessage
+        {
+        }
 
-		internal class TargetProcessState
-		{
-			private readonly bool _isDown;
+        public class TestBugQueryResult : ISagaMessage
+        {
+            public Guid SagaId { get; set; }
+        }
 
-			public TargetProcessState(bool isDown)
-			{
-				_isDown = isDown;
-			}
+        internal class TargetProcessState
+        {
+            private readonly bool _isDown;
 
-			public bool IsDown
-			{
-				get { return _isDown; }
-			}
-		}
+            public TargetProcessState(bool isDown)
+            {
+                _isDown = isDown;
+            }
 
-		#endregion
-	}
+            public bool IsDown
+            {
+                get { return _isDown; }
+            }
+        }
+
+        #endregion
+    }
 }

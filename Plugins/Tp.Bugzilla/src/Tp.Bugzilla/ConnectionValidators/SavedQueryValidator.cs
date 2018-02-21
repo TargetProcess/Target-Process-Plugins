@@ -11,30 +11,30 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Bugzilla.ConnectionValidators
 {
-	public class SavedQueryValidator : Validator, IDataHolder<int[]>
-	{
-		public SavedQueryValidator(IBugTrackingConnectionSettingsSource connectionSettings)
-			: base(connectionSettings)
-		{
-		}
+    public class SavedQueryValidator : Validator, IDataHolder<int[]>
+    {
+        public SavedQueryValidator(IBugTrackingConnectionSettingsSource connectionSettings)
+            : base(connectionSettings)
+        {
+        }
 
-		protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
-		{
-			try
-			{
-				Data = new BugzillaUrl(ConnectionSettings).GetChangedBugsIds(CurrentDate.Value);
-			}
-			catch (Exception)
-			{
-				errors.Add(new PluginProfileError
-				           	{
-				           		FieldName = BugzillaProfile.QueriesField,
-				           		Message = "The defined Bugzilla Saved Searches are not valid",
-								AdditionalInfo = ValidationErrorType.QueryNotFound.ToString()
-				           	});
-			}
-		}
+        protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
+        {
+            try
+            {
+                Data = new BugzillaUrl(ConnectionSettings).GetChangedBugsIds(CurrentDate.Value);
+            }
+            catch (Exception)
+            {
+                errors.Add(new PluginProfileError
+                {
+                    FieldName = BugzillaProfile.QueriesField,
+                    Message = "The defined Bugzilla Saved Searches are not valid",
+                    AdditionalInfo = ValidationErrorType.QueryNotFound.ToString()
+                });
+            }
+        }
 
-		public int[] Data { get; private set; }
-	}
+        public int[] Data { get; private set; }
+    }
 }

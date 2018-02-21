@@ -21,98 +21,90 @@ using Tp.Tfs.Tests.StructureMap;
 
 namespace Tp.Tfs.Tests
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class UserMapperSpecs
-	{
-		private const string _tpName = "someone great";
-		private const string _tpLogin = "someone";
-		private const int _tpId = 1;
-	    private const string _tpActiveDirName = "someone_active_dir";
+    public class UserMapperSpecs
+    {
+        private const string _tpName = "someone great";
+        private const string _tpLogin = "someone";
+        private const int _tpId = 1;
+        private const string _tpActiveDirName = "someone_active_dir";
 
-		private static VcsPluginContext Context
-		{
-			get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
-		}
+        private static VcsPluginContext Context
+        {
+            get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
+        }
 
-		private static UserMapper Mapper
-		{
-			get { return ObjectFactory.GetInstance<UserMapper>(); }
-		}
+        private static UserMapper Mapper
+        {
+            get { return ObjectFactory.GetInstance<UserMapper>(); }
+        }
 
-		public static UserDTO User
-		{
-			get { return Context.UserDtos.Single(x => x.Login == _tpLogin); }
-		}
+        public static UserDTO User
+        {
+            get { return Context.UserDtos.Single(x => x.Login == _tpLogin); }
+        }
 
-		[SetUp]
-		public void Setup()
-		{
-		    try
-		    {
-                ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
-                ObjectFactory.Configure(
-                    x =>
+        [SetUp]
+        public void Setup()
+        {
+            ObjectFactory.Initialize(x => x.AddRegistry<VcsMockEnvironmentRegistry>());
+            ObjectFactory.Configure(
+                x =>
                     x.For<TransportMock>().Use(
-                    TransportMock.CreateWithoutStructureMapClear(
-                        typeof(TfsPluginProfile).Assembly,
-                        new List<Assembly> { typeof(Command).Assembly })));
-		    }
-		    catch (Exception e)
-		    {
-		        
-		        throw;
-		    }
+                        TransportMock.CreateWithoutStructureMapClear(
+                            typeof(TfsPluginProfile).Assembly,
+                            new List<Assembly> { typeof(Command).Assembly })));
 
-			Context.CreateTpUser(_tpName, _tpLogin, _tpId);
-			InitializeProfile();
-		}
+            Context.CreateTpUser(_tpName, _tpLogin, _tpId);
+            InitializeProfile();
+        }
 
         private TfsPluginProfile InitializeProfile()
-		{
-			return Context.Profile;
-		}
-
-		[Test]
-		public void ShouldMapUsersByActiveDirName()
-		{
-            var vcsActiveDirName = _tpActiveDirName;
-
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Author = vcsActiveDirName});
-
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
-
-		[Test]
-		public void ShouldMapUserByName()
-		{
-			var vcsName = "someone great";
-
-			Context.MapUser(vcsName, _tpName);
-
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Author = vcsName});
-
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
+        {
+            return Context.Profile;
+        }
 
         [Test]
-		public void ShouldGuessUserByName()
-		{
-			var vcsName = _tpName;
+        public void ShouldMapUsersByActiveDirName()
+        {
+            var vcsActiveDirName = _tpActiveDirName;
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo {Email = "other@mail.com", Author = vcsName});
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Author = vcsActiveDirName });
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
 
-		[Test]
-		public void ShouldGuessUserByLogin()
-		{
-			var vcsName = _tpLogin;
+        [Test]
+        public void ShouldMapUserByName()
+        {
+            var vcsName = "someone great";
 
-			var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
+            Context.MapUser(vcsName, _tpName);
 
-			lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
-		}
-	}
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Author = vcsName });
+
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
+
+        [Test]
+        public void ShouldGuessUserByName()
+        {
+            var vcsName = _tpName;
+
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
+
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
+
+        [Test]
+        public void ShouldGuessUserByLogin()
+        {
+            var vcsName = _tpLogin;
+
+            var lookup = Mapper.GetAuthorBy(new RevisionInfo { Email = "other@mail.com", Author = vcsName });
+
+            lookup.Name.Should(Be.EqualTo(_tpName), "lookup.Name.Should(Be.EqualTo(_tpName))");
+        }
+    }
 }

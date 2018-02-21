@@ -5,34 +5,39 @@ tau.mashups
     .addDependency('tau/core/extension.base')
     .addDependency('tau/mashup.manager/utils/utils.mashup.manager.actionType')
     .addDependency('tau/mashup.manager/utils/utils.mashup.manager.placeholderParser')
+    .addDependency('tau/mashup.manager/utils/utils.mashup.manager.mashup.data.converter')
     .addDependency('tp/plugins/errorMessageContainer')
     .addDependency('libs/aceEditor/aceEditor')
+    .addDependency('tau/mashup.manager/ui/templates/ui.template.mashup.manager.mashup.metainfo')
     .addModule('tau/mashup.manager/ui/extensions/ui.extension.mashup.manager.mashup',
         function($, _, scriptErrorChecker, ExtensionBase, mashupManagerActionType, PlaceholderParser,
-            ErrorMessageContainer, aceEditor) {
+            mashupDataConverter, ErrorMessageContainer, aceEditor, mashupMetaInfoTemplate) {
 
             return ExtensionBase.extend({
 
-                'bus afterInit:last + dataBind:last + afterRender': function(evtData, initConfig, bindData, renderData) {
+                'bus afterInit:last + dataBind:last + afterRender': function(evt, initConfig, mashupInfo, renderData) {
                     var $element = renderData.element;
-                    var service = initConfig.config.context.configurator.service('mashup.manager');
-                    var actionType = initConfig.config.context.actionData.actionType;
-                    this.codeEditor = aceEditor.setEditor($element.find('.i-role-script'), this.bus, {  maxLines: Infinity, mode: 'ace/mode/javascript' });
-                    this._bindSave($element, service, bindData, actionType);
+                    var context = initConfig.config.context;
+                    this._service = context.configurator.service('mashup.manager');
 
-                    this.errorContainer = this._createErrorContainer($element);
-                    if (initConfig.config.context.actionData.libraryIsAllowed) {
-                        this._showLibraryLink($element);
-                    }
-                    this._bindPlaceholderParser($element);
-                    this._bindPlaceholdersHelp($element);
-                },
+                    this.codeEditor = aceEditor.setEditor($element.find('.i-role-script'), this.bus,
+                        {
+                            maxLines: Infinity,
+                            mode: 'ace/mode/javascript',
+                            useSoftTabs: true,
+                            tabSize: 4
+                        });
 
-                _createErrorContainer: function($element) {
-                    return new ErrorMessageContainer({
+                    this._bindSave($element, mashupInfo, context);
+                    this._bindMetaInfoRefresh($element);
+
+                    this.errorContainer = new ErrorMessageContainer({
                         placeholder: $element,
                         generalErrorContainer: '.i-role-failedOperation'
                     });
+                    this._showLibraryLink($element);
+                    this._bindPlaceholderParser($element);
+                    this._bindPlaceholdersHelp($element);
                 },
 
                 _showLibraryLink: function($element) {
@@ -45,45 +50,72 @@ tau.mashups
 
                 _bindPlaceholdersHelp: function($element) {
                     $element.find('.i-role-placeholdersHelpLink').click(function() {
-                        $element.find('.i-role-placeholdersHelp').animate({ opacity: 'toggle', height: 'toggle' }, 'slow');
+                        $element.find('.i-role-placeholdersHelp')
+                            .animate({opacity: 'toggle', height: 'toggle'}, 'slow');
+                    });
+                },
+
+                _bindMetaInfoRefresh: function($element) {
+                    var refreshMetaInfo = function(event, mashup) {
+                        var mashupInfo = mashupDataConverter.convertServerMashupDataToClientFormat(mashup);
+                        var markup = mashupMetaInfoTemplate.renderToString(mashupInfo);
+                        $element.find('.i-role-mashupMetaInfo').html(markup);
+                    };
+                    this._service.on(['mashupAdded', 'mashupUpdated'], refreshMetaInfo, this);
+                },
+
+                _bindSave: function($element, mashupInfo, context) {
+                    this._eventNamespace = _.uniqueId('.mashupManager');
+                    $(document).on('keydown' + this._eventNamespace, function(e) {
+                        if ((e.metaKey || e.ctrlKey) && String.fromCharCode(e.keyCode).toLowerCase() === 's') {
+                            e.preventDefault();
+                            this._saveMashup($element, mashupInfo, context);
+                        }
+                    }.bind(this));
+
+                    $element.find('.i-role-save').click(function() {
+                        this._saveMashup($element, mashupInfo, context);
                     }.bind(this));
                 },
 
-                _bindSave: function($element, service, bindData, actionType) {
-                    var mashupOldName = $element.find('.i-role-mashupName').val();
-                    $element.find('.i-role-save').click(function(oldName) {
-                        this.errorContainer.clearErrors();
-                        var action = actionType === mashupManagerActionType.addMashup ? 'addMashup' : 'updateMashup';
+                _saveMashup: function($element, mashupInfo, context) {
+                    this.errorContainer.clearErrors();
+                    var service = this._service;
 
-                        this._getEditingMashup($element, oldName, bindData)
-                            .then(function(mashup) {
-                                var error = scriptErrorChecker.checkForScriptErrors(mashup.Files[0].Content);
-                                if (error && error.name === 'SyntaxError') {
-                                    service.status.error(error.name + ': ' + error.message);
-                                } else {
-                                    service[action](mashup, this._saveFailHandler.bind(this));
-                                }
-                            }.bind(this));
-                    }.bind(this, mashupOldName));
+                    this
+                        ._getEditingMashup($element, mashupInfo, context)
+                        .then(function(mashup, error) {
+                            if (error && error.name === 'SyntaxError') {
+                                service.status.error(error.name + ': ' + error.message);
+                            } else {
+                                var actionType = context.actionData.actionType;
+                                var action = actionType === mashupManagerActionType.addMashup ?
+                                    'addMashup' : 'updateMashup';
+                                service[action](mashup, this._saveFailHandler.bind(this));
+                            }
+                        }.bind(this));
                 },
 
-                _getEditingMashup: function($element, oldName, bindData) {
+                _getEditingMashup: function($element, mashupInfo, context) {
                     return this.codeEditor.then(function(editor) {
                         var mashupName = _.trim($element.find('.i-role-mashupName').val());
-                        var mashup = {
-                            Files: [
-                                {
-                                    FileName: bindData.fileName || mashupName + '.js',
-                                    Content: editor.getValue()
-                                }
-                            ],
-                            Name: mashupName,
-                            Placeholders: $element.find('.i-role-placeholders').val()
+                        var script = editor.getValue();
+
+                        var updatedInfo = {
+                            name: mashupName,
+                            placeholders: $element.find('.i-role-placeholders').val(),
+                            fileName: mashupInfo.fileName || mashupName + '.js',
+                            script: script,
+                            mashupMetaInfo: {
+                                isEnabled: $element.find('.i-role-mashupIsEnabled:checked').val() === 'true',
+                                lastModificationDate: new Date(),
+                                lastModifiedBy: context.configurator.getLoggedUser()
+                            }
                         };
-                        if (oldName) {
-                            mashup.OldName = oldName;
-                        }
-                        return $.when(mashup);
+
+                        var mashup = mashupDataConverter.convertClientMashupDataToServerFormat(mashupInfo, updatedInfo);
+                        var error = scriptErrorChecker.checkForScriptErrors(script);
+                        return $.when(mashup, error);
                     });
                 },
 
@@ -91,6 +123,16 @@ tau.mashups
                     var error = JSON.parse(responseText);
                     this.errorContainer.addRange(error);
                     this.errorContainer.render();
+                },
+
+                destroy: function() {
+                    if (this._eventNamespace) {
+                        $(document).off(this._eventNamespace);
+                    }
+                    if (this._service) {
+                        this._service.removeAllListeners(this);
+                    }
+                    this._super();
                 }
             });
         }

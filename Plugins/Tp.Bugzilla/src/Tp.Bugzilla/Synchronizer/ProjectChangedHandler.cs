@@ -11,53 +11,54 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
-	using System;
+    using System;
+    using log4net;
 
-	using log4net;
+    public class ProjectChangedHandler
+        : EntityChangedHandler<ProjectDTO>,
+          IHandleMessages<ProjectUpdatedMessage>,
+          IHandleMessages<ProjectDeletedMessage>
+    {
+        private readonly ILog _log;
 
-	public class ProjectChangedHandler : EntityChangedHandler<ProjectDTO>,
-	                                     IHandleMessages<ProjectUpdatedMessage>,
-	                                     IHandleMessages<ProjectDeletedMessage>
-	{
-		private readonly ILog _log;
-		public ProjectChangedHandler(IStorageRepository storage) : base(storage)
-		{
-			_log = LogManager.GetLogger(GetType());
-		}
+        public ProjectChangedHandler(IStorageRepository storage) : base(storage)
+        {
+            _log = LogManager.GetLogger(GetType());
+        }
 
-		public void Handle(ProjectUpdatedMessage message)
-		{
-			if (NeedToProcess(message.Dto) && ProcessChanged(message.Dto))
-			{
-				Profile.StatesMapping.Clear();
-			}
-			Update(message.Dto);
-		}
+        public void Handle(ProjectUpdatedMessage message)
+        {
+            if (NeedToProcess(message.Dto) && ProcessChanged(message.Dto))
+            {
+                Profile.StatesMapping.Clear();
+            }
+            Update(message.Dto);
+        }
 
-		private bool ProcessChanged(ProjectDTO dto)
-		{
-			return !dto.ProcessID.Equals(EntitiesStorage.Where(x => x.ID == dto.ID).Select(x => x.ProcessID).SingleOrDefault());
-		}
+        private bool ProcessChanged(ProjectDTO dto)
+        {
+            return !dto.ProcessID.Equals(EntitiesStorage.Where(x => x.ID == dto.ID).Select(x => x.ProcessID).SingleOrDefault());
+        }
 
-		public void Handle(ProjectDeletedMessage message)
-		{
-			Delete(message.Dto);
-		}
+        public void Handle(ProjectDeletedMessage message)
+        {
+            Delete(message.Dto);
+        }
 
-		protected override bool NeedToProcess(ProjectDTO dto)
-		{
-			if (dto == null)
-			{
-				throw new ArgumentNullException("dto");
-			}
+        protected override bool NeedToProcess(ProjectDTO dto)
+        {
+            if (dto == null)
+            {
+                throw new ArgumentNullException("dto");
+            }
 
-			if (Profile == null)
-			{
-				_log.Error("Profile is null");
-				return false;
-			}
+            if (Profile == null)
+            {
+                _log.Error("Profile is null");
+                return false;
+            }
 
-			return dto.ProjectID == Profile.Project;
-		}
-	}
+            return dto.ProjectID == Profile.Project;
+        }
+    }
 }

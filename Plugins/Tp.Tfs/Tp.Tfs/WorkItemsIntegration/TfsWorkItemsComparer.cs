@@ -5,7 +5,7 @@
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	public class TfsWorkItemsComparer : IWorkItemsComparer
-	{
-	}
+    public class TfsWorkItemsComparer : IWorkItemsComparer
+    {
+    }
 }

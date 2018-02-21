@@ -11,27 +11,27 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class PluginProfileSerializationTests
-	{
-		[Test]
-		public void ShouldBeAbleToSerializeProfile()
-		{
-			TransportMock.CreateWithoutStructureMapClear(typeof (SampleProfileSerialized).Assembly);
-			var pluginProfile = new PluginProfileDto
-			                    	{
-			                    		Name = "TestProfile",
-			                    		Settings = new SampleProfileSerialized {StringValue = "components"}
-			                    	};
+    public class PluginProfileSerializationTests
+    {
+        [Test]
+        public void ShouldBeAbleToSerializeProfile()
+        {
+            TransportMock.CreateWithoutStructureMapClear(typeof(SampleProfileSerialized).Assembly);
+            var pluginProfile = new PluginProfileDto
+            {
+                Name = "TestProfile",
+                Settings = new SampleProfileSerialized { StringValue = "components" }
+            };
 
-			var serializedProfile = pluginProfile.Serialize();
-			var deserializedProfile = serializedProfile.DeserializeProfile();
+            var serializedProfile = pluginProfile.Serialize();
+            var deserializedProfile = serializedProfile.DeserializeProfile();
 
-			deserializedProfile.Name.Should(Be.EqualTo("TestProfile"), "deserializedProfile.Name.Should(Be.EqualTo(\"TestProfile\"))");
-			deserializedProfile.Settings.Should(Be.Not.Null, "Settings weren't deserialized");
-			var settings = (SampleProfileSerialized) deserializedProfile.Settings;
-			settings.StringValue.Should(Be.EqualTo("components"), "settings.StringValue.Should(Be.EqualTo(\"components\"))");
-		}
-	}
+            deserializedProfile.Name.Should(Be.EqualTo("TestProfile"), "deserializedProfile.Name.Should(Be.EqualTo(\"TestProfile\"))");
+            deserializedProfile.Settings.Should(Be.Not.Null, "Settings weren't deserialized");
+            var settings = (SampleProfileSerialized) deserializedProfile.Settings;
+            settings.StringValue.Should(Be.EqualTo("components"), "settings.StringValue.Should(Be.EqualTo(\"components\"))");
+        }
+    }
 }

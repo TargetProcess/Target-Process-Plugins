@@ -19,46 +19,46 @@ using Tp.Tfs.Workflow;
 
 namespace Tp.Tfs.StructureMap
 {
-	public class TfsRegistry : SourceControlRegistry
-	{
-		public TfsRegistry()
-		{
-			For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use<PluginSpecifyMessageHandlerOrdering>();
-			For<IExcludedAssemblyNamesSource>().HybridHttpOrThreadLocalScoped().Use<TfsPluginExcludedAssemblies>();
+    public class TfsRegistry : SourceControlRegistry
+    {
+        public TfsRegistry()
+        {
+            For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use<PluginSpecifyMessageHandlerOrdering>();
+            For<IExcludedAssemblyNamesSource>().HybridHttpOrThreadLocalScoped().Use<TfsPluginExcludedAssemblies>();
 
-			For<IWorkItemsStore>().Use<TfsWorkItemsStore>();
-			For<IWorkItemsComparer>().Use<TfsWorkItemsComparer>();
-			For<IPluginMashupRepository>().Singleton().Use<TfsPluginMashupRepository>();
-		}
+            For<IWorkItemsStore>().Use<TfsWorkItemsStore>();
+            For<IWorkItemsComparer>().Use<TfsWorkItemsComparer>();
+            For<IPluginMashupRepository>().Singleton().Use<TfsPluginMashupRepository>();
+        }
 
-		protected override void ConfigureCheckConnectionErrorResolver()
-		{
-			For<ICheckConnectionErrorResolver>().Use<TfsCheckConnectionErrorResolver>();
-		}
+        protected override void ConfigureCheckConnectionErrorResolver()
+        {
+            For<ICheckConnectionErrorResolver>().Use<TfsCheckConnectionErrorResolver>();
+        }
 
-		protected override void ConfigureSourceControlConnectionSettingsSource()
-		{
-			For<ISourceControlConnectionSettingsSource>().Use<TfsCurrentProfileToConnectionSettingsAdapter>();
-		}
+        protected override void ConfigureSourceControlConnectionSettingsSource()
+        {
+            For<ISourceControlConnectionSettingsSource>().Use<TfsCurrentProfileToConnectionSettingsAdapter>();
+        }
 
-		protected override void ConfigureRevisionIdComparer()
-		{
-			For<IRevisionIdComparer>().HybridHttpOrThreadLocalScoped().Use<TfsRevisionIdComparer>();
-		}
+        protected override void ConfigureRevisionIdComparer()
+        {
+            For<IRevisionIdComparer>().HybridHttpOrThreadLocalScoped().Use<TfsRevisionIdComparer>();
+        }
 
-		protected override void ConfigureVersionControlSystem()
-		{
-			For<IVersionControlSystem>().Use<TfsVersionControlSystem>();
-		}
+        protected override void ConfigureVersionControlSystem()
+        {
+            For<IVersionControlSystem>().Use<TfsVersionControlSystem>();
+        }
 
-		protected override void ConfigureRevisionStorage()
-		{
-			For<IRevisionStorageRepository>().Use<TfsRevisionStorageRepository>();
-		}
+        protected override void ConfigureRevisionStorage()
+        {
+            For<IRevisionStorageRepository>().Use<TfsRevisionStorageRepository>();
+        }
 
-		protected override void ConfigureUserMapper()
-		{
-			For<UserMapper>().Use<TfsUserMapper>();
-		}
-	}
+        protected override void ConfigureUserMapper()
+        {
+            For<UserMapper>().Use<TfsUserMapper>();
+        }
+    }
 }

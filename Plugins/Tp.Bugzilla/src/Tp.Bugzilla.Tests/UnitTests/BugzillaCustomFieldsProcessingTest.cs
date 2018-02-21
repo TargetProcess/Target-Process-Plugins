@@ -9,37 +9,43 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Bugzilla.Tests.UnitTests
 {
-	[TestFixture]
-    [Category("PartPlugins0")]
-	public class BugzillaCustomFieldsProcessingTest
-	{
-		[Test]
-		public void ShouldProcessSimpleBugzillaCustomField()
-		{
-			const string cfName = "cf name";
-			const string cfValue = "cf value";
+    [TestFixture]
+    [Category("PartPlugins1")]
+    public class BugzillaCustomFieldsProcessingTest
+    {
+        [Test]
+        public void ShouldProcessSimpleBugzillaCustomField()
+        {
+            const string cfName = "cf name";
+            const string cfValue = "cf value";
 
-			var field = new custom_field {cf_name = cfName, cf_value = cfValue};
+            var field = new custom_field { cf_name = cfName, cf_value = cfValue };
 
-			var info = new CustomFieldInfo(field);
+            var info = new CustomFieldInfo(field);
 
-			info.Name.Should(Be.EqualTo(cfName), "info.Name.Should(Be.EqualTo(cfName))");
-			info.Values.Should(Be.EquivalentTo(new[] {cfValue}), "info.Values.Should(Be.EquivalentTo(new[] {cfValue}))");
-		}
+            info.Name.Should(Be.EqualTo(cfName), "info.Name.Should(Be.EqualTo(cfName))");
+            info.Values.Should(Be.EquivalentTo(new[] { cfValue }), "info.Values.Should(Be.EquivalentTo(new[] {cfValue}))");
+        }
 
-		[Test]
-		public void ShouldProcessCollectionBugzillaCustomField()
-		{
-			const string cfName = "cf name";
-			const string cfValue1 = "cf value1";
-			const string cfValue2 = "cf value2";
+        [Test]
+        public void ShouldProcessCollectionBugzillaCustomField()
+        {
+            const string cfName = "cf name";
+            const string cfValue1 = "cf value1";
+            const string cfValue2 = "cf value2";
 
-			var field = new custom_field { cf_name = cfName, cf_type = "Multiple-Selection Box", cf_values = new cf_values{cf_valueCollection = new cf_valueCollection {cfValue1, cfValue2}}};
+            var field = new custom_field
+            {
+                cf_name = cfName,
+                cf_type = "Multiple-Selection Box",
+                cf_values = new cf_values { cf_valueCollection = new cf_valueCollection { cfValue1, cfValue2 } }
+            };
 
-			var info = new CustomFieldInfo(field);
+            var info = new CustomFieldInfo(field);
 
-			info.Name.Should(Be.EqualTo(cfName), "info.Name.Should(Be.EqualTo(cfName))");
-			info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }), "info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }))");
-		}
-	}
+            info.Name.Should(Be.EqualTo(cfName), "info.Name.Should(Be.EqualTo(cfName))");
+            info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }),
+                "info.Values.Should(Be.EquivalentTo(new[] { cfValue1, cfValue2 }))");
+        }
+    }
 }

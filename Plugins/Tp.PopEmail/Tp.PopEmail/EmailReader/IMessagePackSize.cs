@@ -5,18 +5,18 @@
 
 namespace Tp.PopEmailIntegration.EmailReader
 {
-	public class MessagePackSize : IMessagePackSize
-	{
-		public MessagePackSize(int value)
-		{
-			Value = value;
-		}
+    public class MessagePackSize : IMessagePackSize
+    {
+        public MessagePackSize(int value)
+        {
+            Value = value;
+        }
 
-		public int Value { get; private set; }
-	}
+        public int Value { get; private set; }
+    }
 
-	public interface IMessagePackSize
-	{
-		int Value { get; }
-	}
+    public interface IMessagePackSize
+    {
+        int Value { get; }
+    }
 }

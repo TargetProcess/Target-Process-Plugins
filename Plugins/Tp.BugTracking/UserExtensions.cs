@@ -7,11 +7,11 @@ using Tp.Integration.Common;
 
 namespace Tp.BugTracking
 {
-	public static class UserExtensions
-	{
-		public static bool IsNotDeletedUser(this UserDTO user)
-		{
-			return !user.DeleteDate.HasValue;
-		}
-	}
+    public static class UserExtensions
+    {
+        public static bool IsNotDeletedUser(this UserDTO user)
+        {
+            return !user.DeleteDate.HasValue;
+        }
+    }
 }

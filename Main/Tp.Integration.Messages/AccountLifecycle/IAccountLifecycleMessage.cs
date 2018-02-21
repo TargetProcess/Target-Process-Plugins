@@ -2,7 +2,7 @@
 
 namespace Tp.Integration.Messages.AccountLifecycle
 {
-	public interface IAccountLifecycleMessage : IMessage
-	{
-	}
+    public interface IAccountLifecycleMessage : IMessage
+    {
+    }
 }

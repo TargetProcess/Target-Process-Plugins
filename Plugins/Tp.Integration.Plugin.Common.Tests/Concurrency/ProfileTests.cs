@@ -12,58 +12,64 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.Integration.Plugin.Common.Tests.Concurrency
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class ProfileTests : DomainObjectConcurrencyTest
-	{
-		private IAccount _account;
-		private const string ACCOUNT_NAME = "Account";
+    public class ProfileTests : DomainObjectConcurrencyTest
+    {
+        private IAccount _account;
+        private const string ACCOUNT_NAME = "Account";
 
-		protected override void OnInit()
-		{
-			base.OnInit();
-			_account = AccountCollection.GetOrCreate(ACCOUNT_NAME);
-		}
+        protected override void OnInit()
+        {
+            base.OnInit();
+            _account = AccountCollection.GetOrCreate(ACCOUNT_NAME);
+        }
 
-		[Test]
-		public void ReadWrite()
-		{
-			_account.Profiles.Add(new ProfileCreationArgs("Profile", new SampleJiraProfile {JiraLogin = "JiraLogin"}));
-			ExecuteConcurrently(UpdateProfile, ReadProfile);
-			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
-		}
-		
-		[Test]
-		public void ReadRead()
-		{
-			_account.Profiles.Add(new ProfileCreationArgs("Profile", new SampleJiraProfile { JiraLogin = "JiraLogin" }));
-			ExecuteConcurrently(ReadProfile, ReadProfile);
-			AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
-		}
+        [Test]
+        public void ReadWrite()
+        {
+            _account.Profiles.Add(new ProfileCreationArgs("Profile", new SampleJiraProfile { JiraLogin = "JiraLogin" }));
+            ExecuteConcurrently(UpdateProfile, ReadProfile);
+            AccountCollection.GetOrCreate(ACCOUNT_NAME)
+                .Profiles.Count()
+                .Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
+        }
 
-		[Test, Ignore]
-		public void ReadWriteChess()
-		{
-			Chess.RunRemotely(() => ReadWrite());
-		}
+        [Test]
+        public void ReadRead()
+        {
+            _account.Profiles.Add(new ProfileCreationArgs("Profile", new SampleJiraProfile { JiraLogin = "JiraLogin" }));
+            ExecuteConcurrently(ReadProfile, ReadProfile);
+            AccountCollection.GetOrCreate(ACCOUNT_NAME)
+                .Profiles.Count()
+                .Should(Be.EqualTo(1), "AccountCollection.GetOrCreate(ACCOUNT_NAME).Profiles.Count().Should(Be.EqualTo(1))");
+        }
 
-		[Test, Ignore]
-		public void ReadReadChess()
-		{
-			Chess.RunRemotely(() => ReadRead());
-		}
+        [Test, Ignore]
+        public void ReadWriteChess()
+        {
+            Chess.RunRemotely(() => ReadWrite());
+        }
 
-		private void UpdateProfile()
-		{
-			var profile = _account.Profiles["Profile"];
-			profile.Settings = new SampleJiraProfile {JiraLogin = "JiraLogin"};
-			profile.Save();
-		}
+        [Test, Ignore]
+        public void ReadReadChess()
+        {
+            Chess.RunRemotely(() => ReadRead());
+        }
 
-		private void ReadProfile()
-		{
-			var profile = _account.Profiles["Profile"];
-			profile.GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.StringContaining("JiraLogin"), "profile.GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.StringContaining(\"JiraLogin\"))");
-		}
-	}
+        private void UpdateProfile()
+        {
+            var profile = _account.Profiles["Profile"];
+            profile.Settings = new SampleJiraProfile { JiraLogin = "JiraLogin" };
+            profile.Save();
+        }
+
+        private void ReadProfile()
+        {
+            var profile = _account.Profiles["Profile"];
+            profile.GetProfile<SampleJiraProfile>()
+                .JiraLogin.Should(Be.StringContaining("JiraLogin"),
+                    "profile.GetProfile<SampleJiraProfile>().JiraLogin.Should(Be.StringContaining(\"JiraLogin\"))");
+        }
+    }
 }

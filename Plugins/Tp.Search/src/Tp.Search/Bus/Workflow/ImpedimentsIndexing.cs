@@ -12,52 +12,56 @@ using Tp.Search.Model.Entity;
 
 namespace Tp.Search.Bus.Workflow
 {
-	internal class ImpedimentsIndexing : IndexAlgorithm<ImpedimentDTO, IndexExistingEntitiesSagaData, ImpedimentQuery>
-	{
-		public ImpedimentsIndexing(IEntityIndexer entityIndexer, Func<IndexExistingEntitiesSagaData> data, IEntityTypeProvider entityTypesProvider, Action<IndexExistingEntitiesSagaData> onComplete, Action<QueryBase> sendQuery, IActivityLogger logger)
-			: base(entityIndexer, data, entityTypesProvider, onComplete, sendQuery, logger, "impediment")
-		{
-		}
+    internal class ImpedimentsIndexing : IndexAlgorithm<ImpedimentDTO, IndexExistingEntitiesSagaData, ImpedimentQuery>
+    {
+        public ImpedimentsIndexing(IEntityIndexer entityIndexer, Func<IndexExistingEntitiesSagaData> data,
+            IEntityTypeProvider entityTypesProvider, Action<IndexExistingEntitiesSagaData> onComplete, Action<QueryBase> sendQuery,
+            IActivityLogger logger)
+            : base(entityIndexer, data, entityTypesProvider, onComplete, sendQuery, logger, "impediment")
+        {
+        }
 
-		protected override void IndexEntity(ImpedimentDTO dto)
-		{
-			EntityIndexer.UpdateImpedimentIndex(dto, new[] { ImpedimentField.EntityStateID, ImpedimentField.OwnerID, ImpedimentField.ResponsibleID, ImpedimentField.IsPrivate }, true, DocumentIndexOptimizeSetup.NoOptimize);
-		}
+        protected override void IndexEntity(ImpedimentDTO dto)
+        {
+            EntityIndexer.UpdateImpedimentIndex(dto,
+                new[] { ImpedimentField.EntityStateID, ImpedimentField.OwnerID, ImpedimentField.ResponsibleID, ImpedimentField.IsPrivate },
+                true, DocumentIndexOptimizeSetup.NoOptimize);
+        }
 
-		protected override void OptimizeIndex()
-		{
-			EntityIndexer.OptimizeImpedimentIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
-		}
+        protected override void OptimizeIndex()
+        {
+            EntityIndexer.OptimizeImpedimentIndex(DocumentIndexOptimizeSetup.ImmediateOptimize);
+        }
 
-		protected override void IncrementCounters(int count)
-		{
-			Data.ImpedimentsRetrievedCount += count;
-			Data.ImpedimentsCurrentDataWindowSize += count;
-		}
+        protected override void IncrementCounters(int count)
+        {
+            Data.ImpedimentsRetrievedCount += count;
+            Data.ImpedimentsCurrentDataWindowSize += count;
+        }
 
-		protected override int GetCurrentDataWindowSize()
-		{
-			return Data.ImpedimentsCurrentDataWindowSize;
-		}
+        protected override int GetCurrentDataWindowSize()
+        {
+            return Data.ImpedimentsCurrentDataWindowSize;
+        }
 
-		protected override void ResetCurrentDataWindowSize()
-		{
-			Data.ImpedimentsCurrentDataWindowSize = 0;
-		}
+        protected override void ResetCurrentDataWindowSize()
+        {
+            Data.ImpedimentsCurrentDataWindowSize = 0;
+        }
 
-		protected override int GetTotalRetrievedEntitiesCount()
-		{
-			return Data.ImpedimentsRetrievedCount;
-		}
+        protected override int GetTotalRetrievedEntitiesCount()
+        {
+            return Data.ImpedimentsRetrievedCount;
+        }
 
-		protected override void ResetTotalRetrievedEntitiesCount()
-		{
-			Data.ImpedimentsRetrievedCount = 0;
-		}
+        protected override void ResetTotalRetrievedEntitiesCount()
+        {
+            Data.ImpedimentsRetrievedCount = 0;
+        }
 
-		protected override ImpedimentQuery CreateQuery()
-		{
-			return new ImpedimentQuery();
-		}
-	}
+        protected override ImpedimentQuery CreateQuery()
+        {
+            return new ImpedimentQuery();
+        }
+    }
 }

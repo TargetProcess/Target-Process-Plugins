@@ -64,153 +64,154 @@ using IProfile = Tp.Integration.Plugin.Common.Domain.IProfile;
 
 namespace Tp.Integration.Plugin.Common.StructureMap
 {
-	public class PluginRegistry : Registry
-	{
-		public PluginRegistry()
-		{
-			For<IPluginSettings>().Singleton().Use<PluginSettings>();
-			For<IPluginQueueFactory>().Singleton().Use<PluginQueueFactory>();
-			For<PluginDataFolder>().Singleton().Use<PluginDataFolder>();
-			For<ServiceManager>().Singleton().Use<ServiceManager>();
-			ConfigureWebServices();
+    public class PluginRegistry : Registry
+    {
+        public PluginRegistry()
+        {
+            For<IPluginSettings>().Singleton().Use<PluginSettings>();
+            For<IPluginQueueFactory>().Singleton().Use<PluginQueueFactory>();
+            For<PluginDataFolder>().Singleton().Use<PluginDataFolder>();
+            For<ServiceManager>().Singleton().Use<ServiceManager>();
+            ConfigureWebServices();
 
-			For<IPluginContext>().Singleton().Use<PluginContext>();
-			For<IProfileGatewayFactory>().Singleton().Use<ProfileGatewayFactory>();
+            For<IPluginContext>().Singleton().Use<PluginContext>();
+            For<IProfileGatewayFactory>().Singleton().Use<ProfileGatewayFactory>();
 
-			For<IPluginCurrentObjectContext>().Singleton().Use<PluginCurrentObjectContext>();
-			For<IAccountCollection>().Singleton().Use<AccountCollection>();
-			For<IProfileCollectionReadonly>().Use<CurrentProfileCollection>();
-			For<IProfileCollection>().Use<CurrentProfileCollection>();
+            For<IPluginCurrentObjectContext>().Singleton().Use<PluginCurrentObjectContext>();
+            For<IAccountCollection>().Singleton().Use<AccountCollection>();
+            For<IProfileCollectionReadonly>().Use<CurrentProfileCollection>();
+            For<IProfileCollection>().Use<CurrentProfileCollection>();
 
-			For<IProfile>().Use<CurrentProfile>();
-			For<IProfileReadonly>().Use<CurrentProfile>();
-			Forward<IProfileReadonly, IStorageRepository>();
+            For<IProfile>().Use<CurrentProfile>();
+            For<IProfileReadonly>().Use<CurrentProfile>();
+            Forward<IProfileReadonly, IStorageRepository>();
 
-			For<IAccountRepository>().Singleton().Use<AccountRepository>();
-			For<IProfileRepository>().Singleton().Use<ProfileRepository>();
-			Forward<IProfileRepository, IProfileFactory>();
+            For<IAccountRepository>().Singleton().Use<AccountRepository>();
+            For<IProfileRepository>().Singleton().Use<ProfileRepository>();
+            Forward<IProfileRepository, IProfileFactory>();
 
-			For<IPluginPersister>().Singleton().Use(GetPluginPersisterInstance);
-			For<IAccountPersister>().Singleton().Use(GetAccountPersisterInstance);
-			For<IProfilePersister>().Singleton().Use(GetProfilePersisterInstance);
-			For<IProfileStoragePersister>().Singleton().Use(GetProfileStoragePersisterInstance);
-			For<ITpBus>().Singleton().Use(CreateTpBus);
-			Forward<ITpBus, ICommandBus>();
-			Forward<ITpBus, ILocalBus>();
-			FillAllPropertiesOfType<ITpBus>();
-			FillAllPropertiesOfType<ICommandBus>();
+            For<IPluginPersister>().Singleton().Use(GetPluginPersisterInstance);
+            For<IAccountPersister>().Singleton().Use(GetAccountPersisterInstance);
+            For<IProfilePersister>().Singleton().Use(GetProfilePersisterInstance);
+            For<IProfileStoragePersister>().Singleton().Use(GetProfileStoragePersisterInstance);
+            For<ITpBus>().Singleton().Use(CreateTpBus);
+            Forward<ITpBus, ICommandBus>();
+            Forward<ITpBus, ILocalBus>();
+            FillAllPropertiesOfType<ITpBus>();
+            FillAllPropertiesOfType<ICommandBus>();
 
-			For<IAssembliesHost>().Singleton().Use(GetAssembliesHost);
-			For<IPluginMetadata>().Singleton().Use<AssemblyScanner>();
-			For<IDatabaseConfiguration>().Singleton().Use<DatabaseConfiguration>();
+            For<IAssembliesHost>().Singleton().Use(GetAssembliesHost);
+            For<IPluginMetadata>().Singleton().Use<AssemblyScanner>();
+            For<IDatabaseConfiguration>().Singleton().Use<DatabaseConfiguration>();
 
-			For<IPluginCommandRepository>().Singleton().Use<PluginCommandRepository>();
-			Forward<IPluginCommandRepository, PluginCommandRepository>();
+            For<IPluginCommandRepository>().Singleton().Use<PluginCommandRepository>();
+            Forward<IPluginCommandRepository, PluginCommandRepository>();
 
-			For<PluginRuntime>().Singleton().Use<PluginRuntime>();
-			For<IEventAggregator>().Use(c => c.GetInstance<PluginRuntime>().EventAggregator);
+            For<PluginRuntime>().Singleton().Use<PluginRuntime>();
+            For<IEventAggregator>().Use(c => c.GetInstance<PluginRuntime>().EventAggregator);
 
-			For<Locker>().Singleton().Use<Locker>();
-			For<IActivityLogPathProvider>().Singleton().Use<ActivityLogPathProvider>();
-			For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
-			For<IActivityLoggerFactory>().Singleton().Use<PluginActivityLoggerFactory>();
-			For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
-			For<ILogManager>().Singleton().Use<Activity.TpLogManager>();
-			Forward<ILogManager, ILogProvider>();
-			For<IRouterChildTagsSource>().Singleton().Use<RouterChildTagsSource>();
+            For<Locker>().Singleton().Use<Locker>();
+            For<IActivityLogPathProvider>().Singleton().Use<ActivityLogPathProvider>();
+            For<IActivityLogger>().Singleton().Use(CreateActivityLogger);
+            For<IActivityLoggerFactory>().Singleton().Use<PluginActivityLoggerFactory>();
+            For<ILog4NetFileRepository>().Singleton().Use<Log4NetFileRepository>();
+            For<ILogManager>().Singleton().Use<Activity.TpLogManager>();
+            Forward<ILogManager, ILogProvider>();
+            For<IRouterChildTagsSource>().Singleton().Use<RouterChildTagsSource>();
 
-			For<ITaskFactory>().Singleton().Use(GetTaskFactory);
-		}
+            For<ITaskFactory>().Singleton().Use(GetTaskFactory);
+            For<IDisabledAccountCollection>().Singleton().Use(DisabledAccountCollection.Load);
+        }
 
-		protected virtual ITaskFactory GetTaskFactory()
-		{
-			return new TpTaskFactory();
-		}
+        protected virtual ITaskFactory GetTaskFactory()
+        {
+            return new TpTaskFactory();
+        }
 
-		protected virtual ITpBus CreateTpBus()
-		{
-			return ObjectFactory.GetInstance<TpBus>();
-		}
+        protected virtual ITpBus CreateTpBus()
+        {
+            return ObjectFactory.GetInstance<TpBus>();
+        }
 
-		protected virtual IActivityLogger CreateActivityLogger()
-		{
-			return ObjectFactory.GetInstance<PluginActivityLogger>();
-		}
+        protected virtual IActivityLogger CreateActivityLogger()
+        {
+            return ObjectFactory.GetInstance<PluginActivityLogger>();
+        }
 
-		protected virtual IAssembliesHost GetAssembliesHost()
-		{
-			return new AssembliesHost();
-		}
+        protected virtual IAssembliesHost GetAssembliesHost()
+        {
+            return new AssembliesHost();
+        }
 
-		protected virtual IProfileStoragePersister GetProfileStoragePersisterInstance()
-		{
-			return ObjectFactory.GetInstance<ProfileStorageSqlPersister>();
-		}
+        protected virtual IProfileStoragePersister GetProfileStoragePersisterInstance()
+        {
+            return ObjectFactory.GetInstance<ProfileStorageSqlPersister>();
+        }
 
-		protected virtual IPluginPersister GetPluginPersisterInstance()
-		{
-			return ObjectFactory.GetInstance<PluginPersister>();
-		}
+        protected virtual IPluginPersister GetPluginPersisterInstance()
+        {
+            return ObjectFactory.GetInstance<PluginPersister>();
+        }
 
-		protected virtual IAccountPersister GetAccountPersisterInstance()
-		{
-			return ObjectFactory.GetInstance<AccountPersister>();
-		}
+        protected virtual IAccountPersister GetAccountPersisterInstance()
+        {
+            return ObjectFactory.GetInstance<AccountPersister>();
+        }
 
-		protected virtual IProfilePersister GetProfilePersisterInstance()
-		{
-			return ObjectFactory.GetInstance<ProfilePersister>();
-		}
+        protected virtual IProfilePersister GetProfilePersisterInstance()
+        {
+            return ObjectFactory.GetInstance<ProfilePersister>();
+        }
 
 
-		private void ConfigureWebServices()
-		{
-			For<AssignableService>().Use(CreateService<AssignableService>);
-			For<AttachmentService>().Use(CreateService<AttachmentService>);
-			For<AuditHistoryService>().Use(CreateService<AuditHistoryService>);
-			For<AuthenticationService>().Use(CreateService<AuthenticationService>);
-			For<BugService>().Use(CreateService<BugService>);
-			For<BuildService>().Use(CreateService<BuildService>);
-			For<CommentService>().Use(CreateService<CommentService>);
-			For<CustomActivityService>().Use(CreateService<CustomActivityService>);
-			For<CustomFieldService>().Use(CreateService<CustomFieldService>);
-			For<EntityStateService>().Use(CreateService<EntityStateService>);
-			For<FeatureService>().Use(CreateService<FeatureService>);
-			For<FileService>().Use(CreateService<FileService>);
-			For<GeneralService>().Use(CreateService<GeneralService>);
-			For<GeneralUserService>().Use(CreateService<GeneralUserService>);
-			For<ImpedimentService>().Use(CreateService<ImpedimentService>);
-			For<IterationService>().Use(CreateService<IterationService>);
-			For<MyAssignmentsService>().Use(CreateService<MyAssignmentsService>);
-			For<PasswordRecoveryService>().Use(CreateService<PasswordRecoveryService>);
-			For<PriorityService>().Use(CreateService<PriorityService>);
-			For<ProcessService>().Use(CreateService<ProcessService>);
-			For<ProgramService>().Use(CreateService<ProgramService>);
-			For<ProjectMemberService>().Use(CreateService<ProjectMemberService>);
-			For<ProjectService>().Use(CreateService<ProjectService>);
-			For<ReleaseService>().Use(CreateService<ReleaseService>);
-			For<RequesterService>().Use(CreateService<RequesterService>);
-			For<RequestService>().Use(CreateService<RequestService>);
-			For<RequestTypeService>().Use(CreateService<RequestTypeService>);
-			For<RevisionFileService>().Use(CreateService<RevisionFileService>);
-			For<RevisionService>().Use(CreateService<RevisionService>);
-			For<RoleEffortService>().Use(CreateService<RoleEffortService>);
-			For<RoleService>().Use(CreateService<RoleService>);
-			For<SeverityService>().Use(CreateService<SeverityService>);
-			For<TagsService>().Use(CreateService<TagsService>);
-			For<TaskService>().Use(CreateService<TaskService>);
-			For<TestCaseRunService>().Use(CreateService<TestCaseRunService>);
-			For<TestCaseService>().Use(CreateService<TestCaseService>);
-			For<TestPlanRunService>().Use(CreateService<TestPlanRunService>);
-			For<TestPlanService>().Use(CreateService<TestPlanService>);
-			For<TimeService>().Use(CreateService<TimeService>);
-			For<UserService>().Use(CreateService<UserService>);
-			For<UserStoryService>().Use(CreateService<UserStoryService>);
-		}
+        private void ConfigureWebServices()
+        {
+            For<AssignableService>().Use(CreateService<AssignableService>);
+            For<AttachmentService>().Use(CreateService<AttachmentService>);
+            For<AuditHistoryService>().Use(CreateService<AuditHistoryService>);
+            For<AuthenticationService>().Use(CreateService<AuthenticationService>);
+            For<BugService>().Use(CreateService<BugService>);
+            For<BuildService>().Use(CreateService<BuildService>);
+            For<CommentService>().Use(CreateService<CommentService>);
+            For<CustomActivityService>().Use(CreateService<CustomActivityService>);
+            For<CustomFieldService>().Use(CreateService<CustomFieldService>);
+            For<EntityStateService>().Use(CreateService<EntityStateService>);
+            For<FeatureService>().Use(CreateService<FeatureService>);
+            For<FileService>().Use(CreateService<FileService>);
+            For<GeneralService>().Use(CreateService<GeneralService>);
+            For<GeneralUserService>().Use(CreateService<GeneralUserService>);
+            For<ImpedimentService>().Use(CreateService<ImpedimentService>);
+            For<IterationService>().Use(CreateService<IterationService>);
+            For<MyAssignmentsService>().Use(CreateService<MyAssignmentsService>);
+            For<PasswordRecoveryService>().Use(CreateService<PasswordRecoveryService>);
+            For<PriorityService>().Use(CreateService<PriorityService>);
+            For<ProcessService>().Use(CreateService<ProcessService>);
+            For<ProgramService>().Use(CreateService<ProgramService>);
+            For<ProjectMemberService>().Use(CreateService<ProjectMemberService>);
+            For<ProjectService>().Use(CreateService<ProjectService>);
+            For<ReleaseService>().Use(CreateService<ReleaseService>);
+            For<RequesterService>().Use(CreateService<RequesterService>);
+            For<RequestService>().Use(CreateService<RequestService>);
+            For<RequestTypeService>().Use(CreateService<RequestTypeService>);
+            For<RevisionFileService>().Use(CreateService<RevisionFileService>);
+            For<RevisionService>().Use(CreateService<RevisionService>);
+            For<RoleEffortService>().Use(CreateService<RoleEffortService>);
+            For<RoleService>().Use(CreateService<RoleService>);
+            For<SeverityService>().Use(CreateService<SeverityService>);
+            For<TagsService>().Use(CreateService<TagsService>);
+            For<TaskService>().Use(CreateService<TaskService>);
+            For<TestCaseRunService>().Use(CreateService<TestCaseRunService>);
+            For<TestCaseService>().Use(CreateService<TestCaseService>);
+            For<TestPlanRunService>().Use(CreateService<TestPlanRunService>);
+            For<TestPlanService>().Use(CreateService<TestPlanService>);
+            For<TimeService>().Use(CreateService<TimeService>);
+            For<UserService>().Use(CreateService<UserService>);
+            For<UserStoryService>().Use(CreateService<UserStoryService>);
+        }
 
-		private static TService CreateService<TService>() where TService : WebServicesClientProtocol, new()
-		{
-			return ObjectFactory.GetInstance<ServiceManager>().GetService<TService>();
-		}
-	}
+        private static TService CreateService<TService>() where TService : WebServicesClientProtocol, new()
+        {
+            return ObjectFactory.GetInstance<ServiceManager>().GetService<TService>();
+        }
+    }
 }

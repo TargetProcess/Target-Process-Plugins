@@ -1,7 +1,7 @@
 namespace Tp.Search.Model.Optimization
 {
-	interface IDocumentIndexPeriodicOptimizeHint
-	{
-		bool Advice();
-	}
+    interface IDocumentIndexPeriodicOptimizeHint
+    {
+        bool Advice();
+    }
 }

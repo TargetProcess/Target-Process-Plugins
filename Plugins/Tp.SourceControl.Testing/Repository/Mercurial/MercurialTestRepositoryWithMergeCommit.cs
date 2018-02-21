@@ -6,40 +6,40 @@
 namespace Tp.SourceControl.Testing.Repository.Mercurial
 {
     public class MercurialTestRepositoryWithMergeCommit : VcsTestRepository<MercurialTestRepositoryWithMergeCommit>
-	{
-		protected override string Name
-		{
-			get { return "TestRepositoryWithMergeCommit"; }
-		}
+    {
+        protected override string Name
+        {
+            get { return "TestRepositoryWithMergeCommit"; }
+        }
 
-		public override string Login
-		{
-			get { throw new System.NotImplementedException(); }
-		}
+        public override string Login
+        {
+            get { throw new System.NotImplementedException(); }
+        }
 
-		public override string Password
-		{
-			get { throw new System.NotImplementedException(); }
-		}
+        public override string Password
+        {
+            get { throw new System.NotImplementedException(); }
+        }
 
-		public override void Commit(string commitComment)
-		{
-			throw new System.NotImplementedException();
-		}
+        public override void Commit(string commitComment)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public override string Commit(string filePath, string changedContent, string commitComment)
-		{
-			throw new System.NotImplementedException();
-		}
+        public override string Commit(string filePath, string changedContent, string commitComment)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public override void CheckoutBranch(string branch)
-		{
-			throw new System.NotImplementedException();
-		}
+        public override void CheckoutBranch(string branch)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public override string CherryPick(string revisionId)
-		{
-			throw new System.NotImplementedException();
-		}
-	}
+        public override string CherryPick(string revisionId)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

@@ -10,36 +10,36 @@ using Tp.Integration.Plugin.TestRunImport.TestRunImport;
 
 namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 {
-	public class SimpleTestRunImportResultsReaderFactory : ITestRunImportResultsReaderFactory
-	{
-		private readonly IActivityLogger _log;
+    public class SimpleTestRunImportResultsReaderFactory : ITestRunImportResultsReaderFactory
+    {
+        private readonly IActivityLogger _log;
 
-		public SimpleTestRunImportResultsReaderFactory(IActivityLogger log)
-		{
-			_log = log;
-		}
+        public SimpleTestRunImportResultsReaderFactory(IActivityLogger log)
+        {
+            _log = log;
+        }
 
-		public AbstractTestRunImportResultsReader GetResolver(TestRunImportSettings settings, TextReader reader)
-		{
-			if (settings == null)
-			{
-				_log.Error("GetResolver member settings is null");
-				throw new ArgumentNullException("settings");
-			}
+        public AbstractTestRunImportResultsReader GetResolver(TestRunImportSettings settings, TextReader reader)
+        {
+            if (settings == null)
+            {
+                _log.Error("GetResolver member settings is null");
+                throw new ArgumentNullException("settings");
+            }
 
-			switch (settings.FrameworkType)
-			{
-				case FrameworkTypes.FrameworkTypes.NUnit:
-					return new NUnitResultsXmlReader(_log, reader);
-				case FrameworkTypes.FrameworkTypes.JUnit:
-					return new JUnitResultsXmlReader(_log, reader);
-				case FrameworkTypes.FrameworkTypes.Selenium:
-					return new SeleniumResultsHtmlReader(_log, reader);
-				case FrameworkTypes.FrameworkTypes.JenkinsHudson:
-					return new JenkinsHudsonResultsXmlReader(_log, reader);
-				default:
-					throw new ApplicationException(string.Format("Failed to get resolver for FrameworkType: {0}", settings.FrameworkType));
-			}
-		}
-	}
+            switch (settings.FrameworkType)
+            {
+                case FrameworkTypes.FrameworkTypes.NUnit:
+                    return new NUnitResultsXmlReader(_log, reader);
+                case FrameworkTypes.FrameworkTypes.JUnit:
+                    return new JUnitResultsXmlReader(_log, reader);
+                case FrameworkTypes.FrameworkTypes.Selenium:
+                    return new SeleniumResultsHtmlReader(_log, reader);
+                case FrameworkTypes.FrameworkTypes.JenkinsHudson:
+                    return new JenkinsHudsonResultsXmlReader(_log, reader);
+                default:
+                    throw new ApplicationException(string.Format("Failed to get resolver for FrameworkType: {0}", settings.FrameworkType));
+            }
+        }
+    }
 }

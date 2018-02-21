@@ -7,17 +7,17 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.SourceControl.RevisionStorage
 {
-	public class ImportedRevisionInfo
-	{
-		public RevisionIdRelation RevisionId { get; set; }
+    public class ImportedRevisionInfo
+    {
+        public RevisionIdRelation RevisionId { get; set; }
 
-		public IStorageRepository Profile { get; set; }
-	}
+        public IStorageRepository Profile { get; set; }
+    }
 
-	public class RevisionIdRelation
-	{
-		public int TpId { get; set; }
+    public class RevisionIdRelation
+    {
+        public int TpId { get; set; }
 
-		public string RevisionId { get; set; }
-	}
+        public string RevisionId { get; set; }
+    }
 }

@@ -22,191 +22,191 @@ using Tp.Tfs;
 
 namespace Tp.Tfs.Tests.Context
 {
-	public class VcsPluginContext
-	{
-		private readonly TransportMock _transport;
-		private IProfileReadonly _profileStorage;
-		private readonly ContextExpectations _contextExpectations;
-		public List<TpUserMappingInfo> TpUsers { get; private set; }
-		private TfsPluginProfile _profile;
+    public class VcsPluginContext
+    {
+        private readonly TransportMock _transport;
+        private IProfileReadonly _profileStorage;
+        private readonly ContextExpectations _contextExpectations;
+        public List<TpUserMappingInfo> TpUsers { get; private set; }
+        private TfsPluginProfile _profile;
 
-		public VcsPluginContext(TransportMock transportMock)
-		{
-			_transport = transportMock;
+        public VcsPluginContext(TransportMock transportMock)
+        {
+            _transport = transportMock;
 
-			_contextExpectations = new ContextExpectations(this);
-			TpUsers = new List<TpUserMappingInfo>();
+            _contextExpectations = new ContextExpectations(this);
+            TpUsers = new List<TpUserMappingInfo>();
 
-			Transport.On<RetrieveAllUsersQuery>()
-				.Reply(x => CreateRetrieveAllUsersQueryReply());
+            Transport.On<RetrieveAllUsersQuery>()
+                .Reply(x => CreateRetrieveAllUsersQueryReply());
 
-			On.CreateCommand<RevisionDTO>().Reply(CreateRevisionCreatedMessage);
-			On.CreateCommand<RevisionFileDTO>().Reply(CreateRevisionFileCreatedMessage);
-			On.CreateCommand<RevisionAssignableDTO>().Reply(CreateRevisionAssignableCreatedMessage);
-		}
+            On.CreateCommand<RevisionDTO>().Reply(CreateRevisionCreatedMessage);
+            On.CreateCommand<RevisionFileDTO>().Reply(CreateRevisionFileCreatedMessage);
+            On.CreateCommand<RevisionAssignableDTO>().Reply(CreateRevisionAssignableCreatedMessage);
+        }
 
         public TfsPluginProfile Profile
-		{
+        {
             get { return _profile ?? (_profile = ProfileStorage.GetProfile<TfsPluginProfile>()); }
-		}
+        }
 
-		public TransportMock Transport
-		{
-			get { return _transport; }
-		}
+        public TransportMock Transport
+        {
+            get { return _transport; }
+        }
 
-		public LogMock Log
-		{
-			get { return ObjectFactory.GetInstance<LogMock>(); }
-		}
+        public LogMock Log
+        {
+            get { return ObjectFactory.GetInstance<LogMock>(); }
+        }
 
-		private ISagaMessage[] CreateRetrieveAllUsersQueryReply()
-		{
-			if (!UserDtos.Any())
-			{
-				return new[] {new UserQueryResult {Dtos = null, QueryResultCount = 0}};
-			}
-
-			return UserDtos.Select(
-				dto => new UserQueryResult {Dtos = new[] {dto}, QueryResultCount = UserDtos.Count()}).ToArray();
-		}
-
-		public IEnumerable<UserDTO> UserDtos
-		{
-			get
-			{
-				return TpUsers.Select(u =>
-				                      	{
-				                      		var firstName = u.Name;
-				                      		var lastName = string.Empty;
-
-				                      		var index = u.Name.IndexOf(' ');
-
-											if (index > -1)
-											{
-												firstName = u.Name.Substring(0, index);
-												lastName = u.Name.Substring(index + 1);
-											}
-
-				                      		return new UserDTO
-				                      			{
-				                      				ID = u.Id,
-				                      				Login = u.Login,
-				                      				FirstName = firstName,
-				                      				LastName = lastName,
-				                      				IsActive = true,
-				                      				Email = u.Email,
-                                                    ActiveDirectoryName = "someone_active_dir"
-				                      			};
-				                      	}).ToArray();
-			}
-		}
-
-		#region Configuration
-
-		public ContextExpectations On
-		{
-			get { return _contextExpectations; }
-		}
-
-		#endregion
-
-		private static ISagaMessage CreateRevisionAssignableCreatedMessage(CreateCommand createCommand)
-		{
-			return new RevisionAssignableCreatedMessage {Dto = (RevisionAssignableDTO) createCommand.Dto};
-		}
-
-		public List<RevisionInfo> Revisions
-		{
-			get { return ((VersionControlSystemMock) VersionControlSystem).Revisions; }
-		}
-
-		private IProfileReadonly ProfileStorage
-		{
-            get 
-            { 
-                return _profileStorage ?? 
-                    (_profileStorage = _transport.AddProfile(
-                        "Test profile", 
-                        new TfsPluginProfile { StartRevision = "1", Uri = ConfigHelper.Instance.TestCollection })); 
+        private ISagaMessage[] CreateRetrieveAllUsersQueryReply()
+        {
+            if (!UserDtos.Any())
+            {
+                return new[] { new UserQueryResult { Dtos = null, QueryResultCount = 0 } };
             }
-		}
 
-		private IVersionControlSystem VersionControlSystem
-		{
-			get { return ObjectFactory.GetInstance<IVersionControlSystem>(); }
-		}
+            return UserDtos.Select(
+                dto => new UserQueryResult { Dtos = new[] { dto }, QueryResultCount = UserDtos.Count() }).ToArray();
+        }
 
-		private static ISagaMessage CreateRevisionFileCreatedMessage(CreateCommand createCommand)
-		{
-			var revisionFile = (RevisionFileDTO) createCommand.Dto;
-			revisionFile.ID = EntityId.Next();
-			return new RevisionFileCreatedMessage { Dto = revisionFile };
-		}
+        public IEnumerable<UserDTO> UserDtos
+        {
+            get
+            {
+                return TpUsers.Select(u =>
+                {
+                    var firstName = u.Name;
+                    var lastName = string.Empty;
 
-		private static ISagaMessage CreateRevisionCreatedMessage(CreateCommand command)
-		{
-			var revision = (RevisionDTO) command.Dto;
-			revision.ID = EntityId.Next();
-			return new RevisionCreatedMessage {Dto = revision};
-		}
+                    var index = u.Name.IndexOf(' ');
 
-		public void StartPlugin()
-		{
-			_transport.LocalQueue.Clear();
-			_transport.TpQueue.Clear();
-			_transport.HandleLocalMessage(ProfileStorage, new TickMessage());
-		}
+                    if (index > -1)
+                    {
+                        firstName = u.Name.Substring(0, index);
+                        lastName = u.Name.Substring(index + 1);
+                    }
 
-		public void CreateTpUser(string name, int id)
-		{
-			TpUsers.Add(new TpUserMappingInfo
-			            	{Name = name, Id = id, Email = Guid.NewGuid() + "@mail.com", Login = Guid.NewGuid() + "_login"});
-		}
+                    return new UserDTO
+                    {
+                        ID = u.Id,
+                        Login = u.Login,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        IsActive = true,
+                        Email = u.Email,
+                        ActiveDirectoryName = "someone_active_dir"
+                    };
+                }).ToArray();
+            }
+        }
 
-		public void MapUser(string vcsuser, string tpuserName)
-		{
-			Profile.UserMapping.Add(new MappingElement
-			                        	{
-			                        		Key = vcsuser,
-			                        		Value =
-			                        			new MappingLookup {Name = tpuserName, Id = TpUsers.Single(x => x.Name == tpuserName).Id}
-			                        	});
-		}
+        #region Configuration
 
-		public TpUserMappingInfo GetTpUserByName(string userName)
-		{
-			return TpUsers.FirstOrDefault(x => x.Name == userName);
-		}
+        public ContextExpectations On
+        {
+            get { return _contextExpectations; }
+        }
 
-		public TpUserMappingInfo GetTpUserByLogin(string userLogin)
-		{
-			return TpUsers.FirstOrDefault(x => x.Login == userLogin);
-		}
+        #endregion
+
+        private static ISagaMessage CreateRevisionAssignableCreatedMessage(CreateCommand createCommand)
+        {
+            return new RevisionAssignableCreatedMessage { Dto = (RevisionAssignableDTO) createCommand.Dto };
+        }
+
+        public List<RevisionInfo> Revisions
+        {
+            get { return ((VersionControlSystemMock) VersionControlSystem).Revisions; }
+        }
+
+        private IProfileReadonly ProfileStorage
+        {
+            get
+            {
+                return _profileStorage ??
+                (_profileStorage = _transport.AddProfile(
+                    "Test profile",
+                    new TfsPluginProfile { StartRevision = "1", Uri = ConfigHelper.Instance.TestCollection }));
+            }
+        }
+
+        private IVersionControlSystem VersionControlSystem
+        {
+            get { return ObjectFactory.GetInstance<IVersionControlSystem>(); }
+        }
+
+        private static ISagaMessage CreateRevisionFileCreatedMessage(CreateCommand createCommand)
+        {
+            var revisionFile = (RevisionFileDTO) createCommand.Dto;
+            revisionFile.ID = EntityId.Next();
+            return new RevisionFileCreatedMessage { Dto = revisionFile };
+        }
+
+        private static ISagaMessage CreateRevisionCreatedMessage(CreateCommand command)
+        {
+            var revision = (RevisionDTO) command.Dto;
+            revision.ID = EntityId.Next();
+            return new RevisionCreatedMessage { Dto = revision };
+        }
+
+        public void StartPlugin()
+        {
+            _transport.LocalQueue.Clear();
+            _transport.TpQueue.Clear();
+            _transport.HandleLocalMessage(ProfileStorage, new TickMessage());
+        }
+
+        public void CreateTpUser(string name, int id)
+        {
+            TpUsers.Add(new TpUserMappingInfo
+                { Name = name, Id = id, Email = Guid.NewGuid() + "@mail.com", Login = Guid.NewGuid() + "_login" });
+        }
+
+        public void MapUser(string vcsuser, string tpuserName)
+        {
+            Profile.UserMapping.Add(new MappingElement
+            {
+                Key = vcsuser,
+                Value =
+                    new MappingLookup { Name = tpuserName, Id = TpUsers.Single(x => x.Name == tpuserName).Id }
+            });
+        }
+
+        public TpUserMappingInfo GetTpUserByName(string userName)
+        {
+            return TpUsers.FirstOrDefault(x => x.Name == userName);
+        }
+
+        public TpUserMappingInfo GetTpUserByLogin(string userLogin)
+        {
+            return TpUsers.FirstOrDefault(x => x.Login == userLogin);
+        }
 
 
-		public void CreateTpUser(string name, string mail)
-		{
-			var userLookup = new TpUserMappingInfo
-			                 	{Id = EntityId.Next(), Name = name, Email = mail, Login = Guid.NewGuid() + "_login"};
-			TpUsers.Add(userLookup);
-		}
+        public void CreateTpUser(string name, string mail)
+        {
+            var userLookup = new TpUserMappingInfo
+                { Id = EntityId.Next(), Name = name, Email = mail, Login = Guid.NewGuid() + "_login" };
+            TpUsers.Add(userLookup);
+        }
 
-		public void CreateTpUser(string name)
-		{
-			CreateTpUser(name, name + "@company.com");
-		}
+        public void CreateTpUser(string name)
+        {
+            CreateTpUser(name, name + "@company.com");
+        }
 
-		public void CreateTpUser(string userName, string userLogin, int userId)
-		{
-			var userLookup = new TpUserMappingInfo { Id = EntityId.Next(), Name = userName, Login = userLogin };
-			TpUsers.Add(userLookup);
-		}
+        public void CreateTpUser(string userName, string userLogin, int userId)
+        {
+            var userLookup = new TpUserMappingInfo { Id = EntityId.Next(), Name = userName, Login = userLogin };
+            TpUsers.Add(userLookup);
+        }
 
-		public void CreateTpUserWithLogin(string login, string name, string mail)
-		{
-			var userLookup = new TpUserMappingInfo { Id = EntityId.Next(), Name = name, Login = login, Email = mail };
-			TpUsers.Add(userLookup);
-		}
-	}
+        public void CreateTpUserWithLogin(string login, string name, string mail)
+        {
+            var userLookup = new TpUserMappingInfo { Id = EntityId.Next(), Name = name, Login = login, Email = mail };
+            TpUsers.Add(userLookup);
+        }
+    }
 }

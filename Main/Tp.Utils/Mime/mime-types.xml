@@ -423,6 +423,13 @@
 		<magic offset="0" value="ID3" />
 	</mime-type>
 
+	<mime-type name="audio/mp4"
+						description="MPEG-4 audio file">
+		<ext>m4a</ext>
+		<ext>m4b</ext>
+		<ext>m4p</ext>
+		<magic offset="4" value="ftyp" />
+	</mime-type>
 
 	<mime-type name="audio/x-aiff"
 						 description="Audio Interchange File">
@@ -722,7 +729,6 @@
 						 description="Setext (Structure Enhanced Text)">
 		<ext>etx</ext>
 	</mime-type>
-
 
 	<!--
      !   Video primary type

@@ -5,18 +5,18 @@
 
 namespace Tp.Plugin.Core.Attachments
 {
-	public interface IBufferSize
-	{
-		int Value { get; }
-	}
+    public interface IBufferSize
+    {
+        int Value { get; }
+    }
 
-	public class BufferSize : IBufferSize
-	{
-		public BufferSize(int value)
-		{
-			Value = value;
-		}
+    public class BufferSize : IBufferSize
+    {
+        public BufferSize(int value)
+        {
+            Value = value;
+        }
 
-		public int Value { get; private set; }
-	}
+        public int Value { get; private set; }
+    }
 }

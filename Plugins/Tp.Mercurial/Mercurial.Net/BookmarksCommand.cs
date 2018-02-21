@@ -64,10 +64,6 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public IEnumerable<Bookmark> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Bookmark> Result { get; private set; }
     }
 }

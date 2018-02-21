@@ -57,10 +57,7 @@ namespace Mercurial
         /// </summary>
         public MergeJob MergeJob
         {
-            get
-            {
-                return _MergeJob;
-            }
+            get { return _MergeJob; }
         }
 
         /// <summary>
@@ -68,10 +65,7 @@ namespace Mercurial
         /// </summary>
         public string Path
         {
-            get
-            {
-                return _Path;
-            }
+            get { return _Path; }
         }
 
         /// <summary>
@@ -104,7 +98,8 @@ namespace Mercurial
                     return Path;
 
                 default:
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid subFile parameter passed to GetMergeSubFilePath: {0}", subFile));
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture,
+                        "Invalid subFile parameter passed to GetMergeSubFilePath: {0}", subFile));
             }
         }
 
@@ -175,11 +170,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the current state of the file this <see cref="MergeJobConflict"/> relates to.
         /// </summary>
-        public MergeConflictState State
-        {
-            get;
-            internal set;
-        }
+        public MergeConflictState State { get; internal set; }
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -219,7 +210,7 @@ namespace Mercurial
                 return true;
             if (obj.GetType() != typeof(MergeJobConflict))
                 return false;
-            return Equals((MergeJobConflict)obj);
+            return Equals((MergeJobConflict) obj);
         }
 
         /// <summary>
@@ -279,11 +270,12 @@ namespace Mercurial
                 return;
             }
 
-            IEnumerable<MergeConflict> conflictsAfterResolve = MergeJob.Repository.Resolve(new ResolveCommand().WithAction(ResolveAction.List));
+            IEnumerable<MergeConflict> conflictsAfterResolve =
+                MergeJob.Repository.Resolve(new ResolveCommand().WithAction(ResolveAction.List));
             State =
-                (from conflict in conflictsAfterResolve
-                 where conflict.Path == _Path
-                 select conflict.State).First();
+            (from conflict in conflictsAfterResolve
+                where conflict.Path == _Path
+                select conflict.State).First();
         }
 
         /// <summary>
@@ -299,7 +291,9 @@ namespace Mercurial
                 ".other",
             };
 
-            foreach (string physicalPath in extensions.Select(extension => System.IO.Path.Combine(MergeJob.Repository.Path, Path) + extension).Where(File.Exists))
+            foreach (
+                string physicalPath in
+                extensions.Select(extension => System.IO.Path.Combine(MergeJob.Repository.Path, Path) + extension).Where(File.Exists))
             {
                 File.Delete(physicalPath);
             }

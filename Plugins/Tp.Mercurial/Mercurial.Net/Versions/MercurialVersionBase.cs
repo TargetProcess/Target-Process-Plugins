@@ -27,15 +27,9 @@ namespace Mercurial.Versions
         /// </summary>
         public static MercurialVersionBase Current
         {
-            get
-            {
-                return _Current;
-            }
+            get { return _Current; }
 
-            private set
-            {
-                _Current = value;
-            }
+            private set { _Current = value; }
         }
 
         /// <summary>
@@ -82,12 +76,12 @@ namespace Mercurial.Versions
                 select new { type, attr };
 
             Type bestImplementation =
-                (from implementation in implementations
-                 where implementation.attr.IsMatch(version)
-                 select implementation.type).FirstOrDefault();
+            (from implementation in implementations
+                where implementation.attr.IsMatch(version)
+                select implementation.type).FirstOrDefault();
 
             if (bestImplementation != null)
-                return (MercurialVersionBase)Activator.CreateInstance(bestImplementation);
+                return (MercurialVersionBase) Activator.CreateInstance(bestImplementation);
 
             return new MercurialVersionBase();
         }

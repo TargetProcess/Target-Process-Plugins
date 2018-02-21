@@ -44,11 +44,7 @@ namespace Mercurial
         /// </remarks>
         [BooleanArgument(TrueOption = "--all")]
         [DefaultValue(false)]
-        public bool SelectAll
-        {
-            get;
-            set;
-        }
+        public bool SelectAll { get; set; }
 
         /// <summary>
         /// Sets the <see cref="SelectAll"/> property to the specified value and
@@ -74,10 +70,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Files
         {
-            get
-            {
-                return _Files.Collection;
-            }
+            get { return _Files.Collection; }
         }
 
         /// <summary>
@@ -112,10 +105,7 @@ namespace Mercurial
         [DefaultValue("")]
         public string MergeTool
         {
-            get
-            {
-                return _MergeTool;
-            }
+            get { return _MergeTool; }
 
             set
             {
@@ -151,11 +141,7 @@ namespace Mercurial
         [EnumArgument(ResolveAction.MarkUnresolved, "--unmark")]
         [EnumArgument(ResolveAction.List, "--list")]
         [DefaultValue(ResolveAction.MarkResolved)]
-        public ResolveAction Action
-        {
-            get;
-            set;
-        }
+        public ResolveAction Action { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Action"/> property to the specified value and
@@ -194,7 +180,7 @@ namespace Mercurial
         {
             if (exitCode != 0 || Action != ResolveAction.List)
                 return;
-            
+
             var resolutionRegex = new Regex(@"^(?<state>[UR])\s(?<file>.*)$", RegexOptions.IgnoreCase);
 
             string[] lines = OutputParsingUtilities.SplitIntoLines(standardOutput);
@@ -202,7 +188,8 @@ namespace Mercurial
             foreach (Match resolutionMatch in lines.Select(line => resolutionRegex.Match(line)))
             {
                 if (!resolutionMatch.Success)
-                    throw new MercurialResultParsingException(exitCode, "Unable to parse one or more of the lines of output from the 'hg resolve --list' command", standardOutput);
+                    throw new MercurialResultParsingException(exitCode,
+                        "Unable to parse one or more of the lines of output from the 'hg resolve --list' command", standardOutput);
 
                 result.Add(new MergeConflict(
                     resolutionMatch.Groups["file"].Value,
@@ -214,11 +201,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public IEnumerable<MergeConflict> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<MergeConflict> Result { get; private set; }
 
         /// <summary>
         /// Gets all the arguments to the <see cref="CommandBase{T}.Command"/>, or an

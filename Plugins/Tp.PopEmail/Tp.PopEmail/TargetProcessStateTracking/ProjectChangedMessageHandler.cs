@@ -10,30 +10,31 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.PopEmailIntegration.TargetProcessStateTracking
 {
-	public class ProjectChangedMessageHandler : IHandleMessages<ProjectCreatedMessage>,
-	                                            IHandleMessages<ProjectUpdatedMessage>,
-	                                            IHandleMessages<ProjectDeletedMessage>
-	{
-		private readonly IStorageRepository _storageRepository;
+    public class ProjectChangedMessageHandler
+        : IHandleMessages<ProjectCreatedMessage>,
+          IHandleMessages<ProjectUpdatedMessage>,
+          IHandleMessages<ProjectDeletedMessage>
+    {
+        private readonly IStorageRepository _storageRepository;
 
-		public ProjectChangedMessageHandler(IStorageRepository storageRepository)
-		{
-			_storageRepository = storageRepository;
-		}
+        public ProjectChangedMessageHandler(IStorageRepository storageRepository)
+        {
+            _storageRepository = storageRepository;
+        }
 
-		public void Handle(ProjectCreatedMessage message)
-		{
-			_storageRepository.Get<ProjectDTO>().Add(message.Dto);
-		}
+        public void Handle(ProjectCreatedMessage message)
+        {
+            _storageRepository.Get<ProjectDTO>().Add(message.Dto);
+        }
 
-		public void Handle(ProjectUpdatedMessage message)
-		{
-			_storageRepository.Get<ProjectDTO>().Update(message.Dto, x => x.ID == message.Dto.ID);
-		}
+        public void Handle(ProjectUpdatedMessage message)
+        {
+            _storageRepository.Get<ProjectDTO>().Update(message.Dto, x => x.ID == message.Dto.ID);
+        }
 
-		public void Handle(ProjectDeletedMessage message)
-		{
-			_storageRepository.Get<ProjectDTO>().Remove(x => x.ID == message.Dto.ID);
-		}
-	}
+        public void Handle(ProjectDeletedMessage message)
+        {
+            _storageRepository.Get<ProjectDTO>().Remove(x => x.ID == message.Dto.ID);
+        }
+    }
 }

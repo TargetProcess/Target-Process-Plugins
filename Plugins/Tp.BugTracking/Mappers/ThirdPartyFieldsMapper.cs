@@ -13,67 +13,67 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.BugTracking.Mappers
 {
-	public class ThirdPartyFieldsMapper : IThirdPartyFieldsMapper
-	{
-		private readonly IStorageRepository _storageRepository;
+    public class ThirdPartyFieldsMapper : IThirdPartyFieldsMapper
+    {
+        protected readonly IStorageRepository StorageRepository;
 
-		public ThirdPartyFieldsMapper(IStorageRepository storageRepository)
-		{
-			_storageRepository = storageRepository;
-		}
+        public ThirdPartyFieldsMapper(IStorageRepository storageRepository)
+        {
+            StorageRepository = storageRepository;
+        }
 
-		public Mappings Map(MappingSource source)
-		{
-			return new Mappings
-			       	{
-			       		States = GetMappingFor(source.States, GetMappedStates()),
-			       		Severities = GetMappingFor(source.Severities, GetMappedSeverities()),
-			       		Priorities = GetMappingFor(source.Priorities, GetMappedPriorities())
-			       	};
-		}
+        public virtual Mappings Map(MappingSource source)
+        {
+            return new Mappings
+            {
+                States = GetMappingFor(source.States, GetMappedStates()),
+                Severities = GetMappingFor(source.Severities, GetMappedSeverities()),
+                Priorities = GetMappingFor(source.Priorities, GetMappedPriorities())
+            };
+        }
 
-		private static MappingContainer GetMappingFor(MappingSourceEntry source, IEnumerable<MappingElement> mapped)
-		{
-			var elements = new List<MappingElement>();
-			IEnumerable<string> thirdPartyItems = source.ThirdPartyItems;
+        protected static MappingContainer GetMappingFor(MappingSourceEntry source, IEnumerable<MappingElement> mapped)
+        {
+            var elements = new List<MappingElement>();
+            IEnumerable<string> thirdPartyItems = source.ThirdPartyItems;
 
-			var existingMappingElements = mapped
-				.FilterOutObsoleteItemsBy(thirdPartyItems)
-				.FilterOutEmptyItems();
+            var existingMappingElements = mapped
+                .FilterOutObsoleteItemsBy(thirdPartyItems)
+                .FilterOutEmptyItems();
 
-			elements.AddRange(existingMappingElements);
+            elements.AddRange(existingMappingElements);
 
-			var newMappingElements = thirdPartyItems
-				.FilterOutDuplicateThirdPartyItemsBy(elements)
-				.ToMappingElements(source);
-			elements.AddRange(newMappingElements);
+            var newMappingElements = thirdPartyItems
+                .FilterOutDuplicateThirdPartyItemsBy(elements)
+                .ToMappingElements(source);
+            elements.AddRange(newMappingElements);
 
-			var container = new MappingContainer();
-			container.AddRange(elements.OrderBy(r => r.Key).ToList());
+            var container = new MappingContainer();
+            container.AddRange(elements.OrderBy(r => r.Key).ToList());
 
-			return container;
-		}
+            return container;
+        }
 
-		private IEnumerable<MappingElement> GetMappedStates()
-		{
-			return GetMappedEntities(x => x.StatesMapping);
-		}
+        private IEnumerable<MappingElement> GetMappedStates()
+        {
+            return GetMappedEntities(x => x.StatesMapping);
+        }
 
-		private IEnumerable<MappingElement> GetMappedSeverities()
-		{
-			return GetMappedEntities(x => x.SeveritiesMapping);
-		}
+        private IEnumerable<MappingElement> GetMappedSeverities()
+        {
+            return GetMappedEntities(x => x.SeveritiesMapping);
+        }
 
-		private IEnumerable<MappingElement> GetMappedPriorities()
-		{
-			return GetMappedEntities(x => x.PrioritiesMapping);
-		}
+        private IEnumerable<MappingElement> GetMappedPriorities()
+        {
+            return GetMappedEntities(x => x.PrioritiesMapping);
+        }
 
-		private IEnumerable<MappingElement> GetMappedEntities(Func<IBugTrackingMappingSource, IEnumerable<MappingElement>> selector)
-		{
-			return _storageRepository.IsNull
-					? Enumerable.Empty<MappingElement>()
-					: selector(_storageRepository.GetProfile<IBugTrackingMappingSource>());
-		} 
-	}
+        private IEnumerable<MappingElement> GetMappedEntities(Func<IBugTrackingMappingSource, IEnumerable<MappingElement>> selector)
+        {
+            return StorageRepository.IsNull
+                ? Enumerable.Empty<MappingElement>()
+                : selector(StorageRepository.GetProfile<IBugTrackingMappingSource>());
+        }
+    }
 }

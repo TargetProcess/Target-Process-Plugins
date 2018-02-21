@@ -8,11 +8,11 @@ using Tp.SourceControl;
 
 namespace Tp.Mercurial
 {
-	public class MercurialCurrentProfileToConnectionSettingsAdapter : CurrentProfileToConnectionSettingsAdapter<MercurialPluginProfile>
-	{
-		public MercurialCurrentProfileToConnectionSettingsAdapter(IStorageRepository repository)
-			: base(repository)
-		{
-		}
-	}
+    public class MercurialCurrentProfileToConnectionSettingsAdapter : CurrentProfileToConnectionSettingsAdapter<MercurialPluginProfile>
+    {
+        public MercurialCurrentProfileToConnectionSettingsAdapter(IStorageRepository repository)
+            : base(repository)
+        {
+        }
+    }
 }

@@ -37,10 +37,7 @@ namespace Mercurial
         /// </summary>
         public Collection<string> Files
         {
-            get
-            {
-                return _Files.Collection;
-            }
+            get { return _Files.Collection; }
         }
 
         /// <summary>
@@ -76,15 +73,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string OutputFormat
         {
-            get
-            {
-                return _OutputFormat;
-            }
+            get { return _OutputFormat; }
 
-            set
-            {
-                _OutputFormat = (value ?? string.Empty).Trim();
-            }
+            set { _OutputFormat = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -112,11 +103,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--decode")]
         [DefaultValue(false)]
-        public bool Decode
-        {
-            get;
-            set;
-        }
+        public bool Decode { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Decode"/> property to the specified value and
@@ -142,11 +129,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -173,10 +156,7 @@ namespace Mercurial
         /// </summary>
         public override IEnumerable<string> Arguments
         {
-            get
-            {
-                return base.Arguments.Concat(_Files.GetArguments());
-            }
+            get { return base.Arguments.Concat(_Files.GetArguments()); }
         }
 
         /// <summary>

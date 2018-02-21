@@ -9,24 +9,23 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Integration.Plugin.Common.Tests.Activity
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
     public class ShouldLogUnhandledExceptions : ActivityTestBase
-	{
-		protected override void OnInit()
-		{
-			ObjectFactory.GetInstance<ActivityLoggingContext>().InitializeActivityLoggingMock();
-		}
+    {
+        protected override void OnInit()
+        {
+            ObjectFactory.GetInstance<ActivityLoggingContext>().InitializeActivityLoggingMock();
+        }
 
-		[Test]
-		public void ShouldLogUnhandledException()
-		{
-			@"
+        [Test]
+        public void ShouldLogUnhandledException()
+        {
+            @"
 				Given profile 'Profile' for account 'Account' created
 				When unhandled exception is thrown during message handling for account 'Account' and profile 'Profile'
-				Then error log for profile 'Profile' for account 'Account' should be written
-			"
-				.Execute(In.Context<ActivityLoggingActionSteps>());
-		}
-	}
+				Then error log for profile 'Profile' for account 'Account' should be written"
+                .Execute(In.Context<ActivityLoggingActionSteps>());
+        }
+    }
 }

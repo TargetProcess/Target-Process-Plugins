@@ -9,15 +9,15 @@ using Tp.Integration.Common;
 
 namespace Tp.Tfs.WorkItemsIntegration.ChangedFieldsMapping
 {
-	public class FeatureChangedFieldsPolicy : ChangedFieldsPolicyBase
-	{
-		public FeatureChangedFieldsPolicy()
-		{
-			FieldsMap = new Dictionary<string, Enum>
-			{
-				{ "Name", FeatureField.Name },
-				{ "Description", FeatureField.Description }
-			};
-		}
-	}
+    public class FeatureChangedFieldsPolicy : ChangedFieldsPolicyBase
+    {
+        public FeatureChangedFieldsPolicy()
+        {
+            FieldsMap = new Dictionary<string, Enum>
+            {
+                { "Name", FeatureField.Name },
+                { "Description", FeatureField.Description }
+            };
+        }
+    }
 }

@@ -8,22 +8,22 @@ using Tp.MashupManager.MashupLibrary.Repository.Synchronizer;
 
 namespace Tp.MashupManager.MashupLibrary.Repository
 {
-	public class LibraryRepositoryFactory : ILibraryRepositoryFactory
-	{
-		private readonly ILibraryLocalFolder _folder;
-		private readonly ILibraryRepositorySynchronizer _synchronizer;
-		private readonly IMashupLoader _mashupLoader;
+    public class LibraryRepositoryFactory : ILibraryRepositoryFactory
+    {
+        private readonly ILibraryLocalFolder _folder;
+        private readonly ILibraryRepositorySynchronizer _synchronizer;
+        private readonly IMashupLoader _mashupLoader;
 
-		public LibraryRepositoryFactory(ILibraryLocalFolder folder, ILibraryRepositorySynchronizer synchronizer, IMashupLoader mashupLoader)
-		{
-			_folder = folder;
-			_synchronizer = synchronizer;
-			_mashupLoader = mashupLoader;
-		}
+        public LibraryRepositoryFactory(ILibraryLocalFolder folder, ILibraryRepositorySynchronizer synchronizer, IMashupLoader mashupLoader)
+        {
+            _folder = folder;
+            _synchronizer = synchronizer;
+            _mashupLoader = mashupLoader;
+        }
 
-		public ILibraryRepository GetRepository(ILibraryRepositoryConfig config)
-		{
-			return new LibraryRepository(config, _folder, _synchronizer, _mashupLoader);
-		}
-	}
+        public ILibraryRepository GetRepository(ILibraryRepositoryConfig config)
+        {
+            return new LibraryRepository(config, _folder, _synchronizer, _mashupLoader);
+        }
+    }
 }

@@ -46,15 +46,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
 
-            set
-            {
-                _Name = (value ?? string.Empty).Trim();
-            }
+            set { _Name = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -64,11 +58,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--local")]
         [DefaultValue(false)]
-        public bool IsLocal
-        {
-            get;
-            set;
-        }
+        public bool IsLocal { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to add or remove the tag.
@@ -78,15 +68,9 @@ namespace Mercurial
         [EnumArgument(TagAction.Remove, "--remove")]
         public TagAction Action
         {
-            get
-            {
-                return _Action;
-            }
+            get { return _Action; }
 
-            set
-            {
-                _Action = value;
-            }
+            set { _Action = value; }
         }
 
         /// <summary>
@@ -97,11 +81,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool ReplaceExisting
-        {
-            get;
-            set;
-        }
+        public bool ReplaceExisting { get; set; }
 
         /// <summary>
         /// Gets or sets the commit message to use when committing the tag.
@@ -110,15 +90,9 @@ namespace Mercurial
         [NullableArgument(NonNullOption = "--message")]
         public string Message
         {
-            get
-            {
-                return _Message;
-            }
+            get { return _Message; }
 
-            set
-            {
-                _Message = (value ?? string.Empty).Trim();
-            }
+            set { _Message = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -130,15 +104,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string OverrideAuthor
         {
-            get
-            {
-                return _OverrideAuthor;
-            }
+            get { return _OverrideAuthor; }
 
-            set
-            {
-                _OverrideAuthor = (value ?? string.Empty).Trim();
-            }
+            set { _OverrideAuthor = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -147,11 +115,7 @@ namespace Mercurial
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date")]
         [DefaultValue(null)]
-        public DateTime? OverrideTimestamp
-        {
-            get;
-            set;
-        }
+        public DateTime? OverrideTimestamp { get; set; }
 
         /// <summary>
         /// Gets or sets which revision to tag, or <c>null</c> for the parent of the
@@ -160,11 +124,7 @@ namespace Mercurial
         /// </summary>
         [DefaultValue(null)]
         [NullableArgument(NonNullOption = "--rev")]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Name"/> property to the specified value and

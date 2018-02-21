@@ -10,23 +10,23 @@ using Tp.Integration.Plugin.Common.PluginCommand;
 
 namespace Tp.Integration.Plugin.Common.Tests.Common.PluginCommand
 {
-	public class PluginCommandMockRepository : IPluginCommandRepository
-	{
-		private readonly List<IPluginCommand> _commands = new List<IPluginCommand>();
+    public class PluginCommandMockRepository : IPluginCommandRepository
+    {
+        private readonly List<IPluginCommand> _commands = new List<IPluginCommand>();
 
-		public void Add(IPluginCommand pluginCommand)
-		{
-			_commands.Add(pluginCommand);
-		}
+        public void Add(IPluginCommand pluginCommand)
+        {
+            _commands.Add(pluginCommand);
+        }
 
-		public IEnumerator<IPluginCommand> GetEnumerator()
-		{
-			return _commands.GetEnumerator();
-		}
+        public IEnumerator<IPluginCommand> GetEnumerator()
+        {
+            return _commands.GetEnumerator();
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
 }

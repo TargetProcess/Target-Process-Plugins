@@ -7,13 +7,13 @@ using System.Runtime.Serialization;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	[DataContract]
-	public class CreatedWorkItemsRange
-	{
-		[DataMember]
-		public int Min { get; set; }
+    [DataContract]
+    public class CreatedWorkItemsRange
+    {
+        [DataMember]
+        public int Min { get; set; }
 
-		[DataMember]
-		public int Max { get; set; }
-	}
+        [DataMember]
+        public int Max { get; set; }
+    }
 }

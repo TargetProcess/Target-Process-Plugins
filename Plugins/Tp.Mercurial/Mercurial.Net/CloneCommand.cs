@@ -59,15 +59,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
 
-            set
-            {
-                _Source = (value ?? string.Empty).Trim();
-            }
+            set { _Source = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -76,11 +70,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(FalseOption = "--noupdate")]
         [DefaultValue(true)]
-        public bool Update
-        {
-            get;
-            set;
-        }
+        public bool Update { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to verify the server certificate. If set to <c>false</c>, will ignore web.cacerts configuration.
@@ -90,10 +80,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -127,11 +114,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument(NonNullOption = "--updaterev")]
         [DefaultValue(null)]
-        public RevSpec UpdateToRevision
-        {
-            get;
-            set;
-        }
+        public RevSpec UpdateToRevision { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use compressed transfer or not. Over LAN, uncompressed is faster, otherwise
@@ -139,11 +122,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(FalseOption = "--uncompressed")]
         [DefaultValue(true)]
-        public bool CompressedTransfer
-        {
-            get;
-            set;
-        }
+        public bool CompressedTransfer { get; set; }
 
         /// <summary>
         /// Gets the collection of revisions to include in the clone. If empty, include every changeset
@@ -152,10 +131,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>
@@ -165,10 +141,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--branch")]
         public Collection<string> Branches
         {
-            get
-            {
-                return new Collection<string>(_Branches);
-            }
+            get { return new Collection<string>(_Branches); }
         }
 
         /// <summary>
@@ -176,11 +149,7 @@ namespace Mercurial
         /// Default value is <c>false</c>.
         /// </summary>
         [DefaultValue(false)]
-        public bool UsePull
-        {
-            get;
-            set;
-        }
+        public bool UsePull { get; set; }
 
         /// <summary>
         /// Sets the <see cref="UsePull"/> property to the specified value and
@@ -209,15 +178,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -228,15 +191,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

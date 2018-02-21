@@ -5,10 +5,10 @@
 
 namespace Tp.MashupManager.CustomCommands.Dtos
 {
-	public class PackageDetailedDto
-	{
-		public string Name { get; set; }
-		public string CompatibleTpVersionMinimum { get; set; }
-		public string ReadmeMarkdown { get; set; }
-	}
+    public class PackageDetailedDto
+    {
+        public string Name { get; set; }
+        public string CompatibleTpVersionMinimum { get; set; }
+        public string ReadmeMarkdown { get; set; }
+    }
 }

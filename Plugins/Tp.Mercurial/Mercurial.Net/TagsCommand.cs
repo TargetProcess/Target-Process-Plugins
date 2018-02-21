@@ -23,11 +23,7 @@ namespace Mercurial
         /// <summary>
         /// Gets the result from the command line execution, as an appropriately typed value.
         /// </summary>
-        public IEnumerable<Tag> Result
-        {
-            get;
-            private set;
-        }
+        public IEnumerable<Tag> Result { get; private set; }
 
         /// <summary>
         /// This method should parse and store the appropriate execution result output

@@ -15,70 +15,71 @@ using Tp.Search.Model.Entity;
 
 namespace Tp.Search.Bus.Workflow
 {
-	class ProjectProcessChangedSaga : TpSaga<ProjectProcessChangedSagaData>,
-	                                         IAmStartedByMessages<ProjectProcessChangedLocalMessage>,
-	                                         IHandleMessages<TargetProcessExceptionThrownMessage>,
-	                                         IHandleMessages<AssignableQueryResult>
-	{
-		private readonly IActivityLogger _logger;
-		private readonly AssignablesIndexing _assignablesIndexing;
+    class ProjectProcessChangedSaga
+        : TpSaga<ProjectProcessChangedSagaData>,
+          IAmStartedByMessages<ProjectProcessChangedLocalMessage>,
+          IHandleMessages<TargetProcessExceptionThrownMessage>,
+          IHandleMessages<AssignableQueryResult>
+    {
+        private readonly IActivityLogger _logger;
+        private readonly AssignablesIndexing _assignablesIndexing;
 
-		public ProjectProcessChangedSaga()
-		{
-		}
+        public ProjectProcessChangedSaga()
+        {
+        }
 
-		public ProjectProcessChangedSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider, IActivityLogger logger)
-		{
-			_logger = logger;
-			_assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => MarkAsComplete(), q
-			                                                                                                                        =>
-				{
-					q.ProjectId = Data.ProjectId;
-					Send(q);
-				}, _logger);
-		}
+        public ProjectProcessChangedSaga(IEntityIndexer entityIndexer, IEntityTypeProvider entityTypesProvider, IActivityLogger logger)
+        {
+            _logger = logger;
+            _assignablesIndexing = new AssignablesIndexing(entityIndexer, () => Data, entityTypesProvider, d => MarkAsComplete(), q
+                =>
+                {
+                    q.ProjectId = Data.ProjectId;
+                    Send(q);
+                }, _logger);
+        }
 
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureMapping<ProjectProcessChangedLocalMessage>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
-			ConfigureMapping<AssignableQueryResult>(saga => saga.Id, message => message.SagaId);
-		}
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<ProjectProcessChangedLocalMessage>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<TargetProcessExceptionThrownMessage>(saga => saga.Id, message => message.SagaId);
+            ConfigureMapping<AssignableQueryResult>(saga => saga.Id, message => message.SagaId);
+        }
 
-		public void Handle(ProjectProcessChangedLocalMessage message)
-		{
-			if (message.ProjectId > 0)
-			{
-				Data.ProjectId = message.ProjectId;
-				_assignablesIndexing.Start();
-			}
-			else
-			{
-				MarkAsComplete();
-			}
-		}
+        public void Handle(ProjectProcessChangedLocalMessage message)
+        {
+            if (message.ProjectId > 0)
+            {
+                Data.ProjectId = message.ProjectId;
+                _assignablesIndexing.Start();
+            }
+            else
+            {
+                MarkAsComplete();
+            }
+        }
 
-		public void Handle(AssignableQueryResult message)
-		{
-			_assignablesIndexing.Handle(message);
-		}
+        public void Handle(AssignableQueryResult message)
+        {
+            _assignablesIndexing.Handle(message);
+        }
 
-		public void Handle(TargetProcessExceptionThrownMessage message)
-		{
-			_logger.Error("Build indexes failed", new Exception(message.ExceptionString));
-			MarkAsComplete();
-		}
-	}
+        public void Handle(TargetProcessExceptionThrownMessage message)
+        {
+            _logger.Error("Build indexes failed", new Exception(message.ExceptionString));
+            MarkAsComplete();
+        }
+    }
 
-	public class ProjectProcessChangedSagaData : ISagaEntity, IAssignableIndexingSagaData
-	{
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
+    public class ProjectProcessChangedSagaData : ISagaEntity, IAssignableIndexingSagaData
+    {
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
 
-		public int ProjectId { get; set; }
-		public int SkipGenerals { get; set; }
-		public int AssignablesRetrievedCount { get; set; }
-		public int AssignablesCurrentDataWindowSize { get; set; }
-	}
+        public int ProjectId { get; set; }
+        public int SkipGenerals { get; set; }
+        public int AssignablesRetrievedCount { get; set; }
+        public int AssignablesCurrentDataWindowSize { get; set; }
+    }
 }

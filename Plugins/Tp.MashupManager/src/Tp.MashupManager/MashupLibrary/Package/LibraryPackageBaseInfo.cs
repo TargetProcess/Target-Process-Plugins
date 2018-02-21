@@ -5,9 +5,9 @@
 
 namespace Tp.MashupManager.MashupLibrary.Package
 {
-	public class LibraryPackageBaseInfo
-	{
-		public string ShortDescription { get; set; }
-		public LibraryPackageCompatibleTpVersion CompatibleTpVersion { get; set; } 
-	}
+    public class LibraryPackageBaseInfo
+    {
+        public string ShortDescription { get; set; }
+        public LibraryPackageCompatibleTpVersion CompatibleTpVersion { get; set; }
+    }
 }

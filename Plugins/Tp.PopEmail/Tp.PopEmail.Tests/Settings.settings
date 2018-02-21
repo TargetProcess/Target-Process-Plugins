@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="PluginConnectionString" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa</Value>
+      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=SSPI</Value>
     </Setting>
     <Setting Name="TpConnectionString" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;user id=sa;password=sa</Value>
+      <Value Profile="(Default)">Data Source=(local);Initial Catalog=TargetProcessTest;Integrated Security=SSPI</Value>
     </Setting>
   </Settings>
 </SettingsFile>

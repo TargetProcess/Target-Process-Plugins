@@ -7,10 +7,10 @@ using System;
 
 namespace Tp.SourceControl.Testing.Repository
 {
-	public interface IVcsCredentials
-	{
-		Uri Uri { get; }
-		string Login { get; }
-		string Password { get; }
-	}
+    public interface IVcsCredentials
+    {
+        Uri Uri { get; }
+        string Login { get; }
+        string Password { get; }
+    }
 }

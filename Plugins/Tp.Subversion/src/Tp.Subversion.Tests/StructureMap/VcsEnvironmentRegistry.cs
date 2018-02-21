@@ -7,11 +7,11 @@ using Tp.Subversion.Context;
 
 namespace Tp.Subversion.StructureMap
 {
-	public class VcsEnvironmentRegistry : SubversionRegistry
-	{
-		public VcsEnvironmentRegistry()
-		{
-			For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
-		}
-	}
+    public class VcsEnvironmentRegistry : SubversionRegistry
+    {
+        public VcsEnvironmentRegistry()
+        {
+            For<VcsPluginContext>().HybridHttpOrThreadLocalScoped().Use<VcsPluginContext>();
+        }
+    }
 }

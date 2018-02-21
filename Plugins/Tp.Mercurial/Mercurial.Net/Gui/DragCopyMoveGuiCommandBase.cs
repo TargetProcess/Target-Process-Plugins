@@ -45,10 +45,7 @@ namespace Mercurial.Gui
         /// </summary>
         public Collection<string> SourceFiles
         {
-            get
-            {
-                return _SourceFiles;
-            }
+            get { return _SourceFiles; }
         }
 
         /// <summary>
@@ -58,15 +55,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = value;
-            }
+            set { _Destination = value; }
         }
 
         /// <summary>
@@ -88,7 +79,7 @@ namespace Mercurial.Gui
                 foreach (string value in values)
                     SourceFiles.Add(value);
 
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>
@@ -107,7 +98,7 @@ namespace Mercurial.Gui
         public T WithDestination(string value)
         {
             Destination = value;
-            return (T)this;
+            return (T) this;
         }
 
         /// <summary>

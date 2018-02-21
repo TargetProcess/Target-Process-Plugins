@@ -7,19 +7,19 @@ using System;
 
 namespace Tp.Bugzilla.Tests.Mocks
 {
-	public class BugzillaServiceWithTransportErrorOnGetIdsMock : BugzillaServiceMock, IBugzillaServiceFailMock
-	{
-		public bool Fail { get; set; }
+    public class BugzillaServiceWithTransportErrorOnGetIdsMock : BugzillaServiceMock, IBugzillaServiceFailMock
+    {
+        public bool Fail { get; set; }
 
-		public override int[] GetChangedBugIds(DateTime? lastSyncDate)
-		{
-			if (Fail)
-			{
-				Fail = false;
-				throw new Exception("Simulate error during getting changed ids from Bugzilla");
-			}
+        public override int[] GetChangedBugIds(DateTime? lastSyncDate)
+        {
+            if (Fail)
+            {
+                Fail = false;
+                throw new Exception("Simulate error during getting changed ids from Bugzilla");
+            }
 
-			return base.GetChangedBugIds(lastSyncDate);
-		}
-	}
+            return base.GetChangedBugIds(lastSyncDate);
+        }
+    }
 }

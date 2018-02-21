@@ -7,10 +7,10 @@ using System;
 
 namespace Tp.PopEmailIntegration.Data
 {
-	[Serializable]
-	public class MailAddressLite
-	{
-		public string Address { get; set; }
-		public string DisplayName { get; set; }
-	}
+    [Serializable]
+    public class MailAddressLite
+    {
+        public string Address { get; set; }
+        public string DisplayName { get; set; }
+    }
 }

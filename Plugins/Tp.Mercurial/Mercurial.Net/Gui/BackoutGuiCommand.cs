@@ -28,11 +28,7 @@ namespace Mercurial.Gui
         /// </summary>
         [BooleanArgument(TrueOption = "--clean")]
         [DefaultValue(false)]
-        public bool Merge
-        {
-            get;
-            set;
-        }
+        public bool Merge { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Merge"/> property to the specified value and
@@ -58,11 +54,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -88,11 +80,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--parent")]
         [DefaultValue(null)]
-        public RevSpec Parent
-        {
-            get;
-            set;
-        }
+        public RevSpec Parent { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Parent"/> property to the specified value and

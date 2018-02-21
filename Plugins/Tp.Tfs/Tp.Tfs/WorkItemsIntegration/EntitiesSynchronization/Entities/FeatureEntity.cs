@@ -5,7 +5,7 @@
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Entities
 {
-	public class FeatureEntity : WorkItemEntity
-	{
-	}
+    public class FeatureEntity : WorkItemEntity
+    {
+    }
 }

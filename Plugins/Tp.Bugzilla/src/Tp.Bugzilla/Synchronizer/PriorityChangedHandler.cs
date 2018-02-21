@@ -11,40 +11,41 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
-	public class PriorityChangedHandler : EntityChangedHandler<PriorityDTO>,
-	                                      IHandleMessages<PriorityUpdatedMessage>,
-	                                      IHandleMessages<PriorityCreatedMessage>,
-	                                      IHandleMessages<PriorityDeletedMessage>
-	{
-		public PriorityChangedHandler(IStorageRepository storage) : base(storage)
-		{
-		}
+    public class PriorityChangedHandler
+        : EntityChangedHandler<PriorityDTO>,
+          IHandleMessages<PriorityUpdatedMessage>,
+          IHandleMessages<PriorityCreatedMessage>,
+          IHandleMessages<PriorityDeletedMessage>
+    {
+        public PriorityChangedHandler(IStorageRepository storage) : base(storage)
+        {
+        }
 
-		public void Handle(PriorityUpdatedMessage message)
-		{
-			Update(message.Dto);
+        public void Handle(PriorityUpdatedMessage message)
+        {
+            Update(message.Dto);
 
-			Storage.GetProfile<BugzillaProfile>().PrioritiesMapping
-				.Where(m => m.Value.Id == message.Dto.ID)
-				.ForEach(m => m.Value.Name = message.Dto.Name);
-		}
+            Storage.GetProfile<BugzillaProfile>().PrioritiesMapping
+                .Where(m => m.Value.Id == message.Dto.ID)
+                .ForEach(m => m.Value.Name = message.Dto.Name);
+        }
 
-		public void Handle(PriorityCreatedMessage message)
-		{
-			Create(message.Dto);
-		}
+        public void Handle(PriorityCreatedMessage message)
+        {
+            Create(message.Dto);
+        }
 
-		public void Handle(PriorityDeletedMessage message)
-		{
-			Delete(message.Dto);
+        public void Handle(PriorityDeletedMessage message)
+        {
+            Delete(message.Dto);
 
-			Storage.GetProfile<BugzillaProfile>().PrioritiesMapping
-				.RemoveAll(m => m.Value.Id == message.Dto.ID);
-		}
+            Storage.GetProfile<BugzillaProfile>().PrioritiesMapping
+                .RemoveAll(m => m.Value.Id == message.Dto.ID);
+        }
 
-		protected override bool NeedToProcess(PriorityDTO dto)
-		{
-			return dto.EntityTypeName == BugzillaProfileInitializationSaga.BugEntityTypeName;
-		}
-	}
+        protected override bool NeedToProcess(PriorityDTO dto)
+        {
+            return dto.EntityTypeName == BugzillaProfileInitializationSaga.BugEntityTypeName;
+        }
+    }
 }

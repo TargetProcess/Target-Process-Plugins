@@ -14,39 +14,39 @@ using Tp.PopEmailIntegration.EmailReader.Client;
 
 namespace Tp.PopEmailIntegration.CustomCommands
 {
-	public class CheckConnectionCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage
-			       	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = GetResponse(args)};
-		}
+    public class CheckConnectionCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage
+                { PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = GetResponse(args) };
+        }
 
-		private static string GetResponse(string args)
-		{
-			var profile = args.DeserializeProfile();
-			var settings = (ConnectionSettings) profile.Settings;
-			var errors = new PluginProfileErrorCollection();
+        private static string GetResponse(string args)
+        {
+            var profile = args.DeserializeProfile();
+            var settings = (ConnectionSettings) profile.Settings;
+            var errors = new PluginProfileErrorCollection();
 
-			settings.ValidateConnection(errors);
-			if (errors.Any())
-			{
-				return errors.Serialize();
-			}
+            settings.ValidateConnection(errors);
+            if (errors.Any())
+            {
+                return errors.Serialize();
+            }
 
-			CheckConnection(settings, errors);
-			return errors.Any() ? errors.Serialize() : string.Empty;
-		}
+            CheckConnection(settings, errors);
+            return errors.Any() ? errors.Serialize() : string.Empty;
+        }
 
-		private static void CheckConnection(ConnectionSettings settings, PluginProfileErrorCollection errors)
-		{
-			using (IEmailClient client = new MailBeeEmailClient(settings))
-			{
-				client.CheckConnection(errors);
-				client.Disconnect();
-			}
-		}
+        private static void CheckConnection(ConnectionSettings settings, PluginProfileErrorCollection errors)
+        {
+            using (IEmailClient client = new MailBeeEmailClient(settings))
+            {
+                client.CheckConnection(errors);
+                client.Disconnect();
+            }
+        }
 
-		public string Name { get; } = "CheckConnection";
-	}
+        public string Name { get; } = "CheckConnection";
+    }
 }

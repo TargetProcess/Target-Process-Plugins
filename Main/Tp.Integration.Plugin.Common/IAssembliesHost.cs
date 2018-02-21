@@ -3,8 +3,8 @@ using System.Reflection;
 
 namespace Tp.Integration.Plugin.Common
 {
-	public interface IAssembliesHost
-	{
-		IEnumerable<Assembly> GetAssemblies();
-	}
+    public interface IAssembliesHost
+    {
+        IEnumerable<Assembly> GetAssemblies();
+    }
 }

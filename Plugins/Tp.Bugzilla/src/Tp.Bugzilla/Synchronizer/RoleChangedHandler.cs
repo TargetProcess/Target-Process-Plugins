@@ -11,36 +11,37 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
-	public class RoleChangedHandler : EntityChangedHandler<RoleDTO>,
-	                                  IHandleMessages<RoleUpdatedMessage>,
-	                                  IHandleMessages<RoleCreatedMessage>,
-	                                  IHandleMessages<RoleDeletedMessage>
+    public class RoleChangedHandler
+        : EntityChangedHandler<RoleDTO>,
+          IHandleMessages<RoleUpdatedMessage>,
+          IHandleMessages<RoleCreatedMessage>,
+          IHandleMessages<RoleDeletedMessage>
 
-	{
-		public RoleChangedHandler(IStorageRepository storage) : base(storage)
-		{
-		}
+    {
+        public RoleChangedHandler(IStorageRepository storage) : base(storage)
+        {
+        }
 
-		public void Handle(RoleUpdatedMessage message)
-		{
-			Update(message.Dto);
+        public void Handle(RoleUpdatedMessage message)
+        {
+            Update(message.Dto);
 
-			Storage.GetProfile<BugzillaProfile>().RolesMapping
-				.Where(m => m.Value.Id == message.Dto.ID)
-				.ForEach(m => m.Value.Name = message.Dto.Name);
-		}
+            Storage.GetProfile<BugzillaProfile>().RolesMapping
+                .Where(m => m.Value.Id == message.Dto.ID)
+                .ForEach(m => m.Value.Name = message.Dto.Name);
+        }
 
-		public void Handle(RoleCreatedMessage message)
-		{
-			Create(message.Dto);
-		}
+        public void Handle(RoleCreatedMessage message)
+        {
+            Create(message.Dto);
+        }
 
-		public void Handle(RoleDeletedMessage message)
-		{
-			Delete(message.Dto);
+        public void Handle(RoleDeletedMessage message)
+        {
+            Delete(message.Dto);
 
-			Storage.GetProfile<BugzillaProfile>().RolesMapping
-				.RemoveAll(m => m.Value.Id == message.Dto.ID);
-		}
-	}
+            Storage.GetProfile<BugzillaProfile>().RolesMapping
+                .RemoveAll(m => m.Value.Id == message.Dto.ID);
+        }
+    }
 }

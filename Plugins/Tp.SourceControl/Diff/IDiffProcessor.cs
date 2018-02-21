@@ -5,8 +5,8 @@
 
 namespace Tp.SourceControl.Diff
 {
-	public interface IDiffProcessor
-	{
-		DiffResult GetDiff(string baseSources, string diffSource);
-	}
+    public interface IDiffProcessor
+    {
+        DiffResult GetDiff(string baseSources, string diffSource);
+    }
 }

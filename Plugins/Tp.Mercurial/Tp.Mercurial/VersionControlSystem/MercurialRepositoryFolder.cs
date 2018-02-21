@@ -14,45 +14,44 @@ using MercurialSDK = Mercurial;
 
 namespace Tp.Mercurial.VersionControlSystem
 {
-	[Serializable]
+    [Serializable]
     public class MercurialRepositoryFolder
-	{
-		public string Value { get; set; }
-		public string RepoUri { get; set; }
+    {
+        public string Value { get; set; }
+        public string RepoUri { get; set; }
 
-		[NonSerialized]
-		private bool _wasMarkedAsDeleted;
+        [NonSerialized] private bool _wasMarkedAsDeleted;
 
-		public void Delete()
-		{
-			if (!Exists())
-			{
-				return;
-			}
+        public void Delete()
+        {
+            if (!Exists())
+            {
+                return;
+            }
 
             try
-			{
-				DeleteDirectory();
-			}
-			catch (Exception ex)
-			{
-				_wasMarkedAsDeleted = true;
-				ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
-			}
-		}
+            {
+                DeleteDirectory();
+            }
+            catch (Exception ex)
+            {
+                _wasMarkedAsDeleted = true;
+                ObjectFactory.GetInstance<IActivityLogger>().Error(ex);
+            }
+        }
 
-		public bool Exists()
-		{
-		    string path = GetAbsolutePath();
+        public bool Exists()
+        {
+            string path = GetAbsolutePath();
             bool exists = Directory.Exists(path);
             return exists && !_wasMarkedAsDeleted;
-		}
+        }
 
         private void DeleteDirectory()
-		{
+        {
             string path = GetAbsolutePath();
             path.DeleteDirectory();
-		}
+        }
 
         public static MercurialRepositoryFolder Create(string repoUri)
         {
@@ -119,9 +118,9 @@ namespace Tp.Mercurial.VersionControlSystem
             return path;
         }
 
-		protected static string MercurialCloneRootFolder
-		{
-			get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
-		}
-	}
+        protected static string MercurialCloneRootFolder
+        {
+            get { return ObjectFactory.GetInstance<PluginDataFolder>().Path; }
+        }
+    }
 }

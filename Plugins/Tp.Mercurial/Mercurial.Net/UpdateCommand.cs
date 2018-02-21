@@ -34,11 +34,7 @@ namespace Mercurial
         /// </summary>
         [NullableArgument]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to do a clean update, discarding uncommitted changes in the process (no backup.)
@@ -46,11 +42,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--clean")]
         [DefaultValue(false)]
-        public bool Clean
-        {
-            get;
-            set;
-        }
+        public bool Clean { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to update across branches if there are no uncommitted changes.
@@ -60,10 +52,7 @@ namespace Mercurial
         [DefaultValue(false)]
         public bool AcrossBranches
         {
-            get
-            {
-                return _AcrossBranches;
-            }
+            get { return _AcrossBranches; }
 
             set
             {
@@ -81,15 +70,9 @@ namespace Mercurial
         [NullableArgument(NonNullOption = "--tool")]
         public string MergeTool
         {
-            get
-            {
-                return _MergeTool;
-            }
+            get { return _MergeTool; }
 
-            set
-            {
-                _MergeTool = (value ?? string.Empty).Trim();
-            }
+            set { _MergeTool = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

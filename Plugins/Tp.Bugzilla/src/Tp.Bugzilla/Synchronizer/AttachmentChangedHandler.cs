@@ -10,25 +10,26 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Bugzilla.Synchronizer
 {
-	public class AttachmentChangedHandler : EntityChangedHandler<AttachmentDTO>,
-	                                        IHandleMessages<AttachmentCreatedMessage>
-	{
-		private readonly IBugzillaInfoStorageRepository _bugzillaInfoStorageRepository;
+    public class AttachmentChangedHandler
+        : EntityChangedHandler<AttachmentDTO>,
+          IHandleMessages<AttachmentCreatedMessage>
+    {
+        private readonly IBugzillaInfoStorageRepository _bugzillaInfoStorageRepository;
 
-		public AttachmentChangedHandler(IStorageRepository storage,
-		                                IBugzillaInfoStorageRepository bugzillaInfoStorageRepository) : base(storage)
-		{
-			_bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
-		}
+        public AttachmentChangedHandler(IStorageRepository storage,
+            IBugzillaInfoStorageRepository bugzillaInfoStorageRepository) : base(storage)
+        {
+            _bugzillaInfoStorageRepository = bugzillaInfoStorageRepository;
+        }
 
-		public void Handle(AttachmentCreatedMessage message)
-		{
-			Create(message.Dto);
-		}
+        public void Handle(AttachmentCreatedMessage message)
+        {
+            Create(message.Dto);
+        }
 
-		protected override bool NeedToProcess(AttachmentDTO dto)
-		{
-			return _bugzillaInfoStorageRepository.GetBugzillaBug(dto.GeneralID) != null;
-		}
-	}
+        protected override bool NeedToProcess(AttachmentDTO dto)
+        {
+            return _bugzillaInfoStorageRepository.GetBugzillaBug(dto.GeneralID) != null;
+        }
+    }
 }

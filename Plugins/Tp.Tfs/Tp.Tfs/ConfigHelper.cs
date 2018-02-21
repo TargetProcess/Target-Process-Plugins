@@ -11,38 +11,38 @@ using Tp.Integration.Plugin.Common.Logging;
 
 namespace Tp.Tfs
 {
-	public static class ConfigHelper
-	{
-		public static bool GetWorkItemsState()
-		{
-			var log = ObjectFactory.GetInstance<ILogManager>().GetLogger(typeof(ConfigHelper));
+    public static class ConfigHelper
+    {
+        public static bool GetWorkItemsState()
+        {
+            var log = ObjectFactory.GetInstance<ILogManager>().GetLogger(typeof(ConfigHelper));
 
-			var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PluginSettings.config");
+            var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PluginSettings.config");
 
-			if (!File.Exists(fullPath))
-			{
-				log.WarnFormat("Failed to find PluginSettings.config file by path '{0}'.", fullPath);
-				return false;
-			}
+            if (!File.Exists(fullPath))
+            {
+                log.WarnFormat("Failed to find PluginSettings.config file by path '{0}'.", fullPath);
+                return false;
+            }
 
-			var pluginConfig = new XmlDocument();
-			pluginConfig.Load(fullPath);
+            var pluginConfig = new XmlDocument();
+            pluginConfig.Load(fullPath);
 
-			var workItemsStateNode = pluginConfig.DocumentElement.SelectSingleNode("setting[@name='WorkItemsState']/value");
-			if (workItemsStateNode == null)
-			{
-				log.Warn("Failed to find PluginInputQueue setting in PluginSettings.config file.");
-				return false;
-			}
+            var workItemsStateNode = pluginConfig.DocumentElement.SelectSingleNode("setting[@name='WorkItemsState']/value");
+            if (workItemsStateNode == null)
+            {
+                log.Warn("Failed to find PluginInputQueue setting in PluginSettings.config file.");
+                return false;
+            }
 
-			bool state;
-			if (!bool.TryParse(workItemsStateNode.InnerText, out state))
-			{
-				log.Warn("Failed to read WorkItemsState value in PluginSettings.config file.");
-				return false;
-			}
+            bool state;
+            if (!bool.TryParse(workItemsStateNode.InnerText, out state))
+            {
+                log.Warn("Failed to read WorkItemsState value in PluginSettings.config file.");
+                return false;
+            }
 
-			return state;
-		}
-	}
+            return state;
+        }
+    }
 }

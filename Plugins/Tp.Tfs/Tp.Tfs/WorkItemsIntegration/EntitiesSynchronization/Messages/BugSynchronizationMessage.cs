@@ -5,7 +5,7 @@
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Messages
 {
-	public class BugSynchronizationMessage : EntitySynchronizationMessage
-	{
-	}
+    public class BugSynchronizationMessage : EntitySynchronizationMessage
+    {
+    }
 }

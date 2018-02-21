@@ -8,38 +8,45 @@ using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.SourceControl.Settings
 {
-	[DataContract, KnownType(typeof(ISourceControlConnectionSettingsSource))]
-	public class ConnectionSettings : ISourceControlConnectionSettingsSource
-	{
-		public const string UriField = "Uri";
-		public const string LoginField = "Login";
-		public const string PasswordField = "Password";
+    [DataContract]
+    public class SourceControlSettings
+    {
+        [DataMember]
+        public bool UsersMigrated { get; set; }
+    }
 
-		private string _uri;
+    [DataContract, KnownType(typeof(ISourceControlConnectionSettingsSource))]
+    public class ConnectionSettings : SourceControlSettings, ISourceControlConnectionSettingsSource
+    {
+        public const string UriField = "Uri";
+        public const string LoginField = "Login";
+        public const string PasswordField = "Password";
 
-		[DataMember]
-		public string Uri
-		{
-			get { return _uri; }
-			set
-			{
-				if (value != null)
-				{
-					_uri = value.Trim();
-				}
-			}
-		}
+        private string _uri;
 
-		[DataMember]
-		public string Login { get; set; }
+        [DataMember]
+        public string Uri
+        {
+            get { return _uri; }
+            set
+            {
+                if (value != null)
+                {
+                    _uri = value.Trim();
+                }
+            }
+        }
 
-		[DataMember]
-		public string Password { get; set; }
+        [DataMember]
+        public string Login { get; set; }
 
-		[DataMember]
-		public string StartRevision { get; set; }
+        [DataMember]
+        public string Password { get; set; }
 
-		[DataMember]
-		public MappingContainer UserMapping { get; set; }
-	}
+        [DataMember]
+        public string StartRevision { get; set; }
+
+        [DataMember]
+        public MappingContainer UserMapping { get; set; }
+    }
 }

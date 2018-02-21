@@ -71,6 +71,10 @@ elsif (substr($constants.BUGZILLA_VERSION, 0, 3) eq $supportedBugzillaVersion)
 			exit;
 		}
 	}
+	elsif($cmd eq 'add_customfield')
+	{
+		add_customfield();
+	}
 	elsif($cmd eq 'add_comment')
 	{
 		add_comment();
@@ -96,6 +100,42 @@ sub get_timezone
 	my $hours = $dbh->selectrow_array('SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP)', undef);
 
 	print $hours;
+}
+
+sub add_customfield
+{
+	my $bugId = $cgi->param("bugid");
+
+	my $bug = new Bugzilla::Bug($bugId);
+	if (!defined($bug) || $bug->bug_id ne $bugId)
+	{
+		print "Bug ID=".$bugId." not found";
+		exit;
+	}
+
+	my $cf_value = decode_base64($cgi->param("cf_value"));
+	my $cf_name = $cgi->param("cf_name");
+
+	my @custom_fields = Bugzilla->active_custom_fields;
+	foreach my $field (@custom_fields) {
+		if ($field->name eq $cf_name) {
+			eval {
+				Bugzilla::Bug->VALIDATORS->{$cf_name}->($bug, $cf_value, $cf_name);
+				my %set_all_fields = ();
+				$set_all_fields{$cf_name} = $cf_value;
+				$bug->set_all(\%set_all_fields);
+				$bug->update();
+				print 'OK';
+				exit;
+			} or do {
+				my $e = $@;
+				print("$e\n");
+				exit;
+			}
+		}
+	}
+
+	print "Couldn't find Bugzilla custom field '".$cf_name."'";
 }
 
 sub add_comment
@@ -514,6 +554,7 @@ sub findQuery {
 sub addScriptVersionTemplate{
    my $template = shift;
    my $scriptVersionXmlTemplate_text = <<'SCRIPTVERSION';
+   [% PROCESS "global/field-descs.none.tmpl" %]
    <?xml version="1.0" [% IF Param('utf8') %]encoding="UTF-8" [% END %]standalone="yes" ?>
 <!DOCTYPE bugzilla_properties SYSTEM "[% Param('urlbase') %]bugzilla.dtd">
 
@@ -524,13 +565,31 @@ sub addScriptVersionTemplate{
           exporter="[% user.email FILTER xml %]"
 [% END %]
 >
-  <script_version>[% scriptVersion %]</script_version>
-  <timezone>valid</timezone>
-  <custom_fields>
-  [% FOREACH cf = custom_field_names %]
-     <name>[% cf.name %]</name>
-  [% END %]
-  </custom_fields>
+	<script_version>[% scriptVersion %]</script_version>
+	<timezone>valid</timezone>
+	<custom_fields>
+[% FOREACH cf = custom_field_names %]
+		<name>[% cf.name %]</name>
+[% END %]
+	</custom_fields>
+[% FOREACH cf = custom_field_names %]
+	<custom_field>
+		<cf_name>[% cf.name %]</cf_name>
+		<cf_value>[% bug.${cf.name} FILTER xml %]</cf_value>
+		<cf_type>[% field_types.${cf.type} %]</cf_type>
+		<cf_description>[% cf.description %]</cf_description>
+		<cf_values>
+		[% FOREACH value = bug.${cf.name} %]
+			<cf_value>[% value FILTER xml%]</cf_value>
+		[% END %]
+		</cf_values>
+		<cf_legal_values>
+		[% FOREACH legal_value = cf.${'legals'} %]
+			<cf_value>[% legal_value.${'name'} FILTER xml %]</cf_value>
+		[% END %]
+		</cf_legal_values>
+	</custom_field>
+[% END %]
   <severities>
   [% FOREACH name = severity_names %]
      <name>[% name %]</name>

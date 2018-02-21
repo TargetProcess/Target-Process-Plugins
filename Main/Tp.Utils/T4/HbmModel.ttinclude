@@ -9,7 +9,6 @@
 <#@ import namespace="System.Xml.Linq" #>
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
 <#+
-
 	class Model
 	{
 		private readonly ITextTemplatingEngineHost _host;
@@ -86,7 +85,7 @@
 			{ "Field[]", "Field[]" },
 			{ "BinaryBlob", "byte[]" },
 			{ "MessageUidDTO", "MessageUidDTO" },
-			{ "Tp.BusinessObjects.TestCaseRunStatus, Tp.BusinessObjects.Core", "TestCaseRunStatusDTO" }
+			{ "Tp.Model.Common.TestCaseRunStatus, Tp.Model.Common", "TestCaseRunStatusDTO" }
 		};
 
 		private readonly Dictionary<string, string> _entityNameMap = new Dictionary<string, string>
@@ -111,12 +110,6 @@
 
 		private readonly Dictionary<string, List<string>> _excludeFields = new Dictionary<string, List<string>>
 		{
-			{ "GeneralUser", new List<string> { "IsAdmin" } },
-			{ "Contact", new List<string> { "IsAdmin" } },
-			{ "Requester", new List<string> { "IsAdmin" } },
-			{ "RuleEngineUser", new List<string> { "IsAdmin" } },
-			{ "SystemUser", new List<string> { "IsAdmin" } },
-			{ "User", new List<string> { "IsAdmin" } },
 		};
 
 		public IEnumerable<EntityDescription> GetEntities()
@@ -155,7 +148,7 @@
 		private string GetPathToMain()
 		{
 			var curPath = _host.ResolvePath(".");
-			return curPath.Substring(0, curPath.IndexOf("Main") + 4);
+			return Path.Combine(curPath.Substring(0, curPath.LastIndexOf("Code")), @"Code\Main");
 		}
 
 		private IEnumerable<EntityDescription> ReadEntities()
@@ -312,7 +305,14 @@
 							IsForeignKey = true
 						}
 					};
-					if (!_excludeRelationNames.Contains(p.Attribute("class").Value))
+
+					var className = p.Attribute("class").Value;
+
+					var shouldAddNameProperty =
+						(name == "Owner" && entityName != "Attachment" && entityName != "Contact" && entityName != "CustomReport" && entityName != "Milestone" && entityName != "SavedFilter" && entityName != "TpProfile" && entityName != "TpSession") ||
+						!_excludeRelationNames.Contains(className);
+
+					if (shouldAddNameProperty)
 					{
 						result.Add(new EntityProperty
 						{
@@ -375,5 +375,4 @@
 			return XName.Get(name, _xmlns);
 		}
 	}
-
 	#>

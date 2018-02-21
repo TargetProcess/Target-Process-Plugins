@@ -16,66 +16,67 @@ using Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Sagas;
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization
 {
-	public class RequestSynchronizeSaga :
-			EntitySynchronizeSaga<RequestEntity, RequestDTO>,
-			IAmStartedByMessages<RequestSynchronizationMessage>,
-			IHandleMessages<RequestCreatedMessage>,
-			IHandleMessages<RequestUpdatedMessage>,
-			IHandleMessages<TargetProcessExceptionThrownMessage>
-	{
-		public RequestSynchronizeSaga()
-		{
-		}
+    public class RequestSynchronizeSaga
+        :
+            EntitySynchronizeSaga<RequestEntity, RequestDTO>,
+            IAmStartedByMessages<RequestSynchronizationMessage>,
+            IHandleMessages<RequestCreatedMessage>,
+            IHandleMessages<RequestUpdatedMessage>,
+            IHandleMessages<TargetProcessExceptionThrownMessage>
+    {
+        public RequestSynchronizeSaga()
+        {
+        }
 
-		public RequestSynchronizeSaga(IActivityLogger logger)
-		{
-			Logger = logger;
-		}
+        public RequestSynchronizeSaga(IActivityLogger logger)
+        {
+            Logger = logger;
+        }
 
-		public override void ConfigureHowToFindSaga()
-		{
-			ConfigureHowToFindSagaInternal<RequestDTO, RequestField, RequestCreatedMessage, RequestUpdatedMessage>();
-		}
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureHowToFindSagaInternal<RequestDTO, RequestField, RequestCreatedMessage, RequestUpdatedMessage>();
+        }
 
-		public void Handle(RequestSynchronizationMessage message)
-		{
-			HandleInternal(message.WorkItem);
-		}
+        public void Handle(RequestSynchronizationMessage message)
+        {
+            HandleInternal(message.WorkItem);
+        }
 
-		public void Handle(RequestCreatedMessage message)
-		{
-			HandleCreatedInternal(message);
-		}
+        public void Handle(RequestCreatedMessage message)
+        {
+            HandleCreatedInternal(message);
+        }
 
-		public void Handle(RequestUpdatedMessage message)
-		{
-			HandleUpdatedInternal<RequestUpdatedMessage, RequestField>(message);
-		}
+        public void Handle(RequestUpdatedMessage message)
+        {
+            HandleUpdatedInternal<RequestUpdatedMessage, RequestField>(message);
+        }
 
-		public void Handle(TargetProcessExceptionThrownMessage message)
-		{
-			HandleErrorInternal(message);
-		}
+        public void Handle(TargetProcessExceptionThrownMessage message)
+        {
+            HandleErrorInternal(message);
+        }
 
-		protected override void SendUpdateCommand(RequestDTO requestDTO, WorkItemInfo itemInfo)
-		{
-			Send(new UpdateRequestCommand(requestDTO) { ChangedFields = itemInfo.ChangedFields });
-		}
+        protected override void SendUpdateCommand(RequestDTO requestDTO, WorkItemInfo itemInfo)
+        {
+            Send(new UpdateRequestCommand(requestDTO) { ChangedFields = itemInfo.ChangedFields });
+        }
 
-		protected override void SendCreateCommand(RequestDTO requestDTO)
-		{
-			Send(new CreateRequestCommand(requestDTO));
-			Data.CreatingEntity = true;
-		}
+        protected override void SendCreateCommand(RequestDTO requestDTO)
+        {
+            Send(new CreateRequestCommand(requestDTO));
+            Data.CreatingEntity = true;
+        }
 
-		protected override RequestDTO CreateEntityDTO(WorkItemInfo workItem)
-		{
-			RequestDTO requestDto = base.CreateEntityDTO(workItem);
+        protected override RequestDTO CreateEntityDTO(WorkItemInfo workItem)
+        {
+            RequestDTO requestDto = base.CreateEntityDTO(workItem);
 
-			requestDto.ProjectName = workItem.TpProjectName;
-			requestDto.ProjectID = workItem.TpProjectId;
+            requestDto.ProjectName = workItem.TpProjectName;
+            requestDto.ProjectID = workItem.TpProjectId;
 
-			return requestDto;
-		}
-	}
+            return requestDto;
+        }
+    }
 }

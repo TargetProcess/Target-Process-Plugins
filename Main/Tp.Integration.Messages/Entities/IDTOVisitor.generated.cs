@@ -34,6 +34,7 @@ namespace Tp.Integration.Common
 		T VisitGeneralFieldExtension(IGeneralFieldExtensionDTO entity);
 		T VisitGeneralListItem(IGeneralListItemDTO entity);
 		T VisitGeneralNumericPriorityListItem(IGeneralNumericPriorityListItemDTO entity);
+		T VisitGeneralConversion(IGeneralConversionDTO entity);
 		T VisitGeneralFollower(IGeneralFollowerDTO entity);
 		T VisitGeneralRelation(IGeneralRelationDTO entity);
 		T VisitGeneralRelationType(IGeneralRelationTypeDTO entity);
@@ -78,8 +79,6 @@ namespace Tp.Integration.Common
 		T VisitSquadProject(ISquadProjectDTO entity);
 		T VisitSquadProjectAllocation(ISquadProjectAllocationDTO entity);
 		T VisitTag(ITagDTO entity);
-		T VisitTagBundle(ITagBundleDTO entity);
-		T VisitTagBundleTag(ITagBundleTagDTO entity);
 		T VisitTagGeneral(ITagGeneralDTO entity);
 		T VisitTask(ITaskDTO entity);
 		T VisitTeam(ITeamDTO entity);
@@ -107,6 +106,7 @@ namespace Tp.Integration.Common
 		T VisitRequester(IRequesterDTO entity);
 		T VisitContact(IContactDTO entity);
 		T VisitRuleEngineUser(IRuleEngineUserDTO entity);
+		T VisitMetricsUser(IMetricsUserDTO entity);
 		T VisitGeneralUser(IGeneralUserDTO entity);
 		T VisitUserProjectAllocation(IUserProjectAllocationDTO entity);
 		T VisitUserStory(IUserStoryDTO entity);
@@ -221,6 +221,10 @@ namespace Tp.Integration.Common
 			return VisitDataTransferObject(dto);
 		}
 		public virtual T VisitGeneralNumericPriorityListItem(IGeneralNumericPriorityListItemDTO dto)
+		{
+			return VisitDataTransferObject(dto);
+		}
+		public virtual T VisitGeneralConversion(IGeneralConversionDTO dto)
 		{
 			return VisitDataTransferObject(dto);
 		}
@@ -400,14 +404,6 @@ namespace Tp.Integration.Common
 		{
 			return VisitDataTransferObject(dto);
 		}
-		public virtual T VisitTagBundle(ITagBundleDTO dto)
-		{
-			return VisitDataTransferObject(dto);
-		}
-		public virtual T VisitTagBundleTag(ITagBundleTagDTO dto)
-		{
-			return VisitDataTransferObject(dto);
-		}
 		public virtual T VisitTagGeneral(ITagGeneralDTO dto)
 		{
 			return VisitDataTransferObject(dto);
@@ -513,6 +509,10 @@ namespace Tp.Integration.Common
 			return VisitGeneralUser(dto);
 		}
 		public virtual T VisitRuleEngineUser(IRuleEngineUserDTO dto)
+		{
+			return VisitGeneralUser(dto);
+		}
+		public virtual T VisitMetricsUser(IMetricsUserDTO dto)
 		{
 			return VisitGeneralUser(dto);
 		}
@@ -714,6 +714,13 @@ namespace Tp.Integration.Common
 		public override T Accept<T>(IDTOVisitor<T> visitor)
 		{
 			return visitor.VisitGeneralNumericPriorityListItem(this);
+		}
+	}
+	public partial class GeneralConversionDTO
+	{
+		public override T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitGeneralConversion(this);
 		}
 	}
 	public partial class GeneralFollowerDTO
@@ -1024,20 +1031,6 @@ namespace Tp.Integration.Common
 			return visitor.VisitTag(this);
 		}
 	}
-	public partial class TagBundleDTO
-	{
-		public override T Accept<T>(IDTOVisitor<T> visitor)
-		{
-			return visitor.VisitTagBundle(this);
-		}
-	}
-	public partial class TagBundleTagDTO
-	{
-		public override T Accept<T>(IDTOVisitor<T> visitor)
-		{
-			return visitor.VisitTagBundleTag(this);
-		}
-	}
 	public partial class TagGeneralDTO
 	{
 		public override T Accept<T>(IDTOVisitor<T> visitor)
@@ -1225,6 +1218,13 @@ namespace Tp.Integration.Common
 		public override T Accept<T>(IDTOVisitor<T> visitor)
 		{
 			return visitor.VisitRuleEngineUser(this);
+		}
+	}
+	public partial class MetricsUserDTO
+	{
+		public override T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitMetricsUser(this);
 		}
 	}
 	public partial class GeneralUserDTO

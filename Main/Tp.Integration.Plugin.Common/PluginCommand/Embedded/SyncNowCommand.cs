@@ -15,42 +15,42 @@ using Tp.Integration.Plugin.Common.Logging;
 
 namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 {
-	public class SyncNowCommand : IPluginCommand
-	{
-		private readonly ILocalBus _localBus;
-		private readonly IPluginContext _pluginContext;
-		private readonly IProfileCollection _profileCollection;
+    public class SyncNowCommand : IPluginCommand
+    {
+        private readonly ILocalBus _localBus;
+        private readonly IPluginContext _pluginContext;
+        private readonly IProfileCollection _profileCollection;
 
-		public SyncNowCommand(ILocalBus localBus, IPluginContext pluginContext, IProfileCollection profileCollection)
-		{
-			_localBus = localBus;
-			_pluginContext = pluginContext;
-			_profileCollection = profileCollection;
-		}
+        public SyncNowCommand(ILocalBus localBus, IPluginContext pluginContext, IProfileCollection profileCollection)
+        {
+            _localBus = localBus;
+            _pluginContext = pluginContext;
+            _profileCollection = profileCollection;
+        }
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			if (_pluginContext.ProfileName.IsEmpty)
-			{
-				throw new ApplicationException("'SyncNow' command should be executed for concrete profile only.");
-			}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            if (_pluginContext.ProfileName.IsEmpty)
+            {
+                throw new ApplicationException("'SyncNow' command should be executed for concrete profile only.");
+            }
 
-			if (_profileCollection[_pluginContext.ProfileName].IsNull)
-			{
-				throw new ApplicationException(string.Format("No profile with name '{0}' was found.",
-				                                             _pluginContext.ProfileName.Value));
-			}
+            if (_profileCollection[_pluginContext.ProfileName].IsNull)
+            {
+                throw new ApplicationException(string.Format("No profile with name '{0}' was found.",
+                    _pluginContext.ProfileName.Value));
+            }
 
-			_localBus.SendLocal(new SyncNowMessage());
+            _localBus.SendLocal(new SyncNowMessage());
 
-			ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType()).Info("SyncNowMessage sent");
+            ObjectFactory.GetInstance<ILogManager>().GetLogger(GetType()).Info("SyncNowMessage sent");
 
-			return new PluginCommandResponseMessage {PluginCommandStatus = PluginCommandStatus.Succeed};
-		}
+            return new PluginCommandResponseMessage { PluginCommandStatus = PluginCommandStatus.Succeed };
+        }
 
-		public string Name
-		{
-			get { return EmbeddedPluginCommands.SyncNow; }
-		}
-	}
+        public string Name
+        {
+            get { return EmbeddedPluginCommands.SyncNow; }
+        }
+    }
 }

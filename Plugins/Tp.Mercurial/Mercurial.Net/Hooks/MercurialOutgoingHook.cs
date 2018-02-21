@@ -30,10 +30,7 @@ namespace Mercurial.Hooks
         /// </summary>
         public string Source
         {
-            get
-            {
-                return _Source;
-            }
+            get { return _Source; }
         }
 
         /// <summary>
@@ -41,22 +38,17 @@ namespace Mercurial.Hooks
         /// </summary>
         public RevSpec FirstRevision
         {
-            get
-            {
-                return _FirstRevision;
-            }
+            get { return _FirstRevision; }
         }
 
         /// <summary>
         /// Gets the url of the remote repository, if known.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Cannot guarantee this is a valid Uri, but it is still given as an Url from Mercurial")]
+        [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings",
+             Justification = "Cannot guarantee this is a valid Uri, but it is still given as an Url from Mercurial")]
         public string Url
         {
-            get
-            {
-                return _Url;
-            }
+            get { return _Url; }
         }
     }
 }

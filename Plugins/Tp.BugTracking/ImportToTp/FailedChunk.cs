@@ -7,18 +7,18 @@ using System;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	[Serializable]
-	public class FailedChunk
-	{
-		public FailedChunk()
-		{
-		}
+    [Serializable]
+    public class FailedChunk
+    {
+        public FailedChunk()
+        {
+        }
 
-		public FailedChunk(int[] chunk)
-		{
-			Chunk = chunk;
-		}
+        public FailedChunk(int[] chunk)
+        {
+            Chunk = chunk;
+        }
 
-		public int[] Chunk { get; set; }
-	}
+        public int[] Chunk { get; set; }
+    }
 }

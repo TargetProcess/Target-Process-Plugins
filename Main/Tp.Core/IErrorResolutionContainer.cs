@@ -1,7 +1,7 @@
 namespace Tp.Core
 {
-	public interface IErrorResolutionContainer
-	{
-		IErrorResolution Resolution { get; }
-	}
+    public interface IErrorResolutionContainer
+    {
+        IErrorResolution Resolution { get; }
+    }
 }

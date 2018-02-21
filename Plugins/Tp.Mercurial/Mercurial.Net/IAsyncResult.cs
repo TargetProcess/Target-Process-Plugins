@@ -16,9 +16,6 @@ namespace Mercurial
         /// <summary>
         /// Gets the inner <see cref="IAsyncResult"/> object.
         /// </summary>
-        IAsyncResult InnerResult
-        {
-            get;
-        }
+        IAsyncResult InnerResult { get; }
     }
 }

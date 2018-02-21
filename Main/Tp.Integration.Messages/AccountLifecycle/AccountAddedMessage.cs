@@ -2,19 +2,19 @@
 
 namespace Tp.Integration.Messages.AccountLifecycle
 {
-	[Serializable]
-	public sealed class AccountAddedMessage
-		: IAccountLifecycleMessage
-	{
-		public AccountAddedMessage()
-		{
-		}
+    [Serializable]
+    public sealed class AccountAddedMessage
+        : IAccountLifecycleMessage
+    {
+        public AccountAddedMessage()
+        {
+        }
 
-		public AccountAddedMessage(string accountName)
-		{
-			AccountName = accountName;
-		}
+        public AccountAddedMessage(string accountName)
+        {
+            AccountName = accountName;
+        }
 
-		public string AccountName { get; set; }
-	}
+        public string AccountName { get; set; }
+    }
 }

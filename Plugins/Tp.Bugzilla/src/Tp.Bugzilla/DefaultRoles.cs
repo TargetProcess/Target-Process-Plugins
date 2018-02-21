@@ -5,9 +5,9 @@
 
 namespace Tp.Bugzilla
 {
-	public class DefaultRoles
-	{
-		public const string Assignee = "Assignee";
-		public const string Reporter = "Reporter";
-	}
+    public class DefaultRoles
+    {
+        public const string Assignee = "Assignee";
+        public const string Reporter = "Reporter";
+    }
 }

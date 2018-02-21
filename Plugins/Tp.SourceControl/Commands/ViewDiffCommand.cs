@@ -13,60 +13,59 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.SourceControl.Commands
 {
-	using System;
+    using System;
+    using Tp.Integration.Plugin.Common.Activity;
 
-	using Tp.Integration.Plugin.Common.Activity;
 
+    public class ViewDiffCommand : IPluginCommand
+    {
+        private readonly IRevisionStorageRepository _repository;
+        private readonly IVersionControlSystemFactory _vcsFactory;
 
-	public class ViewDiffCommand : IPluginCommand
-	{
-		private readonly IRevisionStorageRepository _repository;
-		private readonly IVersionControlSystemFactory _vcsFactory;
+        private readonly IActivityLogger _logger;
 
-		private readonly IActivityLogger _logger;
+        public ViewDiffCommand(IRevisionStorageRepository repository, IVersionControlSystemFactory vcsFactory, IActivityLogger logger)
+        {
+            _repository = repository;
+            _vcsFactory = vcsFactory;
+            _logger = logger;
+        }
 
-		public ViewDiffCommand(IRevisionStorageRepository repository, IVersionControlSystemFactory vcsFactory, IActivityLogger logger)
-		{
-			_repository = repository;
-			_vcsFactory = vcsFactory;
-			_logger = logger;
-		}
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var fileArgs = args.Deserialize<FileViewDiffArgs>();
 
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var fileArgs = args.Deserialize<FileViewDiffArgs>();
+            try
+            {
+                var revision = _repository.GetRevisionId(fileArgs.TpRevisionId);
+                var diff = new DiffResult();
 
-			try
-			{
-				var revision = _repository.GetRevisionId(fileArgs.TpRevisionId);
-				var diff = new DiffResult();
+                if (revision != null)
+                {
+                    var vcs = _vcsFactory.Get(revision.Profile);
+                    diff = vcs.GetDiff(revision.RevisionId.RevisionId, fileArgs.Path);
+                }
 
-				if (revision != null)
-				{
-					var vcs = _vcsFactory.Get(revision.Profile);
-					diff = vcs.GetDiff(revision.RevisionId.RevisionId, fileArgs.Path);
-				}
+                return new PluginCommandResponseMessage
+                {
+                    PluginCommandStatus = PluginCommandStatus.Succeed,
+                    ResponseData = diff.Serialize()
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.Error("ViewDiff error", e);
+                return new PluginCommandResponseMessage
+                {
+                    PluginCommandStatus = PluginCommandStatus.Error,
+                    ResponseData = "Unable to connect to a remote repository: {0}.".Fmt(e.Message)
+                };
+            }
+        }
 
-				return new PluginCommandResponseMessage
-				       	{
-				       		PluginCommandStatus = PluginCommandStatus.Succeed,
-				       		ResponseData = diff.Serialize()
-				       	};
-			}
-			catch(Exception e)
-			{
-				_logger.Error("ViewDiff error", e);
-				return new PluginCommandResponseMessage
-				       	{
-				       		PluginCommandStatus = PluginCommandStatus.Error,
-							ResponseData = "Unable to connect to a remote repository: {0}.".Fmt(e.Message)
-				       	};
-			}
-		}
-
-		public string Name
-		{
-			get { return "ViewDiff"; }
-		}
-	}
+        public string Name
+        {
+            get { return "ViewDiff"; }
+        }
+    }
 }

@@ -7,8 +7,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Messages
 {
-	public class EntitySynchronizationMessage : IPluginLocalMessage
-	{
-		public WorkItemInfo WorkItem { get; set; }
-	}
+    public class EntitySynchronizationMessage : IPluginLocalMessage
+    {
+        public WorkItemInfo WorkItem { get; set; }
+    }
 }

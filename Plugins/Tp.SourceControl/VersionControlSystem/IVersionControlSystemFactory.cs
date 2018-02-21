@@ -8,9 +8,9 @@ using Tp.SourceControl.Settings;
 
 namespace Tp.SourceControl.VersionControlSystem
 {
-	public interface IVersionControlSystemFactory
-	{
-		IVersionControlSystem Get(IStorageRepository profile);
-		IVersionControlSystem Get(ISourceControlConnectionSettingsSource settings);
-	}
+    public interface IVersionControlSystemFactory
+    {
+        IVersionControlSystem Get(IStorageRepository profile);
+        IVersionControlSystem Get(ISourceControlConnectionSettingsSource settings);
+    }
 }

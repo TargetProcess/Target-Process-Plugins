@@ -9,11 +9,11 @@ using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Integration.Plugin.Common.Storage.Repositories
 {
-	internal interface IProfileRepository
-	{
-		ProfileDomainObject Add(ProfileCreationArgs profileCreationArgs, AccountName accountName);
-		void Update(ProfileDomainObject profile, AccountName accountName);
-		void Delete(ProfileName profileName, AccountName accountName);
-		IEnumerable<ProfileDomainObject> GetAll(AccountName accountName);
-	}
+    internal interface IProfileRepository
+    {
+        ProfileDomainObject Add(ProfileCreationArgs profileCreationArgs, AccountName accountName);
+        void Update(ProfileDomainObject profile, AccountName accountName);
+        void Delete(ProfileName profileName, AccountName accountName);
+        IEnumerable<ProfileDomainObject> GetAll(AccountName accountName);
+    }
 }

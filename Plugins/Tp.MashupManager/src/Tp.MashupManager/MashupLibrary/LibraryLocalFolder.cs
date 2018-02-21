@@ -8,15 +8,15 @@ using Tp.Integration.Plugin.Common;
 
 namespace Tp.MashupManager.MashupLibrary
 {
-	public class LibraryLocalFolder : ILibraryLocalFolder
-	{
-		private const string MashupLibraryFolderName = "MashupManagerLibrary";
+    public class LibraryLocalFolder : ILibraryLocalFolder
+    {
+        private const string MashupLibraryFolderName = "MashupManagerLibrary";
 
-		public LibraryLocalFolder(PluginDataFolder pluginDataFolder)
-		{
-			Path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDataFolder.Path, MashupLibraryFolderName);
-		}
+        public LibraryLocalFolder(PluginDataFolder pluginDataFolder)
+        {
+            Path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDataFolder.Path, MashupLibraryFolderName);
+        }
 
-		public string Path { get; private set; }
-	}
+        public string Path { get; private set; }
+    }
 }

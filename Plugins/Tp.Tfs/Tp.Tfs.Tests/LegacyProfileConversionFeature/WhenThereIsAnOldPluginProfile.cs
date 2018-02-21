@@ -8,10 +8,10 @@ using Tp.Testing.Common.NBehave;
 
 namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class WhenThereIsAnOldPluginProfile
-	{
+    public class WhenThereIsAnOldPluginProfile
+    {
         [Test]
         public void ShouldMigrateRevisionsToExistingConvertedProfile()
         {
@@ -32,7 +32,7 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 					And tfs revision 25 is imported
 				When revisions migrated from old profile to the new one
 				Then profile should have revisions: 25
-					And profile should be initialized", 
+					And profile should be initialized",
                     ConfigHelper.Instance.TestCollection,
                     ConfigHelper.Instance.TestCollectionProject,
                     ConfigHelper.Instance.Login,
@@ -137,5 +137,5 @@ namespace Tp.Tfs.Tests.LegacyProfileConversionFeature
 				Then tfs starting revision should be 236"
                 .Execute(In.Context<LegacyProfileConverterActionSteps>());
         }
-	}
+    }
 }

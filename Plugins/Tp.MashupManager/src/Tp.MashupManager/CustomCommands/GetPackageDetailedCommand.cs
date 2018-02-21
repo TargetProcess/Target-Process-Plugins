@@ -9,21 +9,21 @@ using Tp.MashupManager.CustomCommands.Args;
 
 namespace Tp.MashupManager.CustomCommands
 {
-	public class GetPackageDetailedCommand : LibraryCommand<PackageCommandArg>
-	{
-		protected override PluginCommandResponseMessage ExecuteOperation(PackageCommandArg commandArg)
-		{
-			var packageDetailedDto = Library.GetPackageDetailed(commandArg);
-			return new PluginCommandResponseMessage
-				{
-					PluginCommandStatus = PluginCommandStatus.Succeed,
-					ResponseData = packageDetailedDto.Serialize()
-				};
-		}
+    public class GetPackageDetailedCommand : LibraryCommand<PackageCommandArg>
+    {
+        protected override PluginCommandResponseMessage ExecuteOperation(PackageCommandArg commandArg)
+        {
+            var packageDetailedDto = Library.GetPackageDetailed(commandArg);
+            return new PluginCommandResponseMessage
+            {
+                PluginCommandStatus = PluginCommandStatus.Succeed,
+                ResponseData = packageDetailedDto.Serialize()
+            };
+        }
 
-		public override string Name
-		{
-			get { return "GetPackageDetailed"; }
-		}
-	}
+        public override string Name
+        {
+            get { return "GetPackageDetailed"; }
+        }
+    }
 }

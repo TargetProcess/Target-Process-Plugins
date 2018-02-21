@@ -7,9 +7,9 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Integration.Plugin.TestRunImport.Commands.Data
 {
-	public class CheckMappingData
-	{
-		public PluginProfileTypedDto<TestRunImportPluginProfile> Profile { get; set; }
-		public TestCaseLightDto[] TestCases { get; set; }
-	}
+    public class CheckMappingData
+    {
+        public PluginProfileTypedDto<TestRunImportPluginProfile> Profile { get; set; }
+        public TestCaseLightDto[] TestCases { get; set; }
+    }
 }

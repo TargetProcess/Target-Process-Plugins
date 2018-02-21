@@ -7,10 +7,10 @@ using Tp.Core;
 
 namespace Tp.Integration.Plugin.Common.Activity
 {
-	public class ActivityFilter
-	{
-		public DateRange DateRange { get; set; }
+    public class ActivityFilter
+    {
+        public DateRange DateRange { get; set; }
 
-		public ActivityType Type { get; set; }
-	}
+        public ActivityType Type { get; set; }
+    }
 }

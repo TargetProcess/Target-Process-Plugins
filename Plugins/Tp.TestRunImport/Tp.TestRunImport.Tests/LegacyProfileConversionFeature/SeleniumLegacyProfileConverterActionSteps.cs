@@ -10,30 +10,30 @@ using Tp.Testing.Common.NUnit;
 
 namespace Tp.TestRunImport.Tests.LegacyProfileConversionFeature
 {
-	[ActionSteps]
-	public class SeleniumLegacyProfileConverterActionSteps :
-		TestRunImportLegacyProfileConverterActionSteps<SeleniumTestRunImportLegacyProfileConvertor>
-	{
-		protected override FrameworkTypes FrameworkType
-		{
-			get { return FrameworkTypes.Selenium; }
-		}
+    [ActionSteps]
+    public class SeleniumLegacyProfileConverterActionSteps :
+        TestRunImportLegacyProfileConverterActionSteps<SeleniumTestRunImportLegacyProfileConvertor>
+    {
+        protected override FrameworkTypes FrameworkType
+        {
+            get { return FrameworkTypes.Selenium; }
+        }
 
-		protected override string SettingsXmlNode
-		{
-			get { return "SeleniumSettings"; }
-		}
+        protected override string SettingsXmlNode
+        {
+            get { return "SeleniumSettings"; }
+        }
 
-		protected override string PluginName
-		{
-			get { return "Automatic Selenium Test Run Import"; }
-		}
+        protected override string PluginName
+        {
+            get { return "Automatic Selenium Test Run Import"; }
+        }
 
-		[Then("test run results should be posted to the remote Url")]
-		public void ShouldPostResultsToRemoteUrl()
-		{
-			Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true), "Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true))");
-			Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty), "Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty))");
-		}
-	}
+        [Then("test run results should be posted to the remote Url")]
+        public void ShouldPostResultsToRemoteUrl()
+        {
+            Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true), "Profile.PostResultsToRemoteUrl.Should(Be.EqualTo(true))");
+            Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty), "Profile.ResultsFilePath.Should(Be.EqualTo(string.Empty))");
+        }
+    }
 }

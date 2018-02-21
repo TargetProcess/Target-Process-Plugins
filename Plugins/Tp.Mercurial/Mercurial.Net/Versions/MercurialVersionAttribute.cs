@@ -9,7 +9,8 @@ namespace Mercurial.Versions
     /// to specify which version(s) they apply to.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments", Justification = "This is just a shortcut for the other constructor, no new properties introduced.")]
+    [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments",
+         Justification = "This is just a shortcut for the other constructor, no new properties introduced.")]
     public sealed class MercurialVersionAttribute : Attribute, IComparable<MercurialVersionAttribute>, IEquatable<MercurialVersionAttribute>
     {
         /// <summary>
@@ -36,7 +37,9 @@ namespace Mercurial.Versions
         /// <para>- or -</para>
         /// <para><paramref name="toVersionString"/> is <c>null</c>.</para>
         /// </exception>
-        [SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "There are multiple ways to access the same version here, as a Version and as a string, keeping the name as-is.")]
+        [SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string",
+             Justification =
+                 "There are multiple ways to access the same version here, as a Version and as a string, keeping the name as-is.")]
         public MercurialVersionAttribute(string fromVersionString, string toVersionString)
         {
             if (fromVersionString == null)
@@ -57,7 +60,9 @@ namespace Mercurial.Versions
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="versionString"/> is <c>null</c>.</para>
         /// </exception>
-        [SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "There are multiple ways to access the same version here, as a Version and as a string, keeping the name as-is.")]
+        [SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string",
+             Justification =
+                 "There are multiple ways to access the same version here, as a Version and as a string, keeping the name as-is.")]
         public MercurialVersionAttribute(string versionString)
             : this(versionString, versionString)
         {
@@ -69,10 +74,7 @@ namespace Mercurial.Versions
         /// </summary>
         public string FromVersionString
         {
-            get
-            {
-                return _FromVersionString;
-            }
+            get { return _FromVersionString; }
         }
 
         /// <summary>
@@ -132,10 +134,7 @@ namespace Mercurial.Versions
         /// </summary>
         public string ToVersionString
         {
-            get
-            {
-                return _ToVersionString;
-            }
+            get { return _ToVersionString; }
         }
 
         /// <summary>
@@ -266,7 +265,8 @@ namespace Mercurial.Versions
                 return false;
             if (ReferenceEquals(this, other))
                 return true;
-            return base.Equals(other) && Equals(other._FromVersionString, _FromVersionString) && Equals(other._ToVersionString, _ToVersionString);
+            return base.Equals(other) && Equals(other._FromVersionString, _FromVersionString)
+                && Equals(other._ToVersionString, _ToVersionString);
         }
 
         /// <summary>

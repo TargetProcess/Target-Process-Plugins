@@ -13,33 +13,33 @@ using Tp.Integration.Plugin.Common.Validation;
 
 namespace Tp.Integration.Plugin.TestRunImport.Commands
 {
-	public class ValidateProfileForSeleniumUrlCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			return new PluginCommandResponseMessage { ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed };
-		}
+    public class ValidateProfileForSeleniumUrlCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            return new PluginCommandResponseMessage { ResponseData = OnExecute(args), PluginCommandStatus = PluginCommandStatus.Succeed };
+        }
 
-		private static string OnExecute(string args)
-		{
-			var profile = args.DeserializeProfile();
-			return ValidateProfileForSeleniumUrl(profile).Serialize();
-		}
+        private static string OnExecute(string args)
+        {
+            var profile = args.DeserializeProfile();
+            return ValidateProfileForSeleniumUrl(profile).Serialize();
+        }
 
-		private static PluginProfileErrorCollection ValidateProfileForSeleniumUrl(PluginProfileDto profileDto)
-		{
-			var errors = new PluginProfileErrorCollection();
-			if (string.IsNullOrEmpty(profileDto.Name) || string.IsNullOrEmpty(profileDto.Name.Trim()))
-			{
-				errors.Add(new PluginProfileError { FieldName = "Name", Message = "Profile name should not be empty" });
-			}
-			((TestRunImportPluginProfile)profileDto.Settings).ValidateSeleniumUrlData(errors);
-			return errors;
-		}
+        private static PluginProfileErrorCollection ValidateProfileForSeleniumUrl(PluginProfileDto profileDto)
+        {
+            var errors = new PluginProfileErrorCollection();
+            if (string.IsNullOrEmpty(profileDto.Name) || string.IsNullOrEmpty(profileDto.Name.Trim()))
+            {
+                errors.Add(new PluginProfileError { FieldName = "Name", Message = "Profile name should not be empty" });
+            }
+            ((TestRunImportPluginProfile) profileDto.Settings).ValidateSeleniumUrlData(errors);
+            return errors;
+        }
 
-		public string Name
-		{
-			get { return "ValidateProfileForSeleniumUrl"; }
-		}
-	}
+        public string Name
+        {
+            get { return "ValidateProfileForSeleniumUrl"; }
+        }
+    }
 }

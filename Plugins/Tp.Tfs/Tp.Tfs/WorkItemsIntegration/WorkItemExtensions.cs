@@ -8,14 +8,14 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	public static class WorkItemExtensions
-	{
-		public static WorkItemId ToWorkItemId(this WorkItem workItem)
-		{
-			return new WorkItemId
-			{
-				Id = workItem.Id.ToString(CultureInfo.InvariantCulture),
-			};
-		}
-	}
+    public static class WorkItemExtensions
+    {
+        public static WorkItemId ToWorkItemId(this WorkItem workItem)
+        {
+            return new WorkItemId
+            {
+                Id = workItem.Id.ToString(CultureInfo.InvariantCulture),
+            };
+        }
+    }
 }

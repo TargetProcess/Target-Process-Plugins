@@ -29,11 +29,7 @@ namespace Mercurial.Gui
         /// </summary>
         [NullableArgument(NonNullOption = "--rev")]
         [DefaultValue(null)]
-        public RevSpec Revision
-        {
-            get;
-            set;
-        }
+        public RevSpec Revision { get; set; }
 
         /// <summary>
         /// Sets the <see cref="Revision"/> property to the specified value and
@@ -65,16 +61,13 @@ namespace Mercurial.Gui
         [DefaultValue(false)]
         public bool Clean
         {
-            get
-            {
-                return _Clean;
-            }
+            get { return _Clean; }
 
             set
             {
                 if (_Clean == value)
                     return;
-                
+
                 EnsurePropertyAvailability("Clean", GuiClientType.PyQT);
                 _Clean = value;
             }

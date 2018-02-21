@@ -9,40 +9,40 @@ using Tp.Integration.Messages;
 
 namespace Tp.Integration.Plugin.Common.FileStorage
 {
-	public class ProfileFileStorage : IProfileFileStorage
-	{
-		private const string CommonFolderName = "Common";
-		private readonly string _folderName;
+    public class ProfileFileStorage : IProfileFileStorage
+    {
+        private const string CommonFolderName = "Common";
+        private readonly string _folderName;
 
-		public ProfileFileStorage(string accountName, string profileName)
-		{
-			_folderName = Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, GetAccountNameOrCommon(accountName),
-			                           profileName);
-		}
+        public ProfileFileStorage(string accountName, string profileName)
+        {
+            _folderName = Path.Combine(ObjectFactory.GetInstance<PluginDataFolder>().Path, GetAccountNameOrCommon(accountName),
+                profileName);
+        }
 
-		private static string GetAccountNameOrCommon(string accountName)
-		{
-			return accountName == AccountName.Empty ? CommonFolderName : accountName;
-		}
+        private static string GetAccountNameOrCommon(string accountName)
+        {
+            return accountName == AccountName.Empty ? CommonFolderName : accountName;
+        }
 
-		public string GetFolder()
-		{
-			if (!Directory.Exists(_folderName))
-			{
-				Directory.CreateDirectory(_folderName);
-			}
+        public string GetFolder()
+        {
+            if (!Directory.Exists(_folderName))
+            {
+                Directory.CreateDirectory(_folderName);
+            }
 
-			return _folderName;
-		}
+            return _folderName;
+        }
 
-		public void Clear()
-		{
-			var folder = GetFolder();
+        public void Clear()
+        {
+            var folder = GetFolder();
 
-			if (Directory.Exists(folder))
-			{
-				Directory.Delete(folder, true);
-			}
-		}
-	}
+            if (Directory.Exists(folder))
+            {
+                Directory.Delete(folder, true);
+            }
+        }
+    }
 }

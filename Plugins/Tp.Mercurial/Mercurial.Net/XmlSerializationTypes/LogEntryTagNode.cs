@@ -22,15 +22,9 @@ namespace Mercurial.XmlSerializationTypes
         [XmlText]
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get { return _Name; }
 
-            set
-            {
-                _Name = (value ?? string.Empty).Trim();
-            }
+            set { _Name = (value ?? string.Empty).Trim(); }
         }
     }
 }

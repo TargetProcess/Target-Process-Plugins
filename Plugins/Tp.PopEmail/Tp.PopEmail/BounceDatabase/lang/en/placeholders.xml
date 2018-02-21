@@ -27,6 +27,19 @@
 		</mask>
 	</regexps>
 	<regexps>
+		<regexp name="SENT_DATETIME_ALT" />
+		<mask>
+			<![CDATA[\w{3} \w{3} \d{1,2} \d{1,2}:\d{2}:\d{2} \d{4}( [+-]\d{4})?]]>
+		</mask>
+	</regexps>
+	<regexps>
+		<regexp name="SENT_DATETIME_ALT2" />
+		<regexp name="RECEIVED_DATETIME_ALT2" />
+		<mask>
+			<![CDATA[(\w{3}, )?\d{1,2} \w{3} \d{4} \d{1,2}:\d{2}:\d{2}( [+-]\d{4})?]]>
+		</mask>
+	</regexps>
+	<regexps>
 		<regexp name="RECEIVED_DATETIME_YMD" />
 		<mask>
 			<![CDATA[\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}:\d{2}( [+-]\d{4})?( (\(\w{3,4}\)|\w{3,4}))?]]>
@@ -35,6 +48,7 @@
 
 
 	<regexps>
+		<regexp name="PORT" />
 		<regexp name="ERROR_NUM" />
 		<mask>
 			<![CDATA[\d+]]>
@@ -58,20 +72,20 @@
 	<regexps>
 		<regexp name="TO_EMAIL" />
 		<mask>
-			<![CDATA[([a-zA-Z0-9_\-\.'%]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,6}|\d{1,3})(\]?)]]>
+			<![CDATA[([a-zA-Z0-9_\-\.'%!]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9_\-]+\.{1,})+))([a-zA-Z]{2,6}|\d{1,3})(\]?)]]>
 		</mask>
 	</regexps>
 	<regexps>
 		<regexp name="FROM_EMAIL" />
 		<regexp name="TO_FORWARDEMAIL" />
 		<mask>
-			<![CDATA[([a-zA-Z0-9_\-\.']+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9\-]+\.?)+))([a-zA-Z]{2,6}|\d{1,3})?(\]?)]]>
+			<![CDATA[([a-zA-Z0-9_\-\.'%!]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9_\-]+\.?)+))([a-zA-Z]{2,6}|\d{1,3})?(\]?)]]>
 		</mask>
 	</regexps>
 	<regexps>
 		<regexp name="POSTMASTER" />
 		<mask>
-			<![CDATA[([a-zA-Z0-9_\-\.']+)(@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,6}|\d{1,3})(\]?))?]]>
+			<![CDATA[([a-zA-Z0-9_\-\.']+)(@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([a-zA-Z0-9_\-]+\.)+))([a-zA-Z]{2,6}|\d{1,3})(\]?))?]]>
 		</mask>
 	</regexps>
 	<regexps>

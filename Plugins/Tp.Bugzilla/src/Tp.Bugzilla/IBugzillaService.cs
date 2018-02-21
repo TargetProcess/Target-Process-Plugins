@@ -10,20 +10,20 @@ using Tp.Bugzilla.Schemas;
 
 namespace Tp.Bugzilla
 {
-	public interface IBugzillaService
-	{
-		int[] GetChangedBugIds(DateTime? date);
+    public interface IBugzillaService
+    {
+        int[] GetChangedBugIds(DateTime? date);
 
-		bugzilla_properties CheckConnection();
+        bugzilla_properties CheckConnection();
 
-		bugCollection GetBugs(int[] bugIDs);
+        bugCollection GetBugs(int[] bugIDs);
 
-		List<string> GetStatuses();
+        List<string> GetStatuses();
 
-		List<string> GetResolutions();
+        List<string> GetResolutions();
 
-		void Execute(IBugzillaQuery query);
+        void Execute(IBugzillaQuery query);
 
-		TimeSpan GetTimeOffset();
-	}
+        TimeSpan GetTimeOffset();
+    }
 }

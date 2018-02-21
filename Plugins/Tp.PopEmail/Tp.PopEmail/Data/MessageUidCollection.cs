@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 namespace Tp.PopEmailIntegration.Data
 {
-	[Serializable]
-	public class MessageUidCollection : List<string>
-	{
-	}
+    [Serializable]
+    public class MessageUidCollection : List<string>
+    {
+    }
 }

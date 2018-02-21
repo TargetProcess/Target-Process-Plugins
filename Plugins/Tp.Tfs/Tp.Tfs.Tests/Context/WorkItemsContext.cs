@@ -36,16 +36,16 @@ namespace Tp.Tfs.Tests.Context
         {
             EntityMapping = new SimpleMappingContainer()
             {
-                new SimpleMappingElement { First = "Bug", Second = "Bug" }, 
-                new SimpleMappingElement { First = "User Story", Second = "User Story" }, 
-                new SimpleMappingElement { First = "Task", Second = "Feature" }, 
+                new SimpleMappingElement { First = "Bug", Second = "Bug" },
+                new SimpleMappingElement { First = "User Story", Second = "User Story" },
+                new SimpleMappingElement { First = "Task", Second = "Feature" },
                 new SimpleMappingElement { First = "Issue", Second = "Request" }
             };
             ProjectsMapping = new MappingContainer()
             {
                 new MappingElement()
                 {
-                    Key = ConfigHelper.Instance.TestCollectionProject, 
+                    Key = ConfigHelper.Instance.TestCollectionProject,
                     Value = new MappingLookup() { Id = 1, Name = "Test" }
                 }
             };
@@ -77,50 +77,32 @@ namespace Tp.Tfs.Tests.Context
 
         public List<BugDTO> TpBugs
         {
-            get
-            {
-                return _bugs ;
-            }
+            get { return _bugs; }
         }
 
         public List<UserStoryDTO> TpUserStories
         {
-            get
-            {
-                return _userStories;
-            }
+            get { return _userStories; }
         }
 
         public List<FeatureDTO> TpFeatures
         {
-            get
-            {
-                return _features;
-            }
+            get { return _features; }
         }
 
         public List<RequestDTO> TpRequests
         {
-            get
-            {
-                return _requests;
-            }
+            get { return _requests; }
         }
 
         public string TeamProject
         {
-            get
-            {
-                return ProjectsMapping[0].Key;
-            }
+            get { return ProjectsMapping[0].Key; }
         }
 
         public MappingLookup TpProject
         {
-            get
-            {
-                return ProjectsMapping[0].Value;
-            }
+            get { return ProjectsMapping[0].Value; }
         }
 
         public void AddWorkItem(string title, string description, string type)
@@ -134,14 +116,14 @@ namespace Tp.Tfs.Tests.Context
 
             workItem.Save();
         }
-        
+
         public WorkItem GetWorkItem(string type, string title, string project)
         {
             var workItems = _workItemStore.Query(
                 string.Format(
-                    "SELECT * FROM workitems WHERE [Work Item Type]='{0}' and [Team Project]='{1}' and [Title]='{2}'", 
-                    type, 
-                    project, 
+                    "SELECT * FROM workitems WHERE [Work Item Type]='{0}' and [Team Project]='{1}' and [Title]='{2}'",
+                    type,
+                    project,
                     title));
             var workItem = workItems.Cast<WorkItem>().FirstOrDefault(x => x.Title == title && x.Project.Name == project);
             return workItem;
@@ -156,10 +138,10 @@ namespace Tp.Tfs.Tests.Context
 
             foreach (var fieldValue in fieldsValues)
             {
-                PropertyInfo propertyInfo = typeof (WorkItem).GetProperty(fieldValue.Key);
+                PropertyInfo propertyInfo = typeof(WorkItem).GetProperty(fieldValue.Key);
                 propertyInfo.SetValue(workItem, fieldValue.Value, null);
             }
-            
+
             workItem.Save();
         }
 
@@ -214,9 +196,9 @@ namespace Tp.Tfs.Tests.Context
         private void AddReplyForUpdateCommand<TDto, TEntityField, TReplyMessage>(
             ICollection<TDto> dtos,
             params TEntityField[] changedFields)
-                where TReplyMessage : EntityUpdatedMessage<TDto, TEntityField>, ISagaMessage, new()
-                where TEntityField : IConvertible
-                where TDto : DataTransferObject, new()
+            where TReplyMessage : EntityUpdatedMessage<TDto, TEntityField>, ISagaMessage, new()
+            where TEntityField : IConvertible
+            where TDto : DataTransferObject, new()
         {
             TransportMock.OnUpdateEntityCommand<TDto>().Reply(
                 x =>

@@ -11,27 +11,27 @@ using Tp.Tfs.VersionControlSystem;
 
 namespace Tp.Tfs.Tests.VersionControlSystem
 {
-	[TestFixture]
+    [TestFixture]
     [Category("PartPlugins1")]
-	public class TfsRevisionIdSpecs
-	{
-		[Test]
-		public void ShouldHandlePosixTime()
-		{
-			var initialTime = DateTime.Today.AddHours(6);
+    public class TfsRevisionIdSpecs
+    {
+        [Test]
+        public void ShouldHandlePosixTime()
+        {
+            var initialTime = DateTime.Today.AddHours(6);
             TfsRevisionId revisionId = new RevisionId { Time = initialTime, Value = Guid.NewGuid().ToString() };
 
-			RevisionId revisionIdDto = revisionId;
+            RevisionId revisionIdDto = revisionId;
             TfsRevisionId restoredRevisionId = revisionIdDto;
 
-			restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
-		}
+            restoredRevisionId.Time.Should(Be.EqualTo(initialTime), "restoredRevisionId.Time.Should(Be.EqualTo(initialTime))");
+        }
 
-		[Test]
-		public void ShouldSupportMinTime()
-		{
+        [Test]
+        public void ShouldSupportMinTime()
+        {
             TfsRevisionId revisionId = new RevisionId { Time = DateTime.MinValue, Value = Guid.NewGuid().ToString() };
             revisionId.Time.Should(Be.EqualTo(TfsRevisionId.UtcTimeMin), "revisionId.Time.Should(Be.EqualTo(TfsRevisionId.UtcTimeMin))");
-		}
-	}
+        }
+    }
 }

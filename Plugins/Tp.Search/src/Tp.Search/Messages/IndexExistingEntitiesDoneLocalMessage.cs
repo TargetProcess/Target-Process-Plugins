@@ -9,8 +9,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.Search.Messages
 {
-	[Serializable]
-	public class IndexExistingEntitiesDoneLocalMessage : SagaMessage, IPluginLocalMessage
-	{
-	}
+    [Serializable]
+    public class IndexExistingEntitiesDoneLocalMessage : SagaMessage, IPluginLocalMessage
+    {
+    }
 }

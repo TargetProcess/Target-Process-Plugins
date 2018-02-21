@@ -9,12 +9,12 @@ using Tp.Integration.Messages.TargetProcessLifecycle;
 
 namespace Tp.Plugin.Core
 {
-	[Serializable]
-	public class ExceptionThrownLocalMessage : TargetProcessExceptionThrownMessage, IPluginLocalMessage
-	{
-		public static ExceptionThrownLocalMessage Create(TargetProcessExceptionThrownMessage message, Guid sagaId)
-		{
-			return new ExceptionThrownLocalMessage {ExceptionString = message.ExceptionString, SagaId = sagaId};
-		}
-	}
+    [Serializable]
+    public class ExceptionThrownLocalMessage : TargetProcessExceptionThrownMessage, IPluginLocalMessage
+    {
+        public static ExceptionThrownLocalMessage Create(TargetProcessExceptionThrownMessage message, Guid sagaId)
+        {
+            return new ExceptionThrownLocalMessage { ExceptionString = message.ExceptionString, SagaId = sagaId };
+        }
+    }
 }

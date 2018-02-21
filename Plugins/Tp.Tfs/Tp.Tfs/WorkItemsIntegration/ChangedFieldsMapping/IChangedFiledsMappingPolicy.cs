@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace Tp.Tfs.WorkItemsIntegration.ChangedFieldsPolicy
 {
-	public interface IChangedFieldsMappingPolicy
-	{
-		Dictionary<string, Enum> FieldsMap { get; set; }
-		Enum WorkItemFieldToTpField(string workItemType, string workItemfield);
-	}
+    public interface IChangedFieldsMappingPolicy
+    {
+        Dictionary<string, Enum> FieldsMap { get; set; }
+        Enum WorkItemFieldToTpField(string workItemType, string workItemfield);
+    }
 }

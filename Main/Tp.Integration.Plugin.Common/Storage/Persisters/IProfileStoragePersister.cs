@@ -8,26 +8,26 @@ using Tp.Core;
 
 namespace Tp.Integration.Plugin.Common.Storage.Persisters
 {
-	public interface IProfileStoragePersister
-	{
-		void Insert(params ProfileStorage[] profileStorages);
+    public interface IProfileStoragePersister
+    {
+        void Insert(params ProfileStorage[] profileStorages);
 
-		void Update(params ProfileStorage[] profileStorages);
+        void Update(params ProfileStorage[] profileStorages);
 
-		void Delete(ProfileId profileId, TypeNameWithoutVersion key);
-		void Delete(ProfileId profileId, TypeNameWithoutVersion key, params StorageName[] storageNames);
+        void Delete(ProfileId profileId, TypeNameWithoutVersion key);
+        void Delete(ProfileId profileId, TypeNameWithoutVersion key, params StorageName[] storageNames);
 
-		void Delete(params ProfileStorage[] profileStorages);
+        void Delete(params ProfileStorage[] profileStorages);
 
-		IEnumerable<ProfileStorage> FindBy(ProfileId profileId, TypeNameWithoutVersion key);
-		IEnumerable<ProfileStorage> FindBy(ProfileId profileId, TypeNameWithoutVersion key, params StorageName[] storageNames);
+        IEnumerable<ProfileStorage> FindBy(ProfileId profileId, TypeNameWithoutVersion key);
+        IEnumerable<ProfileStorage> FindBy(ProfileId profileId, TypeNameWithoutVersion key, params StorageName[] storageNames);
 
-		ProfileStorage FindBy(ProfileId profileId, TypeNameWithoutVersion key, object item);
-		ProfileStorage FindBy(StorageName storageName, ProfileId profileId, TypeNameWithoutVersion key, object item);
+        ProfileStorage FindBy(ProfileId profileId, TypeNameWithoutVersion key, object item);
+        ProfileStorage FindBy(StorageName storageName, ProfileId profileId, TypeNameWithoutVersion key, object item);
 
-		IEnumerable<ProfileStorage> FindBy(ProfileId profileId);
+        IEnumerable<ProfileStorage> FindBy(ProfileId profileId);
 
-		bool Contains(ProfileId profileId, TypeNameWithoutVersion key, object item);
-		bool Contains(StorageName storageName, ProfileId profileId, TypeNameWithoutVersion key, object item);
-	}
+        bool Contains(ProfileId profileId, TypeNameWithoutVersion key, object item);
+        bool Contains(StorageName storageName, ProfileId profileId, TypeNameWithoutVersion key, object item);
+    }
 }

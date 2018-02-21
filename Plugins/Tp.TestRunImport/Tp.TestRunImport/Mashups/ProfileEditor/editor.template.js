@@ -1,5 +1,13 @@
 tau.mashups
 	.addModule("TestRunImport/editorTemplate",
+			'<style>' +
+			'.ui-autocomplete {' +
+			'max-height: 300px;' +
+			'overflow-y: auto;' +
+			'/* prevent horizontal scrollbar */' +
+			'overflow-x: hidden;' +
+			'}' +
+			'</style>' +
 			'<div>' +
 			'<h2 class="h2">Automatic Test Run Import</h2>' +
 			'<p class="note">Imports automatic test run results to TargetProcess from testing framework.</p>' +
@@ -40,11 +48,9 @@ tau.mashups
 			'		<p class="label pt-5">Test Plan Name&nbsp;<span class="error" name="ProjectErrorLabel"></span>&nbsp;<span class="error" name="TestPlanErrorLabel"></span></p>' +
 			'		<p class="note"><span class="small">Test automation results bind to the test plan.</span></p>' +
 			'		<select class="select" id="projectsDropDown" name="Project">' +
-			'			{{each projects}}<option value="${Id}">${Name}</option>{{/each}}' +
+			'			{{each projects}}<option value="${id}">${name}</option>{{/each}}' +
 			'		</select>' +
-			'		<select class="select" id="testPlansDropDown" name="TestPlan">' +
-			'			{{each testplans}}<option value="${Id}">${Name}</option>{{/each}}' +
-			'		</select>' +
+			'		<input type="text" name="TestPlan" disabled="disabled" testplanid="${testplan.id}" value="${testplan.name}" placeholder=" - Type to select Test Plan - " class="input tptestplan ui-autocomplete-input" autocomplete="off">' +
 			'	</div>' +
 			'	<div class="pad-box">' +
 			'		<h3 class="h3">Test Cases</h3>' +
@@ -111,7 +117,7 @@ tau.mashups
 			'	</div>' +
 			'	<div class="mapping-block">' +
 			'		<p class="label">&nbsp;<span class="error" name="MappingErrorLabel"></span></p>' +
-			'       <p class="error-message" id="failedMappingCheck" style="display:none"><span></span></p>' +
+			'			<p class="error-message" id="failedMappingCheck" style="display:none"><span></span></p>' +
 			'		<a href="javascript:void(0);" class="check-connection-link" id="checkMapping">Check Mapping</a><span class="preloader" style="display:none"></span>' +
 			'	</div>' +
 			'</div>' +

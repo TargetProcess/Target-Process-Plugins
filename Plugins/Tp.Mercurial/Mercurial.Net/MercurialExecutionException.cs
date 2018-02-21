@@ -110,10 +110,7 @@ namespace Mercurial
         /// </summary>
         public int ExitCode
         {
-            get
-            {
-                return _ExitCode;
-            }
+            get { return _ExitCode; }
         }
 
         /// <summary>

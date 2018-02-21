@@ -12,22 +12,22 @@ using Tp.SourceControl.RevisionStorage;
 
 namespace Tp.SourceControl.Commands
 {
-	public class GetImportedRevisionsCommand : IPluginCommand
-	{
-		public PluginCommandResponseMessage Execute(string args, UserDTO user)
-		{
-			var bugIds = args.Deserialize<int[]>();
+    public class GetImportedRevisionsCommand : IPluginCommand
+    {
+        public PluginCommandResponseMessage Execute(string args, UserDTO user)
+        {
+            var bugIds = args.Deserialize<int[]>();
 
-			var repository = ObjectFactory.GetInstance<IRevisionStorageRepository>();
-			var revisions = repository.GetImportedTpIds(bugIds);
+            var repository = ObjectFactory.GetInstance<IRevisionStorageRepository>();
+            var revisions = repository.GetImportedTpIds(bugIds);
 
-			return new PluginCommandResponseMessage
-			       	{PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = revisions.Serialize()};
-		}
+            return new PluginCommandResponseMessage
+                { PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = revisions.Serialize() };
+        }
 
-		public string Name
-		{
-			get { return "GetImportedRevisions"; }
-		}
-	}
+        public string Name
+        {
+            get { return "GetImportedRevisions"; }
+        }
+    }
 }

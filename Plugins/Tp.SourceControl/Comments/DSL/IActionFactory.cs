@@ -5,11 +5,11 @@
 
 namespace Tp.SourceControl.Comments.DSL
 {
-	public interface IActionFactory
-	{
-		IAction CreateAssignRevisionToEntityAction(int entityId);
-		IAction CreatePostTimeAction(decimal timeSpent, decimal? timeLeft);
-		IAction CreatePostCommentAction(string comment);
-		IAction CreateChangeStatusAction(string status);
-	}
+    public interface IActionFactory
+    {
+        IAction CreateAssignRevisionToEntityAction(int entityId);
+        IAction CreatePostTimeAction(decimal timeSpent, decimal? timeLeft);
+        IAction CreatePostCommentAction(string comment);
+        IAction CreateChangeStatusAction(string status);
+    }
 }

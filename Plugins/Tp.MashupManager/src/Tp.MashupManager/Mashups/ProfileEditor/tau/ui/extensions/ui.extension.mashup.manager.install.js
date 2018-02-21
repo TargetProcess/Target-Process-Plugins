@@ -1,26 +1,28 @@
 tau.mashups
     .addDependency('jQuery')
     .addDependency('tau/core/extension.base')
-    .addDependency('tau/ui/behaviour/common/ui.behaviour.progressIndicator')
-    .addModule('tau/mashup.manager/ui/extensions/ui.extension.mashup.manager.install',
-        function($, ExtensionBase, ProgressIndicator) {
+    .addModule('tau/mashup.manager/ui/extensions/ui.extension.mashup.manager.install', function($, ExtensionBase) {
 
-            return ExtensionBase.extend({
-                'bus afterInit + afterRender' : function(evtData, initConfig, renderData){
-                    var $element = renderData.element;
-                    var service = initConfig.config.context.configurator.service('mashup.manager');
-                    this._bindInstall($element, service);
-                },
-                _bindInstall: function($element, service){
-                    $element.on('click', '.i-role-installPackage', _.bind(function(mashupManagerService, e){
-                        var $target = $(e.currentTarget);
-                        var packageToInstall = {
-                            RepositoryName: $target.data('repositoryname'),
-                            PackageName: $target.data('packagename')
-                        };
-                        mashupManagerService.installPackage(packageToInstall);
-                    }, this, service));
-                }
-            });
-        }
-    );
+        return ExtensionBase.extend({
+            'bus afterInit + afterRender': function(evtData, initConfig, renderData) {
+                var $element = renderData.element;
+                var context = initConfig.config.context;
+                this._bindInstall($element, context);
+            },
+
+            _bindInstall: function($element, context) {
+                $element.on('click', '.i-role-installPackage', function(e) {
+                    var $target = $(e.currentTarget);
+                    var loggedUser = context.configurator.getLoggedUser();
+
+                    var service = context.configurator.service('mashup.manager');
+                    service.installPackage({
+                        RepositoryName: $target.data('repositoryname'),
+                        PackageName: $target.data('packagename'),
+                        CreationDate: new Date().getTime(),
+                        CreatedBy: {Id: loggedUser.id, Name: loggedUser.name}
+                    });
+                });
+            }
+        });
+    });

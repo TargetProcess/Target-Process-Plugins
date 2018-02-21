@@ -8,11 +8,11 @@ using Tp.Integration.Plugin.Common.StructureMap;
 
 namespace Tp.LegacyProfileConvertsion.Common.StructureMap
 {
-	public class LegacyProfileConversionRegistry : PluginRegistry
-	{
-		protected override ITpBus CreateTpBus()
-		{
-			return TpBusSafeNull.Instance;
-		}
-	}
+    public class LegacyProfileConversionRegistry : PluginRegistry
+    {
+        protected override ITpBus CreateTpBus()
+        {
+            return TpBusSafeNull.Instance;
+        }
+    }
 }

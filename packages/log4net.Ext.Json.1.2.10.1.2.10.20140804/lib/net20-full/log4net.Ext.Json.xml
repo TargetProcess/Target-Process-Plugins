@@ -1,0 +1,2452 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>log4net.Ext.Json</name>
+    </assembly>
+    <members>
+        <member name="T:log4net.Util.TypeConverters.LayoutConverter">
+            <summary>
+            Supports conversion from string or <see cref="T:log4net.Util.PatternString"/> to <see cref="T:log4net.Layout.ILayout"/> type.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.LayoutConverter.Init(System.Boolean)">
+            <summary>
+            Initialize the environment: register Arrangement Type Converters 
+            with the <see cref="T:log4net.Util.TypeConverters.ConverterRegistry"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.LayoutConverter.#ctor">
+            <summary>
+            Create instance, it will produce <see cref="T:log4net.Layout.PatternLayout"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.LayoutConverter.#ctor(System.Boolean)">
+            <summary>
+            Create instance, it will produce <see cref="T:log4net.Layout.PatternLayout"/>
+            or <see cref="T:log4net.Layout.SerializedLayout"/> if <paramref name="serialized"/>.
+            </summary>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.LayoutConverter.CanConvertFrom(System.Type)">
+            <summary>
+            Can the source type be converted to the type supported by this object
+            </summary>
+            <param name="sourceType">the type to convert</param>
+            <returns>true if the conversion is possible</returns>
+            <remarks>
+            <para>
+            Returns <c>true</c> if the <paramref name="sourceType"/> is
+            the <see cref="T:System.String"/> type.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.LayoutConverter.ConvertFrom(System.Object)">
+            <summary>
+            Overrides the ConvertFrom method of IConvertFrom.
+            </summary>
+            <param name="source">the object to convert to an <see cref="T:log4net.Layout.ILayout"/></param>
+            <returns>the layout</returns>
+        </member>
+        <member name="T:log4net.Layout.SerializedLayout">
+            <summary>
+            Enable an external serializer (JSON) to participate in PaternLayout 
+            with variable member configuration using <see cref="T:log4net.Layout.Arrangements.IArrangement"/>s.
+            </summary>
+            <remarks>
+            <para>
+            The goal of this class is to serialize a <see cref="T:log4net.Core.LoggingEvent"/> 
+            as a string. The results depend on the <i>Members</i> organized by <see cref="T:log4net.Layout.Arrangements.IArrangement"/>s.
+            </para>
+            <para>
+            Custom <i>renderer</i> and <i>fetcher</i> can be provided if the default 
+            <see cref="T:log4net.Layout.Pattern.JsonPatternConverter"/> is used or another implementation 
+            follows this convention:
+            
+            * log4net property: renderer, type <see cref="T:log4net.ObjectRenderer.IObjectRenderer"/>
+            * log4net property: fetcher, type <see cref="T:log4net.Layout.IRawLayout"/>
+            </para>
+            <para>
+            Collected <i>arrangements</i> and <i>converters</i> are also passed as properties and used in 
+            <see cref="T:log4net.Layout.Pattern.JsonPatternConverter"/>:
+            
+            * log4net property: arrangement, type <see cref="T:log4net.Layout.Arrangements.IArrangement"/>
+            * log4net property: converters, type <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>[]
+            </para>
+            <para>
+            This class is not concerned with how the data is rendered. It only provides a configuration shortcut
+            to organize members into structures suitable for JSON serialization. Serialization is then performed
+            by a PatternConverter, the <see cref="T:log4net.Layout.Pattern.JsonPatternConverter"/> by default.
+            </para>
+            </remarks>
+            <example>
+            You can use a default configuration. Note that default default default is used only when no other arrangements exist.
+            
+            * to use the default default members:
+            
+                    <default/>
+                  - it is equivalent to leaving Layout without any arrangements. In that case the defaults are implied.
+            
+            * to use the default members suitable for nxlog:
+                
+                    <default value="nxlog"/>
+            
+            </example>
+            <example>
+            You can use member configurations:
+            
+            * to use a default before any custom members: 
+            
+                    <default/>
+                    <member value="ProcessID"/>
+                    <member value="AppName:appdomain"/>
+            
+            </example>
+            <example>
+            You can use the pattern configuration to allow simple configurations of complex requirements:
+            
+            * to add a member with custom name:
+            
+                    <arrangement value="MyOwnMember:appdomain"/>
+            * to render members using <see cref="T:log4net.Layout.PatternLayout"/>:
+            
+                    <arrangement value="Day|It is %date{dddd} today"/>
+            * to add nested members (note the \;):
+            
+                    <arrangement value="Host=Name:hostname\;ProcessId\;Memory\;timestamp"/>
+            * to add any custom arrangement:
+            
+                    <arrangement value="log4net.Layout.Arrangements.RemovalArrangement!"/>
+            * to add any custom arrangement with an option:
+            
+                    <arrangement value="log4net.Layout.Arrangements.RemovalArrangement!Message"/>
+            * to run a <see cref="T:log4net.Layout.PatternLayout"/> converter with an option (useful more in conversionPattern):
+            
+                    <arrangement value="Month%date:MMM"/>
+            * to add a default arrangement:
+            
+                    <arrangement value="DEFAULT!nxlog"/>
+            * to add remove all members:
+            
+                    <arrangement value="CLEAR"/>
+            * to add remove specific members matching Regex pattern:
+            
+                    <arrangement value="REMOVE!Source.*"/>
+            
+            </example>
+            <example>
+            You can remove members from default:
+            
+                    <default/>
+                    <remove value="message"/>
+                    <arrangement value="data:message"/>
+            
+            </example>
+            <example>
+            You can also use the <see cref="P:log4net.Layout.PatternLayout.ConversionPattern"/> configurations:
+            
+            * to use the default members suitable for nxlog, username and hostname:
+            
+                    <conversionPattern value="DEFAULT!nxlog;UserName;HostName"/>
+                    
+            * to use the <see cref="T:log4net.Layout.PatternLayout"/> style
+            
+                    <conversionPattern value="%d ... %serialize ..."/>
+            </example>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Layout.SerializedLayout.DefaultSerializerName">
+            <summary>
+            This is the default serializing pattern converter name.
+            Destination: <see cref="P:log4net.Layout.SerializedLayout.SerializerName"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.#cctor">
+            <summary>
+            Static constructor to initialize the environment - calls <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.Init"/>.
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.SerializedLayout.m_arrangement">
+            <summary>
+            Keep the collected arrangements here, pass them to the serializing pattern converter
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.SerializedLayout.m_decorators">
+            <summary>
+            decorators to pass to the serializing pattern converter
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.SerializedLayout.m_renderer">
+            <summary>
+            renderer to pass to the serializing pattern converter
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.SerializedLayout.m_fetcher">
+            <summary>
+            fetcher to pass to the serializing pattern converter
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.SerializedLayout.m_constructed">
+            <summary>
+            FIXME: Who knows why the parrent class calls ActivateOptions() from constructor?
+            It seems unnecessary and causes issues here. We use this field to 
+            suspend the call to ActivateOptions() from constructor
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.#ctor">
+            <summary>
+            Constructs an JsonLayout with empty <i>Members</i>, no <i>Style</i>, and default <i>serializer</i>.
+            </summary>
+            <remarks>
+            <para>
+            The default just produces an empty JSON object string.
+            </para>
+            <para>
+            As per the <see cref="T:log4net.Core.IOptionHandler"/> contract the <see cref="M:log4net.Layout.SerializedLayout.ActivateOptions"/>
+            method must be called after the properties on this object have been
+            configured.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.ActivateOptions">
+            <summary>
+            Activate the options that were previously set with calls to properties.
+            </summary>
+            <remarks>
+            <para>
+            This allows an object to defer activation of its options until all
+            options have been set. This is required for components which have
+            related options that remain ambiguous until all are set.
+            </para>
+            <para>
+            If a component implements this interface then this method must be called
+            after its properties have been set before the component can be used.
+            </para>
+            <para>
+            The strange constructor call to this method is suspended using 
+            <see cref="F:log4net.Layout.SerializedLayout.m_constructed"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.Format(System.IO.TextWriter,log4net.Core.LoggingEvent)">
+            <summary>
+            Produces a formatted string as specified by the SerializingConverter.
+            </summary>
+            <param name="loggingEvent">the event being logged</param>
+            <param name="writer">The TextWriter to write the formatted event to</param>
+            <remarks>
+            If SerializingConverter is not set, we default to base implementation.
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.CreateSerializingConverter(log4net.Layout.PatternLayout.ConverterInfo)">
+            <summary>
+            Fetch our own <see cref="T:log4net.Util.PatternConverter"/> SerializingConverter.
+            </summary>
+            <param name="info">description of the PatternConverter</param>
+            <returns>pattern converter set up</returns>
+            <remarks>
+            <para>
+            Please note that properties are only supported with log4net 1.2.11 and above.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.SetUpSerializingConverter(log4net.Util.PatternConverter,log4net.Layout.PatternLayout.ConverterInfo[],log4net.Layout.Arrangements.IArrangement,log4net.Layout.IRawLayout,log4net.ObjectRenderer.IObjectRenderer,log4net.Layout.Decorators.IDecorator[])">
+            <summary>
+            Add <see cref="!:PatternConverter.Properties"/> or make use of <see cref="M:log4net.Layout.Pattern.ISerializingPatternConverter.SetUp(log4net.Layout.Arrangements.IArrangement,System.Collections.Generic.IEnumerable{log4net.Layout.PatternLayout.ConverterInfo},log4net.Layout.IRawLayout,log4net.ObjectRenderer.IObjectRenderer,System.Collections.Generic.IEnumerable{log4net.Layout.Decorators.IDecorator})"/>, 
+            call <see cref="M:log4net.Core.IOptionHandler.ActivateOptions"/> 
+            </summary>
+            <param name="conv">serializer to be set up, see also <seealso cref="T:log4net.Layout.Pattern.ISerializingPatternConverter"/></param>
+            <param name="converters">converters to be used collected from parent class</param>
+            <param name="arrangement">arrangement to be used collected from parent class</param>
+            <param name="fetcher">fetcher to use</param>
+            <param name="renderer">renderer to use</param>
+            <param name="decorators">decorators to use</param>
+            <remarks>
+            <para>
+            Please note that properties are only supported with log4net 1.2.11 and above.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.CreateSerializingConverterInfo(System.String,System.Type)">
+            <summary>
+            Instantiate our own SerializingConverter info
+            </summary>
+            <remarks>
+            <see cref="P:log4net.Layout.SerializedLayout.SerializerName"/> property
+            </remarks>
+            <returns>the info created</returns>
+            <exception cref="T:System.InvalidOperationException">for invalid types see <see cref="T:log4net.Util.PatternConverter"/> abstract class.</exception>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddArrangement(log4net.Layout.Arrangements.IArrangement)">
+            <summary>
+            Add an arbitrary <see cref="T:log4net.Layout.Arrangements.IArrangement"/>. 
+            This method will be most useful for XML configuration.
+            </summary>
+            <param name="value">the arrangement</param>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddDefault(System.String)">
+            <summary>
+            Add an <see cref="T:log4net.Layout.Arrangements.DefaultArrangement"/> that can be plain pattern string.
+            This method will be most useful for XML configuration.
+            </summary>
+            <param name="value">the arrangement</param>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddMember(System.String)">
+            <summary>
+            Add a single <see cref="T:log4net.Layout.Members.Member"/> that can be plain pattern string. 
+            Note that <see cref="T:log4net.Layout.Members.Member"/> implements <see cref="T:log4net.Layout.Arrangements.IArrangement"/> as well.
+            This method will be most useful for XML configuration.
+            </summary>
+            <param name="value">the member</param>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddRemove(System.String)">
+            <summary>
+            With <see cref="T:log4net.Layout.Arrangements.RemovalArrangement"/> remove all or 
+            <seealso cref="T:System.Text.RegularExpressions.Regex"/> specific members.
+            This method will be most useful for XML configuration.
+            </summary>
+            <param name="value">the removal</param>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddRenderer(log4net.ObjectRenderer.IObjectRenderer)">
+            <summary>
+            Add renderer to be passed to serializing pattern converter
+            </summary>
+            <param name="value">renderer</param>
+            <remarks>
+            This method will be most useful for XML configuration.
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddFetcher(log4net.Layout.IRawLayout)">
+            <summary>
+            Add fetcher to be passed to serializing pattern converter
+            </summary>
+            <param name="value">fetcher</param>
+            <remarks>
+            This method will be most useful for XML configuration.
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.SerializedLayout.AddDecorator(log4net.Layout.Decorators.IDecorator)">
+            <summary>
+            Add decorators to be passed to serializing pattern converter
+            </summary>
+            <param name="value">one decorator</param>
+            <remarks>
+            This method will be most useful for XML configuration.
+            </remarks>
+        </member>
+        <member name="P:log4net.Layout.SerializedLayout.SerializerName">
+            <summary>
+            The name to use for the serializing conversion pattern
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.SerializedLayout.SerializingConverter">
+            <summary>
+            The serializer used to <see cref="M:log4net.Layout.SerializedLayout.Format(System.IO.TextWriter,log4net.Core.LoggingEvent)"/> the <see cref="T:log4net.Core.LoggingEvent"/>
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Stamps.IStamp">
+            <summary>
+            Used by the <see cref="T:log4net.Util.Stamps.StampingLoggerFactory"/> to ptovide stamping to <see cref="T:log4net.Util.Stamps.StampingLogger"/>.
+            This is most useful for configuration where any particular stamp style can be added by 
+            calling <see cref="M:log4net.Util.Stamps.StampingLoggerFactory.AddStamp(log4net.Util.Stamps.IStamp)"/>
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.IStamp.StampEvent(log4net.Core.LoggingEvent)">
+            <summary>
+            Stamp the event.
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+        </member>
+        <member name="T:log4net.Layout.Decorators.StandardTypesDecorator">
+            <summary>
+            Decorate logged objects - produce standard types to unite different JSON serializers
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.Decorators.IDecorator">
+            <summary>
+            Decorator modifies logged objects
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Decorators.IDecorator.Decorate(System.Object)">
+            <summary>
+            decorate logged object
+            </summary>
+            <param name="obj">object to decorate</param>
+            <returns>decorated object</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.#ctor">
+            <summary>
+            default constructor - <see cref="P:log4net.Layout.Decorators.StandardTypesDecorator.TypeMemberName"/> is "@type" and <see cref="P:log4net.Layout.Decorators.StandardTypesDecorator.SaveType"/> is null
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.Decorate(System.Object)">
+            <summary>
+            decorate logged object
+            </summary>
+            <param name="obj">object to decorate</param>
+            <returns>decorated object</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.Standardise(System.Object@,System.Collections.IDictionary,System.String)">
+            <summary>
+            Decoration implementation - turn objects to a standard
+            </summary>
+            <param name="obj">object to decorate</param>
+            <param name="flatdict">used in <see cref="T:log4net.Layout.Decorators.StandardTypesFlatDecorator"/></param>
+            <param name="path">used in <see cref="T:log4net.Layout.Decorators.StandardTypesFlatDecorator"/></param>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardNull(System.Object,System.Object@)">
+            <summary>
+            Null gate in standardization
+            </summary>
+            <param name="obj">null equivalent</param>
+            <param name="result">null</param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardString(System.Object,System.Object@)">
+            <summary>
+            Besides regular strings, convert <see cref="T:System.Text.StringBuilder"/>s and <see cref="T:System.IO.StringWriter"/>s to string too.
+            </summary>
+            <param name="obj">Stringy object</param>
+            <param name="result">string</param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardDateTime(System.Object,System.Object@)">
+            <summary>
+            Turn DateTime into ISO-8601 formatted string
+            </summary>
+            <param name="obj"><see cref="T:System.DateTime"/></param>
+            <param name="result"><see cref="T:System.String"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardTimeSpan(System.Object,System.Object@)">
+            <summary>
+            Turn timespans into a number of seconds
+            </summary>
+            <param name="obj"><see cref="T:System.TimeSpan"/></param>
+            <param name="result"><see cref="T:System.Double"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardBytes(System.Object,System.Object@)">
+            <summary>
+            Turn bytes or byte arrays into UTF8 encoded string
+            </summary>
+            <param name="obj"><see cref="T:System.Byte"/> or <see cref="T:byte[]"/></param>
+            <param name="result"><see cref="T:System.String"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardChars(System.Object,System.Object@)">
+            <summary>
+            Turn chars or char arrays into a string
+            </summary>
+            <param name="obj"><see cref="T:System.Char"/> or <see cref="T:char[]"/></param>
+            <param name="result"><see cref="T:System.String"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardPrimitive(System.Object,System.Object@)">
+            <summary>
+            Accept primitives
+            </summary>
+            <param name="obj">primitive type value</param>
+            <param name="result">same</param>
+            <returns>true if it's all done - it's a primitive or decimal</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardGuid(System.Object,System.Object@)">
+            <summary>
+            Stringify GUIDs
+            </summary>
+            <param name="obj"><see cref="T:System.Guid"/></param>
+            <param name="result"><see cref="T:System.String"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardEnum(System.Object,System.Object@)">
+            <summary>
+            Stringify enums with value names
+            </summary>
+            <param name="obj"><see cref="T:System.Enum"/></param>
+            <param name="result"><see cref="T:System.String"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardUri(System.Object,System.Object@)">
+            <summary>
+            Stringify URI
+            </summary>
+            <param name="obj"><see cref="T:System.Uri"/></param>
+            <param name="result"><see cref="T:System.String"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardContext(System.Object,System.Object@)">
+            <summary>
+            Stringify thread context
+            </summary>
+            <param name="obj">ThreadContextStack</param>
+            <param name="result">string</param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardDictionary(System.Object,System.Object@,System.Collections.IDictionary,System.String)">
+            <summary>
+            Copy and traverse dictionary and turn non-standard members into standard ones.
+            </summary>
+            <param name="obj"><see cref="T:System.Collections.IDictionary"/></param>
+            <param name="result">standardized <see cref="T:System.Collections.Generic.Dictionary`2"/></param>
+            <param name="flatdict">ignored here</param>
+            <param name="path">ignored here</param>
+            <returns>true if it's all done - obj was an IDictionary</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardArray(System.Object,System.Object@)">
+            <summary>
+            Accept enumerables
+            </summary>
+            <param name="obj"><see cref="T:System.Collections.IEnumerable"/></param>
+            <param name="result"><see cref="T:System.Collections.IEnumerable"/></param>
+            <returns>true if it's all done - obj was an IEnumerable</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesDecorator.StandardObject(System.Object,System.Object@,System.Collections.IDictionary,System.String)">
+            <summary>
+            Turn objects into dictionaries
+            </summary>
+            <param name="obj">object</param>
+            <param name="result">standard dictionary</param>
+            <param name="flatdict">used in <see cref="T:log4net.Layout.Decorators.StandardTypesFlatDecorator"/></param>
+            <param name="path">used in <see cref="T:log4net.Layout.Decorators.StandardTypesFlatDecorator"/></param>
+            <returns>true if it's all done</returns>
+        </member>
+        <member name="P:log4net.Layout.Decorators.StandardTypesDecorator.SaveType">
+            <summary>
+            preserve object type in serialization. true => always, false => never, null => only if class is publicly visible
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Decorators.StandardTypesDecorator.Stringify">
+            <summary>
+            Call ToString and save the string
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Decorators.StandardTypesDecorator.TypeMemberName">
+            <summary>
+            if <see cref="P:log4net.Layout.Decorators.StandardTypesDecorator.SaveType"/> then this is the name it will be saved as
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Decorators.StandardTypesDecorator.StringMemberName">
+            <summary>
+            if <see cref="P:log4net.Layout.Decorators.StandardTypesDecorator.Stringify"/> then this is the name it will be saved as
+            </summary>
+        </member>
+        <member name="T:log4net.ObjectRenderer.JsonObjectRenderer">
+            <summary>
+            This is the default inmplementation of ISerializer used by JsonLayout. 
+            It uses the .net35 System.Web.Script.Serialization.JavaScriptSerializer in turn.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.ObjectRenderer.JsonObjectRenderer.Default">
+            <summary>
+            The bare minimal default serializer - static cache
+            </summary>
+        </member>
+        <member name="M:log4net.ObjectRenderer.JsonObjectRenderer.RenderObject(log4net.ObjectRenderer.RendererMap,System.Object,System.IO.TextWriter)">
+            <summary>
+            Write the object value as Json string into the writer using the serializer
+            </summary>
+            <param name="rendererMap">The map used to lookup renderers</param>
+            <param name="obj">Object to be serialized</param>
+            <param name="writer">Will receive the serialized data of obj</param>
+        </member>
+        <member name="M:log4net.ObjectRenderer.JsonObjectRenderer.GetSerializer(log4net.ObjectRenderer.RendererMap,System.Object)">
+            <summary>
+            Create serializer for a specific call
+            </summary>
+            <returns>serializer instance</returns>
+        </member>
+        <member name="P:log4net.ObjectRenderer.JsonObjectRenderer.Factory">
+            <summary>
+            Factory of the serializer implementation
+            </summary>
+        </member>
+        <member name="T:log4net.Util.TypeConverters.ArrangementConverter">
+            <summary>
+            Supports conversion from string or <see cref="T:log4net.Util.PatternString"/> to <see cref="T:log4net.Layout.Arrangements.IArrangement"/> type.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Util.TypeConverters.ArrangementConverter.s_converter_context">
+            <summary>
+            This is just a hack to grab converters from PatternLayout
+            </summary>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangement(System.String,log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Convert string option into an arrangement using <see cref="M:log4net.Util.TypeConverters.ConverterRegistry.GetConvertFrom(System.Type)"/> 
+            </summary>
+            <param name="option">pattern, see <seealso cref="M:log4net.Util.TypeConverters.ArrangementConverter.ConvertFrom(System.Object)"/> for more info on formatting</param>
+            <param name="converters">converters to consider, can be null</param>
+            <returns>the arrangement instance</returns>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangementInternal(System.String)">
+            <summary>
+            Convert string option into an arrangement using <see cref="M:log4net.Util.TypeConverters.ConverterRegistry.GetConvertFrom(System.Type)"/> 
+            </summary>
+            <param name="option">pattern, see <seealso cref="M:log4net.Util.TypeConverters.ArrangementConverter.ConvertFrom(System.Object)"/> for more info on formatting</param>
+            <returns>the arrangement instance</returns>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.Init">
+            <summary>
+            Initialize the environment: register Arrangement Type Converters 
+            with the <see cref="T:log4net.Util.TypeConverters.ConverterRegistry"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.CanConvertFrom(System.Type)">
+            <summary>
+            Can the source type be converted to the type supported by this object
+            </summary>
+            <param name="sourceType">the type to convert</param>
+            <returns>true if the conversion is possible</returns>
+            <remarks>
+            <para>
+            Returns <c>true</c> if the <paramref name="sourceType"/> is
+            the <see cref="T:System.String"/> type.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.ConvertFrom(System.Object)">
+            <summary>
+            Overrides the ConvertFrom method of IConvertFrom.
+            </summary>
+            <param name="source">the object to convert to an <see cref="T:log4net.Layout.Arrangements.IArrangement"/></param>
+            <returns>the arrangement</returns>
+            <remarks>
+            <para>
+            "MemberName" =&gt; add member of name "MemberName"
+            "MemberName:message" =&gt; add member named "MemberName" with the value of conversion of name "message"
+            "MemberName=message\;exception" =&gt; add member named "MemberName" with the value of {message="...",exception="..."}
+            "MemberName%date:dddd" =&gt; add member named "MemberName" with the value of PatternLayout for "%date{dddd}"
+            "MemberName|%message%n" =&gt; add member named "MemberName" with the value of PatternLayout for "%message%n"
+            "DEFAULT" =&gt; add member default members
+            "DEFAULT!nxlog" =&gt; add member default members suitable for nxlog
+            "CLEAR" =&gt; remove all members
+            "REMOVE:^ex.*n$" remove member whose name matches regex "^ex.*n$"
+            "DEFAULT!nxlog;Host=Name:hostname\;ProcessId\;Memory\;TimeStamp" =&gt; composite configuration
+            </para>
+            </remarks>
+            <exception cref="T:log4net.Util.TypeConverters.ConversionNotSupportedException">
+            The <paramref name="source"/> object cannot be converted to the
+            target type. To check for this condition use the <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.CanConvertFrom(System.Type)"/>
+            method.
+            </exception>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.ParseArangement(System.String)">
+            <summary>
+            Parse a single member arrangement
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.ParseArrangementSet(System.String)">
+            <summary>
+            Parse a composite arrangement
+            </summary>
+            <param name="option"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.Clean(System.Text.RegularExpressions.Match)">
+            <summary>
+            Unescape matched escaped characters
+            </summary>
+            <param name="match"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.TypeConverters.ArrangementConverter.Brackets(System.Text.RegularExpressions.Match)">
+            <summary>
+            Unescape matched escaped brackets
+            </summary>
+            <param name="match"></param>
+            <returns></returns>
+        </member>
+        <member name="T:log4net.Util.Stamps.StampingLoggerFactory">
+            <summary>
+            Wrap created loggers with a stamping logger to modify <see cref="T:log4net.Core.LoggingEvent"/>s as they pass through.
+            </summary>
+            <remarks>
+            Purpose: to have a uniquely identifying stamps on each event regardless of user code and regardless of appenders.
+            Caller unique identity can mostly be established by checking the machine, processid and time 
+            with the assumption that only one app instance can run on a certain machine with a certain PID at a certain time.
+            If this assumption is broken, then other/further stamps are needed. Sequential stamp is thrown in to address
+            a problem with time measurement granularity within the application between consecutive or parallel events.
+            With uniquely identifying stamps, events can be processed, managed and analyzed more easily in respective tools.
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Util.Stamps.StampingLoggerFactory.DefaultStamps">
+            <summary>
+            Defines the default stamping policy
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.StampingLoggerFactory.Stamps">
+            <summary>
+            List of stamps to be used on events. 
+            </summary>
+            <remarks>
+            <para>
+            XML configuration will likely use the <see cref="M:log4net.Util.Stamps.StampingLoggerFactory.AddStamp(log4net.Util.Stamps.IStamp)"/> method to populate this.
+            </para>
+            <para>
+            If empty, the <see cref="F:log4net.Util.Stamps.StampingLoggerFactory.DefaultStamps"/> set will be used.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.#ctor">
+            <summary>
+            Create instance without an <see cref="P:log4net.Util.Stamps.StampingLoggerFactory.InnerFactory"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.#ctor(log4net.Repository.Hierarchy.ILoggerFactory)">
+            <summary>
+            Create instance with a <see cref="P:log4net.Util.Stamps.StampingLoggerFactory.InnerFactory"/>
+            </summary>
+            <param name="innerFactory">can be null</param>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.CreateLogger(System.String)">
+            <summary>
+            Wraps the <see cref="T:log4net.Repository.Hierarchy.Logger"/> made by the wrapped inner factory in a stamping logger.
+            </summary>
+            <param name="name">The name of the <see cref="T:log4net.Repository.Hierarchy.Logger"/>.</param>
+            <returns>The <see cref="T:log4net.Repository.Hierarchy.Logger"/> instance for the specified name wrapped with a stamper.</returns>
+            <remarks>
+            <para>
+            Create a new <see cref="T:log4net.Repository.Hierarchy.Logger"/> instance with the 
+            specified name.
+            </para>
+            <para>
+            Called by the <see cref="T:log4net.Repository.Hierarchy.Hierarchy"/> to create
+            new named <see cref="T:log4net.Repository.Hierarchy.Logger"/> instances.
+            </para>
+            <para>
+            If the <paramref name="name"/> is <c>null</c> then the root logger
+            must be returned.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.GetFactory">
+            <summary>
+            Get the wrapped factory, most likely <see cref="P:log4net.Util.Stamps.StampingLoggerFactory.InnerFactory"/>. Set a default if empty (<see cref="T:log4net.Repository.Hierarchy.DefaultLoggerFactory"/>)
+            </summary>
+            <returns></returns>
+            <remarks>
+            <para>
+            Gives an inherited class a chance to override default behavior.
+            </para>
+            <para>
+            FIXME: Could we reach the <see cref="T:log4net.Repository.Hierarchy.DefaultLoggerFactory"/> more easily/obviously, rather than instantiating a fake <see cref="T:log4net.Repository.Hierarchy.Hierarchy"/> and fetching <see cref="P:log4net.Repository.Hierarchy.Hierarchy.LoggerFactory"/>?
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.CreateStampingLogger(log4net.Repository.Hierarchy.Logger,log4net.Util.Stamps.StampDelegate)">
+            <summary>
+            Create the wrapping stamper logger. By default, root logger is not wrapped.
+            </summary>
+            <param name="logger">Implementation logger to wrap.</param>
+            <param name="call">delegate to call to stamp the event before passing it to <paramref name="logger"/> </param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.StampEvent(log4net.Core.LoggingEvent)">
+            <summary>
+            The default delegate for <see cref="M:log4net.Util.Stamps.StampingLoggerFactory.CreateStampingLogger(log4net.Repository.Hierarchy.Logger,log4net.Util.Stamps.StampDelegate)"/> applies all the stamps in regular order.
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.GetStamps">
+            <summary>
+            Get stamps defined or default stamps or empty.
+            </summary>
+            <returns>stamps to apply</returns>
+            <remarks>
+            Called by <see cref="M:log4net.Util.Stamps.StampingLoggerFactory.StampEvent(log4net.Core.LoggingEvent)"/>, gives a child class a chance to override default behavior.
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLoggerFactory.AddStamp(log4net.Util.Stamps.IStamp)">
+            <summary>
+            Add a stamp to the set
+            </summary>
+            <param name="stamp"></param>
+            <remarks>
+            This will likely be called by the XML config.
+            </remarks>
+            <remarks>
+            The default behavior is that if no stamps are explicitly added, the <see cref="F:log4net.Util.Stamps.StampingLoggerFactory.DefaultStamps"/> are used instead.
+            </remarks>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLoggerFactory.InnerFactory">
+            <summary>
+            The wrapped logger factory. 
+            </summary>
+            <remarks>
+            If empty, <see cref="T:log4net.Repository.Hierarchy.DefaultLoggerFactory"/> fills the space on first use.
+            </remarks>
+        </member>
+        <member name="T:log4net.Plugin.JsonPlugin">
+            <summary>
+            Not sure if this should stay. 
+            This log4net plugin will register <see cref="T:log4net.ObjectRenderer.JsonObjectRenderer"/>
+            and add a "json" Conversion pattern to all <see cref="T:log4net.Layout.ILayout"/>s.
+            </summary>
+            <remarks>
+            If you put the following in your assembly, the log4net logging will 
+            be magically JSONified without much need for xml configuration:
+            [assembly: log4net.Config.Plugin(typeof(JsonPlugin))]
+            Then you can just use conversion pattern %json or %json{with further options} in your PatternLayout.
+            Though using SerializedLayout still gives much more flexibility
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Plugin.JsonPlugin.Init">
+            <summary>
+            Call <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.Init"/> and <see cref="M:log4net.Util.TypeConverters.LayoutConverter.Init(System.Boolean)"/> once.
+            </summary>
+        </member>
+        <member name="M:log4net.Plugin.JsonPlugin.#ctor">
+            <summary>
+            Create an instance and call <see cref="M:log4net.Plugin.JsonPlugin.Init"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Plugin.JsonPlugin.Attach(log4net.Repository.ILoggerRepository)">
+            <summary>
+            Interfere with a repository
+            </summary>
+            <param name="repository"></param>
+        </member>
+        <member name="M:log4net.Plugin.JsonPlugin.Shutdown">
+            <summary>
+            Stop interferring
+            </summary>
+        </member>
+        <member name="M:log4net.Plugin.JsonPlugin.Repo_ConfigurationChanged(System.Object,System.EventArgs)">
+            <summary>
+            Do the interferring
+            </summary>
+            <param name="sender">a repo</param>
+            <param name="e">ignored</param>
+        </member>
+        <member name="P:log4net.Plugin.JsonPlugin.Name">
+            <summary>
+            Plugin name is the Type's AssemblyQualifiedName
+            </summary>
+        </member>
+        <member name="P:log4net.Plugin.JsonPlugin.Repo">
+            <summary>
+            Attached repository
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.RawArrangedLayout">
+            <summary>
+            This <see cref="T:log4net.Layout.IRawLayout"/> facilitates arranged members retrieval 
+            in the form of a <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+            </summary>
+            <remarks>
+            This is meant to be used as a <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="T:log4net.Layout.IRawArrangedLayout">
+            <summary>
+            An interface recognized by <see cref="T:log4net.Layout.Pattern.JsonPatternConverter"/> to apply arrangements on it's <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/>
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="P:log4net.Layout.IRawArrangedLayout.Members">
+            <summary>
+            Serialized members to be arranged
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.RawArrangedLayout.#ctor">
+            <summary>
+            Create instance and set Members to an empty list
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.RawArrangedLayout.Format(log4net.Core.LoggingEvent)">
+            <summary>
+            Gather the <see cref="P:log4net.Layout.RawArrangedLayout.Members"/> in a dictionary
+            </summary>
+            <param name="loggingEvent"></param>
+            <returns>dictionary of members</returns>
+        </member>
+        <member name="P:log4net.Layout.RawArrangedLayout.Members">
+            <summary>
+            The <see cref="T:log4net.Layout.Members.IMember"/>s to be put in a dictionary
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Enumerable">
+            <summary>
+            Utility static methods to provide compatibility with System.Linq
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Enumerable.Cast``1(System.Collections.IEnumerable)">
+            <summary>
+            Equivalent to System.Linq.Enumerable.Cast&lt;T>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Enumerable.ToArray``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Equivalent to System.Linq.Enumerable.ToArray&lt;T>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Enumerable.Union``1(System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            A union implementation similar to System.Linq.Enumerable.Union&lt;T>
+            except that null arguments are allowed
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerations"></param>
+            <returns></returns>
+        </member>
+        <member name="T:log4net.Appender.KeepAliveAppender">
+            <summary>
+            KeepAliveAppender will produce alive logs in regular intervals from the log4net.Appender.KeepAliveAppender logger.
+            </summary>
+            <remarks>
+            <para>
+            Without imparting any of the parent <see cref="T:log4net.Appender.ForwardingAppender"/>'s features,
+            this appender get's itself <see cref="M:log4net.Util.KeepAlive.Manage(log4net.Util.KeepAlive.AliveCall,System.Int32)"/>d in <see cref="M:log4net.Appender.KeepAliveAppender.ActivateOptions"/>
+            and <see cref="M:log4net.Util.KeepAlive.Release(log4net.Util.KeepAlive.AliveCall)"/>d in <see cref="M:log4net.Appender.KeepAliveAppender.OnClose"/>. Any attached appender should 
+            then receive Alive messages.
+            </para>
+            <para>
+            The appender must be referenced or else it will not be called. Add a additivity false logger log4net.Appender.KeepAliveAppender
+            and hook this appender to it. Then add appenders that need to be kept alive to this appender.
+            </para>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Appender.KeepAliveAppender.Alive">
+            <summary>
+            It's the default level used to log 'alive' events, based on log4net's Alert level. 
+            It's high so that it bounces through INFO/ERROR filters, even though it is not a reason to be alert.
+            Lack of 'alive' might be a reason to be alert though.
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.KeepAliveAppender.ActivateOptions">
+            <summary>
+            Initialize the appender based on the options set
+            </summary>
+            <remarks>
+            <para>
+            This is part of the <see cref="T:log4net.Core.IOptionHandler"/> delayed object
+            activation scheme. The <see cref="M:log4net.Appender.KeepAliveAppender.ActivateOptions"/> method must 
+            be called on this object after the configuration properties have
+            been set. Until <see cref="M:log4net.Appender.KeepAliveAppender.ActivateOptions"/> is called this
+            object is in an undefined state and must not be used. 
+            </para>
+            <para>
+            If any of the configuration properties are modified then 
+            <see cref="M:log4net.Appender.KeepAliveAppender.ActivateOptions"/> must be called again.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Appender.KeepAliveAppender.AliveCall">
+            <summary>
+            Make an "I'm alive!" call
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.KeepAliveAppender.OnClose">
+            <summary>
+            Closes the appender and releases resources.
+            </summary>
+            <remarks>
+            <para>
+            Releases any resources allocated within the appender such as file handles, 
+            network connections, etc.
+            </para>
+            <para>
+            It is a programming error to append to a closed appender.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:log4net.Appender.KeepAliveAppender.KeepAliveLevel">
+            <summary>
+            Log alive message at this level
+            </summary>
+        </member>
+        <member name="P:log4net.Appender.KeepAliveAppender.KeepAliveMessage">
+            <summary>
+            Keep alive message
+            </summary>
+        </member>
+        <member name="P:log4net.Appender.KeepAliveAppender.KeepAliveInterval">
+            <summary>
+            Keep alive interval
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.RawCallLayout">
+            <summary>
+            Utility class to facilitate lambda call layout from the code and <see cref="T:log4net.Layout.Members.Member"/> configuration.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Layout.RawCallLayout.s_processId">
+            <summary>
+            cache the proc id;
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.RawCallLayout.s_webappname">
+            <summary>
+            Cache the website name
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.#cctor">
+            <summary>
+            Initialize <see cref="P:log4net.Layout.RawCallLayout.OverrideCalls"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.FindLayout(System.String,log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Find an appropriate <see cref="T:log4net.Layout.IRawLayout"/> for the specified conversion name using own defaults or <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>s provided.
+            </summary>
+            <param name="name">name of conversion</param>
+            <param name="converters">converters we can use to work out the conversions</param>
+            <returns>call found</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.FindLayout(System.String,System.Collections.Generic.IEnumerable{log4net.Layout.RawCallLayout})">
+            <summary>
+            Find an appropriate <see cref="T:log4net.Layout.RawCallLayout"/> for the specified conversion name among the <see cref="T:log4net.Layout.RawCallLayout"/>s provided.
+            </summary>
+            <param name="name">name of conversion</param>
+            <param name="calls">calls to be searched</param>
+            <returns>call found</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.GetCalls(log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Get the standard calls enhanced by converters
+            </summary>
+            <param name="converters"></param>
+            <returns>enhanced standard calls</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.CombineCalls(System.Collections.Generic.IEnumerable{log4net.Layout.RawCallLayout},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Combine provided converters (first) and the existing calls
+            </summary>
+            <param name="calls">existing calls</param>
+            <param name="converters">converters to include</param>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.MakeOverrideCalls(System.Collections.Generic.IEnumerable{log4net.Layout.RawCallLayout})">
+            <summary>
+            Add the standard (in the opinion of this class) conversions.
+            </summary>
+            <remarks>
+            <para>
+            TODO: (Rant) I'm not entirely happy with this monster. 
+            I wish s_globalRulesRegistry and friends in <seealso cref="T:log4net.Layout.PatternLayout"/>  
+            would better lend themselves to code reuse.
+            There could be a simple ConvertorCollection class exposing that functionality 
+            which I'd re-use to create the following matrix with the already declared convertors.
+            </para>
+            </remarks>
+            <param name="calls">calls to add to</param>
+            <returns>calls added</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.AddCalls(System.Collections.Generic.IEnumerable{log4net.Layout.RawCallLayout}@,log4net.Util.RawCallDelegate,System.String[])">
+            <summary>
+            Make a union of existing calls and new call provided for each name
+            </summary>
+            <param name="calls">existing calls</param>
+            <param name="layoutCall">lambda call providing value for logging event to be turned into <see cref="T:log4net.Layout.IRawLayout"/></param>
+            <param name="name">valid names for the conversion</param>
+        </member>
+        <member name="F:log4net.Layout.RawCallLayout.m_getter">
+            <summary>
+            Function to retrieve a value from a <see cref="T:log4net.Core.LoggingEvent"/>
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.RawCallLayout.m_info">
+            <summary>
+            If constructed from such, the original <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.#ctor(System.String,log4net.Util.RawCallDelegate)">
+            <summary>
+            Create a named instance from a (lambda) function
+            </summary>
+            <param name="name">conversion name</param>
+            <param name="getter">function</param>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.#ctor(System.String,log4net.Util.PatternConverter)">
+            <summary>
+            Create a named instance from a <see cref="T:log4net.Util.PatternConverter"/> 
+            </summary>
+            <param name="name">conversion name</param>
+            <param name="converter">pattern converter</param>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.#ctor(System.String,log4net.Util.PatternString)">
+            <summary>
+            Create a named instance from a <see cref="T:log4net.Util.PatternConverter"/> 
+            </summary>
+            <param name="name">conversion name</param>
+            <param name="pattern">pattern string</param>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.#ctor(log4net.Layout.PatternLayout.ConverterInfo)">
+            <summary>
+            Create an instance from a <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>, instantiating it's <see cref="T:log4net.Util.PatternConverter"/>.
+            </summary>
+            <remarks>
+            Properties["option"] (a <see cref="T:System.String"/>) can be used to set an option on the converter instance.
+            </remarks>
+            <remarks>
+            Properties are only supported in log4net 1.2.11 and later.
+            </remarks>
+            <param name="info"></param>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.Format(log4net.Core.LoggingEvent)">
+            <summary>
+            Call the getter
+            </summary>
+            <param name="loggingEvent">the event to get a value for/from</param>
+            <returns>the value gotten</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.Format(log4net.Util.PatternConverter,log4net.Core.LoggingEvent)">
+            <summary>
+            Helper method to call the <see cref="M:log4net.Util.PatternConverter.Format(System.IO.TextWriter,System.Object)"/>
+            </summary>
+            <param name="conv">converter to call</param>
+            <param name="loggingEvent">event to render</param>
+            <returns>value retrieved</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.Equals(System.Object)">
+            <summary>
+            This is handy when jamming calls together to avoid duplicates. See the <see cref="M:log4net.Layout.RawCallLayout.CombineCalls(System.Collections.Generic.IEnumerable{log4net.Layout.RawCallLayout},log4net.Layout.PatternLayout.ConverterInfo[])"/> method.
+            </summary>
+            <param name="obj">to compare to</param>
+            <returns>same</returns>
+        </member>
+        <member name="M:log4net.Layout.RawCallLayout.GetHashCode">
+            <summary>
+            The compiler complained...
+            </summary>
+            <returns>what the base gives</returns>
+        </member>
+        <member name="P:log4net.Layout.RawCallLayout.OverrideCalls">
+            <summary>
+            A list of standard conversions to be used by <see cref="T:log4net.Layout.Members.Member"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.RawCallLayout.Name">
+            <summary>
+            The name of a conversion
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Stamps.Stamp">
+            <summary>
+            The class providing standard stamps
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.#ctor">
+            <summary>
+            A universal stamp with name "stamp"
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.StampEvent(log4net.Core.LoggingEvent)">
+            <summary>
+            Stamp the event.
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.SetStamp(log4net.Core.LoggingEvent,System.String,System.Object)">
+            <summary>
+            Store the stamp value in a property of the logging event
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <param name="name">name of the stamp</param>
+            <param name="value">stamp value</param>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetValue(log4net.Core.LoggingEvent)">
+            <summary>
+            Create stamp value
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <returns>value to set as a stamp</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetSanitizedValue(log4net.Core.LoggingEvent,System.Object)">
+            <summary>
+            Make sure the value will not change later
+            </summary>
+            <param name="loggingEvent"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="F:log4net.Util.Stamps.Stamp.s_sync_root">
+            <summary>
+            lock root
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.Stamp.s_ref_sys_time">
+            <summary>
+            System start reference time against unix epoch in seconds
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.Stamp.s_ref_app_time">
+            <summary>
+            Application start reference time against unix epoch in seconds
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.Stamp.s_processId">
+            <summary>
+            cache the proc id;
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.Stamp.s_sequenceId">
+            <summary>
+            cache the sequence id;
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.#cctor">
+            <summary>
+            Call <see cref="M:log4net.Util.Stamps.Stamp.Init"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.Init">
+            <summary>
+            Initialize internal epoch time reference cache, thread safe
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetProcessId">
+            <summary>
+            Get the cached process ID
+            </summary>
+            <returns>process id</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetSequence">
+            <summary>
+            Get a statically incremented number in a thread safe manner
+            </summary>
+            <returns>sequence number</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.SetSequence(System.Int64)">
+            <summary>
+            Set a statically incremented number in a thread safe manner
+            </summary>
+            <returns>sequence number</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetSystemUpTime">
+            <summary>
+            Utility method returns current time in seconds since system start using the <see cref="M:System.Diagnostics.Stopwatch.GetTimestamp"/>
+            </summary>
+            <returns>seconds</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.ConvertStopwatchTicksToSeconds(System.Int64)">
+            <summary>
+            Utility method converts ticks given by <see cref="T:System.Diagnostics.Stopwatch"/> to seconds
+            </summary>
+            <param name="ticks">Stopwatch ticks</param>
+            <returns>seconds</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.ConvertTimeSpanToSeconds(System.TimeSpan)">
+            <summary>
+            Utility method converts ticks given by <see cref="T:System.TimeSpan"/> to seconds
+            </summary>
+            <param name="span">TimeSpan</param>
+            <returns>seconds</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetEpochTime(log4net.Util.Stamps.AgeReference)">
+            <summary>
+            Get the epoch time requested in seconds
+            </summary>
+            <param name="ageRef"></param>
+            <returns>seconds since epoch 1970</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.GetTimeStampValue(log4net.Util.Stamps.AgeReference,log4net.Util.Stamps.AgeReference,System.Double,System.Boolean)">
+            <summary>
+            Get the time elapsed between tfrom and tto adjusted by multiplier and potentially rounded
+            </summary>
+            <param name="tfrom">start of time span definition</param>
+            <param name="tto">end of timespan definition</param>
+            <param name="multiplier">give 1000000 to get microseconds; 1.0/24/3600 to get days</param>
+            <param name="round">Round to a whole number</param>
+            <returns>adjusted time value</returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.Stamp.AdjustTimeValue(System.Double,System.Double,System.Boolean)">
+            <summary>
+            Adjust time value - Multiply and Round
+            </summary>
+            <param name="value">epoch time value</param>
+            <param name="multiplier"> 1,000,000 to get microseconds</param>
+            <param name="round">Round to a whole number</param>
+            <returns>adjusted value</returns>
+        </member>
+        <member name="P:log4net.Util.Stamps.Stamp.Name">
+            <summary>
+            Property name to set
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Stamps.SequenceStamp">
+            <summary>
+            Set a thread safe sequencial number property value on the event.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.SequenceStamp.GetValue(log4net.Core.LoggingEvent)">
+            <summary>
+            Create stamp value - thread-safe statically incremented sequence number
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <returns>value to set as a stamp</returns>
+        </member>
+        <member name="T:log4net.Layout.Members.IMember">
+            <summary>
+            This interface is used by the <see cref="T:log4net.Layout.SerializedLayout"/> to represent a serialized member value.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="T:log4net.Layout.Arrangements.IArrangement">
+            <summary>
+            Used by <see cref="T:log4net.Layout.SerializedLayout"/>, this interface allows the organization of the members to be serialized.
+            It may be used to simply add or remove members or to do any kinf of magic on the list.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.IArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Organize the <see cref="T:log4net.Layout.Members.IMember"/>s to be serialized
+            </summary>
+            <param name="members">Members to be arranged</param>
+            <param name="converters">inherited converters, can be null</param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.IArrangement.SetOption(System.String)">
+            <summary>
+            All arrangements can take an option which is handy for XML configuration and to simplify set up.
+            </summary>
+            <param name="value">The option specific to the arrangement implementation</param>
+        </member>
+        <member name="P:log4net.Layout.Members.IMember.Name">
+            <summary>
+            Name of value to be serialized
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Members.IMember.Layout">
+            <summary>
+            A converter which will draw a specific value from a logging event
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Stamps.StampDelegate">
+            <summary>
+            Used by <see cref="T:log4net.Util.Stamps.StampingLoggerFactory"/> and <see cref="T:log4net.Util.Stamps.StampingLogger"/> to work together.
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="T:log4net.Util.Stamps.ProcessIdStamp">
+            <summary>
+            Set a process id number property value on the event.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.ProcessIdStamp.GetValue(log4net.Core.LoggingEvent)">
+            <summary>
+            Create stamp value - process id
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <returns>value to set as a stamp</returns>
+        </member>
+        <member name="T:log4net.Layout.Arrangements.MultipleArrangement">
+            <summary>
+            This <see cref="T:log4net.Layout.Arrangements.IArrangement"/> allows the organization of the members to be serialized.
+            Here we merely allow multiple arrangements to be represented by a single object.
+            </summary>
+            <remarks>
+            <para>
+            It's used by <see cref="T:log4net.Layout.SerializedLayout"/> and <see cref="T:log4net.Util.TypeConverters.ArrangementConverter"/> internally.
+            </para>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="T:log4net.Layout.Arrangements.NoArrangement">
+            <summary>
+            This <see cref="T:log4net.Layout.Arrangements.IArrangement"/> represents no arrangements intended
+            which is returned instead of null from <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangement(System.String,log4net.Layout.PatternLayout.ConverterInfo[])"/>. 
+            </summary>
+            <remarks>
+            <para>
+            It is statically cached in <see cref="F:log4net.Layout.Arrangements.NoArrangement.Instance"/>.
+            </para>
+            <para>
+            It is used as a base for other implementations.
+            </para>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Layout.Arrangements.NoArrangement.Instance">
+            <summary>
+            A static instance cache of the class
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.NoArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Organize the <see cref="T:log4net.Layout.Members.IMember"/>s to be serialized
+            </summary>
+            <param name="members">Members to be arranged</param>
+            <param name="converters">inherited converters, can be null</param>
+            <remarks>
+            By default, do nothing, which should be overriden by child class
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.NoArrangement.SetOption(System.String)">
+            <summary>
+            All arrangements can take an option which is handy for XML configuration and to simplify set up.
+            </summary>
+            <remarks>By default, there's no option taken, which should be overriden by child class</remarks>
+            <param name="value">The option specific to the arrangement implementation</param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.MultipleArrangement.#ctor">
+            <summary>
+            Create instance with <see cref="P:log4net.Layout.Arrangements.MultipleArrangement.Arrangements"/> set
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.MultipleArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Simply call each and every one of the <see cref="P:log4net.Layout.Arrangements.MultipleArrangement.Arrangements"/>
+            </summary>
+            <param name="members">Members to be arranged</param>
+            <param name="converters">inherited converters, can be null</param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.MultipleArrangement.SetOption(System.String)">
+            <summary>
+            Parse the option as arrangement and add it to the list
+            </summary>
+            <param name="value">The option understood by <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangement(System.String,log4net.Layout.PatternLayout.ConverterInfo[])"/></param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.MultipleArrangement.AddArrangement(log4net.Layout.Arrangements.IArrangement)">
+            <summary>
+            Well, add an arrangement
+            </summary>
+            <param name="arrangement">Arrangement to add</param>
+        </member>
+        <member name="P:log4net.Layout.Arrangements.MultipleArrangement.Arrangements">
+            <summary>
+            All arrangements collected by <see cref="M:log4net.Layout.Arrangements.MultipleArrangement.AddArrangement(log4net.Layout.Arrangements.IArrangement)"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Arrangements.MultipleArrangement.Option">
+            <summary>
+            Option to be parsed on arrangement into arrangement
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Serializer.ISerializerFactory">
+            <summary>
+            Create serializers
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Serializer.ISerializerFactory.GetSerializer(System.Object,log4net.ObjectRenderer.RendererMap)">
+            <summary>
+            Creates a <see cref="T:log4net.Util.Serializer.ISerializer"/> with a specific <paramref name="map"/>
+            </summary>
+            <param name="obj">object to get a serializer for</param>
+            <param name="map">renderer map to consider</param>
+            <returns>a serializer for <paramref name="obj"/></returns>
+        </member>
+        <member name="T:log4net.Layout.Arrangements.OptionArrangement">
+            <summary>
+            This <see cref="T:log4net.Layout.Arrangements.IArrangement"/> allows the organization of the members to be serialized.
+            An option is recognised and processed by <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangement(System.String,log4net.Layout.PatternLayout.ConverterInfo[])"/>
+            </summary>
+            <remarks>
+            <para>
+            It is the base of the <see cref="T:log4net.Layout.Arrangements.DefaultArrangement"/> class.
+            </para>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.OptionArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Parse the Arrangement string and use the new arrangement instance.
+            </summary>
+            <param name="members">Members to be arranged</param>
+            <param name="converters">inherited converters, can be null</param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.OptionArrangement.SetOption(System.String)">
+            <summary>
+            Set the <see cref="P:log4net.Layout.Arrangements.OptionArrangement.Arrangement"/> option
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="P:log4net.Layout.Arrangements.OptionArrangement.Arrangement">
+            <summary>
+            The arrangement option to be parsed by <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangement(System.String,log4net.Layout.PatternLayout.ConverterInfo[])"/>.
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Serializer.JsonSerializer">
+            <summary>
+            A simpleton implementation of a JSON serializer to supplement 
+            System.Web.Script.Serialization.JavaScriptSerializer of NET35
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="T:log4net.Util.Serializer.ISerializer">
+            <summary>
+            Serialize objects
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Serializer.ISerializer.Serialize(System.Object)">
+            <summary>
+            Serialize object
+            </summary>
+            <param name="obj">object to serialize</param>
+            <returns>serialized data</returns>
+        </member>
+        <member name="F:log4net.Util.Serializer.JsonSerializer.DefaultSerializerFactory">
+            <summary>
+            Which serializer will be used by default?
+            </summary>
+            <remarks>
+            Creating JsonSerializer here
+            </remarks>
+        </member>
+        <member name="F:log4net.Util.Serializer.JsonSerializer.DefaultEscapedChars">
+            <summary>
+            Default JSON escaped characters
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.#ctor">
+            <summary>
+            Construct instance - take <see cref="P:log4net.Util.Serializer.JsonSerializer.EscapedChars"/> from <see cref="F:log4net.Util.Serializer.JsonSerializer.DefaultEscapedChars"/>,
+            <see cref="P:log4net.Util.Serializer.JsonSerializer.SaveType"/> is false, <see cref="P:log4net.Util.Serializer.JsonSerializer.TypeMemberName"/> is "__type".
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.Serialize(System.Object)">
+            <summary>
+            Serialize <paramref name="obj"/> to a JSON string
+            </summary>
+            <param name="obj">object to serialize</param>
+            <returns>JSON string</returns>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.Serialize(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize any object into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeNull(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize null into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeDateTime(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize date and time into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeTimeSpan(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize time span into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializePrimitive(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize int's, byte's, char's, bools and friends into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeDictionary(System.Collections.IDictionary,System.Text.StringBuilder)">
+            <summary>
+            Serialize a dictionary into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeArray(System.Collections.IEnumerable,System.Text.StringBuilder)">
+            <summary>
+            Serialize enumerables into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeObject(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize an object (last resort) into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeBytes(System.Byte[],System.Text.StringBuilder)">
+            <summary>
+            Serialize escaped string into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeChars(System.Char[],System.Text.StringBuilder)">
+            <summary>
+            Serialize escaped string into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeString(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize escaped string into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeUri(System.Uri,System.Text.StringBuilder)">
+            <summary>
+            Serialize URI into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeGuid(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize enum into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.SerializeEnum(System.Object,System.Text.StringBuilder)">
+            <summary>
+            Serialize enum into a string builder
+            </summary>
+            <param name="obj"></param>
+            <param name="sb"></param>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.ObjToDict(System.Object,System.Nullable{System.Boolean},System.String,System.Nullable{System.Boolean},System.String)">
+            <summary>
+            Convert objects fields and props into a dictionary
+            </summary>
+            <param name="obj">object to be turned into a dictionary</param>
+            <param name="saveType">preserve the type of the object? null => only when publicly visible</param>
+            <param name="typeMemberName">where to preserve the type</param>
+            <param name="stringify">call ToString() and save it</param>
+            <param name="stringMemberName">where to preserve the string</param>
+            <returns>dictionary of props and fields</returns>
+        </member>
+        <member name="P:log4net.Util.Serializer.JsonSerializer.EscapedChars">
+            <summary>
+            JSON escaped characters
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Serializer.JsonSerializer.SaveType">
+            <summary>
+            preserve object type in serialization. true => always, false => never, null => only if class is publicly visible
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Serializer.JsonSerializer.Stringify">
+            <summary>
+            Call ToString and save the string
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Serializer.JsonSerializer.TypeMemberName">
+            <summary>
+            if <see cref="P:log4net.Util.Serializer.JsonSerializer.SaveType"/> then this is the name it will be saved as
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Serializer.JsonSerializer.StringMemberName">
+            <summary>
+            if <see cref="P:log4net.Util.Serializer.JsonSerializer.Stringify"/> then this is the name it will be saved as
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Serializer.JsonSerializer.Map">
+            <summary>
+            RendererMap given by the layout
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Serializer.JsonSerializer.Factory">
+            <summary>
+            Creates JsonSerializer
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Serializer.JsonSerializer.Factory.GetSerializer(System.Object,log4net.ObjectRenderer.RendererMap)">
+            <summary>
+            Create JsonSerializer
+            </summary>
+            <param name="obj"></param>
+            <param name="map"></param>
+            <returns></returns>
+        </member>
+        <member name="T:log4net.Util.Stamps.ValueStamp">
+            <summary>
+            Set a fixed value property on the event, for example a host name.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.ValueStamp.GetValue(log4net.Core.LoggingEvent)">
+            <summary>
+            Create stamp value - the <see cref="P:log4net.Util.Stamps.ValueStamp.Value"/>
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <returns>value to set as a stamp</returns>
+        </member>
+        <member name="P:log4net.Util.Stamps.ValueStamp.Value">
+            <summary>
+            Property value to set
+            </summary>
+        </member>
+        <member name="T:log4net.Util.RawCallDelegate">
+            <summary>
+            A delegate to be called by <see cref="T:log4net.Layout.RawCallLayout"/>
+            </summary>
+            <param name="loggingEvent"></param>
+            <returns>converted value</returns>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="T:log4net.Util.Stamps.TimeStamp">
+            <summary>
+            Set a time since unix epoch number property value on the event. 
+            </summary>
+            <remarks>
+            It is seconds by default. This is a double precision value.
+            It can be multiplied by <see cref="P:log4net.Util.Stamps.TimeStamp.Multiplier"/> and <see cref="P:log4net.Util.Stamps.TimeStamp.Round"/>ed.
+            If the resulting value can be represented by a long type, long is returned, otherwise double.
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.TimeStamp.#ctor">
+            <summary>
+            Create instance by default stamping with Now - Epoch1970
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.TimeStamp.GetValue(log4net.Core.LoggingEvent)">
+            <summary>
+            Create stamp value - a time value calculated from the props
+            </summary>
+            <param name="loggingEvent">event to stamp</param>
+            <returns>value to set as a stamp</returns>
+        </member>
+        <member name="P:log4net.Util.Stamps.TimeStamp.Round">
+            <summary>
+            Round the double value to whole units
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.TimeStamp.Multiplier">
+            <summary>
+            Change unit by multiplying the default seconds. Give 1000000 to get microseconds; 1.0/24/3600 to get days.
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.TimeStamp.TimeFrom">
+            <summary>
+            The point of reference (Unix epoch (default), system start or application start)
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.TimeStamp.TimeTo">
+            <summary>
+            The point of reference (Unix epoch (default), system start or application start)
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Stamps.AgeReference">
+            <summary>
+            Defines a point of reference for <see cref="T:log4net.Util.Stamps.TimeStamp"/>
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Util.Stamps.AgeReference.Epoch1970">
+            <summary>
+            Unix epoch 1970-01-01 is the time
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.AgeReference.SystemStart">
+            <summary>
+            System startup time is the time
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.AgeReference.ApplicationStart">
+            <summary>
+            Application startup time is the time
+            </summary>
+        </member>
+        <member name="F:log4net.Util.Stamps.AgeReference.Now">
+            <summary>
+            Now is the time
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.Pattern.ISerializingPatternConverter">
+            <summary>
+            This interface loosely binds <see cref="T:log4net.Layout.SerializedLayout"/>
+            and it's <see cref="P:log4net.Layout.SerializedLayout.SerializingConverter"/>
+            so that arrangement can be passed efficiently if supported.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Layout.Pattern.ISerializingPatternConverter.SetUp(log4net.Layout.Arrangements.IArrangement,System.Collections.Generic.IEnumerable{log4net.Layout.PatternLayout.ConverterInfo},log4net.Layout.IRawLayout,log4net.ObjectRenderer.IObjectRenderer,System.Collections.Generic.IEnumerable{log4net.Layout.Decorators.IDecorator})">
+            <summary>
+            This interface loosely binds <see cref="T:log4net.Layout.SerializedLayout"/>
+            and it's <see cref="P:log4net.Layout.SerializedLayout.SerializingConverter"/>
+            so that arrangement can be passed efficiently if supported.
+            </summary>
+            <param name="arrangement">arrangement to organize the serialized members, can be null</param>
+            <param name="converters">converters to pass to arrangements, can be null</param>
+            <param name="fetcher">fetches an object from a logging event</param>
+            <param name="renderer">serializes the object</param>
+            <param name="decorators">decorates the object before serialization</param>
+        </member>
+        <member name="T:log4net.Layout.Decorators.StandardTypesFlatDecorator">
+            <summary>
+            Decorate logged objects - produce standard types to unite different JSON serializers + flatten dictionaries / objects
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesFlatDecorator.StandardDictionary(System.Object,System.Object@,System.Collections.IDictionary,System.String)">
+            <summary>
+            Override base by flattening the directory structure using dot-path member names
+            </summary>
+            <param name="obj">dictionary</param>
+            <param name="result">standardized dictionary</param>
+            <param name="flatdict">flat dictionary built recursively</param>
+            <param name="path">recursive name in flat dictionary</param>
+            <returns>true if it's all fine and done - obj was an IDictionary</returns>
+        </member>
+        <member name="M:log4net.Layout.Decorators.StandardTypesFlatDecorator.FlattenDictionary(System.Collections.IDictionary,System.Collections.IDictionary,System.String)">
+            <summary>
+            Copy a recursively nested dictionary into a flat dictionary.
+            </summary>
+            <param name="dict">source hierarchical dictionary</param>
+            <param name="flatdict">target flat dictionary</param>
+            <param name="path">nesting path</param>
+            <remarks>
+            
+            * member keys/names are stringified
+            * nested <see cref="T:System.Collections.IDictionary"/> member values are flattened with a "parent.child" notation
+            * non-primitive values are stringified
+            
+            </remarks>
+        </member>
+        <member name="T:log4net.Util.KeepAlive">
+            <summary>
+            Keep appenders and logging busy with occasional "Alive" notice
+            </summary>
+            <remarks>
+            <para>
+            This may serve to:
+            
+            * force roll over of files even with little logging,
+            * maintain and track application instances health
+            
+            </para>
+            <para>
+            A single thread does the time scheduling and calling. 
+            It is implemented as a static singleton. 
+            Appenders can be <see cref="M:log4net.Util.KeepAlive.Manage(log4net.Util.KeepAlive.AliveCall,System.Int32)"/>d and <see cref="M:log4net.Util.KeepAlive.Release(log4net.Util.KeepAlive.AliveCall)"/>d.
+            When at least one appender is managed, thread executes. Otherwise it stops.
+            </para>
+            <para>
+            </para>
+            It's made to be thread safe. 
+            The code locks <see cref="F:log4net.Util.KeepAlive.m_control_locker"/> to synchronize, wait and pulse.
+            Additionally the code locks the <see cref="F:log4net.Util.KeepAlive.m_calls_locker"/> for any operation with appenders.
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.Instance">
+            <summary>
+            The only single static instance of this class
+            </summary>
+        </member>
+        <member name="M:log4net.Util.KeepAlive.Manage(log4net.Util.KeepAlive.AliveCall,System.Int32)">
+            <summary>
+            Let a callback be called by KeepAlive regularly;
+            </summary>
+            <param name="alivecall">callback to be called</param>
+            <param name="interval">how often</param>
+        </member>
+        <member name="M:log4net.Util.KeepAlive.Release(log4net.Util.KeepAlive.AliveCall)">
+            <summary>
+            Stop managing an appender
+            </summary>
+            <param name="alivecall">callback to be released</param>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.m_control_locker">
+            <summary>
+            Used to lock operations on this (Start, Stop, Manage, Release)
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.m_calls_locker">
+            <summary>
+            Used to lock operations on <see cref="F:log4net.Util.KeepAlive.m_calls"/>
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.m_calls">
+            <summary>
+            Internal appender and config store
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.m_rep">
+            <summary>
+            Repository used for custom <see cref="T:log4net.Core.LoggingEvent"/>
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.m_thread">
+            <summary>
+            The Alive thread
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.m_stop">
+            <summary>
+            flag indication that <see cref="M:log4net.Util.KeepAlive.Run"/> should terminate.
+            </summary>
+        </member>
+        <member name="M:log4net.Util.KeepAlive.Start">
+            <summary>
+            Initiate the <see cref="M:log4net.Util.KeepAlive.Run"/> loop
+            </summary>
+        </member>
+        <member name="M:log4net.Util.KeepAlive.Stop">
+            <summary>
+            This is fatal.
+            </summary>
+        </member>
+        <member name="M:log4net.Util.KeepAlive.Run">
+            <summary>
+            Loop as long as not <see cref="F:log4net.Util.KeepAlive.m_stop"/>
+            </summary>
+        </member>
+        <member name="T:log4net.Util.KeepAlive.Config">
+            <summary>
+            Per-appender config structure
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.Config.Interval">
+            <summary>
+            Interval to keep alive with
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.Config.Offset">
+            <summary>
+            Offset to the interval. 
+            </summary>
+            <remarks>
+            Randomize the logging time so that if many apps log come together, they don't compete too much.
+            Still keep the regular interval.
+            </remarks>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.Config.Schedule">
+            <summary>
+            Next run schedule
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.Config.ExceptionLogged">
+            <summary>
+            This call has been problematic. This helps reduce verbosity in case of permanent failure.
+            </summary>
+        </member>
+        <member name="F:log4net.Util.KeepAlive.Config.Call">
+            <summary>
+            The AliveCall delegate to be called
+            </summary>
+        </member>
+        <member name="T:log4net.Util.KeepAlive.AliveCall">
+            <summary>
+            Alive call action delegate
+            </summary>
+        </member>
+        <member name="T:log4net.Plugin.StampPlugin">
+            <summary>
+            Set <see cref="P:log4net.Repository.Hierarchy.Hierarchy.LoggerFactory"/> to <see cref="T:log4net.Util.Stamps.StampingLoggerFactory"/>
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Plugin.StampPlugin.Attach(log4net.Repository.ILoggerRepository)">
+            <summary>
+            Interfere with a repository
+            </summary>
+            <param name="repository"></param>
+        </member>
+        <member name="M:log4net.Plugin.StampPlugin.Shutdown">
+            <summary>
+            Stop interferring
+            </summary>
+        </member>
+        <member name="M:log4net.Plugin.StampPlugin.Repo_ConfigurationChanged(System.Object,System.EventArgs)">
+            <summary>
+            Do the interferring
+            </summary>
+            <param name="sender">a repo, only <see cref="T:log4net.Repository.Hierarchy.Hierarchy"/> is handled</param>
+            <param name="e">ignored</param>
+        </member>
+        <member name="P:log4net.Plugin.StampPlugin.Name">
+            <summary>
+            Plugin name is the Type's AssemblyQualifiedName
+            </summary>
+        </member>
+        <member name="P:log4net.Plugin.StampPlugin.Repo">
+            <summary>
+            Attached repository
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.Members.Member">
+            <summary>
+            A common value implementation of INamedValue and IRawLayout for simple configuration.
+            Some commonly used values should be addressed here with sensible output formatting.
+            </summary>
+            <remarks>
+            <para>
+            Use this class to easily configure more complex values. This is achieved by 
+            specifying an <see cref="P:log4net.Layout.Members.Member.Option"/>.
+            </para>
+            <para>
+            This class is also used internally to deliver sensible defaults for values.
+            </para>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.#ctor">
+            <summary>
+            Create an instance
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.Format(log4net.Core.LoggingEvent)">
+            <summary>
+            If a value cannot be retrieved from the separate NestedLayout object
+            a set of known vallues would be tried. If that fails too, UndefinedValue is returned.
+            </summary>
+            <param name="loggingEvent">the event to get values for/from</param>
+            <returns>Object retrieved from logging event</returns>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.ActivateOptions">
+            <summary>
+            When configured by XML or by <see cref="T:log4net.Util.TypeConverters.ArrangementConverter"/> in general,
+            the <see cref="P:log4net.Layout.Members.Member.Option"/> is tried to figure out the <see cref="T:log4net.Layout.IRawLayout"/> to use.
+            </summary>
+            <remarks>
+            It can be a <see cref="T:log4net.Util.PatternString"/>, then the option will be stringified.
+            It can be a <see cref="T:System.String"/>, then <see cref="M:log4net.Util.TypeConverters.ArrangementConverter.GetArrangement(System.String,log4net.Layout.PatternLayout.ConverterInfo[])"/> will be attempted.
+            It can be an <see cref="T:log4net.Layout.Arrangements.IArrangement"/>, then it will be used to arrange a new <see cref="T:log4net.Layout.RawArrangedLayout"/>
+            It can be another <see cref="T:log4net.Layout.Members.IMember"/>, then if Name was not set yet it will be adopted.
+            It can be a <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>, then a new RawCallLayout will be set up around it.
+            It can be a <see cref="T:log4net.Util.PatternParser"/>, then a new RawCallLayout will be set up around it.
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Add this member to the list.
+            </summary>
+            <param name="members">Members to be arrangedFetcher</param>
+            <param name="converters">ignored</param>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.SetOption(System.String)">
+            <summary>
+            Set the <see cref="P:log4net.Layout.Members.Member.Option"/>
+            </summary>
+            <param name="value">the option</param>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.GetLayout(System.String)">
+            <summary>
+            Find a matching layout for this Member using known values and converters. 
+            See <see cref="M:log4net.Layout.RawCallLayout.FindLayout(System.String,log4net.Layout.PatternLayout.ConverterInfo[])"/>
+            </summary>
+            <param name="name">member name</param>
+            <returns>layout found</returns>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.GetLayoutValue(log4net.Core.LoggingEvent,System.Object@)">
+            <summary>
+            The NestedLayout is tried to provide a value
+            </summary>
+            <param name="loggingEvent">the event to get value from</param>
+            <param name="obj">value found</param>
+            <returns>success of finding a NestedLayout not null</returns>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.GetDefaultValue(log4net.Core.LoggingEvent,System.Object@)">
+            <summary>
+            The NestedLayout is tried to provide a value
+            </summary>
+            <param name="loggingEvent">the event to get value from</param>
+            <param name="obj">value found</param>
+            <returns>success of finding a NestedLayout not null</returns>
+        </member>
+        <member name="M:log4net.Layout.Members.Member.GetPropertyValue(log4net.Core.LoggingEvent,System.Object@)">
+            <summary>
+            Try to get a property value with exact match
+            </summary>
+            <param name="loggingEvent">the event to get value from</param>
+            <param name="obj">value found</param>
+            <returns>success of matching a known value</returns>
+        </member>
+        <member name="P:log4net.Layout.Members.Member.Name">
+            <summary>
+            Name of value to be serialized as.
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Members.Member.Option">
+            <summary>
+            Option used to configure this object in <see cref="M:log4net.Layout.Members.Member.ActivateOptions"/>. 
+            It should help to figure out the <see cref="T:log4net.Layout.IRawLayout"/> to use.
+            Otherwise Option will be used directly as a value.
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Members.Member.Layout">
+            <summary>
+            Back reference to "this" for simple configuration.
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Members.Member.Converters">
+            <summary>
+            Converters to pass to descendants
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.Arrangements.RemovalArrangement">
+            <summary>
+            This <see cref="T:log4net.Layout.Arrangements.IArrangement"/> will just empty the values; either all or those matching a regex option.
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Layout.Arrangements.RemovalArrangement.m_nameRegex">
+            <summary>
+            Parsed <see cref="P:log4net.Layout.Arrangements.RemovalArrangement.NameRegex"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.RemovalArrangement.#ctor">
+            <summary>
+            Create instance without a <see cref="P:log4net.Layout.Arrangements.RemovalArrangement.NameRegex"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.RemovalArrangement.#ctor(System.String)">
+            <summary>
+            Create instance with a <see cref="P:log4net.Layout.Arrangements.RemovalArrangement.NameRegex"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.RemovalArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            Remove members whose name matches regular expression
+            </summary>
+            <param name="members">values to arrange</param>
+            <param name="converters">ignored</param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.RemovalArrangement.SetOption(System.String)">
+            <summary>
+            Set the <see cref="P:log4net.Layout.Arrangements.RemovalArrangement.NameRegex"/>
+            </summary>
+            <param name="value">regular expression</param>
+        </member>
+        <member name="P:log4net.Layout.Arrangements.RemovalArrangement.NameRegex">
+            <summary>
+            The regular expression used to match member names for removal. If null, all members shall be removed.
+            </summary>
+        </member>
+        <member name="T:log4net.Util.Stamps.StampingLogger">
+            <summary>
+            Stamping logger stamps the  <see cref="T:log4net.Core.LoggingEvent"/> using the <see cref="T:log4net.Util.Stamps.StampDelegate"/> <see cref="P:log4net.Util.Stamps.StampingLogger.Call"/> 
+            and passes it to the wrapped <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/> in the <see cref="M:log4net.Util.Stamps.StampingLogger.CallAppenders(log4net.Core.LoggingEvent)"/> call.
+            </summary>
+            <remarks>
+            This would be a much nicer a job if ILogger could be decorated.
+            Or! If ILogger was actually used in the framework :[ properly, particularly by the <see cref="P:log4net.Util.Stamps.StampingLogger.Hierarchy"/>
+            </remarks>
+            <remarks>
+            
+            * All Log() and ForcedLog() methods are left as in <see cref="T:log4net.Repository.Hierarchy.Logger"/> (not overriden).
+            * We rely on the CallAppenders() method which should be called by either of the above.
+            * Any other property or method should simply wrap the <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.#ctor(log4net.Repository.Hierarchy.Logger,log4net.Util.Stamps.StampDelegate)">
+            <summary>
+            Wrap a logger and remember to call a delegate for each <see cref="T:log4net.Core.LoggingEvent"/>
+            </summary>
+            <param name="innerLogger"></param>
+            <param name="call"></param>
+            <remarks>
+            Callers shoul ensure that params are not null!
+            </remarks>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.CallAppenders(log4net.Core.LoggingEvent)">
+            <summary>
+            The point of stamping the event and hand-over to <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+            <param name="loggingEvent">event to stamp and pass</param>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.AddAppender(log4net.Appender.IAppender)">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+            <param name="newAppender"></param>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.CloseNestedAppenders">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.GetAppender(System.String)">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.IsEnabledFor(log4net.Core.Level)">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+            <param name="level"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.RemoveAllAppenders">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.RemoveAppender(log4net.Appender.IAppender)">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+            <param name="appender"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.RemoveAppender(System.String)">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:log4net.Util.Stamps.StampingLogger.ToString">
+            <summary>
+            Give some useful debugging description.
+            </summary>
+            <returns>"this wrapping that"</returns>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.InnerLogger">
+            <summary>
+            The wrapped logger
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Call">
+            <summary>
+            The stamping call to execute before passing event to <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Additivity">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Appenders">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.EffectiveLevel">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Hierarchy">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Level">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Name">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Util.Stamps.StampingLogger.Parent">
+            <summary>
+            Wrap of <see cref="P:log4net.Util.Stamps.StampingLogger.InnerLogger"/>
+            </summary>
+        </member>
+        <member name="T:log4net.Layout.Pattern.JsonPatternConverter">
+            <summary>
+            Render the <see cref="T:log4net.Layout.Members.Member"/>s using <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer"/> or using <see cref="M:log4net.ObjectRenderer.RendererMap.FindAndRender(System.Object,System.IO.TextWriter)"/>.
+            Log4net properties can set (likely through <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>) to provide custom 
+            <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer"/>, <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/> and to pass <see cref="T:log4net.Layout.Arrangements.IArrangement"/> 
+            and <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>s from hosting layout.
+            Option can be set to introduce an additional <see cref="T:log4net.Layout.Arrangements.IArrangement"/>
+            Use it in a custom <see cref="P:log4net.Layout.PatternLayout.ConversionPattern"/> like this: "%serialize{DEFAULT;PID:processid}"
+            </summary>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.#ctor">
+            <summary>
+            Create instance with a default <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/> and <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.Convert(System.IO.TextWriter,System.Object)">
+            <summary>
+            Render an object which will most likely be a <see cref="T:log4net.Core.LoggingEvent"/>
+            </summary>
+            <param name="writer"></param>
+            <param name="state"></param>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.Convert(System.IO.TextWriter,log4net.Core.LoggingEvent)">
+            <summary>
+            Render what comes from the  <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/> using  <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer"/> or default renderer.
+            </summary>
+            <param name="writer"><see cref="T:System.IO.TextWriter"/> that will receive the formatted result.</param>
+            <param name="loggingEvent">The <see cref="T:log4net.Core.LoggingEvent"/> on which the pattern converter should be executed.</param>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.RenderObject(log4net.ObjectRenderer.RendererMap,System.Object,System.IO.TextWriter)">
+            <summary>
+            Render <paramref name="obj"/> into the <paramref name="writer"/>
+            </summary>
+            <param name="map">from <see cref="P:log4net.Core.LoggingEvent.Repository"/></param>
+            <param name="obj">value to be rendered</param>
+            <param name="writer">writer to write obj to</param>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.ActivateOptions">
+            <summary>
+            Activate the options that were previously set with calls to properties.
+            <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer"/> of type <see cref="T:log4net.ObjectRenderer.IObjectRenderer"/> is taken from Properties["renderer"] if present.
+            <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/> of type <see cref="T:log4net.Layout.IRawLayout"/> is taken from Properties["fetcher"] if present
+            <see cref="T:log4net.Layout.Arrangements.IArrangement"/> is taken from Properties["arrangement"] and from <i>option</i>.
+            Converters to be used in arrangements are taken from Properties["converters"], an array of <see cref="T:log4net.Layout.PatternLayout.ConverterInfo"/>.
+            Members are arranged using <see cref="M:log4net.Layout.Pattern.JsonPatternConverter.SetUp(log4net.Layout.Arrangements.IArrangement,System.Collections.Generic.IEnumerable{log4net.Layout.PatternLayout.ConverterInfo},log4net.Layout.IRawLayout,log4net.ObjectRenderer.IObjectRenderer,System.Collections.Generic.IEnumerable{log4net.Layout.Decorators.IDecorator})"/>
+            </summary>
+            <remarks>
+            <para>
+            This allows an object to defer activation of its options until all
+            options have been set. This is required for components which have
+            related options that remain ambiguous until all are set.
+            </para>
+            <para>
+            If a component implements this interface then this method must be called
+            after its properties have been set before the component can be used.
+            </para>
+            <para>
+            Please note that properties are only supported with log4net 1.2.11 and above.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.SetUp(log4net.Layout.Arrangements.IArrangement,System.Collections.Generic.IEnumerable{log4net.Layout.PatternLayout.ConverterInfo},log4net.Layout.IRawLayout,log4net.ObjectRenderer.IObjectRenderer,System.Collections.Generic.IEnumerable{log4net.Layout.Decorators.IDecorator})">
+            <summary>
+            Arrange <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/>'s members if possible, if it is an <see cref="T:log4net.Layout.IRawArrangedLayout"/>.
+            </summary>
+            <param name="arrangement">arangement to use, can be null</param>
+            <param name="converters">converters to consider, can be null</param>
+            <param name="fetcher">fetches an object from a logging event</param>
+            <param name="renderer">serializes the object</param>
+            <param name="decorators">decorates the object before serialization</param>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.Arrange(log4net.Layout.Arrangements.IArrangement,System.Collections.Generic.IEnumerable{log4net.Layout.PatternLayout.ConverterInfo})">
+            <summary>
+            Arrange members
+            </summary>
+            <param name="arrangement">by arrangement</param>
+            <param name="converters">with converters</param>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.CreateFetcher">
+            <summary>
+            Give us our default <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher"/>
+            </summary>
+            <returns>fetcher</returns>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.CreateDecorators">
+            <summary>
+            Give us our default <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Decorators"/>
+            </summary>
+            <returns>fetcher</returns>
+        </member>
+        <member name="M:log4net.Layout.Pattern.JsonPatternConverter.CreateRenderer">
+            <summary>
+            Give us our default <see cref="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer"/>
+            </summary>
+            <returns>renderer</returns>
+        </member>
+        <member name="P:log4net.Layout.Pattern.JsonPatternConverter.Renderer">
+            <summary>
+            How to render the members is decided here. By default it is a <see cref="F:log4net.ObjectRenderer.JsonObjectRenderer.Default"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Pattern.JsonPatternConverter.Fetcher">
+            <summary>
+            What to render is decided here. By default it is a <see cref="T:log4net.Layout.RawArrangedLayout"/> 
+            and it's members can be arranged - see <see cref="M:log4net.Layout.Pattern.JsonPatternConverter.ActivateOptions"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Pattern.JsonPatternConverter.Decorators">
+            <summary>
+            members can be modified by decorators before they are serialized
+            </summary>
+            <remarks>
+            This is used to unite different JSON serializers for instance in <see cref="T:log4net.Layout.Decorators.StandardTypesDecorator"/>
+            </remarks>
+        </member>
+        <member name="T:log4net.Layout.Arrangements.DefaultArrangement">
+            <summary>
+            This <see cref="T:log4net.Layout.Arrangements.IArrangement"/> will put together few most obvious values as defaults.
+            These <see cref="F:log4net.Layout.Arrangements.DefaultArrangement.ConfigDefaults"/> are the options recognized by <see cref="T:log4net.Util.TypeConverters.ArrangementConverter"/>.
+            </summary>
+            <remarks>
+            <para>
+            If no other arrangement is set for the <see cref="T:log4net.Layout.SerializedLayout"/> it will add a default default by default.
+            </para>
+            <para>
+            It is used by <see cref="M:log4net.Layout.SerializedLayout.AddDefault(System.String)"/> to allow simple xml configuration 
+            &lt;default value="nxlog" /&gt; or simply &lt;default /&gt;.
+            </para>
+            <para>
+            It is used by <see cref="T:log4net.Util.TypeConverters.ArrangementConverter"/> to represent "DEFAULT:nxlog" or simply "DEFAULT" 
+            in the serialize conversion pattern option.
+            </para>
+            <para>
+            The arrangement is actually done by the base <see cref="T:log4net.Layout.Arrangements.OptionArrangement"/> implementation.
+            </para>
+            </remarks>
+            <author>Robert Sevcik</author>
+        </member>
+        <member name="F:log4net.Layout.Arrangements.DefaultArrangement.DefaultDefaultDefault">
+            <summary>
+            This is the default <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Default"/> containing "default" :o)
+            </summary>
+        </member>
+        <member name="F:log4net.Layout.Arrangements.DefaultArrangement.ConfigDefaults">
+            <summary>
+            A dictionary of default options which are recognized by <see cref="T:log4net.Util.TypeConverters.ArrangementConverter"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.DefaultArrangement.#ctor">
+            <summary>
+            Create an instance with <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Default"/> = "default".
+            Copy static <see cref="F:log4net.Layout.Arrangements.DefaultArrangement.ConfigDefaults"/> dictionary to <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Config"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.DefaultArrangement.#ctor(System.String)">
+            <summary>
+            Create an instance with specific <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Default"/>.
+            Copy static <see cref="F:log4net.Layout.Arrangements.DefaultArrangement.ConfigDefaults"/> dictionary to <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Config"/>
+            </summary>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.DefaultArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])">
+            <summary>
+            This implementation will pick a <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Default"/> from <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Config"/>
+            and call the base <see cref="T:log4net.Layout.Arrangements.OptionArrangement"/> implementation on that
+            </summary>
+            <exception cref="T:System.Exception">When the <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Default"/> is not found in <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Config"/></exception>
+            <param name="members">Members to be arranged</param>
+            <param name="converters">Converter infos to pass to child arrangements</param>
+        </member>
+        <member name="M:log4net.Layout.Arrangements.DefaultArrangement.SetOption(System.String)">
+            <summary>
+            Chose the <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Default"/> of <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Config"/>
+            </summary>
+            <remarks>
+            base.SetOption(value) is called from <see cref="M:log4net.Layout.Arrangements.DefaultArrangement.Arrange(System.Collections.Generic.IList{log4net.Layout.Members.IMember},log4net.Layout.PatternLayout.ConverterInfo[])"/>
+            </remarks>
+            <param name="value">Config dictionary key</param>
+        </member>
+        <member name="P:log4net.Layout.Arrangements.DefaultArrangement.Default">
+            <summary>
+            Default option of <see cref="P:log4net.Layout.Arrangements.DefaultArrangement.Config"/>
+            </summary>
+        </member>
+        <member name="P:log4net.Layout.Arrangements.DefaultArrangement.Config">
+            <summary>
+            Default values configuration
+            </summary>
+        </member>
+    </members>
+</doc>

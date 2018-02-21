@@ -7,8 +7,8 @@ using Tp.Integration.Messages.PluginLifecycle;
 
 namespace Tp.BugTracking.ImportToTp
 {
-	public class ImportBugsChunk : IPluginLocalMessage
-	{
-		public int[] ThirdPartyBugsIds { get; set; }
-	}
+    public class ImportBugsChunk : IPluginLocalMessage
+    {
+        public int[] ThirdPartyBugsIds { get; set; }
+    }
 }

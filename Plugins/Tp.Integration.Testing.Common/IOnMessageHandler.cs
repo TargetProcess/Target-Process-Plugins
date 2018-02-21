@@ -11,9 +11,9 @@ using Tp.Integration.Messages.EntityLifecycle;
 
 namespace Tp.Integration.Testing.Common
 {
-	public interface IOnMessageHandler<TMessage> where TMessage : IMessage
-	{
-		void Reply(Func<TMessage, ISagaMessage[]> createMessage);
-		void Reply(Func<TMessage, ISagaMessage> createMessage);
-	}
+    public interface IOnMessageHandler<TMessage> where TMessage : IMessage
+    {
+        void Reply(Func<TMessage, ISagaMessage[]> createMessage);
+        void Reply(Func<TMessage, ISagaMessage> createMessage);
+    }
 }

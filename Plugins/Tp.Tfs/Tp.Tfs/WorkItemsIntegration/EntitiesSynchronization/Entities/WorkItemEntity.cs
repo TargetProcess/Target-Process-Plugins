@@ -8,17 +8,17 @@ using NServiceBus.Saga;
 
 namespace Tp.Tfs.WorkItemsIntegration.EntitiesSynchronization.Entities
 {
-	[Serializable]
-	public class WorkItemEntity : ISagaEntity
-	{
-		public string Name { get; set; }
-		public string Description { get; set; }
+    [Serializable]
+    public class WorkItemEntity : ISagaEntity
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-		public Guid Id { get; set; }
-		public string Originator { get; set; }
-		public string OriginalMessageId { get; set; }
+        public Guid Id { get; set; }
+        public string Originator { get; set; }
+        public string OriginalMessageId { get; set; }
 
-		public WorkItemInfo WorkItem { get; set; }
-		public bool CreatingEntity { get; set; }
-	}
+        public WorkItemInfo WorkItem { get; set; }
+        public bool CreatingEntity { get; set; }
+    }
 }

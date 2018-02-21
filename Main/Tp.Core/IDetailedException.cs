@@ -1,7 +1,7 @@
 namespace Tp.Core
 {
-	public interface IDetailedException
-	{
-		object Details { get; }
-	}
+    public interface IDetailedException
+    {
+        object Details { get; }
+    }
 }

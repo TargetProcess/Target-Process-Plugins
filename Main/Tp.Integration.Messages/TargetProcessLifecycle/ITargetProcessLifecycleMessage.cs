@@ -2,7 +2,7 @@
 
 namespace Tp.Integration.Messages.TargetProcessLifecycle
 {
-	public interface ITargetProcessLifecycleMessage : IMessage
-	{
-	}
+    public interface ITargetProcessLifecycleMessage : IMessage
+    {
+    }
 }

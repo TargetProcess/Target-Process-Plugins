@@ -5,15 +5,15 @@
 
 namespace Tp.Integration.Plugin.Common.Validation
 {
-	/// <summary>
-	/// Inherit your profile from this interface to implement validation logic.
-	/// </summary>
-	public interface IValidatable
-	{
-		/// <summary>
-		/// Validates profile and accumulate errors.
-		/// </summary>
-		/// <param name="errors">Validation errors. Add your errors to this collection and they will be returned with response to profile add\update commands.</param>
-		void Validate(PluginProfileErrorCollection errors);
-	}
+    /// <summary>
+    /// Inherit your profile from this interface to implement validation logic.
+    /// </summary>
+    public interface IValidatable
+    {
+        /// <summary>
+        /// Validates profile and accumulate errors.
+        /// </summary>
+        /// <param name="errors">Validation errors. Add your errors to this collection and they will be returned with response to profile add\update commands.</param>
+        void Validate(PluginProfileErrorCollection errors);
+    }
 }

@@ -33,15 +33,9 @@ namespace Mercurial.Gui
         [DefaultValue("")]
         public string OverrideAuthor
         {
-            get
-            {
-                return _OverrideAuthor;
-            }
+            get { return _OverrideAuthor; }
 
-            set
-            {
-                _OverrideAuthor = (value ?? string.Empty).Trim();
-            }
+            set { _OverrideAuthor = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -50,11 +44,7 @@ namespace Mercurial.Gui
         /// </summary>
         [DateTimeArgument(NonNullOption = "--date")]
         [DefaultValue(null)]
-        public DateTime? OverrideTimestamp
-        {
-            get;
-            set;
-        }
+        public DateTime? OverrideTimestamp { get; set; }
 
         /// <summary>
         /// Sets the <see cref="OverrideAuthor"/> property to the specified value and

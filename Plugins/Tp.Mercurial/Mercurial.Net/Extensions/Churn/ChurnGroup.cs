@@ -66,10 +66,7 @@ namespace Mercurial.Extensions.Churn
         /// </summary>
         public int Total
         {
-            get
-            {
-                return _Additions + _Removals;
-            }
+            get { return _Additions + _Removals; }
         }
 
         /// <summary>
@@ -77,10 +74,7 @@ namespace Mercurial.Extensions.Churn
         /// </summary>
         public int Additions
         {
-            get
-            {
-                return _Additions;
-            }
+            get { return _Additions; }
         }
 
         /// <summary>
@@ -88,10 +82,7 @@ namespace Mercurial.Extensions.Churn
         /// </summary>
         public int Removals
         {
-            get
-            {
-                return _Removals;
-            }
+            get { return _Removals; }
         }
 
         /// <summary>
@@ -99,10 +90,7 @@ namespace Mercurial.Extensions.Churn
         /// </summary>
         public string GroupName
         {
-            get
-            {
-                return _GroupName;
-            }
+            get { return _GroupName; }
         }
 
         /// <summary>
@@ -110,10 +98,7 @@ namespace Mercurial.Extensions.Churn
         /// </summary>
         public ChurnUnit Unit
         {
-            get
-            {
-                return _Unit;
-            }
+            get { return _Unit; }
         }
     }
 }

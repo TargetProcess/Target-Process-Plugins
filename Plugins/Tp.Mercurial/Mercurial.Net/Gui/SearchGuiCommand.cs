@@ -35,15 +35,9 @@ namespace Mercurial.Gui
         [DefaultValue(true)]
         public bool CaseSensitivity
         {
-            get
-            {
-                return _CaseSensitivity;
-            }
+            get { return _CaseSensitivity; }
 
-            set
-            {
-                _CaseSensitivity = value;
-            }
+            set { _CaseSensitivity = value; }
         }
 
         /// <summary>

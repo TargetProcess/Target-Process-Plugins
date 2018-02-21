@@ -67,11 +67,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--force")]
         [DefaultValue(false)]
-        public bool Force
-        {
-            get;
-            set;
-        }
+        public bool Force { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to verify the server certificate. If set to <c>false</c>, will ignore web.cacerts configuration.
@@ -81,10 +77,7 @@ namespace Mercurial
         [DefaultValue(true)]
         public bool VerifyServerCertificate
         {
-            get
-            {
-                return _VerifyServerCertificate;
-            }
+            get { return _VerifyServerCertificate; }
 
             set
             {
@@ -158,10 +151,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--rev")]
         public Collection<RevSpec> Revisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_Revisions);
-            }
+            get { return new Collection<RevSpec>(_Revisions); }
         }
 
         /// <summary>
@@ -171,10 +161,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--branch")]
         public Collection<string> Branches
         {
-            get
-            {
-                return new Collection<string>(_Branches);
-            }
+            get { return new Collection<string>(_Branches); }
         }
 
         /// <summary>
@@ -187,10 +174,7 @@ namespace Mercurial
         [RepeatableArgument(Option = "--base")]
         public Collection<RevSpec> BaseRevisions
         {
-            get
-            {
-                return new Collection<RevSpec>(_BaseRevisions);
-            }
+            get { return new Collection<RevSpec>(_BaseRevisions); }
         }
 
         /// <summary>
@@ -199,11 +183,7 @@ namespace Mercurial
         /// </summary>
         [BooleanArgument(TrueOption = "--all")]
         [DefaultValue(false)]
-        public bool All
-        {
-            get;
-            set;
-        }
+        public bool All { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="MercurialCompressionType">compression type</see> to use
@@ -212,11 +192,7 @@ namespace Mercurial
         [DefaultValue(MercurialCompressionType.BZip2)]
         [EnumArgument(MercurialCompressionType.None, "--type", "none")]
         [EnumArgument(MercurialCompressionType.GZip, "--type", "gzip")]
-        public MercurialCompressionType Compression
-        {
-            get;
-            set;
-        }
+        public MercurialCompressionType Compression { get; set; }
 
         /// <summary>
         /// Gets or sets the full path to and name of the file to save the bundle to.
@@ -226,15 +202,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string FileName
         {
-            get
-            {
-                return _FileName;
-            }
+            get { return _FileName; }
 
-            set
-            {
-                _FileName = (value ?? string.Empty).Trim();
-            }
+            set { _FileName = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -247,15 +217,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string Destination
         {
-            get
-            {
-                return _Destination;
-            }
+            get { return _Destination; }
 
-            set
-            {
-                _Destination = (value ?? string.Empty).Trim();
-            }
+            set { _Destination = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -266,15 +230,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string SshCommand
         {
-            get
-            {
-                return _SshCommand;
-            }
+            get { return _SshCommand; }
 
-            set
-            {
-                _SshCommand = (value ?? string.Empty).Trim();
-            }
+            set { _SshCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>
@@ -285,15 +243,9 @@ namespace Mercurial
         [DefaultValue("")]
         public string RemoteCommand
         {
-            get
-            {
-                return _RemoteCommand;
-            }
+            get { return _RemoteCommand; }
 
-            set
-            {
-                _RemoteCommand = (value ?? string.Empty).Trim();
-            }
+            set { _RemoteCommand = (value ?? string.Empty).Trim(); }
         }
 
         /// <summary>

@@ -8,11 +8,11 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
-	public interface IWorkItemsStore
-	{
-		WorkItem[] GetWorkItemsFrom(string workItemNumber);
-		WorkItem[] GetWorkItemsFrom(DateTime from);
-		WorkItem[] GetWorkItemsBetween(string projectName, string[] importedTypes, int minId, int maxId, DateTime lastSync);
-		WorkItem GetWorkItem(int id);
-	}
+    public interface IWorkItemsStore
+    {
+        WorkItem[] GetWorkItemsFrom(string workItemNumber);
+        WorkItem[] GetWorkItemsFrom(DateTime from);
+        WorkItem[] GetWorkItemsBetween(string projectName, string[] importedTypes, int minId, int maxId, DateTime lastSync);
+        WorkItem GetWorkItem(int id);
+    }
 }

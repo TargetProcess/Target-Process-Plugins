@@ -10,29 +10,29 @@ using Tp.Tfs.WorkItemsIntegration;
 
 namespace Tp.Tfs
 {
-	public class TfsCurrentProfileToConnectionSettingsAdapter : CurrentProfileToConnectionSettingsAdapter<TfsPluginProfile>
-	{
-		public TfsCurrentProfileToConnectionSettingsAdapter(IStorageRepository repository)
-			: base(repository)
-		{
-		}
+    public class TfsCurrentProfileToConnectionSettingsAdapter : CurrentProfileToConnectionSettingsAdapter<TfsPluginProfile>
+    {
+        public TfsCurrentProfileToConnectionSettingsAdapter(IStorageRepository repository)
+            : base(repository)
+        {
+        }
 
-		public MappingContainer ProjectsMapping
-		{
-			get { return Profile.ProjectsMapping; }
-			set { Profile.ProjectsMapping = value; }
-		}
+        public MappingContainer ProjectsMapping
+        {
+            get { return Profile.ProjectsMapping; }
+            set { Profile.ProjectsMapping = value; }
+        }
 
-		public SimpleMappingContainer EntityMapping
-		{
-			get { return Profile.EntityMapping; }
-			set { Profile.EntityMapping = value; }
-		}
+        public SimpleMappingContainer EntityMapping
+        {
+            get { return Profile.EntityMapping; }
+            set { Profile.EntityMapping = value; }
+        }
 
-		public bool WorkItemsEnabled
-		{
-			get { return Profile.WorkItemsEnabled; }
-			set { Profile.WorkItemsEnabled = value; }
-		}
-	}
+        public bool WorkItemsEnabled
+        {
+            get { return Profile.WorkItemsEnabled; }
+            set { Profile.WorkItemsEnabled = value; }
+        }
+    }
 }
