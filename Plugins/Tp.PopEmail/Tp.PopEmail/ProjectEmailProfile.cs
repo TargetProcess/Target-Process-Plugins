@@ -20,14 +20,10 @@ namespace Tp.PopEmailIntegration
     [Serializable, Profile, DataContract]
     public class ProjectEmailProfile : ConnectionSettings, ISynchronizableProfile, IRuleHandler
     {
-        public int SynchronizationInterval
-        {
-            get { return 5; }
-        }
+        public int SynchronizationInterval => 5;
 
         [DataMember]
         public string Rules { get; set; }
-
 
         public bool IsMessageForCurrentEmailAccount(MessageDTO messageDto)
         {
@@ -65,10 +61,10 @@ namespace Tp.PopEmailIntegration
             }
         }
 
-        public string DecodedRules
-        {
-            get { return HttpUtility.UrlDecode(Rules, Encoding.UTF7); }
-        }
+        public string DecodedRules => HttpUtility.UrlDecode(Rules, Encoding.UTF7);
+
+        [DataMember]
+        public bool UsersMigrated { get; set; }
     }
 
     public interface IRuleHandler

@@ -48,7 +48,7 @@ namespace Tp.PopEmailIntegration.Sagas
 
         public void Handle(TargetProcessExceptionThrownMessage message)
         {
-            Log().Error(string.Format("Failed to create comment '{0}'", Data.Comment.Description),
+            Log().Error($"Failed to create comment '{Data.Comment.Description}'",
                 message.GetException());
             SendLocal(new CommentCreateFailedMessageInternal { SagaId = Data.OuterSagaId });
             MarkAsComplete();
@@ -73,6 +73,10 @@ namespace Tp.PopEmailIntegration.Sagas
     {
     }
 
+    [Serializable]
+    public sealed class MigrateUsersCommandInternal : SagaMessage, IPluginLocalMessage
+    {
+    }
 
     [Serializable]
     public class CreateCommentSagaData : ISagaEntity

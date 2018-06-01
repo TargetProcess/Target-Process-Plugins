@@ -60,17 +60,6 @@ namespace Tp.Core.Features
 
         DoNotUseTableValueParameterInSqlQuery,
 
-        /// <summary>
-        /// Enable Calculated Custom Fields
-        /// </summary>
-        [ClientFeature("calculated.custom.fields")]
-        CalculatedCustomFields,
-
-        /// <summary>
-        /// Enable Collections in calculated Custom Fields
-        /// </summary>
-        CalculatedCustomFieldsCollections,
-
         LockAccountOnConvertOperation,
 
         /// <summary>
@@ -163,16 +152,15 @@ namespace Tp.Core.Features
         MetricsExternalApplier,
 
         /// <summary>
+        /// Per account feature that enables sending results for external apply to queue for inProc calculated metrics.
+        /// </summary>
+        [ClientFeature("highPriorityMetricsExternalApplier")]
+        MetricsHighPriorityExternalApplier,
+
+        /// <summary>
         /// Per server feature that enables write rest via queue entry point. (US#143276)
         /// </summary>
         MetricsWriteRestViaQueue,
-
-        MetricsZipkinTracing,
-
-        /// <summary>
-        /// Enables sending app metrics to Graphite over StatsD colelctor.
-        /// </summary>
-        MetricsStatsDMonitoring,
 
         /// <summary>
         /// Enables using locks for metric execution results applying synchromization to prevent race conditions (BUG#142991)
@@ -184,6 +172,13 @@ namespace Tp.Core.Features
         /// in order not to lose some changes because of stale entity state in NHibernate cache of existing Portal (BUG#162420)
         /// </summary>
         MetricsUseSeparatePortalForEntityUpdate,
+
+        /// <summary>
+        /// US#176365 and US#176364
+        /// Send update requests to external loop prevetion service. But still use internal loop prevention for checks
+        /// </summary>
+        [ClientFeature("metricsUpdateExternalLoopPrevention")]
+        MetricsUpdateExternalLoopPrevention,
 
         /// <summary>
         /// Enables publishing of resource change messages to Rule Engine service.
@@ -204,8 +199,11 @@ namespace Tp.Core.Features
         [ClientFeature("metricNoEffortCalculation")]
         MetricNoEffortCalculation,
 
-        [ClientFeature("userStoryNewLists")]
-        UserStoryNewLists,
+        /// <summary>
+        /// Adds a metric which disables default metric for time calculation.
+        /// </summary>
+        [ClientFeature("metricNoTimeCalculation")]
+        MetricNoTimeCalculation,
 
         /// <summary>
         /// Shows info message for missing attachments removed by antivirus on storage server.
@@ -231,30 +229,6 @@ namespace Tp.Core.Features
         /// Enables unlimited paging for REST api
         /// </summary>
         UnlimitedRestPaging,
-
-        /// <summary>
-        /// Enables new split form for assignables
-        /// </summary>
-        [ClientFeature("newSplit")]
-        NewSplit,
-
-        /// <summary>
-        /// Enables resource reference fields on new split form
-        /// </summary>
-        [ClientFeature("newSplitResourceReferences")]
-        NewSplitResourceReferences,
-
-        /// <summary>
-        /// Enables new split for resource collections
-        /// </summary>
-        [ClientFeature("newSplitResourceCollections")]
-        NewSplitResourceCollections,
-
-        /// <summary>
-        /// Enables custom fields on the new split form
-        /// </summary>
-        [ClientFeature("newSplitCustomFields")]
-        NewSplitCustomFields,
 
         /// <summary>
         /// Enables generation of link entities between TestCaseRun and its each parent TestPlanRun
@@ -317,6 +291,16 @@ namespace Tp.Core.Features
         /// Uses vizydrop report editor by default
         /// </summary>
         UseVizydropByDefault,
+
+        /// <summary>
+        /// Allow apply user context for vizydrop report on view
+        /// </summary>
+        AllowApplyUserContextForVizydrop,
+
+        /// <summary>
+        /// Allow apply user context for vizydrop report on dashboard
+        /// </summary>
+        AllowApplyUserContextForVizydropOnDashboard,
 
         CacheUserAuthData,
         CacheGlobalSettingsData,
@@ -392,8 +376,6 @@ namespace Tp.Core.Features
         /// </summary>
         LimitPublicExtensionMethods,
 
-        [ClientFeature("tp3Settings")]
-        Tp3Settings,
 
         /// <summary>
         /// Enables GlobalDataTemplates caching
@@ -503,11 +485,6 @@ namespace Tp.Core.Features
         [ClientFeature("search2ui")]
         Search2UI,
 
-        /// <summary>
-        /// Save number and money custom fields with no padding zeros
-        /// </summary>
-        CustomFieldNumericShortFormat,
-
         [ClientFeature("include.stack.traces.in.response")]
         IncludeStackTracesInResponse,
 
@@ -554,18 +531,6 @@ namespace Tp.Core.Features
         DisableSliceBase64,
 
         /// <summary>
-        /// Enables nested group in the view menu with. Max 3 levels of groups allowed.
-        /// See US#156650 for details.
-        /// </summary>
-        [ClientFeature("board.menu.nestedGroups")]
-        NestedGroupsInViewMenu,
-
-        /// <summary>
-        /// Toggles entity new lists for Project entity - Releases tab (lists)
-        /// </summary>
-        ProjectReleasesNewLists,
-
-        /// <summary>
         /// Uses better dates comparison logic in dsl engine (BUG#111590)
         /// </summary>
         DslBetterDatesComparison,
@@ -579,7 +544,6 @@ namespace Tp.Core.Features
         /// Enables some speedup in editing team workflows. See #96862.
         /// </summary>
         TeamWorkflowEditSpeedup,
-
 
         /// <summary>
         /// Backwards-compatibility feature toggle which makes LimitedParallelExecutor use TaskFactory to run callbacks.
@@ -599,22 +563,8 @@ namespace Tp.Core.Features
         [ClientFeature("relatedSelectionForContextSelector")]
         RelatedSelectionForContextSelector,
 
-        // Enables context menu item in the views menu which allows to create groups and views
-        // inside another groups. See US#157993 for details
-        [ClientFeature("board.menu.createMenuItemsDirectlyInsideGroup")]
-        CreateMenusItemDirectlyInsideGroup,
-
         [ClientFeature("new.list.refresh.on.projects.change")]
         RefreshNewListOnProjectsChange,
-
-        [ClientFeature("entity_name_1line.show_title")]
-        EntityNameLineShowTitle,
-
-        /// <summary>
-        /// Allows to collapse/expand All Views section in the Views Menu (US#158009).
-        /// </summary>
-        [ClientFeature("board.menu.collapseAllViewsSection")]
-        CollapseAllViewsMenuSection,
 
         /// <summary>
         /// Forces all CF triggers to use serializable isolation level
@@ -653,9 +603,6 @@ namespace Tp.Core.Features
         [ClientFeature("accountLockForViewsMenuOperations")]
         AccountLockForViewsMenuOperations,
 
-        [ClientFeature("innerListsHierarchy")]
-        InnerListsHierarchy,
-
         /// <summary>
         /// Increases number of cases rest support in filter expressions. See US#164255.
         /// </summary>
@@ -667,33 +614,9 @@ namespace Tp.Core.Features
         RestImprovePolymorphicSelectors,
 
         /// <summary>
-        /// Replaces automatically opened modal window with last release change log with less
-        /// obtrusive menu item in system settings context menu.
-        /// See US#162901 for details.
-        /// </summary>
-        [ClientFeature("whatIsNewInSettingsMenu")]
-        WhatIsNewInSettingsMenu,
-
-        [ClientFeature("showCardHintsOnlyOnMinSize")]
-        ShowCardHintsOnlyOnMinSize,
-
-        /// <summary>
         /// Enables caching of Full LightContext instances for HttpContext (if awailable) or ThreadLocal scope. See BUG#164611 for details
         /// </summary>
         CacheFullLightContextsForThreadScope,
-
-        /// <summary>
-        /// Enables comments copying when splitting an entity.
-        /// See US#162531 for details.
-        /// </summary>
-        SplitCopyComments,
-
-        /// <summary>
-        /// Allows changing owner when splitting an entity.
-        /// See US#162531 for details.
-        /// </summary>
-        [ClientFeature("split.editOwner")]
-        SplitEditOwner,
 
         [ClientFeature("preventNavigationOnCometChangesBoardPlus")]
         PreventNavigationOnCometChangesBoardPlus,
@@ -710,18 +633,11 @@ namespace Tp.Core.Features
         DslDifferentTypesWideningConversion,
 
         /// <summary>
-        /// Includes entity name in a share link.
+        /// Includes entity name in a copy link.
         /// See US#167783 for details.
         /// </summary>
-        [ClientFeature("shareLink.withTitle")]
-        ShareLinkWithTitle,
-
-        /// <summary>
-        /// Allows to edit desctiption for views and show popup with legend
-        /// See US#156945 for details.
-        /// </summary>
-        [ClientFeature("views.legend")]
-        ViewsLegend,
+        [ClientFeature("copyLink.withTitle")]
+        CopyLinkWithTitle,
 
         /// <summary>
         /// Enforces Number and Money CF rounding when loading data via Business Objects.
@@ -780,11 +696,11 @@ namespace Tp.Core.Features
         /// </summary>
         ExternalFeatureToggles,
 
-		/// <summary>
+        /// <summary>
         /// BUG#170990 Rule Engine processes events of wrong accounts
         /// </summary>
         RuleEngineObserveOnCurrentThreadScheduledObservable,
-        
+
         /// <summary>
         /// Add move to top functionality to context menu on board and list
         /// </summary>
@@ -796,5 +712,166 @@ namespace Tp.Core.Features
         /// </summary>
         [ClientFeature("returnAllEntitiesOnNumericPriorityRecalculation")]
         ReturnAllEntitiesOnNumericPriorityRecalculation,
+
+        /// <summary>
+        /// 500 per page for lists.
+        /// </summary>
+        [ClientFeature("newList500ItemsPerPage")]
+        NewList500ItemsPerPage,
+
+        /// <summary>
+        /// List large page render optimization. Feature toggle can be removed on second release if no issues.
+        /// </summary>
+        [ClientFeature("newListLargePageOptimization")]
+        NewListLargePageOptimization,
+
+        /// <summary>
+        /// US#171023 Removes double NULL check from sql generated for axis projection
+        /// </summary>
+        RemoveDoubleNullCheckFromAxisProjectionExpression,
+
+        /// <summary>
+        /// US#171030 Remove unnecessary joins from polymorphic axes
+        /// </summary>
+        RemoveUnnecessaryJoinsFromPolymorphicAxes,
+
+        /// <summary>
+        /// US#171145 Remove excessive joins when filtering child collections
+        /// </summary>
+        ReduceJoinsWhenAggregateCollections,
+
+        /// <summary>
+        /// US#171146 Join child subqueries to parent column
+        /// </summary>
+        OptimizeJoinConditionForCountSubQuery,
+
+        // <summary>
+        // Enables retrospectives service
+        // </summary>
+        [ClientFeature("retrospectives")]
+        Retrospectives,
+
+        /// <summary>
+        /// Replaces built-in Views Menu with the one provided by the Views Menu Mashup
+        /// See Feature #171906
+        /// </summary>
+        [ClientFeature("viewsMenuMashup")]
+        ViewsMenuAsMashup,
+
+        /// <summary>
+        /// Fixes join condition generation for one-to-many collections that has same type as their parent, e.g. TestPlanRun.TestPlanRuns, #173942
+        /// </summary>
+        FixJoinGenerationForSameTable,
+
+        /// <summary>
+        /// Extends DSL filters for collection members with Project.IsActive is True predicate
+        /// </summary>
+        ExtendDslWithProjectIsActiveFilterOnCollectionMember,
+
+        /// <summary>
+        /// Improves support for Hide Empty Lanes functionality. See #170861, #170862.
+        /// Also improves support of polymorphic filters that was added in RestImprovePolymorphicFilters feature.
+        /// </summary>
+        HideEmptyLanesOnBackend,
+
+        /// <summary>
+        /// BUG#174144 Don't update effort by call for the card, wait for comet
+        /// </summary>
+        DoNotReloadTotalEffortAfterUpdate,
+
+        /// <summary>
+        /// Forces the currently open view to be always visible in the Views Menu even if it doesn't
+        /// match specified search criteria.
+        /// See US#174568
+        /// </summary>
+        [ClientFeature("board.menu.search.showCurrentView")]
+        AlwaysShowCurrentViewWhenSearchingInViewsMenu,
+
+        /// <summary>
+        /// US#174262 Remove excessive request from Units field
+        /// </summary>
+        RemoveUnnecessaryRequestFromUnitsField,
+
+        ImproveTeamWorkflowSuggestionPerformance,
+
+        /// <summary>
+        /// Fix a few N+1 problems in context retrieving code
+        /// </summary>
+        FixNPlus1InContext,
+
+        FixNPlus1InQuickAddTemplates,
+
+        /// <summary>
+        /// Protects description component content from beign overwritten by stakle comet notification. See #176307.
+        /// </summary>
+        [ClientFeature("fixCometRaceConditionInDescriptionEditor")]
+        FixCometRaceConditionInDescriptionEditor,
+
+        /// <summary>
+        /// BUG#179677 Adds usage of comet notification deprecation logic in model.board.slice.comet.js.
+        /// </summary>
+        [ClientFeature("clientCometNotificationDeprecationCache")]
+        ClientCometNotificationDeprecationCache,
+
+        /// <summary>
+        /// US#166640 Whether entity ID on entity view should be a link or not.
+        /// </summary>
+        EntityIdIsLink,
+
+        /// <summary>
+        /// Use INNER JOIN when possible instead of IN (select * from @TableParam), US#173197.
+        /// </summary>
+        ReplaceInCheckWithInnerJoin,
+
+        /// <summary>
+        /// Use IN (x, y, z) instead of IN (select * from @TableParam) for small values sets, US#173197.
+        /// </summary>
+        InlineSmallInExpressionRangesInQueries,        
+
+        /// <summary>
+        /// Applies other axis filters when calculate axis counters. See #67718.
+        /// </summary>
+        AxesCountersWithFullFilters,
+
+        /// <summary>
+        /// Enables integration of Notification Center UI in TP
+        /// </summary>
+        [ClientFeature("notificationCenter")]
+        NotificationCenter,
+
+        /// <summary>
+        /// Allows to use custom field names directly in API v2 queries
+        /// instead of `CustomValues["Name"]`.
+        /// See US#179383 for details
+        /// </summary>
+        ReferenceCustomFieldsByNameInApiV2,
+
+        /// <summary>
+        /// Enables refreshing of labels using slice comet subscription on detailed view tabs with entity collection lists
+        /// See US#178806 for details
+        /// </summary>
+        [ClientFeature("label.refresher.comet")]
+        LabelRefresherComet,
+        /// <summary>
+        /// Adds support of inactive teams
+        /// </summary>
+        [ClientFeature("inactiveTeams")]
+        InactiveTeams,
+        
+        /// <summary>
+        /// US#180358 Fix N+1 problems in capacity calculator
+        /// </summary>
+        FixNPlus1InCapacityCalculator,
+        
+        /// <summary>
+        /// US#180714
+        /// </summary>
+        ImproveTagsFilteringPerformance,
+
+        /// <summary>
+        /// Use entity custom fields instead of text ones in hierarchy.link component.
+        /// </summary>
+        [ClientFeature("useEntityCustomFieldsInHierarchyLinkComponent")]
+        UseEntityCustomFieldsInHierarchyLinkComponent,
     }
 }

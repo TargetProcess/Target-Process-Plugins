@@ -7,7 +7,6 @@ tau.mashups
 	.addDependency("tp/plugins/vcs/ui.widgets")
 	.addModule("Subversion/UserMappingEditor", function (userRepository, restService, Bus, usersPopoverWidget) {
 
-
 	    function UserMappingEditor(config) {
 	        this._create(config);
 	    }

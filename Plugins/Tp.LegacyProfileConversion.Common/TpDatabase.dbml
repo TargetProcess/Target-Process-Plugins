@@ -106,7 +106,6 @@
     <Type Name="GlobalSetting">
       <Column Name="GlobalSettingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="CompanyName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="Logo" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="SMTPServer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="SMTPPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SMTPLogin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />

@@ -1,3 +1,8 @@
+// 
+// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,14 +50,14 @@ namespace Tp.Testing.Common.NBehave
                     if (first)
                     {
                         // append error message only for the first failed step
-                        failMessage.AppendLine(string.Format("Step '{0}' failed with result:", stepResult.StringStep.Trim()));
+                        failMessage.AppendLine($"Step '{stepResult.StringStep.Trim()}' failed with result:");
                         failMessage.AppendLine(failedResult.Exception.Message);
                         first = false;
                     }
                     else
                     {
                         failMessage.AppendLine(string.Empty);
-                        failMessage.AppendLine(string.Format("Step '{0}' failed", stepResult.StringStep.Trim()));
+                        failMessage.AppendLine($"Step '{stepResult.StringStep.Trim()}' failed");
                     }
                 }
 

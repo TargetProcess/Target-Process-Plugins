@@ -38,7 +38,6 @@ namespace Tp.Core
             });
         }
 
-
         public static TpLogManager Instance => _instance ?? (_instance = new TpLogManager());
 
         public ILog GetLog(string loggerName) => LogManager.GetLogger(loggerName);

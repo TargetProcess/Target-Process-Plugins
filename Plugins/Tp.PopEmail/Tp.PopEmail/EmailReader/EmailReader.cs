@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -9,6 +9,8 @@ using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
+using System.Text.RegularExpressions;
 using MailBee.Mime;
 using NServiceBus;
 using Tp.Integration.Common;
@@ -27,6 +29,9 @@ namespace Tp.PopEmailIntegration.EmailReader
 {
     public class EmailReader : IHandleMessages<EmailUidsRetrievedMessage>
     {
+        private static readonly Regex _rfc2045Regex = new Regex(
+            "(?i)Content-Type(?i):[\\s]{1,1}(?<ContentType>((text|image|audio|video|application)|(message|multipart))/((X-|x-)[^]\\[()<>@,;\\\\:\"/?=\0- ]+|[^]\\[()<>@,;\\\\:\"/?=\0- ]+)(;[\\s]+[^]\\[()<>@,;\\\\:\"/?=\0- ]+=([^]\\[()<>@,;\\\\:\"/?=\0- ]+|\"(?:(?:(?:\\\\{2})+|\\\\[^\\\\]|[^\\\\\"])*)\"))*)",
+            RegexOptions.Compiled);
         private readonly IEmailClient _client;
         private readonly MessageUidRepository _messageUidRepository;
         private readonly ILocalBus _localBus;
@@ -50,7 +55,7 @@ namespace Tp.PopEmailIntegration.EmailReader
         {
             try
             {
-                _log.InfoFormat("Downloading {0} messages from email server...", message.Uids.Length);
+                _log.Info($"Downloading {message.Uids.Length} messages from email server...");
                 _client.Connect();
                 _client.Login();
 
@@ -59,7 +64,8 @@ namespace Tp.PopEmailIntegration.EmailReader
                 {
                     count++;
                 }
-                _log.InfoFormat("Downloaded messages={0}", count);
+
+                _log.Info($"Downloaded messages={count}");
             }
             catch (Exception ex)
             {
@@ -133,7 +139,7 @@ namespace Tp.PopEmailIntegration.EmailReader
                 //skip processing Delivery Status Notification message.
                 if (_client.IsDsnMessage(message))
                 {
-                    _log.InfoFormat("Skip processing Delivery Status Notification message '{0}'", message.Subject);
+                    _log.Info($"Skip processing Delivery Status Notification message '{message.Subject}'");
                     return null;
                 }
 
@@ -188,27 +194,31 @@ namespace Tp.PopEmailIntegration.EmailReader
                 var emailAddress in
                 mailBeeMailMessage.To.Cast<EmailAddress>().Where(emailAddress => !mailMessage.To.TryAdd(emailAddress.AsString)))
             {
-                _log.WarnFormat("To address \"{0}\" is not in a recognized format.", emailAddress.AsString);
+                _log.Warn($"To address \"{emailAddress.AsString}\" is not in a recognized format.");
             }
+
             foreach (
                 var emailAddress in
                 mailBeeMailMessage.ReplyTo.Cast<EmailAddress>()
                     .Where(emailAddress => !mailMessage.ReplyToList.TryAdd(emailAddress.AsString)))
             {
-                _log.WarnFormat("ReplyTo address \"{0}\" is not in a recognized format.", emailAddress.AsString);
+                _log.Warn($"ReplyTo address \"{emailAddress.AsString}\" is not in a recognized format.");
             }
+
             foreach (
                 var emailAddress in
                 mailBeeMailMessage.Cc.Cast<EmailAddress>().Where(emailAddress => !mailMessage.CC.TryAdd(emailAddress.AsString)))
             {
-                _log.WarnFormat("Cc address \"{0}\" is not in a recognized format.", emailAddress.AsString);
+                _log.Warn($"Cc address \"{emailAddress.AsString}\" is not in a recognized format.");
             }
+
             foreach (
                 var emailAddress in
                 mailBeeMailMessage.Bcc.Cast<EmailAddress>().Where(emailAddress => !mailMessage.Bcc.TryAdd(emailAddress.AsString)))
             {
-                _log.WarnFormat("Bcc address \"{0}\" is not in a recognized format.", emailAddress.AsString);
+                _log.Warn($"Bcc address \"{emailAddress.AsString}\" is not in a recognized format.");
             }
+
             switch (mailBeeMailMessage.Priority)
             {
                 case MailPriority.Low:
@@ -224,6 +234,7 @@ namespace Tp.PopEmailIntegration.EmailReader
                     mailMessage.Priority = System.Net.Mail.MailPriority.High;
                     break;
             }
+
             foreach (Attachment mailBeeAttachment in mailBeeMailMessage.Attachments)
             {
                 if ((!mailBeeAttachment.IsFile && !mailBeeAttachment.IsInline) && !mailBeeAttachment.IsMessageInside)
@@ -233,18 +244,43 @@ namespace Tp.PopEmailIntegration.EmailReader
 
                 var attachmentName = GetAttachmentName(mailBeeAttachment);
 
-                var newAttachment = new System.Net.Mail.Attachment(
-                    new MemoryStream(mailBeeAttachment.GetData()),
-                    attachmentName,
-                    mailBeeAttachment.ContentType);
+                var contentType = GetContentTypeForAttachment(mailBeeAttachment);
 
-                if (mailBeeAttachment.IsInline && !String.IsNullOrEmpty(mailBeeAttachment.ContentID))
+                if (contentType == null)
                 {
-                    newAttachment.Name = mailBeeAttachment.ContentID;
+                    throw new EmailException($"Email {mailBeeMailMessage.Subject} attachment {attachmentName} content type - '{mailBeeAttachment.ContentType}' is invalid");
                 }
+
+                var newAttachment =
+                    new System.Net.Mail.Attachment(new MemoryStream(mailBeeAttachment.GetData()), contentType) { Name = attachmentName };
+
+                if (mailBeeAttachment.IsInline && !string.IsNullOrEmpty(mailBeeAttachment.ContentID))
+                {
+                    newAttachment.ContentId = mailBeeAttachment.ContentID;
+                    newAttachment.ContentDisposition.Inline = true;
+                }
+
                 mailMessage.Attachments.Add(newAttachment);
             }
+
             return mailMessage;
+        }
+
+        private static ContentType GetContentTypeForAttachment(Attachment mailBeeAttachment)
+        {
+            try
+            {
+                return new ContentType(mailBeeAttachment.ContentType);
+            }
+            catch (Exception)
+            {
+                var matches = _rfc2045Regex.Matches(mailBeeAttachment.RawHeader);
+                if (matches.Count != 0)
+                {
+                    return new ContentType(matches[0].Groups["ContentType"].Value);
+                }
+                return null;
+            }
         }
 
         private static EmailMessage ConvertToDto(System.Net.Mail.MailMessage message, MessageUidDTO messageUidDto,
@@ -254,7 +290,7 @@ namespace Tp.PopEmailIntegration.EmailReader
             {
                 FromAddress = message.From.Address,
                 FromDisplayName = message.From.DisplayName,
-                Recipients = String.Join("; ", message.To.Select(address => address.Address).ToArray()),
+                Recipients = string.Join("; ", message.To.Select(address => address.Address).ToArray()),
                 CC =
                     message.CC.Select(address => new MailAddressLite { Address = address.Address, DisplayName = address.DisplayName })
                         .ToList(),
@@ -271,7 +307,13 @@ namespace Tp.PopEmailIntegration.EmailReader
             foreach (var attachment in message.Attachments)
             {
                 var fileId = AttachmentFolder.Save(attachment.ContentStream);
-                emailMessageDto.EmailAttachments.Add(new LocalStoredAttachment { FileId = fileId, FileName = attachment.Name });
+                emailMessageDto.EmailAttachments.Add(new LocalStoredAttachment
+                {
+                    FileId = fileId,
+                    FileName = attachment.Name,
+                    ContentId = attachment.ContentId,
+                    ContentType = attachment.ContentType.MediaType
+                });
             }
 
             return emailMessageDto;
@@ -279,9 +321,9 @@ namespace Tp.PopEmailIntegration.EmailReader
 
         private static string GetAttachmentName(Attachment mailBeeAttachment)
         {
-            if (String.IsNullOrEmpty(mailBeeAttachment.FilenameOriginal))
+            if (string.IsNullOrEmpty(mailBeeAttachment.FilenameOriginal))
             {
-                return String.IsNullOrEmpty(mailBeeAttachment.Name) ? mailBeeAttachment.Filename : mailBeeAttachment.Name;
+                return string.IsNullOrEmpty(mailBeeAttachment.Name) ? mailBeeAttachment.Filename : mailBeeAttachment.Name;
             }
 
             return mailBeeAttachment.FilenameOriginal;
@@ -304,10 +346,10 @@ namespace Tp.PopEmailIntegration.EmailReader
                 mailAddressCollection.Add(mailAddress);
                 return true;
             }
-            catch
+            catch (Exception)
             {
+                return false;
             }
-            return false;
         }
     }
 }

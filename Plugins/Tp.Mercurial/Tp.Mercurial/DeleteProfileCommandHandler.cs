@@ -4,12 +4,10 @@
 
 using System.Linq;
 using NServiceBus;
-using StructureMap;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Mercurial.VersionControlSystem;
-using Tp.SourceControl.Settings;
 
 namespace Tp.Mercurial
 {

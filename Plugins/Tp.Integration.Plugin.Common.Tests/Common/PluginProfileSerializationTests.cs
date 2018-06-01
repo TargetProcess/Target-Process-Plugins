@@ -3,8 +3,10 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Collections.Generic;
 using NUnit.Framework;
 using Tp.Integration.Messages.PluginLifecycle;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Testing.Common;
 using Tp.Testing.Common.NUnit;
@@ -26,7 +28,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Common
             };
 
             var serializedProfile = pluginProfile.Serialize();
-            var deserializedProfile = serializedProfile.DeserializeProfile();
+            var deserializedProfile = serializedProfile.DeserializeProfile(p => new ProfileSafeNull());
 
             deserializedProfile.Name.Should(Be.EqualTo("TestProfile"), "deserializedProfile.Name.Should(Be.EqualTo(\"TestProfile\"))");
             deserializedProfile.Settings.Should(Be.Not.Null, "Settings weren't deserialized");

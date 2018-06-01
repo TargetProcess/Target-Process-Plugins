@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -130,7 +130,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
         }
 
         [Test]
-        public void ShouldConsiderRequesterMoreImportantThanUser()
+        public void ShouldConsiderUserMoreImportantThanRequester()
         {
             @"Given requester with email 'sender@company.com'
 				And projects: 6, 7
@@ -140,7 +140,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromRequestersFea
 					And profile has a rule: when subject contains 'SuperJira' then attach to project 6
 					And profile has a rule: when subject contains 'Jira' then attach to project 7
 				When the email arrived
-				Then message from requester with email 'sender@company.com' should be created
+				Then message from user with email 'sender@company.com' should be created
 					And the message should be attached to project 7"
                 .Execute(In.Context<EmailProcessingSagaActionSteps>());
         }

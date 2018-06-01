@@ -4,7 +4,8 @@ using Tp.Core.Annotations;
 
 namespace Tp.Core.Expressions.Visitors
 {
-    internal class Replacer : ExpressionVisitor
+    [PerformanceCritical]
+    public class Replacer : ExpressionVisitor
     {
         private readonly Func<Expression, Maybe<Expression>> _replacement;
 
@@ -14,9 +15,11 @@ namespace Tp.Core.Expressions.Visitors
             _replacement = Argument.NotNull(nameof(replacement), replacement);
         }
 
+        [PerformanceCritical]
         public override Expression Visit(Expression node)
         {
-            return _replacement(node).GetOrElse(() => base.Visit(node));
+            var maybeReplacement = _replacement(node);
+            return maybeReplacement.HasValue ? maybeReplacement.Value : base.Visit(node);
         }
 
         protected override Expression VisitExtension(Expression node)

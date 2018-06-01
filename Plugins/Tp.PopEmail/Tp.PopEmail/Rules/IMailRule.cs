@@ -12,7 +12,7 @@ namespace Tp.PopEmailIntegration.Rules
     public interface IMailRule : INullable
     {
         bool IsMatched(EmailMessage message);
-        void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters);
+        void Execute(EmailMessage emailMessage, MessageDTO dto, AttachmentDTO[] attachments);
     }
 
     public class MailRuleSafeNull : SafeNull<MailRuleSafeNull, IMailRule>, IMailRule
@@ -22,7 +22,7 @@ namespace Tp.PopEmailIntegration.Rules
             return false;
         }
 
-        public void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
+        public void Execute(EmailMessage emailMessage, MessageDTO dto, AttachmentDTO[] attachments)
         {
         }
     }

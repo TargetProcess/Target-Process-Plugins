@@ -10,6 +10,7 @@ using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using System.Globalization;
 using System.Linq;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
@@ -20,6 +21,10 @@ namespace Tp.Tfs
     {
         private const int UriTfsProjectCollection = 1;
         private const int UriTfsTeamProject = 2;
+
+        public TfsCheckConnectionCommand(IProfileCollection profileCollection) : base(profileCollection)
+        {
+        }
 
         protected override void CheckStartRevision(
             TfsPluginProfile settings,

@@ -577,6 +577,206 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order=112)]
 		public string OwnerName { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=113)]
+		public String CustomField61 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=114)]
+		public String CustomField62 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=115)]
+		public String CustomField63 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=116)]
+		public String CustomField64 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=117)]
+		public String CustomField65 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=118)]
+		public String CustomField66 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=119)]
+		public String CustomField67 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=120)]
+		public String CustomField68 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=121)]
+		public String CustomField69 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=122)]
+		public String CustomField70 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=123)]
+		public String CustomField71 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=124)]
+		public String CustomField72 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=125)]
+		public String CustomField73 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=126)]
+		public String CustomField74 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=127)]
+		public String CustomField75 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=128)]
+		public String CustomField76 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=129)]
+		public String CustomField77 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=130)]
+		public String CustomField78 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=131)]
+		public String CustomField79 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=132)]
+		public String CustomField80 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=133)]
+		public String CustomField81 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=134)]
+		public String CustomField82 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=135)]
+		public String CustomField83 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=136)]
+		public String CustomField84 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=137)]
+		public String CustomField85 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=138)]
+		public String CustomField86 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=139)]
+		public String CustomField87 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=140)]
+		public String CustomField88 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=141)]
+		public String CustomField89 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=142)]
+		public String CustomField90 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=143)]
+		public String CustomField91 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=144)]
+		public String CustomField92 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=145)]
+		public String CustomField93 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=146)]
+		public String CustomField94 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=147)]
+		public String CustomField95 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=148)]
+		public String CustomField96 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=149)]
+		public String CustomField97 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=150)]
+		public String CustomField98 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=151)]
+		public String CustomField99 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=152)]
+		public String CustomField100 { get; set; }
 	}
 
 	public enum FeatureField
@@ -688,5 +888,45 @@ namespace Tp.Integration.Common
 		ParentProjectName,
 		LastStateChangeDate,
 		OwnerName,
+		CustomField61,
+		CustomField62,
+		CustomField63,
+		CustomField64,
+		CustomField65,
+		CustomField66,
+		CustomField67,
+		CustomField68,
+		CustomField69,
+		CustomField70,
+		CustomField71,
+		CustomField72,
+		CustomField73,
+		CustomField74,
+		CustomField75,
+		CustomField76,
+		CustomField77,
+		CustomField78,
+		CustomField79,
+		CustomField80,
+		CustomField81,
+		CustomField82,
+		CustomField83,
+		CustomField84,
+		CustomField85,
+		CustomField86,
+		CustomField87,
+		CustomField88,
+		CustomField89,
+		CustomField90,
+		CustomField91,
+		CustomField92,
+		CustomField93,
+		CustomField94,
+		CustomField95,
+		CustomField96,
+		CustomField97,
+		CustomField98,
+		CustomField99,
+		CustomField100,
 	}
 }

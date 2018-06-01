@@ -10,7 +10,7 @@ namespace Tp.Git
 {
     public class NGitConnectionChecker : IConnectionChecker
     {
-        public void Check(GitPluginProfile settings)
+        public void Check(IGitConnectionSettings settings)
         {
             var folder = GitRepositoryFolder.Create(settings.Uri);
             var nativeGit = NGit.Api.Git.Init().SetDirectory(folder.GetAbsolutePath()).Call();

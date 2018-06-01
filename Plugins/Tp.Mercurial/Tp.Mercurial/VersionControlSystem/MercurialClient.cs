@@ -7,15 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Mercurial;
-using StructureMap;
 using Tp.Core;
-using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
-using MercurialSDK = Mercurial;
 using Repository = Mercurial.Repository;
 
 namespace Tp.Mercurial.VersionControlSystem
@@ -149,7 +145,7 @@ namespace Tp.Mercurial.VersionControlSystem
             var command = new CatCommand().WithFile(path);
             if (commit != null)
             {
-                command = command.WithAdditionalArgument(string.Format("-r {0}", commit.RevisionNumber));
+                command = command.WithAdditionalArgument($"-r {commit.RevisionNumber}");
             }
             _repository.Execute(command);
             return command.RawStandardOutput;

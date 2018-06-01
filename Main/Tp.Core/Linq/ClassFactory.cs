@@ -239,7 +239,7 @@ namespace System.Linq.Dynamic
 
             ILGenerator gen = mb.GetILGenerator();
 
-            gen.DeclareLocal(typeof(string));
+            gen.DeclareLocal(typeof(StringBuilder));
 
             var appendObject = typeof(StringBuilder).GetMethod("Append", new[] { typeof(object) });
 
@@ -272,8 +272,6 @@ namespace System.Linq.Dynamic
 
             gen.Emit(OpCodes.Ldloc_0); // sb
             gen.Emit(OpCodes.Callvirt, typeof(object).GetMethod("ToString"));
-            gen.Emit(OpCodes.Stloc_0);
-            gen.Emit(OpCodes.Ldloc_0);
             gen.Emit(OpCodes.Ret);
         }
 

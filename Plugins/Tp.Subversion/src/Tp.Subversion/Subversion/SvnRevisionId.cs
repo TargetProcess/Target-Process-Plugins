@@ -24,8 +24,7 @@ namespace Tp.Subversion.Subversion
 
         private static long ConvertToRevision(RevisionId revision)
         {
-            long revisionId;
-            if (!Int64.TryParse(revision.Value, out revisionId))
+            if (!Int64.TryParse(revision.Value, out var revisionId))
             {
                 revisionId = 0;
             }
@@ -39,8 +38,8 @@ namespace Tp.Subversion.Subversion
 
         public long Value
         {
-            get { return _value; }
-            set { _value = value; }
+            get => _value;
+            set => _value = value;
         }
 
         public static implicit operator SvnRevisionId(RevisionId revisionId)

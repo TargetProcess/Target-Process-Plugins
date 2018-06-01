@@ -7,9 +7,9 @@ namespace System
     [AttributeUsage(AttributeTargets.Method)]
     public class SqlFunctionAttribute : Attribute
     {
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public DbType DbType { get; private set; }
+        public DbType DbType { get; }
 
         public SqlFunctionAttribute(string name, DbType dbType)
         {
@@ -20,19 +20,15 @@ namespace System
 
     public class SqlDateFunctionAttribute : SqlFunctionAttribute
     {
-        private readonly DatePart _datePartSpecifier;
-
         public SqlDateFunctionAttribute(string name, DbType dbType, DatePart datePartSpecifier = DatePart.None) : base(name, dbType)
         {
-            _datePartSpecifier = datePartSpecifier;
+            DatePartSpecifier = datePartSpecifier;
         }
 
-        public DatePart DatePartSpecifier
-        {
-            get { return _datePartSpecifier; }
-        }
+        public DatePart DatePartSpecifier { get; }
     }
 
+    // NOTE: Names should be the same as DATEDIFF scalar T-SQL function datepart argument.
     public enum DatePart
     {
         None,

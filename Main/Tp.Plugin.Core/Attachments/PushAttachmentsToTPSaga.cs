@@ -50,7 +50,7 @@ namespace Tp.Plugin.Core.Attachments
                         GeneralId = message.GeneralId,
                     }));
 
-            if (message.LocalStoredAttachments.Count() == 0)
+            if (message.LocalStoredAttachments.Length == 0)
             {
                 SendSuccessfullMessage();
             }
@@ -60,18 +60,16 @@ namespace Tp.Plugin.Core.Attachments
         {
             var attachments = new List<AttachmentDTO>(Data.ProcessedAttachments) { message.AttachmentDto };
             Data.ProcessedAttachments = attachments.ToArray();
-            if (Data.ProcessedAttachments.Count() == Data.AttachmentsCount)
+
+            var contentIds = new List<KeyValuePair<int, string>>(Data.ContentIds) { new KeyValuePair<int, string>(message.AttachmentDto.AttachmentID.Value, message.ContentId) };
+            Data.ContentIds = contentIds.ToDictionary(x => x.Key, x => x.Value);
+
+            if (Data.ProcessedAttachments.Length == Data.AttachmentsCount)
             {
-                if (Data.MessageId.HasValue)
-                {
-                    Log().InfoFormat("Attachments {0} were added to message with id {1}",
-                        Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(","), Data.MessageId);
-                }
-                else
-                {
-                    Log().InfoFormat("Attachments {0} were added to general with id {1}",
-                        Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(","), Data.GeneralId);
-                }
+                Log().Info(
+                    Data.MessageId.HasValue
+                        ? $"Attachment{(Data.ProcessedAttachments.Length == 1 ? "" : "s")} {Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(",")} {(Data.ProcessedAttachments.Length == 1 ? "was" : "were")} added to message with id {Data.MessageId}"
+                        : $"Attachment{(Data.ProcessedAttachments.Length == 1 ? "" : "s")} {Data.ProcessedAttachments.Select(x => x.OriginalFileName).ToString(",")} {(Data.ProcessedAttachments.Length == 1 ? "was" : "were")} added to general with id {Data.GeneralId}");
 
                 AttachmentFolder.Delete(Data.FileIds);
 
@@ -82,7 +80,7 @@ namespace Tp.Plugin.Core.Attachments
         private void SendSuccessfullMessage()
         {
             SendLocal(new AttachmentsPushedToTPMessageInternal
-                { SagaId = Data.OuterSagaId, AttachmentDtos = Data.ProcessedAttachments });
+                { SagaId = Data.OuterSagaId, AttachmentDtos = Data.ProcessedAttachments, ContentIds = Data.ContentIds });
 
             MarkAsComplete();
         }
@@ -110,6 +108,7 @@ namespace Tp.Plugin.Core.Attachments
         public PushAttachmentsToTPSagaData()
         {
             ProcessedAttachments = new AttachmentDTO[] { };
+            ContentIds = new Dictionary<int, string>();
         }
 
         public Guid Id { get; set; }
@@ -117,6 +116,7 @@ namespace Tp.Plugin.Core.Attachments
         public string OriginalMessageId { get; set; }
         public Guid OuterSagaId { get; set; }
         public AttachmentDTO[] ProcessedAttachments { get; set; }
+        public Dictionary<int, string> ContentIds { get; set; }
         public int AttachmentsCount { get; set; }
         public int? MessageId { get; set; }
         public int? GeneralId { get; set; }
@@ -127,6 +127,7 @@ namespace Tp.Plugin.Core.Attachments
     public class AttachmentsPushedToTPMessageInternal : SagaMessage, IPluginLocalMessage
     {
         public AttachmentDTO[] AttachmentDtos { get; set; }
+        public Dictionary<int, string> ContentIds { get; set; }
     }
 
     [Serializable]

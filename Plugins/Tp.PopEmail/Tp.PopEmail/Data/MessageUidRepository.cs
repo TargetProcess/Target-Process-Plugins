@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.PopEmailIntegration.Data

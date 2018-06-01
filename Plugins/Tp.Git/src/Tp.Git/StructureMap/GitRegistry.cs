@@ -45,6 +45,7 @@ namespace Tp.Git.StructureMap
         protected override void ConfigureSourceControlConnectionSettingsSource()
         {
             For<ISourceControlConnectionSettingsSource>().Use<GitCurrentProfileToConnectionSettingsAdapter>();
+            For<IGitConnectionSettings>().Use<GitCurrentProfileToConnectionSettingsAdapter>();
         }
 
         protected override void ConfigureRevisionIdComparer()

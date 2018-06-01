@@ -34,10 +34,7 @@ namespace Tp.Subversion
         }
 
         [IgnoreDataMember]
-        public bool RevisionSpecified
-        {
-            get { return !StartRevision.IsNullOrWhitespace(); }
-        }
+        public bool RevisionSpecified => !StartRevision.IsNullOrWhitespace();
 
         #region Validation
 
@@ -70,8 +67,7 @@ namespace Tp.Subversion
 
         private bool StartRevisionShouldBeNumber(PluginProfileErrorCollection errors)
         {
-            int result;
-            if (!int.TryParse(StartRevision, out result))
+            if (!int.TryParse(StartRevision, out _))
             {
                 errors.Add(new PluginProfileError { FieldName = StartRevisionField, Message = "Start Revision should be a number." });
                 return false;

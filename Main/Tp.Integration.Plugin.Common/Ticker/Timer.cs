@@ -7,6 +7,7 @@ using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.PluginLifecycle;
 using Tp.Integration.Plugin.Common.Properties;
 using log4net;
+using Tp.Integration.Messages;
 
 namespace Tp.Integration.Plugin.Common.Ticker
 {
@@ -14,7 +15,6 @@ namespace Tp.Integration.Plugin.Common.Ticker
     {
         private readonly IBusExtended _bus;
         private System.Timers.Timer _checkTimer;
-        private TimeSpan _infoSendInterval = TimeSpan.FromSeconds(600);
         private System.Timers.Timer _infoSenderTimer;
 
         public Timer()
@@ -76,7 +76,7 @@ namespace Tp.Integration.Plugin.Common.Ticker
 
             _checkTimer.Start();
 
-            _infoSenderTimer = new System.Timers.Timer { Interval = _infoSendInterval.TotalMilliseconds };
+            _infoSenderTimer = new System.Timers.Timer { Interval = PluginInfoSendInterval.Value.TotalMilliseconds };
             _infoSenderTimer.Elapsed += (sender, elapsedEventArgs) => new PluginInitializer().SendInfoMessages();
             _infoSenderTimer.Start();
         }

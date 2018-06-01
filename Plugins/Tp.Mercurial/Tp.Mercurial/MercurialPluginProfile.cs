@@ -52,7 +52,7 @@ namespace Tp.Mercurial
                 errors.Add(new PluginProfileError
                 {
                     FieldName = StartRevisionField,
-                    Message = string.Format("Start Revision Date should be specified in mm/dd/yyyy format")
+                    Message = "Start Revision Date should be specified in mm/dd/yyyy format"
                 });
                 return false;
             }
@@ -68,7 +68,7 @@ namespace Tp.Mercurial
                 {
                     FieldName = StartRevisionField,
                     Message =
-                        string.Format("Start Revision Date should be not behind {0}", MercurialRevisionId.UtcTimeMax.ToShortDateString())
+                        $"Start Revision Date should be not behind {MercurialRevisionId.UtcTimeMax.ToShortDateString()}"
                 });
                 return false;
             }
@@ -84,7 +84,7 @@ namespace Tp.Mercurial
                 {
                     FieldName = StartRevisionField,
                     Message =
-                        string.Format("Start Revision Date should be not before {0}", MercurialRevisionId.UtcTimeMin.ToShortDateString())
+                        $"Start Revision Date should be not before {MercurialRevisionId.UtcTimeMin.ToShortDateString()}"
                 });
                 return false;
             }
@@ -115,17 +115,17 @@ namespace Tp.Mercurial
 
             if (UriContainsLoginOnly() && !string.IsNullOrEmpty(Password))
             {
-                Uri = Uri.Insert(Uri.IndexOf("@"), ":" + Password);
+                Uri = Uri.Insert(Uri.IndexOf("@", StringComparison.Ordinal), ":" + Password);
             }
             else if (!string.IsNullOrEmpty(Login) && !UriContainsLoginOnly())
             {
                 if (!string.IsNullOrEmpty(Password))
                 {
-                    Uri = Uri.Insert(Uri.IndexOf(@"://") + @"://".Length, Login + ":" + Password + "@");
+                    Uri = Uri.Insert(Uri.IndexOf(@"://", StringComparison.Ordinal) + @"://".Length, $"{Login}:{Password}@");
                 }
                 else
                 {
-                    Uri = Uri.Insert(Uri.IndexOf(@"://") + @"://".Length, Login + "@");
+                    Uri = Uri.Insert(Uri.IndexOf(@"://", StringComparison.Ordinal) + @"://".Length, $"{Login}@");
                 }
             }
         }

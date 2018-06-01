@@ -493,6 +493,10 @@ q:before,q:after{content:'';}
 	padding-bottom: 2px;
 }
 
+.x-tab-panel-header em {
+    font-style: normal;
+}
+
 .x-tab-panel-footer {
 	border: 1px solid;
 	padding-top: 2px;

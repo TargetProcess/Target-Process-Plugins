@@ -10,6 +10,7 @@ using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
 using Tp.Integration.Plugin.Common.Activity;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 
@@ -18,16 +19,18 @@ namespace Tp.Bugzilla.CustomCommand
     public class CheckConnectionCommand : IPluginCommand
     {
         private readonly IActivityLogger _logger;
+        private readonly IProfileCollection _profileCollection;
 
-        public CheckConnectionCommand(IActivityLogger logger)
+        public CheckConnectionCommand(IActivityLogger logger, IProfileCollection profileCollection)
         {
             _logger = logger;
+            _profileCollection = profileCollection;
         }
 
         public PluginCommandResponseMessage Execute(string args, UserDTO user)
         {
             var errors = new PluginProfileErrorCollection();
-            var profile = args.DeserializeProfile();
+            var profile = args.DeserializeProfile(p => _profileCollection[p]);
             var settings = (BugzillaProfile) profile.Settings;
 
             var properties = GetBugzillaProperties(settings, errors);

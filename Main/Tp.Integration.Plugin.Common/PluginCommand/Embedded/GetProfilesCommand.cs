@@ -26,7 +26,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
             var profileDtos = _profileCollection.Select(x => x.ConvertToDto()).ToArray();
 
             return new PluginCommandResponseMessage
-                { ResponseData = profileDtos.Serialize(), PluginCommandStatus = PluginCommandStatus.Succeed };
+                { ResponseData = profileDtos.SerializeForClient(), PluginCommandStatus = PluginCommandStatus.Succeed };
         }
 
         public string Name

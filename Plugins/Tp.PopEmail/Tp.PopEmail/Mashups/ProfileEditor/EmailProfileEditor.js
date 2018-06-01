@@ -25,7 +25,6 @@ tau.mashups
     .addModule("emailIntegration/editor",
 
      function (bus, profileControlsBlock, editorTemplate, errorMessageContainer, $) {
-
          function emailProfileEditor(config) {
              this._create(config);
          }
@@ -69,7 +68,7 @@ tau.mashups
                          UseSSL: false,
                          Rules: null,
                          MailServer: '',
-                         Protocol: ''
+                         UsersMigrated: true
                      }
                  };
              },
@@ -207,7 +206,6 @@ tau.mashups
                  else {
                      this._showConnectionSuccess();
                  }
-
                  this.preloader.hide();
              },
 
@@ -235,14 +233,15 @@ tau.mashups
                          Port: this._getSetPort(),
                          UseSSL: this._getSetUseSsl(),
                          Rules: escape(this._find('#Rules').val()),
-                         MailServer: this._find('#MailServer').val()
+                         MailServer: this._find('#MailServer').val(),
+                         UsersMigrated: this._find('#UsersMigrated').val()
                      }
                  };
              },
 
              _getSetPort: function () {
                  var port = this._find('#Port').val();
-                 if (typeof (port) == 'undefined' || port == '')
+                 if (typeof (port) == 'undefined' || port === '')
                      port = 0;
                  return port;
              },
@@ -253,7 +252,7 @@ tau.mashups
                      state = this.getState();
                  });
 
-                 return state == 'on';
+                 return state === 'on';
              }
          };
          return emailProfileEditor;

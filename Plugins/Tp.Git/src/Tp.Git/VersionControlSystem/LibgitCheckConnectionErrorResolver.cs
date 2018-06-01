@@ -27,19 +27,19 @@ namespace Tp.Git.VersionControlSystem
                 {
                     errors.Add(new PluginProfileError
                     {
-                        FieldName = Reflect<GitPluginProfile>.GetPropertyName(p => p.Uri),
+                        FieldName = Reflect<IGitConnectionSettings>.GetPropertyName(p => p.Uri),
                         Message = libgitException.Message
                     });
 
                     errors.Add(new PluginProfileError
                     {
-                        FieldName = Reflect<GitPluginProfile>.GetPropertyName(p => p.Login),
+                        FieldName = Reflect<IGitConnectionSettings>.GetPropertyName(p => p.Login),
                         Message = libgitException.Message
                     });
 
                     errors.Add(new PluginProfileError
                     {
-                        FieldName = Reflect<GitPluginProfile>.GetPropertyName(p => p.Password),
+                        FieldName = Reflect<IGitConnectionSettings>.GetPropertyName(p => p.Password),
                         Message = libgitException.Message
                     });
 
@@ -50,11 +50,26 @@ namespace Tp.Git.VersionControlSystem
                 {
                     errors.Add(new PluginProfileError
                     {
-                        FieldName = Reflect<GitPluginProfile>.GetPropertyName(p => p.Uri),
+                        FieldName = Reflect<IGitConnectionSettings>.GetPropertyName(p => p.Uri),
                         Message = libgitException.Message
                     });
 
                     return;
+                }
+
+                if (libgitException.Message.Contains("Waiting for USERAUTH response") || libgitException.Message.Contains("Failed to authenticate SSH session"))
+                {
+                    var msg = $"{libgitException.Message}. Please check your SSH keys.";
+                    errors.Add(new PluginProfileError
+                    {
+                        FieldName = Reflect<IGitConnectionSettings>.GetPropertyName(p => p.SshPrivateKey),
+                        Message = msg
+                    });
+                    errors.Add(new PluginProfileError
+                    {
+                        FieldName = Reflect<IGitConnectionSettings>.GetPropertyName(p => p.SshPublicKey),
+                        Message = msg
+                    });
                 }
             }
             

@@ -39,7 +39,7 @@ namespace Tp.PopEmailIntegration
                 x => new MessageUpdatedMessage { Dto = x.Dto as MessageDTO });
 
             @"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
-				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' was created in TP
+				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' with content Id 'image1.gif@01CBF375.60E6C210' was created in TP
 			When UpdateMessageBodyCommandInternal received
 			Then message body should be updated to '<img src=""~/Attachment.aspx?AttachmentID=20"">'"
                 .Execute();
@@ -52,7 +52,7 @@ namespace Tp.PopEmailIntegration
                 x => new MessageUpdatedMessage { Dto = x.Dto as MessageDTO });
 
             @"Given message with body '<img src=""cid:image1.gif@01CBF3???????75.60E6C210"">'
-				And attachment with id 20 and file name 'image1.gif@01CBF3???????75.60E6C210' was created in TP
+				And attachment with id 20 and file name 'image1.gif' with content Id 'image1.gif@01CBF3???????75.60E6C210' was created in TP
 			When UpdateMessageBodyCommandInternal received
 			Then message body should be updated to '<img src=""~/Attachment.aspx?AttachmentID=20"">'"
                 .Execute();
@@ -62,7 +62,7 @@ namespace Tp.PopEmailIntegration
         public void ShouldNotUpdateMessageBodyIfBodyIsEmpty()
         {
             @"Given message with empty body
-				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' was created in TP
+				And attachment with id 20 and file name 'image1.gif' with content Id 'image1.gif@01CBF375.60E6C210' was created in TP
 			When UpdateMessageBodyCommandInternal received
 			Then body should not be updated"
                 .Execute();
@@ -90,7 +90,7 @@ namespace Tp.PopEmailIntegration
         public void ShouldHandleExceptionCorrectly()
         {
             @"Given message with body '<img src=""cid:image1.gif@01CBF375.60E6C210"">'
-				And attachment with id 20 and file name 'image1.gif@01CBF375.60E6C210' was created in TP
+				And attachment with id 20 and file name 'image1.gif' with content Id 'image1.gif@01CBF375.60E6C210' was created in TP
 				And message body cannot be updated
 			When UpdateMessageBodyCommandInternal received
 			Then exception message should be sent"
@@ -109,12 +109,13 @@ namespace Tp.PopEmailIntegration
             Context.Command.MessageDto.Body = null;
         }
 
-        [Given("attachment with id $attachmentId and file name '$attachmentFileName' was created in TP")]
-        public void CreateAttachmentInTP(int attachmentId, string attachmentFileName)
+        [Given("attachment with id $attachmentId and file name '$attachmentFileName' with content Id '$attachmentContentId' was created in TP")]
+        public void CreateAttachmentInTP(int attachmentId, string attachmentFileName, string attachmentContentId)
         {
             var attachments = new List<AttachmentDTO>(Context.Command.AttachmentDtos)
                 { new AttachmentDTO { AttachmentID = attachmentId, OriginalFileName = attachmentFileName } };
             Context.Command.AttachmentDtos = attachments.ToArray();
+            Context.Command.ContentIds = new Dictionary<int, string> { { attachmentId, attachmentContentId } };
         }
 
         [Given("message body cannot be updated")]
@@ -133,11 +134,11 @@ namespace Tp.PopEmailIntegration
         [Then(@"message body should be updated to '$messageBodyUpdated'")]
         public void MessageBodyShouldBeUpdated(string messageBodyUpdated)
         {
-            Context.Transport.TpQueue.GetMessages<UpdateCommand>()
-                .Where(x => x.Dto is MessageDTO)
-                .Count()
+            Context.Transport.TpQueue
+                .GetMessages<UpdateCommand>()
+                .Count(x => x.Dto is MessageDTO)
                 .Should(Be.EqualTo(1),
-                    "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Where(x => x.Dto is MessageDTO).Count().Should(Be.EqualTo(1))");
+                    "Context.Transport.TpQueue.GetMessages<UpdateCommand>().Count(x => x.Dto is MessageDTO).Should(Be.EqualTo(1)");
 
             var message = Context.Transport.LocalQueue.GetMessages<MessageBodyUpdatedMessageInternal>().First();
             message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated), "message.MessageDto.Body.Should(Be.EqualTo(messageBodyUpdated))");

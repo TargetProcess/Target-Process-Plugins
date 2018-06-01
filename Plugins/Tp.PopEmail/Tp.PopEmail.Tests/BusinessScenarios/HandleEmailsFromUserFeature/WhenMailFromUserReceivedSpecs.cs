@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -150,10 +150,9 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 					And sender email is 'sender@company.com'
 					And sender email display name is 'Sara White'
 				When the email arrived
-					Then requester with email 'sender@company.com' and first name 'Sara' and last name 'White' should be created
-						And message from requester with email 'sender@company.com' should be created
+					Then message from user with email 'sender@company.com' should be created
 						And request in project 1 should be created from the message
-						And requester with email 'sender@company.com' should be added as requester and owner to the request
+						And user with email 'sender@company.com' should be added as requester and owner to the request
 			".Execute(In.Context<EmailProcessingSagaActionSteps>());
         }
     }

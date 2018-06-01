@@ -5,11 +5,9 @@
 
 using System;
 using System.IO;
-using System.Text;
 using Mercurial;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Validation;
-using Tp.Mercurial.VersionControlSystem;
 using Tp.SourceControl.Commands;
 
 namespace Tp.Mercurial.VersionControlSystem
@@ -65,7 +63,6 @@ namespace Tp.Mercurial.VersionControlSystem
         {
             if (string.IsNullOrEmpty(e.Message))
                 return string.Empty;
-
 
             if (e.Message.StartsWith("abort:"))
             {

@@ -30,7 +30,7 @@ namespace Tp.SourceControl.VersionControlSystem
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}", FromChangeset, ToChangeset);
+            return $"{FromChangeset} - {ToChangeset}";
         }
     }
 }

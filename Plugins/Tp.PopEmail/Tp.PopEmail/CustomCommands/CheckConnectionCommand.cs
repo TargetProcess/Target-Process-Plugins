@@ -8,6 +8,7 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.PopEmailIntegration.EmailReader.Client;
@@ -16,15 +17,22 @@ namespace Tp.PopEmailIntegration.CustomCommands
 {
     public class CheckConnectionCommand : IPluginCommand
     {
+        private readonly IProfileCollection _profileCollection;
+
+        public CheckConnectionCommand(IProfileCollection profileCollection)
+        {
+            _profileCollection = profileCollection;
+        }
+
         public PluginCommandResponseMessage Execute(string args, UserDTO user)
         {
             return new PluginCommandResponseMessage
                 { PluginCommandStatus = PluginCommandStatus.Succeed, ResponseData = GetResponse(args) };
         }
 
-        private static string GetResponse(string args)
+        private string GetResponse(string args)
         {
-            var profile = args.DeserializeProfile();
+            var profile = args.DeserializeProfile(p => _profileCollection[p]);
             var settings = (ConnectionSettings) profile.Settings;
             var errors = new PluginProfileErrorCollection();
 

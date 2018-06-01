@@ -40,7 +40,7 @@ tau.mashups
                 '				<input type="text" class="input" id="login" name="Login" value="${Settings.Login}" style="width: 275px;" />' +
                 '				<p class="label pt-10">' +
                 '					Password&nbsp;<span class="error" name="PasswordErrorLabel"></span></p>' +
-                '				<input type="password" class="input" id="password" name="Password" value="${Settings.Password}" style="width: 275px;" />' +
+                '				<input type="password" class="input" id="password" name="Password" value="${passwordValue}" style="width: 275px;" />' +
                 '				<p class="label pt-20">' +
                 '					Export all the revisions starting from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
                 '						style="width: 97px;" /><span class="error" name="StartRevisionErrorLabel"></span></p>' +
@@ -61,7 +61,7 @@ tau.mashups
                 '	<div class="controls-block"></div>' +
                 '</div>',
 
-            _create: function (config) {
+            _create: function (config) {                
                 this.placeHolder = config.placeHolder;
                 this.model = config.model;
                 this.controller = config.controller;
@@ -133,7 +133,15 @@ tau.mashups
 
             render: function () {
                 this.placeHolder.html('');
+
+                this.model.passwordValue = this.model.Settings.HasPassword ? '0000000000000000' : '';
+                this._passwordChanged = false;
+
                 var rendered = $.tmpl(this.editorTemplate, this.model);
+
+                rendered.find("#password").change(function () {
+                    this._passwordChanged = true;
+                }.bind(this));
 
                 this.checkConnectionBtn = rendered.find('#checkConnection');
                 this.checkConnectionBtn.click($.proxy(this._onCheckConnection, this));
@@ -222,7 +230,7 @@ tau.mashups
                     Settings: {
                         Uri: this._find('#uri').val(),
                         Login: this._find('#login').val(),
-                        Password: this._find('#password').val(),
+                        Password: this._passwordChanged ? this._find('#password').val() : null,
                         StartRevision: this._find('#startRevision').val(),
                         SyncInterval: this._find('#syncInterval').val(),
                         UserMapping: this.UserMappingEditor.getUserMappings()

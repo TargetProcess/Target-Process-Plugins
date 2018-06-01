@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Core</RootNamespace>
     <AssemblyName>Tp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
@@ -86,9 +86,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -100,9 +98,8 @@
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
-    <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.7\lib\net45\Tp.Core.Functional.dll</HintPath>
     </Reference>
     <Reference Include="Tp.I18n, Version=0.1.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tp.I18n.0.1.0\lib\net45\Tp.I18n.dll</HintPath>
@@ -141,12 +138,14 @@
     <Compile Include="Expressions\ExpressionsHelper.cs" />
     <Compile Include="Diagnostics\Time\NoProfilerDataCollector.cs" />
     <Compile Include="Diagnostics\Time\ProfilerDiagnostics.cs" />
+    <Compile Include="Expressions\Visitors\RemoveImpossibleTypeChecks.cs" />
     <Compile Include="ITextProvider.cs" />
     <Compile Include="Features\ITpFeatureList.cs" />
     <Compile Include="Features\TpFeature.cs" />
     <Compile Include="Features\TpFeatureListExtensions.cs" />
     <Compile Include="Internationalization\MessageLocalizer.cs" />
     <Compile Include="Internationalization\LocalizationScopeAttribute.cs" />
+    <Compile Include="LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Linq\SafeConvert.cs" />
     <Compile Include="Linq\SurrogateGeneratorHelper.cs" />
     <Compile Include="Linq\TokenType.cs" />
@@ -239,6 +238,8 @@
     <Compile Include="PropertyBag\IPropertyBagSetter.cs" />
     <Compile Include="PublicNameAttribute.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="SecurityProtocolTypeScope.cs" />
+    <Compile Include="Expressions\Visitors\RemoveUnnecessaryTypeChecks.cs" />
     <Compile Include="SerializableStringDictionary.cs" />
     <Compile Include="ErrorResolutionType.cs" />
     <Compile Include="ServiceManager.cs" />
@@ -272,7 +273,6 @@
     <Compile Include="Linq\DynamicExpressionParser.cs" />
     <Compile Include="Linq\DynamicOrdering.cs" />
     <Compile Include="Linq\DynamicProperty.cs" />
-    <Compile Include="Linq\DynamicQueryable.cs" />
     <Compile Include="Linq\ParseException.cs" />
     <Compile Include="Linq\Res.cs" />
     <Compile Include="Linq\Signature.cs" />
@@ -308,6 +308,7 @@
     <Compile Include="PropertyBag\TypedKey.cs" />
     <Compile Include="PropertyBag\TypedKeyStorage.cs" />
     <Compile Include="TypeExtensions.cs" />
+    <Compile Include="TypeHelper.cs" />
     <Compile Include="TypeNameWithoutVersion.cs" />
     <Compile Include="RootUri.cs" />
     <Compile Include="Unit.cs" />

@@ -20,12 +20,8 @@ namespace Tp.Utils.Csv
         /// <exception cref="ArgumentNullException">If <paramref name="textWriter"/> is <c>null</c>.</exception>
         public CsvRenderer(char delimiter, TextWriter textWriter)
         {
-            if (textWriter == null)
-            {
-                throw new ArgumentNullException(nameof(textWriter));
-            }
             _delimiter = delimiter;
-            _textWriter = textWriter;
+            _textWriter = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
         }
 
         public void WriteBlock(StringBuilder stream)
@@ -55,7 +51,7 @@ namespace Tp.Utils.Csv
             {
                 StartNewLine();
             }
-            foreach (string s in values)
+            foreach (var s in values)
             {
                 WriteValue(s);
             }
@@ -105,7 +101,7 @@ namespace Tp.Utils.Csv
                 if (NeedEscape(value))
                 {
                     textWriter.Write("\"");
-                    foreach (char c in value)
+                    foreach (var c in value)
                     {
                         if (c == '"')
                         {
@@ -132,7 +128,7 @@ namespace Tp.Utils.Csv
 
         public void Render(IEnumerable<string> columnNames)
         {
-            foreach (String column in columnNames)
+            foreach (var column in columnNames)
             {
                 WriteValue(column);
             }

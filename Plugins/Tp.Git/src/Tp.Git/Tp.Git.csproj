@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\..\..\packages\LibGit2Sharp-SSH.NativeBinaries.1.0.14\build\LibGit2Sharp-SSH.NativeBinaries.props" Condition="Exists('..\..\..\..\packages\LibGit2Sharp-SSH.NativeBinaries.1.0.14\build\LibGit2Sharp-SSH.NativeBinaries.props')" />
+  <Import Project=".\ReplaceLibgitBinaries.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Git</RootNamespace>
     <AssemblyName>Tp.Git</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
@@ -26,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
@@ -70,6 +73,9 @@
     <Reference Include="Mono.Security.Win32, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Security.Win32.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NGit, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\NGit.dll</HintPath>
@@ -117,15 +123,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\GenerateSshKeysCommand.cs" />
     <Compile Include="DeleteProfileCommandHandler.cs" />
     <Compile Include="GitCheckConnectionCommand.cs" />
     <Compile Include="GitPluginProfile.cs" />
     <Compile Include="GitCurrentProfileToConnectionSettingsAdapter.cs" />
+    <Compile Include="GitStartupHandler.cs" />
     <Compile Include="IConnectionChecker.cs" />
+    <Compile Include="IGitConnectionSettings.cs" />
     <Compile Include="LibgitConnectionChecker.cs" />
     <Compile Include="NGitConnectionChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructureMap\GitPluginExcludedAssemblies.cs" />
+    <Compile Include="VersionControlSystem\Ssh\SshCredentials.cs" />
+    <Compile Include="VersionControlSystem\Ssh\StrictUtf8Marshaler.cs" />
     <Compile Include="VersionControlSystem\IGitClient.cs" />
     <Compile Include="VersionControlSystem\LibgitCheckConnectionErrorResolver.cs" />
     <Compile Include="VersionControlSystem\LibgitClient.cs" />
@@ -175,9 +186,29 @@
     <Content Include="git-logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="git2.dll" />
+    <None Include="git2.dll.readme.txt" />
     <Content Include="Mashups\ProfileEditor\ProfileEditor.js" />
     <Content Include="Mashups\ProfileEditor\registerMashup.js" />
     <Content Include="Mashups\ProfileEditor\userMappingEditor.js" />
+    <Content Include="ssh-keygen\msys-2.0.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ssh-keygen\msys-crypto-1.0.0.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ssh-keygen\msys-gcc_s-seh-1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ssh-keygen\msys-ssp-0.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ssh-keygen\msys-z.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ssh-keygen\ssh-keygen.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
@@ -204,9 +235,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\*.*  $(TargetDir)Mashups\*.* /Y /E
-
-
-
 echo F | move /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

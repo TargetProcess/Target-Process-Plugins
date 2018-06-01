@@ -12,14 +12,13 @@ using Tp.SourceControl.Settings;
 
 namespace Tp.SourceControl.VersionControlSystem
 {
-    public abstract class VersionControlSystem : IVersionControlSystem
+    public abstract class VersionControlSystem<TSettings> : IVersionControlSystem where TSettings : ISourceControlConnectionSettingsSource
     {
-        protected readonly ISourceControlConnectionSettingsSource _settings;
+        protected readonly TSettings _settings;
         protected readonly ICheckConnectionErrorResolver _errorResolver;
         protected readonly IActivityLogger _logger;
 
-        protected VersionControlSystem(ISourceControlConnectionSettingsSource settings,
-            ICheckConnectionErrorResolver errorResolver, IActivityLogger logger)
+        protected VersionControlSystem(TSettings settings, ICheckConnectionErrorResolver errorResolver, IActivityLogger logger)
         {
             _settings = settings;
             _errorResolver = errorResolver;

@@ -42,8 +42,8 @@ using Tp.Testing.Common.NBehave;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.12.6.38108")]
+// [assembly: AssemblyVersion("3.12.10.39797")]
 
-[assembly: AssemblyVersion("3.12.6.38108")]
-[assembly: AssemblyFileVersion("3.12.6.38108")]
+[assembly: AssemblyVersion("3.12.10.39797")]
+[assembly: AssemblyFileVersion("3.12.10.39797")]
 [assembly: ActionStepsAssembly]

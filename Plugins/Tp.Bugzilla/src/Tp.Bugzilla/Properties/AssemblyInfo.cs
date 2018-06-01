@@ -35,10 +35,10 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.12.6.38108")]
+// [assembly: AssemblyVersion("3.12.10.39797")]
 
-[assembly: AssemblyVersion("3.12.6.38108")]
-[assembly: AssemblyFileVersion("3.12.6.38108")]
+[assembly: AssemblyVersion("3.12.10.39797")]
+[assembly: AssemblyFileVersion("3.12.10.39797")]
 [assembly:
     PluginAssembly("Bugzilla",
         "Imports bugs from Bugzilla to TargetProcess in real time. Sends the updated states, comments, assignments back to Bugzilla.",

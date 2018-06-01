@@ -50,14 +50,13 @@ namespace Tp.PopEmailIntegration.Sagas
                 Data.Requesters = message.Requesters;
                 Data.MessageDto = message.MessageDto;
 
-                Log().Info(string.Format("Creating request from message with id {0} in project {1}", message.MessageDto.ID,
-                    message.ProjectId));
+                Log().Info($"Creating request from message with id {message.MessageDto.ID} in project {message.ProjectId}");
 
                 var requestDto = new RequestDTO
                 {
                     OwnerID = message.MessageDto.FromID,
                     Name = string.IsNullOrEmpty(message.MessageDto.Subject)
-                        ? string.Format("Created from Message with ID {0}", message.MessageDto.ID)
+                        ? $"Created from Message with ID {message.MessageDto.ID}"
                         : message.MessageDto.Subject,
                     Description = Utils.TextToHtml(message.MessageDto.Body ?? string.Empty),
                     ProjectID = message.ProjectId,
@@ -70,9 +69,7 @@ namespace Tp.PopEmailIntegration.Sagas
             else
             {
                 Log().Info(
-                    string.Format(
-                        "Not creating request from message with id {0} in project {1} because it has been sent by TargetProcess or the project itself",
-                        message.MessageDto.ID, message.ProjectId));
+                    $"Not creating request from message with id {message.MessageDto.ID} in project {message.ProjectId} because it has been sent by TargetProcess or the project itself");
                 MarkAsComplete();
             }
         }
@@ -94,13 +91,13 @@ namespace Tp.PopEmailIntegration.Sagas
         {
             var messageId = Data.MessageDto.ID;
             var requestId = Data.RequestId;
-            Log().Info(string.Format("Attaching message with id {0} to request with id {1}", messageId, requestId));
+            Log().Info($"Attaching message with id {messageId} to request with id {requestId}");
             Send(new AttachMessageToGeneralCommand { MessageId = messageId, GeneralId = requestId });
         }
 
         public void Handle(MessageAttachedToGeneralMessage message)
         {
-            Log().Info(string.Format("Adding attachments to request with id {0}", message.GeneralId));
+            Log().Info($"Adding attachments to request with id {message.GeneralId}");
             SendLocal(new AddAttachmentsToGeneralCommandInternal
             {
                 Attachments = Data.Attachments,
@@ -111,7 +108,7 @@ namespace Tp.PopEmailIntegration.Sagas
 
         public void Handle(AttachmentsAddedToGeneralMessage message)
         {
-            Log().Info(string.Format("Updating description for request with id {0}", Data.RequestId));
+            Log().Info($"Updating description for request with id {Data.RequestId}");
             SendLocal(new UpdateRequestDescriptionCommandInternal
             {
                 RequestAttachmentDtos = message.Attachments,
@@ -123,15 +120,14 @@ namespace Tp.PopEmailIntegration.Sagas
 
         public void Handle(RequestDescriptionUpdatedMessageInternal message)
         {
-            Log().Info(string.Format("Marking message with id {0} as processed", Data.MessageDto.ID));
+            Log().Info($"Marking message with id {Data.MessageDto.ID} as processed");
             Data.MessageDto.IsProcessed = true;
             Send(new UpdateMessageCommand(Data.MessageDto, new Enum[] { MessageField.IsProcessed }));
         }
 
         public void Handle(MessageUpdatedMessage message)
         {
-            Log().Info(string.Format("Request with id {0} is successfully created from message with id {1}", Data.RequestId,
-                Data.MessageDto.ID));
+            Log().Info($"Request with id {Data.RequestId} is successfully created from message with id {Data.MessageDto.ID}");
             MarkAsComplete();
         }
 

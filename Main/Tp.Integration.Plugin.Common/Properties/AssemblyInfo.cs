@@ -34,10 +34,10 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.12.6.38108")]
+// [assembly: AssemblyVersion("3.12.10.39797")]
 
-[assembly: AssemblyVersion("3.12.6.38108")]
-[assembly: AssemblyFileVersion("3.12.6.38108")]
+[assembly: AssemblyVersion("3.12.10.39797")]
+[assembly: AssemblyFileVersion("3.12.10.39797")]
 [assembly: InternalsVisibleTo("Tp.Integration.Plugin.Common.Tests")]
 [assembly: InternalsVisibleTo("Tp.Integration.Testing.Common")]
 [assembly: InternalsVisibleTo("Tp.LegacyProfileConversion.Common.Testing")]

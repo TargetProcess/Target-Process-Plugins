@@ -1,11 +1,10 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using NServiceBus;
 using Tp.Integration.Messages.PluginLifecycle;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.PopEmailIntegration.Initialization

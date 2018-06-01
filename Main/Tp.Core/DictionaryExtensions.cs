@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using Tp.Core;
 using Tp.Core.Annotations;
 
@@ -102,6 +103,12 @@ namespace System.Collections.Generic
         }
 
         public static Maybe<TVal> GetValue<TKey, TVal>(this Dictionary<TKey, TVal> d, TKey k)
+        {
+            IDictionary<TKey, TVal> typed = d;
+            return typed.GetValue(k);
+        }
+
+        public static Maybe<TVal> GetValue<TKey, TVal>(this ConcurrentDictionary<TKey, TVal> d, TKey k)
         {
             IDictionary<TKey, TVal> typed = d;
             return typed.GetValue(k);

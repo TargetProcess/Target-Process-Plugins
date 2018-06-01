@@ -6,11 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Mercurial;
 using Tp.SourceControl;
 using Tp.SourceControl.VersionControlSystem;
 using Tp.SourceControl.Workflow.Workflow;

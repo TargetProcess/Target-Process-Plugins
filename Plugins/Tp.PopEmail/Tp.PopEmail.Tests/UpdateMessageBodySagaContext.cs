@@ -4,6 +4,7 @@
 // 
 
 using System;
+using System.Collections.Generic;
 using StructureMap;
 using Tp.Integration.Common;
 using Tp.PopEmailIntegration.Sagas;
@@ -19,6 +20,7 @@ namespace Tp.PopEmailIntegration
             _command = new UpdateMessageBodyCommandInternal
             {
                 AttachmentDtos = new AttachmentDTO[] { },
+                ContentIds = new Dictionary<int, string>(),
                 MessageDto = new MessageDTO(),
                 OuterSagaId = OuterSagaId
             };

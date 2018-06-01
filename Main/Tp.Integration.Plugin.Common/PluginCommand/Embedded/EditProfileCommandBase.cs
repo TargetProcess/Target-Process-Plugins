@@ -27,7 +27,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 
         public PluginCommandResponseMessage Execute(string args, UserDTO user = null)
         {
-            var profileDto = args.DeserializeProfile();
+            var profileDto = args.DeserializeProfile(p => ProfileCollection[p]);
             return OnExecute(profileDto);
         }
 

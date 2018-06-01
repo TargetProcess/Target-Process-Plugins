@@ -6,10 +6,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using NGit;
 using StructureMap;
+using Tp.Core;
 
 namespace Tp.SourceControl.Testing.Repository.Git
 {
@@ -56,9 +58,12 @@ namespace Tp.SourceControl.Testing.Repository.Git
 
             var clonedRepoFolder = CreateUniqueTestFolderPrefix();
 
-            _git = NGit.Api.Git.CloneRepository()
-                .SetURI(LocalRepositoryPath)
-                .SetDirectory(clonedRepoFolder).Call();
+            InvokeInSecurityProtocolScope(() =>
+            {
+                _git = NGit.Api.Git.CloneRepository()
+                    .SetURI(LocalRepositoryPath)
+                    .SetDirectory(clonedRepoFolder).Call();
+            });
         }
 
         private static string CreateUniqueTestFolderPrefix()
@@ -133,6 +138,14 @@ namespace Tp.SourceControl.Testing.Repository.Git
                         }
                     }
                 }
+            }
+        }
+
+        private void InvokeInSecurityProtocolScope(Action action)
+        {
+            using (new SecurityProtocolTypeScope(SecurityProtocolType.Tls12))
+            {
+                action();
             }
         }
     }

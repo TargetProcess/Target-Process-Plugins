@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -16,14 +16,14 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.Git.VersionControlSystem
 {
-    public class GitVersionControlSystem : SourceControl.VersionControlSystem.VersionControlSystem
+    public class GitVersionControlSystem : VersionControlSystem<ISourceControlConnectionSettingsSource>
     {
         private readonly IDiffProcessor _diffProcessor;
         private readonly IRevisionIdComparer _revisionComparer;
         private readonly IGitClient _git;
         private const int MissingRevisionsCheckInterval = 7;
 
-        public GitVersionControlSystem(ISourceControlConnectionSettingsSource settings,
+        public GitVersionControlSystem(IGitConnectionSettings settings,
             ICheckConnectionErrorResolver errorResolver, IActivityLogger logger,
             IDiffProcessor diffProcessor, IStorageRepository profile, IRevisionIdComparer revisionComparer,
             IGitClientFactory gitClientFactory)

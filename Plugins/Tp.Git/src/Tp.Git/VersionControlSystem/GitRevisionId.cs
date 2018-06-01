@@ -50,7 +50,7 @@ namespace Tp.Git.VersionControlSystem
 
         public override string ToString()
         {
-            return string.Format("RevisionId: {0}, Date: {1}", Value, Time);
+            return $"RevisionId: {Value}, Date: {Time}";
         }
     }
 }

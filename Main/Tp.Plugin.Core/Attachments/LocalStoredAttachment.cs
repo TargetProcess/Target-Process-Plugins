@@ -12,8 +12,10 @@ namespace Tp.Plugin.Core.Attachments
     {
         public FileId FileId { get; set; }
         public string FileName { get; set; }
+        public string ContentType { get; set; }
         public string Description { get; set; }
         public int? OwnerId { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string ContentId { get; set; }
     }
 }

@@ -3,25 +3,22 @@
 //   TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-
-using Tp.Integration.Messages;
-using Tp.Integration.Messages.ServiceBus.Transport.Router;
-
 namespace Tp.Integration.Plugin.Common.Handlers
 {
-    using System;
-    using NServiceBus;
-    using System.Linq;
+    using Core.Annotations;
+    using Domain;
+    using log4net;
+    using Logging;
     using Messages;
     using Messages.AccountLifecycle;
+    using Messages.Commands;
     using Messages.PluginLifecycle;
-    using Domain;
-    using Tp.Core.Annotations;
-    using Tp.Integration.Messages.ServiceBus.Transport;
-    using Tp.Integration.Messages.Commands;
-    using Tp.Integration.Plugin.Common.Logging;
-    using Tp.Integration.Plugin.Common.PluginLifecycle;
-    using log4net;
+    using Messages.ServiceBus.Transport;
+    using Messages.ServiceBus.Transport.Router;
+    using NServiceBus;
+    using PluginLifecycle;
+    using System;
+    using System.Linq;
 
     public sealed class AccountHandler
         : IHandleMessages<AccountAddedMessage>,

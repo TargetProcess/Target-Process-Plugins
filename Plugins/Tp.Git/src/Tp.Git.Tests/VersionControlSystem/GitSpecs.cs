@@ -35,7 +35,7 @@ namespace Tp.Git.Tests.VersionControlSystem
 {
     [TestFixture]
     [Category("PartPlugins1")]
-    public class GitSpecs : ISourceControlConnectionSettingsSource
+    public class GitSpecs : IGitConnectionSettings
     {
         private GitTestRepository _testRepository;
         private string _gitRepoUri;
@@ -435,7 +435,7 @@ namespace Tp.Git.Tests.VersionControlSystem
             return CreateGit(this);
         }
 
-        private GitVersionControlSystem CreateGit(ISourceControlConnectionSettingsSource settings)
+        private GitVersionControlSystem CreateGit(IGitConnectionSettings settings)
         {
             return new GitVersionControlSystem(settings,
                 ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
@@ -447,5 +447,9 @@ namespace Tp.Git.Tests.VersionControlSystem
         }
 
         #endregion
+
+        public bool UseSsh => false;
+        public string SshPrivateKey => null;
+        public string SshPublicKey => null;
     }
 }

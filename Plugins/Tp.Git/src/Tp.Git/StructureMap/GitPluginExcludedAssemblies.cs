@@ -7,7 +7,13 @@ namespace Tp.Git.StructureMap
     {
         public GitPluginExcludedAssemblies()
         {
-            AddRange(new[] { "git2-ssh-baa87df.dll", "libssh2.dll", "zlib.dll" });
+            AddRange(new[]
+            {
+                // libgit-ssh
+                "git2-ssh-baa87df.dll",
+                // ssh-keygen
+                "ssh-keygen.exe", "msys-z.dll", "msys-ssp-0.dll", "msys-gcc_s-seh-1.dll", "msys-crypto-1.0.0.dll", "msys-2.0.dll"
+            });
         }
     }
 }

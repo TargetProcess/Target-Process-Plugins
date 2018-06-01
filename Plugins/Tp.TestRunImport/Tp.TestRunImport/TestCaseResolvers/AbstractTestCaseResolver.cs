@@ -74,7 +74,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
         public CheckMappingResult ResolveTestCaseNames(PluginProfileErrorCollection errors)
         {
             var result = new CheckMappingResult { Errors = errors, NamesMappers = new List<NamesMapper>() };
-            if (errors.Count() == 0)
+            if (!errors.Any())
             {
                 var mapped = new List<KeyValuePair<int, NamesMapper>>();
                 var notMapped = new List<NamesMapper>();
@@ -92,19 +92,19 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
                         r =>
                             mapped.Add(new KeyValuePair<int, NamesMapper>(r.TestCaseID.GetValueOrDefault(),
                                 new NamesMapper(
-                                    string.Format("#{0} - {1}", r.TestCaseID, r.TestCaseName),
+                                    $"#{r.TestCaseID} - {r.TestCaseName}",
                                     resultInfo.Name))));
                     result.Mapped += resolved.Count;
                 }
                 mapped.OrderBy(x => x.Key).ForEach(o => result.NamesMappers.Add(o.Value));
-                result.OverMappedUnitTests = mapped.GroupBy(x => x.Key).Where(g => g.Count() > 1).Count();
+                result.OverMappedUnitTests = mapped.GroupBy(x => x.Key).Count(g => g.Count() > 1);
                 foreach (
                     var tt in
                     TestCaseTestPlans.Where(t => mapped.FirstOrDefault(x => x.Key == t.TestCaseID.GetValueOrDefault()).Value == null)
                         .OrderBy(x => x.TestCaseID.GetValueOrDefault()))
                 {
                     result.NamesMappers.Add(new NamesMapper(
-                        string.Format("#{0} - {1}", tt.TestCaseID, tt.TestCaseName),
+                        $"#{tt.TestCaseID} - {tt.TestCaseName}",
                         string.Empty));
                     result.NotMappedTestCases++;
                 }

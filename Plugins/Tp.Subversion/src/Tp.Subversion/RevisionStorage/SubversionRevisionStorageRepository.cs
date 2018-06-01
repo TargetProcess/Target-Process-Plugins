@@ -1,4 +1,9 @@
-﻿using Tp.Integration.Plugin.Common.Domain;
+﻿// 
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.RevisionStorage;
 using Tp.SourceControl.VersionControlSystem;
 

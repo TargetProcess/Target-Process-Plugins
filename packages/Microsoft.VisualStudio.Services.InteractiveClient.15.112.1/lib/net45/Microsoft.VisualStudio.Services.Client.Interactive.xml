@@ -1,0 +1,2923 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.VisualStudio.Services.Client.Interactive</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAdalAuthenticationHelper.GetTenantIdFromAccountStore(System.String)">
+            <summary>  
+            Read tenant /authenticator info from Account storage (HKEY_CURRENT_USER\Software\Microsoft\VSCommon\Keychain\Accounts) for specified user
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAdalAuthenticationHelper.TrySetADALTokenForAuth(Microsoft.VisualStudio.Services.Client.Controls.VssFederatedCredentialPrompt,Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper)">
+            <summary>
+            Validate adal token against VSTS Service. If Successful, set parameters of prompt to include access token and return true.
+            Else, return false.
+            </summary>
+            <param name="federatedPrompt"></param>
+            <param name="tokenCacheItem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAdalAuthenticationHelper.VerifyAuthWithADALToken(Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper,System.String@)">
+            <summary>
+            Get access token from ADALCache using tokenCacheItem as key and validate token against Identities/me endpoint.
+            Return true if valid, else return false.
+            </summary>
+            <param name="tokenCacheItem"></param>
+            <param name="accessToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAdalAuthenticationHelper.CleanupAccessTokenInPromptParameters(Microsoft.VisualStudio.Services.Client.Controls.VssFederatedCredentialPrompt)">
+            <summary>
+            Prompt's parameters may contain access token as a result of previous request which may/maynot be valid anymore.
+            As a precaution, always Clean up Accesstoken from parameters for subsequest requests.
+            </summary>
+            <param name="federatedPrompt"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAdalAuthenticationHelper.CleanupUserInfoInPromptParameters(Microsoft.VisualStudio.Services.Client.Controls.VssFederatedCredentialPrompt)">
+            <summary>
+            Clean up user information in the prompt so we don't prefill the username in cases we don't want to.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAdalAuthenticationHelper.FilterForDistinctTenantUser(System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper},System.String)">
+            <summary>
+            Filter distinct user information by tenant and attempt to acquire token for unique combination of user and tenant.
+            If successful, add to list of users to be shown on Account Picker
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage">
+            <summary>
+            A helper class that adds Token Storage support to normal VssClientCredentials.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="storageKind"></param>
+            <param name="storageNamespace"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.#ctor(System.String,Microsoft.VisualStudio.Services.Common.TokenStorage.VssTokenStorage)">
+            <summary>
+            
+            </summary>
+            <param name="storageKind"></param>
+            <param name="tokenStorage"></param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.TokenStorage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.TokenKind">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.RetrieveToken(System.Uri,Microsoft.VisualStudio.Services.Common.VssCredentialsType)">
+            <summary>
+            
+            </summary>
+            <param name="serverUrl"></param>
+            <param name="credentialsType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.StoreToken(System.Uri,Microsoft.VisualStudio.Services.Common.IssuedToken)">
+            <summary>
+            
+            </summary>
+            <param name="serverUrl"></param>
+            <param name="token"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.RemoveToken(System.Uri,Microsoft.VisualStudio.Services.Common.IssuedToken)">
+            <summary>
+            
+            </summary>
+            <param name="serverUrl"></param>
+            <param name="token"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.RemoveTokenValues(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="userId"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentialStorage.BuildTokenKey(System.Uri,Microsoft.VisualStudio.Services.Common.VssCredentialsType)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Internal.EditionType">
+            <summary>
+            Which edition is installed: Standard(Server), Express, Trial or Hosted
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.NotificationHandler">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.NotificationExceptionHandler">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.NotificationSubscription">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.NotificationSubscription.UnSubscribe">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.ClientNotificationExceptionUtility.s_acsErrorCodeRegEx">
+            <summary> 
+            Provides a compiled regular expression used for extracting the error code from the message. 
+            </summary> 
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientNotificationExceptionUtility.IsTransient(System.Exception)">
+            <summary> 
+            Determines whether the specified exception represents a transient failure that can be compensated by a retry. 
+            </summary> 
+            <param name="ex">The exception object to be verified.</param> 
+            <returns>True if the specified exception is considered as transient, otherwise false.</returns> 
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.IClientNotificationSubscription">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.IClientNotificationSubscription.UnSubscribe">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.NotificationContext">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.NotificationContext.ClientId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.NotificationContext.NotificationType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.NotificationContext.EventHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.NotificationContext.ExceptionHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionMessage.Type">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionMessage.Attributes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionMessage.InnerException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionMessage.IsTransient">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionType.ServiceBusException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.ServiceBusExceptionType.NotificationServiceNotAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.AddNewAccount">
+            <summary>
+              Looks up a localized string similar to Add a new account....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.CancelButton">
+            <summary>
+              Looks up a localized string similar to _New....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.DialogHeader">
+            <summary>
+              Looks up a localized string similar to Choose your account.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.DialogTitle">
+            <summary>
+              Looks up a localized string similar to Choose an account.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerResources.OkButton">
+            <summary>
+              Looks up a localized string similar to _Select.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerWindow">
+            <summary>
+            Interaction logic for AccountPickerWindow.xaml
+            </summary>
+            <summary>
+            AccountPickerWindow
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.AccountPicker.AccountPickerWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.BrowserEmulationVersion.TrySetBrowserVersion(Microsoft.VisualStudio.Services.Client.Controls.BrowserVersion)">
+            <summary>
+            Sets browser emulation version in registry for current application so that browser opened from current
+            application will behave like corresponsing version. 
+            </summary>
+            <param name="version">Desired version. If default is passed, it will set emulation version as installed IE's version</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.BrowserEmulationVersion.GetEmulationVersionByBrowserVersion(System.Int32)">
+            <summary>
+            Returns browser emulation version corresponding to the given IE version. It picks force version of each browser version (if available) because we dont
+            want this setting is overriden by !DOCTYPE directive. If non-valid IE version is passed, it returns IE9.
+            </summary>
+            <param name="browserVersion">IE's version</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.BrowserFlowLayer">
+            <summary>
+            Layer a browser sign-in event was detected.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Controls.BrowserFlowLayer.Unspecified">
+            <summary>
+            Unknown or not specified.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Controls.BrowserFlowLayer.Navigation">
+            <summary>
+            During navigation to a location.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Controls.BrowserFlowLayer.Server">
+            <summary>
+            From the server, which may or may not be based on the request.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Controls.BrowserFlowLayer.Client">
+            <summary>
+            In the client, which may or may not be based on content from the server.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.BrowserWindow">
+            <summary>
+            Interaction logic for BrowserWindow.xaml
+            </summary>
+            <summary>
+            BrowserWindow
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.BrowserWindow.OnPreviewKeyDown(System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Temporary solution to block commonly used but undesirable Internet Explorer keyboard shortcuts.
+            </summary>
+            <param name="e">Event details.</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.BrowserWindow.KeyDownHandler">
+            <summary>
+            Attach to an element to preview all key down events and handle them unless they are explicitly ignored.
+            </summary>
+            <remarks>
+            Code borrowed and adapted from $/DevDiv/Main/
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.BrowserWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.DpiHelper">
+            <summary>
+            Copied from src\env\shell\PackageFramework\Current\Shell\UI\Common\DpiHelper.cs
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.DpiHelper.DeviceDpiX">
+            <summary>
+            The screen's (device) current horizontal DPI
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.DialogHost">
+            <summary>
+            Default implementation for <c>IDialogHost</c>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.InvokeDialogFunc">
+            <summary>
+            Callback function that shows the dialog.
+            </summary>
+            <param name="owner">Parent window handle</param>
+            <param name="state">Parameters of the dialog</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.IDialogHost">
+            <summary>
+            Provide a hook to delegate presenting a dialog window to the caller so it
+            can fully control the settings on which the dialog is shown.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.IDialogHost.InvokeDialogAsync(Microsoft.VisualStudio.Services.Client.Controls.InvokeDialogFunc,System.Object)">
+            <summary>
+            Show a dialog by invoking the callback function.
+            </summary>
+            <param name="showDialog">Callback to show the dialog</param>
+            <param name="state">Parameters of the dialog</param>
+            <returns>Dialog result</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPromptContext">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts.#ctor(Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPromptContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts.#ctor(Microsoft.VisualStudio.Services.Common.IVssCredentialPrompt,Microsoft.VisualStudio.Services.Common.IVssCredentialPrompt)">
+            <summary>
+            
+            </summary>
+            <param name="federatedCredentialPrompt"></param>
+            <param name="windowsCredentialPrompt"></param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts.FederatedPrompt">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts.WindowsPrompt">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.VssCredentialPrompts.CreateDefault(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.FederatedCredential)">
+            <summary>
+            
+            </summary>
+            <param name="federatedCredential"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.VssFederatedCredentialPrompt.InvokeDialog(System.IntPtr,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="owner"></param>
+            <param name="state"></param>
+        </member>
+        <member name="E:Microsoft.VisualStudio.Services.Client.Controls.VssFederatedCredentialPrompt.DialogShowing">
+            <summary>
+            Occurs just before the dialog is brought up.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.VssFederatedSignInWindow.ClientTokenData">
+            <summary>
+            Gets the metadata regarding the client token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.VssFederatedSignInWindow.Error">
+            <summary>
+            Error received during failed processing.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Controls.VssFederatedSignInWindow.TokenData">
+            <summary>
+            Gets the JSON feed returned from the VSS server.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.WindowsCredentialPrompt.GetToken(System.Uri,System.Net.ICredentials)">
+            <summary>
+            
+            </summary>
+            <param name="uri"></param>
+            <param name="failedCredentials"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.WindowsCredentialPrompt.GetPrimerCredentialsBlob(System.String)">
+            <summary>
+            Builds the credentials blob used to prime the credentials prompt.
+            The input may be in either "DOMAIN\user" form or just "user".
+            This method may return null, in which case no blob should be passed to
+            CredUIPromptForWindowsCredentials.
+            </summary>
+            <param name="userName">Username used to prepopulate the username field.</param>
+            <returns>Blob to pass to CredUIPromptForWindowsCredentials</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Controls.WindowsCredentialPrompt.GetFullyQualifiedDnsName(System.String)">
+            <summary>
+            Attempts to resolve the host into a fully qualified Dns name.  If it fails, it will return the host name.
+            </summary>
+            <param name="uri"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager">
+            <summary>
+            Default implementation of the IAccountManager. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.AddLogger(Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger)">
+            <summary>
+            Add a logger to the account manager so that events which are logged to the account manager can be retreived.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.RemoveLogger(Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger)">
+            <summary>
+            Remove a logger from the account manager
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.#ctor(Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="store">Storage to store accounts</param>
+            <param name="instanceName">Instance name, is used to create different account manager scopes. One usage is to create a different instance per rootsuffix in visual studio.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.#ctor(Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="store">storage to store accounts</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.#ctor(Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore,System.String,Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="store">Storage to store accounts</param>
+            <param name="instanceName">Instance name, is used to create different account manager scopes. One usage is to create a different instance per rootsuffix in visual studio.</param>
+            <param name="vsAccountProviderShim">Shim to override vs account provider properties. This can be null if no shim is desired. In that case the old code will execute.</param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.DefaultInstance">
+            <summary>
+             Global instance which everyone should use to have access to the same account manager store
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.Store">
+            <summary>
+            Store which provides access to stored account information
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.VsoEndpoint">
+            <summary>
+            Endpoint to the Visual Studio Team Services service.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.GetCache``1">
+            <summary>
+            There are a number of global caches used to store token information. The GetCache method
+            provdes a way to get access to the instance of these caches which everyone in the process should use
+            </summary>
+            <typeparam name="T">Type of cache requested. Examples are VssTokenStorage, AdalTokenCache</typeparam>
+            <returns>Cache instance</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.SetDefaultInstanceWithName(System.String)">
+            <summary>
+            Sets the default instance of the account manager to be a new account mananger greated using the passed in instance name.
+            By calling this method all users of the AccountManager.DefaultInstance will use the one created during call.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManager.SetDefaultInstanceWithName(System.String,Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore,Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim)">
+            <summary>
+            Sets the default instance of the account manager to be a new account mananger greated using the passed in instance name.
+            By calling this method all users of the AccountManager.DefaultInstance will use the one created during call.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.ADALEndpointRegistryOverrideName">
+            <summary>
+            Registry value which can be used to override the endpoint used to acquire adal tokens by default
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.VSOEndpointRegistryOverrideName">
+            <summary>
+            End point used to connect to VSTS when asking for both the session tokens and the tenant infomration
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.AdalExtraParametersRegistryOverrideName">
+            <summary>
+            Registry value to override the default extra parameters passed during account creation or authentication
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.TrueTask">
+            <summary>
+            A completed task with a <c>true</c> result.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.FalseTask">
+            <summary>
+            A completed task with a <c>false</c> result.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.RemoveMidQueue``1(System.Collections.Generic.Queue{``0},``0)">
+            <summary>
+            Removes an element from the middle of a queue without disrupting the other elements.
+            </summary>
+            <typeparam name="T">The element to remove.</typeparam>
+            <param name="queue">The queue to modify.</param>
+            <param name="valueToRemove">The value to remove.</param>
+            <remarks>
+            If a value appears multiple times in the queue, only its first entry is removed.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.GetVSOEndpointRegistryOverride">
+            <summary>
+            Get the endpoint to call VSTS services with from the registry
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.GetADALEndpointRegistryOverride">
+            <summary>
+            Get the endpoint we will use to acquire an ADAL token against for account creation and authentication
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.GetADALExtraParametersRegistryOverride">
+            <summary>
+            Get the extra query parameters from the registry that will be used during account creation and authentication
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.GetDefaultProviderImage">
+            <summary>
+            Get the default image for an Work/School account
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagementUtilities.GetMSAImage">
+            <summary>
+            Get the default image for an MSA account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.Hive">
+            <summary>
+            Gets the hive this watcher is currently monitoring
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.KeyPath">
+            <summary>
+            Gets the key path this watcher is currently monitoring
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.WatchSubtree">
+            <summary>
+            Gets a value indicating whether or not the sub-tree is being monitored
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.Filter">
+            <summary>
+            Gets the filter for the current watcher
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.Error">
+            <summary>
+            Raised when an error occurs while monitoring the key.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.KeyChanged">
+            <summary>
+            Raised each time a registry change is detected according to the parameters of the watcher
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.Stop">
+            <summary>
+            Stops monitoring the registry key.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountRegistryWatcher.Start">
+            <summary>
+            Begins monitoring of the registry key according to the supplied parameters.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.RegistryChangeNotificationFilter.NameChange">
+            <summary>
+            Notify the caller if a subkey is added or deleted. 
+            Corrsponds to Win32 Value REG_NOTIFY_CHANGE_NAME 
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.RegistryChangeNotificationFilter.AttributeChange">
+            <summary>
+            Notify the caller of changes to the attributes of the key.  
+            Corrsponds to Win32 Value REG_NOTIFY_CHANGE_ATTRIBUTES 
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.RegistryChangeNotificationFilter.ValueChange">
+            <summary>
+            Notify the caller of changes to a value of the key. 
+            This can include adding or deleting a value, or changing an existing value. 
+            
+            Corrsponds to Win32 Value REG_NOTIFY_CHANGE_LAST_SET
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.RegistryChangeNotificationFilter.SecurityChange">
+            <summary>
+            Notify the caller of changes to the security descriptor of the key.
+            
+            Corrsponds to Win32 Value REG_NOTIFY_CHANGE_SECURITY
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache">
+            <summary>
+            The AccountManagerAdalCache is a custom implementation of the ADAL token cache for use with the 
+            AccountManager and VSAccountProvider. An instance of this object should normally be retreived from
+            the AccountManager.GetCache&lt;&lt;AccountManagerAdalCache&gt;&gt; call
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.isClearing">
+            <summary>
+            Are we in the process of clearing the cache
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.VSClientId">
+            <summary>
+            Client id for visual studio. This is to be used with the ADAL acquire token call to indicate you want a token 
+            for the visual studio client.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.AfterCacheSerialization">
+            <summary>
+            This event will fire after the cache has been serialized to disk. This is so that the vs account provider who itself normally
+            would register for AfterAccountNotification does not try and process a cache before it has been written to disk
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.#ctor">
+            <summary>
+            Create an instance of the accoung manager adal cache 
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.AadAuthorityBase">
+            <summary>
+            Base active directory authority to use when creating an authentication context.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.Clear">
+            <summary>
+            Clears the adal cache persistent storage on disk and in memory
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.GetAddedOrUpdatedItems(System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper},System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper})">
+            <summary>
+            This is to help unit test the added items algorithm. Since we cannot create a tokenCacheItem we need to wrap it so we can create mocks for unit tests
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.GetValidItemsForTenant(System.String)">
+            <summary>
+            Returns list of TokenCacheItemWrapper list (Key of ADAL Cache) belonging to specified tenant
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.GetValidItemForUserAndTenant(System.String,System.String)">
+            <summary>
+            Returns list of TokenCacheItemWrapper list (Key of ADAL Cache) belonging to specified tenant and user . Expected to be unique
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache.GetVsoEndpointToken(Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper)">
+            <summary>
+            Returns list of ADAL Token(Value of ADAL Cache) belonging to specified Adal cache key . Expected to be unique
+            The resource we are getting the token for is specifically the Vso resource
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.RegistryAccountStore.RaiseChangingEvent(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs)">
+            <summary>
+            Will fire before any changes made locally in this process to the account store.
+            Does not fire for events that occure due to other processes changing the account store.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.RegistryAccountStore.Dispose">
+            <summary>
+            Dispose of any resources used by the registry account store such as the thread which is
+            watching the registry
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.SignInHelper.PrepareSignInState">
+            <summary>
+            Prepares the sign in state before showing a sign in dialog.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim">
+            <summary>
+            This interface is to allow visual studio to shim in to the vs account provider and replace its functionality when 
+            running in visual studio.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.AdalExtraQueryParameters" -->
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetConfiguration">
+            <summary>
+            Configuration endpoints and data used to access active directory.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetMsaHomeTenantId">
+            <summary>
+            The MSA home tenantId
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.ProcessAuthenticationResultAsync(Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult)">
+            <summary>
+             Given an authentication result from an adal acquire token call look up the cache item in the adal cache and see if we need to add a new account based on that item.
+            </summary>
+            <param name="authenticationResult">Authentication result to process</param>
+            <returns>The identifier of the account that was processed</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.ClearTokensForAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Clear access tokens related to the account
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.AcquireAdalTokenAsync(System.String,System.String,Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier,System.IntPtr,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Acquires an adal token asynchronously. There are two parts to the call. The first part is a browser dialog which will be launched and make take some time
+            after the browser dialog is closed the rest of the method is async.
+            </summary>
+            <param name="parentWindowHandle">Parent windows handle</param>
+            <param name="tenantId">tenant to get token for</param>
+            <param name="identitifer">User identifier to get token for</param>
+            <param name="resource">resource to get token for</param>
+            <param name="accountForReAuthentication">Account to be used during reauthentication, if this must not be null if prompting is required</param>
+            <param name="prompt">Should a prompt be displayed if no token could be retrieved</param>
+            <param name="cancellationToken"></param>
+            <returns>Authentication result</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.AcquireAdalTokenAsyncWithContextAsync(System.String,Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext,Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Boolean,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Acquires an adal token asynchronously. This method will try and acquire an adal token silently asynchronously. However, if prompt true is passed in then there will be two parts to the call. The first part is a browser dialog which will be launched and may take some time
+            after the browser dialog is closed the rest of the method is async.
+            </summary>
+            <param name="resource">resource to get token for</param>
+            <param name="context">Existing adal context</param>
+            <param name="identitifer">User identifier to get token for</param>
+            <param name="accountForReAuthentication">Account to be used during reauthentication, if this must not be null if prompting is required</param>
+            <param name="prompt">Should a prompt be displayed if no token could be retrieved</param>
+            <param name="extraQueryParameters">Extra query parameters to pass to the login dialog</param>
+            <param name="cancellationToken"></param>
+            <returns>Authentication result</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetSessionTokenFromAccountAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Get a VSTS session token based on an account from this account provider.
+            </summary>
+            <param name="account">Account to get the session token for</param>
+            <param name="scope">The scope for the session token. An empty value indicates an unscoped token is required.</param>
+            <param name="forceRefresh">Should any cache of tokens be ignored and a new token is retreived from the server</param>
+            <param name="cancellationToken">cancellation token</param>
+            <returns>The session token</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetExtraQueryParameters(System.String)">
+            <summary>
+            Gets extra query parameters used by adal for authentication.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.RefreshAuthenticationStateAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Threading.CancellationToken)">
+            <summary>
+            Determines if the account needs re-authentication and updates its NeedsReauthentication status.
+            </summary>
+            <param name="accountKey">AccountKey which representes the account to refresh, not null. It must be supported by this account provider.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>A task that tracks the operation. Not null.</returns>
+            <exception cref="T:System.ArgumentNullException">thrown if <paramref name="account"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">thrown if <paramref name="account"/> is not supported by the account provider.</exception>
+            <exception cref="T:System.OperationCanceledException">may be thrown if <paramref name="cancellationToken"/> is cancelled</exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.CreateAccountWithUIAsync(System.IntPtr,System.Threading.CancellationToken)">
+            <summary>
+            Create a new account using this account provider.
+            This will show a login dialog initially and then be asynchronous after that point.
+            </summary>
+            <param name="parentWindowHandle">Parent windows to parent the login dialog to</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Added account</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.AuthenticateAccountWithUIAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.IntPtr,System.Threading.CancellationToken)">
+            <summary>
+            Re-authenticate an account.
+            </summary>
+            <param name="accountKey">Account to re-authenticate</param>
+            <param name="parentWindowHandle">Parent window to parent the login to</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Account that has been re-authenticated</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.AuthenticateAndApplyScopeWithUIAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.IntPtr,System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.ScopeInfo},System.Threading.CancellationToken)">
+            <summary>
+            Authenticate an account and apply a scoping filter to the account. This has two parts. First is a sign in dialog which will be launched and waited upon. After the 
+            dialog is closed the rest of the method is async.
+            </summary>
+            <param name="accountKey">Account to authenticate</param>
+            <param name="parentWindowHandle">parent windows handle</param>
+            <param name="scopes">Scopes to filter the account to</param>
+            <param name="cancellationToken">cancellation token</param>
+            <returns>An account with the scopes applied</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.ClearScopes(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Clear any scopes off the account
+            </summary>
+            <param name="accountKey">Account to clear the scopes from</param>
+            <returns>Account with the scopes cleared</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetScopesForAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Get the scopes for the account
+            </summary>
+            <param name="accountKey">Account to get the scopes for</param>
+            <returns>A scope info describing the scope data</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetHomeTenantInfo(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Gets the tenant information for the home tenant of the account. This will return a tenantInformation structure even if the home tenant is not in the scope of the account.
+             If the account cannot be found an argument exception will be thrown.
+             If no home tenand could be found null is returned
+            </summary>
+            <param name="accountKey">Account to get the home tenant info for</param>
+            <returns>Tenant information for the home account</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.GetTenantsInScope(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Gets the tenants in scope for the account
+            </summary>
+            <param name="accountKey">Account to get the tenants for</param>
+            <returns>An enumeration of tenant information on the account</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.RefreshDisplayInfoAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Threading.CancellationToken)">
+            <summary>
+            Refresh the display information on the account
+            </summary>
+            <param name="accountKey">Account to refresh the display information on</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Account with the new display information</returns>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.IVSAccountProviderShim.RaiseAccountProcessingDoneEvent">
+            <summary>
+            Fired when the account creation or authentication is completed
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountExtensions.GetIdentityProviderProperty(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Returns the value of the identity provider used for this account.
+            </summary>
+            <returns>The identity provider. This may be null, a guid(in string format), or some name</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountExtensions.SetPersonalizationAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore)">
+            <summary>
+            Returns the value of the identity provider used for this account.
+            </summary>
+            <returns>The identity provider. This may be null, a guid(in string format), or some name</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountExtensions.IsPersonalizationAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Returns the value of the identity provider used for this account.
+            </summary>
+            <returns>The identity provider. This may be null, a guid(in string format), or some name</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountExtensions.GetIdTokenPayload(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Returns the payload of the id token
+            This may be null if no id token is found
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountExtensions.GetHomeTenantId(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Gets the tenantId of the home tenant for the user of this account. 
+            This may be null if no home tenant is found
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider">
+            <summary>
+            Provides access tokens from microsoft powered accounts such as MSA and Work/School accounts. 
+            There are two sets of access tokens availiable from this provider, Session tokens to communicate with VSTS, and AdalTokens to communicate with AAD.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.EmailAddressKeyName">
+            <summary>
+            Key for adding email address to the exception data.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AccountProviderIdentifier">
+            <summary>
+            The unique guid to identify this account provider.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.PersonalizationAccountPropertyName">
+            <summary>
+            This property if set to true indicates this is the personalization account. This needs to be set by visual studio after signing in and after signing out
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.IsMSAPropertyName">
+            <summary>
+            This is a property indicating if the account is an MSA account or not
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AdalSigninExtraQueryParameters">
+            <summary>
+            Extra sign in query parameters for use with the adal sign in dialog
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.DeleteTokenCacheItem">
+            <summary>
+            Delegate to delete items from the token cache used for unit testing.
+            </summary>
+            <param name="item">Item to delete</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.TryGetSelfAsync">
+            <summary>
+            Delegate for getting the tenant infomation from VSTS
+            </summary>
+            <param name="errors">Any exceptions that happen during the retreival of the tenant information</param>
+            <param name="tenantId">TenentId to request access to the VSTS endpoint with</param>
+            <param name="uniqueId">UniqueId to request access to the VSTS endpoint with</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetWrappedItemsFromCache">
+            <summary>
+            Delegate for unit testing to provide a certain state to what tokens have been added during a addNewAccount processing flow.
+            </summary>
+            <param name="adalCache">Adal cache</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenSilently">
+            <summary>
+            A delegate for synchronously acquiring ADAL access token silently without a prompt.
+            </summary>
+            <param name="adalCache">ADAL cache, not null.</param>
+            <param name="tenantId">Tenant ID, not null.</param>
+            <param name="identifier">User identifier, not null.</param>
+            <param name="resource">Resource to get the access token for, not null.</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenSilentlyAsync">
+            <summary>
+            An delegate for asynchronously acquiring ADAL access token silently without a prompt.
+            </summary>
+            <param name="adalCache">ADAL cache, not null.</param>
+            <param name="userIdTenantIdPair">A key value pair of User Unique ID -> Tenant ID</param>
+            <param name="resource">Resource to get the access token for, not null.</param>
+            <returns>A task that returns true if the token is acquired; Otherwise, false.</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenWithUI">
+            <summary>
+            A delegate for acquiring acquiring ADAL access token synchronously with a prompt. 
+            </summary>
+            <param name="parentWindowHandle">Pointer to parent the sign in window to</param>
+            <param name="identifier">Identifier to get an access token for</param>
+            <param name="tenantId">Tenant to get the access token for</param>
+            <param name="extraQueryParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AccountHomeTenantPropertyName">
+            <summary>
+            This is the tenantId of the home tenant for the user. This is a GUID and its friendly name can be looked up in the TenantIdToNameMap property
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AccountIdentityProviderProperty">
+            <summary>
+             The name of the identity provider used to authenticate the account, this is set when the account is created.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AccountTenantInformationPropertyName">
+            <summary>
+            This is an internal property that contains the tenant information for the account
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.IdTokenPayloadPropertyName">
+            <summary>
+            This is an private property that contains the id token information for the account
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.ScopesPropertyName">
+            <summary>
+            This is an internal property that contains the scope information for the account
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.DisableMsaFedQueryParameter">
+            <summary>
+            A query parameter that tells AAD that we do not want to use the MSA login in screen. This forces users onto the work or school account screen
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.LiveDomainHintQueryParameter">
+            <summary>
+            A query parameter that tells AAD that we would like to authenticate with live.com. This also works with PPE so we do not need a different address for that.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AzureRMAPIVersion">
+            <summary>
+            API version to use with the AzureRM endpoint
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GraphEndpointApiVersion">
+            <summary>
+            API version to use with the graph endpoint
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AdalSilentRetryCount">
+            <summary>
+            Number of times we should retry a silent adal token acquisition
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.EmptyGuidList">
+            <summary>
+            Empty read only list of guid
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AdalExtraQueryParameterstRegistryOverride">
+            <summary>
+            Extra query parmeters which have been overriden from the registry
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.adalCache">
+            <summary>
+            Adal cache that persists the data to disk
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.sessionTokenStore">
+            <summary>
+            Session token storage which stores session tokens for each of the accounts
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.logger">
+            <summary>
+            Logger used to log information back to consumers of the account provider such as visual studio
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.accountStore">
+            <summary>
+            Account store which allows the modification of the account portion of the keychain
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.defaultProviderImage">
+            <summary>
+             Image which will be set as the provider image on the account when a new account is created
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.msaAccountLogo">
+            <summary>
+            Image which will be set as the account image on the account when an account is an MSA account
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.instanceName">
+            <summary>
+            Instance name from the account provider to make our mutex be different for different root suffixes of vs
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.vsoSelf">
+            <summary>
+            Identity which uses VSTS to get the identity
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.azureRMSelf">
+            <summary>
+            Identity which uses Azure RM to get identity
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.vsAccountProviderShim">
+            <summary>
+            Shim for public methods.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.Configuration">
+            <summary>
+            Configuration endpoints and data used to access active directory.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.ADALEndpoint">
+            <summary>
+            The endpoint we use to talk to ADAL when making a connection for add accounts and getting access tokens
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetSelfIdentity">
+            <summary>
+            Delegate to get the tenant information from VSTS
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetAdalCacheWrappedItems">
+            <summary>
+            Delegate to get the set of ADAL cache lists used to determine which new tokens have been added
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenNoPrompt">
+            <summary>
+            Delegate to acquire an ADAL token with NO prompt
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenNoPromptAsync">
+            <summary>
+            Gets or sets a delegate for asynchronously acquiring ADAL access token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenWithPrompt">
+            <summary>
+            Delegate to synchronously acquire an ADAL token with a prompt.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetQueryParameterCultureInfoFunc">
+            <summary>
+            Internal for dependency injection during tests. DO NOT USE.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AdalExtraQueryParametersOverride">
+            <summary>
+            Extra query parameters for the add account adal call
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.MsaHomeTenantId">
+            <summary>
+            The MSA home tenantId
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AccountProviderId">
+            <summary>
+            Get the unique guid identifier for this account provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AccountStore">
+            <summary>
+            Gets and sets the account store for this account provider
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.#ctor(System.String)">
+            <summary>
+            Create an account provider
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.#ctor(Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.TryGetSelfAsync,Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.TryGetSelfAsync,Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetWrappedItemsFromCache,Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenSilently,Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenWithUI,Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage,Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger)">
+            <summary>
+            Create an account provider
+            </summary>
+            <param name="self">Delegate to get tenant info</param>
+            <param name="cacheLists">Delegate to initialize the lists used to determine which new tokens have been added or not from the ADAL cache</param>
+            <param name="acquireAdalTokenSilently">Delegate to acquire an ADAL token silently</param>
+            <param name="acquireAdalTokenWithUI">Delegate to acquire an ADAL token with UI</param>
+            <param name="sessionTokenStorage">SessionToken storage location</param>
+            <param name="logger">logger to log information back to a consumer of the account provider</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.SetAdalCache(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache)">
+            <summary>
+            Set the ADAL cache on the account provider
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.ProcessAuthenticationResult(Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult)">
+            <summary>
+            Given an authentication result from an adal acquire token call look up the cache item in the adal cache and see if we need to add a new account based on that item.
+            </summary>
+            <param name="authenticationResult"></param>
+            <returns>the unique Id of the added account</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.ProcessAuthenticationResult(Microsoft.VisualStudio.Services.Client.Keychain.AdalCache.AuthenticationResultWrapper)">
+            <summary>
+            Given an authentication result from an adal acquire token call look up the cache item in the adal cache and see if we need to add a new account based on that item.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetWrappedCacheItems(Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache)">
+            <summary>
+            Given a token cache read through the items and wrap them in our tokencacheitem wrapper. This is done for unit testing purposes
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetUniqueIdTenantIdForMissingOrExpiredTokens(System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation})">
+            <summary>
+            Enumerates unique ID -> tenant ID pairs from <paramref name="tenantInformation"/> without good access tokens in the ADAL cache.
+            </summary>
+            <returns>
+            Enumeration of unique ID -> tenant ID pairs based on account's GetUniqueIdTenantIdMap().
+            May be null if <paramref name="tenantInformation"/> is null; Otherwise, not null.
+            </returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetUniqueIdTenantIdForMissingOrExpiredTokens(System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation},System.Collections.Generic.List{Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper})">
+            <summary>
+            Enumerates unique ID -> tenant ID pairs from <paramref name="tenantInformation"/> without good access tokens in the ADAL cache.
+            </summary>
+            <param name="currentItems">Current cache items. Not null.</param>
+            <returns>
+            Enumeration of unique ID -> tenant ID pairs based on account's tenant information.
+            May be null if <paramref name="tenantInformation"/> is null; Otherwise, not null.
+            </returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AllTenantsHaveMissingOrExpiredTokens(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Gets a value indicating whether all tenants on <paramref name="account"/> have missing or expired tokens,
+            or the <paramref name="account"/> doesn't have tenants at all.
+            </summary>
+            <param name="account">Account to check, not null.</param>
+            <returns>True if the <paramref name="account"/> doesn't have tenants or all its tenants have expired or missing tokens; Otherwise, false</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AllTenantsHaveMissingOrExpiredTokens(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.Collections.Generic.List{Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper})">
+            <summary>
+            Gets a value indicating whether all tenants on <paramref name="account"/> have missing or expired tokens,
+            or the <paramref name="account"/> doesn't have tenants at all.
+            </summary>
+            <param name="account">Account to check, not null.</param>
+            <param name="currentItems">Current ADAL cache items with access tokens, not null.</param>
+            <returns>True if the <paramref name="account"/> doesn't have tenants or all its tenants have expired or missing tokens; Otherwise, false</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetAccountNeedsReauthenticationAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.Threading.CancellationToken)">
+            <summary>
+            Gets a value indicating whether the <paramref name="account"/> needs reauthentication, doesn't need it, or if its auth status is not clear.
+            </summary>
+            <param name="account">Account to check, not null.</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>
+            A task that returns true if the <paramref name="account"/> needs re-authentication,
+            false if it doesn't need it, and null if it is not clear.
+            </returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenSilent(Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache,System.String,Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier,System.String)">
+            <summary>
+            Acquires ADAL access token silently without a prompt.
+            </summary>
+            <param name="adalCache">ADAL cache, not null.</param>
+            <param name="tenantId">Tenant ID, not null.</param>
+            <param name="identifier">User identifier, not null.</param>
+            <param name="resource">Resource to get the access token for, not null.</param>
+            <returns>UserInfo.UniqueId if the token is acquired; Otherwise, null</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenSilentAsync(Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountManagerAdalCache,System.Collections.Generic.KeyValuePair{System.String,System.String},System.String)">
+            <summary>
+            Asynchronously acquires an ADAL access token silently without a prompt.
+            </summary>
+            <param name="adalCache">ADAL cache, not null.</param>
+            <param name="userIdTenantIdPair">A key value pair of User Unique ID -> Tenant ID</param>
+            <param name="resource">Resource to get the access token for, not null.</param>
+            <returns>A task that returns true if the token is acquired; Otherwise, false.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.IsPossibleNewAccount(Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCacheItem,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+             Check the item to see if it matches an existing account.
+             To determine if the item represents a new account we check to see if there is a matching uniqueId. If there is then the item is not new. However if
+             the uniqueId is null then we cannot tell based on uniqueId alone and need to consider it a possible new account until proven otherwise
+             by calling the VSTS API to get a definitive answer.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.IsPossibleNewAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.TokenCacheItemWrapper,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            To allow testing of the operations on the cache item we need to wrap them
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetAdalUniqueIds(System.Collections.Generic.List{System.Exception},System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.Account})">
+            <summary>
+            Get the unique list of uniqueId which are on existing account objects
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenAsync(System.String,System.String,Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier,System.IntPtr,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Acquires an adal token asynchronously. There are two parts to the call. The first part is a browser dialog which will be launched and make take some time
+            after the browser dialog is closed the rest of the method is async.
+            </summary>
+            <param name="parentWindowHandle">Parent windows handle</param>
+            <param name="tenantId">tenant to get token for</param>
+            <param name="identitifer">User identifier to get token for</param>
+            <param name="resource">resource to get token for</param>
+            <param name="accountForReAuthentication">Account to be used during reauthentication, if this must not be null if prompting is required</param>
+            <param name="prompt">Should a prompt be displayed if no token could be retrieved</param>
+            <param name="cancellationToken"></param>
+            <returns>Authentication result</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireAdalTokenAsync(System.String,Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext,Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Boolean,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Acquires an adal token asynchronously. This method will try and acquire an adal token silently asynchronously. However, if prompt true is passed in then there will be two parts to the call. The first part is a browser dialog which will be launched and may take some time
+            after the browser dialog is closed the rest of the method is async.
+            </summary>
+            <param name="resource">resource to get token for</param>
+            <param name="context">Existing adal context</param>
+            <param name="identitifer">User identifier to get token for</param>
+            <param name="accountForReAuthentication">Account to be used during reauthentication, if this must not be null if prompting is required</param>
+            <param name="prompt">Should a prompt be displayed if no token could be retrieved</param>
+            <param name="extraQueryParameters">Extra query parameters to pass to the login dialog</param>
+            <param name="cancellationToken"></param>
+            <returns>Authentication result</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetSessionTokenFromAccountAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Get a VSTS session token based on an account from this account provider.
+            </summary>
+            <param name="account">Account to get the session token for</param>
+            <param name="scope">The scope for the session token. An empty value indicates an unscoped token is required.</param>
+            <param name="forceRefresh">Should any cache of tokens be ignored and a new token is retreived from the server</param>
+            <param name="cancellationToken">cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.RefreshAuthenticationStateAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Threading.CancellationToken)">
+            <summary>
+            Determines if the account needs re-authentication and updates its NeedsReauthentication status.
+            </summary>
+            <param name="accountKey">AccountKey which representes the account to refresh, not null. It must be supported by this account provider.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>A task that tracks the operation. Not null.</returns>
+            <exception cref="T:System.ArgumentNullException">thrown if <paramref name="account"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">thrown if <paramref name="account"/> is not supported by the account provider.</exception>
+            <exception cref="T:System.OperationCanceledException">may be thrown if <paramref name="cancellationToken"/> is cancelled</exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.CreateAccountWithUIAsync(System.IntPtr,System.Threading.CancellationToken)">
+            <summary>
+            Create a new account using this account provider.
+            This will show a login dialog initially and then be asynchronous after that point.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.FindAccount(Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier)">
+            <summary>
+            Finds an account by user's <paramref name="userIdentifier"/> or returns null if it's not found.
+            </summary>
+            <param name="uniqueId">User's unique id to look for. May be null or empty.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.InitializeAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore)">
+            <summary>
+            Initialize the vs account provider with an account store
+            </summary>
+            <param name="store"></param>
+            <returns>Task which will complete when the store is initialized</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AuthenticateAccountWithUIAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.IntPtr,System.Threading.CancellationToken)">
+            <summary>
+            Authenticate an account. This has two parts. First is a sign in dialog which will be launched and waited upon. After the 
+            dialog is closed the rest of the method is async.
+            </summary>
+            <param name="accountKey">Account to authenticate</param>
+            <param name="parentWindowHandle">parent windows handle</param>
+            <param name="cancellationToken">cancellation token</param>
+            <returns>An added account</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.FindAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Boolean)">
+            <summary>
+            Retrieve an account from an account key
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AuthenticateAndApplyScopeWithUIAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.IntPtr,System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.AccountManagement.ScopeInfo},System.Threading.CancellationToken)">
+            <summary>
+            Authenticate an account and apply a scoping filter to the account. This has two parts. First is a sign in dialog which will be launched and waited upon. After the 
+            dialog is closed the rest of the method is async.
+            </summary>
+            <param name="accountKey">Account to authenticate</param>
+            <param name="parentWindowHandle">parent windows handle</param>
+            <param name="scopes">Scopes to filter the account to</param>
+            <param name="cancellationToken">cancellation token</param>
+            <returns>An added account</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.ClearScopes(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Clear any scoping filter on the account
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.RefreshDisplayInfoAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Threading.CancellationToken)">
+            <summary>
+            Refreshes the display info on the account. 
+            </summary>
+            <param name="accountKey">AccountKey which represents the account to refresh teh display info on</param>
+            <param name="cancellationToken">Cancell the refresh operation</param>
+            <returns>The account with the refreshed information</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetTenantInformation(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Get the tenant information data off of an account
+            </summary>
+            <param name="account"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetTenantsInScope(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Get tenants in scope for an account. If the account cannot be found an argument exception will be thrown.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.GetHomeTenantInfo(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Gets the tenant information for the home tenant of the account. This will return a tenantInformation structure even if the home tenant is not in the scope of the account.
+             If the account cannot be found an argument exception will be thrown.
+             If no home tenand could be found null is returned
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.VSAccountProvider.AcquireTokenLogEvent.Logger">
+            <summary>
+            Internal for testing only. DO NOT USE.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs">
+            <summary>
+            This event represents a change in the account storage.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.Added">
+            <summary>
+            List of added accounts
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.Removed">
+            <summary>
+            List of removed accounts
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.Modified">
+            <summary>
+            List of modified accounts. The first value is the original account object, the second is the modified account object
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.#ctor(System.Collections.Generic.IReadOnlyList{Microsoft.VisualStudio.Services.Client.AccountManagement.Account},System.Collections.Generic.IReadOnlyList{Microsoft.VisualStudio.Services.Client.AccountManagement.Account},System.Collections.Generic.IReadOnlyList{System.Tuple{Microsoft.VisualStudio.Services.Client.AccountManagement.Account,Microsoft.VisualStudio.Services.Client.AccountManagement.Account}})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.#ctor">
+            <summary>
+            Event with no changes.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.CreateForAddingAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Create the event args for an account that is being added 
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.CreateForRemovingAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Create an event for an account to be removed
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStoreChangedEventArgs.CreateForModifyingAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Create an event for an account to be modified.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider">
+            <summary>
+            Provides a way to create and authenticate accounts
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.AccountProviderId">
+            <summary>
+            Unique guid that represents the account provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.AccountStore">
+            <summary>
+            Gets or sets the account store used by the account provider to retrieve and save accounts to storage.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.ClearTokensForAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Clear any authentication tokens related to the account.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.InitializeAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore)">
+            <summary>
+            Initialize the provider with the account store it will use to interact with the keychain
+            </summary>
+            <param name="store">Store which stores accounts</param>
+            <returns>Task to track the operation</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.RefreshAuthenticationStateAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Threading.CancellationToken)">
+            <summary>
+            Determines if the account needs re-authentication and updates its NeedsReauthentication status.
+            </summary>
+            <param name="accountKey">Account to refresh, not null. It must be supported by this account provider.</param>
+            <param name="cancellationToken">Cancelled the operation</param>
+            <returns>A task that tracks the operation. Not null.</returns>
+            <exception cref="T:System.ArgumentNullException">thrown if <paramref name="accountKey"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">thrown if <paramref name="accountKey"/> is not supported by the account provider.</exception>
+            <exception cref="T:System.OperationCanceledException">may be thrown if <paramref name="cancellationToken"/> is cancelled.</exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.AuthenticateAccountWithUIAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.IntPtr,System.Threading.CancellationToken)">
+            <summary>
+            This method is used to authenticate an account from an unauthenticated state.
+            This should be called on the UI thread.
+            </summary>
+            <param name="accountKey">Account to authenticate</param>
+            <param name="parentWindowHandle">Windows handle to parent the sign in window</param>
+            <param name="cancellationToken">Cancel the operation</param>
+            <returns>The account which has been authenticated</returns>
+            <exception cref="T:System.OperationCanceledException">If the user cancels the login prompt</exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.CreateAccountWithUIAsync(System.IntPtr,System.Threading.CancellationToken)">
+            <summary>
+            Creates an account on the keychain by launching a sign in window and asking for credentials.
+            If the account already exists on the keychain the account will be updated. No additional account will be created.
+            This should be called on the UI thread.
+            </summary>
+            <param name="parentWindowHandle">Window to parent the sign in dialog to</param>
+            <param name="cancellationToken">Cancell the operation</param>
+            <returns>The created account which has been created.</returns>
+            <exception cref="T:System.OperationCanceledException">If the user cancels the login prompt</exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider.RefreshDisplayInfoAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Threading.CancellationToken)">
+            <summary>
+            The provider will use the account key passed in to refresh the display information on the account in the keychain. 
+            For example this may be used to update descriptions or images found in the account.
+            This will save the changes to the store before returning the account
+            </summary>
+            <param name="accountKey">Account to update</param>
+            <param name="cancellationToken">Cancell the operation</param>
+            <returns>An account with the updated display info</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountManager">
+            <summary>
+            Provides access to get account providers, token caches, and the account store.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountManager.Store">
+            <summary>
+            Store that provides access to accounts in keychain storage.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountManager.GetCache``1">
+            <summary>
+            There are a number of global caches used to store token information. The GetCache method
+            provides a way to get access to the instance of these caches which everyone in the process should use
+            </summary>
+            <typeparam name="T">Type of cache requested. Examples are VssTokenStorage, AdalTokenCache</typeparam>
+            <returns>Cache instance</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountManager.GetAccountProviderAsync(System.Guid)">
+            <summary>
+            Gets an IAccountProvider based on the provider's unique guid.
+            </summary>
+            <param name="accountProviderId">Provider ID for the provider requested</param>
+            <returns>IAccountProvider instance</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore">
+            <summary>
+            Storage for accounts
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.KeychainAccountStoreChanged">
+            <summary>
+            Event that is fired after the store has changed.  This includes adds, removals and modifications.
+            This event will fire after both local changes and changes made by other processes to the account store.
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.KeychainAccountStoreChanging">
+            <summary>
+            Fired when the store is changing. The event is fired before the change.
+            This event will also only fire for account store changes made locally for the process.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.AddOrUpdateAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Add or update an account in storage
+            </summary>
+            <param name="account">account to add or update</param>
+            <returns>new copy of the account after it has been added or updated</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.SetDisplayInfo(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo)">
+            <summary>
+            Set the display info on the account. This can be used to update the display info on the account in storage.
+            </summary>
+            <param name="account">account to update</param>
+            <param name="info">new display info to update the account with</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.SetProperty(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.String,System.String)">
+            <summary>
+            Set a property on the account
+            </summary>
+            <param name="account">account to update the property upon</param>
+            <param name="key">property key</param>
+            <param name="value">value of the property to update the account with</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.SetNeedsReauthentication(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Boolean)">
+            <summary>
+            Set the needs re-authentication property specifically.
+            </summary>
+            <param name="account">account to update</param>
+            <param name="value">Needs re-authentication property value</param>
+            <returns>account from the store with the property set to the new value</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.SetProperties(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Sets multiple properties at once.
+            </summary>
+            <param name="account">account to update properties on</param>
+            <param name="properties">set of key and values which represent the property name and value for each of the properties.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.RemoveAccount(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Remove an account from storage
+            </summary>
+            <param name="key">account to remove</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountStore.GetAllAccounts">
+            <summary>
+            Get all accounts from the storage
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountProviderExtensions">
+            <summary>
+            Set of extension methods to work on account providers
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountProviderExtensions.RefreshAuthenticationStateAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.IAccountProvider,System.Threading.CancellationToken)">
+            <summary>
+            Goes through all the accounts in the account store associated with this provider and determines if they need re-authentication,
+             trying to refresh those that do need it. If that doesn't work, sets NeedsReauthentication flag on the expired accounts.
+            It also clears the flag on the accounts that are valid.
+            </summary>
+            <param name="cancellationToken">Cancellation token.</param>
+            <exception cref="T:System.OperationCanceledException">may be thrown if <paramref name="cancellationToken"/> is cancelled</exception>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKeyComparer">
+            <summary>
+            Comparer to compare two account keys
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKeyComparer.Equals(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Determine if two account keys are equal
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKeyComparer.GetHashCode(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey)">
+            <summary>
+            Generate a hash code based on the account keys.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfoNoLogoComparer">
+            <summary>
+            Compare two account display info objects.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfoNoLogoComparer.Equals(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo,Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo)">
+            <summary>
+            Determine if the two objects are equal
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfoNoLogoComparer.GetHashCode(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo)">
+            <summary>
+            Generate a hash code for the display info.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountMemberComparer">
+            <summary>
+            Compare the individual fields on an account to determine if they are different in contents.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountMemberComparer.Equals(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Determine if the accounts are the same including contents. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountMemberComparer.GetHashCode(Microsoft.VisualStudio.Services.Client.AccountManagement.Account)">
+            <summary>
+            Generate a hash code for the accounts
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData">
+            <summary>
+            Data used to initialize an account.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.DisplayInfo">
+            <summary>
+            Information displayed, usually to an end user
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.UniqueId">
+            <summary>
+            UniqueId for the account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.Authenticator">
+            <summary>
+            Name of the authenticator for the account. This is normally the IDP such as live.com, or STS
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.ParentProviderId">
+            <summary>
+            UniqueId for the account provider that created this account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.Properties">
+            <summary>
+            Set of properties on the account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.SupportedAccountProviders">
+            <summary>
+            Set of supported account providers. This is a list in addition to the ParentProviderId that will work with this account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData.NeedsReauthentication">
+            <summary>
+            Does the account need reauthentication
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.Account">
+            <summary>
+            Representation of an account on the keychain. 
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.AccountMemberComparer">
+            <summary>
+            Comparer to compare the contents to two different accounts to determine if they are equal
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.#ctor(Microsoft.VisualStudio.Services.Client.AccountManagement.AccountInitializationData)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="initializationData">Initialization data</param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.Authenticator">
+            <summary>
+            Name of the authenticator for the account. This is normally the IDP such as live.com, or STS
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.SupportedAccountProviders">
+            <summary>
+            Set of supported account providers. This is a list in addition to the ParentProviderId that will work with this account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.DisplayInfo">
+            <summary>
+            Information displayed, usually to an end user
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.Properties">
+            <summary>
+            Set of properties on the account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.NeedsReauthentication">
+            <summary>
+            Does the account need reauthentication
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.Account.InitializationDataFromAccount">
+            <summary>
+            Get initialization data from an account
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo">
+            <summary>
+            Information on an account that is commonly displayed to an end user
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.DisplayInfoNoLogoComparer">
+            <summary>
+            Comparer to compare two display info objects to each other to determine if they are the same.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.#ctor(System.String,System.String,System.String,System.Byte[],System.Byte[])">
+            <summary>
+            Constructor
+            </summary>
+            <param name="accountDisplayName">Display name of the account</param>
+            <param name="providerDisplayName">Display name of the provider</param>
+            <param name="userName">User name for the account</param>
+            <param name="accountLogo">Logo for the account</param>
+            <param name="providerLogo">Logo for the provider</param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.AccountDisplayName">
+            <summary>
+            Display name of the account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.ProviderDisplayName">
+            <summary>
+            Display name of the provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.UserName">
+            <summary>
+            User name
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.AccountLogo">
+            <summary>
+            Logo for the account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountDisplayInfo.ProviderLogo">
+            <summary>
+            Logo for the provider
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey">
+            <summary>
+            Represents the key information to differentiate one account from another
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey.KeyComparer">
+            <summary>
+            Comparer to compare two keys together
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey.#ctor(System.String,System.Guid)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey.UniqueId">
+            <summary>
+            UniqueId for the account, this must be unique per provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountKey.ProviderId">
+            <summary>
+            Provider unique guid
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.AggregateLogger">
+            <summary>
+            Represents an <see cref="T:Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger"/> supporting multiple loggers.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger">
+            <summary>
+            Represents a logger that can log events with named properties.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger.LogEvent(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Logs an event with the specified name and properties.
+            </summary>
+            <param name="name">The name of the event.</param>
+            <param name="properties">The properties of the event.</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountStorageException">
+            <summary>
+            Exception thrown when there is a problem with the account storage.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountsProcessedEventArgs">
+            <summary>
+            This event indicates when any account processing currently in progress finishes
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountsProcessedEventArgs.#ctor(System.Collections.Generic.IList{System.Exception})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="exceptions"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountsProcessedEventArgs.#ctor(System.Boolean,System.Collections.Generic.IList{System.Exception})">
+            <summary>
+            Account processing event
+            </summary>
+            <param name="skipped">Was account processing skipped due to there being no changes to process</param>
+            <param name="exceptions">Were there any exceptions during account processing</param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountsProcessedEventArgs.Skipped">
+            <summary>
+            Get or sets a value indicating whether or not the processing task was skipped, likely due to there being no cache changes between this call and the last call.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.AccountsProcessedEventArgs.Exceptions">
+            <summary>
+            What exceptions happened during account processing.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.ScopeInfo">
+            <summary>
+            Contains information about how an account should be scoped.
+            This will contain one scope element which is either a tenantId guid or a domain name which will 
+            be converted to a tenantId at a later point. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.ScopeInfo.Domain">
+            <summary>
+            A domain to scope an account to
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.ScopeInfo.TenantId">
+            <summary>
+            A tenantId to scope the account to
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.AccountManagement.ScopeInfo.UpdateTenantIdForDomain(System.Guid)">
+            <summary>
+            After we transform a domain to a tenantId we need to update the scope info with the tenantId guid
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation">
+            <summary>
+            Internal structure to contain the information about a tenant
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation.UniqueIds">
+            <summary>
+            Set of uniqueId's that belong to a tenant. Normally this is only one. But if we are authenticating an MSA that is a dual headed 
+            account we will get get one from live and one from AAD.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation.TenantId">
+            <summary>
+            TenantId guid from ADAL
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation.FriendlyName">
+            <summary>
+            The friendly name of the tenant if it is available. If the tenant came from a filter
+            this will be empty. If it came from VSTS it will normally have a friendly anme
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.AccountManagement.TenantInformation.IsOwned">
+            <summary>
+            Is the tenant owned by this account. This list comes from VSTS
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.SessionCounterManager">
+            <summary>
+            This mananger is responsible for incrementing the IE QueryNetSessionCount once when EnsureSessionCounterSet is called
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionCounterManager.EnsureSessionCounterSet">
+            <summary>
+            Set the session counter if it is not set. This can be called multiple times but will only 
+            increment the counter once.
+            </summary>
+            <remarks>
+            From MSDN (http://msdn.microsoft.com/en-us/library/ie/dn720860(v=vs.85).aspx):
+            The net session count tracks the number of instances of the web browser control.
+            When a web browser control is created, the net session count is incremented. When the control
+            is destroyed, the net session count is decremented. When the net session count reaches zero,
+            the session cookies for the process are cleared. SetQueryNetSessionCount can be used to prevent
+            the session cookies from being cleared for applications where web browser controls are being created
+            and destroyed throughout the lifetime of the application. (Because the application lives longer than
+            a given instance, session cookies must be retained for a longer periods of time.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage">
+            <summary>
+            This class allows the acquisition and storage of session tokens which can be used to talk to Visual Studio Team Services accounts.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.#ctor(Microsoft.VisualStudio.Services.Client.AccountManagement.Logging.ILogger,Microsoft.VisualStudio.Services.Common.TokenStorage.VssTokenStorage,Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.GetSessionTokenFromVSO)">
+            <summary>
+            Constructor used for internal testing
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.ClearAllSessionTokenStorage">
+            <summary>
+            Clear out any Session tokens from the token storage. Do not clear out other tokens which may be in there.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.GetSessionTokenFromAccountAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Get a self describing session token from an account for a given scope
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.DoesSessionTokenRequireRefresh(System.DateTime,Microsoft.VisualStudio.Services.Common.TokenStorage.VssToken,System.String,System.Boolean@)">
+            <summary>
+            From a session token stored in vsstoken storage determine if the token has reached a point where 
+            it should be refreshed. This can happen if the token is already expired or the token has reach a percentage of 
+            its usefull life span. 
+            
+            The data as to how many days before the token needs to be refreshed is encoded as a property in the token and set 
+            when the token is created or refreshed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.RefreshSessionTokensForAccountAsync(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Given an account refresh any session tokens which are already in token storage that are in need of refreshing
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenStorage.GetScopesFromTokenStorage(Microsoft.VisualStudio.Services.Client.AccountManagement.Account,System.Collections.Generic.IEnumerable{Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenDescriptor},System.Boolean,System.Collections.Generic.IDictionary{Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenDescriptor,System.String},System.Collections.Generic.HashSet{Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenDescriptor})">
+            <summary>
+            Go through token storage for the list of scopes we would like to get tokens for and see if they are in token storage and have enough lifetime such that 
+            they do not need to be refreshed. The scopesAndTokenValues dictionary will contain scopes and their session tokens if they are found in token storage.
+            This will include tokens that are fresh and those that need to be refreshed. The reason is that the tokens may have enough lifetime on them to be used even if they are passed
+            their refresh date. We will also check to see which scopes need to be refreshed. This will be passed back in the scopedNeedingRefreshing. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration">
+            <summary>
+            Configuration information used by an account provider when creating an account
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.AadAuthorityBase">
+            <summary>
+            Gets the base URI for the AAD authority
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.ValidateAadAuthority">
+            <summary>
+            Gets whether or not the Aad Authority be validated.  
+            If a given authority is not in the pre-approved list then validation will need to be turned off in order to use it.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.AzureRMIdentityEnabled">
+            <summary>
+            Gets the value indicating if we should use the VSTS code or the azure resource manager way of getting the tenant information through the ARM endpoint.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.ClientIdentifier">
+            <summary>
+            Gets the client client identifier to use to represent the current application within the selected AAD instance
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.NativeClientRedirect">
+            <summary>
+            Gets the native client redirect URI to use that goes along with the ClientIdentifier
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.ResourceEndpoint">
+            <summary>
+            Gets the default resource to use when retrieving tokens against the authority
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.AzureResourceManagementEndpoint">
+            <summary>
+            Gets the azure resource management endpoint to use which matches with the AAD authority. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.AadProviderConfiguration.GraphEndpoint">
+            <summary>
+            Gets the graph endpoint to use which matches with the AAD authority. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration">
+            <summary>
+             What configuration is used to configure an AAD account provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.AzureRMIdentityEnabled">
+            <summary>
+            Is this provider using azureRM identity or another identity
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.AadAuthorityBase">
+            <summary>
+            Base URI for the AAD authority
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.ValidateAadAuthority">
+            <summary>
+            Should the Aad Authority be validated.  
+            If a given authority is not in the pre-approved list then validation will need to be turned off in order to use it.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.ClientIdentifier">
+            <summary>
+            The client client identifier to use to represent the current application within the selected AAD instance
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.NativeClientRedirect">
+            <summary>
+            The native client redirect URI to use that goes along with the ClientIdentifier
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.ResourceEndpoint">
+            <summary>
+            The default resource to use when retrieving tokens against the authority
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.AzureResourceManagementEndpoint">
+            <summary>
+            The azure resource management endpoint to use which matches with the AAD authority. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.GraphEndpoint">
+            <summary>
+            The graph endpoint to use which matches with the AAD authority. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.Keychain.VSProvider.IAadProviderConfiguration.AzureRMAudienceEndpoint">
+            <summary>
+            Uri to use when requesting access tokens to the AzureRMEndpoint
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.AdalCache.AuthenticationResultWrapper">
+            <summary>
+            Wrapper to wrap the authentication result to allow for unit testing since we cannot directly instantiate an authenticationresult.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingAuthType.Unknown">
+            <summary>
+            Prompt initiated by sign in or re-authentication of fed token
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingAuthType.Create">
+            <summary>
+            Prompt initiated by create an account
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingAuthType.Reauth">
+            <summary>
+            Prompt initiated by re-authentication of keychain accounts
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingEventProperties">
+            <summary>
+            Property names for account management logging event PromptUserForCredential
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingEventProperties.AuthType">
+            <summary>
+            Type of prompt for credential
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingEventProperties.Source">
+            <summary>
+            Source that initiated the credential prompt
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingSource.ASAP">
+            <summary>
+            Prompt initiated from account settings dialog or account picker
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingSource.AdalWrapper">
+            <summary>
+            Prompt initiated from acquire token
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingSource.TFS">
+            <summary>
+            VssConnectMode equals to Resource is a TFS connection
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.Services.Client.Keychain.Logging.AccountManagementLoggingSource.NonTFS">
+            <summary>
+            VssConnectMode doesn't equal to Resource is a non-TFS connection
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.Keychain.Logging.DiagnosticsLoggingMessageSeverity">
+            <summary>
+            What is the severity of the diagnostics logging event
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.Keychain.SessionTokenPair.GetTokenPair(System.String)">
+            <summary>
+            It will create new token pair object based on the token value data in storage
+            Previously we were storing only self describing token in storage so for 
+            backward compatibility reasons, first it tries to deserialize the object,
+            if he couldn't deserialize it, he will assume the token value itself a selfdescribing
+            token and will create token pair object without compact token value.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.INotificationManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.INotificationManager.SubscribeAsync(Microsoft.VisualStudio.Services.Client.NotificationContext)">
+            <summary>
+            
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssClientNotificationManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientNotificationManager.Initialize(Microsoft.VisualStudio.Services.WebApi.VssConnection)">
+            <summary>
+            
+            </summary>
+            <param name="connection"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientNotificationManager.SubscribeAsync(Microsoft.VisualStudio.Services.Client.NotificationContext,System.Threading.CancellationToken)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.CredentialStorageUtility.GetCredentials(Microsoft.VisualStudio.Services.Common.TokenStorage.VssToken)">
+            <summary>
+            Returns a credentials object for the specified initial token and no additional
+            information to obtain a new token if the initial one fails. The credentials will
+            only work if the initial token is valid.
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.CredentialStorageUtility.GetTokenFromString(Microsoft.VisualStudio.Services.Common.VssCredentialsType,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="credentialsType"></param>
+            <param name="tokenValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.CredentialStorageUtility.GetTokenAsString(Microsoft.VisualStudio.Services.Common.IssuedToken)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssAadCredential">
+            <summary>
+            Currently it is impossible to get whether prompting is allowed from the credential itself without reproducing the logic
+            used by VssClientCredentials. Since this is a stop gap solution to get Windows integrated authentication to work against
+            AAD via ADFS for now this class will only support that one, non-interactive flow. We need to assess how much we want to
+            invest in this legacy stack rather than recommending people move to the VssConnect API for future authentication needs.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssAadTokenProvider.OnGetTokenAsync(Microsoft.VisualStudio.Services.Common.IssuedToken,System.Threading.CancellationToken)">
+            <summary>
+            Temporary implementation since we don't have a good configuration story here at the moment.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssClientCredentials">
+            <summary>
+            Provides credentials to use when connecting to a Visual Studio Service.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with default credentials.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with default credentials if specified.
+            </summary>
+            <param name="useDefaultCredentials">True to use default windows credentials; otherwise, false</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(System.Boolean,Microsoft.VisualStudio.Services.Client.Controls.IDialogHost)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified dialog host and default credentials if specified.
+            </summary>
+            <param name="useDefaultCredentials">True to use default windows credentials; otherwise, false</param>
+            <param name="dialogHost">The dialog host for the federated prompt window</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.FederatedCredential,Microsoft.VisualStudio.Services.Client.Controls.IDialogHost)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified dialog host, the specified windows credential and
+            default issued token credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+            <param name="federatedCredential">The federated credential to use for authentication</param>
+            <param name="dialogHost">The dialog host for the federated prompt window</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.IVssCredentialPrompt)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with default credentials and the 
+            specified credential prompt.
+            </summary>
+            <param name="credentialPrompt">The prompt to get credentials</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified windows credential and
+            default issued token credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.CredentialPromptType)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified windows credential and
+            default issued token credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+            <param name="promptType">CredentialPromptType.PromptIfNeeded if interactive prompts are allowed, otherwise CredentialProptType.DoNotPrompt</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.FederatedCredential)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified windows credential and
+            default issued token credential.
+            </summary>
+            <param name="federatedCredential">The federated credential to use for authentication</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.FederatedCredential)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified windows and issued token 
+            credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+            <param name="federatedCredential">The federated credential to use for authentication</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.FederatedCredential,Microsoft.VisualStudio.Services.Common.CredentialPromptType)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified windows and issued token 
+            credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+            <param name="federatedCredential">The federated credential to use for authentication</param>
+            <param name="promptType">CredentialPromptType.PromptIfNeeded if interactive prompts are allowed, otherwise CredentialProptType.DoNotPrompt</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.FederatedCredential,Microsoft.VisualStudio.Services.Common.CredentialPromptType,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Initializes a new <c>VssClientCredentials</c> instance with the specified windows and issued token 
+            credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+            <param name="federatedCredential">The federated credential to use for authentication</param>
+            <param name="promptType">CredentialPromptType.PromptIfNeeded if interactive prompts are allowed; otherwise, CredentialProptType.DoNotPrompt</param>
+            <param name="scheduler">An optional <c>TaskScheduler</c> to ensure credentials prompting occurs on the UI thread</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.#ctor(Microsoft.VisualStudio.Services.Common.WindowsCredential,Microsoft.VisualStudio.Services.Common.FederatedCredential,Microsoft.VisualStudio.Services.Common.CredentialPromptType,System.Threading.Tasks.TaskScheduler,Microsoft.VisualStudio.Services.Common.IVssCredentialPrompt)">
+            <summary>
+            Initializes a new <c>VssCredentials</c> instance with the specified windows and issued token 
+            credential.
+            </summary>
+            <param name="windowsCredential">The windows credential to use for authentication</param>
+            <param name="federatedCredential">The federated credential to use for authentication</param>
+            <param name="promptType">CredentialPromptType.PromptIfNeeded if interactive prompts are allowed; otherwise, CredentialProptType.DoNotPrompt</param>
+            <param name="scheduler">An optional <c>TaskScheduler</c> to ensure credentials prompting occurs on the UI thread</param>
+            <param name="credentialPrompt">An optional <c>IVssCredentialPrompt</c> to perform prompting for credentials</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.op_Implicit(Microsoft.VisualStudio.Services.Common.FederatedCredential)~Microsoft.VisualStudio.Services.Client.VssClientCredentials">
+            <summary>
+            Implicitly converts a <c>FederatedCredential</c> instance into a <c>VssClientCredentials</c> instance.
+            </summary>
+            <param name="credential">The federated credential instance</param>
+            <returns>A new <c>VssClientCredentials</c> instance which wraps the specified credential</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.op_Implicit(Microsoft.VisualStudio.Services.Common.WindowsCredential)~Microsoft.VisualStudio.Services.Client.VssClientCredentials">
+            <summary>
+            Implicitly converts a <c>WindowsCredential</c> instance into a <c>VssClientCredentials</c> instance.
+            </summary>
+            <param name="credential">The windows credential instance</param>
+            <returns>A new <c>VssClientCredentials</c> instance which wraps the specified credential</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.TryGetValidAdalToken(Microsoft.VisualStudio.Services.Common.IVssCredentialPrompt)">
+            Attempts to find appropriate Access token for IDE user and add to prompt's parameter
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.LoadCachedCredentials(System.Uri,System.Boolean)">
+            <summary>
+            Loads stored credentials for the specified server if found. If no credentials are found in the windows
+            credential store for the specified server and options then default credentials are returned.
+            </summary>
+            <param name="serverUrl">The server location</param>
+            <param name="requireExactMatch">A value indicating whether or not an exact or partial match of the server is required</param>
+            <returns>A credentials object populated with stored credentials for the server if found</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.LoadCachedCredentials(System.Uri,System.Boolean,Microsoft.VisualStudio.Services.Common.CredentialPromptType)">
+            <summary>
+            Loads stored credentials for the specified server if found. If no credentials are found in the windows
+            credential store for the specified server and options then default credentials are returned.
+            </summary>
+            <param name="serverUrl">The server location</param>
+            <param name="requireExactMatch">A value indicating whether or not an exact or partial match of the server is required</param>
+            <param name="promptType">A value indicating whether or not the credentials may support interactivity</param>
+            <returns>A credentials object populated with stored credentials for the server if found</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.LoadCachedCredentials(System.String,System.Uri,System.Boolean)">
+            <summary>
+            Loads stored credentials for the specified server if found. If no credentials are found in the windows
+            credential store for the specified server and options then default credentials are returned.
+            </summary>
+            <param name="featureRegistryKeyword">An optional application name for isolated credential storage in the registry</param>
+            <param name="serverUrl">The server location</param>
+            <param name="requireExactMatch">A value indicating whether or not an exact or partial match of the server is required</param>
+            <returns>A credentials object populated with stored credentials for the server if found</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssClientCredentials.LoadCachedCredentials(System.String,System.Uri,System.Boolean,Microsoft.VisualStudio.Services.Common.CredentialPromptType)">
+            <summary>
+            Loads stored credentials for the specified server if found. If no credentials are found in the windows
+            credential store for the specified server and options then default credentials are returned.
+            </summary>
+            <param name="featureRegistryKeyword">An optional application name for isolated credential storage in the registry</param>
+            <param name="serverUrl">The server location</param>
+            <param name="requireExactMatch">A value indicating whether or not an exact or partial match of the server is required</param>
+            <param name="promptType">A value indicating whether or not the credentials may support interactivity</param>
+            <returns>A credentials object populated with stored credentials for the server if found</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssFederatedCredential">
+            <summary>
+            Provides federated authentication with a hosted <c>VssConnection</c> instance using cookies.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssFederatedCredential.#ctor">
+            <summary>
+            Initializes a new <c>VssFederatedCredential</c> instance.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssFederatedCredential.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new <c>VssFederatedCredential</c> instance.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssFederatedCredential.#ctor(Microsoft.VisualStudio.Services.Client.VssFederatedToken)">
+            <summary>
+            Initializes a new <c>VssFederatedCredential</c> instance.
+            </summary>
+            <param name="initialToken">The initial token if available</param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssFederatedCredential.CredentialType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssFederatedToken">
+            <summary>
+            Provides a cookie-based authentication token.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssFederatedToken.#ctor(System.Net.CookieCollection)">
+            <summary>
+            Initializes a new <c>VssFederatedToken</c> instance using the specified cookies.
+            </summary>
+            <param name="cookies"></param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssFederatedToken.CookieCollection">
+            <summary>
+            Returns the CookieCollection contained within this token. For internal use only.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssFederatedTokenProvider">
+            <summary>
+            Provides authentication for internet identities using single-sign-on cookies.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssFederatedTokenProvider.Credential">
+            <summary>
+            Gets the federated credential from which this provider was created.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssFederatedTokenProvider.GetTokenIsInteractive">
+            <summary>
+            Gets a value indicating whether or not a call to get token will require interactivity.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssFederatedTokenProvider.Issuer">
+            <summary>
+            Gets the issuer for the token provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssFederatedTokenProvider.Realm">
+            <summary>
+            Gets the realm for the token provider.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.#ctor(Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer)">
+            <summary>
+            Initializes a new <c>VssOAuthCredential</c> instance with the specified initial token.
+            </summary>
+            <param name="initialToken">The initial token to use  on the resource server before attempting to contact 
+            the authorization server for another grant or new access token. Usually this token will have been 
+            persisted by the caller and is used here to resume the session</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.#ctor(System.String)">
+            <summary>
+            Initializes a new <c>VssOAuthCredential</c> instance with the provided access token.
+            </summary>
+            <param name="accessToken">The OAuth access token</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.#ctor(Microsoft.VisualStudio.Services.Client.VssOAuthToken)">
+            <summary>
+            Initializes a new <c>VssOAuthCredential</c> instance with the provided access token.
+            </summary>
+            <param name="accessToken">The OAuth access token</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.#ctor(System.Uri,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new <c>VssOAuthCredential</c> instance with the specified client id and secret and either an
+            authorization code or a refresh token
+            </summary>
+            <param name="clientId">The client id</param>
+            <param name="clientSecret">The client secret</param>
+            <param name="authCodeOrRefreshToken">Either an authorization code or a refresh token which can be used
+            to obtain an access token (and a new refresh token)</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.#ctor(System.Uri,System.String,System.String,System.String,System.Action{Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer})">
+            <summary>
+            Initializes a new <c>VssOAuthCredential</c> instance with the specified client id and secret and either an
+            authorization code or a refresh token
+            </summary>
+            <param name="authorizationUri">The base URI of the authorization server. This is usually the same
+            as the URI of the TFS server</param>
+            <param name="clientId">The client id</param>
+            <param name="clientSecret">The client secret</param>
+            <param name="authCodeOrRefreshToken">Either an authorization code or a refresh token which can be used
+            to obtain an access token (and a new refresh token)</param>
+            <param name="tokensReceived">Allow API consumers to obtain the received access token and refresh token in case they need to be
+            persisted for future access</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.#ctor(System.Uri,System.String,System.String,Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer,System.Action{Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer})">
+            <summary>
+            Initializes a new <c>VssOAuthCredential</c> instance with the specified client id and secret and an
+            initial token
+            </summary>
+            <param name="authorizationUri">The base URI of the authorization server. This is usually the same
+            as the URI of the TFS server</param>
+            <param name="clientId">The client id</param>
+            <param name="clientSecret">The client secret</param>
+            <param name="initialToken">The initial token to use  on the resource server before attempting to contact the authorization server
+            (for another grant or new access token). Usually this token will have been persisted by the caller and is
+            used here to resume the session</param>
+            <param name="tokensReceived">Allow API consumers to obtain the received access token and refresh token in case they need to be
+            persisted for future access</param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.CredentialType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.ClientId">
+            <summary>
+            Gets the client id.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.ClientSecret">
+            <summary>
+            Gets the client secret.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.TokensReceived">
+            <summary>
+            The API-consumer-provided callback to invoke when an access token and a refresh token
+            are obtained from the authorization server
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.IsAuthenticationChallenge(Microsoft.VisualStudio.Services.Common.IHttpResponse)">
+            <summary>
+            
+            </summary>
+            <param name="webResponse"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthCredential.OnCreateTokenProvider(System.Uri,Microsoft.VisualStudio.Services.Common.IHttpResponse)">
+            <summary>
+            Creates a provider for retrieving security tokens for the provided credentials.
+            </summary>
+            <returns>An issued token provider for the current credential</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssOAuthTokenType">
+            <summary>
+            The type of OAuth token
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssOAuthToken">
+            <summary>
+            Provides a token used for OAuth delegation based authentication
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthToken.#ctor(System.String)">
+            <summary>
+            Constructs a new <c>OAuthToken</c> instance of type <c>VssOAuthTokenType.AccessToken</c>.
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthToken.#ctor(System.String,Microsoft.VisualStudio.Services.Client.VssOAuthTokenType)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="tokenType"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthToken.#ctor(System.String,Microsoft.VisualStudio.Services.Client.VssOAuthTokenType,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="tokenType"></param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthToken.Token">
+            <summary>
+            Gets the underlying token as string
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthToken.TokenType">
+            <summary>
+            Gets the type of OAuth token
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthToken.Expiration">
+            <summary>
+            The expiration time of the token
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer">
+            <summary>
+            A container to encapsulate an OAuth access token and an OAuth refresh token (or authorization code)
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer.AccessToken">
+            <summary>
+            The access code used to prove authorization on the resource server
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer.RefreshToken">
+            <summary>
+            The refresh token (or authorization code)
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer.ApplyTo(Microsoft.VisualStudio.Services.Common.IHttpRequest)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer.ExtractTokens(System.IO.Stream)">
+            <summary>
+            Extract the OAuth tokens from the response data
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer.FromAccessToken(System.String)">
+            <summary>
+            Build an OAuth token from an access token.
+            </summary>
+            <param name="accessToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthTokenContainer.FromAuthCodeOrRefreshToken(System.String)">
+            <summary>
+            Build an OAuth token from a refresh token or an authorization code.
+            </summary>
+            <param name="authCodeOrRefreshToken"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthTokenProvider.Credential">
+            <summary>
+            Gets the OAuth token credential from which this provider was created.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssOAuthTokenProvider.GetTokenIsInteractive">
+            <summary>
+            Gets a value indicating whether or not a call to get token will require interactivity.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.VssOAuthTokenProvider.OnGetTokenAsync(Microsoft.VisualStudio.Services.Common.IssuedToken,System.Threading.CancellationToken)">
+            <summary>
+            Issues a request to synchronously retrieve a token for the associated credential.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Services.Client.VssAadSettings.ApplicationTenant">
+            <summary>
+            Application tenant either from a registry override or a constant
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.#cctor">
+            Creates the resource manager instance.
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.Get(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.GetInt(System.String)">
+            Returns a localized integer given a resource string name.
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.GetBool(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.Format(System.String,System.Object[])">
+            A little helper function to alleviate some typing associated with loading resources and
+            formatting the strings.  In DEBUG builds, it also asserts that the number of format
+            arguments and the length of args match.
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.UnexpectedNavigation">
+            <summary>
+            Unexpected navigation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.UnexpectedNavigationToUrl">
+             <summary>
+             Precedes a URI in an exception message
+            
+             Unexpected navigation: 
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.STAThreadRequired">
+            <summary>
+            The calling thread must be STA to show the dialog.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.BrowserNavigationFailed">
+            <summary>
+            Browser navigation failed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.BrowserNavigationToUrlFailed">
+             <summary>
+             Precedes a URI in an exception message
+            
+             Browser navigation failed: 
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.None">
+             <summary>
+             Used to represent a missing URI
+            
+             (none)
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.BrowserScriptDisabled">
+            <summary>
+            SP324081: Check that your Internet Explorer security settings will allow JavaScript and cookies. If enabled, please contact support.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ErrorDeserializeFailed">
+            <summary>
+            Failed to deserialize error data.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.SignInCancelled">
+            <summary>
+            Sign-in cancelled.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.TokenDeserializeFailed">
+            <summary>
+            Failed to deserialize token data.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ExplicitTrustRequired">
+            <summary>
+            Your browser is security restricted or JavaScript is disabled. Do you want locations required for sign-in to be automatically added to your Trusted Sites list?
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationBadGateway">
+            <summary>
+            SP324087: Connection is failing before reaching the server.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationBadRequest">
+            <summary>
+            SP324086: Server could not understand the request.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationForbidden">
+            <summary>
+            SP324084: Connection not allowed to access the server.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationGatewayTimeout">
+            <summary>
+            SP324088: Connection is timing out before reaching the server.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationInternalServerError">
+            <summary>
+            SP324089: Server was unable to complete the request.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationNotFound">
+            <summary>
+            SP324085: Connection could not find a resource on the server.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationServiceUnavailable">
+            <summary>
+            SP324082: Connection to the service is currently unavailable.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.NavigationUnauthorized">
+            <summary>
+            SP324083: Browser navigation failed due to it not being authorized for access.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerBadRequest">
+            <summary>
+            SP324094: Our service could not understand the request.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerForbidden">
+            <summary>
+            SP324092: You are not allowed to access a resource from our service.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerInternalServerError">
+            <summary>
+            SP324095: Our service was unable to complete the request.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerNotFound">
+            <summary>
+            SP324093: Could not find a resource from our service.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerServiceUnavailable">
+            <summary>
+            SP324090: Our service is currently unavailable.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerUnauthorized">
+            <summary>
+            SP324091: You are not authorized to access our service.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.ServerUnknownError">
+            <summary>
+            SP324096: Our service could not complete the operation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.UnknownClientError">
+            <summary>
+            SP324098: Your browser could not complete the operation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.UnknownError">
+            <summary>
+            SP324099: Could not complete the operation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.AccountManagerProblemExecutingInGlobalMutex(System.Object)">
+            <summary>
+            There was a problem executing within the global mutex &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.RegistryAccountStoreCannotCreateSubKey(System.Object,System.Object)">
+            <summary>
+            Could not write a new subkey {0}\\{1}.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.RegistryAccountStoreMemberNotValid(System.Object,System.Object)">
+            <summary>
+            The member &apos;{0}&apos; was not found in the registry for account: &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.BlueBadgeAccountImage192192">
+            <summary>
+            Resources\BlueBadgeAccountImage192192.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.VsAccountProviderName">
+             <summary>
+             Account is the representation of the user. Like a live account on hotmail or an outlook account.
+            
+             Microsoft account
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.MicrosoftLogo_128xLG">
+            <summary>
+            Resources\MicrosoftLogo_128xLG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.VsAccountProviderWorkOrSchool">
+            <summary>
+            Work or school account
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.VsAccountProviderUserNameCannotBeEmpty">
+             <summary>
+             When the username is empty
+            
+             User Name cannot be empty
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.VsAccountProviderUnsupportedAccount">
+             <summary>
+             When the account's ProviderId doesn't match account provider's ID
+            
+             The account is not supported by the provider because its ProviderId doesn&apos;t match.
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.VsAccountProviderSetAdalCacheInvalidOperation">
+             <summary>
+             When the SetAdalCache method on vsaccountprovider is called multiple times
+            
+             Cannot set ADAL cache multiple times.
+             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.VsAccountProviderAccountNotFoundFromKey">
+            <summary>
+            Cannot find an account matching the account key
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.UICredProvider_MessageText">
+            <summary>
+            Please provide credentials to connect.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.Client.ClientResources.UICredProvider_TitleText(System.Object)">
+            <summary>
+            Connecting to {0}
+            </summary>
+        </member>
+    </members>
+</doc>

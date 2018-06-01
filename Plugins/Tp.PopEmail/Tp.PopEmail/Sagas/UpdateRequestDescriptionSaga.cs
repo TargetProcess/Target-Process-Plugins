@@ -50,8 +50,8 @@ namespace Tp.PopEmailIntegration.Sagas
 
                     if (createdAttachment == null) continue;
 
-                    var url = string.Format("~/Attachment.aspx?AttachmentID={0}", attachment.AttachmentID);
-                    var newUrl = string.Format("~/Attachment.aspx?AttachmentID={0}", createdAttachment.AttachmentID);
+                    var url = $"~/Attachment.aspx?AttachmentID={attachment.AttachmentID}";
+                    var newUrl = $"~/Attachment.aspx?AttachmentID={createdAttachment.AttachmentID}";
 
                     requestDescriptionUpdated = requestDescriptionUpdated.Replace(url, newUrl);
                 }

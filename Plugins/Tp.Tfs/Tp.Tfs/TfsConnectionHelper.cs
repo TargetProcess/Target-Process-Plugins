@@ -6,7 +6,10 @@ using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using Microsoft.VisualStudio.Services.Client;
+using Microsoft.VisualStudio.Services.Common;
 using Tp.SourceControl.Settings;
+using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 
 namespace Tp.Tfs
 {
@@ -15,7 +18,7 @@ namespace Tp.Tfs
         public Uri TfsCollectionUri { get; set; }
         public string TeamProjectName { get; set; }
         public int SegmentsCount { get; set; }
-        public TfsClientCredentials Credential { get; set; }
+        public VssCredentials Credential { get; set; }
     }
 
     public static class TfsConnectionHelper
@@ -32,7 +35,7 @@ namespace Tp.Tfs
                 string[] segements = settings.Uri.Split('/');
                 string[] serverPathSegments =
                     segements.TakeWhile(x => !x.Equals(possibleVirtualDirectory, StringComparison.OrdinalIgnoreCase)).ToArray();
-                string serverPath = String.Join("/", serverPathSegments);
+                string serverPath = string.Join("/", serverPathSegments);
 
                 if (CheckTfsServerPath(serverPath, parameters.Credential))
                 {
@@ -86,7 +89,7 @@ namespace Tp.Tfs
             return new[] { teamProject };
         }
 
-        public static TfsClientCredentials CreateCredential(ISourceControlConnectionSettingsSource settings)
+        public static VssCredentials CreateCredential(ISourceControlConnectionSettingsSource settings)
         {
             var domen = string.Empty;
             string login;
@@ -102,8 +105,8 @@ namespace Tp.Tfs
             }
 
             var credential = string.IsNullOrEmpty(domen)
-                ? new TfsClientCredentials(new BasicAuthCredential(new NetworkCredential(login, settings.Password)))
-                : new TfsClientCredentials(new WindowsCredential(new NetworkCredential(login, settings.Password, domen)));
+                ? new VssClientCredentials(new VssBasicCredential(new NetworkCredential(login, settings.Password)))
+                : new VssClientCredentials(new WindowsCredential(new NetworkCredential(login, settings.Password, domen)));
 
             return credential;
         }
@@ -123,7 +126,7 @@ namespace Tp.Tfs
             return workItemTypes;
         }
 
-        private static bool CheckTfsServerPath(string path, TfsClientCredentials credential)
+        private static bool CheckTfsServerPath(string path, VssCredentials credential)
         {
             TfsConfigurationServer tfsServer = null;
             try
@@ -134,8 +137,7 @@ namespace Tp.Tfs
             }
             catch
             {
-                if (tfsServer != null)
-                    tfsServer.Dispose();
+                tfsServer?.Dispose();
             }
 
             return false;

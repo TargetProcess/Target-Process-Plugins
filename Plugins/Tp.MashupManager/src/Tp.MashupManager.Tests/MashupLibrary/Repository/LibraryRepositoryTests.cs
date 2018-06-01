@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using NGit.Api;
 using NUnit.Framework;
 using StructureMap;
+using Tp.Core;
 using Tp.Integration.Plugin.Common;
 using Tp.MashupManager.MashupLibrary;
 using Tp.MashupManager.MashupLibrary.Package;
@@ -125,22 +127,28 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
 
         private void CommitRemoteRepository(string remoteRepository)
         {
-            Git git = Git.Open(remoteRepository);
-            try
+            InvokeInSecurityProtocolScope(() =>
             {
-                git.Add().AddFilepattern(".").Call();
-                git.Commit().SetMessage("Commit message").Call();
-            }
-            finally
-            {
-                git.GetRepository().Close();
-            }
+                Git git = Git.Open(remoteRepository);
+                try
+                {
+                    git.Add().AddFilepattern(".").Call();
+                    git.Commit().SetMessage("Commit message").Call();
+                }
+                finally
+                {
+                    git.GetRepository().Close();
+                }
+            });
         }
 
         private void InitRemoteRepository(string remoteRepository)
         {
-            Git git = Git.Init().SetDirectory(remoteRepository).Call();
-            git.GetRepository().Close();
+            InvokeInSecurityProtocolScope(() =>
+            {
+                Git git = Git.Init().SetDirectory(remoteRepository).Call();
+                git.GetRepository().Close();
+            });
         }
 
         private ILibraryRepository LibraryRepository
@@ -251,6 +259,14 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
                 "baseInfo.ShortDescription.Should(Is.EqualTo(TestMashupBaseInfoDescription))");
             baseInfo.CompatibleTpVersion.Minimum.Should(Is.EqualTo(TestMashupBaseInfoCompatibleTpVersionMinimum),
                 "baseInfo.CompatibleTpVersion.Minimum.Should(Is.EqualTo(TestMashupBaseInfoCompatibleTpVersionMinimum))");
+        }
+
+        private void InvokeInSecurityProtocolScope(Action action)
+        {
+            using (new SecurityProtocolTypeScope(SecurityProtocolType.Tls12))
+            {
+                action();
+            }
         }
     }
 }

@@ -67,5 +67,35 @@ Test subject line2' and sender address '2@2.com'
 				Then message 'Uid2' should be passed to process"
                 .Execute(In.Context<MessageDownloadActionSteps>());
         }
+
+        [Test]
+        public void ShouldProcessNewMessagesWithPdfAttachmentWithRfc2045Mime()
+        {
+            @"Given profile has downloaded message 'Uid1'
+					And mail server has uids: Uid1,Uid2
+					And message with uid 'Uid2' has attachment with mime 'Content-Type: application/pdf
+	name=""=?utf-8?Q?ERRORE_LCL_6301419062.pdf?=""
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=""=?utf-8?Q?ERRORE_LCL_6301419062.pdf?=""' and sender address '1@1.com'
+				When tick occurs
+				Then message with 'Uid2' with attachment 'ERRORE LCL 6301419062.pdf' of content type 'application/pdf' should be passed to process"
+                .Execute(In.Context<MessageDownloadActionSteps>());
+        }
+
+        [Test]
+        public void ShouldProcessNewMessagesWithZipAttachmentWithRfc2045Mime()
+        {
+            @"Given profile has downloaded message 'Uid1'
+					And mail server has uids: Uid1,Uid2
+					And message with uid 'Uid2' has attachment with mime 'Content-Type: application/zip, application/octet-stream;
+	name=""15156891401442_0.zip""
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+	filename=""15156891401442_0.zip""' and sender address '1@1.com'
+				When tick occurs
+				Then message with 'Uid2' with attachment '15156891401442_0.zip' of content type 'application/zip' should be passed to process"
+                .Execute(In.Context<MessageDownloadActionSteps>());
+        }
+
     }
 }

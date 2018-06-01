@@ -1,0 +1,12 @@
+git2.dll compiled from following commits:
+* Libgit2 c9d59c6140fc365eb7ab950fb1a33187a949d403
+* Libssh2 bcd492163b71608f8e46cdc864741d6c566ce9bc
+
+To compile git2.dll do the following:
+* Prereq: Win10, VS2015, CMake. Windows and VS may be other versions, but this versions do work. Add cmake.exe to PATH.
+* Checkout libgit2 to C:\libgit2
+* Checkout libssh2 to C:\libssh2
+* Create dir C:\libgit2\bin and open terminal in it
+* cmake .. -G"Visual Studio 15 Win64" -DEMBED_SSH_PATH=C:/libssh2 -DBUILD_CLAR=OFF -DGIT_SSH_MEMORY_CREDENTIALS=ON -DCMAKE_BUILD_TYPE=Release
+* cmake --build . --config Release
+* Find git2.dll in C:\libgit2\bin\Release. This is a win64 version. It's enough for our plugin as it runs in 64 bits on Windows only. It contains embeded zlib and libssh2, so only single dll file required.

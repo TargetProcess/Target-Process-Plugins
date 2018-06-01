@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -17,7 +17,7 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.Mercurial.VersionControlSystem
 {
-    public class MercurialVersionControlSystem : SourceControl.VersionControlSystem.VersionControlSystem
+    public class MercurialVersionControlSystem : VersionControlSystem<ISourceControlConnectionSettingsSource>
     {
         private readonly IDiffProcessor _diffProcessor;
         private readonly MercurialClient _mercurial;
@@ -90,7 +90,7 @@ namespace Tp.Mercurial.VersionControlSystem
             }
             catch (MercurialException ex)
             {
-                throw new VersionControlException(String.Format("Mercurial exception: {0}", ex.Message));
+                throw new VersionControlException($"Mercurial exception: {ex.Message}");
             }
         }
 

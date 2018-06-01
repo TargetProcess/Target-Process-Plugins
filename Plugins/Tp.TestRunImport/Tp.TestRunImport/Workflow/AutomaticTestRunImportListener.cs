@@ -205,7 +205,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
             {
                 var request =
                     WebRequest.Create(
-                        new Uri(string.Format("{0}/lastCompletedBuild/buildNumber", profile.ResultsFilePath.TrimEnd(new[] { '/', '\\' }))));
+                        new Uri($"{profile.ResultsFilePath.TrimEnd('/', '\\')}/lastCompletedBuild/buildNumber"));
 
                 if (!(request is HttpWebRequest)) return null;
 
@@ -224,13 +224,12 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
             catch (UriFormatException ex)
             {
                 _log.ErrorFormat("Specified path has invalid format: {0}", ex.Message);
-                throw new ApplicationException(string.Format("Specified path has invalid format: {0}", ex.Message), ex);
+                throw new ApplicationException($"Specified path has invalid format: {ex.Message}", ex);
             }
             catch (NotSupportedException ex)
             {
-                _log.ErrorFormat(string.Format("Specified path has invalid format: {0}", ex.Message), ex);
-                throw new ApplicationException(
-                    string.Format("The request scheme specified in requestUri is not registered: {0}", ex.Message), ex);
+                _log.ErrorFormat($"Specified path has invalid format: {ex.Message}", ex);
+                throw new ApplicationException($"The request scheme specified in requestUri is not registered: {ex.Message}", ex);
             }
             catch (SecurityException ex)
             {
@@ -238,9 +237,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
                     "The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {0}",
                     ex.Message);
                 throw new ApplicationException(
-                    string.Format(
-                        "The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {0}",
-                        ex.Message), ex);
+                    $"The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {ex.Message}", ex);
             }
         }
     }

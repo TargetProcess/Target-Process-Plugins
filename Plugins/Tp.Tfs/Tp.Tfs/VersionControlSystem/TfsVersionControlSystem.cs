@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -10,24 +10,20 @@ using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.Diff;
-using Tp.SourceControl.Settings;
 using Tp.SourceControl.VersionControlSystem;
 using VersionControlException = Tp.SourceControl.VersionControlSystem.VersionControlException;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using Tp.SourceControl.Settings;
 
 namespace Tp.Tfs.VersionControlSystem
 {
-    public class TfsVersionControlSystem : SourceControl.VersionControlSystem.VersionControlSystem
+    public class TfsVersionControlSystem : VersionControlSystem<ISourceControlConnectionSettingsSource>
     {
         private readonly IDiffProcessor _diffProcessor;
         private readonly TfsClient _tfsClient;
 
-        public TfsVersionControlSystem(
-            ISourceControlConnectionSettingsSource settings,
-            ICheckConnectionErrorResolver errorResolver,
-            IActivityLogger logger,
-            IDiffProcessor diffProcessor)
-            : base(settings, errorResolver, logger)
+        public TfsVersionControlSystem(ISourceControlConnectionSettingsSource settings, ICheckConnectionErrorResolver errorResolver, IActivityLogger logger,
+            IDiffProcessor diffProcessor) : base(settings, errorResolver, logger)
         {
             _diffProcessor = diffProcessor;
             _tfsClient = new TfsClient(settings);
@@ -66,7 +62,7 @@ namespace Tp.Tfs.VersionControlSystem
 
         public override RevisionRange[] GetFromTillHead(RevisionId @from, int pageSize)
         {
-            return _tfsClient.GetFromTillHead(Int32.Parse(from.Value), pageSize).ToArray();
+            return _tfsClient.GetFromTillHead(int.Parse(from.Value), pageSize).ToArray();
         }
 
         public override RevisionRange[] GetAfterTillHead(RevisionId @from, int pageSize)

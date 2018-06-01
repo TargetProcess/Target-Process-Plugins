@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
@@ -18,9 +17,12 @@ namespace Tp.Git.Workflow
 {
     public class GitUserMapper : UserMapper
     {
-        public GitUserMapper(Func<IStorageRepository> storageRepository, Func<IActivityLogger> logger)
+        private readonly IGitConnectionSettings _settings;
+
+        public GitUserMapper(Func<IStorageRepository> storageRepository, Func<IActivityLogger> logger, IGitConnectionSettings settings)
             : base(storageRepository, logger)
         {
+            _settings = settings;
         }
 
         protected override TpUserData GuessUser(RevisionInfo revision, ICollection<TpUserData> userDtos)
@@ -60,7 +62,7 @@ namespace Tp.Git.Workflow
 
         protected override MappingLookup GetTpUserFromMapping(RevisionInfo revision)
         {
-            var userMapping = StorageRepository().GetProfile<GitPluginProfile>().UserMapping;
+            var userMapping = _settings.UserMapping;
             MappingLookup lookup = null;
 
             if (AuthorEmailIsSpecified(revision))

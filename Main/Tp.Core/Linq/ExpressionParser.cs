@@ -487,8 +487,7 @@ namespace System.Linq.Dynamic
             string text = _token.Text;
             if (text[0] != '-')
             {
-                ulong value;
-                if (!ulong.TryParse(text, out value) && ulong.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                if (!ulong.TryParse(text, out ulong value) && ulong.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
                 {
                     throw ParseError(Res.InvalidIntegerLiteral(text));
                 }
@@ -503,8 +502,7 @@ namespace System.Linq.Dynamic
             }
             else
             {
-                long value;
-                if (!long.TryParse(text, out value) && !long.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                if (!long.TryParse(text, out long value) && !long.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
                 {
                     throw ParseError(Res.InvalidIntegerLiteral(text));
                 }
@@ -588,15 +586,13 @@ namespace System.Linq.Dynamic
             if (_symbols.TryGetValue(_token.Text, out value) ||
                 _externals != null && _externals.TryGetValue(_token.Text, out value))
             {
-                var expr = value as Expression;
-                if (expr == null)
+                if (!(value is Expression expr))
                 {
                     expr = Expression.Constant(value);
                 }
                 else
                 {
-                    var lambda = expr as LambdaExpression;
-                    if (lambda != null)
+                    if (expr is LambdaExpression lambda)
                     {
                         return ParseLambdaInvocation(lambda);
                     }
@@ -727,9 +723,7 @@ namespace System.Linq.Dynamic
             {
                 NextToken();
 
-                Expression expr;
-                string propName;
-                ParseObjectPropertyDefinition(out expr, out propName);
+                ParseObjectPropertyDefinition(out Expression expr, out string propName);
 
                 expressions.Add(expr);
                 properties.Add(new DynamicProperty(propName, expr.Type));
@@ -742,6 +736,7 @@ namespace System.Linq.Dynamic
 
         private void ParseObjectPropertyDefinition(out Expression expr, out string propName)
         {
+            propName = null;
             var exprPos = _token.Position;
             if (_token.ID == TokenId.Identifier)
             {
@@ -775,8 +770,14 @@ namespace System.Linq.Dynamic
             }
 
             var maybePropName = GetPropertyName(expr, exprPos);
-            propName = maybePropName
-                .GetOrThrow(() => ParseError(exprPos, Res.MissingAsClause));
+            if (maybePropName.HasValue)
+            {
+                propName = maybePropName.Value;
+            }
+            else if (propName == null)
+            {
+                throw ParseError(exprPos, Res.MissingAsClause);
+            }
         }
 
         private Maybe<string> GetPropertyName(Expression expr, int exprPos)
@@ -791,7 +792,10 @@ namespace System.Linq.Dynamic
             return maybePropName;
         }
 
-        private static readonly string[] AggregationMethodNames = { "Sum", "Count", "Average", "Min", "Max", "Aggregate" };
+        // Please, order by usage frequency to microoptimize Enumerable.Contains().
+        private static readonly string[] AggregationMethodNames = new []{
+            nameof(Enumerable.Count), nameof(Enumerable.Min), nameof(Enumerable.Max),
+            nameof(Enumerable.Sum), nameof(Enumerable.Average)}.Concat(nameof(Enumerable.Aggregate)).ToArray();
 
         // find the root of Enumerable chains and get it name
         // userstories.Where(x).select(y)=>'userstories'
@@ -841,9 +845,7 @@ namespace System.Linq.Dynamic
                 }
                 else
                 {
-                    var me = expr as MemberExpression;
-
-                    if (me != null)
+                    if (expr is MemberExpression me)
                     {
                         propName = me.Member.Name;
                     }
@@ -1104,8 +1106,7 @@ namespace System.Linq.Dynamic
                     : Expression.Field(instance, (FieldInfo) member);
             }
 
-            Expression expression;
-            if (DynamicDictionary.TryGetExpression(type, instance, errorPos, name, out expression))
+            if (DynamicDictionary.TryGetExpression(type, instance, errorPos, name, out Expression expression))
             {
                 return expression;
             }
@@ -1148,14 +1149,14 @@ namespace System.Linq.Dynamic
 
             if (methodName.EqualsIgnoreCase("Avg"))
             {
-                methodName = "Average";
+                methodName = nameof(Enumerable.Average);
             }
 
             var signatureInfo = GetAppropriateMethod(typeof(IEnumerableAggregateSignatures), methodName, false, args);
             if (signatureInfo.IsSingle)
             {
                 var signature = signatureInfo.GetSingleOrThrow();
-                if (signature.Name == "Min" || signature.Name == "Max")
+                if (signature.Name == nameof(IEnumerableAggregateSignatures.Min) || signature.Name == nameof(IEnumerableAggregateSignatures.Max))
                 {
                     typeArgs = new[] { elementType, args[0].Type };
                 }
@@ -1624,8 +1625,7 @@ namespace System.Linq.Dynamic
             [NotNull] Expression expr, [NotNull] Type type, bool exact)
         {
             if (expr.Type == type) return expr;
-            var ce = expr as ConstantExpression;
-            if (ce != null)
+            if (expr is ConstantExpression ce)
             {
                 if (ce == NullLiteral)
                 {
@@ -1634,8 +1634,7 @@ namespace System.Linq.Dynamic
                 }
                 else
                 {
-                    string text;
-                    if (_literals.TryGetValue(ce, out text))
+                    if (_literals.TryGetValue(ce, out string text))
                     {
                         Type target = GetNonNullableType(type);
                         object value = null;
@@ -1666,7 +1665,7 @@ namespace System.Linq.Dynamic
             }
             if (expr.Type == typeof(char) && type == typeof(string))
             {
-                return Expression.Call(expr, "ToString", Type.EmptyTypes);
+                return Expression.Call(expr, nameof(string.ToString), Type.EmptyTypes);
             }
             return null;
         }
@@ -1935,7 +1934,7 @@ namespace System.Linq.Dynamic
             if (left.Type == typeof(string))
             {
                 return Expression.GreaterThan(
-                    GenerateStaticMethodCall(errorPosition, "Compare", left, right),
+                    GenerateStaticMethodCall(errorPosition, nameof(string.Compare), left, right),
                     Expression.Constant(0));
             }
             return Expression.GreaterThan(left, right);
@@ -1949,7 +1948,7 @@ namespace System.Linq.Dynamic
             if (left.Type == typeof(string))
             {
                 return Expression.GreaterThanOrEqual(
-                    GenerateStaticMethodCall(errorPosition, "Compare", left, right),
+                    GenerateStaticMethodCall(errorPosition, nameof(string.Compare), left, right),
                     Expression.Constant(0));
             }
             return Expression.GreaterThanOrEqual(left, right);
@@ -1963,7 +1962,7 @@ namespace System.Linq.Dynamic
             if (left.Type == typeof(string))
             {
                 return Expression.LessThan(
-                    GenerateStaticMethodCall(errorPosition, "Compare", left, right),
+                    GenerateStaticMethodCall(errorPosition, nameof(string.Compare), left, right),
                     Expression.Constant(0));
             }
             return Expression.LessThan(left, right);
@@ -1977,7 +1976,7 @@ namespace System.Linq.Dynamic
             if (left.Type == typeof(string))
             {
                 return Expression.LessThanOrEqual(
-                    GenerateStaticMethodCall(errorPosition, "Compare", left, right),
+                    GenerateStaticMethodCall(errorPosition, nameof(string.Compare), left, right),
                     Expression.Constant(0));
             }
             return Expression.LessThanOrEqual(left, right);
@@ -1990,7 +1989,7 @@ namespace System.Linq.Dynamic
         {
             if (left.Type == typeof(string) && right.Type == typeof(string))
             {
-                return GenerateStaticMethodCall(errorPosition, "Concat", left, right);
+                return GenerateStaticMethodCall(errorPosition, nameof(string.Concat), left, right);
             }
             return Expression.Add(left, right);
         }
@@ -2008,7 +2007,8 @@ namespace System.Linq.Dynamic
         {
             return Expression.Call(
                 null,
-                typeof(string).GetMethod("Concat", new[] { typeof(object), typeof(object) }),
+                // ReSharper disable once AssignNullToNotNullAttribute
+                typeof(string).GetMethod(nameof(string.Concat), new[] { typeof(object), typeof(object) }),
                 new[] { left, right });
         }
 

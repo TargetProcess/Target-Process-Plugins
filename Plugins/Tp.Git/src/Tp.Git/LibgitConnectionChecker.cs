@@ -1,12 +1,11 @@
 ﻿using LibGit2Sharp;
-using LibGit2Sharp.Handlers;
 using Tp.Git.VersionControlSystem;
 
 namespace Tp.Git
 {
     public class LibgitConnectionChecker : IConnectionChecker
     {
-        public void Check(GitPluginProfile settings)
+        public void Check(IGitConnectionSettings settings)
         {
             var folder = GitRepositoryFolder.Create(settings.Uri);
             try

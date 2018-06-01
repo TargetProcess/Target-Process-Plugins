@@ -22,10 +22,7 @@ namespace Tp.MashupManager.CustomCommands
             return profile == null ? GetEmptyResponseMessage() : GetResponseMessage(profile);
         }
 
-        public string Name
-        {
-            get { return "GetProfileInfo"; }
-        }
+        public string Name => "GetProfileInfo";
 
         private PluginCommandResponseMessage GetResponseMessage(IProfile profile)
         {
@@ -38,7 +35,7 @@ namespace Tp.MashupManager.CustomCommands
             return new PluginCommandResponseMessage
             {
                 PluginCommandStatus = PluginCommandStatus.Succeed,
-                ResponseData = new PluginProfileDto { Name = string.Empty, Settings = new MashupManagerProfile() }.Serialize()
+                ResponseData = new PluginProfileDto { Name = string.Empty, Settings = new MashupManagerProfile() }.SerializeForClient()
             };
         }
     }

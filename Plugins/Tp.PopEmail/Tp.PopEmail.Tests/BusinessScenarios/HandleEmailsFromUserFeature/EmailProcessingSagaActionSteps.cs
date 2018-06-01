@@ -74,13 +74,9 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
         [Given(@"requester with email '$requesterMail' works for company $companyId")]
         public void SetRequesterCompany(string requesterMail, int companyId)
         {
-            var requesters = Context.Storage.Get<UserLite>().Where(x => x.UserType == UserType.Requester).ToList();
-            var requester = requesters.FirstOrDefault(x => x.Email == requesterMail);
-            if (requester == null)
-            {
-                CreateRequesterWithEmail(requesterMail);
-                requester = requesters.First(x => x.Email == requesterMail);
-            }
+            CreateRequesterWithEmail(requesterMail);
+            var requester = Context.Storage.Get<UserLite>().Where(x => x.UserType == UserType.Requester)
+                .First(x => x.Email == requesterMail);
             requester.CompanyId = companyId;
         }
 
@@ -131,7 +127,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
         [Given("sender '$senderMail' is from company $companyId")]
         public void AssignSenderToCompany(string senderMail, int companyId)
         {
-            Context.UserRepository.Add(new UserLite { Email = senderMail, CompanyId = companyId, Id = EntityId.Next() });
+            SetRequesterCompany(senderMail, companyId);
             SetSenderEmail(senderMail);
         }
 
@@ -173,11 +169,15 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
                 { Email = userEmail, FirstName = userName, Id = EntityId.Next(), UserType = UserType.User });
         }
 
-
         [Given("requester with email '$requesterEmail'")]
         public void CreateRequesterWithEmail(string requesterEmail)
         {
-            Context.UserRepository.Add(new UserLite { Email = requesterEmail, Id = EntityId.Next(), UserType = UserType.Requester });
+            var requesters = Context.Storage.Get<UserLite>().Where(x => x.UserType == UserType.Requester).ToList();
+            var requester = requesters.FirstOrDefault(x => x.Email == requesterEmail);
+            if (requester == null)
+            {
+                Context.UserRepository.Add(new UserLite { Email = requesterEmail, Id = EntityId.Next(), UserType = UserType.Requester });
+            }
         }
 
         [Given("sender email is '$senderEmail'")]
@@ -211,7 +211,6 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
         {
             Context.EmailMessage.FromDisplayName = null;
         }
-
 
         [Given("email subject is '$emailSubject'")]
         public void SetEmailSubject(string emailSubject)
@@ -357,6 +356,16 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
             request.OwnerID.Should(Be.EqualTo(user.Id), "request.OwnerID.Should(Be.EqualTo(user.Id))");
         }
 
+        [Then("user with email '$userMail' should be added as requester and owner to the request")]
+        public void AssertUserIsOwnerAndRequester(string userMail)
+        {
+            var request =
+                Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Select(
+                    x => x.Dto as RequestDTO).Single();
+            var user = Context.Storage.Get<UserLite>().Single(x => x.Email == userMail && x.UserType == UserType.User && !x.IsDeletedOrInactiveUser);
+            request.OwnerID.Should(Be.EqualTo(user.Id), "request.OwnerID.Should(Be.EqualTo(user.Id))");
+        }
+
         [Then(
              @"requester with email '$requesterMail' and first name '$firstName' and last name '$lastName' should be created"
          )]
@@ -381,9 +390,18 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
         [Then(@"message from requester with email '$requesterMail' should be created")]
         public void RequesterEmailShouldBe(string requesterMail)
         {
-            var user = Context.Storage.Get<UserLite>().First(x => x.Email == requesterMail && x.UserType == UserType.Requester);
-            Context.Transport.TpQueue.GetMessages<CreateMessageCommand>()
-                .Count()
+            var user = Context.Storage.Get<UserLite>().First(x => x.Email == requesterMail && x.UserType == UserType.Requester && !x.IsDeletedOrInactiveUser);
+            Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Length
+                .Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1))");
+            Context.CreatedMessageDtos.Single()
+                .FromID.Should(Be.EqualTo(user.Id), "Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id))");
+        }
+
+        [Then(@"message from user with email '$userMail' should be created")]
+        public void UserEmailShouldBe(string userMail)
+        {
+            var user = Context.Storage.Get<UserLite>().First(x => x.Email == userMail && x.UserType == UserType.User && !x.IsDeletedOrInactiveUser);
+            Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Length
                 .Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1))");
             Context.CreatedMessageDtos.Single()
                 .FromID.Should(Be.EqualTo(user.Id), "Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id))");
@@ -406,8 +424,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
 
         private static void AssertMessageCreatedBy(UserLite user)
         {
-            Context.Transport.TpQueue.GetMessages<CreateMessageCommand>()
-                .Count()
+            Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Length
                 .Should(Be.EqualTo(1), "Context.Transport.TpQueue.GetMessages<CreateMessageCommand>().Count().Should(Be.EqualTo(1))");
             Context.CreatedMessageDtos.Single().FromID.Should(Be.EqualTo(user.Id), "Message was created on behalf of wrong user");
         }
@@ -471,7 +488,7 @@ namespace Tp.PopEmailIntegration.BusinessScenarios.HandleEmailsFromUserFeature
                 .GetMessages<CreateCommand>()
                 .Count(x => x.Dto is RequestDTO)
                 .Should(Be.EqualTo(1),
-                    "Context.Transport.TpQueue.GetMessages<CreateCommand>().Where(x => x.Dto is RequestDTO).Count().Should(Be.EqualTo(1))");
+                    "Context.Transport.TpQueue.GetMessages<CreateCommand>().Count(x => x.Dto is RequestDTO).Should(Be.EqualTo(1))");
         }
 
         [Then("no request should be created from the message")]

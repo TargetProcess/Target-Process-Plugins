@@ -4,7 +4,6 @@
 // 
 
 using System;
-using Mono.Unix.Native;
 using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.Mercurial.VersionControlSystem
@@ -54,7 +53,7 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public override string ToString()
         {
-            return string.Format("RevisionId: {0}, Date: {1}", Value, Time);
+            return $"RevisionId: {Value}, Date: {Time}";
         }
     }
 }

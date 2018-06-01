@@ -3,8 +3,10 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using System.Runtime.Serialization;
 using Tp.Integration.Plugin.Common.Mapping;
+using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.SourceControl.Settings
 {
@@ -41,7 +43,16 @@ namespace Tp.SourceControl.Settings
         public string Login { get; set; }
 
         [DataMember]
+        [SecretMember]
         public string Password { get; set; }
+
+        private bool? _hasPassword;
+        [DataMember]
+        public bool HasPassword
+        {
+            get { return _hasPassword ?? !Password.IsNullOrEmpty(); }
+            set { _hasPassword = value; }
+        }
 
         [DataMember]
         public string StartRevision { get; set; }

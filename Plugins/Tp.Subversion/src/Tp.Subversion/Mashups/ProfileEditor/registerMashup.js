@@ -28,7 +28,6 @@ tau.mashups
 			},
 
 			renderEditor: function () {
-
 				var _profileRepository = profileRepository;
 
 				function profileLoaded(data) {

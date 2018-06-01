@@ -92,6 +92,7 @@ namespace System.Linq.Dynamic
             {
                 var test = argumentList.Value.Where(x => x.Type.IsNullable())
                     .Select(x => Expression.NotEqual(x, Expression.Constant(null, x.Type)))
+                    .ToArray()
                     .CombineAnd();
                 var needToNullate = e.Type.IsValueType;
                 var resultType = needToNullate ? typeof(Nullable<>).MakeGenericType(e.Type) : e.Type;

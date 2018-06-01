@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Mercurial;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -15,10 +12,10 @@ namespace Tp.Mercurial.VersionControlSystem
             {
                 Author = changeset.AuthorName,
                 Comment = changeset.CommitMessage,
-                Id = new RevisionId() { Time = changeset.Timestamp, Value = changeset.Hash },
+                Id = new RevisionId { Time = changeset.Timestamp, Value = changeset.Hash },
                 Time = changeset.Timestamp,
                 Entries = changeset.PathActions
-                    .Select(pa => new RevisionEntryInfo() { Path = pa.Path, Action = pa.Action.ToFileAction() }).ToArray(),
+                    .Select(pa => new RevisionEntryInfo { Path = pa.Path, Action = pa.Action.ToFileAction() }).ToArray(),
                 Email = changeset.AuthorEmailAddress,
                 TimeCreated = changeset.Timestamp
             };

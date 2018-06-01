@@ -21,6 +21,6 @@ namespace Tp.Git.VersionControlSystem
 
     public interface IGitClientFactory
     {
-        IGitClient Create(ISourceControlConnectionSettingsSource settings, IStorage<GitRepositoryFolder> folderStorage);
+        IGitClient Create(IGitConnectionSettings settings, IStorage<GitRepositoryFolder> folderStorage);
     }
 }

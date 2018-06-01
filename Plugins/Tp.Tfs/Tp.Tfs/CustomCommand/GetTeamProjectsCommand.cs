@@ -8,12 +8,20 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 
 namespace Tp.Tfs.CustomCommand
 {
     public class GetTeamProjectsCommand : IPluginCommand
     {
+        private readonly IProfileCollection _profileCollection;
+
+        public GetTeamProjectsCommand(IProfileCollection profileCollection)
+        {
+            _profileCollection = profileCollection;
+        }
+
         public PluginCommandResponseMessage Execute(string args, UserDTO user)
         {
             return new PluginCommandResponseMessage
@@ -25,7 +33,7 @@ namespace Tp.Tfs.CustomCommand
 
         private string OnExecute(string args)
         {
-            var profile = args.DeserializeProfile();
+            var profile = args.DeserializeProfile(p => _profileCollection[p]);
 
             try
             {

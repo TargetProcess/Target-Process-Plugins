@@ -14,7 +14,7 @@ namespace System.Linq.Expressions
         {
             expression = expression.PartialEval();
             var constantExpression = expression as ConstantExpression;
-            return (constantExpression?.Value is T) ? Maybe.Return((T) constantExpression.Value) : Maybe.Nothing;
+            return constantExpression?.Value is T ? Maybe.Return((T) constantExpression.Value) : Maybe.Nothing;
         }
 
         [Pure]
@@ -481,9 +481,9 @@ namespace System.Linq.Expressions
 
         [Pure]
         [NotNull]
-        public static T ProtectFromNullReference<T>([NotNull] this T expression) where T : Expression
+        public static T ProtectFromNullReference<T>([NotNull] this T expression, ISet<Expression> notNullExpressions = null) where T : Expression
         {
-            return (T) (new ProtectFromNullReferenceVisitor().Visit(expression));
+            return (T) (new ProtectFromNullReferenceVisitor(notNullExpressions).Visit(expression));
         }
 
         [Pure]
@@ -520,10 +520,40 @@ namespace System.Linq.Expressions
 
         [Pure]
         [NotNull]
+        public static Expression<Func<T, bool>> CombineAnd<T>(
+                [NotNull] this Expression<Func<T, bool>> head,
+                [NotNull] [ItemNotNull] IReadOnlyCollection<Expression<Func<T, bool>>> tail) =>
+            Combine(head, tail, Expression.AndAlso);
+
+        [Pure]
+        [NotNull]
         public static Expression<Func<T, bool>> CombineOr<T>(
                 [NotNull] this Expression<Func<T, bool>> head,
                 [NotNull] [ItemNotNull] params Expression<Func<T, bool>>[] tail) =>
             Combine(head, tail, Expression.OrElse);
+
+        [Pure]
+        [NotNull]
+        public static Expression<Func<T, bool>> CombineOr<T>(
+            [NotNull] this Expression<Func<T, bool>> head,
+            [NotNull] [ItemNotNull] IReadOnlyCollection<Expression<Func<T, bool>>> tail) =>
+            Combine(head, tail, Expression.OrElse);
+
+        [Pure]
+        [NotNull]
+        public static Expression<Func<T, bool>> CombineAnd<T>([NotNull] [ItemNotNull] this IEnumerable<Expression<Func<T, bool>>> expressions)
+        {
+            var exprs = expressions.ToReadOnlyCollection();
+            return CombineAnd(exprs.First(), exprs.Skip(1).ToArray());
+        }
+
+        [Pure]
+        [NotNull]
+        public static Expression<Func<T, bool>> CombineOr<T>([NotNull] [ItemNotNull] this IEnumerable<Expression<Func<T, bool>>> expressions)
+        {
+            var exprs = expressions.ToReadOnlyCollection();
+            return CombineOr(exprs.First(), exprs.Skip(1).ToArray());
+        }
 
         [Pure]
         [NotNull]
@@ -542,7 +572,7 @@ namespace System.Linq.Expressions
             [NotNull] [ItemNotNull] IReadOnlyCollection<Expression<Func<T, bool>>> tail,
             [NotNull] [InstantHandle] Func<Expression, Expression, BinaryExpression> combiner)
         {
-            Expression<Func<T, bool>> tree = BuildBalancedExpressionTree(head, tail.ToArray(), combiner);
+            Expression<Func<T, bool>> tree = BuildBalancedExpressionTree(head, tail, combiner);
             return (Expression<Func<T, bool>>)Expression.Lambda(combiner(head.Body, tree.Body), head.Parameters);
         }
 
@@ -557,13 +587,13 @@ namespace System.Linq.Expressions
             {
                 return head;
             }
-            else if (nodes.Count() == 1)
+            else if (nodes.Count == 1)
             {
                 var lambda = LambdaSubstituter.ReplaceParameters(nodes.Single(), head.Parameters);
                 return Expression.Lambda<Func<T, bool>>(lambda, head.Parameters);
             }
 
-            int halfTreeSize = nodes.Count() / 2;
+            int halfTreeSize = nodes.Count / 2;
             var leftTree = BuildBalancedExpressionTree(head, nodes.Take(halfTreeSize).ToArray(), combiner);
             var rightTree = BuildBalancedExpressionTree(head, nodes.Skip(halfTreeSize).ToArray(), combiner);
             var tree = Expression.Lambda<Func<T, bool>>(combiner(leftTree.Body, rightTree.Body), head.Parameters);

@@ -19,6 +19,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
         private volatile bool _isRunning;
         private Predicate<TMessage> _while;
         private readonly List<IObserver<TMessage>> _observers;
+        private bool _isDisposed;
 
         public MessageConsumer(IMessageSource<TMessage> messageSource, IScheduler scheduler, ILoggerContextSensitive log)
         {
@@ -41,8 +42,16 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 
         public void Consume(Action<TMessage> handleMessage)
         {
+            void HandleMessageIfNotDisposed(TMessage message)
+            {
+                if (!_isDisposed)
+                {
+                    handleMessage(message);
+                }
+            }
+
             ThrowIfRunning();
-            ConsumeCore(handleMessage);
+            ConsumeCore(HandleMessageIfNotDisposed);
             _isRunning = true;
         }
 
@@ -63,13 +72,20 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Pump
 
         public void Dispose()
         {
-            if (_subscription != null)
+            try
             {
-                _subscription.Dispose();
+                if (_subscription != null)
+                {
+                    _subscription.Dispose();
+                }
+                OnDispose();
+                _isRunning = false;
             }
-            OnDispose();
-            _isRunning = false;
-            _log.Info(LoggerContext.New(Name), "disposed.");
+            finally
+            {
+                _isDisposed = true;
+                _log.Info(LoggerContext.New(Name), "disposed.");
+            }
         }
 
         public Predicate<TMessage> While

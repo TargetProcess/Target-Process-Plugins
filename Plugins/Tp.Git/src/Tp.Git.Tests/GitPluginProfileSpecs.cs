@@ -35,7 +35,7 @@ namespace Tp.Git.Tests
             var startRevisionError = _errors.Single();
             startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"),
                 "startRevisionError.FieldName.Should(Be.EqualTo(\"StartRevision\"))");
-            startRevisionError.Message.Should(Be.EqualTo($"Start Revision Date should be not before {GitRevisionId.UtcTimeMin.ToShortDateString()}"),
+            startRevisionError.Message.Should(Be.EqualTo($"Start Revision Date should be not before {GitRevisionId.UtcTimeMin.ToShortDateString()}."),
                 "startRevisionError.Message.Should(Be.EqualTo(\"Start Revision Date should be not before 1/1/1970\"))");
         }
 
@@ -48,7 +48,7 @@ namespace Tp.Git.Tests
             var startRevisionError = _errors.Single();
             startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"),
                 "startRevisionError.FieldName.Should(Be.EqualTo(\"StartRevision\"))");
-            startRevisionError.Message.Should(Be.EqualTo($"Start Revision Date should be not behind {GitRevisionId.UtcTimeMax.ToShortDateString()}"),
+            startRevisionError.Message.Should(Be.EqualTo($"Start Revision Date should be not behind {GitRevisionId.UtcTimeMax.ToShortDateString()}."),
                 "startRevisionError.Message.Should(Be.EqualTo(\"Start Revision Date should be not behind 1/19/2038\"))");
         }
 
@@ -61,7 +61,7 @@ namespace Tp.Git.Tests
             var startRevisionError = _errors.Single();
             startRevisionError.FieldName.Should(Be.EqualTo("StartRevision"),
                 "startRevisionError.FieldName.Should(Be.EqualTo(\"StartRevision\"))");
-            startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be specified in mm/dd/yyyy format"),
+            startRevisionError.Message.Should(Be.EqualTo("Start Revision Date should be specified in mm/dd/yyyy format."),
                 "startRevisionError.Message.Should(Be.EqualTo(\"Start Revision Date should be specified in mm/dd/yyyy format\"))");
         }
 
@@ -114,6 +114,12 @@ namespace Tp.Git.Tests
         }
 
         [Test]
+        public void ShouldHandleGithubGitUriWithDotInHostName()
+        {
+            ValidateUri("git@github.tpondemand.com:project/om3/core/logistics-portal/logistics-portal-api.git");
+        }
+
+        [Test]
         public void ShouldHandleFileUri()
         {
             ValidateUri("file:///path/to/so-me/repo.git/");
@@ -158,21 +164,20 @@ namespace Tp.Git.Tests
         [Test]
         public void ShouldHandleSshUri()
         {
-            ValidateWrongUri("ssh://username@server.com:285/~username/path/to/repo.git", "Connection via SSH is not supported.");
+            ValidateUri("ssh://username@server.com:285/~username/path/to/repo.git");
         }
 
         [Test]
         public void ShouldHandleSshScpUri1()
         {
-            ValidateWrongUri("git@github.com:TargetProcess/RPG.git", "Connection via SSH is not supported.");
+            ValidateUri("git@github.com:TargetProcess/RPG.git");
         }
 
         [Test]
         public void ShouldHandleSshScpUri2()
         {
-            ValidateWrongUri("github.com:TargetProcess/RPG.git", "Connection via SSH is not supported.");
+            ValidateUri("github.com:TargetProcess/RPG.git");
         }
-
 
         private void ValidateUri(string uri)
         {

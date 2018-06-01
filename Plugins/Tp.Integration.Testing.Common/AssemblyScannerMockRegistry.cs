@@ -71,10 +71,9 @@ namespace Tp.Integration.Testing.Common
 
     public class MockTaskFactory : ITaskFactory
     {
-        public Task StartNew(Action action)
+        public void StartNew(Action action)
         {
             action();
-            return new Task(() => { });
         }
 
         public Task<T> StartNew<T>(Func<T> func)

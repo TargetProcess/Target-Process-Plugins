@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -9,11 +10,17 @@ namespace Tp.Core.Expressions.Visitors
 {
     internal class ProtectFromNullReferenceVisitor : ExpressionVisitor
     {
+        private readonly ISet<Expression> _notNullExpressions;
         private static readonly Type _nullableOpenType = typeof(Nullable<>);
+
+        public ProtectFromNullReferenceVisitor(ISet<Expression> notNullExpressions = null)
+        {
+            _notNullExpressions = notNullExpressions;
+        }
 
         protected override Expression VisitMember(MemberExpression memberExpression)
         {
-            if (memberExpression.Expression != null && CanBeNull(memberExpression))
+            if (memberExpression.Expression != null && CanBeNull(memberExpression.Expression))
             {
                 return ProtectFromNull(memberExpression, memberExpression.Expression);
             }
@@ -26,11 +33,16 @@ namespace Tp.Core.Expressions.Visitors
         }
 
         private static readonly MethodInfo _toStringMethod = Reflect<object>.GetMethod(o => o.ToString());
-        private static bool CanBeNull(Expression expression)
+        private bool CanBeNull(Expression expression)
         {
             if (expression == null)
             {
                 return true;
+            }
+
+            if (_notNullExpressions?.Contains(expression) == true)
+            {
+                return false;
             }
             
             return expression
@@ -55,27 +67,21 @@ namespace Tp.Core.Expressions.Visitors
         private static bool ShouldProtectMethodCall(MethodCallExpression node)
         {
             var method = node.Method;
-            if (TpFeature.RestProtectAllMethodCallsFromNull.IsEnabled())
+
+            if (method.IsStatic)
             {
-                if (method.IsStatic)
-                {
-                    // This skips protection for extension methods as well, because they may be called on null values and can have logic for them. 
-                    // E.g. StringExtensions.Contains() protects from nulls inside itself.
-                    return false;
-                }
-
-                if (node.Object?.NodeType == ExpressionType.Constant)
-                {
-                    // This removes redundant null checks in EnumerableProjector.Project etc
-                    return false;
-                }
-
-                return true;
+                // This skips protection for extension methods as well, because they may be called on null values and can have logic for them. 
+                // E.g. StringExtensions.Contains() protects from nulls inside itself.
+                return false;
             }
 
-            if (method.Name == "ToString" && !method.IsStatic) return true;
-            if (method.IsSpecialName && method.Name == "get_Item") return true;
-            return false;
+            if (node.Object?.NodeType == ExpressionType.Constant)
+            {
+                // This removes redundant null checks in EnumerableProjector.Project etc
+                return false;
+            }
+
+            return true;
         }
 
         protected override Expression VisitUnary(UnaryExpression node)

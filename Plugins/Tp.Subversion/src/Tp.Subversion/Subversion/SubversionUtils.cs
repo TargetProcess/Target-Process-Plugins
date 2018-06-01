@@ -24,16 +24,14 @@ namespace Tp.Subversion.Subversion
             _log.InfoFormat("Process svn revisions...");
             foreach (var svnRevision in svnRevisions)
             {
-                _log.InfoFormat("Do processing of revision {0}", svnRevision.Revision);
+                _log.Info($"Do processing of revision {svnRevision.Revision}");
 
                 if (svnRevision.Revision == 0 ||
                     svnRevision.ChangedPaths == null ||
                     svnRevision.ChangedPaths.Count == 0)
                 {
-                    _log.InfoFormat("Skip processing revision {0}. {1}.", svnRevision.Revision,
-                        svnRevision.ChangedPaths == null
-                            ? "ChangedPaths == null"
-                            : $"ChangedPaths.Count == {svnRevision.ChangedPaths.Count}");
+                    _log.Info(
+                        $"Skip processing revision {svnRevision.Revision}. {(svnRevision.ChangedPaths == null ? "ChangedPaths == null" : $"ChangedPaths.Count == {svnRevision.ChangedPaths.Count}")}.");
                     continue;
                 }
 
@@ -50,8 +48,7 @@ namespace Tp.Subversion.Subversion
             var infos = SvnChangeItemCollectionToArrayOfRevisionEntryInfo(revision.ChangedPaths);
             var entries = infos.ToArray();
 
-            _log.InfoFormat("Revision Info ctor: {0},{1},{2},{3},{4}", revision.Revision, revision.Author, revision.LogMessage,
-                revision.Time.ToLocalTime(), entries);
+            _log.Info($"Revision Info ctor: {revision.Revision},{revision.Author},{revision.LogMessage},{revision.Time.ToLocalTime()},{entries}");
             return new RevisionInfo
             {
                 Id = revision.Revision.ToString(),

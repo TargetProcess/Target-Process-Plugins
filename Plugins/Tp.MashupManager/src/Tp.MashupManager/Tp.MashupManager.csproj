@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.MashupManager</RootNamespace>
     <AssemblyName>Tp.MashupManager</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
@@ -106,9 +106,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tp.Core.Functional, Version=0.1.3.6, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.3.6\lib\net45\Tp.Core.Functional.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.7\lib\net45\Tp.Core.Functional.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +170,7 @@
     <Compile Include="MashupsOnTargetProcessStartSender.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MashupManagerStartupHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">

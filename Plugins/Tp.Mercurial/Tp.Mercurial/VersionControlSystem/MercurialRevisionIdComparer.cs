@@ -46,10 +46,8 @@ namespace Tp.Mercurial.VersionControlSystem
 
         public RevisionId ConvertToRevisionId(string startRevision)
         {
-            DateTime startDate;
-            if (
-                !DateTime.TryParse(startRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal,
-                    out startDate))
+            if (!DateTime.TryParse(startRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal,
+                    out var startDate))
                 throw new FormatException("StartRevision argument is in invalid datetime format.");
 
             var revisionId = new MercurialRevisionId() { Time = startDate };

@@ -8,7 +8,6 @@ using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.PopEmailIntegration.Rules.Parsing;
 
@@ -23,7 +22,7 @@ namespace Tp.PopEmailIntegration.Rules.ThenClauses
 
         public override void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
         {
-            _bus.SendLocal(new AttachMessageToProjectCommand { MessageDto = dto, ProjectId = _projectId });
+            Bus.SendLocal(new AttachMessageToProjectCommand { MessageDto = dto, ProjectId = ProjectId });
         }
 
         public static IThenClause Create(ParseNode clauseNode)

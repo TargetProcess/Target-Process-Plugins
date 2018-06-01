@@ -3,6 +3,7 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Linq;
 using Tp.Integration.Common;
 using Tp.PopEmailIntegration.Data;
 using Tp.PopEmailIntegration.Rules.ThenClauses;
@@ -28,8 +29,9 @@ namespace Tp.PopEmailIntegration.Rules
             return _whenClause.IsMatched(message) && _thenClause.IsMatched(message);
         }
 
-        public void Execute(MessageDTO dto, AttachmentDTO[] attachments, int[] requesters)
+        public void Execute(EmailMessage emailMessage, MessageDTO dto, AttachmentDTO[] attachments)
         {
+            var requesters = _whenClause.GetRequestersForEmail(emailMessage).ToArray();
             _thenClause.Execute(dto, attachments, requesters);
         }
 

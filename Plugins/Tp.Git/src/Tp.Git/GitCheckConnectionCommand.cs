@@ -7,6 +7,7 @@ using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
 using System.Linq;
+using Tp.Integration.Plugin.Common.Domain;
 
 namespace Tp.Git
 {
@@ -14,7 +15,7 @@ namespace Tp.Git
     {
         private readonly IConnectionChecker _connectionChecker;
 
-        public GitCheckConnectionCommand(IConnectionChecker connectionChecker)
+        public GitCheckConnectionCommand(IConnectionChecker connectionChecker, IProfileCollection profileCollection) : base(profileCollection)
         {
             _connectionChecker = connectionChecker;
         }
@@ -28,12 +29,13 @@ namespace Tp.Git
         protected override void OnCheckConnection(PluginProfileErrorCollection errors, GitPluginProfile settings)
         {
             settings.ValidateUri(errors);
+            settings.ValidateSshKeys(errors);
             if (errors.Any())
             {
                 return;
             }
 
             _connectionChecker.Check(settings);
-        }   
+        }
     }
 }

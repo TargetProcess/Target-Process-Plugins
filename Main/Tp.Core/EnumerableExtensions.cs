@@ -480,6 +480,46 @@ namespace System.Linq
         {
             return left.Any(right.Contains);
         }
+
+        [Pure]
+        public static Dictionary<TKey, TSource> ToDictionaryOfKnownCapacity<TSource, TKey>(this ICollection<TSource> source,
+            Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer = null)
+        {
+            return ToDictionaryOfKnownCapacity(source, source.Count, keySelector, comparer);
+        }
+
+        [Pure]
+        public static Dictionary<TKey, TSource> ToDictionaryOfKnownCapacity<TSource, TKey>(this IEnumerable<TSource> source, int capacity,
+            Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer = null)
+        {
+            var dictionary = new Dictionary<TKey, TSource>(capacity, comparer);
+            foreach (var item in source)
+            {
+                dictionary.Add(keySelector(item), item);
+            }
+
+            return dictionary;
+        }
+
+        [Pure]
+        public static Dictionary<TKey, TElement> ToDictionaryOfKnownCapacity<TSource, TKey, TElement>(this ICollection<TSource> source,
+            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer = null)
+        {
+            return source.ToDictionaryOfKnownCapacity(source.Count, keySelector, elementSelector, comparer);
+        }
+
+        [Pure]
+        public static Dictionary<TKey, TElement> ToDictionaryOfKnownCapacity<TSource, TKey, TElement>(this IEnumerable<TSource> source, int capacity,
+            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer = null)
+        {
+            var dictionary = new Dictionary<TKey, TElement>(capacity, comparer);
+            foreach (var item in source)
+            {
+                dictionary.Add(keySelector(item), elementSelector(item));
+            }
+
+            return dictionary;
+        }
     }
 
     public struct PartitionResult<T>

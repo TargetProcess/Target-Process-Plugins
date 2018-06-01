@@ -24,14 +24,11 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
         {
             return new PluginCommandResponseMessage
             {
-                ResponseData = _profileCollection[args].ConvertToDto().Serialize(),
+                ResponseData = _profileCollection[args].ConvertToDto().SerializeForClient(),
                 PluginCommandStatus = PluginCommandStatus.Succeed
             };
         }
 
-        public string Name
-        {
-            get { return EmbeddedPluginCommands.GetProfile; }
-        }
+        public string Name => EmbeddedPluginCommands.GetProfile;
     }
 }

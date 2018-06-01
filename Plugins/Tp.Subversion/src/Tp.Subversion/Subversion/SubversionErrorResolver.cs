@@ -67,7 +67,7 @@ namespace Tp.Subversion.Subversion
         private static PluginProfileError ErrorFor(string field, string message)
         {
             return new PluginProfileError
-                { FieldName = field, Message = string.Format("{0}. See plugin log for details.", message) };
+                { FieldName = field, Message = $"{message}. See plugin log for details." };
         }
 
         private static void HandleConnectionError(PluginProfileErrorCollection errors)

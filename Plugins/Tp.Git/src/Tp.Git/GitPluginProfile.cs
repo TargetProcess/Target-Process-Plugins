@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2015 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -12,6 +12,7 @@ using Tp.Git.VersionControlSystem;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Mapping;
+using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Settings;
 
@@ -19,7 +20,7 @@ namespace Tp.Git
 {
     [Profile]
     [DataContract]
-    public class GitPluginProfile : ConnectionSettings, ISynchronizableProfile, IValidatable
+    public class GitPluginProfile : ConnectionSettings, ISynchronizableProfile, IValidatable, IGitConnectionSettings
     {
         private const string SynchIntervalInMinutes = "SynchIntervalInMinutes";
         public const string StartRevisionField = "StartRevision";
@@ -37,8 +38,7 @@ namespace Tp.Git
         {
             get
             {
-                int val;
-                if (!int.TryParse(_syncInterval, out val))
+                if (!int.TryParse(_syncInterval, out var val))
                 {
                     val = PluginSettings.LoadInt(SynchIntervalInMinutes, 0);
                 }
@@ -56,7 +56,23 @@ namespace Tp.Git
             set { }
         }
 
-        #region Validation
+        [DataMember]
+        public bool UseSsh { get; set; }
+
+        [DataMember]
+        [SecretMember]
+        public string SshPrivateKey { get; set; }
+
+        private bool? _hasSshPrivateKey;
+        [DataMember]
+        public bool HasSshPrivateKey
+        {
+            get { return _hasSshPrivateKey ?? !SshPrivateKey.IsNullOrEmpty(); }
+            set { _hasSshPrivateKey = value; }
+        }
+
+        [DataMember]
+        public string SshPublicKey { get; set; }
 
         public bool ValidateStartRevision(PluginProfileErrorCollection errors)
         {
@@ -66,13 +82,12 @@ namespace Tp.Git
 
         private bool StartRevisionShouldBeValidDate(PluginProfileErrorCollection errors)
         {
-            DateTime result;
-            if (!DateTime.TryParse(StartRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal, out result))
+            if (!DateTime.TryParse(StartRevision, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AdjustToUniversal, out _))
             {
                 errors.Add(new PluginProfileError
                 {
                     FieldName = StartRevisionField,
-                    Message = string.Format("Start Revision Date should be specified in mm/dd/yyyy format")
+                    Message = "Start Revision Date should be specified in mm/dd/yyyy format."
                 });
                 return false;
             }
@@ -87,7 +102,7 @@ namespace Tp.Git
                 errors.Add(new PluginProfileError
                 {
                     FieldName = StartRevisionField,
-                    Message = string.Format("Start Revision Date should be not behind {0}", GitRevisionId.UtcTimeMax.ToShortDateString())
+                    Message = $"Start Revision Date should be not behind {GitRevisionId.UtcTimeMax.ToShortDateString()}."
                 });
                 return false;
             }
@@ -102,7 +117,7 @@ namespace Tp.Git
                 errors.Add(new PluginProfileError
                 {
                     FieldName = StartRevisionField,
-                    Message = string.Format("Start Revision Date should be not before {0}", GitRevisionId.UtcTimeMin.ToShortDateString())
+                    Message = $"Start Revision Date should be not before {GitRevisionId.UtcTimeMin.ToShortDateString()}."
                 });
                 return false;
             }
@@ -114,6 +129,56 @@ namespace Tp.Git
             ValidateUri(errors);
             ValidateStartRevision(errors);
             ValidateUserMapping(errors);
+            ValidateSshKeys(errors);
+        }
+
+        public void ValidateSshKeys(PluginProfileErrorCollection errors)
+        {
+            if (!UseSsh)
+            {
+                return;
+            }
+            if (SshPrivateKey.IsNullOrEmpty())
+            {
+                errors.Add(new PluginProfileError { Message = "Please specify SSH private key.", FieldName = nameof(SshPrivateKey) });
+            }
+
+            if (!SshPrivateKey.StartsWith("-----BEGIN RSA PRIVATE KEY-----"))
+            {
+                errors.Add(new PluginProfileError
+                {
+                    Message = "SSH private key has incorrect format. It should begin with `-----BEGIN RSA PRIVATE KEY-----`.",
+                    FieldName = nameof(SshPrivateKey)
+                });
+            }
+
+            if (!ContainsOnlyValidSymbols(SshPrivateKey))
+            {
+                errors.Add(new PluginProfileError
+                {
+                    Message = "SSH private key contains ivalid symbols.",
+                    FieldName = nameof(SshPrivateKey)
+                });
+            }
+
+            if (SshPublicKey.IsNullOrEmpty())
+            {
+                errors.Add(new PluginProfileError { Message = "Please specify SSH public key.", FieldName = nameof(SshPublicKey) });
+            }
+
+            if (!ContainsOnlyValidSymbols(SshPublicKey))
+            {
+                errors.Add(new PluginProfileError
+                {
+                    Message = "SSH public key contains ivalid symbols.",
+                    FieldName = nameof(SshPublicKey)
+                });
+            }
+
+            bool ContainsOnlyValidSymbols(string key)
+            {
+                return key.Select(c => (int) c).All(c => c == 10 || c == 13 || (c > 31 && c < 126));
+            }
         }
 
         public void ValidateUri(PluginProfileErrorCollection errors)
@@ -124,11 +189,9 @@ namespace Tp.Git
 
         private void ValidateUriFormat(PluginProfileErrorCollection errors)
         {
-            if (!string.IsNullOrEmpty(Uri) && !IsCommonUri() && !IsGitUri() && !IsFileUri())
+            if (!string.IsNullOrEmpty(Uri) && !IsCommonUri() && !IsGitUri() && !IsFileUri() && !IsSshUri())
             {
-                errors.Add(IsSshUri()
-                    ? new PluginProfileError { Message = "Connection via SSH is not supported.", FieldName = UriField }
-                    : new PluginProfileError { Message = "Wrong Uri format.", FieldName = UriField });
+                errors.Add(new PluginProfileError { Message = "Wrong Uri format.", FieldName = UriField });
             }
         }
 
@@ -136,7 +199,7 @@ namespace Tp.Git
         {
             return Regex.IsMatch(Uri, @"^ssh://(.+@)?([\w\d\.]+)(:\d+)?/(~\S+)?(/\S)*$", RegexOptions.IgnoreCase)
                 || Regex.IsMatch(Uri,
-                    @"^(?!file:)(?!http:)(?!https:)(?!ftp:)(?!ftps:)(?!rsync:)(?!git:)(?!ssh:)(.+@)?[\w\d]+[\.][\w\d]+:(/~.+/)?\S*$",
+                    @"^(?!file:)(?!http:)(?!https:)(?!ftp:)(?!ftps:)(?!rsync:)(?!git:)(?!ssh:)(.+@)?[\w\d\-._~%]+[\.][\w\d]+:(/~.+/)?\S*$",
                     RegexOptions.IgnoreCase);
         }
 
@@ -174,7 +237,5 @@ namespace Tp.Git
                 });
             }
         }
-
-        #endregion
     }
 }

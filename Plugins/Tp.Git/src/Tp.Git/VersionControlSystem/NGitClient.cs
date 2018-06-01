@@ -21,8 +21,12 @@ namespace Tp.Git.VersionControlSystem
 {
     public class NGitClientFactory : IGitClientFactory
     {
-        public IGitClient Create(ISourceControlConnectionSettingsSource settings, IStorage<GitRepositoryFolder> folderStorage)
+        public IGitClient Create(IGitConnectionSettings settings, IStorage<GitRepositoryFolder> folderStorage)
         {
+            if (settings.UseSsh)
+            {
+                throw new NotSupportedException("This profile uses ssh connection, it's not supported in NGit");
+            }
             return new NGitClient(settings, folderStorage);
         }
     }

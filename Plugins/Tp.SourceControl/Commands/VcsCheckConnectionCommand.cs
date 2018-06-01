@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -9,6 +9,7 @@ using Tp.Integration.Common;
 using Tp.Integration.Messages;
 using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.PluginLifecycle.PluginCommand;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Settings;
@@ -19,6 +20,13 @@ namespace Tp.SourceControl.Commands
     public abstract class VcsCheckConnectionCommand<TVcsPluginProfile> : IPluginCommand
         where TVcsPluginProfile : ISourceControlConnectionSettingsSource
     {
+        private readonly IProfileCollection _profileCollection;
+
+        protected VcsCheckConnectionCommand(IProfileCollection profileCollection)
+        {
+            _profileCollection = profileCollection;
+        }
+
         public PluginCommandResponseMessage Execute(string args, UserDTO user)
         {
             return new PluginCommandResponseMessage
@@ -27,7 +35,7 @@ namespace Tp.SourceControl.Commands
 
         private string OnExecute(string args)
         {
-            var profile = args.DeserializeProfile();
+            var profile = args.DeserializeProfile(name => _profileCollection[name]);
             var errors = new PluginProfileErrorCollection();
             try
             {
@@ -52,8 +60,10 @@ namespace Tp.SourceControl.Commands
 
         protected virtual void OnCheckConnection(PluginProfileErrorCollection errors, TVcsPluginProfile settings)
         {
-            var vcs = CreateVcs(settings);
-            CheckStartRevision(settings, vcs, errors);
+            using (var vcs = CreateVcs(settings))
+            {
+                CheckStartRevision(settings, vcs, errors);
+            }
         }
 
         protected virtual IVersionControlSystem CreateVcs(TVcsPluginProfile settings)
@@ -64,9 +74,6 @@ namespace Tp.SourceControl.Commands
         protected abstract void CheckStartRevision(TVcsPluginProfile settings, IVersionControlSystem versionControlSystem,
             PluginProfileErrorCollection errors);
 
-        public string Name
-        {
-            get { return "CheckConnection"; }
-        }
+        public string Name => "CheckConnection";
     }
 }

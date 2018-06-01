@@ -64,7 +64,7 @@ namespace Tp.Plugin.Core.Attachments
 
         public void Handle(AttachmentCreatedMessage message)
         {
-            SendLocal(new AttachmentCreatedMessageInternal { SagaId = Data.OuterSagaId, AttachmentDto = message.Dto });
+            SendLocal(new AttachmentCreatedMessageInternal { SagaId = Data.OuterSagaId, AttachmentDto = message.Dto, ContentId = Data.LocalStoredAttachment.ContentId });
             MarkAsComplete();
         }
 
@@ -114,6 +114,7 @@ namespace Tp.Plugin.Core.Attachments
     public class AttachmentCreatedMessageInternal : SagaMessage, IPluginLocalMessage
     {
         public AttachmentDTO AttachmentDto { get; set; }
+        public string ContentId { get; set; }
     }
 
     public class PushAttachmentToTPSagaData : ISagaEntity

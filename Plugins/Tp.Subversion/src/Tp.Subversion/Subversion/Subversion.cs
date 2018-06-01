@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Web;
 using SharpSvn;
@@ -24,7 +23,7 @@ using Tp.SourceControl.VersionControlSystem;
 
 namespace Tp.Subversion.Subversion
 {
-    public class Subversion : VersionControlSystem
+    public class Subversion : VersionControlSystem<ISourceControlConnectionSettingsSource>
     {
         private readonly IDiffProcessor _diffProcessor;
         private SvnClient _client;
@@ -67,7 +66,7 @@ namespace Tp.Subversion.Subversion
                 catch (SvnException ex)
                 {
                     _logger.Error("Connection failed.", ex);
-                    throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message.Trim()), ex);
+                    throw new VersionControlException($"Subversion exception: {ex.Message.Trim()}", ex);
                 }
                 return _client;
             }
@@ -80,8 +79,7 @@ namespace Tp.Subversion.Subversion
             try
             {
                 var repos = _settings.Uri;
-                SvnInfoEventArgs info;
-                Client.GetInfo(repos, out info);
+                Client.GetInfo(repos, out var info);
 
                 return info.Revision;
             }
@@ -94,11 +92,10 @@ namespace Tp.Subversion.Subversion
 
         private SvnInfoEventArgs GetRepositoryInfo(string root)
         {
-            _logger.DebugFormat("Getting repository info '{0}'", root);
+            _logger.Debug($"Getting repository info '{root}'");
 
             var repos = new Uri(root);
-            SvnInfoEventArgs info;
-            Client.GetInfo(repos, out info);
+            Client.GetInfo(repos, out var info);
             return info;
         }
 
@@ -109,13 +106,13 @@ namespace Tp.Subversion.Subversion
                 SvnRevisionId fromChangeset = revisionRange.FromChangeset;
                 SvnRevisionId toChangeset = revisionRange.ToChangeset;
 
-                _logger.DebugFormat("Getting revision infos [{0}:{1}]", fromChangeset, toChangeset);
+                _logger.Debug($"Getting revision infos [{fromChangeset}:{toChangeset}]");
                 var arg = new SvnLogArgs(new SvnRevisionRange(fromChangeset.Value, toChangeset.Value)) { ThrowOnError = true };
                 return SubversionUtils.ArrayOfSvnRevisionToArrayOfRevisionInfo(GetSvnRevisions(arg), this).ToArray();
             }
             catch (SvnException e)
             {
-                throw new VersionControlException(String.Format("Subversion exception: {0}", e.Message), e);
+                throw new VersionControlException($"Subversion exception: {e.Message}", e);
             }
         }
 
@@ -127,9 +124,7 @@ namespace Tp.Subversion.Subversion
         private Collection<SvnLogEventArgs> GetSvnRevisions(SvnLogArgs arg, string path)
         {
             var targetPath = GetPath(path);
-            Collection<SvnLogEventArgs> svnRevisions;
-            if (Client.GetLog(targetPath, arg,
-                out svnRevisions))
+            if (Client.GetLog(targetPath, arg, out var svnRevisions))
             {
                 RemoveChangedItemFromOtherProject(svnRevisions);
                 return svnRevisions;
@@ -145,18 +140,15 @@ namespace Tp.Subversion.Subversion
 
         private void RemoveChangedItemFromOtherProject(IEnumerable<SvnLogEventArgs> svnRevisions)
         {
-            var listOfRevision = new List<SvnLogEventArgs>();
             var removedChangedPaths = new List<SvnChangeItem>();
             foreach (var svnRevision in svnRevisions)
             {
-                _logger.DebugFormat("Processing SVN Revision #{0} for removing", svnRevision.Revision);
+                _logger.Debug($"Processing SVN Revision #{svnRevision.Revision} for removing");
 
                 if (svnRevision.ChangedPaths == null)
                 {
                     continue;
                 }
-
-                listOfRevision.Clear();
 
                 removedChangedPaths.AddRange(svnRevision.ChangedPaths.Where(x => !x.RepositoryPath.ToString().StartsWith(_projectPath)));
 
@@ -165,17 +157,16 @@ namespace Tp.Subversion.Subversion
                     svnRevision.ChangedPaths.Remove(changeItem);
                 }
 
-                _logger.DebugFormat("SVN Revision #{0} is processed for removing", svnRevision.Revision);
+                _logger.Debug($"SVN Revision #{svnRevision.Revision} is processed for removing");
             }
         }
 
         public RevisionInfo[] GetRevisions(RevisionRange revisionsRange, string path)
         {
-            _logger.DebugFormat("GET SVN Revisions for {0} [{1}, {2}]", path, revisionsRange.FromChangeset, revisionsRange.ToChangeset);
+            _logger.Debug($"GET SVN Revisions for {path} [{revisionsRange.FromChangeset}, {revisionsRange.ToChangeset}]");
             var arg = CreateSvnLogArgument(path, new RevisionRange(revisionsRange.FromChangeset, revisionsRange.ToChangeset));
             var tpRevisionInfo = SubversionUtils.ArrayOfSvnRevisionToArrayOfRevisionInfo(GetSvnRevisions(arg, path), this);
-            _logger.DebugFormat("SVN Revisions for {0} [{1}, {2}] is retrieved", path, revisionsRange.FromChangeset,
-                revisionsRange.ToChangeset);
+            _logger.Debug($"SVN Revisions for {path} [{revisionsRange.FromChangeset}, {revisionsRange.ToChangeset}] is retrieved");
 
             return tpRevisionInfo.ToArray();
         }
@@ -196,7 +187,7 @@ namespace Tp.Subversion.Subversion
         {
             try
             {
-                using (var stream = GetSVNFileStream(changeset, path))
+                using (var stream = GetSvnFileStream(changeset, path))
                 {
                     stream.Position = 0;
                     return new StreamReader(stream).ReadToEnd();
@@ -204,18 +195,17 @@ namespace Tp.Subversion.Subversion
             }
             catch (SvnFileSystemException ex)
             {
-                throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
+                throw new VersionControlException($"Subversion exception: {ex.Message}");
             }
         }
 
-        private MemoryStream GetSVNFileStream(SvnRevisionId changeset, string path)
+        private MemoryStream GetSvnFileStream(SvnRevisionId changeset, string path)
         {
             var memoryStream = new MemoryStream();
-            SvnTarget target;
             //If you use Uri you should encode '#' as %23, as Uri's define the # as Fragment separator.
             //And in this case the fragment is not send to the server.
             path = path.Replace("#", "%23");
-            if (SvnTarget.TryParse(GetPath(path).AbsolutePath, out target))
+            if (SvnTarget.TryParse(GetPath(path).AbsolutePath, out _))
             {
                 if (FileWasDeleted(path, changeset))
                 {
@@ -263,14 +253,14 @@ namespace Tp.Subversion.Subversion
         {
             try
             {
-                using (var stream = GetSVNFileStream(new SvnRevisionId(changeset), path))
+                using (var stream = GetSvnFileStream(new SvnRevisionId(changeset), path))
                 {
                     return stream.ToArray();
                 }
             }
             catch (SvnFileSystemException ex)
             {
-                throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
+                throw new VersionControlException($"Subversion exception: {ex.Message}");
             }
         }
 
@@ -308,7 +298,7 @@ namespace Tp.Subversion.Subversion
 
             if (timeoutAcquired)
             {
-                throw new SvnException(string.Format("Timeout while connecting to svn repository {0}", _settings.Uri));
+                throw new SvnException($"Timeout while connecting to svn repository {_settings.Uri}");
             }
 
             return info;
@@ -407,7 +397,7 @@ namespace Tp.Subversion.Subversion
             }
             catch (SvnFileSystemException ex)
             {
-                throw new VersionControlException(String.Format("Subversion exception: {0}", ex.Message));
+                throw new VersionControlException($"Subversion exception: {ex.Message}");
             }
         }
 

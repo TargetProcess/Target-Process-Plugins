@@ -1,0 +1,1609 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.TeamFoundation.Lab.Common</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.CommonUtilities">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.IsLabObject(System.String)">
+            <summary>
+            Checks the presence of <LabManagement></LabManagement> in the description of vmm object.
+            </summary>
+            <param name="vmObjectDescription"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.GetNonLabDescription(System.String)">
+            <summary>
+            Strips lab description from the vm description
+            </summary>
+            <param name="vmObjectDescription"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.GetLabOwnedDescription(System.String)">
+            <summary>
+            Retuns Lab owned description "<LabManagement>....</LabManagement>" from the description of vmm object.
+            If not a lab object then returns empty.
+            </summary>
+            <param name="vmObjectDescription"></param>
+            <returns>Lab owned description from VmDescription</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.InsertLabOwnedDescriptionInVmmDescription(System.String,System.String)">
+            <summary>
+            Retuns Lab owned description "<LabManagement>....</LabManagement>" inserted in Vmm description
+            Preserves the Vmm description, prefix or suffix.
+            </summary>
+            <param name="vmObjectDescription"></param>
+            <returns>Lab owned description inserted in VmDescription</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.AddNetUseRecord(System.String,System.String,System.String,System.String)">
+            <summary>
+            Add a new net use record.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.RemoveNetUseRecord(System.String)">
+            <summary>
+            Remove the netuse record
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.AddWNetConnection(System.String,System.String,System.String,System.String)">
+            <summary>
+            Adds a new windows network connection
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.CommonUtilities.RemoveWNetConnection(System.String)">
+            <summary>
+            Removes a new windows network connection
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.ExternalCredentials">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.Credentials">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.DirectoryServicesHelper">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.AddNetUseFailureException">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.RemoveNetUseFailureException">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch">
+            <summary>
+            This class measures both elapsed time (on all platforms) and CPU cycle count (on Vista and above).
+            </summary>
+            <remarks>
+            To measure elapsed time: 
+               If the high-resolution performance counter is present, we use QueryPerformanceCounter.  
+               Else we fall back to using DateTime.Now.
+            To measure CPU cycle count: 
+               If we're on Windows Vista or above, we use QueryThreadCycleTime.  
+               Else we just return 0.
+            For the original version, see http://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch.aspx.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.HasElapsedCpu">
+            <summary>
+            Indicates whether elapsed CPU can be measured on this machine.  This field is read-only.
+            </summary>
+            <remarks>
+            This is true on Windows Vista, Windows Server 2008 and above, false on earlier versions of Windows.
+            If false, the GetCpuCycles method and all of the ElapsedCpu properties will return 0.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.CpuFrequency">
+            <summary>
+            Gets the maximum frequency of the processor.  This field is read-only.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.TicksPerMillisecond">
+            <summary>
+            Number of 100-nanosecond ticks per millisecond.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.TicksPerSecond">
+            <summary>
+            To convert 100-nanosecond ticks from DateTime.Now into seconds.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.OSVista">
+            <summary>
+            Major version number for Windows Vista and Windows Server 2008, which have QueryThreadCycleTime.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.rawTimeToTicks">
+            <summary>
+            Conversion factor between a raw timer value, and the equivalent time in 100-nanosecond DateTime ticks.
+            </summary>
+            <remarks>
+            Must be updated whenever frequency is changed.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.isHighResolution">
+            <summary>
+            Whether the timer is based on a high-resolution performance counter.  The unit tests write to this 
+            field to force testing of all code paths - otherwise it could be readonly.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.frequency">
+            <summary>
+            The frequency of the timer.  The unit tests write to this field to force testing of all code 
+            paths - otherwise it could be a public static readonly long.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.elapsedTime">
+            <summary>
+            Total accumulated elapsed time of this stopwatch, as of the last time Stop() was called. 
+            </summary>
+            <remarks>
+            The units of this field are QPC counts if we're using QueryPerformanceCounter, or 100-nanosecond ticks 
+            if we're using DateTime.Now.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.elapsedCpu">
+            <summary>
+            Total accumulated CPU cycle count of this stopwatch, as of the last time Stop() was called.
+            </summary>
+            <remarks>
+            The units of this field are cycle counts from QueryThreadCycleTime.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.startTime">
+            <summary>
+            The timestamp when Start() was last called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.startCpu">
+            <summary>
+            The CPU cycle count when Start() was last called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.startThread">
+            <summary>
+            The ManagedThreadId of the thread running this MeasurementBlock when Start() was last called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.threadSwitchOccurred">
+            <summary>
+            Whether we detected a change of thread ID since Start() was last called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.isRunning">
+            <summary>
+            Whether we are in a running state or not.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.#cctor">
+            <summary>
+            Static constructor : decides which timers to use, depending on platform.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.#ctor">
+            <summary>
+            Initializes a new instance of the ExtendedStopwatch class.
+            </summary>
+            <remarks>
+            The ExtendedStopwatch instance is stopped, and its elapsed time and CPU cycle count properties are zero.  
+            </remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.Frequency">
+            <summary>
+            Gets the frequency of the timer as the number of ticks per second.  
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.IsRunning">
+            <summary>
+            Gets a value indicating whether the current instance is running.
+            </summary>
+            <remarks>
+            An ExtendedStopwatch instance begins running with a call to Start or StartNew. 
+            The instance stops running with a call to Stop or Reset.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.Elapsed">
+            <summary>
+            Gets the total elapsed time measured by the current instance, as a timespan.
+            </summary>
+            <remarks>
+            If you want to get the total elapsed CPU time instead, use ElapsedCpu.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.ElapsedMilliseconds">
+            <summary>
+            Gets the total elapsed time measured by the current instance, in milliseconds.
+            </summary>
+            <remarks>
+            If you want to get the total elapsed CPU time instead, use ElapsedCpuMilliseconds.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.ElapsedTicks">
+            <summary>
+            Gets the total elapsed time measured by the current instance, in timer ticks.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.ElapsedCpu">
+            <summary>
+            Gets the total elapsed CPU time measured by the current instance.
+            </summary>
+            <remarks>
+            If you want to get the total elapsed time instead, use Elapsed.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.ElapsedCpuMilliseconds">
+            <summary>
+            Gets the total elapsed CPU time measured by the current instance, in milliseconds.
+            </summary>
+            <remarks>
+            If you want to get the total elapsed time instead, use ElapsedMilliseconds.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.ElapsedCpuCycles">
+            <summary>
+            Gets the total elapsed CPU time measured by the current instance, in cycles.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.ThreadSwitchOccurred">
+            <summary>
+            Gets a value indicating whether a thread switch was detected.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.StartNew">
+            <summary>
+            Initializes a new ExtendedStopwatch instance, sets the elapsed time and CPU time properties to zero, 
+            and starts measuring elapsed time and CPU time.
+            </summary>
+            <remarks>
+            This method is equivalent to calling the ExtendedStopwatch constructor and then calling Start 
+            on the new instance.
+            </remarks>
+            <returns>A Stopwatch that has just begun measuring elapsed and CPU time.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetTimestamp">
+            <summary>
+            Gets the current number of ticks of the underlying time mechanism.
+            </summary>
+            <remarks>
+            If the ExtendedStopwatch class is using the high-resolution performance counter, GetTimestamp returns the 
+            current value of that counter.  If the ExtendedStopwatch class is using the system timer, GetTimestamp 
+            returns the current DateTime.ticks property of the DateTime.UtcNow instance.
+            If you want to get the current CPU cycle count instead of the current time, use GetCpuCycles().
+            </remarks>
+            <returns>A long integer representing the tick counter value of the underlying timer mechanism, 
+            or 0 if an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetCpuCycles">
+            <summary>
+            Gets the current CPU cycle count for the active thread.
+            </summary>
+            <remarks>
+            If you want to get the current time instead of the current CPU cycle count, use GetTimestamp().
+            </remarks>
+            <returns>A long integer representing the current CPU cycle count for the active thread, 
+            or 0 if an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.Start">
+            <summary>
+            Starts, or resumes, measuring elapsed time and CPU cycle count for an interval.
+            </summary>
+            <remarks>
+            In a typical ExtendedStopwatch scenario, you call the Start method, then eventually call the Stop method, 
+            and then you check elapsed time and CPU cycle count using the Elapsed and CpuCycles properties.  
+            Once started, an ExtendedStopwatch timer measures the current interval until the instance is stopped or 
+            reset. Starting an ExtendedStopwatch that is already running does not change the timer state or reset the 
+            elapsed time and CPU cycle count properties.  
+            When a ExtendedStopwatch instance measures more than one interval, the Start method resumes measuring from 
+            the current elapsed time and CPU cycle count values.  An ExtendedStopwatch instance calculates and retains 
+            the cumulative elapsed time and CPU cycle count across multiple time intervals, until the instance is reset. 
+            Use the Reset method before calling Start to clear the cumulative elapsed time and CPU cycle count in an 
+            ExtendedStopwatch instance.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.Stop">
+            <summary>
+            Stops measuring elapsed time and CPU cycle count for an interval.
+            </summary>
+            <remarks>
+            In a typical ExtendedStopwatch scenario, you call the Start method, then eventually call the Stop method, 
+            and then you check elapsed time and/or CPU cycle count using the Elapsed and CpuCycles properties.  
+            The Stop method ends the current time interval measurement.  Stopping an ExtendedStopwatch that is not 
+            running does not change the timer state or reset the elapsed time and CPU cycle count properties.  
+            When an ExtendedStopwatch instance measures more than one interval, the Stop method is equivalent to 
+            pausing the elapsed time measurement.  A subsequent call to Start resumes measuring time from the current 
+            elapsed time and CPU cycle count values.  
+            Use the Reset method to clear the cumulative elapsed time and CPU cycle count in an ExtendedStopwatch 
+            instance.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.Reset">
+            <summary>
+            Stops time interval measurement and resets the elapsed time to zero.
+            </summary>
+            <remarks>
+            An ExtendedStopwatch instance calculates and retains the cumulative elapsed time and CPU time across 
+            multiple time intervals, until the instance is reset.  Use Reset to stop any current interval 
+            measurement in progress and clear the elapsed time and CPU time values.  Use Stop to stop the 
+            current interval measurement and retain the cumulative elapsed time and CPU time values.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetRawElapsedTime">
+            <summary>
+            Gets the raw elapsed time value.  Divide this value by frequency to get a time in seconds.
+            </summary>
+            <returns>The raw elapsed time value.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetElapsedDateTimeTicks">
+            <summary>
+            Gets the elapsed time, in DateTime ticks.
+            </summary>
+            <returns>The elapsed time.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetCpuCyclesWithErrorChecks">
+            <summary>
+            Gets the raw elapsed CPU cycle count, checking to see if we changed thread or processor.
+            </summary>
+            <remarks>
+            This is used internally in place of GetCpuCycles(), to add error checking and save a redundant call 
+            to GetCurrentThread().
+            </remarks>
+            <returns>The CPU cycle count for the current thread, or 0 if an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetRawElapsedCpuCycles">
+            <summary>
+            Gets the raw elapsed CPU cycle count.
+            </summary>
+            <returns>The elapsed CPU cycle count.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.GetElapsedCpuDateTimeTicks">
+            <summary>
+            Gets the elapsed CPU time, in DateTime ticks.
+            </summary>
+            <returns>The elapsed CPU time.</returns>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods">
+            <summary>
+            P/Invoke methods used to access Windows timer features.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.QueryThreadCycleTime(System.IntPtr,System.UInt64@)">
+            <summary>
+            Retrieves the cycle time for the specified thread (on Vista and above).
+            </summary>
+            <remarks>
+            See http://msdn2.microsoft.com/en-us/library/ms684943(VS.85).aspx. 
+            <code>
+            BOOL WINAPI QueryThreadCycleTime(
+             __in   HANDLE ThreadHandle,
+             __out  PULONG64 CycleTime
+            );
+            </code></remarks>
+            <param name="handle">A handle to the thread.</param>
+            <param name="ticks">The number of CPU clock cycles used by the thread.</param>
+            <returns>True if the function succeeds, false if it fails.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.GetCurrentThread">
+            <summary>Retrieves a pseudo handle for the calling thread.</summary>
+            <remarks>See http://msdn2.microsoft.com/en-us/library/ms683182(VS.85).aspx.
+            <code>
+            HANDLE WINAPI GetCurrentThread(void);
+            </code></remarks>
+            <returns>A pseudo handle for the current thread.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.GetCurrentProcessorNumber">
+            <summary>
+            Retrieves the number of the processor the current thread is running on (on Vista and above).
+            </summary>
+            <remarks>
+            See http://msdn2.microsoft.com/en-us/library/ms683181(VS.85).aspx.
+            <code>
+            DWORD WINAPI GetCurrentProcessorNumber(void);
+            </code></remarks>
+            <returns>The current processor number.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.QueryPerformanceFrequency(System.Int64@)">
+            <summary>
+            Retrieves the frequency of the high-resolution performance counter, if one exists.
+            </summary>
+            <remarks>
+            See http://msdn.microsoft.com/en-us/library/ms644905.aspx.
+            <code>
+            BOOL QueryPerformanceFrequency(LARGE_INTEGER *lpFrequency);
+            </code>
+            </remarks>
+            <param name="freq">Pointer to a variable that receives the current performance-counter frequency, 
+            in counts per second.</param>
+            <returns>True if the call succeeeded.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.QueryPerformanceCounter(System.Int64@)">
+            <summary>
+            Retrieves the current value of the high-resolution performance counter, if one exists.
+            </summary>
+            <remarks>
+            See http://msdn.microsoft.com/en-us/library/ms644904.aspx. 
+            <code>
+            BOOL QueryPerformanceCounter(LARGE_INTEGER *lpPerformanceCount);
+            </code></remarks>
+            <param name="count">Pointer to a variable that receives the current performance-counter value, 
+            in counts.</param>
+            <returns>True if the call succeeded.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.CallNtPowerInformation(System.Int32,System.IntPtr,System.UInt32,System.IntPtr,System.UInt32)">
+            <summary>
+            Sets or retrieves processor and power information.
+            </summary>
+            <remarks>
+            See http://msdn2.microsoft.com/en-us/library/aa372675.aspx.
+            <code>
+            NTSTATUS WINAPI CallNtPowerInformation(
+             __in   POWER_INFORMATION_LEVEL InformationLevel,
+             __in   PVOID lpInputBuffer,
+             __in   ULONG nInputBufferSize,
+             __out  PVOID lpOutputBuffer,
+             __in   ULONG nOutputBufferSize
+            );
+            </code></remarks>
+            <param name="InformationLevel">Determines the information being set or retrieved.</param>
+            <param name="lpInputBuffer">Pointer to an optional input buffer.</param>
+            <param name="nInputBufferSize">Size of the input buffer, in bytes.</param>
+            <param name="lpOutputBuffer">Pointer to an optional output buffer.</param>
+            <param name="nOutputBufferSize">Size of the output buffer, in bytes.</param>
+            <returns>0 if the function succeeds.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.GetMaxCpuFrequency">
+            <summary>Gets the maximum processor frequency, in MHz.</summary>
+            <returns>The maximum frequency of this processor, in MHz.</returns>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION">
+            <summary>Struct returned by CallNtPowerInformation.</summary>
+            <remarks>See http://msdn2.microsoft.com/en-us/library/aa373184(VS.85).aspx.
+            <code>
+            typedef struct _PROCESSOR_POWER_INFORMATION {
+              ULONG Number;
+              ULONG MaxMhz;
+              ULONG CurrentMhz;
+              ULONG MhzLimit;
+              ULONG MaxIdleState;
+              ULONG CurrentIdleState;
+            } PROCESSOR_POWER_INFORMATION 
+            </code></remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION.Number">
+            <summary>The processor number.</summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION.MaxMhz">
+            <summary>The maximum specified processor clock frequency, in MHz.</summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION.CurrentMhz">
+            <summary>The current processor clock frequency, in MHz.</summary>
+            <remarks>The maximum specified processor clock frequency multiplied by the current processor throttle.</remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION.MhzLimit">
+            <summary>The current limit on the processor clock frequency, in MHz.</summary>
+            <remarks>The maximum specified processor clock frequency multiplied by the current processor throttle limit.</remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION.MaxIdleState">
+            <summary>The maximum idle state of the processor.</summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.ExtendedStopwatch.NativeMethods.PROCESSOR_POWER_INFORMATION.CurrentIdleState">
+            <summary>The current idle state of the processor.</summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.HostUtility">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.IPAddressUtility">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabConstants">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabConstants.NetworkAgentContractVersionKey">
+            <summary>
+            Deprecated. Use IsolationAgentVersionKey instead of this.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabConstants.IsolationServiceContractVersionKey">
+            <summary>
+            Deprecated. Use IsolationServerVersionKey instead of this.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabConstants.WorkflowIntegrationPreferredVersion">
+            <summary>
+            Represents the current contract version between WorkflowIntegration service and BuildServiceHost.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabConstants.AgentConfigurationFile">
+            <summary>
+            this constant is also present in Common\FileServices\KnownExecutionKeys.cs
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.CollectionConfigurationSettings">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.KnownEnvironmentProperties">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.KnownEnvironmentProperties.ConfigureLabSystemForTesting">
+            <summary>
+            Set this custom property to false on the lab system that you want to exclude from testing.
+            If you do not set this property or if the value is not false, lab system will be configured for testing.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabEnvironmentPlacementPolicy">
+            <summary>
+            Represents various placement policies available in Lab Management
+            </summary>
+            <remarks>
+            Placement policies controls how SCVMM places virtual machines on virtualization hosts. For more information, refer to SCVMM documentation.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabEnvironmentPlacementPolicy.Conservative">
+            <summary>
+            Placement policy to equally distribute load across virtualization hosts.
+            This generally allows hosts to meet sudden demands for resources.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabEnvironmentPlacementPolicy.Aggressive">
+            <summary>
+            Placement policy to maximize utilization of virtualization hosts.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.HostConfigurationSettingType">
+            <summary>
+            This enumeration and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.HostConfigurationSetting">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabRegistryKeys">
+            <summary>
+            This enumeration and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabConfigurationKeyStrings">
+            <summary>
+            This enumeration and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>    
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.AgentProcessStatus">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabExternalCallSemaphores">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabCollectionRegistryKeys">
+            <summary>
+            This enumeration and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabCollectionKeyStrings">
+            <summary>
+            This enumeration and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabManagementCollectionServicingTokens">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.RegistryConstants">
+            This is a partial copy of alm\qtools_core\Common\Registry\RegistryConstants.cs.
+            Ensure that both files are in sync. 
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabDnsPrimitives">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabDnsPrimitives.DnsRecordPartial">
+            <summary>
+            Partial DNS_Record structure. Defined as DNS_RECORD in WinDns.h of SDK.
+            This will be used to get the type of the DNS record and then Marshal the record accordingly.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabSemaphore">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabExternalCall">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.IntegrationUserAccountData">
+            <summary>
+            used in the lab step perfomer
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabBlockTrace">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabPerformanceTrace">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabPerfEventConstants">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock">
+            <summary>
+            Provides microsecond-accuracy timing and logs timing events to ETW.  
+            For more details see http://devdiv/sites/wikis/perf/Wiki%20Pages/MeasurementBlock.aspx. 
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.providerName">
+            <summary>
+            The name of the ETW provider (must match definition in MeasurementBlockManifest.xml).
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.providerGuid">
+            <summary>
+            The GUID of the ETW provider (must match definition in MeasurementBlockManifest.xml).
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.stopwatch">
+            <summary>
+            Wrapped instance of ExtendedStopwatch class.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.correlationId">
+            <summary>
+            Unique identifier for this MeasurementBlock.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.parentCorrelationId">
+            <summary>
+            Unique identifier for the parent of this MeasurementBlock (Guid.Empty if it's not nested).
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.parentSequenceNumber">
+            <summary>
+            SequenceNumber of the parent of this MeasurementBlock (0 if it's not nested).
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.nestingLevel">
+            <summary>
+            The level to which this MeasurementBlock is nested (0 if it's not nested).
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.sequenceNumber">
+            <summary>
+            Incremented every time Begin() is called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.categoryData">
+            <summary>
+            String data about what's being measured (truncated to 127 characters, defaults to code calling location).
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.componentId">
+            <summary>
+            Integer identifier about what's being measured.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.sizeData">
+            <summary>
+            Integer data about what's being measured.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.disposed">
+            <summary>
+            Whether Dispose() has already been called on this object.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.#ctor">
+            <summary>
+            Initializes a new instance of the MeasurementBlock class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.#ctor(System.UInt64)">
+            <summary>
+            Initializes a new instance of the MeasurementBlock class, setting its size.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.#ctor(System.UInt64,System.String)">
+            <summary>
+            Initializes a new instance of the MeasurementBlock class, setting its size and category.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the category argument is null.</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.#ctor(System.UInt64,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the MeasurementBlock class, setting its size, category, and nesting level.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <param name="nestingLevel">Logical nesting level of the MeasurementBlock.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the category argument is null.</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.#ctor(System.UInt64,System.String,Microsoft.TeamFoundation.Lab.Common.MeasurementBlock)">
+            <summary>
+            Initializes a new instance of the MeasurementBlock class, setting its size, category, and parent.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <param name="parent">Parent MeasurementBlock.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the category or parent argument is null.</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Finalize">
+            <summary>
+            Finalizes this instance of MeasurementBlock.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.HasElapsedCpu">
+            <summary>
+            Gets a value indicating whether the underlying stopwatch is measuring thread-level CPU time.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Name">
+            <summary>
+            Gets the name of the MeasurementBlock ETW provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Guid">
+            <summary>
+            Gets the GUID of the MeasurementBlock ETW provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.IsDisposed">
+            <summary>
+            Gets a value indicating whether this object is in the process of being disposed.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Category">
+            <summary>
+            Gets or sets the description of what's being measured (arbitrary string data, truncated to 127 characters).
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the value is null.</exception>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.ComponentId">
+            <summary>
+            Gets or sets the component identifier (arbitrary integer data, intended to hold application component id).
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.CorrelationId">
+            <summary>
+            Gets the unique identifier (GUID) for this MeasurementBlock.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Elapsed">
+            <summary>
+            Gets the elapsed time of the underlying stopwatch.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.ElapsedCpu">
+            <summary>
+            Gets the elapsed CPU time of the underlying stopwatch. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.IsRunning">
+            <summary>
+            Gets a value indicating whether the underlying stopwatch is running.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.NestingLevel">
+            <summary>
+            Gets the level to which this MeasurementBlock is nested (0 if it's not nested).
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.ParentCorrelationId">
+            <summary>
+            Gets the unique identifier (GUID) for the parent of this MeasurementBlock (Guid.Empty if it's not nested).
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.ParentSequenceNumber">
+            <summary>
+            Gets the number of times that the parent of this MeasurementBlock had been started when this 
+            MeasurementBlock was created (0 if this MeasurementBlock is not nested).
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.SequenceNumber">
+            <summary>
+            Gets the number of times that this MeasurementBlock has been started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Size">
+            <summary>
+            Gets or sets the size of what's being measured (any arbitrary integer data).
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.ThreadSwitchOccurred">
+            <summary>
+            Gets a value indicating whether the underlying stopwatch has detected a change of threads.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.BeginNew">
+            <summary>
+            Initializes new running instance.
+            </summary>
+            <returns>A running MeasurementBlock instance.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.BeginNew(System.UInt64)">
+            <summary>
+            Initializes new running instance, setting its size.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <returns>A running instance of MeasurementBlock.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.BeginNew(System.UInt64,System.String)">
+            <summary>
+            Initializes new running instance, setting its size and category.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <returns>A running instance of MeasurementBlock.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.BeginNew(System.UInt64,System.String,System.Int32)">
+            <summary>
+            Initializes new running instance, settings its size, category, and logical nesting level.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <param name="nestingLevel">Logical nesting level of the MeasurementBlock.</param>
+            <returns>A running instance of MeasurementBlock.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.BeginNew(System.UInt64,System.String,Microsoft.TeamFoundation.Lab.Common.MeasurementBlock)">
+            <summary>
+            Initializes new running instance, setting its size, category, and parent.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <param name="parent">Parent MeasurementBlock.</param>
+            <returns>A running instance of MeasurementBlock.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Mark">
+            <summary>
+            Writes a stateless MeasurementBlock ETW "Mark" event.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Mark(System.UInt64)">
+            <summary>
+            Writes a stateless MeasurementBlock ETW "Mark" event, with specified size field.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Mark(System.UInt64,System.String)">
+            <summary>
+            Writes a stateless MeasurementBlock ETW "Mark" event, with specified size and category fields.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Begin">
+            <summary>
+            Writes a MeasurementBlock ETW "Begin" event, and starts timing.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Begin(System.UInt64)">
+            <summary>
+            Sets the size, writes a MeasurementBlock ETW "Begin" event, and starts timing.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Begin(System.UInt64,System.String)">
+            <summary>
+            Sets the size and category, writes a MeasurementBlock ETW "Begin" event, and starts timing.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the category argument is null.</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.End">
+            <summary>
+            Stops timing, and writes a MeasurementBlock ETW "End" event.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.End(System.UInt64)">
+            <summary>
+            Sets the size, stops timing, and writes a MeasurementBlock ETW "End" event.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.End(System.UInt64,System.String)">
+            <summary>
+            Sets the size and category, stops timing, and writes a MeasurementBlock ETW "End" event.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the category argument is null.</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Step">
+            <summary>
+            Writes a MeasurementBlock ETW "Step" event.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Step(System.UInt64)">
+            <summary>
+            Sets the size, and writes a MeasurementBlock ETW "Step" event.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Step(System.UInt64,System.String)">
+            <summary>
+            Sets the size and category, and writes a MeasurementBlock ETW "Step" event.
+            </summary>
+            <param name="size">Size of what's being measured (any arbitrary integer data).</param>
+            <param name="category">Description of what's being measured (arbitrary string data, truncated to 127 characters).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the category argument is null.</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Reset">
+            <summary>
+            Resets user fields in this instance, enabling it to be reused (but leaves correlation ids, 
+            sequence numbers, and nesting levels intact).
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Dispose">
+            <summary>
+            Dispose of this instance.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.Dispose(System.Boolean)">
+            <summary>
+            Disposes of a MeasurementBlock.
+            </summary>
+            <remarks>
+            Called from Dispose() with disposing=true, and from the finalizer (~MeasurementBlock) with disposing=false.
+            Guidelines:
+            1. We may be called more than once: do nothing after the first call.
+            2. Avoid throwing exceptions if disposing is false, i.e. if we're being finalized.
+            </remarks>
+            <param name="disposing">True if called from Dispose(), false if called from the finalizer.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlock.SetCategoryToCallLocation">
+            <summary>
+            If the user hasn't supplied a string value for the category field, set it to the calling location.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.MeasurementBlockProvider">
+            <summary>
+            The bulk of MeasurementBlockProvider is contained in the auto-generated file MeasurementBlockProvider.cs.
+            This file adds additional methods that need access to the internals of MeasurementBlockProvider.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlockProvider.EventWrite_BeginLevel(System.UInt32,System.UInt64,System.UInt64,System.UInt64,System.Guid,System.UInt32,System.UInt32,System.Guid,System.UInt32,System.String)">
+            <summary>
+            Wraps the generated EventWrite_Begin method, and sets the level at which to write the Begin event.
+            </summary>
+            <param name="componentId">Value of the user-defined componentId property.</param>
+            <param name="ticks">Total elapsed time, in ticks.</param>
+            <param name="cpuTicks">Total CPU time, in ticks.</param>
+            <param name="size">Value of the user-defined size property.</param>
+            <param name="correlationId">Unique identifier for the MeasurementBlock.</param>
+            <param name="sequenceNumber">Number of times the MeasurementBlock has been started.</param>
+            <param name="nestingLevel">Depth to which the MeasurementBlock is nested.</param>
+            <param name="parentCorrelationId">Unique identifier of the parent of the MeasurementBlock.</param>
+            <param name="parentSequenceNumber">Number of times the parent has been started.</param>
+            <param name="category">Value of the user-defined category property.</param>
+            <returns>True if the event was written.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlockProvider.EventWrite_EndLevel(System.UInt32,System.UInt64,System.UInt64,System.UInt64,System.Guid,System.UInt32,System.UInt32,System.Guid,System.UInt32,System.String)">
+            <summary>
+            Wraps the generated EventWrite_End method, and sets the level at which to write the End event.
+            </summary>
+            <param name="componentId">Value of the user-defined componentId property.</param>
+            <param name="ticks">Total elapsed time, in ticks.</param>
+            <param name="cpuTicks">Total CPU time, in ticks.</param>
+            <param name="size">Value of the user-defined size property.</param>
+            <param name="correlationId">Unique identifier for the MeasurementBlock.</param>
+            <param name="sequenceNumber">Number of times the MeasurementBlock has been started.</param>
+            <param name="nestingLevel">Depth to which the MeasurementBlock is nested.</param>
+            <param name="parentCorrelationId">Unique identifier of the parent of the MeasurementBlock.</param>
+            <param name="parentSequenceNumber">Number of times the parent has been started.</param>
+            <param name="category">Value of the user-defined category property.</param>
+            <returns>True if the event was written.</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.MeasurementBlockProvider.EventWrite_StepLevel(System.UInt32,System.UInt64,System.UInt64,System.UInt64,System.Guid,System.UInt32,System.UInt32,System.Guid,System.UInt32,System.String)">
+            <summary>
+            Wraps the generated EventWrite_Step method, and sets the level at which to write the Step event.
+            </summary>
+            <param name="componentId">Value of the user-defined componentId property.</param>
+            <param name="ticks">Total elapsed time, in ticks.</param>
+            <param name="cpuTicks">Total CPU time, in ticks.</param>
+            <param name="size">Value of the user-defined size property.</param>
+            <param name="correlationId">Unique identifier for the MeasurementBlock.</param>
+            <param name="sequenceNumber">Number of times the MeasurementBlock has been started.</param>
+            <param name="nestingLevel">Depth to which the MeasurementBlock is nested.</param>
+            <param name="parentCorrelationId">Unique identifier of the parent of the MeasurementBlock.</param>
+            <param name="parentSequenceNumber">Number of times the parent has been started.</param>
+            <param name="category">Value of the user-defined category property.</param>
+            <returns>True if the event was written.</returns>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabPermissions">
+            <summary>
+            Permissions needed for invoking queries or operations on Lab Management artifacts
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Read">
+            <summary>
+            Permission to query properties or status of Lab Management artifacts
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Create">
+            <summary>
+            Permission to import virtual machine images into Lab Management
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Write">
+            <summary>
+            Permission to create new Lab Management artifacts eg. creating LabEnvironment or creating LabTemplate from LabSystem.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Edit">
+            <summary>
+            Permission to update properties of existing Lab Management artifacts
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Delete">
+            <summary>
+            Permission to delete existing Lab Management artifacts
+            </summary>        
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Start">
+            <summary>
+            Permission to start machines
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Stop">
+            <summary>
+            Permission to stop machines
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.Pause">
+            <summary>
+            Permission to pause machines
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.ManageSnapshots">
+            <summary>
+            Permission to create, apply and delete virtual machine snapshots 
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.ManageLocation">
+            <summary>
+            Permissions to create, query or change properties of Lab Locations
+            </summary>
+            <remarks>Lab Locations are places that contain virtual machines, such as Host Groups and Library Shares</remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.DeleteLocation">
+            <summary>
+            Permission to delete Lab Locations
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.ManagePermissions">
+            <summary>
+            Permission to change permissions on any Lab Management artifact
+            </summary>        
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissions.ManageChildPermissions">
+            <summary>
+            Permission to change permissions on children (in security hierarchy) of any Lab Management artifact
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LabPermissionConstants">
+            <summary>
+            Combination of Permissions necessary to perform common Lab Management operations
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissionConstants.EnvironmentOps">
+            <summary>
+            Combination of Permissions necessary to perform basic operations on a LabEnvironment
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LabPermissionConstants.FullControlLabPermission">
+            <summary>
+            Combination of Permissions necessary to perform all operations on all artifacts.
+            </summary>
+            <remarks>Commonly used to perform administrative activities</remarks>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.SecurityConstants">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.AdministrationNamespacePermissions">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LLUpdateFieldMasks">
+            <summary>
+            Flags indicating updates to be performed on a Library Share
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LLUpdateFieldMasks.None">
+            <summary>
+            No update
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LLUpdateFieldMasks.AttachByDefault">
+            <summary>
+            Update settings to automatically associate the Library share to any new Team Project
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LLUpdateFieldMasks.All">
+            <summary>
+            All allowed updates
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LHUpdateFieldMasks">
+            <summary>
+            Flags indicating updates to be performed on a Host Group
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LHUpdateFieldMasks.None">
+            <summary>
+            No update
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LHUpdateFieldMasks.AttachByDefault">
+            <summary>
+            Update settings to automatically associate the Host Group to any new Team Project
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LHUpdateFieldMasks.PlacementPolicy">
+            <summary>
+            Update Placement policy applicable on a Host Group
+            </summary>
+            <remarks>The Placement policies available are <see cref="T:Microsoft.TeamFoundation.Lab.Common.LabEnvironmentPlacementPolicy"/></remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LHUpdateFieldMasks.DnsSuffix">
+            <summary>
+            Update Dns suffix used while generating non-conflicting and unique names for environments with Network Isolation placed in this Host Group
+            </summary>
+            <remarks>This setting provides for using a DNS Server local to the lab containing the Host group, so that latencies are minimized</remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LHUpdateFieldMasks.All">
+            <summary>
+            All possible updates
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks">
+            <summary>
+            Flags indicating updates to be performed on a Lab Template 
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.None">
+            <summary>
+            No update
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.Name">
+            <summary>
+            Update name
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.Description">
+            <summary>
+            Update description
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.Role">
+            <summary>
+            Update Role of the template
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.Properties">
+            <summary>
+            Update Custom Properties
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.HardwareProfileDefinition">
+            <summary>
+            Update Hardware Profile Definition
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.OSProfileDefinition">
+            <summary>
+            Update OS Profile Definition
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LTUpdateFieldMasks.All">
+            <summary>
+            All possible updates
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks">
+            <summary>
+            Flags indicating updates to be performed on a Lab System
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.None">
+            <summary>
+            No update
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.Name">
+            <summary>
+            Update name
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.Description">
+            <summary>
+            Update description
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.Role">
+            <summary>
+            Update Role
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.Properties">
+            <summary>
+            Update Custom Properties
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.HardwareProfileDefinition">
+            <summary>
+            Update Hardware Profile Definition
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.OSProfileDefinition">
+            <summary>
+            Update OS Profile Definition
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.IsolationOptions">
+            <summary>
+            Update Network Isolation options
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LSUpdateFieldMasks.All">
+            <summary>
+            All possible updates
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks">
+            <summary>
+            Flags indicating updates to be performed on a Lab Environemnt
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.None">
+            <summary>
+            No update
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.Name">
+            <summary>
+            Update name
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.Description">
+            <summary>
+            Update description
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.IsolationRequired">
+            <summary>
+            Enable / Disable Network Isolation on the environment
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.Properties">
+            <summary>
+            Update Custom Properties on the environment
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.CodedUIRole">
+            <summary>
+            Update the codedui role on the environment
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.CodedUIUserName">
+            <summary>
+            Update the user under which the codedui role was configured
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.TestControllerName">
+            <summary>
+            Update the test controller against which this environment is configured
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.LEUpdateFieldMasks.All">
+            <summary>
+            All possible updates
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.VirtualHardDiskType">
+            <summary>
+            This enumeration and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.HardwareProfile">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>    
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.VirtualHardDiskInfo">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.HardwareProfileDefinition">
+            <summary>
+            Specifies Hardware settings to be used while creating a virtual machine
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.HardwareProfileDefinition.#ctor">
+            <summary>
+            Creates a new instance of the class
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.HardwareProfileDefinition.#ctor(System.Int32)">
+            <summary>
+            Creates new instance of the class with specified settings for memory
+            </summary>
+            <param name="memory">Memory, in MB, to be allocated to the virtual machine</param>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.HardwareProfileDefinition.Memory">
+            <summary>
+            Memory, in MB, to be allocated to the virtual machine
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.Credential">
+            <summary>
+            Specifies user credentials
+            </summary>
+            <remarks>Generally used in conjunction with <see cref="T:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition"/> to pass various credential needed while configuring OS</remarks>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.Credential.#ctor">
+            <summary>
+            Creates new instance of the class
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.Credential.#ctor(System.String,System.String)">
+            <summary>
+            Creates new instance of the class with specified user name and password
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.Credential.User">
+            <summary>
+            User name.
+            </summary>
+            <example>MyDomain\User1</example>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.Credential.Password">
+            <summary>
+            Password of the user
+            </summary>
+            <remarks>Password is stored internally as a SecureString. This Property converts that and provides it as a string for convenience</remarks>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.Credential.passwordString">
+            <summary>
+            This is reserved for internal use and is not intended to be used in your code.
+            </summary>    
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.Credential.SecurePassword">
+            <summary>
+            Password of the user
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.OSProfile">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition">
+            <summary>
+            Operating System Configuration information used while creating a virtual machine
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.#ctor">
+            <summary>
+            Creates new instance of the class
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.#ctor(Microsoft.TeamFoundation.Lab.Common.OSProfile)">
+            <summary>
+            This method is reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.#ctor(Microsoft.TeamFoundation.Lab.Common.Credential,Microsoft.TeamFoundation.Lab.Common.Credential,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Creates new instance of the class with specified parameters
+            </summary>
+            <param name="domainCredential">Credentials to be used to join the machine to the domain</param>
+            <param name="adminCredential">Credentials of Administrator account</param>
+            <param name="joinWorkgroup">Name of the workgroup to which you want to join the virtual machine</param>
+            <param name="joinDomain">Name of the domain to which you want to join the virtual machine</param>
+            <param name="fullName">Specifies the name of the person in whose name a virtual machine is registered. 
+            This is the user name that appears in System Properties within the virtual machine</param>
+            <param name="computerName">Specifies the name of the computer, either as a fully qualified domain name, or a host name</param>
+            <param name="orgName">Specifies the name of the organization of the person in whose name a virtual machine is registered. 
+            This is the organization name that appears in System Properties with the virtual machine</param>
+            <param name="timeZone">Specifies the time zone settings with which the virtual machine is to be configured.
+            For exact values to be used, consult SCVMM documentation for New-GuestOSProfile.</param>
+            <param name="productKey">the product key to use for the operating system to be installed on the virtual machine</param>
+            <param name="osName">Operating system to be installed on the virtual machine. 
+            For exact values, consult SCVMM documentation for Get-OperatingSystem</param>
+            <param name="commands"></param>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.DomainCredential">
+            <summary>
+            Credentials to be used to join the machine to the domain
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.AdminCredential">
+            <summary>
+            Credentials of Administrator account
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.JoinWorkgroup">
+            <summary>
+            The name of the workgroup to which you want to join a virtual machine
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.JoinDomain">
+            <summary>
+            Name of the domain to which you want to join the virtual machine
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.FullName">
+            <summary>
+            Specifies the name of the person in whose name a virtual machine is registered. 
+            This is the user name that appears in System Properties within the virtual machine
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.ComputerName">
+            <summary>
+            Specifies the name of the computer, either as a fully qualified domain name, or a host name
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.OrgName">
+            <summary>
+            Specifies the name of the organization of the person in whose name a virtual machine is registered. 
+            This is the organization name that appears in System Properties with the virtual machine
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.TimeZone">
+            <summary>
+            Specifies the time zone settings with which the virtual machine is to be configured.      
+            </summary>
+            <remarks>If TimeZone value needs to be ignored then use invalid value of -1. 
+            For other values available, consult SCVMM documentation for New-GuestOSProfile</remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.ProductKey">
+            <summary>
+            The product key to use for the operating system to be installed on the virtual machine
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.OperatingSystem">
+            <summary>
+            Operating system to be installed on the virtual machine. 
+            </summary>
+            <remarks>For exact values, consult SCVMM documentation for Get-OperatingSystem</remarks>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.RunOnceCommands">
+            <summary>
+            Specifies one or more commands to add to the [GuiRunOnce] section of the SysPrep.inf file. These are run after installation of the operating system.
+            </summary>
+        </member>
+        <member name="F:Microsoft.TeamFoundation.Lab.Common.OSProfileDefinition.InvalidTimeZone">
+            <summary>
+            Value to be used to use defaults for time zone.
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.Common.GuestOperatingSystem">
+            <summary>
+            This class and its members are reserved for internal use and are not intended to be used in your code.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.UserNameUtils.ReadPasswordFromConsole(System.String,System.String)">
+            <summary>
+            Returns the password entered by the user. This uses ReadKey method
+            which does not display the password in the console.
+            </summary>
+            <returns>Password</returns>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.#cctor">
+            Creates the resource manager instance.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Get(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.GetInt(System.String)">
+            Returns a localized integer given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.GetBool(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Format(System.String,System.Object[])">
+            A little helper function to alleviate some typing associated with loading resources and
+            formatting the strings.  In DEBUG builds, it also asserts that the number of format
+            arguments and the length of args match.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.InvalidContractVersion(System.Object)">
+            <summary>
+            The following contract version is not valid: {0}.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.MoreDetailsInInnerException(System.Object)">
+            <summary>
+            More details: {0}.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.LabServiceErrorEventMsg">
+            <summary>
+            &quot;A LabService error has occurred&quot;
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.InvalidUserNameOrPassword">
+            <summary>
+            The user name or password is not valid. Enter a valid user name (for example, domain\user) and password, and try the operation again.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.UnableToProvisionIntegrationAccountInBuildServiceAccounts(System.Object)">
+            <summary>
+            Team Foundation Server is unable to provision the following account in the Build Service Accounts group: &apos;{0}&apos;. Confirm that the group exists and the user credentials provided are valid, and then try the operation again.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Error_IPBlock_InvalidInputFormat">
+            <summary>
+            TF255252: The value for IPBlock is not valid. Specify a valid IPv4 address and subnet mask in the format shown in this example: 192.168.23.0/24
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Error_IPBlock_InvalidIPAddress">
+            <summary>
+            TF255396: The format of the IP address block you specified is not valid. You must specify an address block using the Classless Inter-Domain Routing format, where the initial address is followed by a slash and then the subnet mask in bits. Example: 192.168.23.0/24
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Error_IPBlock_InvalidSubnetMaskLength">
+            <summary>
+            TF255253: The subnet mask length specified in IPBlock is not valid. Example: 192.168.23.0/24
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Error_IPBlock_IPAddressNotOnSubnetBoundary">
+            <summary>
+            TF255254: The IP address specified in IPBlock is not valid. The IP address must be on the subnet boundary. Example: 192.168.23.0/24
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.Common.ResourceCommon.Error_IPBlock_IPHasZeroNetworkID">
+            <summary>
+            TF255255: The IP address specified in IPBlock is not valid because it has a network ID of zero. Example: 192.168.23.0/24
+            </summary>
+        </member>
+    </members>
+</doc>

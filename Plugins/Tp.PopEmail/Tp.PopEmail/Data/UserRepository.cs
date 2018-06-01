@@ -39,6 +39,12 @@ namespace Tp.PopEmailIntegration.Data
             _storageRepository.Get<UserEmailSearchField>(userEmail).Remove(x => x.UserId == userId);
         }
 
+        public void RemoveAll()
+        {
+            _storageRepository.Get<UserLite>().Clear();
+            _storageRepository.Get<UserEmailSearchField>().Clear();
+        }
+
         public void Update(UserLite user)
         {
             // 4 queries

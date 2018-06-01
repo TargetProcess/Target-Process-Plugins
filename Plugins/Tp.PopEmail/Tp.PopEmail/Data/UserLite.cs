@@ -38,10 +38,7 @@ namespace Tp.PopEmailIntegration.Data
             return userLite;
         }
 
-        public bool IsDeleted
-        {
-            get { return DeleteDate != null; }
-        }
+        public bool IsDeleted => DeleteDate != null;
 
         public bool IsDeletedOrInactiveUser
         {
@@ -57,9 +54,6 @@ namespace Tp.PopEmailIntegration.Data
             }
         }
 
-        public bool IsDeletedRequester
-        {
-            get { return UserType == UserType.Requester && IsDeleted; }
-        }
+        public bool IsDeletedRequester => UserType == UserType.Requester && IsDeleted;
     }
 }

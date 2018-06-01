@@ -27,7 +27,7 @@ namespace Tp.PopEmailIntegration.Rules
                 }
             }
 
-            return result;
+            return null;
         }
     }
 }

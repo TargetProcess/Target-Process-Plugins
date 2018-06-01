@@ -4,7 +4,6 @@
 // 
 
 using System;
-using System.Linq;
 using NServiceBus;
 using NServiceBus.Saga;
 using Tp.Integration.Messages.EntityLifecycle;
@@ -40,7 +39,7 @@ namespace Tp.PopEmailIntegration.Sagas
             Data.Requesters = message.Requesters;
             foreach (var requesterId in message.Requesters)
             {
-                Log().Info(string.Format("Attaching requester with Id {0} to request with id {1}", requesterId, message.RequestId));
+                Log().Info($"Attaching requester with Id {requesterId} to request with id {message.RequestId}");
                 var attachGeneralUserToRequestCommand = new AttachGeneralUserToRequestCommand
                 {
                     RequestId = message.RequestId,
@@ -53,7 +52,7 @@ namespace Tp.PopEmailIntegration.Sagas
         public void Handle(GeneralUserAttachedToRequestMessage message)
         {
             Data.ProcessedRequestersCount++;
-            if (Data.ProcessedRequestersCount == Data.Requesters.Count())
+            if (Data.ProcessedRequestersCount == Data.Requesters.Length)
             {
                 SendLocal(new RequestersAttachedToRequestMessageInternal { SagaId = Data.OuterSagaId });
                 MarkAsComplete();

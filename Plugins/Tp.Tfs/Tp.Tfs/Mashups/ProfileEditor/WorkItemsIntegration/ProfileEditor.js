@@ -43,7 +43,7 @@ tau.mashups
                 '				<input type="text" class="input" id="login" name="Login" value="${Settings.Login}" style="width: 275px;" />' +
                 '				<p class="label pt-10">' +
                 '					Password&nbsp;<span class="error" name="PasswordErrorLabel"></span></p>' +
-                '				<input type="password" class="input" id="password" name="Password" value="${Settings.Password}" style="width: 275px;" />' +
+                '				<input type="password" class="input" id="password" name="Password" value="${passwordValue}" style="width: 275px;" />' +
                 '			</div>' +
                 '			<div class="check-block">' +
                 '				<p class="message-error pb-10" style="display: none;">' +
@@ -284,7 +284,15 @@ tau.mashups
 
             render: function () {
                 this.placeHolder.html('');
+
+                this.model.passwordValue = this.model.Settings.HasPassword ? '0000000000000000' : '';
+                this._passwordChanged = false;
+
                 var rendered = $.tmpl(this.editorTemplate, this.model, this);
+
+                rendered.find("#password").change(function () {
+                    this._passwordChanged = true;
+                }.bind(this));
 
                 function onProjectMappingChanged() {
                     if (rendered.find(".workitems-tfs-projects")[0].selectedIndex == 0 ||
@@ -469,7 +477,7 @@ tau.mashups
                     Settings: {
                         Uri: this._find('#uri').val(),
                         Login: this._find('#login').val(),
-                        Password: this._find('#password').val(),
+                        Password: this._passwordChanged ? this._find('#password').val() : null,
                         StartRevision: this._find('#startRevision').val(),
                         UserMapping: [],
                         EntityMapping: [],

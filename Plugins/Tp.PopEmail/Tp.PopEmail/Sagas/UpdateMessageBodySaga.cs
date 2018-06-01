@@ -1,9 +1,11 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NServiceBus;
 using NServiceBus.Saga;
@@ -44,10 +46,13 @@ namespace Tp.PopEmailIntegration.Sagas
             {
                 foreach (var attachment in message.AttachmentDtos)
                 {
-                    var url = string.Format("~/Attachment.aspx?AttachmentID={0}", attachment.AttachmentID);
+                    var contentIdPair = message.ContentIds.FirstOrDefault(x => x.Key == attachment.AttachmentID);
+                    var contentId = contentIdPair.Key != 0 && !string.IsNullOrEmpty(contentIdPair.Value)
+                        ? contentIdPair.Value
+                        : attachment.OriginalFileName;
+                    var url = $"~/Attachment.aspx?AttachmentID={attachment.AttachmentID}";
                     messageBodyUpdated = Regex.Replace(messageBodyUpdated,
-                        @"(<img[^>]*src=['""])(cid:" + Regex.Escape(attachment.OriginalFileName) +
-                        @")(['""][^>]*?>)", "$1" + url + "$3",
+                        $@"(<img[^>]*src=['""])(cid:{Regex.Escape(contentId)})(['""][^>]*?>)", $"$1{url}$3",
                         RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
                 }
             }
@@ -90,6 +95,7 @@ namespace Tp.PopEmailIntegration.Sagas
     {
         public Guid OuterSagaId { get; set; }
         public AttachmentDTO[] AttachmentDtos { get; set; }
+        public Dictionary<int, string>ContentIds { get; set; }
         public MessageDTO MessageDto { get; set; }
     }
 

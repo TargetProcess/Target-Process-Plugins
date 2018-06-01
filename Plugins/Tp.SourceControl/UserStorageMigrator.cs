@@ -1,6 +1,10 @@
+// 
+// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
 using System.Linq;
 using log4net;
-using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Domain;
@@ -44,14 +48,14 @@ namespace Tp.SourceControl
             logger.Info($"Start migrate {account.Name}\\{profile.Name.Value}");
             var users = profile.Get<UserDTO>();
             if (!users.Empty())
-            {               
+            {
                 var repository = new DataRepository<TpUserData>(profile);
 
                 // in case previous migration has failed
                 repository.GetAll().ForEach(repository.Delete);
 
                 users.ForEach(u => repository.Add(new TpUserData(u)));
-                users.Clear();                
+                users.Clear();
             }
 
             profileSettings.UsersMigrated = true;

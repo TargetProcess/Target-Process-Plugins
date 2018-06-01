@@ -119,13 +119,7 @@ namespace Tp.PopEmailIntegration
 
         public override string ToString()
         {
-            var builder = new StringBuilder();
-            builder.AppendFormat("Protocol={0}", Protocol);
-            builder.AppendFormat(", MailServer='{0}'", MailServer);
-            builder.AppendFormat(", Port={0}", Port);
-            builder.AppendFormat(", Ssl={0}", UseSSL ? "Yes" : "No");
-            builder.AppendFormat(", Login='{0}'", Login);
-            return builder.ToString();
+            return $"Protocol={Protocol}, MailServer='{MailServer}', Port={Port}, Ssl={(UseSSL ? "Yes" : "No")}, Login='{Login}'";
         }
     }
 }

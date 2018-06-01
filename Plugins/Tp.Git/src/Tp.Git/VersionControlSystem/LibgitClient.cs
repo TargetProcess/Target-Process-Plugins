@@ -4,6 +4,7 @@ using System.Linq;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Tp.Core;
+using Tp.Git.VersionControlSystem.Ssh;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.SourceControl.Settings;
@@ -13,7 +14,7 @@ namespace Tp.Git.VersionControlSystem
 {
     public class LibgitClientFactory : IGitClientFactory
     {
-        public IGitClient Create(ISourceControlConnectionSettingsSource settings, IStorage<GitRepositoryFolder> folderStorage)
+        public IGitClient Create(IGitConnectionSettings settings, IStorage<GitRepositoryFolder> folderStorage)
         {
             return new LibgitClient(settings, folderStorage);
         }
@@ -21,15 +22,30 @@ namespace Tp.Git.VersionControlSystem
 
     public class LibgitClient : IGitClient
     {
-        private readonly ISourceControlConnectionSettingsSource _settings;
+        private readonly IGitConnectionSettings _settings;
         private readonly GitRepositoryFolder _repositoryFolder;
 
-        public static CredentialsHandler CreateCredentialsHandler(ISourceControlConnectionSettingsSource settings)
+        public static CredentialsHandler CreateCredentialsHandler(IGitConnectionSettings settings)
         {
-            return (url, fromUrl, types) => new UsernamePasswordCredentials { Username = settings.Login, Password = settings.Password };
+            return (url, userNameFromUrl, types) =>
+            {
+                if (types == SupportedCredentialTypes.Ssh && !settings.UseSsh)
+                {
+                    throw new InvalidOperationException("Repository requested SSH connection, please change profile to use SSH and set up SSH keys.");
+                }
+
+                if (types == SupportedCredentialTypes.UsernamePassword && settings.UseSsh)
+                {
+                    throw new InvalidOperationException("Repository requested HTTP connection, but profile configured to use SSH connection. Please uncheck Use SSH option and enter login and password for repository.");
+                }
+
+                return settings.UseSsh
+                    ? (Credentials) new SshCredentials(settings, userNameFromUrl)
+                    : new UsernamePasswordCredentials { Username = settings.Login, Password = settings.Password };
+            };
         }
 
-        public LibgitClient(ISourceControlConnectionSettingsSource settings, IStorage<GitRepositoryFolder> folderStorage)
+        public LibgitClient(IGitConnectionSettings settings, IStorage<GitRepositoryFolder> folderStorage)
         {
             _settings = settings;
             _repositoryFolder = GetRepositoryFolder(folderStorage);

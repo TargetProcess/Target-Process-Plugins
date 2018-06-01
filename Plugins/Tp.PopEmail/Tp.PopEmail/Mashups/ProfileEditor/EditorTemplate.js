@@ -38,7 +38,8 @@ tau.mashups
 '<p class="label pt-10">Login&nbsp;<span class="error" name="LoginErrorLabel"></span></p></p>'+
 '<input type="text" id="Login" name="Login" class="input" style="width: 275px;" value="${Settings.Login}" />'+
 '<p class="label pt-10">Password&nbsp;<span class="error" name="PasswordErrorLabel"></span></p></p>'+
-'<input type="password" id="Password" name="Password" class="input" style="width: 275px;" value="${Settings.Password}" />'+
+'<input type="password" id="Password" name="Password" class="input" style="width: 275px;" value="${Settings.Password}" />' +
+'<input type="hidden" id="UsersMigrated" name="UsersMigrated" value="${Settings.UsersMigrated}">' +
 '</div>'+
 '<div class="check-block">'+
 '<p class="message-ok" id="successfulConnection" style="display:none"><span>Connection was established successfully</span></p>' +

@@ -4,6 +4,7 @@
 // 
 
 using System.Linq;
+using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
@@ -12,6 +13,10 @@ namespace Tp.Subversion.Commands
 {
     public class SubversionCheckConnectionCommand : VcsCheckConnectionCommand<SubversionPluginProfile>
     {
+        public SubversionCheckConnectionCommand(IProfileCollection profileCollection) : base(profileCollection)
+        {
+        }
+
         protected override void OnCheckConnection(PluginProfileErrorCollection errors, SubversionPluginProfile settings)
         {
             settings.ValidateUri(errors);

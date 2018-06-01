@@ -40,13 +40,13 @@ namespace Tp.PopEmailIntegration.Rules.ThenClauses
             var command = new CreateRequestFromMessageCommand
             {
                 MessageDto = dto,
-                ProjectId = _projectId,
+                ProjectId = ProjectId,
                 Attachments = attachments,
                 Requesters = requesters,
                 IsPrivate = _isPrivate,
                 SquadId = _squadId
             };
-            _bus.SendLocal(command);
+            Bus.SendLocal(command);
         }
 
         public static IThenClause CreatePublicRequest(ParseNode clauseNode)

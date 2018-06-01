@@ -2,6 +2,6 @@
 {
     public interface IConnectionChecker
     {
-        void Check(GitPluginProfile settings);
+        void Check(IGitConnectionSettings settings);
     }
 }

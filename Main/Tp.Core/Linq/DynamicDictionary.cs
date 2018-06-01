@@ -32,16 +32,13 @@ namespace System.Linq.Dynamic
 
         public static bool TryGetAlias(Expression expr, int exprPos, out string name)
         {
-            var methodExpression = expr as MethodCallExpression;
-
-            if (methodExpression != null)
+            if (expr is MethodCallExpression methodExpression)
             {
                 var declaringType = methodExpression.Method.DeclaringType;
                 if (declaringType != null && declaringType.IsGenericType
                     && declaringType.GetGenericTypeDefinition() == typeof(DictionaryValueAccessor<>))
                 {
-                    var constExpression = methodExpression.Arguments[1] as ConstantExpression;
-                    if (constExpression != null)
+                    if (methodExpression.Arguments[1] is ConstantExpression constExpression)
                     {
                         name = constExpression.Value as string;
                         return true;
@@ -56,7 +53,7 @@ namespace System.Linq.Dynamic
         private static Expression GenerateDictionaryMemberAccess(Expression instance, string name, Type valueType)
         {
             var expression =
-                Expression.Call(typeof(DictionaryValueAccessor<>).MakeGenericType(valueType).GetMethod("GetDictionaryValue"),
+                Expression.Call(typeof(DictionaryValueAccessor<>).MakeGenericType(valueType).GetMethod(nameof(DictionaryValueAccessor<int>.GetDictionaryValue)),
                     instance,
                     Expression.Constant(name));
 
@@ -71,8 +68,7 @@ namespace System.Linq.Dynamic
 
         public static Maybe<string> GetAlias(Expression expr, int exprPos)
         {
-            string name;
-            if (!TryGetAlias(expr, exprPos, out name))
+            if (!TryGetAlias(expr, exprPos, out string name))
             {
                 return Maybe.Nothing;
             }
@@ -85,10 +81,7 @@ namespace System.Linq.Dynamic
         [UsedImplicitly]
         public static T GetDictionaryValue(IDictionary<string, T> dictionary, string key)
         {
-            T value;
-            if (dictionary.TryGetValue(key, out value))
-                return value;
-            return default;
+            return dictionary.TryGetValue(key, out T value) ? value : default;
         }
     }
 }

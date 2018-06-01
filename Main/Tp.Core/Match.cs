@@ -27,7 +27,7 @@ namespace Tp.Core
         {
             var visitor = new ReplaceVisitor();
             return (T) visitor.Visit(e);
-        }
+        }        
 
         [NotNull]
         public static IQueryable<T> InlineMatch<T>(this IQueryable<T> e)
@@ -333,17 +333,17 @@ namespace Tp.Core
             Type resultType, IEnumerable<LambdaExpression> filterExpressions,
             IEnumerable<LambdaExpression> valueExpressions, ParameterExpression cellsParameter)
         {
-            var cases = filterExpressions.Zip(valueExpressions, Tuple.Create);
+            var cases = filterExpressions.Zip(valueExpressions, (@case, then) => (Case: @case, Then: then));
             return GenerateMatchCaseExpression(resultType, cellsParameter, cases);
         }
 
         public static LambdaExpression GenerateMatchCaseExpression(
             Type resultType, ParameterExpression parameter,
-            IEnumerable<Tuple<LambdaExpression, LambdaExpression>> cases)
+            IEnumerable<(LambdaExpression Case, LambdaExpression Then)> cases)
         {
             var seed = MatchE();
             var aggrergated = cases
-                .Aggregate(seed, (@case, caseModel) => @case.Case(caseModel.Item1, caseModel.Item2));
+                .Aggregate(seed, (@case, caseModel) => @case.Case(caseModel.Case, caseModel.Then));
             var endExpression = Expression.Lambda(Expression.Constant(resultType.DefaultValue(), resultType), parameter);
 
             return aggrergated.End(endExpression, parameter.Type, resultType);

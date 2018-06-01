@@ -80,5 +80,45 @@ namespace Tp.Integration.Common
         String CustomField58 { get; set; }
         String CustomField59 { get; set; }
         String CustomField60 { get; set; }
+        String CustomField61 { get; set; }
+        String CustomField62 { get; set; }
+        String CustomField63 { get; set; }
+        String CustomField64 { get; set; }
+        String CustomField65 { get; set; }
+        String CustomField66 { get; set; }
+        String CustomField67 { get; set; }
+        String CustomField68 { get; set; }
+        String CustomField69 { get; set; }
+        String CustomField70 { get; set; }
+        String CustomField71 { get; set; }
+        String CustomField72 { get; set; }
+        String CustomField73 { get; set; }
+        String CustomField74 { get; set; }
+        String CustomField75 { get; set; }
+        String CustomField76 { get; set; }
+        String CustomField77 { get; set; }
+        String CustomField78 { get; set; }
+        String CustomField79 { get; set; }
+        String CustomField80 { get; set; }
+        String CustomField81 { get; set; }
+        String CustomField82 { get; set; }
+        String CustomField83 { get; set; }
+        String CustomField84 { get; set; }
+        String CustomField85 { get; set; }
+        String CustomField86 { get; set; }
+        String CustomField87 { get; set; }
+        String CustomField88 { get; set; }
+        String CustomField89 { get; set; }
+        String CustomField90 { get; set; }
+        String CustomField91 { get; set; }
+        String CustomField92 { get; set; }
+        String CustomField93 { get; set; }
+        String CustomField94 { get; set; }
+        String CustomField95 { get; set; }
+        String CustomField96 { get; set; }
+        String CustomField97 { get; set; }
+        String CustomField98 { get; set; }
+        String CustomField99 { get; set; }
+        String CustomField100 { get; set; }
     }
 }

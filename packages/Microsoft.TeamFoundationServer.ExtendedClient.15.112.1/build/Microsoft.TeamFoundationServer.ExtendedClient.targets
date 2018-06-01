@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PrepareForRunDependsOn>
+      $(PrepareForRunDependsOn);
+      CopyNativeBinariesToOutputDirectory
+    </PrepareForRunDependsOn>
+  </PropertyGroup>
+  <Target Name="CopyNativeBinariesToOutputDirectory" DependsOnTargets="CopyFilesToOutputDirectory">
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)\..\lib\native\x86\Microsoft.WITDataStore32.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)\..\lib\native\amd64\Microsoft.WITDataStore64.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

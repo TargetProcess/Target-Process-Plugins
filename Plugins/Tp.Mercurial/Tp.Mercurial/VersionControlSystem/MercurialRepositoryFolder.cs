@@ -10,7 +10,6 @@ using StructureMap;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
-using MercurialSDK = Mercurial;
 
 namespace Tp.Mercurial.VersionControlSystem
 {

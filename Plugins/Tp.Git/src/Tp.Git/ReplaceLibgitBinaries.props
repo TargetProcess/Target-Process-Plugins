@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">        
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)\git2.dll">
+            <!-- Copy binary to file name expected by LibgitSharp-SSH -->
+            <Link>lib\win32\x64\git2-ssh-baa87df.dll</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>        
+    </ItemGroup>
+    <Target Name="ReplaceLibgitBinaries" AfterTargets="Build">
+        <ItemGroup>
+            <PdbFiles Include="$(TargetDir)\lib\win32\x64\*.pdb"/>
+        </ItemGroup>           
+        <!-- Remove 32 bit binaries as we do not compile 32 bit version of libgit2. This is precaution in case plugin will be run in 32bit by mistake. -->
+        <RemoveDir Directories="$(TargetDir)\lib\win32\x86" />
+        <Delete Files="@(PdbFiles)" />
+        <Delete Files="$(TargetDir)\lib\win32\x64\zlib.dll" />
+        <Delete Files="$(TargetDir)\lib\win32\x64\libssh2.dll" />
+    </Target>    
+</Project>

@@ -36,6 +36,8 @@ namespace Tp.PopEmailIntegration.Sagas
           IHandleMessages<RequestersCreationFailedMessageInternal>,
           IHandleMessages<RequestersCreatedMessageInternal>
     {
+        private static readonly Regex _ticketRegex = new Regex("Ticket[#](\\d+)", RegexOptions.Compiled);
+
         public override void ConfigureHowToFindSaga()
         {
             ConfigureMapping<MessageCreatedMessage>(saga => saga.Id, message => message.SagaId);
@@ -82,7 +84,7 @@ namespace Tp.PopEmailIntegration.Sagas
 
             if (requestersDtoToCreate.Empty())
             {
-                var fromRequester = GetRequesterByAddress(fromAddress.Address);
+                var fromRequester = GetUserOrRequesterByAddress(fromAddress.Address);
                 InvokeRules(fromRequester.Id);
             }
             else
@@ -95,9 +97,9 @@ namespace Tp.PopEmailIntegration.Sagas
             }
         }
 
-        private void ProcessAddress(MailAddressLite address, List<RequesterDTO> requestersDtoToCreate)
+        private void ProcessAddress(MailAddressLite address, ICollection<RequesterDTO> requestersDtoToCreate)
         {
-            var requester = GetRequesterByAddress(address.Address);
+            var requester = GetUserOrRequesterByAddress(address.Address);
             if (requester != null)
             {
                 RestoreDeletedRequester(requester);
@@ -109,15 +111,21 @@ namespace Tp.PopEmailIntegration.Sagas
             }
         }
 
-        private static UserLite GetRequesterByAddress(string address)
+        private static UserLite GetUserOrRequesterByAddress(string address)
         {
-            var requesters =
-                ObjectFactory.GetInstance<UserRepository>().GetByEmail(address).Where(x => x.UserType == UserType.Requester).ToArray();
+            var generalUsers =
+                ObjectFactory.GetInstance<UserRepository>().GetByEmail(address).ToArray();
 
-            if (!requesters.Any()) return null;
+            var user = generalUsers.FirstOrDefault(x => x.UserType == UserType.User && !x.IsDeletedOrInactiveUser);
+            if (user != null)
+            {
+                return user;
+            }
+
+            var requesters = generalUsers.Where(x => x.UserType == UserType.Requester).ToArray();
 
             var requester = requesters.FirstOrDefault(x => !x.IsDeletedRequester);
-            return requester ?? requesters.FirstOrDefault();
+            return requester ?? requesters.OrderByDescending(x => x.Id).FirstOrDefault();
         }
 
         public void Handle(RequestersCreatedMessageInternal message)
@@ -126,9 +134,8 @@ namespace Tp.PopEmailIntegration.Sagas
             var fromUser = fromUsers.OrderBy(x => x.UserType).FirstOrDefault();
             if (fromUser == null)
             {
-                Log()
-                    .ErrorFormat("Failed to find user with email '{0}'. Message will not be processed",
-                        Data.EmailReceivedMessage.Mail.FromAddress);
+                Log().Error(
+                    $"Failed to find user with email '{Data.EmailReceivedMessage.Mail.FromAddress}'. Message will not be processed");
                 MarkAsComplete();
             }
             else
@@ -137,32 +144,9 @@ namespace Tp.PopEmailIntegration.Sagas
             }
         }
 
-        private IEnumerable<int> GetRequestersForEmail(EmailMessage emailMessage)
-        {
-            var requesterAddresses = new List<string> { emailMessage.FromAddress };
-            if (emailMessage.ReplyTo != null)
-            {
-                requesterAddresses.AddRange(emailMessage.ReplyTo.Select(replyToAddress => replyToAddress.Address));
-            }
-            if (emailMessage.CC != null)
-            {
-                requesterAddresses.AddRange(emailMessage.CC.Select(ccAddress => ccAddress.Address));
-            }
-
-            foreach (var requesterAddress in requesterAddresses.Distinct())
-            {
-                var users = ObjectFactory.GetInstance<UserRepository>().GetByEmail(requesterAddress);
-                var user = users.OrderBy(x => x.UserType).FirstOrDefault(x => !x.IsDeleted);
-                if (user?.Id != null)
-                {
-                    yield return user.Id.Value;
-                }
-            }
-        }
-
         public void Handle(RequestersCreationFailedMessageInternal emailMessage)
         {
-            Log().ErrorFormat("Failed to create message with subject '{0}'", Data.EmailReceivedMessage.Mail.Subject);
+            Log().Error($"Failed to create message with subject '{Data.EmailReceivedMessage.Mail.Subject}'");
             CompleteSaga();
         }
 
@@ -200,8 +184,6 @@ namespace Tp.PopEmailIntegration.Sagas
 
         private void InvokeRules(int? fromUserId)
         {
-            Data.Requesters = GetRequestersForEmail(Data.EmailReceivedMessage.Mail).ToArray();
-
             var messageDto = Data.EmailReceivedMessage.Mail.Convert();
             if (!MatchedRule.IsNull || MessageContainsTicket(messageDto.Body))
             {
@@ -228,7 +210,7 @@ namespace Tp.PopEmailIntegration.Sagas
         public void Handle(MessageCreatedMessage message)
         {
             Data.MessageDto = message.Dto;
-            Log().Info($"Creating attachments for message with id {message.Dto.ID}");
+            Log().Info($"{(Data.EmailReceivedMessage.Mail.EmailAttachments.Any() ? "Creating" : "No")}{(Data.EmailReceivedMessage.Mail.EmailAttachments.Any() ? $" {Data.EmailReceivedMessage.Mail.EmailAttachments.Count}" : "")} attachment{(Data.EmailReceivedMessage.Mail.EmailAttachments.Count == 1 ? "" : "s")} for message with id {message.Dto.ID}");
             SendLocal(new PushAttachmentsToTpCommandInternal
             {
                 OuterSagaId = Data.Id,
@@ -242,7 +224,7 @@ namespace Tp.PopEmailIntegration.Sagas
             Log().Info($"Updating body for message with id {Data.MessageDto.ID}");
             Data.Attachments = message.AttachmentDtos;
             SendLocal(new UpdateMessageBodyCommandInternal
-                { MessageDto = Data.MessageDto, AttachmentDtos = message.AttachmentDtos, OuterSagaId = Data.Id });
+                { MessageDto = Data.MessageDto, AttachmentDtos = message.AttachmentDtos, ContentIds = message.ContentIds, OuterSagaId = Data.Id });
         }
 
         public void Handle(MessageBodyUpdatedMessageInternal message)
@@ -303,11 +285,10 @@ namespace Tp.PopEmailIntegration.Sagas
                 return result;
             }
 
-            var pattern = new Regex("Ticket[#](\\d+)");
-            var matches = pattern.Matches(messageBody);
+            var matches = _ticketRegex.Matches(messageBody);
             if (matches.Count > 0)
             {
-                if (Int32.TryParse(matches[0].Groups[1].Value, out result) == false)
+                if (int.TryParse(matches[0].Groups[1].Value, out result) == false)
                 {
                     result = -1;
                 }
@@ -331,7 +312,7 @@ namespace Tp.PopEmailIntegration.Sagas
         {
             var matchedRule = MatchedRule;
             Log().Info($"Executing rule '{matchedRule}' on message {Data.MessageDto.ID}");
-            matchedRule.Execute(Data.MessageDto, Data.Attachments, Data.Requesters);
+            matchedRule.Execute(Data.EmailReceivedMessage.Mail, Data.MessageDto, Data.Attachments);
             CompleteSaga();
         }
 
@@ -367,6 +348,5 @@ namespace Tp.PopEmailIntegration.Sagas
         public EmailReceivedMessage EmailReceivedMessage { get; set; }
         public MessageDTO MessageDto { get; set; }
         public AttachmentDTO[] Attachments { get; set; }
-        public int[] Requesters { get; set; }
     }
 }

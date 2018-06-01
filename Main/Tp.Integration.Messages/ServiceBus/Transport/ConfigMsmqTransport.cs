@@ -16,7 +16,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
         where TTransport : IMsmqTransport
     {
         /// <summary>
-        /// Wraps the given configuration object but stores the same 
+        /// Wraps the given configuration object but stores the same
         /// builder and configurer properties.
         /// </summary>
         /// <param name="config"></param>
@@ -64,7 +64,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
         /// <summary>
         /// Requests that the incoming queue be purged of all messages when the bus is started.
         /// All messages in this queue will be deleted if this is true.
-        /// Setting this to true may make sense for certain smart-client applications, 
+        /// Setting this to true may make sense for certain smart-client applications,
         /// but rarely for server applications.
         /// </summary>
         /// <param name="value"></param>
@@ -78,10 +78,10 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
         /// <summary>
         /// Sets the isolation level that database transactions on this endpoint will run at.
         /// This value is only relevant when <see cref="TransactionMode"/> has been set to <see cref="TransportTransactionMode.TransactionScope"/>.
-        /// 
+        ///
         /// Higher levels like RepeatableRead and Serializable promise a higher level
         /// of consistency, but at the cost of lower parallelism and throughput.
-        /// 
+        ///
         /// If you wish to run sagas on this endpoint, RepeatableRead is the suggested value
         /// and is the default value.
         /// </summary>
@@ -106,7 +106,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
 
         /// <summary>
         /// Sets the time span where a transaction will timeout.
-        /// 
+        ///
         /// Most endpoints should leave it at the default.
         /// </summary>
         /// <param name="transactionTimeout"></param>
@@ -122,7 +122,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
         /// When set to <see cref="int.MaxValue"/> message is retried to process until success (unlimited number of attempts).
         /// This value is only relevant when <see cref="TransactionMode"/> has been
         /// set to <see cref="TransportTransactionMode.QueueOnly"/> or <see cref="TransportTransactionMode.TransactionScope"/>.
-        /// 
+        ///
         /// Most endpoints should leave it at the default.
         /// </summary>
         /// <param name="maxRetries"></param>
@@ -130,6 +130,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
         public ConfigMsmqTransport<TTransport> MaxRetries(int maxRetries)
         {
             transportConfig.ConfigureProperty(t => t.MaxRetries, maxRetries);
+            return this;
+        }
+
+        public ConfigMsmqTransport<TTransport> NumberOfWorkerThreads(int numberOfWorkerThreads)
+        {
+            transportConfig.ConfigureProperty(t => t.NumberOfWorkerThreads, numberOfWorkerThreads);
             return this;
         }
     }
