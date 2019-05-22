@@ -10,7 +10,6 @@ using StructureMap;
 using TinyPG;
 using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
-using Tp.SourceControl.Comments.DSL;
 using Tp.SourceControl.Messages;
 using Tp.SourceControl.VersionControlSystem;
 
@@ -52,7 +51,7 @@ namespace Tp.SourceControl.Comments
 
             try
             {
-                var commandTree = _parser.Parse(description.Trim() + " ");
+                var commandTree = _parser.Parse($"{description.Trim()} ");
 
                 if (commandTree.Errors.Count > 0)
                 {
@@ -65,7 +64,7 @@ namespace Tp.SourceControl.Comments
             }
             catch (Exception exception)
             {
-                _log.Error(string.Format("Failed to parse comment {0}", description), exception);
+                _log.Error($"Failed to parse comment {description}", exception);
                 return Enumerable.Empty<AssignRevisionToEntityAction>();
             }
         }

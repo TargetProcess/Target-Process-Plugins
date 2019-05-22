@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{294F3FDB-1C7D-4102-A3AF-F81922347D32}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Perforce</RootNamespace>
+    <AssemblyName>Tp.Perforce</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <HintPath>..\..\..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net, Version=1.2.0.2, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net.Ext.Json, Version=1.2.13.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\log4net.Ext.Json.1.2.10.1.2.10.20140804\lib\net20-full\log4net.Ext.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap262">
+      <HintPath>..\..\..\Libs\NServiceBus\binaries\containers\structuremap\NServiceBus.ObjectBuilder.StructureMap262.dll</HintPath>
+    </Reference>
+    <Reference Include="p4api.net">
+      <HintPath>..\..\..\Libs\p4api.net64\p4api.net.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="P4CurrentProfileToConnectionSettingsAdapter.cs" />
+    <Compile Include="P4CheckConnectionCommand.cs" />
+    <Compile Include="P4PluginProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RevisionStorage\P4RevisionStorageRepository.cs" />
+    <Compile Include="StructureMap\P4Registry.cs" />
+    <Compile Include="StructureMap\P4PluginExcludedAssemblies.cs" />
+    <Compile Include="VersionControlSystem\P4CheckConnectionErrorResolver.cs" />
+    <Compile Include="VersionControlSystem\P4RevisionId.cs" />
+    <Compile Include="VersionControlSystem\P4RevisionIdComparer.cs" />
+    <Compile Include="VersionControlSystem\P4Utils.cs" />
+    <Compile Include="VersionControlSystem\P4VersionControlSystem.cs" />
+    <Compile Include="Workflow\P4UserMapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Main\Tp.Integration.Plugin.Common\App.config">
+      <Link>App.config</Link>
+    </None>
+    <None Include="Install.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="PluginSettings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Uninstall.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Main\Tp.Core\Tp.Core.csproj">
+      <Project>{93bf8935-0436-4e51-ac35-0ba1d93b8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{ef010d25-b262-4051-b369-bd62f334a190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Integration.Plugin.Common\Tp.Integration.Plugin.Common.csproj">
+      <Project>{3692e1db-2933-4f02-a5e6-ba303f1825b1}</Project>
+      <Name>Tp.Integration.Plugin.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Main\Tp.Plugin.Core\Tp.Plugin.Core.csproj">
+      <Project>{bbfa5c9b-6c11-4b62-a9b1-e631462d333b}</Project>
+      <Name>Tp.Plugin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tp.Integration.Plugin.UninstallUtil\Tp.Integration.Plugin.UninstallUtil.csproj">
+      <Project>{fcaff2c5-aff5-454a-91d1-6e2f653f1bcb}</Project>
+      <Name>Tp.Integration.Plugin.UninstallUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tp.SourceControl\Tp.SourceControl.csproj">
+      <Project>{ac8b8885-d4f1-4ec9-a428-b90b2ac088c3}</Project>
+      <Name>Tp.SourceControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mashups\ProfileEditor\ProfileEditor.js" />
+    <Content Include="Mashups\ProfileEditor\registerMashup.js" />
+    <Content Include="Mashups\ProfileEditor\userMappingEditor.js" />
+    <Content Include="perforce-logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Platform)' == 'x64' OR '$(Platform)' == 'AnyCPU' ">
+    <Content Include="$(MSBuildThisFileDirectory)..\..\..\Libs\p4api.net64\p4bridge.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>p4bridge.dll</Link>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\..\..\Libs\p4api.net64\p4bridge.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>p4bridge.pdb</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo F | xcopy $(ProjectDir)Mashups\*.*  $(TargetDir)Mashups\*.* /Y /E /D
+
+echo F | move /Y $(TargetDir)$(TargetFileName).config $(TargetDir)Tp.Integration.Plugin.Common.dll.config</PostBuildEvent>
+  </PropertyGroup>
+</Project>

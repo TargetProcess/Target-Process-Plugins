@@ -36,11 +36,11 @@ namespace TinyPG
             SkipList = new List<TokenType>();
             SkipList.Add(TokenType.SPACE);
 
-            regex = new Regex(@"(?i)id:", RegexOptions.Compiled);
+            regex = new Regex(@"(?i)id:(?=[0-9]+)", RegexOptions.Compiled);
             Patterns.Add(TokenType.IdKeyword1, regex);
             Tokens.Add(TokenType.IdKeyword1);
 
-            regex = new Regex(@"#", RegexOptions.Compiled);
+            regex = new Regex(@"#(?=[0-9]+)", RegexOptions.Compiled);
             Patterns.Add(TokenType.IdKeyword2, regex);
             Tokens.Add(TokenType.IdKeyword2);
 
@@ -100,11 +100,11 @@ namespace TinyPG
             Patterns.Add(TokenType.DECIMAL, regex);
             Tokens.Add(TokenType.DECIMAL);
 
-            regex = new Regex(@"(?i)(.(?<!#)(?<!(id|time|status|state|comment|comm|comments|cmt):))+\s", RegexOptions.Compiled);
+            regex = new Regex(@"(?i)(.(?<!#(?=[0-9]+))(?<!id:(?=[0-9]+))(?<!(time|status|state|comment|comm|comments|cmt):))+\s", RegexOptions.Compiled);
             Patterns.Add(TokenType.ANY_TEXT, regex);
             Tokens.Add(TokenType.ANY_TEXT);
 
-            regex = new Regex(@"(?i)((?!#)(?!(id|time|status|state|comment|comm|comments|cmt):).)", RegexOptions.Compiled);
+            regex = new Regex(@"(?i)((?!#(?=[0-9]+))(?!id:(?=[0-9]+))(?!(time|status|state|comment|comm|comments|cmt):).)", RegexOptions.Compiled);
             Patterns.Add(TokenType.ANY_SYMBOL, regex);
             Tokens.Add(TokenType.ANY_SYMBOL);
         }

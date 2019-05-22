@@ -4,10 +4,8 @@
 // 
 
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading;
 using NServiceBus;
 using NServiceBus.Saga;
 using Tp.Integration.Common;
@@ -55,10 +53,9 @@ namespace Tp.SourceControl.Workflow.Workflow
 
         public void Handle(NewRevisionDetectedLocalMessage localMessage)
         {
-            string key;
-            if (_revisionStorage.SaveRevisionInfo(localMessage.Revision, out key))
+            if (_revisionStorage.SaveRevisionInfo(localMessage.Revision, out var key))
             {
-                _logger.InfoFormat("Importing revision. Revision ID: {0}", localMessage.Revision.Id.Value);
+                _logger.Info($"Importing revision. Revision ID: {localMessage.Revision.Id.Value}");
 
                 var dto = new RevisionDTO
                 {
@@ -88,9 +85,8 @@ namespace Tp.SourceControl.Workflow.Workflow
         {
             Data.RevisionFilesCreated++;
 
-            _logger.InfoFormat(
-                "Revision file created. Revision ID: {0}; TargetProcess Revision File ID: {1}; Revision File Name: {2}",
-                Data.SourceControlID, message.Dto.ID.Value, message.Dto.FileName);
+            _logger.Info(
+                $"Revision file created. Revision ID: {Data.SourceControlID}; TargetProcess Revision File ID: {message.Dto.ID.Value}; Revision File Name: {message.Dto.FileName}");
 
             if (Data.RevisionFilesCreated == Data.RevisionEntries.Length)
             {
@@ -132,7 +128,7 @@ namespace Tp.SourceControl.Workflow.Workflow
         {
             _revisionStorage.RemoveRevisionInfo(Data.RevisionKey);
 
-            _logger.Error(string.Format("Failed to create revision. Revision ID: {0}", Data.SourceControlID), message.GetException());
+            _logger.Error($"Failed to create revision. Revision ID: {Data.SourceControlID}", message.GetException());
 
             MarkAsComplete();
         }

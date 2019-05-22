@@ -31,7 +31,7 @@ namespace Tp.SourceControl.Workflow.Workflow
         {
             if (!AuthorIsSpecified(revision))
             {
-                _logger().Warn(string.Format("No author in revision. Revision ID: {0}", revision.Id));
+                _logger().Warn($"No author in revision. Revision ID: {revision.Id}");
                 return DefaultUser;
             }
 
@@ -45,7 +45,7 @@ namespace Tp.SourceControl.Workflow.Workflow
                     return tpUser;
                 }
 
-                _logger().Warn(string.Format("TP user not found. TargetProcess User ID: {0}; Name: {1}", tpUser.Id, tpUser.Name));
+                _logger().Warn($"TP user not found. TargetProcess User ID: {tpUser.Id}; Name: {tpUser.Name}");
             }
 
             var user = GuessUser(revision, userDtos);
@@ -56,8 +56,7 @@ namespace Tp.SourceControl.Workflow.Workflow
             }
 
             _logger()
-                .Warn(string.Format("Revision author doesn't match any TP User name. There is no valid mapping for user {0}",
-                    revision.Author));
+                .Warn($"Revision author doesn't match any TP User name. There is no valid mapping for user {revision.Author}");
             return DefaultUser;
         }
 

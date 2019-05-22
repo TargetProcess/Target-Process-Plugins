@@ -3,7 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using Tp.Integration.Plugin.Common.Mapping;
 
 namespace Tp.SourceControl
@@ -15,7 +14,7 @@ namespace Tp.SourceControl
             return new MappingLookup
             {
                 Id = userDto.ID.GetValueOrDefault(),
-                Name = String.Format("{0} {1}", userDto.FirstName, userDto.LastName)
+                Name = $"{userDto.FirstName} {userDto.LastName}"
             };
         }
     }

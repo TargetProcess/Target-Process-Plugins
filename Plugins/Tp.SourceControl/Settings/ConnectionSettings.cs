@@ -29,7 +29,7 @@ namespace Tp.SourceControl.Settings
         [DataMember]
         public string Uri
         {
-            get { return _uri; }
+            get => _uri;
             set
             {
                 if (value != null)
@@ -50,8 +50,8 @@ namespace Tp.SourceControl.Settings
         [DataMember]
         public bool HasPassword
         {
-            get { return _hasPassword ?? !Password.IsNullOrEmpty(); }
-            set { _hasPassword = value; }
+            get => _hasPassword ?? !Password.IsNullOrEmpty();
+            set => _hasPassword = value;
         }
 
         [DataMember]
