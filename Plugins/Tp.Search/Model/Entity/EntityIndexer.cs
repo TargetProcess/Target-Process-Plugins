@@ -500,7 +500,7 @@ namespace Tp.Search.Model.Entity
 				commentSquadIndex.Index(indexResult.DocNumber, _documentIdFactory.EncodeSquadId(squadId));
 				IDocumentIndex commentEntityTypeIndex = _documentIndexProvider.GetOrCreateDocumentIndex(_pluginContext.AccountName, DocumentIndexTypeToken.CommentEntityType);
 				Maybe<string> maybeEntityTypeName = _entityTypeProvider.GetEntityTypeName(int.Parse(commentEntity.EntityTypeId));
-				string entityTypeName = maybeEntityTypeName.FailIfNothing(() => new ApplicationException("No entgity type name for {0}".Fmt(commentEntity.EntityTypeId)));
+				string entityTypeName = maybeEntityTypeName.FailIfNothing(() => new ApplicationException("No entity type name for {0}".Fmt(commentEntity.EntityTypeId)));
 				commentEntityTypeIndex.Index(indexResult.DocNumber, entityTypeName);
 			}
 			return indexResult;
