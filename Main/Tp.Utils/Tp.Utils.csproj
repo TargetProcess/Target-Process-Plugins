@@ -63,6 +63,7 @@
       <HintPath>..\..\packages\MarkdownDeep.NET-StrongName.1.5\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="NBehave.Narrator.Framework">
       <HintPath>..\..\packages\nbehave.0.5.1.263\lib\net40\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
@@ -74,8 +75,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -127,11 +129,13 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferenceEqualityComparer.cs" />
+    <Compile Include="RequestExtensions.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="Sys\Executor.cs" />
     <Compile Include="Sys\ProcessTimeOutException.cs" />
     <Compile Include="TypeConverter.cs" />
+    <Compile Include="UniqueTokenGenerator.cs" />
     <Compile Include="UriBuilderExtensions.cs" />
     <Compile Include="VerbosityExtensions.cs" />
   </ItemGroup>

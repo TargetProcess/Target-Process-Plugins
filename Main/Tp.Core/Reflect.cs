@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Tp.Core;
+using Tp.Core.Expressions;
 
 public partial class Reflect
 {
@@ -20,20 +21,42 @@ public partial class Reflect
         if (calls.Length != 1)
         {
             throw new ArgumentException($"Expect 1 method call in expression, was {calls.Length}", nameof(genericCall));
-        }        
+        }
         var call = calls[0];
 
-        var targetObject = call.Object?.PartialEval().MaybeAs<ConstantExpression>()
+        var targetObject = call.Object?.PartialEvalNoCompile().MaybeAs<ConstantExpression>()
             .Select(c => c.Value)
             .GetOrThrow(() => new ArgumentException("Method call target should be constant value", nameof(genericCall)));
 
         var arguments = call.Arguments
-            .Select(a => a.PartialEval().MaybeAs<ConstantExpression>().GetOrThrow(() => new ArgumentException("Method call arguments should be constant values", nameof(genericCall))))
+            .Select(a => a.PartialEvalNoCompile().MaybeAs<ConstantExpression>().GetOrThrow(() => new ArgumentException("Method call arguments should be constant values", nameof(genericCall))))
             .Select(c => c.Value)
             .ToArray();
 
         var targetMethod = call.Method.GetGenericMethodDefinition().MakeGenericMethod(types);
         return (TResult)targetMethod.Invoke(targetObject, arguments);
+    }
+
+    public static void InvokeGeneric(Expression<Action> genericCall, params Type[] types)
+    {
+        var calls = genericCall.TraversePreOrder().OfType<MethodCallExpression>().ToArray();
+        if (calls.Length != 1)
+        {
+            throw new ArgumentException($"Expect 1 method call in expression, was {calls.Length}", nameof(genericCall));
+        }
+        var call = calls[0];
+
+        var targetObject = call.Object?.PartialEvalNoCompile().MaybeAs<ConstantExpression>()
+            .Select(c => c.Value)
+            .GetOrThrow(() => new ArgumentException("Method call target should be constant value", nameof(genericCall)));
+
+        var arguments = call.Arguments
+            .Select(a => a.PartialEvalNoCompile().MaybeAs<ConstantExpression>().GetOrThrow(() => new ArgumentException("Method call arguments should be constant values", nameof(genericCall))))
+            .Select(c => c.Value)
+            .ToArray();
+
+        var targetMethod = call.Method.GetGenericMethodDefinition().MakeGenericMethod(types);
+        targetMethod.Invoke(targetObject, arguments);
     }
 }
 

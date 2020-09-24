@@ -5,7 +5,6 @@ tau.mashups
 	.addDependency("tp/plugins/vcs/ui.widgets")
 	.addModule("Tfs/EntityMappingEditor", function (restService, Bus) {
 
-
 	    function EntityMappingEditor(config) {
 	        this._create(config);
 	    }

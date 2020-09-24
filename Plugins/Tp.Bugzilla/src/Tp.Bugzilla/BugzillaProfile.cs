@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -44,8 +44,8 @@ namespace Tp.Bugzilla
         [DataMember]
         public string Url
         {
-            get { return _url; }
-            set { _url = value.Trim(); }
+            get => _url;
+            set => _url = value.Trim();
         }
 
         [DataMember]
@@ -60,7 +60,7 @@ namespace Tp.Bugzilla
         [DataMember]
         public string SavedSearches
         {
-            get { return _savedSearches; }
+            get => _savedSearches;
             set
             {
                 _savedSearches = string.Join(",", value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)

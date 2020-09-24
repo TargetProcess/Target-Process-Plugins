@@ -1,12 +1,12 @@
 namespace Tp.Core.Services
 {
-    public class EmptyService : IService
+    public class EmptyService : Service
     {
-        public void Start()
+        public override void Start()
         {
         }
 
-        public void Stop()
+        public override void Stop()
         {
         }
     }

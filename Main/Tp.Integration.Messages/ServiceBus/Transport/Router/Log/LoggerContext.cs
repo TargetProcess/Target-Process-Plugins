@@ -35,9 +35,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
 
         private void AddThreadPoolInfo(StringBuilder buf)
         {
-            int workerThreads;
-            int ioThreads;
-            ThreadPool.GetAvailableThreads(out workerThreads, out ioThreads);
+            ThreadPool.GetAvailableThreads(out var workerThreads, out var ioThreads);
             PutKeyValueInto(buf, "workerThreads", workerThreads.ToString());
             PutKeyValueInto(buf, "ioThreads", ioThreads.ToString());
         }
@@ -56,19 +54,16 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router.Log
         private static void Begin(StringBuilder buf)
         {
             buf.Append("[");
-            return;
         }
 
         private static void End(StringBuilder buf)
         {
             buf.Append("]");
-            return;
         }
 
         private static void PutKeyValueInto(StringBuilder buf, string key, string value)
         {
             buf.AppendFormat("{0}={1},", key, value);
-            return;
         }
 
         private static string GetMessageType(TransportMessage message)

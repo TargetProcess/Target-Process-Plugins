@@ -36,6 +36,8 @@ namespace Tp.Core
                 XmlConfigurator.Configure(config);
                 Instance.DefaultLog.Warn("Could not fnd log4net config files - use app config");
             });
+
+            Expressions.Logging.Logger = Expressions.ExpressionLoggerAdapter.Instance;
         }
 
         public static TpLogManager Instance => _instance ?? (_instance = new TpLogManager());

@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -44,8 +44,7 @@ namespace Tp.Tfs
         {
             get
             {
-                int value;
-                int.TryParse(SyncInterval, out value);
+                int.TryParse(SyncInterval, out var value);
                 return Math.Max(MinimumSynchronizationIntervalInMinutes, value);
             }
             set { }
@@ -55,13 +54,12 @@ namespace Tp.Tfs
 
         public void ValidateStartRevision(PluginProfileErrorCollection errors)
         {
-            Int32 startRevision;
-            if (!Int32.TryParse(StartRevision, out startRevision) || startRevision < 1)
+            if (!Int32.TryParse(StartRevision, out var startRevision) || startRevision < 1)
             {
                 errors.Add(new PluginProfileError
                 {
                     FieldName = StartRevisionField,
-                    Message = string.Format("Specify a start revision number in the range of 1 - 2147483647"),
+                    Message = $"Specify a start revision number in the range of 1 - {Int32.MaxValue}",
                     Status = PluginProfileErrorStatus.WrongRevisionNumberError
                 });
             }
@@ -69,13 +67,12 @@ namespace Tp.Tfs
 
         public void ValidateStartWorkItem(PluginProfileErrorCollection errors)
         {
-            Int32 startWorkItem;
-            if (!Int32.TryParse(StartWorkItem, out startWorkItem) || startWorkItem < 1)
+            if (!Int32.TryParse(StartWorkItem, out var startWorkItem) || startWorkItem < 1)
             {
                 errors.Add(new PluginProfileError
                 {
                     FieldName = StartWorkItemField,
-                    Message = string.Format("Specify a start workitem number in the range of 1 - 2147483647"),
+                    Message = $"Specify a start workitem number in the range of 1 - {Int32.MaxValue}",
                     Status = PluginProfileErrorStatus.WrongRevisionNumberError
                 });
             }

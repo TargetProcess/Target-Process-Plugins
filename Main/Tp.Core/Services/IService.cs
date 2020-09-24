@@ -4,5 +4,6 @@ namespace Tp.Core.Services
     {
         void Start();
         void Stop();
+        int? Priority { get; }
     }
 }

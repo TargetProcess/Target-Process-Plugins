@@ -7,7 +7,7 @@ namespace Tp.Core
 {
     public class Delta
     {
-        private static readonly ReadOnlyCollection<string> EmptyChangedFields = new ReadOnlyCollection<string>(new string[0]);
+        private static readonly ReadOnlyCollection<string> EmptyChangedFields = new ReadOnlyCollection<string>(Array.Empty<string>());
 
         protected Delta(object original, object changed, IReadOnlyList<string> changedFields)
         {

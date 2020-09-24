@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Globalization;
@@ -44,7 +44,7 @@ namespace Tp.Git
                 }
                 return Math.Max(MinimumSynchronizationIntervalInMinutes, val).ToString(CultureInfo.InvariantCulture);
             }
-            set { _syncInterval = value; }
+            set => _syncInterval = value;
         }
 
         private const int MinimumSynchronizationIntervalInMinutes = 5;
@@ -67,8 +67,8 @@ namespace Tp.Git
         [DataMember]
         public bool HasSshPrivateKey
         {
-            get { return _hasSshPrivateKey ?? !SshPrivateKey.IsNullOrEmpty(); }
-            set { _hasSshPrivateKey = value; }
+            get => _hasSshPrivateKey ?? !SshPrivateKey.IsNullOrEmpty();
+            set => _hasSshPrivateKey = value;
         }
 
         [DataMember]
@@ -138,47 +138,73 @@ namespace Tp.Git
             {
                 return;
             }
+
+            const string puttyKeyErrorMessage = "Is seems you have uploaded key in PuTTY format. Unfortunately only keys in OpenSSH format are supported right now.";
+
             if (SshPrivateKey.IsNullOrEmpty())
             {
                 errors.Add(new PluginProfileError { Message = "Please specify SSH private key.", FieldName = nameof(SshPrivateKey) });
             }
-
-            if (!SshPrivateKey.StartsWith("-----BEGIN RSA PRIVATE KEY-----"))
+            else
             {
-                errors.Add(new PluginProfileError
+                if (!SshPrivateKey.StartsWith("-----BEGIN RSA PRIVATE KEY-----"))
                 {
-                    Message = "SSH private key has incorrect format. It should begin with `-----BEGIN RSA PRIVATE KEY-----`.",
-                    FieldName = nameof(SshPrivateKey)
-                });
-            }
+                    errors.Add(new PluginProfileError
+                    {
+                        Message = "SSH private key has incorrect format. It should begin with `-----BEGIN RSA PRIVATE KEY-----`.",
+                        FieldName = nameof(SshPrivateKey)
+                    });
+                }
 
-            if (!ContainsOnlyValidSymbols(SshPrivateKey))
-            {
-                errors.Add(new PluginProfileError
+                if (!ContainsOnlyValidSymbols(SshPrivateKey))
                 {
-                    Message = "SSH private key contains ivalid symbols.",
-                    FieldName = nameof(SshPrivateKey)
-                });
+                    errors.Add(new PluginProfileError
+                    {
+                        Message = "SSH private key contains invalid symbols.",
+                        FieldName = nameof(SshPrivateKey)
+                    });
+                }
+
+                if (IsPuttyKey(SshPrivateKey))
+                {
+                    errors.Add(new PluginProfileError { Message = puttyKeyErrorMessage, FieldName = nameof(SshPrivateKey) });
+                }
             }
 
             if (SshPublicKey.IsNullOrEmpty())
             {
                 errors.Add(new PluginProfileError { Message = "Please specify SSH public key.", FieldName = nameof(SshPublicKey) });
             }
+            else
+            {
+                if (!ContainsOnlyValidSymbols(SshPublicKey))
+                {
+                    errors.Add(new PluginProfileError
+                    {
+                        Message = "SSH public key contains ivalid symbols.",
+                        FieldName = nameof(SshPublicKey)
+                    });
+                }
 
-            if (!ContainsOnlyValidSymbols(SshPublicKey))
+                if (IsPuttyKey(SshPublicKey))
+                {
+                    errors.Add(new PluginProfileError { Message = puttyKeyErrorMessage, FieldName = nameof(SshPublicKey) });
+                }
+            }
+
+            // If user submits private key as public key, it leads to plugin crash with OOM when SSH connection is established.
+            if (SshPublicKey == SshPrivateKey)
             {
                 errors.Add(new PluginProfileError
                 {
-                    Message = "SSH public key contains ivalid symbols.",
+                    Message = "SSH public and private keys are the same. You need to provide both public and private key.",
                     FieldName = nameof(SshPublicKey)
                 });
             }
 
-            bool ContainsOnlyValidSymbols(string key)
-            {
-                return key.Select(c => (int) c).All(c => c == 10 || c == 13 || (c > 31 && c < 126));
-            }
+            bool ContainsOnlyValidSymbols(string key) => key.Select(c => (int) c).All(c => c == 10 || c == 13 || (c > 31 && c < 126));
+
+            bool IsPuttyKey(string key) => key.Contains("PuTTY-User-Key-File", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public void ValidateUri(PluginProfileErrorCollection errors)
@@ -197,7 +223,7 @@ namespace Tp.Git
 
         private bool IsSshUri()
         {
-            return Regex.IsMatch(Uri, @"^ssh://(.+@)?([\w\d\.]+)(:\d+)?/(~\S+)?(/\S)*$", RegexOptions.IgnoreCase)
+            return Regex.IsMatch(Uri, @"^ssh://(.+@)?([\w\d\.]+)(:\d+)?/(\S+)?(/\S)*$", RegexOptions.IgnoreCase)
                 || Regex.IsMatch(Uri,
                     @"^(?!file:)(?!http:)(?!https:)(?!ftp:)(?!ftps:)(?!rsync:)(?!git:)(?!ssh:)(.+@)?[\w\d\-._~%]+[\.][\w\d]+:(/~.+/)?\S*$",
                     RegexOptions.IgnoreCase);

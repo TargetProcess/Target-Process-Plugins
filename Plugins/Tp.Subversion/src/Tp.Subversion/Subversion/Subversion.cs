@@ -85,7 +85,7 @@ namespace Tp.Subversion.Subversion
             }
             catch (SvnException ex)
             {
-                _logger.Error("Svn plugin Error when gettin revision id.", ex);
+                _logger.Error("Svn plugin Error when getting revision id.", ex);
                 throw;
             }
         }

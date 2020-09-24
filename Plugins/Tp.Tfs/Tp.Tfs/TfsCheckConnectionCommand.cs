@@ -1,27 +1,24 @@
 ﻿// 
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
 using Microsoft.TeamFoundation;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Git.Client;
-using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
-using System.Globalization;
 using System.Linq;
+using Microsoft.VisualStudio.Services.Common;
+using Microsoft.VisualStudio.Services.WebApi;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Commands;
 using Tp.SourceControl.VersionControlSystem;
+using Tp.Tfs.VersionControlSystem;
 
 namespace Tp.Tfs
 {
     public class TfsCheckConnectionCommand : VcsCheckConnectionCommand<TfsPluginProfile>
     {
-        private const int UriTfsProjectCollection = 1;
-        private const int UriTfsTeamProject = 2;
-
         public TfsCheckConnectionCommand(IProfileCollection profileCollection) : base(profileCollection)
         {
         }
@@ -41,40 +38,76 @@ namespace Tp.Tfs
 
             if (!errors.Any())
             {
-                TfsTeamProjectCollection collection = null;
-
                 try
                 {
-                    TfsConnectionParameters parameters = TfsConnectionHelper.GetTfsConnectionParameters(settings);
-
-                    switch (parameters.SegmentsCount)
+                    var parameters = TfsConnectionHelper.GetTfsConnectionParameters(settings, out var useRest);
+                    using (var tfsClient = useRest
+                        ? (ITfsClient)new TfvcHttpTfsClient(parameters, TimeSpan.FromSeconds(100))
+                        : new TfsClient(parameters, TimeSpan.FromSeconds(100)))
+                    {
+                        var latest = tfsClient.GetLatestChangesetId(int.Parse(settings.StartRevision));
+                        if (latest == null)
+                        {
+                            errors.Add(new PluginProfileError
+                            {
+                                FieldName = "StartRevision",
+                                Message = "No revisions found.",
+                                Status = PluginProfileErrorStatus.UnexistedRevisionWarning
+                            });
+                        }
+                        else if (latest.Value < int.Parse(settings.StartRevision))
+                        {
+                            errors.Add(new PluginProfileError
+                            {
+                                FieldName = "StartRevision",
+                                Message = $"The last revision {latest.Value} is less than the start revision {settings.StartRevision}",
+                                Status = PluginProfileErrorStatus.UnexistedRevisionWarning
+                            });
+                        }
+                    }
+                    /*switch (parameters.SegmentsCount)
                     {
                         case UriTfsProjectCollection:
                         {
-                            collection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
-                            collection.EnsureAuthenticated();
-                            collection.Connect(ConnectOptions.None);
+                            vssConnection = new VssConnection(parameters.TfsCollectionUri,
+                                new VssCredentials(parameters.Credential) { PromptType = CredentialPromptType.DoNotPrompt });
+                            vssConnection.ConnectAsync().SyncResult();
 
-                            var vcs = collection.GetService<VersionControlServer>();
+                            var vcs = vssConnection.GetClient<TfvcHttpClient>();
                             CheckChangeset(settings, vcs);
 
                             break;
                         }
                         case UriTfsTeamProject:
                         {
-                            collection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
-                            collection.EnsureAuthenticated();
-                            collection.Connect(ConnectOptions.None);
-
-                            var vcs = collection.GetService<VersionControlServer>();
+                            vssConnection = new VssConnection(parameters.TfsCollectionUri,
+                                new VssCredentials(parameters.Credential) { PromptType = CredentialPromptType.DoNotPrompt });
+                            vssConnection.ConnectAsync().SyncResult();
 
                             try
                             {
-                                TeamProject teamProject = vcs.GetTeamProject(parameters.TeamProjectName);
+                                var pc = vssConnection.GetClient<ProjectHttpClient>();
+                                var teamProject = pc.GetProject(parameters.TeamProjectName).Result;
 
+                                var vcs = vssConnection.GetClient<TfvcHttpClient>();
                                 CheckChangeset(settings, vcs, teamProject);
                             }
-                            catch (Microsoft.TeamFoundation.VersionControl.Client.VersionControlException)
+
+                            catch (AggregateException aggregateException)
+                            {
+                                foreach (var exception in aggregateException.InnerExceptions)
+                                {
+                                    if (exception is ProjectDoesNotExistWithNameException vssServiceException)
+                                    {
+                                        errors.Add(new PluginProfileError
+                                        {
+                                            FieldName = "Uri",
+                                            Message = vssServiceException.Message
+                                        });
+                                    }
+                                }
+                            }*/
+                            /*catch (Microsoft.TeamFoundation.VersionControl.Client.VersionControlException)
                             {
                                 var gitRepositoryService = collection.GetService<GitRepositoryService>();
                                 var gitRepositories = gitRepositoryService.QueryRepositories(parameters.TeamProjectName);
@@ -92,23 +125,23 @@ namespace Tp.Tfs
                                 {
                                     throw;
                                 }
-                            }
+                            }*/
 
-                            break;
+                            /*break;
                         }
                         default:
                             errors.Add(new PluginProfileError { FieldName = "Uri", Message = "Could not connect to server." });
                             break;
-                    }
+                    }*/
                 }
-                catch (TeamFoundationServerUnauthorizedException e)
+                catch (VssUnauthorizedException e)
                 {
                     errors.Add(
                         new PluginProfileError
                         {
                             Status = PluginProfileErrorStatus.WrongCredentialsError,
                             FieldName = "Login",
-                            Message = "Authorization failed.",
+                            Message = e.Message,
                             AdditionalInfo = e.Message
                         });
                     errors.Add(
@@ -116,17 +149,17 @@ namespace Tp.Tfs
                         {
                             Status = PluginProfileErrorStatus.WrongCredentialsError,
                             FieldName = "Password",
-                            Message = "Authorization failed.",
+                            Message = e.Message,
                             AdditionalInfo = e.Message
                         });
                 }
-                catch (ResourceAccessException e)
+                catch (VssServiceResponseException e)
                 {
                     errors.Add(new PluginProfileError
                     {
                         AdditionalInfo = e.Message,
                         FieldName = "Uri",
-                        Message = "Resource access denied",
+                        Message = $"{e.Message} HttpStatusCode: {e.HttpStatusCode}",
                         Status = PluginProfileErrorStatus.Error
                     });
                 }
@@ -149,64 +182,40 @@ namespace Tp.Tfs
                         Message = "Could not connect to server.",
                     });
                 }
-                finally
+                /*finally
                 {
-                    collection?.Dispose();
-                }
+                    vssConnection?.Dispose();
+                }*/
             }
         }
 
-        private static void CheckChangeset(TfsPluginProfile settings, VersionControlServer versionControl, TeamProject teamProject = null)
+        /*private static void CheckChangeset(TfsPluginProfile settings, TfvcHttpClientBase versionControl, TeamProjectReference teamProject = null)
         {
-            string startRevision = int.Parse(settings.StartRevision) > 1
-                ? (int.Parse(settings.StartRevision) - 1).ToString(CultureInfo.InvariantCulture)
-                : settings.StartRevision;
+            var startRevision = int.Parse(settings.StartRevision) > 1 ? int.Parse(settings.StartRevision) - 1: int.Parse(settings.StartRevision);
 
-            if (teamProject == null)
+            var tfvcChangesetSearchCriteria = new TfvcChangesetSearchCriteria { ItemPath = "$/", FromId = startRevision };
+
+            try
             {
-                var teamProjects = versionControl.GetAllTeamProjects(false);
+                var changeset = teamProject == null
+                    ? versionControl.GetChangesetsAsync(null, null, 0, 1, "Id ASC", tfvcChangesetSearchCriteria).Result.FirstOrDefault()
+                    : versionControl.GetChangesetsAsync(teamProject.Id, null, 0, 1, "Id ASC", tfvcChangesetSearchCriteria).Result
+                        .FirstOrDefault();
 
-                foreach (var project in teamProjects)
+                if (changeset != null)
+                    return;
+            }
+            catch (AggregateException aggregateException)
+            {
+                foreach (var exception in aggregateException.InnerExceptions)
                 {
-                    try
+                    if (exception is VssServiceException vssServiceException && vssServiceException.Message.Contains("TF14019"))
                     {
-                        var changeset = versionControl.QueryHistory(
-                            project.ServerItem,
-                            VersionSpec.Latest,
-                            0,
-                            RecursionType.Full,
-                            null,
-                            VersionSpec.ParseSingleSpec(startRevision, null),
-                            null,
-                            1,
-                            false,
-                            false).Cast<Changeset>().FirstOrDefault();
-
-                        if (changeset != null)
-                            return;
-                    }
-                    catch (ChangesetNotFoundException)
-                    {
+                        throw new ChangesetNotFoundException(vssServiceException.Message);
                     }
                 }
-
-                throw new ChangesetNotFoundException($"There’s no such revision: {settings.StartRevision}");
+                throw aggregateException.Flatten();
             }
-
-            var projectChangeset = versionControl.QueryHistory(
-                teamProject.ServerItem,
-                VersionSpec.Latest,
-                0,
-                RecursionType.Full,
-                null,
-                VersionSpec.ParseSingleSpec(startRevision, null),
-                null,
-                1,
-                false,
-                false).Cast<Changeset>().FirstOrDefault();
-
-            if (projectChangeset == null)
-                throw new ChangesetNotFoundException($"There’s no such revision: {settings.StartRevision}");
-        }
+        }*/
     }
 }

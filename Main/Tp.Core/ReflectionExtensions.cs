@@ -8,9 +8,9 @@ namespace System
     public static class ReflectionExtensions
     {
         /// <summary>
-        /// When overridden in a derived class, returns the <see cref="propertyInfo"/> object for the 
-        /// method on the direct or indirect base class in which the property represented 
-        /// by this instance was first declared. 
+        /// When overridden in a derived class, returns the <see cref="propertyInfo"/> object for the
+        /// method on the direct or indirect base class in which the property represented
+        /// by this instance was first declared.
         /// </summary>
         /// <returns>A <see cref="propertyInfo"/> object for the first implementation of this property.</returns>
         public static PropertyInfo GetBaseDefinition(this PropertyInfo propertyInfo)
@@ -44,6 +44,20 @@ namespace System
                 .OrElse(() => type.BaseType
                     .NothingIfNull()
                     .Bind(t => t.FindPropertyInHierarchy(name, flags)));
+        }
+
+        public static readonly Memoizator<(ICustomAttributeProvider, Type), Maybe<Attribute>> CustomAttributesMemo =
+            new Memoizator<(ICustomAttributeProvider, Type), Maybe<Attribute>>(x =>
+            {
+                var (provider, attributeType) = x;
+                return provider.GetCustomAttributes(attributeType, false).OfType<Attribute>().FirstOrNothing();
+            });
+
+        public static Maybe<TAttribute> GetCustomAttributeCached<TAttribute>(
+            this ICustomAttributeProvider provider)
+            where TAttribute : Attribute
+        {
+            return CustomAttributesMemo.Apply((provider, typeof(TAttribute))).OfType<TAttribute>();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
     {
         public PluginAccount()
         {
-            PluginProfiles = new PluginProfile[] { };
+            PluginProfiles = Array.Empty<PluginProfile>();
             Name = AccountName.Empty;
             PluginName = string.Empty;
         }

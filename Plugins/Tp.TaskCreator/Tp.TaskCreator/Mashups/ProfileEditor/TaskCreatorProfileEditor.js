@@ -29,7 +29,7 @@ tau.mashups
                     '<div class="task-creator-settings">' +
                     '	<div class="pad-box">' +
                     '		<p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span><br />' +
-					'		<span class="small">Once this name is saved, you can not change it.</span></p>' +
+                    '		<span class="small">Once this name is saved, you can not change it.</span></p>' +
                     '		<input id="profileNameTextBox" type="text" name="Name" class="input" style="width: 275px;" value="${Name}" />' +
                     '	</div>' +
                     '	<div class="separator"></div>' +
@@ -43,9 +43,9 @@ tau.mashups
                     '		<p class="label pt-10">Command Name&nbsp;<span class="error" name="CommandNameErrorLabel"></span><br />' +
                     '			<span class="small">' +
                     '				As you add/edit a user story, you should put a special command prefix before user story name. Let\'s use' +
-					'				<strong>{CT}</strong> as a prefix, and <strong>User Guide</strong> as the user story name. So, if we put <strong>{CT}User Guide</strong> to user story name field,' +
-					'				a set of tasks entered to the Task List field will be created and the {CT} prefix will be then removed from user' +
-					'				story name.' +
+                    '				<strong>{CT}</strong> as a prefix, and <strong>User Guide</strong> as the user story name. So, if we put <strong>{CT}User Guide</strong> to user story name field,' +
+                    '				a set of tasks entered to the Task List field will be created and the {CT} prefix will be then removed from user' +
+                    '				story name.' +
                     '			</span>' +
                     '		</p>' +
                     '		<input id="commandNameTextBox" name="CommandName" value="{{if Settings.CommandName != null}}${unescape(Settings.CommandName)}{{/if}}" type="text" class="input" style="width: 275px;" value="{Type your command name}" />' +
@@ -53,12 +53,12 @@ tau.mashups
                     '		<a id="linkSample" class="note" style="font-size: 11px;" href="javascript:void(0);">Example</a></p>' +
                     '       <div id="tasksSample" class="tasksSamplePopup" style="display: none;">' +
                     '<div class="context-popup-uxo-t" style="right: -25px;"></div>' +
-                    '<div class="p-10"><img src="../javascript/tau/css/images/plugins/task-creator-example.png" width="242px" height="138px" /></div>' +
+                    '<div class="p-10"><img src="../img/plugins/task-creator-example.png" width="242px" height="138px" /></div>' +
                     '</div>' +
                     '<textarea id="tasksListTextArea" name="TasksList" class="textarea" style="width: 100%;" rows="10">{{if Settings.TasksList != null}}${unescape(Settings.TasksList)}{{/if}}</textarea>' +
                     '	</div>' +
                     '</div>' +
-					'<div class="controls-block">' +
+                    '<div class="controls-block">' +
                     '</div>' +
                     '</form>' +
                     '</div>';
@@ -177,4 +177,4 @@ tau.mashups
 	new taskCreatorProfileEditor({
 		placeHolder: $('#' + config.placeholderId)
 	}).render();
-})
+});

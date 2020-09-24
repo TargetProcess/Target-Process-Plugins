@@ -1,4 +1,6 @@
-﻿namespace Tp.Integration.Messages.PluginLifecycle
+﻿using System;
+
+namespace Tp.Integration.Messages.PluginLifecycle
 {
     public class PluginAccountMessageSerialized : IPluginLifecycleMessage
     {
@@ -6,7 +8,7 @@
 
         public PluginAccount[] GetAccounts()
         {
-            return string.IsNullOrEmpty(SerializedMessage) ? new PluginAccount[] { } : SerializedMessage.Deserialize<PluginAccount[]>();
+            return string.IsNullOrEmpty(SerializedMessage) ? Array.Empty<PluginAccount>() : SerializedMessage.Deserialize<PluginAccount[]>();
         }
     }
 }

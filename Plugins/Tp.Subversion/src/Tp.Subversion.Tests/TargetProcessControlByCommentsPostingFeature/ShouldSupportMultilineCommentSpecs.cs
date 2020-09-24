@@ -1,5 +1,5 @@
 ﻿//  
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -58,6 +58,23 @@ namespace Tp.Subversion.TargetProcessControlByCommentsPostingFeature
 					And vcs commit is: {{Id:1, Comment:""added headerRenderer to WindowShade control{0}added fix to allow CanvasButton to work within a Repeater"", Author:""svnuser""}}
 				When plugin started up
 				Then 0 revisions should be created in TP",
+                    Environment.NewLine)
+                .Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>()
+                    .And<ShouldChangeStatusSpecs>()
+                    .And<ShouldPostCommentSpecs>()
+                    .And<ShouldPostTimeSpecs>().And<UserMappingFeatureActionSteps>());
+        }
+
+        [Test]
+        public void ShouldProcessMultilineInCommitWithSharpWithoutNumbers()
+        {
+            string.Format(
+                    @"Given tp user 'tpuser' with id 5
+					And vcs user 'svnuser' mapped as 'tpuser'
+					And vcs commit is: {{Id:1, Comment:""Fixes: #362446 Change description: Update sfpatchmaker to use snort package retrieved by components/snort install-prebuilts target.{0} This is required in order to be able to use snort in an upgrade when UPGRADE_ONLY is set, feature Testing/Change Based Regression Done: - Built an{0} upgrade with this change with UPGRADE_ONLY set. Review Link: Documentation: #review-1092635 @anduvall, @desudhak, @dshernic, @hireshah, @jjaffari,{0} @jwilt, @michasul"", Author:""svnuser""}}
+				When plugin started up
+				Then 1 revisions should be created in TP
+					And log should not contain Failed to parse messages",
                     Environment.NewLine)
                 .Execute(In.Context<VcsPluginActionSteps>().And<WhenCommitMadeByTpUserSpecs>()
                     .And<ShouldChangeStatusSpecs>()

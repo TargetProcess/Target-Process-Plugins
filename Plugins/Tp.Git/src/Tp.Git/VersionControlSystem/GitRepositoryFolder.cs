@@ -6,7 +6,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using NGit.Storage.File;
 using StructureMap;
 using Tp.Integration.Plugin.Common;
 using Tp.Integration.Plugin.Common.Activity;

@@ -88,7 +88,8 @@ namespace Tp.Utils.Html
             "caption",
             "colgroup",
             "col",
-            "tfoot"
+            "tfoot",
+            "code"
         };
 
         private static readonly ISet<string> _keepImgStyleProperties = new HashSet<string>
@@ -180,13 +181,9 @@ namespace Tp.Utils.Html
 
         protected override bool IsValidAttribute(string name, string key, string value)
         {
-            KeepAttributeRule[] rules;
-            if (_keepAttributeRules.TryGetValue(key, out rules))
-            {
-                return rules.Any(rule => rule.TagName == name && rule.NeedKeep(value));
-            }
-
-            return base.IsValidAttribute(name, key, value);
+            return _keepAttributeRules.TryGetValue(key, out var rules)
+                ? rules.Any(rule => rule.TagName == name && rule.NeedKeep(value))
+                : base.IsValidAttribute(name, key, value);
         }
 
         protected override void WriteElement(TextWriter result, string name, Dictionary<string, string> attributes, bool empty)
@@ -218,7 +215,7 @@ namespace Tp.Utils.Html
         {
             if (_prevNodeType == HtmlNodeType.Element && !string.IsNullOrEmpty(value))
             {
-                value = value.TrimStart(new[] { '\r', '\n' });
+                value = value.TrimStart('\r', '\n');
             }
 
             if (TopTag != null && TopTag.ToLowerInvariant() == "pre")
@@ -290,8 +287,7 @@ namespace Tp.Utils.Html
 
             return matches.Select(match =>
             {
-                int matchedTeamId;
-                int.TryParse(match.Groups["id"].Value, out matchedTeamId);
+                int.TryParse(match.Groups["id"].Value, out var matchedTeamId);
                 return new TeamMention(match.Groups[0].Value, matchedTeamId, match.Groups["name"].Value);
             });
         }

@@ -1,0 +1,1638 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.VisualStudio.Services.TestResults.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.#cctor">
+            <summary>
+            Creates the dictionary for all the exceptions that need to be serialized
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByBuildWithContinuationTokenAsync(System.String,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByBuildWithContinuationTokenAsync(System.Guid,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByReleaseWithContinuationTokenAsync(System.Guid,System.Int32,System.String,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="releaseId"></param>
+            <param name="publishContext"></param>
+            <param name="releaseEnvId"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByReleaseWithContinuationTokenAsync(System.String,System.Int32,System.String,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="releaseId"></param>
+            <param name="publishContext"></param>
+            <param name="releaseEnvId"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByBuildV1Async(System.String,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="fields"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByBuildV1Async(System.Guid,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="fields"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByReleaseV1Async(System.String,System.Int32,System.String,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="releaseId"></param>
+            <param name="publishContext"></param>
+            <param name="releaseEnvId"></param>
+            <param name="fields"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetResultGroupsByReleaseV1Async(System.Guid,System.Int32,System.String,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="releaseId"></param>
+            <param name="publishContext"></param>
+            <param name="releaseEnvId"></param>
+            <param name="fields"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetTcmRunAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetTcmResultAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.GetTcmSubResultAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test Sub result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="testSubResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.QueryTestRunsAsync2(System.String,System.DateTime,System.DateTime,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState},System.Collections.Generic.IEnumerable{System.Int32},System.Nullable{System.Boolean},System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunPublishContext},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Query Test Runs based on filters.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="minLastUpdatedDate">Minimum Last Modified Date of run to be queried (Mandatory).</param>
+            <param name="maxLastUpdatedDate">Maximum Last Modified Date of run to be queried (Mandatory, difference between min and max date can be atmost 7 days).</param>
+            <param name="state">Current state of the Runs to be queried.</param>
+            <param name="planIds">Plan Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="isAutomated">Automation type of the Runs to be queried.</param>
+            <param name="publishContext">PublishContext of the Runs to be queried.</param>
+            <param name="buildIds">Build Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="buildDefIds">Build Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="branchName">Source Branch name of the Runs to be queried.</param>
+            <param name="releaseIds">Release Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseDefIds">Release Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvIds">Release Environment Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvDefIds">Release Environment Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="runTitle">Run Title of the Runs to be queried.</param>
+            <param name="top">Number of runs to be queried. Limit is 100</param>
+            <param name="continuationToken">continuationToken received from previous batch or null for first batch.</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClient.QueryTestRunsAsync2(System.Guid,System.DateTime,System.DateTime,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState},System.Collections.Generic.IEnumerable{System.Int32},System.Nullable{System.Boolean},System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunPublishContext},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Query Test Runs based on filters.
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="minLastUpdatedDate">Minimum Last Modified Date of run to be queried (Mandatory).</param>
+            <param name="maxLastUpdatedDate">Maximum Last Modified Date of run to be queried (Mandatory, difference between min and max date can be atmost 7 days).</param>
+            <param name="state">Current state of the Runs to be queried.</param>
+            <param name="planIds">Plan Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="isAutomated">Automation type of the Runs to be queried.</param>
+            <param name="publishContext">PublishContext of the Runs to be queried.</param>
+            <param name="buildIds">Build Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="buildDefIds">Build Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="branchName">Source Branch name of the Runs to be queried.</param>
+            <param name="releaseIds">Release Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseDefIds">Release Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvIds">Release Environment Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvDefIds">Release Environment Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="runTitle">Run Title of the Runs to be queried.</param>
+            <param name="top">Number of runs to be queried. Limit is 100</param>
+            <param name="continuationToken">continuationToken received from previous batch or null for first batch.</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestIterationResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Int32,System.Int32,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="iterationId"></param>
+            <param name="actionPath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestIterationResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.Guid,System.Int32,System.Int32,System.Int32,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="iterationId"></param>
+            <param name="actionPath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestSubResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestSubResultAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestResultAttachmentAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestResultAttachmentAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultAttachmentContentAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultAttachmentsAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultAttachmentsAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultAttachmentZipAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultAttachmentZipAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultAttachmentContentAsync(System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test sub result attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test sub result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultAttachmentsAsync(System.String,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns attachment references for test sub result.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultAttachmentsAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns attachment references for test sub result.
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultAttachmentZipAsync(System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test sub result attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultAttachmentZipAsync(System.Guid,System.Int32,System.Int32,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test sub result attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="attachmentId"></param>
+            <param name="testSubResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestRunAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestRunAttachmentAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestAttachmentRequestModel,System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="attachmentRequestModel"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestRunAttachmentAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestRunAttachmentAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunAttachmentContentAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunAttachmentContentAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunAttachmentsAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunAttachmentsAsync(System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunAttachmentZipAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunAttachmentZipAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Returns a test run attachment
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="attachmentId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetBugsLinkedToTestResultAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetBugsLinkedToTestResultAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testCaseResultId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetBuildCodeCoverageAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="flags"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetBuildCodeCoverageAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="flags"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetCodeCoverageSummaryAsync(System.String,System.Int32,System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="deltaBuildId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetCodeCoverageSummaryAsync(System.Guid,System.Int32,System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="deltaBuildId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.UpdateCodeCoverageSummaryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] http://(tfsserver):8080/tfs/DefaultCollection/_apis/test/CodeCoverage?buildId=10 Request: Json of code coverage summary
+            </summary>
+            <param name="coverageData"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.UpdateCodeCoverageSummaryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.CodeCoverageData,System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] http://(tfsserver):8080/tfs/DefaultCollection/_apis/test/CodeCoverage?buildId=10 Request: Json of code coverage summary
+            </summary>
+            <param name="coverageData"></param>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunCodeCoverageAsync(System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="flags"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunCodeCoverageAsync(System.Guid,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="flags"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultHistoryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.ResultsFilter,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="filter"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultHistoryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.ResultsFilter,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="filter"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultDetailsForBuildAsync(System.String,System.Int32,System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="groupBy"></param>
+            <param name="filter"></param>
+            <param name="orderby"></param>
+            <param name="shouldIncludeResults"></param>
+            <param name="queryRunSummaryForInProgress"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultDetailsForBuildAsync(System.Guid,System.Int32,System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="groupBy"></param>
+            <param name="filter"></param>
+            <param name="orderby"></param>
+            <param name="shouldIncludeResults"></param>
+            <param name="queryRunSummaryForInProgress"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultDetailsForReleaseAsync(System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="releaseId"></param>
+            <param name="releaseEnvId"></param>
+            <param name="publishContext"></param>
+            <param name="groupBy"></param>
+            <param name="filter"></param>
+            <param name="orderby"></param>
+            <param name="shouldIncludeResults"></param>
+            <param name="queryRunSummaryForInProgress"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultDetailsForReleaseAsync(System.Guid,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="releaseId"></param>
+            <param name="releaseEnvId"></param>
+            <param name="publishContext"></param>
+            <param name="groupBy"></param>
+            <param name="filter"></param>
+            <param name="orderby"></param>
+            <param name="shouldIncludeResults"></param>
+            <param name="queryRunSummaryForInProgress"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetResultGroupsByBuildAsync(System.String,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetResultGroupsByBuildAsync(System.Guid,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetResultGroupsByReleaseAsync(System.String,System.Int32,System.String,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="releaseId"></param>
+            <param name="publishContext"></param>
+            <param name="releaseEnvId"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetResultGroupsByReleaseAsync(System.Guid,System.Int32,System.String,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="releaseId"></param>
+            <param name="publishContext"></param>
+            <param name="releaseEnvId"></param>
+            <param name="fields"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsMetaDataAsync(System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Get list of test Result meta data details for corresponding testcasereferenceId
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="testReferenceIds">TestCaseReference Ids of the test Result to be queried, comma seperated list of valid ids (limit no. of ids 100).</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsMetaDataAsync(System.Guid,System.Collections.Generic.IEnumerable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Get list of test Result meta data details for corresponding testcasereferenceId
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="testReferenceIds">TestCaseReference Ids of the test Result to be queried, comma seperated list of valid ids (limit no. of ids 100).</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsByQueryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultsQuery,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="query"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsByQueryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultsQuery,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="query"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.AddTestResultsToTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResult[],System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="results"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.AddTestResultsToTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResult[],System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="results"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultByIdAsync(System.String,System.Int32,System.Int32,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.ResultDetails},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testResultId"></param>
+            <param name="detailsToInclude"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultByIdAsync(System.Guid,System.Int32,System.Int32,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.ResultDetails},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testResultId"></param>
+            <param name="detailsToInclude"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsAsync(System.String,System.Int32,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.ResultDetails},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="detailsToInclude"></param>
+            <param name="skip"></param>
+            <param name="top"></param>
+            <param name="outcomes"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsAsync(System.Guid,System.Int32,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.ResultDetails},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="detailsToInclude"></param>
+            <param name="skip"></param>
+            <param name="top"></param>
+            <param name="outcomes"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.UpdateTestResultsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResult[],System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="results"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.UpdateTestResultsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestCaseResult[],System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="results"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsByBuildAsync(System.String,System.Int32,System.String,System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="outcomes"></param>
+            <param name="top"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsByBuildAsync(System.Guid,System.Int32,System.String,System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="outcomes"></param>
+            <param name="top"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsByReleaseAsync(System.String,System.Int32,System.Nullable{System.Int32},System.String,System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="releaseId"></param>
+            <param name="releaseEnvid"></param>
+            <param name="publishContext"></param>
+            <param name="outcomes"></param>
+            <param name="top"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultsByReleaseAsync(System.Guid,System.Int32,System.Nullable{System.Int32},System.String,System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.TestOutcome},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="releaseId"></param>
+            <param name="releaseEnvid"></param>
+            <param name="publishContext"></param>
+            <param name="outcomes"></param>
+            <param name="top"></param>
+            <param name="continuationToken"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultsReportForBuildAsync(System.String,System.Int32,System.String,System.Nullable{System.Boolean},Microsoft.TeamFoundation.TestManagement.WebApi.BuildReference,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="includeFailureDetails"></param>
+            <param name="buildToCompare"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultsReportForBuildAsync(System.Guid,System.Int32,System.String,System.Nullable{System.Boolean},Microsoft.TeamFoundation.TestManagement.WebApi.BuildReference,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="publishContext"></param>
+            <param name="includeFailureDetails"></param>
+            <param name="buildToCompare"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultsReportForReleaseAsync(System.String,System.Int32,System.Int32,System.String,System.Nullable{System.Boolean},Microsoft.TeamFoundation.TestManagement.WebApi.ReleaseReference,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="releaseId"></param>
+            <param name="releaseEnvId"></param>
+            <param name="publishContext"></param>
+            <param name="includeFailureDetails"></param>
+            <param name="releaseToCompare"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultsReportForReleaseAsync(System.Guid,System.Int32,System.Int32,System.String,System.Nullable{System.Boolean},Microsoft.TeamFoundation.TestManagement.WebApi.ReleaseReference,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="releaseId"></param>
+            <param name="releaseEnvId"></param>
+            <param name="publishContext"></param>
+            <param name="includeFailureDetails"></param>
+            <param name="releaseToCompare"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultsSummaryForReleasesAsync(System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.ReleaseReference},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="releases"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultsSummaryForReleasesAsync(System.Collections.Generic.IEnumerable{Microsoft.TeamFoundation.TestManagement.WebApi.ReleaseReference},System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="releases"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestSummaryByRequirementAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultsContext,System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="resultsContext"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="workItemIds"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestSummaryByRequirementAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultsContext,System.Guid,System.Collections.Generic.IEnumerable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="resultsContext"></param>
+            <param name="project">Project ID</param>
+            <param name="workItemIds"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryResultTrendForBuildAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultTrendFilter,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="filter"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryResultTrendForBuildAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultTrendFilter,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="filter"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryResultTrendForReleaseAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultTrendFilter,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="filter"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryResultTrendForReleaseAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestResultTrendFilter,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="filter"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.RunCreateModel,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="testRun"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.RunCreateModel,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="testRun"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestRunAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestRunAsync(System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunByIdAsync(System.String,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="includeDetails"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunByIdAsync(System.Guid,System.Int32,System.Nullable{System.Boolean},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="includeDetails"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunsAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildUri"></param>
+            <param name="owner"></param>
+            <param name="tmiRunId"></param>
+            <param name="planId"></param>
+            <param name="includeRunDetails"></param>
+            <param name="automated"></param>
+            <param name="skip"></param>
+            <param name="top"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunsAsync(System.Guid,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildUri"></param>
+            <param name="owner"></param>
+            <param name="tmiRunId"></param>
+            <param name="planId"></param>
+            <param name="includeRunDetails"></param>
+            <param name="automated"></param>
+            <param name="skip"></param>
+            <param name="top"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestRunsAsync(System.String,System.DateTime,System.DateTime,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState},System.Collections.Generic.IEnumerable{System.Int32},System.Nullable{System.Boolean},System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunPublishContext},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Query Test Runs based on filters. Mandatory fields are minLastUpdatedDate and maxLastUpdatedDate.
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="minLastUpdatedDate">Minimum Last Modified Date of run to be queried (Mandatory).</param>
+            <param name="maxLastUpdatedDate">Maximum Last Modified Date of run to be queried (Mandatory, difference between min and max date can be atmost 7 days).</param>
+            <param name="state">Current state of the Runs to be queried.</param>
+            <param name="planIds">Plan Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="isAutomated">Automation type of the Runs to be queried.</param>
+            <param name="publishContext">PublishContext of the Runs to be queried.</param>
+            <param name="buildIds">Build Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="buildDefIds">Build Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="branchName">Source Branch name of the Runs to be queried.</param>
+            <param name="releaseIds">Release Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseDefIds">Release Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvIds">Release Environment Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvDefIds">Release Environment Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="runTitle">Run Title of the Runs to be queried.</param>
+            <param name="top">Number of runs to be queried. Limit is 100</param>
+            <param name="continuationToken">continuationToken received from previous batch or null for first batch. It is not supposed to be created (or altered, if received from last batch) by user.</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestRunsAsync(System.Guid,System.DateTime,System.DateTime,System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunState},System.Collections.Generic.IEnumerable{System.Int32},System.Nullable{System.Boolean},System.Nullable{Microsoft.TeamFoundation.TestManagement.WebApi.TestRunPublishContext},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{System.Int32},System.String,System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Query Test Runs based on filters. Mandatory fields are minLastUpdatedDate and maxLastUpdatedDate.
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="minLastUpdatedDate">Minimum Last Modified Date of run to be queried (Mandatory).</param>
+            <param name="maxLastUpdatedDate">Maximum Last Modified Date of run to be queried (Mandatory, difference between min and max date can be atmost 7 days).</param>
+            <param name="state">Current state of the Runs to be queried.</param>
+            <param name="planIds">Plan Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="isAutomated">Automation type of the Runs to be queried.</param>
+            <param name="publishContext">PublishContext of the Runs to be queried.</param>
+            <param name="buildIds">Build Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="buildDefIds">Build Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="branchName">Source Branch name of the Runs to be queried.</param>
+            <param name="releaseIds">Release Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseDefIds">Release Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvIds">Release Environment Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="releaseEnvDefIds">Release Environment Definition Ids of the Runs to be queried, comma seperated list of valid ids.</param>
+            <param name="runTitle">Run Title of the Runs to be queried.</param>
+            <param name="top">Number of runs to be queried. Limit is 100</param>
+            <param name="continuationToken">continuationToken received from previous batch or null for first batch. It is not supposed to be created (or altered, if received from last batch) by user.</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.UpdateTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.RunUpdateModel,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="runUpdateModel"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.UpdateTestRunAsync(Microsoft.TeamFoundation.TestManagement.WebApi.RunUpdateModel,System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="runUpdateModel"></param>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunStatisticsAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+             <summary>
+            
+             </summary>
+             <param name="project">Project ID or project name</param>
+             <param name="runId"></param>
+             <param name="userState"></param>
+             <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunStatisticsAsync(System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+             <summary>
+            
+             </summary>
+             <param name="project">Project ID</param>
+             <param name="runId"></param>
+             <param name="userState"></param>
+             <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestHistoryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestHistoryQuery,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Get history of a test method using <see cref="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestHistoryQuery" />
+            </summary>
+            <param name="filter"><see cref="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestHistoryQuery" /> to get history</param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestHistoryAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestHistoryQuery,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API] Get history of a test method using <see cref="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestHistoryQuery" />
+            </summary>
+            <param name="filter"><see cref="T:Microsoft.TeamFoundation.TestManagement.WebApi.TestHistoryQuery" /> to get history</param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogsForBuildAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogsForBuildAsync(System.Guid,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultLogsAsync(System.String,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestResultLogsAsync(System.Guid,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultLogsAsync(System.String,System.Int32,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="subResultId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSubResultLogsAsync(System.Guid,System.Int32,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="subResultId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunLogsAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestRunLogsAsync(System.Guid,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="type"></param>
+            <param name="directoryPath"></param>
+            <param name="fileNamePrefix"></param>
+            <param name="fetchMetaData"></param>
+            <param name="top"></param>
+            <param name="continuationToken">Header to pass the continuationToken</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForBuildLogAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="build"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForBuildLogAsync(System.Guid,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="build"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.TestLogStoreEndpointDetailsForBuildAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogStoreOperationType,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="buildId"></param>
+            <param name="testLogStoreOperationType"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.TestLogStoreEndpointDetailsForBuildAsync(System.Guid,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogStoreOperationType,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="buildId"></param>
+            <param name="testLogStoreOperationType"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForResultLogAsync(System.String,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForResultLogAsync(System.Guid,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForSubResultLogAsync(System.String,System.Int32,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="subResultId"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForSubResultLogAsync(System.Guid,System.Int32,System.Int32,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="resultId"></param>
+            <param name="subResultId"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForRunLogAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestLogStoreEndpointDetailsForRunLogAsync(System.Guid,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogType,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="type"></param>
+            <param name="filePath"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.TestLogStoreEndpointDetailsForRunAsync(System.String,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogStoreOperationType,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="runId"></param>
+            <param name="testLogStoreOperationType"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.TestLogStoreEndpointDetailsForRunAsync(System.Guid,System.Int32,Microsoft.TeamFoundation.TestManagement.WebApi.TestLogStoreOperationType,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="runId"></param>
+            <param name="testLogStoreOperationType"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestSettingsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="testSettings"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.CreateTestSettingsAsync(Microsoft.TeamFoundation.TestManagement.WebApi.TestSettings,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="testSettings"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestSettingsAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="testSettingsId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestSettingsAsync(System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="testSettingsId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSettingsByIdAsync(System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="testSettingsId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.GetTestSettingsByIdAsync(System.Guid,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="testSettingsId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.AddWorkItemToTestLinksAsync(Microsoft.TeamFoundation.TestManagement.WebApi.WorkItemToTestLinks,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="workItemToTestLinks"></param>
+            <param name="project">Project ID or project name</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.AddWorkItemToTestLinksAsync(Microsoft.TeamFoundation.TestManagement.WebApi.WorkItemToTestLinks,System.Guid,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="workItemToTestLinks"></param>
+            <param name="project">Project ID</param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestMethodToWorkItemLinkAsync(System.String,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="testName"></param>
+            <param name="workItemId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.DeleteTestMethodToWorkItemLinkAsync(System.Guid,System.String,System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="testName"></param>
+            <param name="workItemId"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestMethodLinkedWorkItemsAsync(System.String,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="testName"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestMethodLinkedWorkItemsAsync(System.Guid,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="testName"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultWorkItemsAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID or project name</param>
+            <param name="workItemCategory"></param>
+            <param name="automatedTestName"></param>
+            <param name="testCaseId"></param>
+            <param name="maxCompleteDate"></param>
+            <param name="days"></param>
+            <param name="workItemCount"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Services.TestResults.WebApi.TestResultsHttpClientBase.QueryTestResultWorkItemsAsync(System.Guid,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            [Preview API]
+            </summary>
+            <param name="project">Project ID</param>
+            <param name="workItemCategory"></param>
+            <param name="automatedTestName"></param>
+            <param name="testCaseId"></param>
+            <param name="maxCompleteDate"></param>
+            <param name="days"></param>
+            <param name="workItemCount"></param>
+            <param name="userState"></param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        </member>
+    </members>
+</doc>

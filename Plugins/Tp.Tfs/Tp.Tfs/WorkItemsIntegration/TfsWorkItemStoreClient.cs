@@ -1,14 +1,16 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
-using System.Linq;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using Microsoft.VisualStudio.Services.Common;
+using System;
+using System.Linq;
 using Tp.SourceControl.Settings;
 using Tp.Tfs.WorkItemsIntegration.Exstentions;
+using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 
 namespace Tp.Tfs.WorkItemsIntegration
 {
@@ -25,11 +27,8 @@ namespace Tp.Tfs.WorkItemsIntegration
 
         public WorkItem[] GetWorkItemsFrom(string workItemNumber)
         {
-            string query = string.Format(
-                "SELECT * FROM workitems WHERE ([Team Project] = '{0}' AND [ID] >= {1} AND [Work Item Type] IN ({2}))",
-                _settings.ProjectsMapping[0].Key,
-                workItemNumber,
-                _settings.EntityMapping.ToWorkItemsString());
+            string query =
+                $"SELECT * FROM workitems WHERE ([Team Project] = '{_settings.ProjectsMapping[0].Key}' AND [ID] >= {workItemNumber} AND [Work Item Type] IN ({_settings.EntityMapping.ToWorkItemsString()}))";
             var workItemsQuery = new Query(_workItemStore, query, null, false);
             var workItems = workItemsQuery.RunQuery();
             return workItems.Cast<WorkItem>().ToArray();
@@ -37,11 +36,8 @@ namespace Tp.Tfs.WorkItemsIntegration
 
         public WorkItem[] GetWorkItemsFrom(DateTime fromDate)
         {
-            string query = string.Format(
-                "SELECT * FROM workitems WHERE ([Team Project] = '{0}' AND [Changed Date] >= '{1}' AND [Work Item Type] IN ({2}))",
-                _settings.ProjectsMapping[0].Key,
-                fromDate,
-                _settings.EntityMapping.ToWorkItemsString());
+            string query =
+                $"SELECT * FROM workitems WHERE ([Team Project] = '{_settings.ProjectsMapping[0].Key}' AND [Changed Date] >= '{fromDate}' AND [Work Item Type] IN ({_settings.EntityMapping.ToWorkItemsString()}))";
 
             var workItemsQuery = new Query(_workItemStore, query, null, false);
             var workItems = workItemsQuery.RunQuery();
@@ -55,13 +51,8 @@ namespace Tp.Tfs.WorkItemsIntegration
 
         public WorkItem[] GetWorkItemsBetween(string projectName, string[] importedTypes, int minId, int maxId, DateTime lastSync)
         {
-            string query = string.Format(
-                "SELECT * FROM workitems WHERE ([Team Project] = '{0}' AND [ID] >= {1} AND [ID] <= {2} AND [Changed Date] > '{3}'  AND [Work Item Type] IN ({4}))",
-                projectName,
-                minId,
-                maxId == -1 ? Int32.MaxValue : maxId,
-                lastSync,
-                importedTypes.ToString(x => string.Concat("'", x, "'"), ","));
+            string query =
+                $"SELECT * FROM workitems WHERE ([Team Project] = '{projectName}' AND [ID] >= {minId} AND [ID] <= {(maxId == -1 ? Int32.MaxValue : maxId)} AND [Changed Date] > '{lastSync}'  AND [Work Item Type] IN ({importedTypes.ToString(x => string.Concat("'", x, "'"), ",")}))";
 
             var workItemsQuery = new Query(_workItemStore, query, null, false);
             var workItems = workItemsQuery.RunQuery();
@@ -70,9 +61,10 @@ namespace Tp.Tfs.WorkItemsIntegration
 
         private static WorkItemStore GetWorkItemStore(ISourceControlConnectionSettingsSource settings)
         {
-            TfsConnectionParameters parameters = TfsConnectionHelper.GetTfsConnectionParameters(settings);
+            var parameters = TfsConnectionHelper.GetTfsConnectionParameters(settings, out var _);
 
-            var teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
+            var teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri,
+                new VssCredentials(new WindowsCredential(parameters.Credential), CredentialPromptType.DoNotPrompt));
             teamProjectCollection.EnsureAuthenticated();
 
             var workItemStore = teamProjectCollection.GetService<WorkItemStore>();

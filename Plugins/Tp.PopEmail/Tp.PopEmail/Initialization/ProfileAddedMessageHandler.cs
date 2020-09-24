@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2017 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2020 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -22,8 +22,8 @@ namespace Tp.PopEmailIntegration.Initialization
         {
             var profile = _storageRepository.GetProfile<ProjectEmailProfile>();
             var profileServerAndLogins = _storageRepository.Get<ProfileServerAndLogin>();
-            profileServerAndLogins.Add(new ProfileServerAndLogin
-                { MailServer = profile.MailServer, Login = profile.Login });
+            var login = profile.SecureAccessMethod == SecureAccessMethods.LoginAndPassword ? profile.Login : profile.OAuthState.Email;
+            profileServerAndLogins.Add(new ProfileServerAndLogin { MailServer = profile.MailServer, Login = login });
         }
     }
 }

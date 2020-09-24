@@ -98,7 +98,7 @@ tau.mashups
 				rendered.find('#syncInterval').numeric({ negative: false });
 				rendered.find('#switch').iphoneSwitch(
 					profile.Settings.PassiveMode ? 'on' : 'off', $.proxy(this._onSwitch, this), $.proxy(this._onSwitch, this),
-					{ switch_on_container_path: '../javascript/tau/css/images/plugins/switch_on.png', switch_off_container_path: '../javascript/tau/css/images/plugins/switch_off.png', switch_path: '../javascript/tau/css/images/plugins/switch.png' }
+					{ switch_on_container_path: '../img/plugins/switch_on.png', switch_off_container_path: '../img/plugins/switch_off.png', switch_path: '../img/plugins/switch.png' }
 				);
 
 				var projectsSelect = rendered.find('#projectsDropDown'), testPlansSelect = rendered.find('#testPlansDropDown'), frameworkSelect = rendered.find('#frameworkDropDown');

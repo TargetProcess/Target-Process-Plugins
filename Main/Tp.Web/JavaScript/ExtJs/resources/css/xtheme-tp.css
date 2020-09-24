@@ -320,10 +320,6 @@ ul.x-tab-strip-bottom{
     font-weight:normal;
 }
 
-.x-btn-noicon .x-btn-small .x-btn-text{
-	height: auto !important;
-}
-
 .x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-mc, .x-btn-bl, .x-btn-br, .x-btn-bc{
 	/*background-image:url(../images/tp/button/btn.gif);*/
 	background-image:url(../images/tp/button/btn.png);

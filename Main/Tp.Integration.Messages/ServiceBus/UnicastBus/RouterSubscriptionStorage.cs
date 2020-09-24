@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using NServiceBus.Unicast.Subscriptions;
 
-namespace Tp.Integration.Messages.ServiceBus
+namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 {
-    public class RouterSubscriptionStorage
-        : ISubscriptionStorage
+    public class RouterSubscriptionStorage : ISubscriptionStorage
     {
         public Func<string> ProxyQueueResolver { get; set; } = () => null;
 

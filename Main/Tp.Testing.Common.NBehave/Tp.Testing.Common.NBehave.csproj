@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tp.Testing.Common.NBehave</RootNamespace>
     <AssemblyName>Tp.Testing.Common.NBehave</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
@@ -20,6 +20,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,18 +41,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NBehave.Narrator.Framework, Version=0.5.1.263, Culture=neutral, PublicKeyToken=d421feca0f4a05f6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\nbehave.0.5.1.263\lib\net35\NBehave.Narrator.Framework.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\nbehave.0.5.1.263\lib\net40\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="NBehave.Spec.Framework">
-      <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net35\NBehave.Spec.Framework.dll</HintPath>
+    <Reference Include="NBehave.Spec.Framework, Version=0.5.1.263, Culture=neutral, PublicKeyToken=d421feca0f4a05f6, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net40\NBehave.Spec.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="NBehave.Spec.NUnit">
-      <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net35\NBehave.Spec.NUnit.dll</HintPath>
+    <Reference Include="NBehave.Spec.NUnit, Version=0.5.1.263, Culture=neutral, PublicKeyToken=d421feca0f4a05f6, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net40\NBehave.Spec.NUnit.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>

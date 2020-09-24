@@ -19,10 +19,7 @@ namespace Tp.Subversion.LegacyProfileConversion
             _maps.Add("Users", new StringDictionary());
         }
 
-        public StringDictionary Users
-        {
-            get { return _maps["Users"]; }
-        }
+        public StringDictionary Users => _maps["Users"];
 
         private readonly Dictionary<string, StringDictionary> _maps = new Dictionary<string, StringDictionary>();
 
@@ -54,7 +51,7 @@ namespace Tp.Subversion.LegacyProfileConversion
         {
             map.Clear();
 
-            var mappings = reader.ReadLine().Replace(string.Format("{0}:", mapName), string.Empty).Split(new[] { ';' },
+            var mappings = reader.ReadLine().Replace($"{mapName}:", string.Empty).Split(new[] { ';' },
                 StringSplitOptions.
                     RemoveEmptyEntries);
 
@@ -67,11 +64,11 @@ namespace Tp.Subversion.LegacyProfileConversion
 
         private static void WriteMap(StringBuilder builder, string mapName, StringDictionary map)
         {
-            builder.AppendFormat("{0}:", mapName);
+            builder.Append($"{mapName}:");
 
             foreach (DictionaryEntry keyValuePair in map)
             {
-                builder.AppendFormat("{0}:{1};", keyValuePair.Key, keyValuePair.Value);
+                builder.Append($"{keyValuePair.Key}:{keyValuePair.Value};");
             }
 
             builder.AppendLine();

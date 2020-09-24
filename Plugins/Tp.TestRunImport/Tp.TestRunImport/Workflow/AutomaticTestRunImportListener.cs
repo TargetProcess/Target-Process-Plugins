@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -58,7 +58,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
 
             try
             {
-                _log.InfoFormat("Started synchronizing at {0}", DateTime.Now);
+                _log.Info($"Started synchronizing at {DateTime.Now}");
 
                 var lastModifyResults = _storageRepository.Get<LastModifyResult>();
                 var lastModifyResult = lastModifyResults.Empty() ? new LastModifyResult() : lastModifyResults.Single();
@@ -76,11 +76,11 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
                 }
 
                 var uri = profile.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson
-                    ? new Uri($"{profile.ResultsFilePath.TrimEnd(new[] { '/', '\\' })}/lastCompletedBuild/testReport/api/xml")
+                    ? new Uri($"{profile.ResultsFilePath.TrimEnd('/', '\\')}/lastCompletedBuild/testReport/api/xml")
                     : new Uri(profile.ResultsFilePath);
                 var factoryResult = _streamFactory.OpenStreamIfModified(uri, profile, lastModifyResult);
 
-                _log.InfoFormat("{0} modification of results source detected", factoryResult == null ? "No new" : "New");
+                _log.Info($"{(factoryResult == null ? "No new" : "New")} modification of results source detected");
 
                 if (factoryResult != null)
                 {
@@ -99,8 +99,8 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
                             try
                             {
                                 var result = _resultsReaderFactory.GetResolver(profile, reader).GetTestRunImportResults();
-                                _log.InfoFormat("{0} items for import detected in resutls source",
-                                    result.Count == 0 ? "No" : result.Count.ToString(CultureInfo.InvariantCulture));
+                                _log.Info(
+                                    $"{(result.Count == 0 ? "No" : result.Count.ToString(CultureInfo.InvariantCulture))} items for import detected in results source");
                                 if (result.Count > 0)
                                 {
                                     _localBus.SendLocal(new TestRunImportResultDetectedLocalMessage
@@ -129,7 +129,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
             catch (UriFormatException ex)
             {
                 _log.Error(ex.Message);
-                throw new ApplicationException(string.Format("Specified path has invalid format. {0}", ex.Message), ex);
+                throw new ApplicationException($"Specified path has invalid format. {ex.Message}", ex);
             }
             catch (ApplicationException ex)
             {
@@ -138,9 +138,9 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
             }
             catch (Exception ex)
             {
-                _log.ErrorFormat("Could not read file \"{0}\": {1}", profile.ResultsFilePath, ex.Message);
+                _log.Error($"Could not read file \"{profile.ResultsFilePath}\": {ex.Message}");
                 throw new ApplicationException(
-                    string.Format("Could not read file \"{0}\": {1}", profile.ResultsFilePath, ex.Message), ex);
+                    $"Could not read file \"{profile.ResultsFilePath}\": {ex.Message}", ex);
             }
         }
 
@@ -223,19 +223,18 @@ namespace Tp.Integration.Plugin.TestRunImport.Workflow
             }
             catch (UriFormatException ex)
             {
-                _log.ErrorFormat("Specified path has invalid format: {0}", ex.Message);
+                _log.Error($"Specified path has invalid format: {ex.Message}");
                 throw new ApplicationException($"Specified path has invalid format: {ex.Message}", ex);
             }
             catch (NotSupportedException ex)
             {
-                _log.ErrorFormat($"Specified path has invalid format: {ex.Message}", ex);
+                _log.Error($"Specified path has invalid format: {ex.Message}", ex);
                 throw new ApplicationException($"The request scheme specified in requestUri is not registered: {ex.Message}", ex);
             }
             catch (SecurityException ex)
             {
-                _log.ErrorFormat(
-                    "The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {0}",
-                    ex.Message);
+                _log.Error(
+                    $"The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {ex.Message}");
                 throw new ApplicationException(
                     $"The caller does not have permission to connect to the requested URI or a URI that the request is redirected to: {ex.Message}", ex);
             }

@@ -629,6 +629,11 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order=121)]
 		public String CustomField100 { get; set; }
+
+		
+		[DataMember]
+		[XmlElement(Order=122)]
+		public Boolean? IsIntegration { get; set; }
 	}
 
 	public enum RequesterField
@@ -751,5 +756,6 @@ namespace Tp.Integration.Common
 		CustomField98,
 		CustomField99,
 		CustomField100,
+		IsIntegration,
 	}
 }

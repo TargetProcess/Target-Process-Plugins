@@ -72,7 +72,7 @@ namespace Tp.Core
 
         public new Maybe<TValue> this[TKey key]
         {
-            get { return this.GetValue<TKey, TValue>(key); }
+            get => this.GetValue(key);
             set
             {
                 if (value != Maybe.Nothing)
@@ -87,15 +87,10 @@ namespace Tp.Core
             }
         }
 
-        ICollection<TKey> IDictionary<TKey, Maybe<TValue>>.Keys
-        {
-            get { return Keys; }
-        }
+        ICollection<TKey> IDictionary<TKey, Maybe<TValue>>.Keys => Keys;
 
-        public new ICollection<Maybe<TValue>> Values
-        {
-            get { return base.Values.Select(x => Maybe.Just(x)).ToList().AsReadOnly(); }
-        }
+        public new ICollection<Maybe<TValue>> Values =>
+            base.Values.Select(Maybe.Just).ToList().AsReadOnly();
 
         #endregion
     }

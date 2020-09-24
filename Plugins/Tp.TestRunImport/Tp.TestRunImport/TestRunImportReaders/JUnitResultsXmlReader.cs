@@ -16,7 +16,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 {
     public class JUnitResultsXmlReader : AbstractTestRunImportResultsReader
     {
-        protected internal JUnitResultsXmlReader(IActivityLogger log, TextReader reader)
+        protected internal JUnitResultsXmlReader(IActivityLogger log, StreamReader reader)
             : base(log, reader)
         {
         }

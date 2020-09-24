@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using NBehave.Narrator.Framework;
 using StructureMap;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.Ticker;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
-using Tp.Integration.Plugin.Common.Storage.Persisters;
-using Tp.LegacyProfileConvertsion.Common;
 using Tp.Tfs.Tests.Context;
 using Tp.Testing.Common.NUnit;
 using Tp.Integration.Testing.Common;
@@ -188,13 +184,11 @@ namespace Tp.Tfs.Tests.WorkItems
                     "Context.TpRequests.First(x => x.Name == entityName).ProjectName.Should(Be.EqualTo(projectName))");
         }
 
-
         [Given("work item '$entityName' field '$field' changed for '$newFieldValue'")]
         public void ChangeUserStoryTitle(string entityName, string field, string newFieldValue)
         {
             Context.ChangeWorkItem(entityName, new Dictionary<string, string> { { field, newFieldValue } });
         }
-
 
         [Then("user story with name '$entityName' is absent in TP")]
         public void UserStoryShouldBeAbsentInTP(string entityName)

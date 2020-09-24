@@ -444,7 +444,7 @@ namespace Tp.Tfs.Tests.VersionControlSystem
 
         private TfsVersionControlSystem CreateTfs(ISourceControlConnectionSettingsSource settings)
         {
-            return new TfsVersionControlSystem(
+            return new TfsVersionControlSystem(_profile,
                 settings,
                 ObjectFactory.GetInstance<ICheckConnectionErrorResolver>(),
                 ObjectFactory.GetInstance<IActivityLogger>(),

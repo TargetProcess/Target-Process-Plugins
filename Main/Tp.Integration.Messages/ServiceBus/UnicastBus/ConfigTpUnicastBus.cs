@@ -6,6 +6,7 @@ using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.ObjectBuilder;
 using NServiceBus.Saga;
+using Tp.Core.Features;
 
 namespace Tp.Integration.Messages.ServiceBus.UnicastBus
 {
@@ -14,12 +15,6 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
     /// </summary>
     public class ConfigTpUnicastBus : Configure
     {
-        /// <summary>
-        /// A map of which message types (belonging to the given assemblies) are owned
-        /// by which endpoint.
-        /// </summary>
-        protected IDictionary<string, IList<string>> assembliesToEndpoints = new Dictionary<string, IList<string>>();
-
         /// <summary>
         /// Wrap the given configure object storing its builder and configurer.
         /// </summary>
@@ -36,22 +31,42 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
             RegisterMessageModules();
 
             var cfg = GetConfigSection<UnicastBusConfig>();
+            if (cfg == null) return;
 
-            if (cfg != null)
+            busConfig.ConfigureProperty(b => b.DistributorControlAddress, cfg.DistributorControlAddress)
+                .ConfigureProperty(b => b.DistributorDataAddress, cfg.DistributorDataAddress)
+                .ConfigureProperty(b => b.ForwardReceivedMessagesTo, cfg.ForwardReceivedMessagesTo)
+                .ConfigureProperty(b => b.MessageOwners, GetMessageOwners(cfg.MessageEndpointMappings))
+                .ConfigureProperty(b => b.Session, GetSession());
+        }
+
+        private static Dictionary<string, IList<string>> GetMessageOwners(MessageEndpointMappingCollection mappings)
+        {
+            var assembliesToEndpoints = new Dictionary<string, IList<string>>();
+            TypesToScan.Where(t => typeof(IMessage).IsAssignableFrom(t)).ToList()
+                .ForEach(t => assembliesToEndpoints[t.Assembly.GetName().Name] = new List<string>());
+
+            foreach (MessageEndpointMapping mapping in mappings)
             {
-                TypesToScan.Where(t => typeof(IMessage).IsAssignableFrom(t)).ToList()
-                    .ForEach(t => assembliesToEndpoints[t.Assembly.GetName().Name] = new List<string>());
-
-                foreach (MessageEndpointMapping mapping in cfg.MessageEndpointMappings)
-                {
-                    assembliesToEndpoints[mapping.Messages] = mapping.Endpoint.SplitByComma().ToList();
-                }
-
-                busConfig.ConfigureProperty(b => b.DistributorControlAddress, cfg.DistributorControlAddress);
-                busConfig.ConfigureProperty(b => b.DistributorDataAddress, cfg.DistributorDataAddress);
-                busConfig.ConfigureProperty(b => b.ForwardReceivedMessagesTo, cfg.ForwardReceivedMessagesTo);
-                busConfig.ConfigureProperty(b => b.MessageOwners, assembliesToEndpoints);
+                assembliesToEndpoints[mapping.Messages] = mapping.Endpoint.SplitByComma().ToList();
             }
+
+            return assembliesToEndpoints;
+        }
+
+        private static IUnicastBusSession GetSession()
+        {
+            return UseSharedUnicastBusSession()
+                ? (IUnicastBusSession)new SharedUnicastBusSession(SharedUnicastBusSessionContextHolder.Instance)
+                : new PerThreadUnicastBusSession();
+        }
+
+        private static bool UseSharedUnicastBusSession()
+        {
+            // Plugins have no feature toggles support, and we use old per thread session for them.
+            // Otherwise, use shared session if not forced to use per thread one.
+            return TpFeature.AsyncEntitiesChangedEventPublishing.IsSupported() &&
+                !TpFeature.ForceUseBackwardCompatibleServiceBusSession.IsEnabled();
         }
 
         private void RegisterMessageModules()
@@ -63,8 +78,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
         private void ConfigureSubscriptionAuthorization()
         {
             Type authType =
-                TypesToScan.Where(t => typeof(IAuthorizeSubscriptions).IsAssignableFrom(t) && !t.IsInterface).
-                    FirstOrDefault();
+                TypesToScan.FirstOrDefault(t => typeof(IAuthorizeSubscriptions).IsAssignableFrom(t) && !t.IsInterface);
 
             if (authType != null)
                 Configurer.ConfigureComponent(authType, ComponentCallModelEnum.Singleton);
@@ -207,7 +221,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
         /// <returns></returns>
         public ConfigTpUnicastBus PropogateReturnAddressOnSend(bool value)
         {
-            busConfig.ConfigureProperty(b => b.PropogateReturnAddressOnSend, value);
+            busConfig.ConfigureProperty(b => b.PropagateReturnAddressOnSend, value);
             return this;
         }
 
@@ -259,7 +273,7 @@ namespace Tp.Integration.Messages.ServiceBus.UnicastBus
             if (skipAction(t))
                 return false;
 
-            foreach (Type interfaceType in t.GetInterfaces())
+            foreach (var interfaceType in t.GetInterfaces())
             {
                 Type messageType = GetMessageTypeFromMessageHandler(interfaceType);
                 if (messageType != null)

@@ -1,28 +1,24 @@
+// ReSharper disable once CheckNamespace
 namespace System.Linq.Dynamic
 {
     public class DynamicProperty
     {
-        private readonly string _name;
-        private readonly Type _type;
-
         public DynamicProperty(string name, Type type)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            _name = name;
-            _type = type;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
         protected bool Equals(DynamicProperty other)
         {
-            return string.Equals(_name, other._name) && _type == other._type;
+            return string.Equals(Name, other.Name) && Type == other.Type;
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((DynamicProperty) obj);
         }
 
@@ -30,18 +26,12 @@ namespace System.Linq.Dynamic
         {
             unchecked
             {
-                return ((_name != null ? _name.GetHashCode() : 0) * 397) ^ (_type != null ? _type.GetHashCode() : 0);
+                return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Type != null ? Type.GetHashCode() : 0);
             }
         }
 
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
-        public Type Type
-        {
-            get { return _type; }
-        }
+        public Type Type { get; }
     }
 }

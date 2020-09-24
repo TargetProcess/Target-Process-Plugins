@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading;
 using Tp.Core.Annotations;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace System.Linq.Dynamic
-// ReSharper restore CheckNamespace
 {
     public class ClassFactory
     {
-        static readonly MethodInfo _equality = Reflect.GetMethod(() => string.Equals("", ""));
+        private static readonly MethodInfo Equality = Reflect.GetMethod(() => string.Equals("", ""));
 
         [NotNull] public static readonly ClassFactory Instance = new ClassFactory();
 
@@ -23,20 +21,8 @@ namespace System.Linq.Dynamic
         private ClassFactory()
         {
             var name = new AssemblyName("DynamicClasses");
-            AssemblyBuilder assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
-#if ENABLE_LINQ_PARTIAL_TRUST
-			new ReflectionPermission(PermissionState.Unrestricted).Assert();
-			try
-			{
-#endif
+            var assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
             _module = assembly.DefineDynamicModule("Module");
-#if ENABLE_LINQ_PARTIAL_TRUST
-			}
-			finally
-			{
-				PermissionSet.RevertAssert();
-			}
-#endif
             _classes = new Cache<Signature, Type>(CreateDynamicClass);
         }
 
@@ -49,13 +35,8 @@ namespace System.Linq.Dynamic
         private Type CreateDynamicClass(Signature signature)
         {
             var typeName = GenerateTypeName();
-#if ENABLE_LINQ_PARTIAL_TRUST
-				new ReflectionPermission(PermissionState.Unrestricted).Assert();
-				try
-				{
-#endif
-            TypeBuilder tb = _module.DefineType(typeName, TypeAttributes.Class | TypeAttributes.Public, signature._baseType);
-            FieldBuilder[] fields = GenerateProperties(tb, signature._properties);
+            TypeBuilder tb = _module.DefineType(typeName, TypeAttributes.Class | TypeAttributes.Public, signature.BaseType);
+            FieldBuilder[] fields = GenerateProperties(tb, signature.Properties);
             GenerateEquals(tb, fields);
             GenerateGetHashCode(tb, fields);
             GenerateToString(tb, fields);
@@ -63,13 +44,6 @@ namespace System.Linq.Dynamic
 
             Type result = tb.CreateType();
             return result;
-#if ENABLE_LINQ_PARTIAL_TRUST
-				}
-				finally
-				{
-					PermissionSet.RevertAssert();
-				}
-#endif
         }
 
         private string GenerateTypeName()
@@ -203,7 +177,7 @@ namespace System.Linq.Dynamic
 
                 il.Emit(OpCodes.Ldarg_1);
                 il.Emit(OpCodes.Ldstr, fieldInfo.Name.Substring(1));
-                il.Emit(OpCodes.Call, _equality);
+                il.Emit(OpCodes.Call, Equality);
                 il.Emit(OpCodes.Ldc_I4_0);
                 il.Emit(OpCodes.Ceq);
                 il.Emit(OpCodes.Stloc_1);
@@ -231,7 +205,7 @@ namespace System.Linq.Dynamic
 
         private static void GenerateToString(TypeBuilder tb, IEnumerable<FieldInfo> fields)
         {
-            MethodBuilder mb = tb.DefineMethod("ToString",
+            MethodBuilder mb = tb.DefineMethod(nameof(ToString),
                 MethodAttributes.Public | MethodAttributes.ReuseSlot |
                 MethodAttributes.Virtual | MethodAttributes.HideBySig,
                 typeof(string), Type.EmptyTypes);
@@ -241,7 +215,7 @@ namespace System.Linq.Dynamic
 
             gen.DeclareLocal(typeof(StringBuilder));
 
-            var appendObject = typeof(StringBuilder).GetMethod("Append", new[] { typeof(object) });
+            var appendObject = typeof(StringBuilder).GetMethod(nameof(StringBuilder.Append), new[] { typeof(object) });
 
             gen.Emit(OpCodes.Newobj, typeof(StringBuilder).GetConstructor(Type.EmptyTypes));
             gen.Emit(OpCodes.Stloc_0); // sb
@@ -271,7 +245,7 @@ namespace System.Linq.Dynamic
             GenerateAppend(gen, " }");
 
             gen.Emit(OpCodes.Ldloc_0); // sb
-            gen.Emit(OpCodes.Callvirt, typeof(object).GetMethod("ToString"));
+            gen.Emit(OpCodes.Callvirt, typeof(object).GetMethod(nameof(ToString)));
             gen.Emit(OpCodes.Ret);
         }
 

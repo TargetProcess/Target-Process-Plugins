@@ -1,8 +1,9 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Net;
 using StructureMap.Configuration.DSL;
 using Tp.Integration.Plugin.TestRunImport.Mappers;
 using Tp.Integration.Plugin.TestRunImport.Streams;
@@ -15,6 +16,8 @@ namespace Tp.Integration.Plugin.TestRunImport.StructureMap
     {
         public PluginRegistry()
         {
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             For<ITestRunImportResultsReaderFactory>().Singleton().Use<SimpleTestRunImportResultsReaderFactory>();
             For<ITestCaseResolverFactory>().Singleton().Use<SimpleTestCaseResolverFactory>();
             For<IStreamFactory>().Singleton().Use<SimpleStreamFactory>();

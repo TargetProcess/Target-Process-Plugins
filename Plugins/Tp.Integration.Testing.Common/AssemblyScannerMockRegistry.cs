@@ -5,6 +5,7 @@
 
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Saga;
 using Tp.Core;
@@ -71,15 +72,31 @@ namespace Tp.Integration.Testing.Common
 
     public class MockTaskFactory : ITaskFactory
     {
-        public void StartNew(Action action)
+        public int? GetQueuedOrRunningTaskCount()
+        {
+            return null;
+        }
+
+        public Task StartNew(Action action)
         {
             action();
+            return Task.CompletedTask;
+        }
+
+        public Task StartNew(Action action, CancellationToken cancellationToken)
+        {
+            return StartNew(action);
         }
 
         public Task<T> StartNew<T>(Func<T> func)
         {
             var result = func();
             return Task.FromResult(result);
+        }
+
+        public Task<T> StartNew<T>(Func<T> func, CancellationToken cancellationToken)
+        {
+            return StartNew(func);
         }
     }
 }

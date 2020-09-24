@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Globalization;
@@ -83,7 +83,7 @@ namespace Tp.SourceControl.Testing.Repository.Tfs
 
             collection.Dispose();
 
-            if (changesets.Count() == 1)
+            if (changesets.Length == 1)
                 return changesets.First().ChangesetId.ToString();
 
             int lastButOneChangeset = changesets.Where(x => x.ChangesetId < changesets.Max(m => m.ChangesetId)).Max(x => x.ChangesetId);

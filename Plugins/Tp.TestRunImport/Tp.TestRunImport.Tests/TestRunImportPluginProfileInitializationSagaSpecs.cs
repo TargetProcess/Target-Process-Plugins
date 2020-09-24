@@ -90,9 +90,6 @@ namespace Tp.TestRunImport.Tests
                     "storageRepository.Get<TestCaseTestPlanDTO>(testCaseTestPlanDto.ID.ToString()).SingleOrDefault().Should(Be.Not.Null)");
         }
 
-        public TestRunImportPluginContext Context
-        {
-            get { return ObjectFactory.GetInstance<TestRunImportPluginContext>(); }
-        }
+        public TestRunImportPluginContext Context => ObjectFactory.GetInstance<TestRunImportPluginContext>();
     }
 }

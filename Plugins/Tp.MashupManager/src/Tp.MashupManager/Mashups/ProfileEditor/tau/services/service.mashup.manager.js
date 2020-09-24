@@ -2,6 +2,7 @@ tau.mashups
     .addDependency('tau/core/event')
     .addDependency('tau/mashup.manager/services/service.mashup.manager.base')
     .addDependency('tau/mashup.manager/services/service.mashup.manager.messages')
+    .addDependency('tracking/tauspy')
     .addModule('tau/mashup.manager/services/service.mashup.manager', function(Event, ServiceMashupManagerBase,
         messages) {
 
@@ -16,18 +17,33 @@ tau.mashups
                     }.bind(this));
             },
             addMashup: function(mashup, failHandler) {
+                taus.track({
+                    action: 'add mashup',
+                    name: mashup.Name
+                });
+
                 return this._executeSaveCommand('AddMashup', mashup, failHandler)
                     .done(function() {
                         this.fire('mashupAdded', mashup);
                     }.bind(this));
             },
             updateMashup: function(mashup, failHandler) {
+                taus.track({
+                    action: 'update mashup',
+                    name: mashup.Name
+                });
+
                 return this._executeSaveCommand('UpdateMashup', mashup, failHandler)
                     .done(function() {
                         this.fire('mashupUpdated', mashup);
                     }.bind(this));
             },
             deleteMashup: function(mashupName) {
+                taus.track({
+                    action: 'delete mashup',
+                    name: mashupName
+                });
+
                 return this._executeProfileRequiredCommand('DeleteMashup', {Name: mashupName})
                     .fail(function(error) {
                         this.status.error('An error occurred when deleting the mashup: ' + error);
@@ -50,6 +66,11 @@ tau.mashups
                     }.bind(this));
             },
             installPackage: function(mashupPackage) {
+                taus.track({
+                    action: 'install mashup',
+                    name: mashupPackage.PackageName
+                });
+
                 return this._executeProfileRequiredCommand('InstallPackage', mashupPackage)
                     .fail(function(error) {
                         this.status.error('An error occurred when installing the mashup: ' + error);

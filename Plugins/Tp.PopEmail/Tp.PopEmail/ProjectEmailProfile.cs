@@ -1,7 +1,7 @@
-﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+﻿//
+// Copyright (c) 2005-2020 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Linq;
@@ -20,6 +20,9 @@ namespace Tp.PopEmailIntegration
     [Serializable, Profile, DataContract]
     public class ProjectEmailProfile : ConnectionSettings, ISynchronizableProfile, IRuleHandler
     {
+        public const string RulesField = "Rules";
+
+        [IgnoreDataMember]
         public int SynchronizationInterval => 5;
 
         [DataMember]
@@ -41,7 +44,7 @@ namespace Tp.PopEmailIntegration
         {
             if (Rules.IsNullOrWhitespace())
             {
-                errors.Add(new PluginProfileError { FieldName = "Rules", Message = "Rules should not be empty" });
+                errors.Add(new PluginProfileError { FieldName = RulesField, Message = "Rules should not be empty" });
             }
             else
             {
@@ -57,10 +60,11 @@ namespace Tp.PopEmailIntegration
             var stringRules = RuleParser.GetRuleLines(this);
             if (parsed.Count() != stringRules.Count())
             {
-                errors.Add(new PluginProfileError { FieldName = "Rules", Message = "Invalid rules format" });
+                errors.Add(new PluginProfileError { FieldName = RulesField, Message = "Invalid rules format" });
             }
         }
 
+        [IgnoreDataMember]
         public string DecodedRules => HttpUtility.UrlDecode(Rules, Encoding.UTF7);
 
         [DataMember]

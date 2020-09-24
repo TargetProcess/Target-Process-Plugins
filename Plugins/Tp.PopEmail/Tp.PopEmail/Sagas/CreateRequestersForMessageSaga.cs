@@ -75,7 +75,7 @@ namespace Tp.PopEmailIntegration.Sagas
                 var requesters = Data.RequestersDto;
                 if (requesters.Length > count)
                 {
-                    Log().Error($"Requester with email {requesters[count].Email} already exists in targetprocess");
+                    Log().Warn($"Requester with email {requesters[count].Email} already exists in targetprocess");
                 }
                 ProcessRequesterCreated();
             }

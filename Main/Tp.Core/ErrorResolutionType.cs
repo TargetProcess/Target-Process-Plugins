@@ -12,6 +12,9 @@ namespace Tp.Core
         ChangeStateWithComment,
         ContactSupport,
         CanLoseCustomFields,
-        Manual
+        Manual,
+        AssignReleaseToProjects,
+        AssignMilestoneToProjects,
+        UnassignMilestoneFromGenerals
     }
 }

@@ -1,9 +1,4 @@
-﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
-// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
-
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Tp.SourceControl.VersionControlSystem;
@@ -21,7 +16,7 @@ namespace Tp.Tfs.VersionControlSystem
                 Id = new RevisionId { Time = changeset.CreationDate, Value = changeset.ChangesetId.ToString(CultureInfo.InvariantCulture) },
                 Time = changeset.CreationDate,
                 Entries = changeset.Changes
-                    .Select(change => new RevisionEntryInfo { Path = change.Item.ServerItem, Action = change.ToFileAction() }).ToArray(),
+                    .Select(change => new RevisionEntryInfo { Path = change.Item.ServerItem, Action = ChangesetActionActionExtensions.ToFileAction(change) }).ToArray(),
                 Email = string.Empty,
                 TimeCreated = changeset.CreationDate
             };

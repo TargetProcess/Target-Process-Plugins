@@ -111,6 +111,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountLocker.cs" />
     <Compile Include="CustomCommands\Args\InstallPackageCommandArg.cs" />
     <Compile Include="CustomCommands\Dtos\LibraryRepositoryDto.cs" />
     <Compile Include="CustomCommands\Dtos\PackageDetailedDto.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="CustomCommands\Args\PackageCommandArg.cs" />
     <Compile Include="CustomCommands\Args\LibraryCommandArg.cs" />
     <Compile Include="CustomCommands\Args\UpdateMashupCommandArg.cs" />
+    <Compile Include="IAccountLocker.cs" />
     <Compile Include="IMashupInfoRepository.cs" />
     <Compile Include="IMashupLoader.cs" />
     <Compile Include="MashupLibrary\Package\LibraryPackageDetailed.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="MashupLibrary\LibraryLocalFolder.cs" />
     <Compile Include="MashupLibrary\Repository\Synchronizer\LibraryRepositorySynchronizer.cs" />
     <Compile Include="MashupLoader.cs" />
+    <Compile Include="MashupManagerSettings.cs" />
     <Compile Include="MashupScriptStorageOperations.cs" />
     <Compile Include="MashupStorage\BadMashupFileNameException.cs" />
     <Compile Include="MashupStorage\BadMashupNameException.cs" />
@@ -171,6 +174,7 @@
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MashupManagerStartupHandler.cs" />
+    <Compile Include="SynchronousMashupInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">

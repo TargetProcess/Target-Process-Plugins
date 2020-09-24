@@ -16,7 +16,7 @@ namespace Tp.Integration.Messages.EntityLifecycle
     {
         public EntityUpdatedMessage()
         {
-            ChangedFields = new TEntityField[] { };
+            ChangedFields = Array.Empty<TEntityField>();
         }
 
         /// <summary>

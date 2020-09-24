@@ -43,15 +43,15 @@
     <AssemblyOriginatorKeyFile>TpPublic.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="mscorlib" />
     <Reference Include="NBehave.Spec.Framework">
       <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net35\NBehave.Spec.Framework.dll</HintPath>
     </Reference>
     <Reference Include="NBehave.Spec.NUnit">
       <HintPath>..\..\packages\nbehave.spec.nunit.0.5.1.263\lib\net35\NBehave.Spec.NUnit.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
@@ -62,8 +62,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tp.Core.Functional.0.1.7\lib\net45\Tp.Core.Functional.dll</HintPath>
@@ -81,6 +82,7 @@
     <Compile Include="Jenkins\JenkinsProvider.cs" />
     <Compile Include="SelfTestsBase.cs" />
     <Compile Include="StrictSelfTestsBase.cs" />
+    <Compile Include="UserStoryAttribute.cs" />
     <Compile Include="ValueConstraint.cs" />
     <Compile Include="NothingConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

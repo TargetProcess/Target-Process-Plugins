@@ -11,5 +11,11 @@ namespace Tp.Integration.Messages.PluginLifecycle
 
         [DataMember]
         public bool ErrorsExist { get; set; }
+
+        [DataMember]
+        public DateTime? ErrorDate { get; set; }
+
+        [DataMember]
+        public string ErrorMessage { get; set; }
     }
 }

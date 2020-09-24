@@ -61,12 +61,8 @@ namespace System.Linq.Dynamic
         {
             var methods = _type
                 .GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
-                .Where(x => x.GetCustomAttribute<ExtensionAttribute>().HasValue);
-
-            if (TpFeature.LimitPublicExtensionMethods.IsEnabled())
-            {
-                methods = methods.Where(x => x.GetCustomAttribute<PublicApiMethodAttribute>().HasValue);
-            }
+                .Where(x => x.GetCustomAttribute<ExtensionAttribute>().HasValue)
+                .Where(x => x.GetCustomAttribute<PublicApiMethodAttribute>().HasValue);
 
             return methods;
         }

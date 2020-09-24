@@ -28,8 +28,7 @@ tau.mashups
                 '   </div>' +
                 '			<div class="separator"></div>' +
                 '			<div class="pad-box">' +
-                '				<h3 class="h3">' +
-                '					Repository Settings</h3>' +
+                '				<h3 class="h3">Repository Settings</h3>' +
                 '				<p class="label">' +
                 '					Enter a full path to the repository&nbsp;<a id="uriExamplesLink" class="small" href="javascript:void(0);">Examples</a>' +
                 '               <span class="error" name="UriErrorLabel"></span></p>' +
@@ -37,8 +36,8 @@ tau.mashups
                 '				<input type="text" class="input" name="Uri" id="uri" value="${Settings.Uri}" style="width: 100%;" /><br />' +
                 '               <p class="label"></p>' +
                 '               <div class="controls-inline-group" style="margin-top: 18px;">' +
-                '                   <button class="tau-btn i-role-http">Use Login and Password</button><button class="tau-btn i-role-ssh">Use SSH Keys</button>' +                    
-                '               </div>' +                
+                '                   <button class="tau-btn i-role-http">Use Login and Password</button><button class="tau-btn i-role-ssh">Use SSH Keys</button>' +
+                '               </div>' +
                 '               <div class="i-role-loginBlock">' +
                 '				    <p class="label">' +
                 '   				<p class="label pt-10">' +
@@ -50,7 +49,7 @@ tau.mashups
                 '               </div>' +
                 '               <div class="i-role-sshKeysBlock">' +
                 '                  <div style="margin-top: 10px; margin-bottom: 15px;">' +
-                '                      <a target="_blank" href="https://www.targetprocess.com/guide/integrations/integrations-source-control/issue-ssh-key-pair-from-git-bash-use-in-targetprocess/">How to issue a new SSH key pair from Git Bush and use it in Targetprocess?</a>' +
+                '                      <a target="_blank" href="https://www.targetprocess.com/guide/integrations/integrations-source-control/issue-ssh-key-pair-from-git-bash-use-in-targetprocess/">How to issue a new SSH key pair from Git Bash and use it in Targetprocess?</a>' +
                 '                  </div>' +
                 '                  <div>' +
                 '                       <button class="tau-btn i-role-sshGenerateKeys" style="margin-top: 12px; margin-bottom: 5px; display: inline-block">Generate keys for me</button>' +
@@ -69,7 +68,7 @@ tau.mashups
                 '                       <span style="margin-left: 10px;" class="yes-message i-role-privateKeyAddedFlag">Added</span>' +
                 '                       <span style="margin-left: 10px;" class="no-message i-role-privateNoKeyFlag">No key</span>' +
                 '                       &nbsp;<span class="error" name="SshPrivateKeyErrorLabel"></span>' +
-                '                   </p>' +                
+                '                   </p>' +
                 '               </div>' +
                 '				<p class="label pt-20">' +
                 '					Export all the revisions starting from&nbsp;&nbsp;<input id="startRevision" name="StartRevision" value="${Settings.StartRevision}" type="text" class="input"' +
@@ -98,7 +97,7 @@ tau.mashups
                 this.model.passwordValue = this.model.Settings.HasPassword ? '0000000000000000' : '';
                 this._passwordChanged = false;
                 this._sshPrivateKeyChanged = false;
-                this._sshPrivateKey = null;                
+                this._sshPrivateKey = null;
 
                 this.controller = config.controller;
                 Bus.subscribe("SubversionProfileEditor", {
@@ -141,7 +140,7 @@ tau.mashups
             render: function () {
                 this.placeHolder.html('');
                 var rendered = $.tmpl(this.editorTemplate, this.model);
-                
+
                 rendered.find("#password").change(function() {
                     this._passwordChanged = true;
                 }.bind(this));
@@ -160,7 +159,7 @@ tau.mashups
                 }.bind(this));
 
                 this.sshPublicKey = rendered.find('.i-role-sshPublicKey');
-                this.sshPublicKey.text(this.model.Settings.SshPublicKey);                
+                this.sshPublicKey.text(this.model.Settings.SshPublicKey);
 
                 this.loginBlock = rendered.find('.i-role-loginBlock');
                 this.sshKeysBlock = rendered.find('.i-role-sshKeysBlock');
@@ -169,8 +168,8 @@ tau.mashups
 
                 rendered.find('.i-role-sshGenerateKeys').click(this._sshGenerateKeys.bind(this));
                 rendered.find('.i-role-sshUploadPublicKey').click(this._sshUploadKey.bind(this, false));
-                rendered.find('.i-role-sshUploadPrivateKey').click(this._sshUploadKey.bind(this, true));                
-                
+                rendered.find('.i-role-sshUploadPrivateKey').click(this._sshUploadKey.bind(this, true));
+
                 this.checkConnectionBtn = rendered.find('#checkConnection');
                 this.checkConnectionBtn.click($.proxy(this._onCheckConnection, this));
                 this.preloader = rendered.find('span.preloader.i-role-checkConnectionProgress');
@@ -321,7 +320,7 @@ tau.mashups
                 if ($(errors).length == 0) {
                     this.checkConnectionBtn.success();
                 }
-            },               
+            },
 
             _sshGenerateKeys: function(e) {
                 e.preventDefault();
@@ -344,7 +343,7 @@ tau.mashups
                     var file = input.files[0];
                     var fileReader = new FileReader();
                     fileReader.onloadend = function(evt) {
-                        if (evt.target.readyState === FileReader.DONE) {                                                        
+                        if (evt.target.readyState === FileReader.DONE) {
                             if (isPrivate) {
                                 this._sshPrivateKeyChanged = true;
                                 this._sshPrivateKey = evt.target.result;

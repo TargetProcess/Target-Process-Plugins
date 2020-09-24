@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -19,20 +19,20 @@ namespace Tp.Tfs
 
         public MappingContainer ProjectsMapping
         {
-            get { return Profile.ProjectsMapping; }
-            set { Profile.ProjectsMapping = value; }
+            get => Profile.ProjectsMapping;
+            set => Profile.ProjectsMapping = value;
         }
 
         public SimpleMappingContainer EntityMapping
         {
-            get { return Profile.EntityMapping; }
-            set { Profile.EntityMapping = value; }
+            get => Profile.EntityMapping;
+            set => Profile.EntityMapping = value;
         }
 
         public bool WorkItemsEnabled
         {
-            get { return Profile.WorkItemsEnabled; }
-            set { Profile.WorkItemsEnabled = value; }
+            get => Profile.WorkItemsEnabled;
+            set => Profile.WorkItemsEnabled = value;
         }
     }
 }

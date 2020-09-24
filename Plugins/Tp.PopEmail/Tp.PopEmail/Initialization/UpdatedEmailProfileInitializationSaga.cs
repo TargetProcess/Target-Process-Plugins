@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2020 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -28,17 +28,19 @@ namespace Tp.PopEmailIntegration.Initialization
             var profileServerAndLogins = StorageRepository().Get<ProfileServerAndLogin>();
             var severAndLogin = profileServerAndLogins.FirstOrDefault();
             var profile = StorageRepository().GetProfile<ProjectEmailProfile>();
+            var login = profile.SecureAccessMethod == SecureAccessMethods.LoginAndPassword ? profile.Login : profile.OAuthState.Email;
 
             if (severAndLogin != null)
             {
-                if (severAndLogin.MailServer == profile.MailServer && severAndLogin.Login == profile.Login)
+                if (string.Compare(severAndLogin.MailServer, profile.MailServer, StringComparison.OrdinalIgnoreCase) == 0
+                    && string.Compare(severAndLogin.Login, login, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     MarkAsComplete();
                     return;
                 }
             }
 
-            profileServerAndLogins.ReplaceWith(new ProfileServerAndLogin { MailServer = profile.MailServer, Login = profile.Login });
+            profileServerAndLogins.ReplaceWith(new ProfileServerAndLogin { MailServer = profile.MailServer, Login = login });
 
             ObjectFactory.GetInstance<MessageUidRepository>().RemoveAll();
 

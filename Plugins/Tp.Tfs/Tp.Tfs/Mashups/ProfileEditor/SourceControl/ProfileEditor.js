@@ -16,11 +16,11 @@ tau.mashups
             preloader: null,
             editorTemplate:
                 '<div>' +
-                '		<h2 class="h2">TFS Integration</h2>' +
-                '		<p class="note">' +
-                '			Exports revisions from TFS and binds source code to TargetProcess user stories, bugs and' +
-                '			tasks.</p>' +
-                '		<div class="svn-settings">' +
+                '	<h2 class="h2">TFS Integration</h2>' +
+                '	<p class="note">' +
+                '		Exports revisions from TFS and binds source code to TargetProcess user stories, bugs and' +
+                '		tasks.</p>' +
+                '	<div class="svn-settings">' +
                 '   <div class="pad-box">' +
                 '       <p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span></p>' +
                 '       <p class="note"><span class="small">Should be unique. Can\'t be changed later.</span></p>' +
@@ -30,11 +30,10 @@ tau.mashups
                 '			<div class="pad-box">' +
                 '				<h3 class="h3">Repository Settings</h3>' +
                 '				<p class="label">' +
-                '					Enter a full path to the repository&nbsp;<a id="uriExamplesLink" class="small" href="javascript:void(0);">Examples</a>' +
-                '               <span class="error" name="UriErrorLabel"></span></p>' +
-                '               <div id="uriExamplesContent" style="display:none" class="small pt-10 pb-10"><p class="label pb-5">URL examples:<p class="rules-actions">http://ServerName:Port/tfs/DefaultCollection</p><p class="rules-actions">http://ServerName:Port/tfs/DefaultCollection/TeamName</p></div><p/> ' +
+                '					Enter a full path to the repository&nbsp;<a id="uriExamplesLink" class="small" href="javascript:void(0);">Examples</a></p>' +
+                '               <div id="uriExamplesContent" style="display:none" class="small pt-10 pb-10"><p class="label pb-5">URL examples:</p><p class="rules-actions">http://ServerName:Port/tfs/DefaultCollection</p><p class="rules-actions">http://ServerName:Port/tfs/DefaultCollection/TeamName</p></div><p/>' +
+                '				<p class="label pt-10">' +'					<span class="error" name="UriErrorLabel"></span></p>' +
                 '				<input type="text" class="input" name="Uri" id="uri" value="${Settings.Uri}" style="width: 100%;" /><br />' +
-                '				<p class="label">' +
                 '				<p class="label pt-10">' +
                 '					Login&nbsp;<span class="error" name="LoginErrorLabel"></span></p>' +
                 '				<input type="text" class="input" id="login" name="Login" value="${Settings.Login}" style="width: 275px;" />' +

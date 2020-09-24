@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using Microsoft.VisualStudio.Services.Common;
 using Tp.Integration.Common;
 using Tp.Integration.Messages.EntityLifecycle;
 using Tp.Integration.Messages.EntityLifecycle.Messages;
@@ -19,6 +20,7 @@ using Tp.Integration.Plugin.Common.Mapping;
 using Tp.Integration.Testing.Common;
 using Tp.Tfs.Tests.WorkItems;
 using Tp.Tfs.WorkItemsIntegration;
+using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 
 namespace Tp.Tfs.Tests.Context
 {
@@ -52,7 +54,8 @@ namespace Tp.Tfs.Tests.Context
             WorkItems = new List<WorkItem>();
             Uri = ConfigHelper.Instance.TestCollection;
             Credential = new NetworkCredential(ConfigHelper.Instance.Login, ConfigHelper.Instance.Password, ConfigHelper.Instance.Domen);
-            _tfsCollection = new TfsTeamProjectCollection(new Uri(Uri), Credential);
+            _tfsCollection = new TfsTeamProjectCollection(new Uri(Uri),
+                new VssCredentials(new WindowsCredential(Credential), CredentialPromptType.DoNotPrompt));
             _workItemStore = _tfsCollection.GetService<WorkItemStore>();
 
             ObjectFactory.Configure(x => x.AddRegistry<WorkItemsUnitTestsRegistry>());
@@ -75,35 +78,17 @@ namespace Tp.Tfs.Tests.Context
         public string Uri { get; set; }
         public NetworkCredential Credential { get; set; }
 
-        public List<BugDTO> TpBugs
-        {
-            get { return _bugs; }
-        }
+        public List<BugDTO> TpBugs => _bugs;
 
-        public List<UserStoryDTO> TpUserStories
-        {
-            get { return _userStories; }
-        }
+        public List<UserStoryDTO> TpUserStories => _userStories;
 
-        public List<FeatureDTO> TpFeatures
-        {
-            get { return _features; }
-        }
+        public List<FeatureDTO> TpFeatures => _features;
 
-        public List<RequestDTO> TpRequests
-        {
-            get { return _requests; }
-        }
+        public List<RequestDTO> TpRequests => _requests;
 
-        public string TeamProject
-        {
-            get { return ProjectsMapping[0].Key; }
-        }
+        public string TeamProject => ProjectsMapping[0].Key;
 
-        public MappingLookup TpProject
-        {
-            get { return ProjectsMapping[0].Value; }
-        }
+        public MappingLookup TpProject => ProjectsMapping[0].Value;
 
         public void AddWorkItem(string title, string description, string type)
         {
@@ -120,19 +105,14 @@ namespace Tp.Tfs.Tests.Context
         public WorkItem GetWorkItem(string type, string title, string project)
         {
             var workItems = _workItemStore.Query(
-                string.Format(
-                    "SELECT * FROM workitems WHERE [Work Item Type]='{0}' and [Team Project]='{1}' and [Title]='{2}'",
-                    type,
-                    project,
-                    title));
+                $"SELECT * FROM workitems WHERE [Work Item Type]='{type}' and [Team Project]='{project}' and [Title]='{title}'");
             var workItem = workItems.Cast<WorkItem>().FirstOrDefault(x => x.Title == title && x.Project.Name == project);
             return workItem;
         }
 
         public void ChangeWorkItem(string name, Dictionary<string, string> fieldsValues)
         {
-            var workItems = _workItemStore.Query(
-                string.Format("SELECT * FROM workitems WHERE [Title]='{0}'", name));
+            var workItems = _workItemStore.Query($"SELECT * FROM workitems WHERE [Title]='{name}'");
 
             var workItem = workItems.Cast<WorkItem>().FirstOrDefault();
 
@@ -145,10 +125,7 @@ namespace Tp.Tfs.Tests.Context
             workItem.Save();
         }
 
-        private static TransportMock TransportMock
-        {
-            get { return ObjectFactory.GetInstance<TransportMock>(); }
-        }
+        private static TransportMock TransportMock => ObjectFactory.GetInstance<TransportMock>();
 
         private TfsPluginProfile GetTfsPluginProfile()
         {
@@ -164,10 +141,7 @@ namespace Tp.Tfs.Tests.Context
             };
         }
 
-        public IProfileReadonly Profile
-        {
-            get { return ObjectFactory.GetInstance<IProfileReadonly>(); }
-        }
+        public IProfileReadonly Profile => ObjectFactory.GetInstance<IProfileReadonly>();
 
         public void ClearWorkItems()
         {

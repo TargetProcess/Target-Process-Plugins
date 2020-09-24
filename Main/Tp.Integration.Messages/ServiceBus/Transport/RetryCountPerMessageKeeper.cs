@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using Tp.Core;
 
 namespace Tp.Integration.Messages.ServiceBus.Transport
 {
@@ -20,20 +21,20 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
             }
 
             _failuresPerMessageLocker.EnterReadLock();
+            var canRetry = !_failuresPerMessage.ContainsKey(messageId) ||
+                _failuresPerMessage[messageId] < MaxRetries;
+            _failuresPerMessageLocker.ExitReadLock();
 
-            if (_failuresPerMessage.ContainsKey(messageId) &&
-                (_failuresPerMessage[messageId] >= MaxRetries))
+            if (canRetry)
             {
-                _failuresPerMessageLocker.ExitReadLock();
-                _failuresPerMessageLocker.EnterWriteLock();
-                _failuresPerMessage.Remove(messageId);
-                _failuresPerMessageLocker.ExitWriteLock();
-
-                return true;
+                return false;
             }
 
-            _failuresPerMessageLocker.ExitReadLock();
-            return false;
+            _failuresPerMessageLocker.EnterWriteLock();
+            _failuresPerMessage.Remove(messageId);
+            _failuresPerMessageLocker.ExitWriteLock();
+
+            return true;
         }
 
         public int GetFailedCount(string messageId)
@@ -54,17 +55,14 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
             }
 
             _failuresPerMessageLocker.EnterReadLock();
-            if (_failuresPerMessage.ContainsKey(messageId))
-            {
-                _failuresPerMessageLocker.ExitReadLock();
-                _failuresPerMessageLocker.EnterWriteLock();
-                _failuresPerMessage.Remove(messageId);
-                _failuresPerMessageLocker.ExitWriteLock();
-            }
-            else
-            {
-                _failuresPerMessageLocker.ExitReadLock();
-            }
+            var hasPerMessageFailure = _failuresPerMessage.ContainsKey(messageId);
+            _failuresPerMessageLocker.ExitReadLock();
+
+            if (!hasPerMessageFailure) return;
+
+            _failuresPerMessageLocker.EnterWriteLock();
+            _failuresPerMessage.Remove(messageId);
+            _failuresPerMessageLocker.ExitWriteLock();
         }
 
         public void IncrementFailuresForMessage(string messageId)
@@ -83,7 +81,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport
                 }
                 else
                 {
-                    _failuresPerMessage[messageId] = _failuresPerMessage[messageId] + 1;
+                    _failuresPerMessage[messageId] += 1;
                 }
             }
             finally

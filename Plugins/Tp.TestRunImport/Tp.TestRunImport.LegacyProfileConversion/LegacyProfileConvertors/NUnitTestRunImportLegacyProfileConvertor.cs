@@ -16,19 +16,10 @@ namespace Tp.TestRunImport.LegacyProfileConversion.LegacyProfileConvertors
         {
         }
 
-        protected override FrameworkTypes FrameworkType
-        {
-            get { return FrameworkTypes.NUnit; }
-        }
+        protected override FrameworkTypes FrameworkType => FrameworkTypes.NUnit;
 
-        protected override string SettingsXmlNode
-        {
-            get { return "NUnitSettings"; }
-        }
+        protected override string SettingsXmlNode => "NUnitSettings";
 
-        protected override string PluginName
-        {
-            get { return "Automatic NUnit Test Run Import"; }
-        }
+        protected override string PluginName => "Automatic NUnit Test Run Import";
     }
 }

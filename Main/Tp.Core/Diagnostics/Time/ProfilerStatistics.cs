@@ -22,22 +22,24 @@ namespace Tp.Core.Diagnostics.Time
         }
 
         [PerformanceCritical]
-        private ProfilerStatistics(Dictionary<ProfilerTarget, Tuple<string, int, int, string>> data)
+        private ProfilerStatistics(Dictionary<ProfilerTarget, (string, int, int, string)> data)
         {
-            _data = data.Select(x =>
-            {
-                var target = x.Key;
-                var headerName = target.GetMetadata<ProfilerTarget, HttpHeaderAttribute>();
-                return new TpProfilerStatisticRecord
+            _data = data
+                .Select(x =>
                 {
-                    Target = target,
-                    Name = ResolverHeaderName(headerName),
-                    ElapsedTimeRaw = x.Value.Item1,
-                    ElapsedTimeTotal = x.Value.Item2,
-                    HitCount = x.Value.Item3,
-                    Context = x.Value.Item4
-                };
-            }).ToDictionaryOfKnownCapacity(data.Count, x => x.Target, x => x);
+                    var target = x.Key;
+                    var headerName = target.GetMetadata<ProfilerTarget, HttpHeaderAttribute>();
+                    return new TpProfilerStatisticRecord
+                    {
+                        Target = target,
+                        Name = ResolverHeaderName(headerName),
+                        ElapsedTimeRaw = x.Value.Item1,
+                        ElapsedTimeTotal = x.Value.Item2,
+                        HitCount = x.Value.Item3,
+                        Context = x.Value.Item4
+                    };
+                })
+                .ToDictionaryOfKnownCapacity(data.Count, x => x.Target, x => x);
         }
 
         private string ResolverHeaderName(string headerName)
@@ -62,15 +64,21 @@ namespace Tp.Core.Diagnostics.Time
                 var elapsedTimes = profilerDatas.Select(x1 => x1.ElapsedMs).ToArray();
                 var hitCounts = profilerDatas.Select(x1 => x1.HitCount).ToArray();
                 var contexts = profilerDatas.Select(x1 => x1.Context).ToArray();
-                return Tuple.Create(elapsedTimes.ToString(";"), elapsedTimes.Any() ? (int) elapsedTimes.Sum() : -1, hitCounts.Any() ? hitCounts.Sum() : 0, contexts.ToString(";"));
+                return (
+                    elapsedTimes.ToString(";"),
+                    elapsedTimes.Any() ? (int) elapsedTimes.Sum() : -1,
+                    hitCounts.Any() ? hitCounts.Sum() : 0,
+                    contexts.ToString(";"));
             });
             return new ProfilerStatistics(data);
         }
 
-        public static IReadOnlyCollection<ProfilerTargetData> Calculate(IEnumerable<TimeInterval> timeIntervals,
+        public static IReadOnlyCollection<ProfilerTargetData> Calculate(
+            IEnumerable<TimeInterval> timeIntervals,
             params ProfilerTarget[] targets)
         {
-            return timeIntervals.Where(x => targets.Contains(x.Target))
+            return timeIntervals
+                .Where(x => targets.Contains(x.Target))
                 .GroupBy(x => x.ThreadId)
                 .OrderBy(x => x.Key == Thread.CurrentThread.ManagedThreadId ? 0 : 1)
                 .Select(x => new ProfilerTargetData
@@ -78,20 +86,24 @@ namespace Tp.Core.Diagnostics.Time
                     ThreadId = x.Key,
                     ElapsedMs = x.Sum(t => (int) t.Elapsed.TotalMilliseconds),
                     HitCount = x.Count(),
-                    Context = x.Aggregate(new StringBuilder(),
-                            (acc, interval) => acc.AppendLine($"[Thread:{x.Key}, ElapsedMs:{interval.Elapsed.TotalMilliseconds}]{{")
+                    Context = x
+                        .Aggregate(
+                            new StringBuilder(1024),
+                            (acc, interval) => acc
+                                .AppendLine($"[Thread:{x.Key}, ElapsedMs:{interval.Elapsed.TotalMilliseconds}]{{")
                                 .AppendLine("Context:" + interval.Context.Select(c => c.ToString()).GetOrDefault(string.Empty))
                                 .AppendLine("StackTrace:" + interval.StackTrace.Select(c => c.ToString()).GetOrDefault(string.Empty))
                                 .AppendLine("}}"))
                         .ToString()
-                }).ToList();
+                })
+                .ToList();
         }
 
         public struct ProfilerTargetData
         {
             public int ThreadId { get; set; }
             public double ElapsedMs { get; set; }
-            public int HitCount{ get; set; }
+            public int HitCount { get; set; }
             public string Context { get; set; }
         }
     }

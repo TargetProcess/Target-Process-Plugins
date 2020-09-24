@@ -36,6 +36,11 @@ namespace Tp.Core.Diagnostics.Time
             return "TimePoint: {0}, {1}, {2}".Fmt(Name, Timestamp, Order);
         }
 
+        /// <summary>
+        /// How much time passed since <see cref="Timestamp"/> to <see cref="point"/>.
+        /// </summary>
+        public TimeSpan DiffTo(DateTimeOffset point) => point - Timestamp;
+
         public static TimePoint UtcNow(string name)
         {
             return new TimePoint(name, CurrentDate.UtcValue);
@@ -45,7 +50,5 @@ namespace Tp.Core.Diagnostics.Time
         {
             return new TimePoint(name, point);
         }
-
-        public static TimePoint Empty => UtcNow("Empty");
     }
 }

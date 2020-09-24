@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
         {
             if (!Directory.Exists(mashupsPhysicalPath))
             {
-                return new Mashup[] { };
+                return Array.Empty<Mashup>();
             }
 
             IEnumerable<string> directories = Directory.GetDirectories(mashupsPhysicalPath);
@@ -43,7 +44,8 @@ namespace Tp.Integration.Messages.PluginLifecycle
                 where !ShouldIgnoreMashupDirectory(directory)
                 let baseDir = directory
                 let configs = Directory.GetFiles(directory, "*.cfg")
-                let mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines))
+                let configModification = configs.Length > 0 ? (DateTime?) configs.Select(File.GetLastWriteTime).Max() : null
+                let mashupConfig = new MashupConfig(configs.SelectMany(File.ReadAllLines), configModification)
                 let mashupName = new DirectoryInfo(directory).Name
                 let files = GetMashupFiles(directory)
                 select new Mashup
@@ -59,7 +61,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
         {
             if (ShouldIgnoreMashupDirectory(directory))
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
 
             var files = new List<string>();

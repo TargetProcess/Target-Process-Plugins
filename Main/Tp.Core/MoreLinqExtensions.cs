@@ -98,6 +98,12 @@ namespace System.Linq
             return new HashSet<TItem>(items, comparer);
         }
 
+        public static ConcurrentHashSet<TItem> ToConcurrentHashSet<TItem>(this IEnumerable<TItem> items, IEqualityComparer<TItem> comparer = null)
+        {
+            AssertNotNull(items, "items");
+            return new ConcurrentHashSet<TItem>(items, comparer);
+        }
+
         private static void AssertNotNull(object value, string paramName)
         {
             if (value == null)

@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using NGit.Util;
 using NServiceBus;
@@ -23,7 +23,19 @@ namespace Tp.MashupManager
         {
             For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use
                 <MashupManagerPluginSpecifyMessageHandlerOrdering>();
-            For<IMashupInfoRepository>().Use<MashupInfoRepository>();
+
+            if (MashupManagerSettings.EnableAccountLockForMashupOperations)
+            {
+                For<IAccountLocker>().Singleton().Use<AccountLocker>();
+
+                For<IMashupInfoRepository>().Use<SynchronousMashupInfoRepository>()
+                    .Ctor<IMashupInfoRepository>().Is<MashupInfoRepository>();
+            }
+            else
+            {
+                For<IMashupInfoRepository>().Use<MashupInfoRepository>();
+            }
+
             For<ISingleProfile>().Singleton().Use<SingleProfile>();
             For<IMashupScriptStorage>().Use<MashupScriptStorage>();
             For<IMashupLocalFolder>().Use<MashupLocalFolder>();
@@ -32,7 +44,8 @@ namespace Tp.MashupManager
             For<ILibraryRepositoryFactory>().Use<LibraryRepositoryFactory>();
             For<ILibraryRepositorySynchronizer>().Singleton().Use<LibraryRepositorySynchronizer>();
             For<ILibraryRepositoryConfigStorage>().Use<LibraryRepositoryConfigStorage>();
-            For<IMashupLoader>().Use<MashupLoader>();
+            For<IMashupLoader>().Singleton().Use(() => new MashupLoader(MashupManagerSettings.MashupFileExtensionsWhiteList));
+
 
             SystemReader.SetInstance(new MockSystemReader(SystemReader.GetInstance()));
         }

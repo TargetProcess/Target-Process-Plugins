@@ -45,7 +45,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +56,26 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr4.Runtime.Standard, Version=4.8.0.0, Culture=neutral, PublicKeyToken=e78b2c5abd1fcb3f">
+      <HintPath>..\..\packages\Antlr4.Runtime.Standard.4.8.0\lib\net35\Antlr4.Runtime.Standard.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="App.Metrics.Abstractions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812">
+      <HintPath>..\..\packages\App.Metrics.Abstractions.3.2.0\lib\net461\App.Metrics.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="App.Metrics.Concurrency, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812">
+      <HintPath>..\..\packages\App.Metrics.Concurrency.2.0.1\lib\net45\App.Metrics.Concurrency.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="App.Metrics.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812">
+      <HintPath>..\..\packages\App.Metrics.Core.3.2.0\lib\net461\App.Metrics.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="App.Metrics.Formatters.Ascii, Version=3.2.0.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812">
+      <HintPath>..\..\packages\App.Metrics.Formatters.Ascii.3.2.0\lib\net461\App.Metrics.Formatters.Ascii.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DelegateDecompiler">
       <HintPath>..\..\packages\DelegateDecompiler.0.17.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
     </Reference>
@@ -77,9 +96,9 @@
     <Reference Include="Mono.Reflection">
       <HintPath>..\..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <HintPath>..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
@@ -94,11 +113,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
+    <Reference Include="Tp.Core.Expressions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\Tp.Core.Expressions.1.0.0-rc2\lib\netstandard2.0\Tp.Core.Expressions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tp.Core.Functional.0.1.7\lib\net45\Tp.Core.Functional.dll</HintPath>
     </Reference>
@@ -116,9 +140,13 @@
     <Compile Include="Annotations\PerformanceCriticalAttribute.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="AssemblyExtensions.cs" />
-    <Compile Include="Chrono.cs" />
+    <Compile Include="AsyncLazy.cs" />
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="ConcurrentHashSet.cs" />
+    <Compile Include="ConcurrentLruCache.cs" />
     <Compile Include="Configuration\AppSettingsReader.cs" />
+    <Compile Include="DecoratorChain.cs" />
+    <Compile Include="Diagnostics\AppMetricsProvider.cs" />
     <Compile Include="Diagnostics\Counters\CounterKey.cs" />
     <Compile Include="Diagnostics\Counters\DiagnosticCounterData.cs" />
     <Compile Include="Diagnostics\Counters\DiagnosticCountersService.cs" />
@@ -136,20 +164,52 @@
     <Compile Include="Diagnostics\Time\IProfilerDataProcessor.cs" />
     <Compile Include="Diagnostics\Time\IProfilerProvider.cs" />
     <Compile Include="Diagnostics\Time\NoProfilerDataProcess.cs" />
-    <Compile Include="Expressions\ExpressionsHelper.cs" />
+    <Compile Include="ApplyInMemoryOrInlineArgumentAttribute.cs" />
     <Compile Include="Diagnostics\Time\NoProfilerDataCollector.cs" />
     <Compile Include="Diagnostics\Time\ProfilerDiagnostics.cs" />
-    <Compile Include="Expressions\Visitors\RemoveImpossibleTypeChecks.cs" />
+    <Compile Include="Diagnostics\Time\ProfilerWithMetrics.cs" />
+    <Compile Include="Expressions\ExpressionApplyCachedExtensions.cs" />
+    <Compile Include="Expressions\ExpressionLoggerAdapter.cs" />
+    <Compile Include="Expressions\ExpressionsHelper.cs" />
+    <Compile Include="Expressions\InlineExpressions.cs" />
+    <Compile Include="Expressions\Parsing\Antlr\ExpressionLexer.cs" />
+    <Compile Include="Expressions\Parsing\Antlr\ExpressionParser.cs" />
+    <Compile Include="Expressions\Parsing\Antlr\ExpressionParserBaseListener.cs" />
+    <Compile Include="Expressions\Parsing\Antlr\ExpressionParserBaseVisitor.cs" />
+    <Compile Include="Expressions\Parsing\Antlr\ExpressionParserListener.cs" />
+    <Compile Include="Expressions\Parsing\Antlr\ExpressionParserVisitor.cs" />
+    <Compile Include="Expressions\Parsing\EnumerableMethodStrategy.cs" />
+    <Compile Include="Expressions\Parsing\BuildExpressionVisitor.cs" />
+    <Compile Include="Expressions\Parsing\BuildOrderingVisitor.cs" />
+    <Compile Include="Expressions\Parsing\Parser.cs" />
+    <Compile Include="Expressions\Parsing\IfNone.cs" />
+    <Compile Include="Expressions\Parsing\Iif.cs" />
+    <Compile Include="Expressions\Parsing\Res.cs" />
+    <Compile Include="Expressions\Parsing\Signatures.cs" />
+    <Compile Include="Expressions\Parsing\StaticTypeOrExpression.cs" />
+    <Compile Include="Expressions\Parsing\TypeSystem.cs" />
+    <Compile Include="Extensions\KeyValuePairExtensions.cs" />
+    <Compile Include="Features\ITpFeatureListFactory.cs" />
+    <Compile Include="FuncUtils.cs" />
+    <Compile Include="Grouping.cs" />
     <Compile Include="ITextProvider.cs" />
     <Compile Include="Features\ITpFeatureList.cs" />
     <Compile Include="Features\TpFeature.cs" />
     <Compile Include="Features\TpFeatureListExtensions.cs" />
     <Compile Include="Internationalization\MessageLocalizer.cs" />
     <Compile Include="Internationalization\LocalizationScopeAttribute.cs" />
+    <Compile Include="IValueHolder.cs" />
+    <Compile Include="LazyFormatString.cs" />
     <Compile Include="LimitedConcurrencyLevelTaskScheduler.cs" />
+    <Compile Include="Linq\ClassFactory.cs" />
+    <Compile Include="Linq\DynamicProperty.cs" />
+    <Compile Include="Linq\ExpressionParserCache.cs" />
+    <Compile Include="Linq\ExpressionStringHasher.cs" />
+    <Compile Include="Linq\IExpressionParser.cs" />
+    <Compile Include="Linq\QueryableType.cs" />
     <Compile Include="Linq\SafeConvert.cs" />
-    <Compile Include="Linq\SurrogateGeneratorHelper.cs" />
-    <Compile Include="Linq\TokenType.cs" />
+    <Compile Include="Linq\SharedParserUtils.cs" />
+    <Compile Include="Linq\Signature.cs" />
     <Compile Include="LocalizedInvalidOperationException.cs" />
     <Compile Include="LocalizedNotImplementedException.cs" />
     <Compile Include="LocalizedNotSupportedException.cs" />
@@ -171,7 +231,7 @@
     <Compile Include="Delta.cs" />
     <Compile Include="Diagnostics\DiagnosticsRegistry.cs" />
     <Compile Include="Diagnostics\Time\ITimePoints.cs" />
-    <Compile Include="Diagnostics\Time\ITimePointsFork.cs" />
+    <Compile Include="Diagnostics\Time\ITimePointsForkable.cs" />
     <Compile Include="Diagnostics\Time\TpProfilerStatisticRecord.cs" />
     <Compile Include="Diagnostics\Time\ProfilerStatistics.cs" />
     <Compile Include="Diagnostics\Time\Profiler.cs" />
@@ -184,17 +244,6 @@
     <Compile Include="DateRange.cs" />
     <Compile Include="DirectoryExtensions.cs" />
     <Compile Include="EnumHelper.cs" />
-    <Compile Include="Expressions\Visitors\BooleanEvaluator.cs" />
-    <Compile Include="Expressions\Visitors\CaseInsensitiveVisitor.cs" />
-    <Compile Include="Expressions\Visitors\CtorTypeChanger.cs" />
-    <Compile Include="Expressions\InlineableAttribute.cs" />
-    <Compile Include="Expressions\InlineEnvironmentAttribute.cs" />
-    <Compile Include="Expressions\Visitors\FixFloatComparisonVisitor.cs" />
-    <Compile Include="Expressions\Visitors\InlineVisitor.cs" />
-    <Compile Include="Expressions\Visitors\InlineApplyVisitor.cs" />
-    <Compile Include="Expressions\Visitors\ProtectFromDivideByZeroVisitor.cs" />
-    <Compile Include="Expressions\Visitors\ProtectFromNullReferenceVisitor.cs" />
-    <Compile Include="Expressions\Visitors\Replacer.cs" />
     <Compile Include="ExtensionsProvider.cs" />
     <Compile Include="Extensions\Comparers.cs" />
     <Compile Include="Extensions\Objects.cs" />
@@ -220,12 +269,11 @@
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="Linq\AllExtensionMethodsProvider.cs" />
     <Compile Include="Linq\DynamicExpressionAliasAttribute.cs" />
-    <Compile Include="Linq\ExtendedExpressionParser.cs" />
+    <Compile Include="Linq\Surrogates.cs" />
     <Compile Include="Linq\IMethodProvider.cs" />
     <Compile Include="Linq\ISurrogateMethod.cs" />
     <Compile Include="Linq\ITypeProvider.cs" />
-    <Compile Include="Linq\Token.cs" />
-    <Compile Include="Linq\UntypedQueryable.cs" />
+    <Compile Include="LocalizedOperationCanceledException.cs" />
     <Compile Include="Lock.cs" />
     <Compile Include="LocalFileSystem.cs" />
     <Compile Include="Locker.cs" />
@@ -238,45 +286,27 @@
     <Compile Include="PropertyBag\ErasedTypedKeyStorage.cs" />
     <Compile Include="PropertyBag\IPropertyBagSetter.cs" />
     <Compile Include="PublicNameAttribute.cs" />
+    <Compile Include="QueuedTaskScheduler.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="SecurityProtocolTypeScope.cs" />
-    <Compile Include="Expressions\Visitors\RemoveUnnecessaryTypeChecks.cs" />
     <Compile Include="SerializableStringDictionary.cs" />
     <Compile Include="ErrorResolutionType.cs" />
     <Compile Include="ServiceManager.cs" />
     <Compile Include="Services\EmptyService.cs" />
     <Compile Include="EqualityHelpers.cs" />
-    <Compile Include="Expressions\Evaluator.cs">
-      <SubType>
-      </SubType>
-    </Compile>
     <Compile Include="ExceptionExtensions.cs" />
-    <Compile Include="Expressions\PreOrderTraverseVisitor.cs" />
-    <Compile Include="Expressions\ExpressionComparison.cs" />
-    <Compile Include="Expressions\ExpressionEnumerable.cs" />
-    <Compile Include="Expressions\ExpressionExtensions.cs" />
-    <Compile Include="Expressions\LambdaSubstituter.cs" />
-    <Compile Include="Expressions\QueryableHelper.cs" />
     <Compile Include="Features\StructureMapExtensions.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="Services\IService.cs" />
-    <Compile Include="Linq\ClassFactory.cs" />
-    <Compile Include="Linq\ExpressionParser.Inner.cs">
-      <DependentUpon>ExpressionParser.cs</DependentUpon>
-    </Compile>
     <Compile Include="Linq\DynamicDictionary.cs" />
-    <Compile Include="Linq\ExpressionParser.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="INullable.cs" />
     <Compile Include="Lazy.cs" />
-    <Compile Include="Linq\DynamicExpressionParser.cs" />
     <Compile Include="Linq\DynamicOrdering.cs" />
-    <Compile Include="Linq\DynamicProperty.cs" />
     <Compile Include="Linq\ParseException.cs" />
     <Compile Include="Linq\Res.cs" />
-    <Compile Include="Linq\Signature.cs" />
     <Compile Include="InvalidDateRangeException.cs" />
     <Compile Include="MaybeConvert\MaybeConvertExtensions.cs" />
     <Compile Include="MaybeDictionary.cs" />
@@ -293,18 +323,20 @@
     <Compile Include="Range.cs" />
     <Compile Include="Reflect.cs" />
     <Compile Include="SafeNull.cs" />
+    <Compile Include="Services\Service.cs" />
     <Compile Include="SqlFunctionAttribute.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringBuilderExtensions.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="StructureMapExtensions.cs" />
+    <Compile Include="UrlCustomFieldPart.cs" />
     <Compile Include="StringLocalizationExtensions.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TpLogManager.cs" />
     <Compile Include="TpPolicy.cs" />
     <Compile Include="TupleExtensions.cs" />
-    <Compile Include="Match.cs" />
     <Compile Include="PropertyBag\IPropertyBagGetter.cs" />
     <Compile Include="PropertyBag\TypedKey.cs" />
     <Compile Include="PropertyBag\TypedKeyStorage.cs" />
@@ -313,6 +345,8 @@
     <Compile Include="TypeNameWithoutVersion.cs" />
     <Compile Include="RootUri.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="Web\ETagCalculator.cs" />
+    <Compile Include="Web\WeakETag.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -340,7 +374,13 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Expressions\Parsing\Antlr\ExpressionLexer.tokens" />
+    <Content Include="Expressions\Parsing\Antlr\ExpressionParser.tokens" />
+    <Content Include="Expressions\Parsing\ExpressionLexer.g4" />
+    <Content Include="Expressions\Parsing\ExpressionParser.g4" />
+    <Content Include="Expressions\Parsing\README.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
   </PropertyGroup>

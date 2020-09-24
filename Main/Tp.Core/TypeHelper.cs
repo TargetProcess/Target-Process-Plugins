@@ -27,13 +27,15 @@ namespace System
             return IsBetween(Type.GetTypeCode(type), TypeCode.Boolean, TypeCode.String);
         }
 
+        private static readonly Type _nullable = typeof(Nullable<>);
         public static bool IsNullable(this Type type)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
-            return Nullable.GetUnderlyingType(type) != null;
+
+            return type.IsGenericType && type.GetGenericTypeDefinition() == _nullable;
         }
 
         public static string FriendlyTypeName(this Type type)
@@ -101,6 +103,14 @@ namespace System
             return false;
         }
 
+        public static Type ResultType(this MemberInfo memberInfo)
+        {
+            var resultType = memberInfo.MaybeAs<PropertyInfo>().Select(x => x.PropertyType)
+                .OrElse(() => memberInfo.MaybeAs<MethodInfo>().Select(x => x.ReturnType))
+                .OrElse(() => memberInfo.MaybeAs<FieldInfo>().Select(x => x.FieldType)).Value;
+            return resultType;
+        }
+
         public static IEnumerable<Type> GetGenericTypeParameterOfInterface(this Type type, Type interfaceType)
         {
             return GetGenericTypeParametersOfInterface(type, interfaceType).Select(ts => ts.Single());
@@ -110,6 +120,11 @@ namespace System
         {
             return type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == interfaceType)
                 .Select(x => x.GetGenericArguments());
+        }
+
+        public static Maybe<IEnumerable<Type>> TryGetGenericTypeParameterOfInterface(this Type type, Type interfaceType)
+        {
+            return type.GetGenericTypeParameterOfInterface(interfaceType).NothingIfNull();
         }
 
         public static IEnumerable<IGrouping<Type, TAttribute>> GetTypesWith<TAttribute>(bool inherit = false, params Assembly[] assembly)

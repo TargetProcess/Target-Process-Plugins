@@ -3,10 +3,8 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using StructureMap;
@@ -15,7 +13,6 @@ using Tp.Integration.Messages.Commands;
 using Tp.Integration.Messages.EntityLifecycle.Queries;
 using Tp.Integration.Messages.PluginLifecycle;
 using Tp.Integration.Plugin.Common.PluginCommand.Embedded;
-using Tp.Integration.Plugin.Common.Storage;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Testing.Common;
 using Tp.PopEmailIntegration.Data;

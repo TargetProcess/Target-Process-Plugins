@@ -19,7 +19,7 @@ namespace Tp.Core
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         /// <returns><paramref name="value"/> if it is not <c>null</c>.</returns>
         [NotNull]
-        public static T NotNull<T>([InvokerParameterName] string name, T value) where T : class
+        public static T NotNull<T>([InvokerParameterName] string name, [NoEnumeration] T value) where T : class
         {
             if (value == null)
             {

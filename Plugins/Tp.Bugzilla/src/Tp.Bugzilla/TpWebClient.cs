@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -49,9 +49,8 @@ namespace Tp.Bugzilla
                 //logging
                 return true;
             }
-            PluginProfileErrorCollection errors;
 
-            if (!_state.TryGetValue(request, out errors))
+            if (!_state.TryGetValue(request, out var errors))
             {
                 //logging
                 return true;
@@ -68,8 +67,8 @@ namespace Tp.Bugzilla
                 {
                     foreach (X509ChainStatus status in chain.ChainStatus)
                     {
-                        if ((certificate.Subject == certificate.Issuer) &&
-                            (status.Status == X509ChainStatusFlags.UntrustedRoot))
+                        if (((certificate.Subject == certificate.Issuer) &&
+                            (status.Status == X509ChainStatusFlags.UntrustedRoot)) || (status.Status == X509ChainStatusFlags.PartialChain))
                         {
                             // Self-signed certificates with an untrusted root are valid.
                             continue;
@@ -101,6 +100,7 @@ namespace Tp.Bugzilla
     internal class TpWebClient : WebClient
     {
         private readonly PluginProfileErrorCollection _errors;
+        private IDisposable _subscription;
 
         public TpWebClient(PluginProfileErrorCollection errors)
         {
@@ -111,15 +111,14 @@ namespace Tp.Bugzilla
         {
             WebRequest w = base.GetWebRequest(uri);
             w.Timeout = 30 * 60 * 1000;
+            _subscription = ServerCertificateValidator.Instance.Register(w, _errors);
             return w;
         }
 
-        protected override WebResponse GetWebResponse(WebRequest request)
+        protected override void Dispose(bool disposing)
         {
-            using (ServerCertificateValidator.Instance.Register(request, _errors))
-            {
-                return base.GetWebResponse(request);
-            }
+            _subscription?.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

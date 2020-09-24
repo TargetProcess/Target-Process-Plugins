@@ -45,14 +45,14 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
                 var replyMessage = new PluginCommandResponseMessage();
                 var commandsToExecute = _pluginCommandRepository.Where(x => x.Name == message.CommandName).ToArray();
 
-                if (commandsToExecute.Count() > 1)
+                if (commandsToExecute.Length > 1)
                 {
-                    replyMessage.ResponseData = string.Format("There are more than one command with name '{0}'", message.CommandName);
+                    replyMessage.ResponseData = $"There are more than one command with name '{message.CommandName}'";
                     replyMessage.PluginCommandStatus = PluginCommandStatus.Error;
                 }
                 else if (!commandsToExecute.Any())
                 {
-                    replyMessage.ResponseData = string.Format("No command with name '{0}' was found", message.CommandName);
+                    replyMessage.ResponseData = $"No command with name '{message.CommandName}' was found";
                     replyMessage.PluginCommandStatus = PluginCommandStatus.Error;
                 }
                 else
@@ -79,7 +79,7 @@ namespace Tp.Integration.Plugin.Common.PluginCommand
                 _tpBus.Reply(new PluginCommandResponseMessage
                 {
                     ResponseData =
-                        string.Format("Plugin {0} command processing error: {1}", message.CommandName, e.Message),
+                        $"Plugin {message.CommandName} command processing error: {e.Message}",
                     PluginCommandStatus = PluginCommandStatus.Error
                 });
             }

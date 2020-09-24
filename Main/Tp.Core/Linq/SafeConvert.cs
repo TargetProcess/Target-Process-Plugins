@@ -245,17 +245,17 @@ namespace Tp.Core.Linq
         {
             if (value == null)
             {
-                return new T[0];
+                return Array.Empty<T>();
             }
 
             try
             {
                 var s = Convert.ToString(value);
-                return string.IsNullOrEmpty(s) ? new T[0] : s.Split(separator).Select(converionFunc).ToArray();
+                return string.IsNullOrEmpty(s) ? Array.Empty<T>() : s.Split(separator).Select(converionFunc).ToArray();
             }
             catch (Exception)
             {
-                return new T[0];
+                return Array.Empty<T>();
             }
         }
     }

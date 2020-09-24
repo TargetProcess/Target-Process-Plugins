@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2013 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -42,13 +42,16 @@ namespace Tp.PopEmailIntegration.Sagas
             var requestDescriptionUpdated = message.RequestDto.Description;
             if (message.RequestAttachmentDtos != null && !string.IsNullOrEmpty(requestDescriptionUpdated))
             {
-                foreach (var attachment in message.MessageAttachmentDtos)
+                var requestAttachmentDtos = message.RequestAttachmentDtos.OrderBy(x => x.AttachmentID).ToList();
+                foreach (var attachment in message.MessageAttachmentDtos.OrderBy(x => x.AttachmentID))
                 {
                     var createdAttachment =
-                        message.RequestAttachmentDtos.FirstOrDefault(
+                        requestAttachmentDtos.FirstOrDefault(
                             a => string.CompareOrdinal(a.OriginalFileName, attachment.OriginalFileName) == 0);
 
                     if (createdAttachment == null) continue;
+
+                    requestAttachmentDtos.Remove(createdAttachment);
 
                     var url = $"~/Attachment.aspx?AttachmentID={attachment.AttachmentID}";
                     var newUrl = $"~/Attachment.aspx?AttachmentID={createdAttachment.AttachmentID}";

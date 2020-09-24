@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using log4net;
 using StructureMap;
 using Tp.Core.Services;
@@ -24,7 +25,7 @@ namespace Tp.Core
             starting();
             try
             {
-                var services = container.GetAllInstances<IService>();
+                var services = container.GetAllInstances<IService>().OrderByDescending(s => s.Priority);
                 foreach (IService service in services)
                 {
                     action(service);

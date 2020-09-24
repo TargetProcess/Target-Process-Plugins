@@ -31,11 +31,7 @@ namespace Tp.Utils.Csv
 
         public CsvReader(TextReader reader, char delimiter, bool parseHeader)
         {
-            if (reader == null)
-            {
-                throw new ArgumentNullException(nameof(reader));
-            }
-            _reader = reader;
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             _delimiter = delimiter;
             int t;
             if ((t = _reader.Read()) != -1)
@@ -58,10 +54,7 @@ namespace Tp.Utils.Csv
             }
         }
 
-        public string[] Fields
-        {
-            get { return _fields.ToArray(); }
-        }
+        public string[] Fields => _fields.ToArray();
 
         private int _c = -1, _lac = -1;
 
@@ -266,14 +259,11 @@ namespace Tp.Utils.Csv
                     }
                     return null;
                 }
-                throw new ArgumentException(string.Format("Unknown column name \"{0}\"", column));
+                throw new ArgumentException($"Unknown column name \"{column}\"");
             }
         }
 
-        public int Line
-        {
-            get { return _line; }
-        }
+        public int Line => _line;
 
         public void Dispose()
         {

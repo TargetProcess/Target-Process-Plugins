@@ -25,7 +25,7 @@ namespace Tp.Subversion.LegacyProfileConversion
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR: Unable to perform conversion. Reason: {0}", ex.Message);
+                Console.WriteLine($"ERROR: Unable to perform conversion. Reason: {ex.Message}");
                 Environment.Exit(1);
             }
         }

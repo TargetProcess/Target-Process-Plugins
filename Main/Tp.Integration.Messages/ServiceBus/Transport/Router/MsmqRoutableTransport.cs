@@ -30,10 +30,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         /// </summary>
         public string InputQueue { get; set; }
 
-        public string UiCommandInputQueue
-        {
-            get { return TpUnicastBus.GetUiQueueName(InputQueue); }
-        }
+        public string UiCommandInputQueue => TpUnicastBus.GetUiQueueName(InputQueue);
 
         /// <summary>
         /// Sets the path to the queue the transport will transfer
@@ -86,7 +83,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         /// <summary>
         /// Sets the maximum interval of time for when a thread thinks there is a message in the queue
         /// that it tries to receive, until it gives up.
-        /// 
+        ///
         /// Default value is 10.
         /// </summary>
         public int SecondsToWaitForMessage
@@ -140,13 +137,13 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         /// <summary>
         /// Gets/sets the number of concurrent threads that should be
         /// created for processing the queue.
-        /// 
+        ///
         /// Get returns the actual number of running worker threads, which may
         /// be different than the originally configured value.
-        /// 
+        ///
         /// When used as a setter, this value will be used by the <see cref="Start"/>
         /// method only and will have no effect if called afterwards.
-        /// 
+        ///
         /// To change the number of worker threads at runtime, call <see cref="ChangeNumberOfWorkerThreads"/>.
         /// </summary>
         public int NumberOfWorkerThreads { get; set; }
@@ -159,10 +156,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         /// <summary>
         /// Gets the address of the input queue.
         /// </summary>
-        public string Address
-        {
-            get { return InputQueue; }
-        }
+        public string Address => InputQueue;
 
         public IPluginQueueFactory PluginQueueFactory { get; set; }
 
@@ -183,9 +177,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         {
             if (RoutableTransportMode == RoutableTransportMode.OnDemand)
             {
-                int workersThreads;
-                int ioThreads;
-                ThreadPool.GetMaxThreads(out workersThreads, out ioThreads);
+                ThreadPool.GetMaxThreads(out var workerThreads, out var ioThreads);
                 ThreadPool.SetMaxThreads(100 * Environment.ProcessorCount, ioThreads);
                 ThreadPool.SetMinThreads(50, 50);
             }
@@ -524,20 +516,17 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         {
             var m = message.Message;
             _messageId = m.Id;
-            
+
             if (IsTransactional && _retryCountPerMessageKeeper.HandledMaxRetries(m.Id))
-                {
-                    Logger.Error(LoggerContext.New(message.MessageOrigin.Name),
-                    $"Message has failed the maximum number of {_retryCountPerMessageKeeper.MaxRetries} times allowed, ID={m.Id}.");
-                    MoveToErrorQueue(message);
-                    return;
-                }
-            
-            //exceptions here will cause a rollback - which is what we want.
-            if (StartedMessageProcessing != null)
             {
-                StartedMessageProcessing(this, null);
+                Logger.Error(LoggerContext.New(message.MessageOrigin.Name),
+                $"Message has failed the maximum number of {_retryCountPerMessageKeeper.MaxRetries} times allowed, ID={m.Id}.");
+                MoveToErrorQueue(message);
+                return;
             }
+
+            //exceptions here will cause a rollback - which is what we want.
+            StartedMessageProcessing?.Invoke(this, null);
             TransportMessage result = Convert(m);
             if (SkipDeserialization)
             {
@@ -587,10 +576,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         {
             var m = message.Message;
             m.Label = m.Label + string.Format("<{0}>{1}</{0}><{2}>{3}<{2}>", FAILEDQUEUE, message.MessageOrigin.Name, ORIGINALID, m.Id);
-            if (_errorQueue != null)
-            {
-                _errorQueue.Send(m, MessageQueueTransactionType.Single);
-            }
+            _errorQueue?.Send(m, MessageQueueTransactionType.Single);
         }
 
         /// <summary>
@@ -659,8 +645,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
                 return null;
             }
 
-            var startIndex = m.Label.IndexOf(string.Format("<{0}>", FAILEDQUEUE)) + FAILEDQUEUE.Length + 2;
-            var count = m.Label.IndexOf(string.Format("</{0}>", FAILEDQUEUE)) - startIndex;
+            var startIndex = m.Label.IndexOf($"<{FAILEDQUEUE}>") + FAILEDQUEUE.Length + 2;
+            var count = m.Label.IndexOf($"</{FAILEDQUEUE}>") - startIndex;
 
             return MsmqUtilities.GetFullPath(m.Label.Substring(startIndex, count));
         }
@@ -677,8 +663,8 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
                 return m.Label;
             }
 
-            var startIndex = m.Label.IndexOf(string.Format("<{0}>", FAILEDQUEUE));
-            var endIndex = m.Label.IndexOf(string.Format("</{0}>", FAILEDQUEUE));
+            var startIndex = m.Label.IndexOf($"<{FAILEDQUEUE}>");
+            var endIndex = m.Label.IndexOf($"</{FAILEDQUEUE}>");
             endIndex += FAILEDQUEUE.Length + 3;
 
             return m.Label.Remove(startIndex, endIndex - startIndex);
@@ -733,10 +719,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         {
             try
             {
-                if (FinishedMessageProcessing != null)
-                {
-                    FinishedMessageProcessing(this, null);
-                }
+                FinishedMessageProcessing?.Invoke(this, null);
             }
             catch (Exception e)
             {
@@ -750,10 +733,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         {
             try
             {
-                if (TransportMessageReceived != null)
-                {
-                    TransportMessageReceived(this, new TransportMessageReceivedEventArgs(msg));
-                }
+                TransportMessageReceived?.Invoke(this, new TransportMessageReceivedEventArgs(msg));
 
                 Logger.Debug(LoggerContext.New(origin.MessageOrigin.Name, msg), "Transport message received");
             }
@@ -770,10 +750,7 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
         {
             try
             {
-                if (FailedMessageProcessing != null)
-                {
-                    FailedMessageProcessing(this, null);
-                }
+                FailedMessageProcessing?.Invoke(this, null);
             }
             catch (Exception e)
             {
@@ -783,21 +760,12 @@ namespace Tp.Integration.Messages.ServiceBus.Transport.Router
             return true;
         }
 
-        private ILoggerContextSensitive Logger
-        {
-            get { return _logger; }
-        }
+        private ILoggerContextSensitive Logger => _logger;
 
         public void Dispose()
         {
-            if (_inputQueueRouter != null)
-            {
-                _inputQueueRouter.Dispose();
-            }
-            if (_uiQueueRouter != null)
-            {
-                _uiQueueRouter.Dispose();
-            }
+            _inputQueueRouter?.Dispose();
+            _uiQueueRouter?.Dispose();
         }
 
         #endregion

@@ -60,6 +60,7 @@
       <HintPath>..\..\..\..\packages\ngit2.2.1.0.20130924\lib\net40\Mono.Security.Win32.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="NBehave.Narrator.Framework">
       <HintPath>..\..\..\..\packages\nbehave.0.5.1.263\lib\net40\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
@@ -105,10 +106,18 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d">
+      <HintPath>..\..\..\..\packages\Tp.Core.Functional.0.1.7\lib\net45\Tp.Core.Functional.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MashupConfigTests.cs" />
@@ -129,6 +138,7 @@
     <Compile Include="Mashups\MashupsOnTargetProcessStartSenderSpecs.cs" />
     <Compile Include="Profile\SingleProfileForPluginSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SynchronousMashupInfoRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Tp.Core\Tp.Core.csproj">
@@ -176,7 +186,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
   </PropertyGroup>

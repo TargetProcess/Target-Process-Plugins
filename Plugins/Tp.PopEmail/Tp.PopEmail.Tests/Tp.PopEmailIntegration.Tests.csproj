@@ -45,8 +45,8 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MailBee.NET">
-      <HintPath>..\..\..\Libs\MailBee.NET.dll</HintPath>
+    <Reference Include="MailBee.NET, Version=12.1.1.620, Culture=neutral, PublicKeyToken=cd85b70fb26f9fc1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MailBee.NET.12.1.1\lib\net45\MailBee.NET.dll</HintPath>
     </Reference>
     <Reference Include="NBehave.Narrator.Framework">
       <HintPath>..\..\..\packages\nbehave.0.5.1.263\lib\net40\NBehave.Narrator.Framework.dll</HintPath>
@@ -195,7 +195,9 @@
       <Name>Tp.PopEmailIntegration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
   </PropertyGroup>

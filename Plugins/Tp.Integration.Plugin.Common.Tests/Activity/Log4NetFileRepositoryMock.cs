@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -26,7 +26,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 
         private static DateTime _now = CurrentDate.Value;
 
-        private readonly IList<ActivityDtoMock> _activityinnerStorage = new List<ActivityDtoMock>
+        private readonly IList<ActivityDtoMock> _activityInnerStorage = new List<ActivityDtoMock>
         {
             new ActivityDtoMock
             {
@@ -83,7 +83,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
             }
         };
 
-        private readonly IList<ActivityDtoMock> _errorinnerStorage = new List<ActivityDtoMock>
+        private readonly IList<ActivityDtoMock> _errorInnerStorage = new List<ActivityDtoMock>
         {
             new ActivityDtoMock
             {
@@ -152,15 +152,9 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 
         public DateTime? Date { get; set; }
 
-        public List<string> RemovedFolders
-        {
-            get { return _removedFolders; }
-        }
+        public List<string> RemovedFolders => _removedFolders;
 
-        public List<string> RemovedFiles
-        {
-            get { return _removedFiles; }
-        }
+        public List<string> RemovedFiles => _removedFiles;
 
         public Log4NetFileRepositoryMock(ILogManager logManager, Locker locker) : base(logManager, locker)
         {
@@ -193,7 +187,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 
         private IEnumerable<ActivityDtoMock> GetCurrentStorage(Logger logger)
         {
-            return logger.Name.Contains("Error") ? _errorinnerStorage : _activityinnerStorage;
+            return logger.Name.Contains("Error") ? _errorInnerStorage : _activityInnerStorage;
         }
 
         protected override IEnumerable<string> GetFilesFromFolderByPattern(string fileName)
@@ -213,8 +207,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Activity
 
         private static string ComposeLogFileName(string baseFileName, int number)
         {
-            return string.Format("{0}.{1}.txt.{2}", baseFileName,
-                _now.AddMonths(-number).AddSeconds(-1).ToString(ActivityLogFile.FileDatePattern), number);
+            return $"{baseFileName}.{_now.AddMonths(-number).AddSeconds(-1).ToString(ActivityLogFile.FileDatePattern)}.txt.{number}";
         }
     }
 }

@@ -350,9 +350,6 @@ namespace Tp.TestRunImport.Tests.NUnit
                 .Execute(In.Context<NUnitTestRunImportActionSteps>());
         }
 
-        protected override FrameworkTypes FrameworkType
-        {
-            get { return FrameworkTypes.NUnit; }
-        }
+        protected override FrameworkTypes FrameworkType => FrameworkTypes.NUnit;
     }
 }

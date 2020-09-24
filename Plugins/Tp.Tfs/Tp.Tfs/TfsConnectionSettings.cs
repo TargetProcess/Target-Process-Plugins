@@ -1,4 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿// 
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using System.Runtime.Serialization;
 using Tp.Integration.Plugin.Common.Mapping;
 using Tp.SourceControl.Settings;
 using Tp.Tfs.WorkItemsIntegration;

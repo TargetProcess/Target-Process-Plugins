@@ -6,7 +6,7 @@ namespace Tp.Core.MaybeConvert
     {
         public static Maybe<int> MaybeToInt(this string s)
         {
-            if (!s.IsNullOrEmpty() && int.TryParse(s, out int result))
+            if (!s.IsNullOrEmpty() && int.TryParse(s, out var result))
             {
                 return Maybe.Just(result);
             }

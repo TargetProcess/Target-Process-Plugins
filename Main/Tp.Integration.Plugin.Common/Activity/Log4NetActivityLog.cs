@@ -71,11 +71,11 @@ namespace Tp.Integration.Plugin.Common.Activity
             _log4NetFileRepository.RemoveFilesFor(logger);
         }
 
-        public bool CheckForErrors()
+        public ActivityLogRecord CheckForErrors()
         {
             var logger = GetLogger(ActivityType.Errors);
 
-            return _log4NetFileRepository.RecordsExist(logger);
+            return _log4NetFileRepository.GetLatestRecord(logger);
         }
 
         private static void CloseAppendersFor(Logger logger)

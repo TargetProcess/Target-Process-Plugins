@@ -58,5 +58,7 @@ namespace System
         {
             LazyInitializer.EnsureInitialized(ref _value, ref _initialized, ref _gate, _valueFactory);
         }
+
+        public bool IsValueCreated => _initialized;
     }
 }

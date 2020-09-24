@@ -59,6 +59,10 @@ namespace Tp.Integration.Messages.Entities
         public string DefaultValue { get; set; }
 
         [DataMember]
+        [XmlElement(Order = 71)]
+        public string Description { get; set; }
+
+        [DataMember]
         [XmlElement(Order = 80)]
         public string CalculationModel { get; set; }
 
@@ -105,9 +109,9 @@ namespace Tp.Integration.Messages.Entities
         {
             if (FieldType == FieldTypeEnum.MultipleSelectionList)
             {
-                return string.IsNullOrEmpty(Value) ? new string[] { } : Value.Split(',').Select(x => x.Trim()).ToArray();
+                return string.IsNullOrEmpty(Value) ? Array.Empty<string>() : Value.Split(',').Select(x => x.Trim()).ToArray();
             }
-            return new string[] { };
+            return Array.Empty<string>();
         }
 
         public override string ToString()

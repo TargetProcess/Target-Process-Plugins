@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -18,7 +18,7 @@ namespace Tp.Integration.Plugin.Common.Activity
 
         void ClearBy(ActivityFilter filter);
 
-        bool CheckForErrors();
+        ActivityLogRecord CheckForErrors();
     }
 
     internal class ActivityLogSafeNull : SafeNull<ActivityLogSafeNull, IActivityLog>, IActivityLog, INullable
@@ -38,9 +38,9 @@ namespace Tp.Integration.Plugin.Common.Activity
         {
         }
 
-        public bool CheckForErrors()
+        public ActivityLogRecord CheckForErrors()
         {
-            return false;
+            return null;
         }
     }
 }

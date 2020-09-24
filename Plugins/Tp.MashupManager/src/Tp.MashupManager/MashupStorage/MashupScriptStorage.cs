@@ -66,9 +66,15 @@ namespace Tp.MashupManager.MashupStorage
             _log.Info($"Deleting mashup '{mashupName}'");
 
             var mashupFolderPath = GetMashupFolderPath(mashupName);
-            Directory.Delete(mashupFolderPath, true);
-
-            _log.Info($"Mashup '{mashupName}' deleted");
+            if (Directory.Exists(mashupFolderPath))
+            {
+                Directory.Delete(mashupFolderPath, true);
+                _log.Info($"Mashup '{mashupName}' deleted");
+            }
+            else
+            {
+                _log.Warn($"Mashup '{mashupName}' doesn't exist in mashups folder");
+            }
         }
 
         private void WriteAccountsConfig(string mashupName, string mashupFolderPath)

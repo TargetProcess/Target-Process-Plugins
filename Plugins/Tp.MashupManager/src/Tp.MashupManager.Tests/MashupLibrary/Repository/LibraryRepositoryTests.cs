@@ -151,17 +151,12 @@ namespace Tp.MashupManager.Tests.MashupLibrary.Repository
             });
         }
 
-        private ILibraryRepository LibraryRepository
-        {
-            get
+        private ILibraryRepository LibraryRepository =>
+            new LibraryRepository(new LibraryRepositoryConfig
             {
-                return new LibraryRepository(new LibraryRepositoryConfig
-                {
-                    Name = Tp3RepositoryName,
-                    Uri = new Uri(RemoteRepositoryPath).AbsoluteUri
-                }, new LibraryLocalFolder(new PluginDataFolder()), new LibraryRepositorySynchronizer(), new MashupLoader());
-            }
-        }
+                Name = Tp3RepositoryName,
+                Uri = new Uri(RemoteRepositoryPath).AbsoluteUri
+            }, new LibraryLocalFolder(new PluginDataFolder()), new LibraryRepositorySynchronizer(), new MashupLoader(Maybe.Nothing));
 
         private void CheckRepositoryFilesExistence(params string[] fileNames)
         {

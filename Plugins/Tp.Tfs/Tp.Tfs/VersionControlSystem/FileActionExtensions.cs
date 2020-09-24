@@ -1,30 +1,30 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2020 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Tp.Integration.Common;
 
 namespace Tp.Tfs.VersionControlSystem
 {
-    public static class ChangesetActionActionExtensions
+    public static class TfvcChangeActionActionExtensions
     {
-        public static FileActionEnum ToFileAction(this Change change)
+        public static FileActionEnum ToFileAction(this TfvcChange change)
         {
-            if (change.ChangeType.HasFlag(ChangeType.Delete))
+            if (change.ChangeType.HasFlag(VersionControlChangeType.Delete))
                 return FileActionEnum.Delete;
 
-            if (change.ChangeType.HasFlag(ChangeType.Add))
+            if (change.ChangeType.HasFlag(VersionControlChangeType.Add))
                 return FileActionEnum.Add;
 
-            if (change.ChangeType.HasFlag(ChangeType.Edit))
+            if (change.ChangeType.HasFlag(VersionControlChangeType.Edit))
                 return FileActionEnum.Modify;
 
-            if (change.ChangeType.HasFlag(ChangeType.Rename))
+            if (change.ChangeType.HasFlag(VersionControlChangeType.Rename))
                 return FileActionEnum.Rename;
 
-            if (change.ChangeType.HasFlag(ChangeType.Branch))
+            if (change.ChangeType.HasFlag(VersionControlChangeType.Branch))
                 return FileActionEnum.Branch;
 
             return FileActionEnum.None;

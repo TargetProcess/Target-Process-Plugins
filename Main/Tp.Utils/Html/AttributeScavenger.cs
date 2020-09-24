@@ -12,7 +12,7 @@ namespace Tp.Utils.Html
         public AttributeScavenger(params string[] keepElements)
         {
             RewriteTags = new Dictionary<string, string> { { "pre", "p" }, };
-            _keepElements = keepElements ?? new string[0];
+            _keepElements = keepElements ?? Array.Empty<string>();
         }
 
         public AttributeScavenger(bool requiredHtmlEncode, params string[] keepElements)

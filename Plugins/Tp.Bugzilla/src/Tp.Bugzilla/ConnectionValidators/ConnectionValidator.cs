@@ -21,10 +21,12 @@ namespace Tp.Bugzilla.ConnectionValidators
 
         protected override void ExecuteConcreate(PluginProfileErrorCollection errors)
         {
+            WebClient webClient = null;
+
             try
             {
                 var url = new BugzillaUrl(ConnectionSettings);
-                WebClient webClient = new TpWebClient(errors) { Encoding = Encoding.UTF8 };
+                webClient = new TpWebClient(errors) { Encoding = Encoding.UTF8 };
                 webClient.DownloadString(url.Url);
             }
             catch (WebException webException)
@@ -47,6 +49,10 @@ namespace Tp.Bugzilla.ConnectionValidators
                     Message = exception.Message,
                     AdditionalInfo = ValidationErrorType.BugzillaNotFound.ToString()
                 });
+            }
+            finally
+            {
+                webClient?.Dispose();
             }
         }
     }

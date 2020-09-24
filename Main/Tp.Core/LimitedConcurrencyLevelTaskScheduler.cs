@@ -35,9 +35,11 @@ namespace System.Threading.Tasks.Schedulers
         /// <param name="maxDegreeOfParallelism">The maximum degree of parallelism provided by this scheduler.</param>
         public LimitedConcurrencyLevelTaskScheduler(int maxDegreeOfParallelism)
         {
-            if (maxDegreeOfParallelism < 1) throw new ArgumentOutOfRangeException("maxDegreeOfParallelism");
+            if (maxDegreeOfParallelism < 1) throw new ArgumentOutOfRangeException(nameof(maxDegreeOfParallelism));
             _maxDegreeOfParallelism = maxDegreeOfParallelism;
         }
+
+        public int GetQueuedOrRunningCount() => _delegatesQueuedOrRunning;
 
         /// <summary>Queues a task to the scheduler.</summary>
         /// <param name="task">The task to be queued.</param>

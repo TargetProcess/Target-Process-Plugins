@@ -1,8 +1,10 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tp.Integration.Common;
 using Tp.Integration.Messages;
@@ -24,17 +26,17 @@ namespace Tp.Integration.Plugin.Common.PluginCommand.Embedded
 
         public PluginCommandResponseMessage Execute(string args, UserDTO user)
         {
-            var responseData =
-                _profileCollection.Select(
-                        x => new ProfileErrorCheckResult { ProfileName = x.Name.Value, ErrorsExist = x.Log.CheckForErrors() }).ToArray().
-                    Serialize();
+            var responseData = (from p in _profileCollection
+                let lastErrorRecord = p.Log.CheckForErrors()
+                select new ProfileErrorCheckResult
+                {
+                    ProfileName = p.Name.Value, ErrorsExist = lastErrorRecord != null, ErrorDate = lastErrorRecord?.DateTime,
+                    ErrorMessage = lastErrorRecord?.Message
+                }).ToArray().Serialize();
             return new PluginCommandResponseMessage
                 { ResponseData = responseData, PluginCommandStatus = PluginCommandStatus.Succeed };
         }
 
-        public string Name
-        {
-            get { return EmbeddedPluginCommands.CheckActivityLogForErrors; }
-        }
+        public string Name => EmbeddedPluginCommands.CheckActivityLogForErrors;
     }
 }

@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -41,10 +41,7 @@ namespace Tp.Subversion
             }
         }
 
-        private static VcsPluginContext Context
-        {
-            get { return ObjectFactory.GetInstance<VcsPluginContext>(); }
-        }
+        private static VcsPluginContext Context => ObjectFactory.GetInstance<VcsPluginContext>();
 
         [Given(@"vcs history is:")]
         [When("new revisions committed to vcs:")]
@@ -92,7 +89,7 @@ namespace Tp.Subversion
         {
             for (int i = 0; i < tpUsersCount; i++)
             {
-                var name = string.Format("UnmappedUser_{0}", i);
+                var name = $"UnmappedUser_{i}";
                 Context.CreateTpUser(name);
             }
         }
@@ -101,7 +98,7 @@ namespace Tp.Subversion
         {
             for (int i = 0; i < svnUsersCount; i++)
             {
-                var author = string.Format("Author_{0}", i);
+                var author = $"Author_{i}";
                 var revision = new RevisionInfo { Author = author };
                 Context.Revisions.Add(revision);
             }
@@ -125,7 +122,6 @@ namespace Tp.Subversion
         {
             Context.CreateTpUserWithLogin(login, name, mail);
         }
-
 
         [Then(@"revisions created in TP should be:")]
         public void RevisionShouldBeInTp(string commit)
@@ -210,6 +206,13 @@ namespace Tp.Subversion
         public void LogShouldContain(string message)
         {
             Context.Log.Messages.Contains(message).Should(Be.True, "log does not contain message '{0}'", message);
+        }
+
+        [Then("log should not contain Failed to parse messages")]
+        public void LogShouldContainFailedToParse()
+        {
+            Context.Log.Messages.Any(x => x.StartsWith("Failed to parse", StringComparison.OrdinalIgnoreCase))
+                .Should(Be.False, "log should not contain Failed to parse messages");
         }
     }
 }

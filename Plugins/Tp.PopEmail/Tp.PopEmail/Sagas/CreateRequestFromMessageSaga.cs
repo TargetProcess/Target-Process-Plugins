@@ -57,7 +57,7 @@ namespace Tp.PopEmailIntegration.Sagas
                     OwnerID = message.MessageDto.FromID,
                     Name = string.IsNullOrEmpty(message.MessageDto.Subject)
                         ? $"Created from Message with ID {message.MessageDto.ID}"
-                        : message.MessageDto.Subject,
+                        : message.MessageDto.Subject.Substring(0, Math.Min(message.MessageDto.Subject.Length, 255)),
                     Description = Utils.TextToHtml(message.MessageDto.Body ?? string.Empty),
                     ProjectID = message.ProjectId,
                     SourceType = RequestSourceEnum.Email,

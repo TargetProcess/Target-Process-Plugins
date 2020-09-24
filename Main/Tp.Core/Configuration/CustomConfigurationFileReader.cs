@@ -14,7 +14,7 @@ namespace Tp.Core.Configuration
         private readonly string _configFileName;
 
         /// <summary>
-        /// Raises when the configuraiton file is modified
+        /// Raises when the configuration file is modified
         /// </summary>
         public event System.EventHandler FileChanged;
 
@@ -22,7 +22,7 @@ namespace Tp.Core.Configuration
         /// Initialize a new instance of the CustomConfigurationFileReader class
         /// </summary>
         /// <param name="configFileName">The full path to the custom configuration file</param>
-        /// <param name="notifyOnFileChange">Indicate if to raise the FileChange event when the configuraiton file changes </param>
+        /// <param name="notifyOnFileChange">Indicate if to raise the FileChange event when the configuration file changes </param>
         public CustomConfigurationFileReader([NotNull] string configFileName, bool notifyOnFileChange = false)
         {
             // Set the configuration file name
@@ -42,7 +42,7 @@ namespace Tp.Core.Configuration
         public IConfiguration Config { get; private set; }
 
         /// <summary>
-        /// Watch the configuraiton file for changes
+        /// Watch the configuration file for changes
         /// </summary>
         private void WatchConfigFile()
         {
@@ -87,10 +87,7 @@ namespace Tp.Core.Configuration
         /// <param name="e"></param>
         private void ConfigFileChangedEvent(object sender, FileSystemEventArgs e)
         {
-            // Check if the file changed event has listeners
-            if (FileChanged != null)
-                // Raise the event
-                FileChanged(this, new EventArgs());
+            FileChanged?.Invoke(this, new EventArgs());
         }
     }
 }

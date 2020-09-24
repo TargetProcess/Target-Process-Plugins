@@ -4,7 +4,6 @@ tau.mashups
     .addDependency("tp/plugins/commandGateway")
     .addDependency("libs/jquery/jquery")
     .addMashup(function (editor, profileRepository, commandGateway, $, config) {
-
         new editor({
             config: config,
             placeHolder: $('#' + config.placeholderId),
@@ -20,6 +19,7 @@ tau.mashups
     .addDependency("tp/plugins/errorMessageContainer")
     .addDependency("libs/jquery/jquery")
     .addDependency("emailIntegration/jquery/numeric")
+    .addDependency("emailIntegration/openidconnect")
     .addDependency("emailIntegration/jquery/iphone-switch")
     .addDependency("emailIntegration/jquery/defaultvalue.source")
     .addModule("emailIntegration/editor",
@@ -60,7 +60,9 @@ tau.mashups
              _getDefaultProfile: function () {
                  return {
                      Name: '',
+                     passwordValue : '',
                      Settings: {
+                         SecureAccessMethod: 0,
                          Login: '',
                          Password: '',
                          Protocol: '',
@@ -68,13 +70,21 @@ tau.mashups
                          UseSSL: false,
                          Rules: null,
                          MailServer: '',
-                         UsersMigrated: true
+                         UsersMigrated: true,
+                         OAuthDiscoverUri: null,
+                         OAuthState: null
                      }
                  };
              },
 
              _renderProfile: function (data) {
                  this.placeHolder.html('');
+
+                 if (data) {
+                     data.passwordValue = data.Settings.HasPassword ? '0000000000000000' : '';
+                     this._oauthState = data.Settings.OAuthState;
+                 }
+                 this._passwordChanged = false;
 
                  var rendered = $.tmpl(this.template, data || this._getDefaultProfile());
                  rendered.find('#name').enabled(!this._isEditMode());
@@ -87,6 +97,12 @@ tau.mashups
                  this.portInput.numeric({ negative: false });
                  this.protocolSelect = rendered.find('#Protocol');
                  this.protocolSelect.change(function() { that._setPort(); });
+                 this.password = rendered.find('#Password');
+                 this.password.change(function() { that._passwordChanged = true; });
+                 this.authSelect = rendered.find('#authDropDown');
+                 this.authSelect.change($.proxy(this._authChange, this));
+                 this.sign = rendered.find('#SignIn');
+                 this.sign.click($.proxy(this._sign, this));
 
                  rendered.appendTo(this.placeHolder);
 
@@ -121,11 +137,136 @@ tau.mashups
                     $.proxy(this._onSwitchOn, this),
                     $.proxy(this._onSwitchOff, this),
                     {
-                        switch_on_container_path: '../javascript/tau/css/images/plugins/switch_on.png',
-                        switch_off_container_path: '../javascript/tau/css/images/plugins/switch_off.png',
-                        switch_path: '../javascript/tau/css/images/plugins/switch.png'
+                        switch_on_container_path: '../img/plugins/switch_on.png',
+                        switch_off_container_path: '../img/plugins/switch_off.png',
+                        switch_path: '../img/plugins/switch.png'
                     }
                 );
+             },
+
+             _initClient: function (code, accessToken, idToken) {
+                 if (code) {
+                     var tokenEndpoint = OIDC['token_endpoint'];
+
+                     var formData =
+                         'grant_type=' + encodeURIComponent('authorization_code')
+                         + '&client_id=' + encodeURIComponent(this._find('#Login').val())
+                         + '&client_secret=' + encodeURIComponent(this.password.val())
+                         + '&code=' + code
+                         + '&redirect_uri=' + encodeURIComponent(OIDC['redirect_uri']);
+
+                     $.ajax({
+                         type: 'POST',
+                         url: tokenEndpoint,
+                         contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                         data: formData,
+                         success: $.proxy(function (resp) {
+                             if (OIDC.isValidIdToken(resp.id_token) === true) {
+                                 var idtParts = OIDC.getIdTokenParts(resp.id_token);
+                                 var payload = OIDC.getJsonObject(idtParts[1]);
+                                 $('#Login').next('span').text(payload.email);
+                                 if (resp.refresh_token) {
+                                     this.sign.addClass('tau-success').val('Sign out');
+                                     this._oauthState = {
+                                         Email: payload.email,
+                                         TokenEndpoint: tokenEndpoint,
+                                         RefreshToken: resp.refresh_token,
+                                         AccessToken: resp.access_token,
+                                         AccessTokenExpirationUtc: '\/Date(' + new Date(payload.exp * 1000).valueOf() + ')\/',
+                                         AccessTokenIssueDateUtc: '\/Date(' + new Date(payload.iat * 1000).valueOf() + ')\/',
+                                         Scope: resp.scope
+                                     };
+                                 } else {
+                                     this._onCheckConnectionError(
+                                         'The refresh_token is only provided on the first authorization from ' + (payload.email ? payload.email : 'the user') + '. Remove access for your app from the Third-party apps and try again.');
+                                 }
+                             }
+                         }, this),
+                         error: $.proxy(function(jqXhr) {
+                             if (jqXhr) {
+                                 this._showError(0, { FieldName: 'Password', Message: jqXhr.responseJSON.error_description });
+                             }
+                         }, this)
+                     });
+                 }
+             },
+
+             _sign: function () {
+                 if (this._oauthState) {
+                     this.sign.removeClass('tau-success').val('Sign in');
+                     $('#Login').next('span').text('');
+                     this._oauthState = null;
+                     return;
+                 }
+                 if (!this.authSelect.val())
+                     return;
+                 var login = this._find('#Login');
+                 var clientId = login.val();
+                 if (!clientId || clientId.length === 0) {
+                     this._showError(0, { FieldName: 'Login', Message: 'Client id should not be empty' });
+                 }
+                 var clientSecret = this.password.val();
+                 if (!clientSecret || clientSecret.length === 0) {
+                     this._showError(0, { FieldName: 'Password', Message: 'Client secret should not be empty' });
+                 } else if (clientSecret === '0000000000000000' && !this._passwordChanged) {
+                     this._showError(0, { FieldName: 'Password', Message: 'Client secret should be reentered' });
+                 }
+                 if (clientId && clientId.length > 0 && clientSecret && clientSecret.length && (clientSecret !== '0000000000000000' || this._passwordChanged)) {
+                     this.checkConnectionErrorMessageContainer.clearErrors();
+                     var url = new Tp.URL(location.href);
+                     var redirectUri = new Tp.WebServiceURL('/Admin/Plugins.aspx');
+                     redirectUri.host = url.host;
+                     redirectUri.port = url.port;
+                     redirectUri.portSep = url.portSep;
+                     redirectUri.protocol = url.protocol;
+                     redirectUri.protocolSep = url.protocolSep;
+                     var clientInfo = {
+                         client_id: clientId,
+                         redirect_uri: redirectUri.toString()
+                     };
+
+                     OIDC.setClientInfo(clientInfo);
+
+                     var selected = this.authSelect.find('option:selected');
+                     var providerInfo = OIDC.discover(selected.attr('url'));
+                     OIDC.setProviderInfo(providerInfo);
+                     OIDC.storeInfo(providerInfo, clientInfo);
+                     var scope = selected.attr('scope') +
+                         ' ' + (this._isImapSelected() ? selected.attr('imap') : selected.attr('pop3'));
+                     OIDC.login({
+                         scope: scope,
+                         response_type: 'code',
+                         access_type: 'offline',
+                         prompt: 'consent',
+                         max_age: 3600
+                     }, $.proxy(this._initClient, this));
+                 } else {
+                     if (!clientId || clientId.length === 0) {
+                         login.focus();
+                         return;
+                     }
+                     if (!clientSecret || clientSecret.length === 0 || clientSecret === '0000000000000000' && !this._passwordChanged) {
+                         this.password.focus();
+                         return;
+                     }
+                 }
+             },
+
+             _authChange: function (e) {
+                 this.checkConnectionErrorMessageContainer.clearErrors();
+                 var select = $(e.target);
+                 var login = this._find('#Login');
+                 login.next('span').text('');
+                 this._oauthState = null;
+                 if (!select.val()) {
+                     this.sign.hide();
+                     login.prevAll('p.label:first').contents()[0].nodeValue = 'Login\u00a0';
+                     this.password.prevAll('p.label:first').contents()[0].nodeValue = 'Password\u00a0';
+                 } else {
+                     this.sign.show().removeClass('tau-success').val('Sign in');
+                     login.prevAll('p.label:first').contents()[0].nodeValue = 'Client id\u00a0';
+                     this.password.prevAll('p.label:first').contents()[0].nodeValue = 'Client secret\u00a0';
+                 }
              },
 
              _setPort: function () {
@@ -227,14 +368,17 @@ tau.mashups
                  return {
                      Name: this._find('#Name').val(),
                      Settings: {
+                         SecureAccessMethod: this._find('#authDropDown').val() || 0,
                          Login: this._find('#Login').val(),
-                         Password: this._find('#Password').val(),
+                         Password: this._passwordChanged ? this._find('#Password').val() : null,
                          Protocol: this._find('#Protocol').val(),
                          Port: this._getSetPort(),
                          UseSSL: this._getSetUseSsl(),
                          Rules: escape(this._find('#Rules').val()),
                          MailServer: this._find('#MailServer').val(),
-                         UsersMigrated: this._find('#UsersMigrated').val()
+                         UsersMigrated: this._find('#UsersMigrated').val(),
+                         OAuthDiscoverUri: this._find('#authDropDown').find('option:selected').attr('url'),
+                         OAuthState: this._oauthState
                      }
                  };
              },
@@ -256,6 +400,4 @@ tau.mashups
              }
          };
          return emailProfileEditor;
-     }
-    );
-
+     });

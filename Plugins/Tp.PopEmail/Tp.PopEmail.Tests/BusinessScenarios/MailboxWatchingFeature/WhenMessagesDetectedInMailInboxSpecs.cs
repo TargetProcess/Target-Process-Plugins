@@ -69,6 +69,30 @@ Test subject line2' and sender address '2@2.com'
         }
 
         [Test]
+        public void ShouldProcessReplyToTextMessageFromMacWithAttachment()
+        {
+            @"Given project 1
+					And reply text message with attachment from mac with uid 'Uid1' has subject 'Re: New Comment added to Request #5 ""Test from Mac""'
+				When tick occurs
+				Then downloaded messages should be: Uid1
+					And message 'Uid1' should be passed to process
+					And message with subject 'Re: New Comment added to Request #5 ""Test from Mac""' should be passed to process in TP"
+                .Execute(In.Context<MessageDownloadActionSteps>());
+        }
+
+        [Test]
+        public void ShouldProcessReplyToHtmlMessageFromMacWithAttachment()
+        {
+            @"Given project 1
+					And reply html message with attachment from mac with uid 'Uid1' has subject 'Re: New Comment added to Request #5 ""Test from Mac""'
+				When tick occurs
+				Then downloaded messages should be: Uid1
+					And message 'Uid1' should be passed to process
+					And message with subject 'Re: New Comment added to Request #5 ""Test from Mac""' should be passed to process in TP"
+                .Execute(In.Context<MessageDownloadActionSteps>());
+        }
+
+        [Test]
         public void ShouldProcessNewMessagesWithPdfAttachmentWithRfc2045Mime()
         {
             @"Given profile has downloaded message 'Uid1'
@@ -96,6 +120,5 @@ Content-Disposition: attachment;
 				Then message with 'Uid2' with attachment '15156891401442_0.zip' of content type 'application/zip' should be passed to process"
                 .Execute(In.Context<MessageDownloadActionSteps>());
         }
-
     }
 }

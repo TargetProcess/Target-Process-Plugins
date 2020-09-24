@@ -807,6 +807,16 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order=156)]
 		public String CustomField100 { get; set; }
+
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order=157)]
+		public int? MilestoneID { get; set; }
+
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order=158)]
+		public string MilestoneName { get; set; }
 	}
 
 	public enum BugField
@@ -963,5 +973,7 @@ namespace Tp.Integration.Common
 		CustomField98,
 		CustomField99,
 		CustomField100,
+		MilestoneID,
+		MilestoneName,
 	}
 }

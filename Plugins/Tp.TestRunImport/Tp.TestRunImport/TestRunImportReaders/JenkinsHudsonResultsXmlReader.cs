@@ -14,7 +14,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 {
     public class JenkinsHudsonResultsXmlReader : AbstractTestRunImportResultsReader
     {
-        public JenkinsHudsonResultsXmlReader(IActivityLogger log, TextReader reader)
+        public JenkinsHudsonResultsXmlReader(IActivityLogger log, StreamReader reader)
             : base(log, reader)
         {
         }

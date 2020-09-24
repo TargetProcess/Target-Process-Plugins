@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Tp.Core;
 
 namespace Tp.MashupManager.Tests
 {
@@ -34,7 +35,7 @@ namespace Tp.MashupManager.Tests
         {
             _directory = Path.Combine(Path.GetTempPath(), DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture));
             Directory.CreateDirectory(_directory);
-            _loader = new MashupLoader();
+            _loader = new MashupLoader(Maybe.Just<IReadOnlyCollection<string>>(new []{".js"}));
             WriteMashupContent(ScriptFileName, ScriptFileContent);
         }
 
@@ -209,6 +210,17 @@ namespace Tp.MashupManager.Tests
             Assert.AreEqual(ScriptFileContent, scriptFile.Content);
             Assert.NotNull(subFolderScriptFile);
             Assert.AreEqual(ScriptFileContent, subFolderScriptFile.Content);
+        }
+
+        [Test]
+        public void ShouldNotLoadFilesNotInWhitelist()
+        {
+            WriteMashupContent("ignore.me", "please");
+
+            var mashup = _loader.Load(_directory, MashupName);
+
+            Assert.AreEqual(1, mashup.Files.Count);
+            Assert.AreEqual(ScriptFileName, mashup.Files[0].FileName);
         }
 
         // ReSharper disable once UnusedParameter.Local

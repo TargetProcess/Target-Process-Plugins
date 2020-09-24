@@ -95,18 +95,8 @@ namespace Tp.Integration.Plugin.Common.Activity
 
         protected virtual string GetLogFilePathFromLogger(Logger logger)
         {
-            if (logger == null)
-            {
-                return String.Empty;
-            }
-
-            PluginRollingFileAppender appender = logger.Appenders.OfType<PluginRollingFileAppender>().FirstOrDefault();
-            if (appender != null)
-            {
-                return appender.File;
-            }
-
-            return String.Empty;
+            PluginRollingFileAppender appender = logger?.Appenders.OfType<PluginRollingFileAppender>().FirstOrDefault();
+            return appender != null ? appender.File : String.Empty;
         }
 
         private static int[] FilterFileNames(IEnumerable<string> files, ActivityFilter filter)
@@ -125,7 +115,7 @@ namespace Tp.Integration.Plugin.Common.Activity
                     var records = new List<ActivityLogRecord>();
                     while (csvReader.Read())
                     {
-                        ActivityLogRecord record = GetActivityRecord(csvReader);
+                        var record = GetActivityRecord(csvReader);
                         if (filter.DateRange.IsInRangeIncludingEndDate(record.DateTime))
                         {
                             records.Add(record);
@@ -176,8 +166,8 @@ namespace Tp.Integration.Plugin.Common.Activity
             }
             catch (IOException e)
             {
-                _logManager.GetLogger(GetType()).Error(string.Format("Failed to delete activity log. Folder : {0}. Reason : ",
-                    string.Join(",", folders.ToArray())), e);
+                _logManager.GetLogger(GetType()).Error(
+                    $"Failed to delete activity log. Folder : {string.Join(",", folders.ToArray())}. Reason : ", e);
             }
         }
 
@@ -223,11 +213,13 @@ namespace Tp.Integration.Plugin.Common.Activity
 
         #endregion
 
-        public bool RecordsExist(Logger logger)
+        public ActivityLogRecord GetLatestRecord(Logger logger)
         {
-            return GetLoggerFiles(logger)
-                .Aggregate(false,
-                    (current, file) => current | (File.Exists(file) && GetFromLog(file, false, (reader, _) => reader.Read())));
+            var filter = new ActivityFilter { Type = ActivityType.Errors, DateRange = DateRange.Empty };
+            return (from lf in GetLoggerFiles(logger)
+                    where File.Exists(lf) && !new FileInfo(lf).Name.StartsWith("json.", StringComparison.OrdinalIgnoreCase)
+                    select GetFromLog<ActivityLogRecord>(lf, null, (reader, _) => GetRecordsFromFile(filter, lf).Reverse().FirstOrDefault()))
+                .FirstOrDefault(record => record != null);
         }
 
         private T GetFromLog<T>(string fileName, T defaultValue, Func<CsvReader, T, T> func)

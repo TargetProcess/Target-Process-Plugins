@@ -16,6 +16,7 @@ namespace Tp.PopEmailIntegration.StructureMap
     {
         public EmailPluginRegistry()
         {
+            For<IExcludedAssemblyNamesSource>().Singleton().Use<EmailPluginExcludedAssemblies>();
             For<IBufferSize>().Singleton().Use(new BufferSize(1000000));
             For<IMessagePackSize>().Singleton().Use(new MessagePackSize(20));
             For<IEmailClient>().Use<MailBeeEmailClient>();

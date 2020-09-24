@@ -19,7 +19,7 @@ namespace Tp.Integration.Messages.EntityLifecycle
     {
         public UpdateCommand()
         {
-            ChangedFields = new string[] { };
+            ChangedFields = Array.Empty<string>();
         }
 
         public DataTransferObject Dto { get; set; }

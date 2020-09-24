@@ -34,18 +34,16 @@ tau.mashups
 
                     $element.on('click', '.i-role-deleteMashup', function(e) {
                         e.preventDefault();
-                        var $target = $(e.target);
-                        if ($target.is('span')) {
-                            $target = $target.parent();
-                        }
-                        var deleteBlock = $target.parent();
+                        // in context of event callback 'this' is a DOM node where click listener is registered
+                        // in our case it is a clicked button with i-role-deleMashup class
+                        var deleteBlock = $(this);
                         deleteBlock.confirmation({
                             message: '',
                             okLabel: 'OK',
                             cancelLabel: 'Cancel',
                             ok: function() {
                                 deleteBlock.confirmation('hideConfirmationMessage');
-                                mashupManagerService.deleteMashup($target.closest('a').data('mashupname')).done(
+                                mashupManagerService.deleteMashup(deleteBlock.closest('a').data('mashupname')).done(
                                     function() {
                                         navigator.to('library');
                                     });

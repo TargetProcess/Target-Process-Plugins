@@ -6,10 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Text;
 using System.Text.RegularExpressions;
 using MailBee.Mime;
 using NServiceBus;
@@ -29,6 +31,9 @@ namespace Tp.PopEmailIntegration.EmailReader
 {
     public class EmailReader : IHandleMessages<EmailUidsRetrievedMessage>
     {
+        private const string _bodyGroupName = "body";
+        private static readonly Regex _macHtmlCommentRegex = new Regex(@"<html>((<body[^>]*>\s*<head>\s*<meta[^>]*>?</head>)|(<head>\s*<meta[^>]*>?</head>\s*<body[^>]*>))(<meta[^>]*>)*(?<body>.*)?</body>.*?</html>",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
         private static readonly Regex _rfc2045Regex = new Regex(
             "(?i)Content-Type(?i):[\\s]{1,1}(?<ContentType>((text|image|audio|video|application)|(message|multipart))/((X-|x-)[^]\\[()<>@,;\\\\:\"/?=\0- ]+|[^]\\[()<>@,;\\\\:\"/?=\0- ]+)(;[\\s]+[^]\\[()<>@,;\\\\:\"/?=\0- ]+=([^]\\[()<>@,;\\\\:\"/?=\0- ]+|\"(?:(?:(?:\\\\{2})+|\\\\[^\\\\]|[^\\\\\"])*)\"))*)",
             RegexOptions.Compiled);
@@ -182,12 +187,9 @@ namespace Tp.PopEmailIntegration.EmailReader
             {
                 Sender = new MailAddress(mailBeeMailMessage.From.AsString),
                 Subject = mailBeeMailMessage.Subject?.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ') ?? string.Empty,
-                Body =
-                    mailBeeMailMessage.IsBodyAvail("text/html", false)
-                        ? mailBeeMailMessage.BodyHtmlText
-                        : mailBeeMailMessage.BodyPlainText,
-                IsBodyHtml = mailBeeMailMessage.IsBodyAvail("text/html", false),
+                IsBodyHtml = mailBeeMailMessage.IsBodyAvail(MediaTypeNames.Text.Html, false),
                 From = new MailAddress(mailBeeMailMessage.From.AsString),
+                Body = GetBody(mailBeeMailMessage),
             };
 
             foreach (
@@ -266,6 +268,35 @@ namespace Tp.PopEmailIntegration.EmailReader
             return mailMessage;
         }
 
+        private static string GetBody(MailMessage mailBeeMailMessage)
+        {       
+            var bodyMediaType = mailBeeMailMessage.IsBodyAvail(MediaTypeNames.Text.Html, false) ? MediaTypeNames.Text.Html : MediaTypeNames.Text.Plain;
+
+            var textBodyParts = mailBeeMailMessage.BodyParts.Cast<TextBodyPart>().Where(x =>
+                string.Compare(x.AsMimePart.ContentType, bodyMediaType, true, CultureInfo.InvariantCulture) == 0).ToArray();
+
+            if (textBodyParts.Length <= 1)
+                return bodyMediaType == MediaTypeNames.Text.Html ? mailBeeMailMessage.BodyHtmlText : mailBeeMailMessage.BodyPlainText;
+
+            if (bodyMediaType == MediaTypeNames.Text.Plain)
+            {
+                return string.Join(" ", textBodyParts.Select(x => x.Text).Where(x => !string.IsNullOrEmpty(x)));
+            }
+
+            var htmlBodyBuilder = new StringBuilder();
+            foreach (var matchCollection in textBodyParts.Select(x => _macHtmlCommentRegex.Matches(x.Text)))
+            {
+                if (matchCollection.Count != 1 || !matchCollection[0].Groups[_bodyGroupName].Success)
+                {
+                    return mailBeeMailMessage.BodyHtmlText;
+                }
+
+                htmlBodyBuilder.Append(matchCollection[0].Groups[_bodyGroupName].Value);
+            }
+
+            return _macHtmlCommentRegex.ReplaceGroup(textBodyParts[0].Text, _bodyGroupName, htmlBodyBuilder.ToString());
+        }
+
         private static ContentType GetContentTypeForAttachment(Attachment mailBeeAttachment)
         {
             try
@@ -275,11 +306,7 @@ namespace Tp.PopEmailIntegration.EmailReader
             catch (Exception)
             {
                 var matches = _rfc2045Regex.Matches(mailBeeAttachment.RawHeader);
-                if (matches.Count != 0)
-                {
-                    return new ContentType(matches[0].Groups["ContentType"].Value);
-                }
-                return null;
+                return matches.Count != 0 ? new ContentType(matches[0].Groups["ContentType"].Value) : null;
             }
         }
 
@@ -350,6 +377,37 @@ namespace Tp.PopEmailIntegration.EmailReader
             {
                 return false;
             }
+        }
+    }
+
+    public static class RegexExtensions
+    {
+        public static string ReplaceGroup(
+            this Regex regex, string input, string groupName, string replacement)
+        {
+            return regex.Replace(
+                input,
+                m =>
+                {
+                    var group = m.Groups[groupName];
+                    var sb = new StringBuilder();
+                    var previousCaptureEnd = 0;
+                    foreach (var capture in group.Captures.Cast<Capture>())
+                    {
+                        var currentCaptureEnd =
+                            capture.Index + capture.Length - m.Index;
+                        var currentCaptureLength =
+                            capture.Index - m.Index - previousCaptureEnd;
+                        sb.Append(
+                            m.Value.Substring(
+                                previousCaptureEnd, currentCaptureLength));
+                        sb.Append(replacement);
+                        previousCaptureEnd = currentCaptureEnd;
+                    }
+                    sb.Append(m.Value.Substring(previousCaptureEnd));
+
+                    return sb.ToString();
+                });
         }
     }
 }

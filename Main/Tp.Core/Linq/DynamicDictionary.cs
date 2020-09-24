@@ -8,9 +8,9 @@ using Tp.Core.Annotations;
 namespace System.Linq.Dynamic
 // ReSharper restore CheckNamespace
 {
-    internal class DynamicDictionary
+    internal static class DynamicDictionary
     {
-        public static bool TryGetExpression(Type type, Expression instance, int errorPos, string name,
+        public static bool TryGetExpression(Type type, Expression instance, string name,
             out Expression expression)
         {
             var dictInterface = TypeIsDictionaryWithStringKey(type)
@@ -30,7 +30,7 @@ namespace System.Linq.Dynamic
             return false;
         }
 
-        public static bool TryGetAlias(Expression expr, int exprPos, out string name)
+        public static bool TryGetAlias(Expression expr, out string name)
         {
             if (expr is MethodCallExpression methodExpression)
             {
@@ -66,9 +66,9 @@ namespace System.Linq.Dynamic
                 type.GetGenericArguments().First() == typeof(string);
         }
 
-        public static Maybe<string> GetAlias(Expression expr, int exprPos)
+        public static Maybe<string> GetAlias(Expression expr)
         {
-            if (!TryGetAlias(expr, exprPos, out string name))
+            if (!TryGetAlias(expr, out string name))
             {
                 return Maybe.Nothing;
             }

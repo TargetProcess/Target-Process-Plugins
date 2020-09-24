@@ -1,0 +1,41 @@
+﻿<testng-results ignored="0" total="6" passed="6" failed="0" skipped="0">
+	<reporter-output> </reporter-output>
+	<suite started-at="2019-07-10T14:41:10Z" name="Default suite" finished-at="2019-07-10T14:41:32Z" duration-ms="21690">
+		<groups> </groups>
+		<test started-at="2019-07-10T14:41:10Z" name="Default test" finished-at="2019-07-10T14:41:32Z" duration-ms="21690">
+			<class name="TestNGExaplesPackage.TestNGExaplesFile">
+				<test-method signature="BuildUp()[pri:0, instance:TestNGExaplesPackage.TestNGExaplesFile@3c87521]" started-at="2019-07-10T14:41:10Z" name="BuildUp" finished-at="2019-07-10T14:41:10Z" duration-ms="12" status="PASS">
+					<reporter-output> </reporter-output>
+				</test-method>
+				<!--  BuildUp  -->
+				<test-method signature="BadPassword()[pri:0, instance:TestNGExaplesPackage.TestNGExaplesFile@3c87521]" started-at="2019-07-10T14:41:10Z" name="BadPassword" finished-at="2019-07-10T14:41:16Z" duration-ms="5853" status="PASS">
+					<reporter-output> </reporter-output>
+				</test-method>
+				<!--  BadPassword  -->
+				<test-method signature="LoginPatient()[pri:0, instance:TestNGExaplesPackage.TestNGExaplesFile@3c87521]" started-at="2019-07-10T14:41:16Z" name="LoginPatient" finished-at="2019-07-10T14:41:16Z" duration-ms="3" status="PASS">
+					<reporter-output> </reporter-output>
+				</test-method>
+				<!--  LoginPatient  -->
+				<test-method signature="FullIntervention()[pri:0, instance:TestNGExaplesPackage.TestNGExaplesFile@3c87521]" started-at="2019-07-10T14:41:16Z" name="FullIntervention" finished-at="2019-07-10T14:41:22Z" duration-ms="5613" status="FAIL">
+					<reporter-output> </reporter-output>
+					<exception class="java.lang.AssertionError">
+						<short-stacktrace>
+							<![CDATA[
+                java.lang.AssertionError
+                ... Removed 22 stack frames
+              ]]>
+						</short-stacktrace>
+					</exception>
+				</test-method>
+				<!--  FullIntervention  -->
+				<test-method signature="ManageAccounts()[pri:0, instance:TestNGExaplesPackage.TestNGExaplesFile@3c87521]" started-at="2019-07-10T14:41:22Z" name="ManageAccounts" finished-at="2019-07-10T14:41:32Z" duration-ms="10154" status="PASS">
+					<reporter-output> </reporter-output>
+				</test-method>
+				<!--  ManageAccounts  -->
+			</class>
+			<!--  TestNGExaplesPackage.TestNGExaplesFile  -->
+		</test>
+		<!--  Default test  -->
+	</suite>
+	<!--  Default suite  -->
+</testng-results>

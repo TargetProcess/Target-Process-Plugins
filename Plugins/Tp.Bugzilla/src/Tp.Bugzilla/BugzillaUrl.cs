@@ -95,19 +95,23 @@ namespace Tp.Bugzilla
         private string UploadDataToBugzilla(string query)
         {
             var encoding = Encoding.UTF8;
-            var webClient = new TpWebClient(new PluginProfileErrorCollection()) { Encoding = encoding };
-            webClient.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
+            var errors = new PluginProfileErrorCollection();
 
-            if (!string.IsNullOrEmpty(_profile.Login) && !string.IsNullOrEmpty(_profile.Password))
+            using (var webClient = new TpWebClient(errors) { Encoding = encoding })
             {
-                query += $"&Bugzilla_login={_profile.Login}&Bugzilla_password={_profile.Password}";
+                webClient.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
+
+                if (!string.IsNullOrEmpty(_profile.Login) && !string.IsNullOrEmpty(_profile.Password))
+                {
+                    query += $"&Bugzilla_login={_profile.Login}&Bugzilla_password={_profile.Password}";
+                }
+
+                var bret = webClient.UploadData($"{Url}/tp2.cgi", "POST", encoding.GetBytes(query));
+
+                var content = encoding.GetString(bret);
+
+                return content;
             }
-
-            var bret = webClient.UploadData($"{Url}/tp2.cgi", "POST", encoding.GetBytes(query));
-
-            var content = encoding.GetString(bret);
-
-            return content;
         }
 
         public string ExecuteOnBugzilla(IBugzillaQuery bugzillaQuery)

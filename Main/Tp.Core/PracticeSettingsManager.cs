@@ -47,6 +47,8 @@ namespace Tp.Core
 
     public static class PracticeSettingsConverter
     {
+        private static readonly XmlSerializer CachedXmlSerializer = new XmlSerializer(typeof(List<PracticeSetting>));
+
         public static IEnumerable<PracticeSetting> Parse(string s)
         {
             if (s.IsNullOrEmpty())
@@ -55,8 +57,7 @@ namespace Tp.Core
             }
             using (var reader = new StringReader(s))
             {
-                var serializer = new XmlSerializer(typeof(List<PracticeSetting>));
-                return (List<PracticeSetting>) serializer.Deserialize(reader);
+                return (List<PracticeSetting>) CachedXmlSerializer.Deserialize(reader);
             }
         }
 
@@ -65,8 +66,7 @@ namespace Tp.Core
             var buf = new StringBuilder();
             using (TextWriter writer = new StringWriter(buf))
             {
-                var serializer = new XmlSerializer(typeof(List<PracticeSetting>));
-                serializer.Serialize(writer, practiceSettings.ToList());
+                CachedXmlSerializer.Serialize(writer, practiceSettings.ToList());
             }
             return buf.ToString();
         }

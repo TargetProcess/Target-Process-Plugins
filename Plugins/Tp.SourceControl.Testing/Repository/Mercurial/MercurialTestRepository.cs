@@ -20,12 +20,9 @@ namespace Tp.SourceControl.Testing.Repository.Mercurial
             ObjectFactory.Configure(x => x.For<MercurialTestRepository>().HybridHttpOrThreadLocalScoped().Use(this));
         }
 
-        private MercurialSDK.Repository _repositiory;
+        private MercurialSDK.Repository _repository;
 
-        private string ClonedRepoFolder
-        {
-            get { return LocalRepositoryPath + "Cloned"; }
-        }
+        private string ClonedRepoFolder => LocalRepositoryPath + "Cloned";
 
         protected override void OnTestRepositoryDeployed()
         {
@@ -36,24 +33,15 @@ namespace Tp.SourceControl.Testing.Repository.Mercurial
 
             Directory.CreateDirectory(ClonedRepoFolder);
 
-            _repositiory = new MercurialSDK.Repository(ClonedRepoFolder);
-            _repositiory.Clone(LocalRepositoryPath, new CloneCommand());
+            _repository = new MercurialSDK.Repository(ClonedRepoFolder);
+            _repository.Clone(LocalRepositoryPath, new CloneCommand());
         }
 
-        protected override string Name
-        {
-            get { return "TestRepository"; }
-        }
+        protected override string Name => "TestRepository";
 
-        public override string Login
-        {
-            get { return "test"; }
-        }
+        public override string Login => "test";
 
-        public override string Password
-        {
-            get { return "test"; }
-        }
+        public override string Password => "test";
 
         public override void Commit(string commitComment)
         {
@@ -68,11 +56,11 @@ namespace Tp.SourceControl.Testing.Repository.Mercurial
                 file.Write(changes, 0, changes.Length);
             }
 
-            _repositiory.Add(new AddCommand().WithPaths(filePath));
-            _repositiory.Commit(commitComment, new CommitCommand().WithOverrideAuthor("test"));
-            _repositiory.Push();
+            _repository.Add(new AddCommand().WithPaths(filePath));
+            _repository.Commit(commitComment, new CommitCommand().WithOverrideAuthor("test"));
+            _repository.Push();
 
-            var lastChangeset = _repositiory.Log().First();
+            var lastChangeset = _repository.Log().First();
 
             return lastChangeset.Revision;
         }

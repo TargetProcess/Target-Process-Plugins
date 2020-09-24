@@ -8,10 +8,7 @@ namespace Tp.Core.Configuration
         {
         }
 
-        public IConfiguration Config
-        {
-            get { return this; }
-        }
+        public IConfiguration Config => this;
 
         public static readonly IConfiguration Instance = new DefaultConfiguration();
 

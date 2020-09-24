@@ -1,3 +1,5 @@
+using Tp.Core.Annotations;
+
 namespace Tp.Core
 {
     public class TransactionScopeSetup
@@ -54,7 +56,9 @@ namespace Tp.Core
     public interface ITransactionScopeProvider
     {
         Maybe<ILockOwner> RootTransactionScope { get; }
-        ITransactionScope CreateTransactionScope(TransactionScopeSetup setup);
+
+        [NotNull]
+        ITransactionScope CreateTransactionScope([NotNull] TransactionScopeSetup setup);
     }
 
 }

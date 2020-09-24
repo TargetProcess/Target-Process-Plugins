@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -298,9 +298,37 @@ namespace Tp.TestRunImport.Tests.Selenium
                 .Execute(In.Context<SeleniumTestRunImportActionSteps>());
         }
 
-        protected override FrameworkTypes FrameworkType
+        [Test]
+        public void ShouldCreateTestPlanRunForTestNGProfileWithoutRegExpSpecified()
         {
-            get { return FrameworkTypes.Selenium; }
+            @"Given a list of test cases in test plan:
+					|Name             |
+					|Build Up         |
+					|Bad Password     |
+					|Login Patient    |
+					|Full Intervention|
+				And projectId '11'
+				And testPlanId '101'
+				And test result file path is '\\Selenium\\SimpleSeleniumTestNGTestResult.xml'
+				And passive mode is turned OFF
+				And current plugin profile settings saved under name 'Profile_1'
+			When plugin imports results
+			Then local message TestRunImportResultDetectedLocalMessage with '5' results should be sent
+				And TestPlanRunCreatedMessage with valid TestPlanRun should be sent from TargetProcess
+				And TestCaseRunQuery with valid TestPlanRunId should be sent to TargetProcess
+				And TestCaseRunQueryResult should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
+				And UpdateCommand for TestCaseRunDTO should be sent to TargetProcess:
+					|Name             |State |Runned|
+					|Build Up         |Passed|Yes   |
+					|Bad Password     |Passed|Yes   |
+					|Login Patient    |Passed|Yes   |
+					|Full Intervention|Failed|Yes   |
+				And TestCaseRunUpdatedMessage should be sent from TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
+				And UpdateCommand for TestCaseDTO should be sent to TargetProcess for TestCaseRuns: Build Up, Bad Password, Login Patient, Full Intervention
+			"
+                .Execute(In.Context<SeleniumTestRunImportActionSteps>());
         }
+
+        protected override FrameworkTypes FrameworkType => FrameworkTypes.Selenium;
     }
 }

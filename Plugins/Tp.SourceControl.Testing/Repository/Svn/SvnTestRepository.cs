@@ -20,10 +20,7 @@ namespace Tp.SourceControl.Testing.Repository.Svn
             ObjectFactory.Configure(x => x.For<SvnTestRepository>().HybridHttpOrThreadLocalScoped().Use(this));
         }
 
-        protected override string Name
-        {
-            get { return "TestRepository"; }
-        }
+        protected override string Name => "TestRepository";
 
         public override void CheckoutBranch(string branch)
         {
@@ -69,23 +66,13 @@ namespace Tp.SourceControl.Testing.Repository.Svn
             return client;
         }
 
-
         private SvnClient _client;
 
-        public override string Login
-        {
-            get { return "test"; }
-        }
+        public override string Login => "test";
 
-        public override string Password
-        {
-            get { return "123456"; }
-        }
+        public override string Password => "123456";
 
-        protected string LocalRepositoryCheckedOutPath
-        {
-            get { return LocalRepositoryPath + "CheckedOut"; }
-        }
+        protected string LocalRepositoryCheckedOutPath => LocalRepositoryPath + "CheckedOut";
 
         public override void Commit(string commitComment)
         {
@@ -102,9 +89,8 @@ namespace Tp.SourceControl.Testing.Repository.Svn
             }
 
             var commit = new SvnCommitArgs { LogMessage = commitComment };
-            SvnCommitResult result;
 
-            _client.Commit(LocalRepositoryCheckedOutPath, commit, out result);
+            _client.Commit(LocalRepositoryCheckedOutPath, commit, out var result);
 
             return result.Revision.ToString();
         }

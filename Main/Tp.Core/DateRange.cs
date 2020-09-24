@@ -30,19 +30,13 @@ namespace Tp.Core
             AssertDateRangeIsValid();
         }
 
-        public TimeSpan? TimeSpan
-        {
-            get { return _endDate - _startDate; }
-        }
+        public TimeSpan? TimeSpan => _endDate - _startDate;
 
-        public bool IsOpened
-        {
-            get { return TimeSpan == null; }
-        }
+        public bool IsOpened => TimeSpan == null;
 
         public DateTime? StartDate
         {
-            get { return _startDate; }
+            get => _startDate;
             set
             {
                 _startDate = value;
@@ -52,7 +46,7 @@ namespace Tp.Core
 
         public DateTime? EndDate
         {
-            get { return _endDate; }
+            get => _endDate;
             set
             {
                 _endDate = value;
@@ -60,15 +54,9 @@ namespace Tp.Core
             }
         }
 
-        public bool IsInFuture
-        {
-            get { return StartDate.GetValueOrDefault().Date > CurrentDate.Value.Date; }
-        }
+        public bool IsInFuture => StartDate.GetValueOrDefault().Date > CurrentDate.Value.Date;
 
-        public bool IsValid
-        {
-            get { return IsValidRange(StartDate, EndDate); }
-        }
+        public bool IsValid => IsValidRange(StartDate, EndDate);
 
         [AssertionMethod]
         private void AssertDateRangeIsValid()
@@ -188,5 +176,7 @@ namespace Tp.Core
         {
             return !startDate.HasValue || !endDate.HasValue || startDate.Value <= endDate.Value;
         }
+
+        public DateRange Clone() => new DateRange(_startDate, _endDate, _validatePeriod);
     }
 }

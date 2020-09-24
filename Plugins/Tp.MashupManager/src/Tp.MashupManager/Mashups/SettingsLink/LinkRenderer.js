@@ -7,12 +7,12 @@ tau.mashups
     .addMashup(function(menuManager, configurator, settingsApi, intl, $) {
         settingsApi.getMenu().addItem({
             id: 'mashups',
-            groupId: 'integration',
+            groupId: 'configuration',
             text: intl.formatMessage('Mashups'),
             url: configurator.getApplicationPath() + '/Admin/EditProfileExt.aspx?PluginName=Mashup+Manager&hideLastAction=1&Placeholders=profileeditormashupmanager',
             isVisible: function() {
                 return configurator.getLoggedUser().isAdministrator;
             },
-            order: 200
+            order: 50
         });
     });

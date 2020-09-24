@@ -149,13 +149,17 @@ namespace Tp.MashupManager
         private void UpdateUnchangedOriginFiles(UpdateMashupCommandArg commandArg)
         {
             var originalMashup = _scriptStorage.GetMashup(commandArg.OldName);
-            var filesToBeAdded = originalMashup.Files
-                .Where(x => !commandArg.Files.Any(y => y.FileName.Equals(x.FileName, StringComparison.InvariantCultureIgnoreCase)))
-                .ToArray();
 
-            if (filesToBeAdded.Any())
+            if (originalMashup != null)
             {
-                commandArg.Files.AddRange(filesToBeAdded);
+                var filesToBeAdded = originalMashup.Files
+                    .Where(x => !commandArg.Files.Any(y => y.FileName.Equals(x.FileName, StringComparison.InvariantCultureIgnoreCase)))
+                    .ToArray();
+
+                if (filesToBeAdded.Any())
+                {
+                    commandArg.Files.AddRange(filesToBeAdded);
+                }
             }
         }
     }

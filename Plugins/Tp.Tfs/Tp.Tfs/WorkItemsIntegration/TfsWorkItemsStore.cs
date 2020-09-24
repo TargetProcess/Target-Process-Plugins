@@ -15,27 +15,27 @@ namespace Tp.Tfs.WorkItemsIntegration
 
         public TfsWorkItemsStore(ISourceControlConnectionSettingsSource settings)
         {
-            _workItemStore = new TfsWorkItemStoreClient(settings);
+            _workItemStore = ((TfsCurrentProfileToConnectionSettingsAdapter)settings).WorkItemsEnabled ? new TfsWorkItemStoreClient(settings) : null;
         }
 
         public WorkItem[] GetWorkItemsFrom(string workItemNumber)
         {
-            return _workItemStore.GetWorkItemsFrom(workItemNumber);
+            return _workItemStore != null ? _workItemStore.GetWorkItemsFrom(workItemNumber) : new WorkItem[]{};
         }
 
         public WorkItem[] GetWorkItemsFrom(DateTime from)
         {
-            return _workItemStore.GetWorkItemsFrom(from);
+            return _workItemStore != null ? _workItemStore.GetWorkItemsFrom(from) : new WorkItem[]{};
         }
 
         public WorkItem[] GetWorkItemsBetween(string projectName, string[] importedTypes, int minId, int maxId, DateTime lastSync)
         {
-            return _workItemStore.GetWorkItemsBetween(projectName, importedTypes, minId, maxId, lastSync);
+            return _workItemStore != null ? _workItemStore.GetWorkItemsBetween(projectName, importedTypes, minId, maxId, lastSync) : new WorkItem[]{};
         }
 
         public WorkItem GetWorkItem(int id)
         {
-            return _workItemStore.GetWorkItem(id);
+            return _workItemStore?.GetWorkItem(id);
         }
     }
 }

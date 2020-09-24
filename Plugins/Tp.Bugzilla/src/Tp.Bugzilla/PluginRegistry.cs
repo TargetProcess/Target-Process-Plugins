@@ -1,8 +1,11 @@
 // 
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using NServiceBus;
 using NServiceBus.Sagas.Impl;
 using StructureMap.Configuration.DSL;
@@ -23,6 +26,8 @@ namespace Tp.Bugzilla
     {
         public PluginRegistry()
         {
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             For<ICustomPluginSpecifyMessageHandlerOrdering>().Singleton().Use<BugzillaPluginSpecifyMessageHandlerOrdering>();
             For<IBugzillaService>().Use<BugzillaService>();
             For<IBugChunkSize>().Singleton().Use<BugChunkSize>();

@@ -113,7 +113,6 @@ namespace Tp.Core
             _plurals.Add(new InflectorRule(rule, replacement));
         }
 
-
         /// <summary>
         /// Abbreviates a string using ellipses. This will turn "Now is the time for all good men" into "Now is the time for..."
         /// </summary>
@@ -344,7 +343,6 @@ namespace Tp.Core
             }
             return ApplyRules(_singulars, s);
         }
-
 
         /// <summary>
         /// Applies the rules.

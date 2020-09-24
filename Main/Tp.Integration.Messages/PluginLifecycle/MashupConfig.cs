@@ -16,12 +16,15 @@ namespace Tp.Integration.Messages.PluginLifecycle
         public static readonly MashupUserInfoProperty CreatedByProperty = new MashupUserInfoProperty("CreatedBy");
         public static readonly UlongProperty LastModificationDateProperty = new UlongProperty("LastModificationDate");
         public static readonly MashupUserInfoProperty LastModifiedByProperty = new MashupUserInfoProperty("LastModifiedBy");
+        public static readonly StringProperty Publisher = new StringProperty("Publisher");
 
         public List<AccountName> Accounts { get; }
         public List<string> Placeholders { get; }
         public MashupMetaInfo MashupMetaInfo { get; }
 
-        public MashupConfig(IEnumerable<string> configLines)
+        public DateTime? ConfigLastModification { get; }
+
+        public MashupConfig(IEnumerable<string> configLines, DateTime? configLastModifiaction = null)
         {
             MashupMetaInfo = new MashupMetaInfo
             {
@@ -69,10 +72,15 @@ namespace Tp.Integration.Messages.PluginLifecycle
                 {
                     MashupMetaInfo.LastModifiedBy = userInfo;
                 }
+                else if (Publisher.TryParse(line, out stringValue))
+                {
+                    MashupMetaInfo.Publisher = stringValue;
+                }
             }
 
             Accounts = accounts.Select(x => x.Trim().ToLower()).Distinct().Select(x => new AccountName(x)).ToList();
             Placeholders = placeholders.Select(x => x.Trim().ToLower()).Distinct().ToList();
+            ConfigLastModification = configLastModifiaction;
         }
 
         public static IEnumerable<string> GetConfigLines(MashupMetaInfo mashupMetaInfo, string placeholders = "", string accountNames = "")

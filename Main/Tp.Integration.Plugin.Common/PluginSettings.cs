@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Configuration;
@@ -42,7 +42,17 @@ namespace Tp.Integration.Plugin.Common
 
         public static string LoadString(string sectionName)
         {
-            return Load(sectionName, default(string), Maybe.Just);
+            return Load(sectionName, default, Maybe.Just);
+        }
+
+        public static bool LoadBool(string sectionName, bool defaultValue = false)
+        {
+            return Load<bool>(sectionName, defaultValue, s => bool.TryParse(s, out var result) ? result : defaultValue);
+        }
+
+        public static Uri LoadUri(string sectionName, UriKind usriKind, Uri defaultValue = default)
+        {
+            return Load<Uri>(sectionName, defaultValue, s => Uri.TryCreate(s, usriKind, out var result) ? result : defaultValue);
         }
 
         public static T Load<T>(string sectionName, T defaultValue, Func<string, Maybe<T>> converter)

@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using Tp.Core;
 using Tp.Core.Annotations;
+using Tp.Core.Extensions;
 
 // ReSharper disable once CheckNamespace
 
@@ -56,7 +58,7 @@ namespace System.Linq
                 return empty;
             }
 
-            return String.Format(" ({0}) ", String.Join(",", values.Select(ToSimpleSqlString)));
+            return $" ({String.Join(",", values.Select(ToSimpleSqlString))}) ";
         }
 
         [NotNull, Pure]
@@ -184,10 +186,41 @@ namespace System.Linq
         }
 
         [Pure]
+        public static bool HasMany<TSource>([NotNull] this IEnumerable<TSource> source)
+        {
+            int num = 0;
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    checked
+                    {
+                        if (++num > 1)
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        [Pure]
+        public static bool HasMany<TSource>([NotNull] this ICollection<TSource> source)
+        {
+            return source.Count > 1;
+        }
+
+        [Pure]
         [ContractAnnotation("null => true")]
         public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> enumerable)
         {
             return enumerable == null || !enumerable.Any();
+        }
+
+        [Pure]
+        [ContractAnnotation("null => true")]
+        public static bool IsNullOrEmpty<T>([CanBeNull] this ICollection<T> collection)
+        {
+            return collection == null || collection.Count == 0;
         }
 
         [Pure, NotNull]
@@ -388,6 +421,13 @@ namespace System.Linq
         }
 
         [NotNull, Pure]
+        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(
+            [NotNull] this T[] xs)
+        {
+            return new ReadOnlyCollection<T>(xs);
+        }
+
+        [NotNull, Pure]
         public static IEnumerable<T> Yield<T>(this T value)
         {
             yield return value;
@@ -399,6 +439,18 @@ namespace System.Linq
             int defaultValue = default)
         {
             return source.Select(selector).DefaultIfEmpty(defaultValue).Max();
+        }
+
+        [NotNull, ItemNotNull, Pure, LinqTunnel]
+        public static IEnumerable<T> WhereNotNull<T>([NotNull] [ItemCanBeNull] this IEnumerable<T> source) where T : class
+        {
+            return source.Where(i => i != null);
+        }
+
+        [NotNull, ItemNotNull, Pure, LinqTunnel]
+        public static IEnumerable<T?> WhereNotNull<T>([NotNull] [ItemCanBeNull] this IEnumerable<T?> source) where T : struct
+        {
+            return source.Where(i => i != null);
         }
 
         /// <summary>
@@ -482,6 +534,26 @@ namespace System.Linq
         }
 
         [Pure]
+        public static TAccumulate Reduce<TSource, TAccumulate>(
+            [NotNull] this IEnumerable<TSource> source,
+            TAccumulate seed,
+            [NotNull] Func<TAccumulate, TSource, int, TAccumulate> func)
+        {
+            Argument.NotNull(nameof(source), source);
+            Argument.NotNull(nameof(func), func);
+
+            TAccumulate accumulate = seed;
+            int index = 0;
+
+            foreach (var src in source)
+            {
+                accumulate = func(accumulate, src, index++);
+            }
+
+            return accumulate;
+        }
+
+        [Pure]
         public static Dictionary<TKey, TSource> ToDictionaryOfKnownCapacity<TSource, TKey>(this ICollection<TSource> source,
             Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer = null)
         {
@@ -519,6 +591,82 @@ namespace System.Linq
             }
 
             return dictionary;
+        }
+
+        [Pure]
+        public static IDictionary<TKey, TElement> ToDictionaryOfKnownCapacity<TKey, TElement>(this IEnumerable<KeyValuePair<TKey, TElement>> source, int capacity)
+        {
+            var dictionary = new Dictionary<TKey, TElement>(capacity);
+            foreach (var (key, value) in source)
+            {
+                dictionary.Add(key, value);
+            }
+
+            return dictionary;
+        }
+
+        /// <summary>
+        /// Given collection of groups of items, returns items which are present in all given groups
+        /// </summary>
+        [Pure]
+        public static IEnumerable<T> Common<T>(this IEnumerable<IEnumerable<T>> xs) => xs.Aggregate(Enumerable.Intersect);
+
+        [Pure]
+        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> items) where T : struct
+        {
+            if (items is IList<T> itemsList)
+            {
+                if (itemsList.Count > 0)
+                {
+                    return itemsList[0];
+                }
+            }
+            else
+            {
+                using (var enumerator = items.GetEnumerator())
+                {
+                    if (enumerator.MoveNext())
+                    {
+                        return enumerator.Current;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static IEnumerable<TResult> Choose<TInput, TIntermediate, TResult>(
+            this IEnumerable<TInput> source,
+            Func<TInput, TIntermediate?> intermediateSelector,
+            Func<TInput, TIntermediate, TResult> resultSelector)
+            where TIntermediate : struct
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var item in source)
+            {
+                var intermediate = intermediateSelector(item);
+                if (intermediate.HasValue)
+                {
+                    yield return resultSelector(item, intermediate.Value);
+                }
+            }
+        }
+
+        [Pure]
+        [LinqTunnel]
+        [NotNull]
+        public static IEnumerable<(T1, T2)> Zip<T1, T2>(
+            [NotNull] this IEnumerable<T1> left,
+            [NotNull] IEnumerable<T2> right)
+        {
+            using (var leftEnumerator = left.GetEnumerator())
+            using (var rightEnumerator = right.GetEnumerator())
+            {
+                while (leftEnumerator.MoveNext() && rightEnumerator.MoveNext())
+                {
+                    yield return (leftEnumerator.Current, rightEnumerator.Current);
+                }
+            }
         }
     }
 

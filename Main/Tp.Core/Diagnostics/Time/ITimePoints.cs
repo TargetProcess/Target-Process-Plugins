@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tp.Core.Diagnostics.Time
 {
@@ -10,9 +11,17 @@ namespace Tp.Core.Diagnostics.Time
         TimeSpan GetFullSpan();
     }
 
-    public interface ITimePoints : ITimePointsReadOnly, ITimePointsFork
+    public interface ITimePoints : ITimePointsReadOnly, ITimePointsForkable
     {
         TimePoint Add(TimePoint point);
         TimePoint AddUtcNow(string name);
+    }
+
+    public static class TimePointsExtensions
+    {
+        public static TimePoint? GetByName(this ITimePointsReadOnly timePoints, string name)
+        {
+            return timePoints.Points.FirstOrDefault(x => x.Name == name);
+        }
     }
 }

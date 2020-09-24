@@ -55,6 +55,9 @@
     <Reference Include="Common.Logging.Log4Net">
       <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DotNetOpenAuth.Ultimate.4.3.4.13329\lib\net45-full\DotNetOpenAuth.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -65,8 +68,8 @@
     <Reference Include="log4net.Ext.Json, Version=1.2.13.29, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\log4net.Ext.Json.1.2.10.1.2.10.20140804\lib\net20-full\log4net.Ext.Json.dll</HintPath>
     </Reference>
-    <Reference Include="MailBee.NET">
-      <HintPath>..\..\..\Libs\MailBee.NET.dll</HintPath>
+    <Reference Include="MailBee.NET, Version=12.1.1.620, Culture=neutral, PublicKeyToken=cd85b70fb26f9fc1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MailBee.NET.12.1.1\lib\net45\MailBee.NET.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -123,6 +126,7 @@
     <Compile Include="Sagas\CreateRequestersForMessageSaga.cs" />
     <Compile Include="Sagas\MigrateUsersSaga.cs" />
     <Compile Include="Sagas\UpdateRequestDescriptionSaga.cs" />
+    <Compile Include="StructureMap\EmailPluginExcludedAssemblies.cs" />
     <Compile Include="TargetProcessStateTracking\GlobalSettingUpdatedMessageHandler.cs" />
     <Compile Include="TargetProcessStateTracking\ProjectChangedMessageHandler.cs" />
     <Compile Include="TargetProcessStateTracking\TpGeneralUserChangedMessageHandler.cs" />
@@ -292,6 +296,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mashups\ProfileEditor\jquery.utils.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mashups\ProfileEditor\openidconnect.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

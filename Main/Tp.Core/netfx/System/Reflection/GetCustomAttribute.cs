@@ -73,7 +73,6 @@ public static partial class GetCustomAttributeExtension
 			.Cast<TAttribute>();
 	}
 
-
 	public static Maybe<TAttribute> GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute
 	{
 		return GetAttributes<TAttribute>(value).FirstOrNothing();

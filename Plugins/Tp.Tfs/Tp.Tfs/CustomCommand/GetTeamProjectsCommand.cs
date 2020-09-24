@@ -47,9 +47,6 @@ namespace Tp.Tfs.CustomCommand
             }
         }
 
-        public string Name
-        {
-            get { return "GetTeamProjects"; }
-        }
+        public string Name => "GetTeamProjects";
     }
 }

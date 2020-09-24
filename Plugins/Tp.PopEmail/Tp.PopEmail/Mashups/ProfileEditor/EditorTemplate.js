@@ -1,26 +1,33 @@
 tau.mashups
     .addModule("emailIntegration/editorTemplate",
-
 '<form method="POST"><h2 class="h2">E-mail Integration</h2>'+
 '<p class="note">Retrieves emails from your mail account into internal inbox and creates requests from emails.</p>'+
 '<div class="base-block">'+
- '	<div class="pad-box">' +
+'	<div class="pad-box">' +
 '		<p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span><br>' +
-'       <span class="small">Once this name is saved, you can not change it.</span></p>' +
+'		<span class="small">Once this name is saved, you can not change it.</span>' +
+'		<span class="small" style="float: right;">Secure access method</span></p>' +
 '		<input id="Name" type="text" name="Name" class="input" style="width: 275px;" value="${Name}" />' +
+'		<div class="controls-group main-controls left" style="float: right;">' +
+'			<input {{if Settings.SecureAccessMethod === 0}}style="display: none;"{{/if}} id="SignIn" name="SignIn" class="tau-btn tau-btn-big input{{if Settings.SecureAccessMethod && !Settings.OAuthState.IsDeleted}} tau-success{{/if}}" type="button" value="{{if Settings.SecureAccessMethod && !Settings.OAuthState.IsDeleted}}Sign out{{else}}Sign in{{/if}}">' +
+'			<select style="float: right;" class="select" id="authDropDown" name="AuthenticationType">' +
+'				<option value="">Login &amp; Password</option>' +
+'				<option value="1" {{if Settings.SecureAccessMethod === 1}}selected="selected"{{/if}} url="https://accounts.google.com" pop3="https://mail.google.com" imap="https://mail.google.com" scope="email">Google OAuth</option>' +
+'				<option value="2" {{if Settings.SecureAccessMethod === 2}}selected="selected"{{/if}} url="https://login.microsoftonline.com/common/v2.0" pop3="https://outlook.office.com/POP.AccessAsUser.All" imap="https://outlook.office.com/IMAP.AccessAsUser.All" scope="email openid offline_access">Outlook OAuth</option>' +
+'			</select>' +
+'		</div>' +
 '	</div>' +
 '	<div class="separator"></div>' +
 '<div class="pad-box">'+
-'<h3 class="h3">Email Settings</h3>'+
+'<h3 class="h3">Email Settings</h3>' +
 '<table>' +
 '<tr>' +
 '</tr>' +
 '<tr>' +
 '<td><p class="label">Protocol</p></td>' +
 '<td><p class="label">Server&nbsp;<span class="error" name="MailServerErrorLabel"></span></p></td>'+
-'<td class="pl-5"><p class="label">Port&nbsp;<span class="error" name="PortErrorLabel"></span></p></td>'+
-'<td></td>'+
-'<td></td>'+
+'<td class="pl-5"><p class="label">Port&nbsp;<span class="error" name="PortErrorLabel"></span></p></td>' +
+'<td class="pl-10 pr-5"><p class="label">SSL Mode</p></td>' +
 '</tr>'+
 '<tr>' +
 '<td>' +
@@ -30,15 +37,14 @@ tau.mashups
 '</select>' +
 '</td>' +
 '<td><input type="text" name="MailServer" id="MailServer" class="input" value="${Settings.MailServer}" style="width: 400px;" /></td>'+
-'<td class="pl-5"><input type="text" name="Port" id="Port" class="input" value="${Settings.Port}" style="width: 100px;" /></td>'+
+'<td class="pl-5"><input type="text" name="Port" id="Port" class="input" value="${Settings.Port}" style="width: 64px;" /></td>'+
 '<td class="pl-10 pr-5"><div id="switch"></div></td>'+
-'<td>SSL Mode</td>'+
 '</tr>'+
 '</table>'+
-'<p class="label pt-10">Login&nbsp;<span class="error" name="LoginErrorLabel"></span></p></p>'+
-'<input type="text" id="Login" name="Login" class="input" style="width: 275px;" value="${Settings.Login}" />'+
-'<p class="label pt-10">Password&nbsp;<span class="error" name="PasswordErrorLabel"></span></p></p>'+
-'<input type="password" id="Password" name="Password" class="input" style="width: 275px;" value="${Settings.Password}" />' +
+'<p class="label pt-10">{{if Settings.SecureAccessMethod}}Client id{{else}}Login{{/if}}&nbsp;<span class="error" name="LoginErrorLabel"></span></p></p>'+
+'<input type="text" id="Login" name="Login" class="input" style="width: 275px;" value="${Settings.Login}" />&nbsp;&nbsp;&nbsp;<span style="color: rgba(0, 0, 0, 0.7);">{{if Settings.SecureAccessMethod !== 0}}${Settings.OAuthState.Email}{{/if}}</span>'+
+'<p class="label pt-10">{{if Settings.SecureAccessMethod}}Client secret{{else}}Password{{/if}}&nbsp;<span class="error" name="PasswordErrorLabel"></span></p></p>'+
+'<input type="password" id="Password" name="Password" class="input" style="width: 275px;" value="${passwordValue}" />' +
 '<input type="hidden" id="UsersMigrated" name="UsersMigrated" value="${Settings.UsersMigrated}">' +
 '</div>'+
 '<div class="check-block">'+

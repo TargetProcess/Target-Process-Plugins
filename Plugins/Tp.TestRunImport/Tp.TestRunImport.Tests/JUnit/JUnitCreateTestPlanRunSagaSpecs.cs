@@ -298,9 +298,6 @@ namespace Tp.TestRunImport.Tests.JUnit
                 .Execute(In.Context<JUnitTestRunImportActionSteps>());
         }
 
-        protected override FrameworkTypes FrameworkType
-        {
-            get { return FrameworkTypes.JUnit; }
-        }
+        protected override FrameworkTypes FrameworkType => FrameworkTypes.JUnit;
     }
 }

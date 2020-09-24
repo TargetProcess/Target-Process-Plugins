@@ -15,27 +15,20 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
     {
         private readonly IActivityLogger _log;
 
-        protected AbstractTestRunImportResultsReader(IActivityLogger log, TextReader reader)
+        protected AbstractTestRunImportResultsReader(IActivityLogger log, StreamReader reader)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException("log");
-            }
-            _log = log;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             if (reader == null)
             {
                 _log.Error("Ctor member reader is null");
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException(nameof(reader));
             }
             Reader = reader;
         }
 
-        protected IActivityLogger Log
-        {
-            get { return _log; }
-        }
+        protected IActivityLogger Log => _log;
 
-        protected TextReader Reader { get; private set; }
+        protected StreamReader Reader { get; }
         public abstract List<TestRunImportResultInfo> GetTestRunImportResults();
     }
 }

@@ -41,6 +41,16 @@ namespace Tp.Core
             return Path.GetFullPath(relativePath);
         }
 
+        public virtual string ReadAllText(string physicalPath)
+        {
+            return File.ReadAllText(physicalPath);
+        }
+
         public virtual IFileSystemWatcher FileSystemWatcher { get; }
+        
+        public virtual void DirectoryDelete(string path, bool recursive)
+        {
+            Directory.Delete(path, recursive);
+        }
     }
 }

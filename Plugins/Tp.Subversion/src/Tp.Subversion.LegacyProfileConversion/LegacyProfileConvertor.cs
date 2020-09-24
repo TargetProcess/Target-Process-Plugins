@@ -48,7 +48,7 @@ namespace Tp.Subversion.LegacyProfileConversion
         {
             if (storageRepository == null)
             {
-                throw new ArgumentNullException("storageRepository");
+                throw new ArgumentNullException(nameof(storageRepository));
             }
             Mapper.CreateMap<TpUser, TpUserData>();
             var repository = new DataRepository<TpUserData>(storageRepository);
@@ -175,7 +175,7 @@ namespace Tp.Subversion.LegacyProfileConversion
         private static string GetValueByName(XmlNode root, string pathtoproject)
         {
             var node = root.SelectSingleNode(pathtoproject);
-            return node != null ? node.InnerText : string.Empty;
+            return node?.InnerText ?? string.Empty;
         }
     }
 }

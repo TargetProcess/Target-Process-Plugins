@@ -26,6 +26,15 @@ namespace Tp.Integration.Common
         }
     }
 
+    public partial class PortfolioEpicDTO
+    {
+        string IAssignableDTO.CommentOnChangingState
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+    }
+
     public partial class EpicDTO
     {
         string IAssignableDTO.CommentOnChangingState

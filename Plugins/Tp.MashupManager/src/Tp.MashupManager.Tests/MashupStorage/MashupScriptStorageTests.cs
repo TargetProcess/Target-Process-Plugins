@@ -6,6 +6,7 @@ using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StructureMap;
+using Tp.Core;
 using Tp.Integration.Messages;
 using Tp.Integration.Plugin.Common.Logging;
 using Tp.Integration.Plugin.Common.Tests.Common;
@@ -39,7 +40,7 @@ namespace Tp.MashupManager.Tests.MashupStorage
             _mashupFolderPath = Path.Combine(mashupLocalFolder.Path, MashupName);
 
             _storage = new MashupScriptStorage(new PluginContextMock { AccountName = new AccountName() }, mashupLocalFolder,
-                logManager, new MashupLoader());
+                logManager, new MashupLoader(Maybe.Nothing));
         }
 
         [TearDown]
@@ -120,6 +121,12 @@ namespace Tp.MashupManager.Tests.MashupStorage
                 {
                     EmptyMashupFile(@"C:\1.txt")
                 }) { Name = @"\..\zagzag" });
+        }
+
+        [Test]
+        public void ShouldNotThrowWhenDeletingNonExistingMashup()
+        {
+            Assert.DoesNotThrow(() => _storage.DeleteMashup("NonExistingMashup"));
         }
 
         private static MashupFile EmptyMashupFile(string fileName)

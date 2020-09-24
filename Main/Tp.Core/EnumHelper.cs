@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace System
             public static readonly EnumCache<TEnum> Cache = new EnumCache<TEnum>(e => e.ToString());
         }
 
-        private static class EnumDescriptionCache<TEnum>
+        public static class EnumDescriptionCache<TEnum>
             where TEnum : struct
         {
             public static readonly EnumCache<TEnum> Instance =
@@ -49,10 +50,13 @@ namespace System
                     (f, attr) => { return attr.MaybeAs<ITextProvider>().Select(x => x.GetText()).GetOrDefault(f.Name); });
         }
 
-        private class EnumCache<TEnum> : IEnumerable<KeyValuePair<TEnum, string>>
+        public class EnumCache<TEnum> : IEnumerable<KeyValuePair<TEnum, string>>
             where TEnum : struct
         {
             private readonly IDictionary<TEnum, string> _values;
+
+            private readonly ConcurrentBag<Maybe.TryDelegate<TEnum, string>> _fallbackFunctions =
+                new ConcurrentBag<Maybe.TryDelegate<TEnum, string>>();
 
             public EnumCache(Func<TEnum, string> valueProvider)
             {
@@ -63,9 +67,27 @@ namespace System
                 _values = ((TEnum[]) Enum.GetValues(typeof(TEnum))).ToDictionary(e => e, valueProvider);
             }
 
+            public void AddFallbackFunction(Maybe.TryDelegate<TEnum, string> function)
+            {
+                _fallbackFunctions.Add(function);
+            }
+
             public string GetValue(TEnum @enum)
             {
-                return _values[@enum];
+                if (_values.TryGetValue(@enum, out var result))
+                {
+                    return result;
+                }
+
+                foreach (var fallback in _fallbackFunctions)
+                {
+                    if (fallback(@enum, out result))
+                    {
+                        return result;
+                    }
+                }
+
+                throw new KeyNotFoundException($"Unable to find cache entry for enum value {typeof(TEnum).Name}.{@enum}");
             }
 
             public IEnumerable<TEnum> GetKeys()
@@ -131,12 +153,12 @@ namespace System
             return Enum.TryParse(val, true, out parsed) ? Maybe.Return(parsed) : Maybe.Nothing;
         }
 
-        public static IDictionary<TEnum, string> TryParseEnumByDescription<TEnum>(this string description, bool ignoreCase)
+        public static IReadOnlyDictionary<TEnum, string> TryParseEnumByDescription<TEnum>(this string description, bool ignoreCase)
             where TEnum : struct
         {
             RaiseErrorIfNotEnum<TEnum>();
 
-            var comparisonType = ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
+            var comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
             Func<KeyValuePair<TEnum, string>, bool> condition = e => string.Equals(description, e.Value, comparisonType);
 
             return EnumDescriptionCache<TEnum>.Instance.Where(d => condition(d)).ToDictionary(k => k.Key, pair => pair.Value);

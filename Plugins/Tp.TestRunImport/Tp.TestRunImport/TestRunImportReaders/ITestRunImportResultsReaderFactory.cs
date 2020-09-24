@@ -3,7 +3,6 @@
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
-using System;
 using System.IO;
 using Tp.Integration.Plugin.TestRunImport.TestRunImport;
 
@@ -35,6 +34,6 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
         /// <exception cref="ApplicationException">
         /// If no suitable AbstractTestRunImportResultsReader can be created.
         /// </exception>
-        AbstractTestRunImportResultsReader GetResolver(TestRunImportSettings settings, TextReader reader);
+        AbstractTestRunImportResultsReader GetResolver(TestRunImportSettings settings, StreamReader reader);
     }
 }

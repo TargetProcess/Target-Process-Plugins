@@ -49,15 +49,9 @@ namespace System.Collections.Generic
                 return _dictionary.Remove(item);
             }
 
-            public int Count
-            {
-                get { return _dictionary.Count; }
-            }
+            public int Count => _dictionary.Count;
 
-            public bool IsReadOnly
-            {
-                get { return _dictionary.IsReadOnly; }
-            }
+            public bool IsReadOnly => _dictionary.IsReadOnly;
 
             public bool ContainsKey(TKey key)
             {
@@ -82,19 +76,13 @@ namespace System.Collections.Generic
 
             public TValue this[TKey key]
             {
-                get { return _dictionary.GetValue(key).GetOrDefault(_defaultValue); }
-                set { _dictionary[key] = value; }
+                get => _dictionary.GetValue(key).GetOrDefault(_defaultValue);
+                set => _dictionary[key] = value;
             }
 
-            public ICollection<TKey> Keys
-            {
-                get { return _dictionary.Keys; }
-            }
+            public ICollection<TKey> Keys => _dictionary.Keys;
 
-            public ICollection<TValue> Values
-            {
-                get { return _dictionary.Values; }
-            }
+            public ICollection<TValue> Values => _dictionary.Values;
 
             IEnumerator IEnumerable.GetEnumerator()
             {
@@ -116,16 +104,14 @@ namespace System.Collections.Generic
 
         public static Maybe<TVal> GetValue<TKey, TVal>(this IReadOnlyDictionary<TKey, TVal> d, TKey k)
         {
-            TVal fetched;
             return k == null
                 ? Maybe.Nothing
-                : (!d.TryGetValue(k, out fetched) ? Maybe.Nothing : Maybe.Just(fetched));
+                : !d.TryGetValue(k, out var fetched) ? Maybe.Nothing : Maybe.Just(fetched);
         }
 
         public static TVal GetValueFailingVerbose<TKey, TVal>(this IDictionary<TKey, TVal> d, TKey k)
         {
-            TVal fetched;
-            if (!d.TryGetValue(k, out fetched))
+            if (!d.TryGetValue(k, out var fetched))
             {
                 throw new KeyNotFoundException("Key {0} was not found in map".Fmt(k));
             }
@@ -134,8 +120,7 @@ namespace System.Collections.Generic
 
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueRetriever)
         {
-            TValue value;
-            if (!dictionary.TryGetValue(key, out value))
+            if (!dictionary.TryGetValue(key, out var value))
             {
                 value = valueRetriever(key);
                 dictionary.Add(key, value);
@@ -152,6 +137,19 @@ namespace System.Collections.Generic
         public static IReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
         {
             return new ReadOnlyDictionary<TKey, TValue>(dictionary);
+        }
+
+        public static void AddOrThrow<TKey, TValue, TException>([NotNull] this IDictionary<TKey, TValue> dictionary, TKey key, TValue value,
+            [NotNull] Func<ArgumentException, TException> converter) where TKey : class where TException : Exception
+        {
+            try
+            {
+                dictionary.Add(key, value);
+            }
+            catch (ArgumentException ex)
+            {
+                throw converter(ex);
+            }
         }
     }
 }

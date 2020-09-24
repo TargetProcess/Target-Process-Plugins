@@ -77,10 +77,7 @@ namespace Tp.Tfs.Handlers
             return profile.SourceControlEnabled;
         }
 
-        private bool IsFirstRun
-        {
-            get { return _storage.Get<WorkItemInfo>().Empty(); }
-        }
+        private bool IsFirstRun => _storage.Get<WorkItemInfo>().Empty();
 
         private IEnumerable<EntitySynchronizationMessage> GetTargetWorkItemsMessages(DateTime? lastSyncDate)
         {

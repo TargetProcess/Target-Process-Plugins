@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Web;
 
 namespace Tp.Utils.Html
 {
@@ -41,9 +40,34 @@ namespace Tp.Utils.Html
             }
 
             var builder = new StringBuilder();
-            foreach (char ch in input)
+            var highSurrogate = char.MinValue;
+            foreach (var ch in input)
             {
+                if (char.IsHighSurrogate(highSurrogate))
+                {
+                    if(char.IsSurrogatePair(highSurrogate, ch))
+                    {
+                        builder.Append(highSurrogate);
+                        builder.Append(ch);
+                    }
+                    else
+                    {
+                        HtmlEncode(highSurrogate, builder);
+                        HtmlEncode(ch, builder);
+                    }
+                    highSurrogate = char.MinValue;
+                    continue;
+                }
+                if (char.IsHighSurrogate(ch))
+                {
+                    highSurrogate = ch;
+                    continue;
+                }
                 HtmlEncode(ch, builder);
+            }
+            if (char.IsHighSurrogate(highSurrogate))
+            {
+                HtmlEncode(highSurrogate, builder);
             }
             output.Write(builder);
         }
@@ -199,15 +223,15 @@ namespace Tp.Utils.Html
 
         private static void HtmlEncode(int ch, StringBuilder builder)
         {
-            if (Char.IsWhiteSpace((char) ch))
+            if (char.IsWhiteSpace((char) ch))
             {
-                var unicodeCategory = Char.GetUnicodeCategory((char) ch);
+                var unicodeCategory = char.GetUnicodeCategory((char) ch);
                 if (unicodeCategory != UnicodeCategory.LineSeparator && unicodeCategory != UnicodeCategory.ParagraphSeparator)
                 {
                     builder.Append((char) ch);
                 }
             }
-            else if (Char.IsLetterOrDigit((char) ch) || Char.GetUnicodeCategory((char) ch) == UnicodeCategory.CurrencySymbol)
+            else if (char.IsLetterOrDigit((char) ch) || char.GetUnicodeCategory((char) ch) == UnicodeCategory.CurrencySymbol)
             {
                 builder.Append((char) ch);
             }
@@ -242,7 +266,7 @@ namespace Tp.Utils.Html
 
         private static void HtmlAttributeEncode(int ch, TextWriter output)
         {
-            if (Char.IsWhiteSpace((char) ch))
+            if (char.IsWhiteSpace((char) ch))
             {
                 output.Write((char) ch);
             }

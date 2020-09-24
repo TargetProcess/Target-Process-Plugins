@@ -26,7 +26,7 @@ namespace Tp.Integration.Plugin.Common
                 Url =
                     (string.Format("{0}/Services/{1}.asmx", Settings.Default.TargetProcessPath, typeof(T).Name))
             };
-            TpPolicy.ApplyAutheticationTicket(serviceWse, Settings.Default.AdminLogin, Settings.Default.AdminPassword);
+            TpPolicy.ApplyAuthenticationTicket(serviceWse, Settings.Default.AdminLogin, Settings.Default.AdminPassword);
 
             return serviceWse;
         }

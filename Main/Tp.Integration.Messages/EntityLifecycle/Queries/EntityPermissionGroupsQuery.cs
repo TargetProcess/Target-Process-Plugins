@@ -11,6 +11,7 @@ namespace Tp.Integration.Messages.EntityLifecycle.Queries
         {
             public int Id { get; set; }
             public string ResourceType { get; set; }
+            public int? ResourceTypeId { get; set; }
         }
 
         public Entity[] Entities { get; set; }

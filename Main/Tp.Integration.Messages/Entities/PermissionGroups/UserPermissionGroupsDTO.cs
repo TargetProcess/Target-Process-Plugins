@@ -7,7 +7,7 @@ namespace Tp.Integration.Messages.Entities.PermissionGroups
 {
     [Serializable]
     [DataContract]
-    public class UserPermissionGroupsDTO : DataTransferObject
+    public class UserPermissionGroupsDTO : DataTransferObject, IUserPermissionGroupsDTO
     {
         [DataMember]
         [XmlElement(Order = 0)]

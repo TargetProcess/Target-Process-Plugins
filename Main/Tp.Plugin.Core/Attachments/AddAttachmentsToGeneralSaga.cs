@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -44,7 +44,11 @@ namespace Tp.Plugin.Core.Attachments
             foreach (var attachmentDto in message.Attachments)
             {
                 var clonedAttachment = Clone(attachmentDto);
-                clonedAttachment.GeneralID = message.GeneralId;
+                if (message.GeneralId != null)
+                {
+                    clonedAttachment.GeneralID = message.GeneralId;
+                    clonedAttachment.MessageID = null;
+                }
                 Send(new CloneAttachmentCommand { Dto = clonedAttachment });
             }
 
@@ -89,7 +93,7 @@ namespace Tp.Plugin.Core.Attachments
 
         public void Handle(TargetProcessExceptionThrownMessage message)
         {
-            Log().Error(string.Format("Failed to add attachments to general with id {0}", Data.GeneralId), message.GetException());
+            Log().Error($"Failed to add attachments to general with id {Data.GeneralId}", message.GetException());
             MarkAsComplete();
         }
     }

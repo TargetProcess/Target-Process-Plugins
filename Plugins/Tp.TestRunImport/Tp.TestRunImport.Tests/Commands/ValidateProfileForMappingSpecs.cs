@@ -73,7 +73,7 @@ namespace Tp.TestRunImport.Tests.Commands
         [Given("Xml results file path path '$uri'")]
         public void GivenRepositoryPath(string uri)
         {
-            _settings.ResultsFilePath = string.Format("{0}\\{1}", Environment.CurrentDirectory, uri.TrimStart('\\'));
+            _settings.ResultsFilePath = $"{Environment.CurrentDirectory}\\{uri.TrimStart('\\')}";
         }
 
         [Given("framework type is '$type'")]
@@ -85,6 +85,8 @@ namespace Tp.TestRunImport.Tests.Commands
                 _settings.FrameworkType = FrameworkTypes.JUnit;
             else if (string.Compare("Selenium", type, StringComparison.InvariantCultureIgnoreCase) == 0)
                 _settings.FrameworkType = FrameworkTypes.Selenium;
+            else if (string.Compare("Cucumber", type, StringComparison.InvariantCultureIgnoreCase) == 0)
+                _settings.FrameworkType = FrameworkTypes.Cucumber;
             else
                 _settings.FrameworkType = FrameworkTypes.None;
         }

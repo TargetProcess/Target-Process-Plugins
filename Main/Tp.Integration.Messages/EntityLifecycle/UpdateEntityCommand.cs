@@ -11,7 +11,7 @@ namespace Tp.Integration.Messages.EntityLifecycle
     public abstract class UpdateEntityCommand<TEntityDto> : IUpdateEntityCommand<TEntityDto>
         where TEntityDto : DataTransferObject, new()
     {
-        protected UpdateEntityCommand(TEntityDto dto) : this(dto, new Enum[] { })
+        protected UpdateEntityCommand(TEntityDto dto) : this(dto, Array.Empty<Enum>())
         {
         }
 

@@ -9,11 +9,11 @@ namespace Tp.Integration.Messages.Entities
         private static readonly DateTime DateMinValue = DateTime.MinValue;
         private const string TextNaValue = "n/a ";
 
-        public static object GetNaValue(this ICustomFieldInfo customField)
+        public static object GetNaValue(this FieldTypeEnum type)
         {
             object naValue = null;
 
-            switch (customField.FieldType)
+            switch (type)
             {
                 case FieldTypeEnum.Text:
                     naValue = TextNaValue;
@@ -25,7 +25,7 @@ namespace Tp.Integration.Messages.Entities
                     naValue = DateMinValue;
                     break;
                 case FieldTypeEnum.Number:
-                    naValue = decimal.MinValue;
+                    naValue = long.MinValue;
                     break;
             }
             return naValue;
@@ -36,13 +36,18 @@ namespace Tp.Integration.Messages.Entities
             switch (customFieldValue.FieldType)
             {
                 case FieldTypeEnum.Number:
-                    return value.MaybeAs<decimal?>().Select(x => x == decimal.MinValue).GetOrDefault();
+                    return value.MaybeAs<long?>().Select(x => x == long.MinValue).GetOrDefault();
                 case FieldTypeEnum.Date:
                     return value.MaybeAs<DateTime?>().Select(x => x == DateMinValue).GetOrDefault();
                 case FieldTypeEnum.Text:
                     return value.MaybeAs<string>().Select(x => x == TextNaValue).GetOrDefault();
             }
             return false;
+        }
+
+        public static bool GetIsCalculated(this ICustomFieldInfo customField)
+        {
+            return !string.IsNullOrEmpty(customField.CalculationModel);
         }
     }
 }

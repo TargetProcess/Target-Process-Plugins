@@ -1,5 +1,5 @@
 ﻿//
-// Copyright (c) 2005-2016 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2020 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 //
 
@@ -11,31 +11,31 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Microsoft.TeamFoundation.Client.Channels;
+using Microsoft.VisualStudio.Services.Common;
 using Tp.Core;
-using Tp.SourceControl.Settings;
+using Tp.SourceControl.Diff;
 using Tp.SourceControl.VersionControlSystem;
 using VersionControlException = Tp.SourceControl.VersionControlSystem.VersionControlException;
+using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 
 namespace Tp.Tfs.VersionControlSystem
 {
-    public class TfsClient
+    public class TfsClient : ITfsClient
     {
-        private const int UriTfsProjectCollection = 1;
-        private const int UriTfsTeamProject = 2;
-
         private readonly VersionControlServer _versionControl;
 
         private TfsTeamProjectCollection _teamProjectCollection;
         private TeamProject[] _teamProjects;
 
-        public TfsClient(ISourceControlConnectionSettingsSource settings)
+        public TfsClient(TfsConnectionParameters parameters, TimeSpan maxTimeout)
         {
-            _versionControl = GetVersionControl(settings);
+            _versionControl = GetVersionControl(parameters, maxTimeout);
         }
 
         ~TfsClient()
         {
-            _teamProjectCollection?.Dispose();
+            Dispose(false);
         }
 
         public IEnumerable<RevisionRange> GetFromTillHead(Int32 from, int pageSize)
@@ -53,7 +53,42 @@ namespace Tp.Tfs.VersionControlSystem
             return GetChangesetsRanges(int.Parse(fromRevision.Value), int.Parse(toRevision.Value), pageSize);
         }
 
-        public Changeset GetParentCommit(Changeset commit, string path)
+        public int? GetLatestChangesetId(int startRevision = 0)
+        {
+            var changeSetIds = new List<int>();
+
+            foreach (var project in _teamProjects)
+            {
+                try
+                {
+                    var changeset = _versionControl.QueryHistory(
+                        project.ServerItem,
+                        VersionSpec.Latest,
+                        0,
+                        RecursionType.Full,
+                        null,
+                        null,
+                        VersionSpec.Latest,
+                        1,
+                        false,
+                        false).Cast<Changeset>().FirstOrDefault();
+
+                    if (changeset != null)
+                    {
+                        if (startRevision >= changeset.ChangesetId)
+                            return changeset.ChangesetId;
+                        changeSetIds.Add(changeset.ChangesetId);
+                    }
+                }
+                catch (ChangesetNotFoundException)
+                {
+                }
+            }
+
+            return changeSetIds.Any() ? changeSetIds.Max(x => x) : (int?)null;
+        }
+
+        private Changeset GetParentCommit(Changeset commit, string path)
         {
             var changeset = GetFirstChangesetBefore(commit.ChangesetId, path);
             if (changeset == null)
@@ -61,6 +96,17 @@ namespace Tp.Tfs.VersionControlSystem
                 throw new VersionControlException($"No parent Changeset found for path '{path}'");
             }
             return _versionControl.GetChangeset(changeset.ChangesetId);
+        }
+
+        public string GetTextFileContent(RevisionId changeset, string path)
+        {
+            var commit = GetCommit(changeset);
+            return GetFileContent(commit, path);
+        }
+
+        public byte[] GetBinaryFileContent(RevisionId changeset, string path)
+        {
+            throw new NotImplementedException();
         }
 
         public Changeset GetCommit(RevisionId id)
@@ -99,7 +145,25 @@ namespace Tp.Tfs.VersionControlSystem
             return revisionInfos;
         }
 
-        public string GetFileContent(Changeset commit, string path)
+        public DiffResult GetDiff(RevisionId changeset, IDiffProcessor diffProcessor, string path)
+        {
+            var commit = GetCommit(changeset);
+            return GetDiff(commit, diffProcessor, path);
+        }
+
+        private DiffResult GetDiff(Changeset commit, IDiffProcessor diffProcessor, string path)
+        {
+            var parent = GetParentCommit(commit, path);
+            var fileContent = GetTextFileContentSafe(commit, path);
+            var previousRevisionFileContent = GetTextFileContentSafe(parent, path);
+            var diff = diffProcessor.GetDiff(previousRevisionFileContent, fileContent);
+            diff.LeftPanRevisionId = parent.ChangesetId.ToString();
+            diff.RightPanRevisionId = commit.ChangesetId.ToString();
+
+            return diff;
+        }
+
+        private string GetFileContent(Changeset commit, string path)
         {
             Changeset changeset = _versionControl.GetChangeset(commit.ChangesetId, true, true);
             Change change = changeset.Changes.FirstOrDefault(ch => ch.Item.ServerItem.Equals(path));
@@ -121,17 +185,29 @@ namespace Tp.Tfs.VersionControlSystem
             return content;
         }
 
-        private VersionControlServer GetVersionControl(ISourceControlConnectionSettingsSource settings)
+        private string GetTextFileContentSafe(Changeset commit, string path)
+        {
+            try
+            {
+                return GetFileContent(commit, path);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private VersionControlServer GetVersionControl(TfsConnectionParameters parameters, TimeSpan sendTimeout)
         {
             VersionControlServer versionControl;
 
-            TfsConnectionParameters parameters = TfsConnectionHelper.GetTfsConnectionParameters(settings);
-
-            switch (parameters.SegmentsCount)
+            switch (parameters.TfsCollection)
             {
-                case UriTfsProjectCollection:
+                case TfsCollection.Project:
                 {
-                    _teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
+                    _teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri,
+                        new VssCredentials(new WindowsCredential(parameters.Credential), CredentialPromptType.DoNotPrompt), null,
+                        new TfsHttpRetryChannelFactory(sendTimeout));
                     _teamProjectCollection.EnsureAuthenticated();
 
                     versionControl = _teamProjectCollection.GetService<VersionControlServer>();
@@ -139,10 +215,12 @@ namespace Tp.Tfs.VersionControlSystem
 
                     break;
                 }
-                case UriTfsTeamProject:
+                case TfsCollection.TeamProject:
                 {
-                    _teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
-                    _teamProjectCollection.EnsureAuthenticated();
+                    _teamProjectCollection = new TfsTeamProjectCollection(parameters.TfsCollectionUri,
+                        new VssCredentials(new WindowsCredential(parameters.Credential), CredentialPromptType.DoNotPrompt), null,
+                        new TfsHttpRetryChannelFactory(sendTimeout));
+                        _teamProjectCollection.EnsureAuthenticated();
 
                     try
                     {
@@ -172,7 +250,7 @@ namespace Tp.Tfs.VersionControlSystem
 
         private Changeset GetFirstChangesetBefore(int before, string path)
         {
-            return _versionControl.QueryHistory(
+           return _versionControl.QueryHistory(
                 path,
                 VersionSpec.Latest,
                 0,
@@ -265,6 +343,26 @@ namespace Tp.Tfs.VersionControlSystem
             }
 
             return changesets;
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            // TODO release unmanaged resources here
+        }
+
+        private void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+            if (disposing)
+            {
+                _teamProjectCollection?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

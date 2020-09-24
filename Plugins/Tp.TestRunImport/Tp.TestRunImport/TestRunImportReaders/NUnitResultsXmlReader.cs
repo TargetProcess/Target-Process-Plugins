@@ -15,7 +15,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
 {
     public class NUnitResultsXmlReader : AbstractTestRunImportResultsReader
     {
-        protected internal NUnitResultsXmlReader(IActivityLogger log, TextReader reader)
+        protected internal NUnitResultsXmlReader(IActivityLogger log, StreamReader reader)
             : base(log, reader)
         {
         }

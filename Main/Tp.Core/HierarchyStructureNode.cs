@@ -12,7 +12,7 @@ namespace Tp.Core
         public HierarchyStructureNode(string id, HierarchyStructureNode[] nodes = null)
         {
             Id = id;
-            Nodes = new ReadOnlyCollection<HierarchyStructureNode>(nodes ?? new HierarchyStructureNode[0]);
+            Nodes = new ReadOnlyCollection<HierarchyStructureNode>(nodes ?? Array.Empty<HierarchyStructureNode>());
         }
 
         public bool Equals(HierarchyStructureNode other)

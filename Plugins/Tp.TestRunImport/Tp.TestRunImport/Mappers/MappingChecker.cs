@@ -37,7 +37,7 @@ namespace Tp.Integration.Plugin.TestRunImport.Mappers
             try
             {
                 var uri = settings.FrameworkType == FrameworkTypes.FrameworkTypes.JenkinsHudson
-                    ? new Uri($"{settings.ResultsFilePath.TrimEnd(new[] { '/', '\\' })}/lastCompletedBuild/testReport/api/xml")
+                    ? new Uri($"{settings.ResultsFilePath.TrimEnd('/', '\\')}/lastCompletedBuild/testReport/api/xml")
                     : new Uri(settings.ResultsFilePath);
                 var factoryResult = _streamFactory.OpenStream(uri, settings);
 

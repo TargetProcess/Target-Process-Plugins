@@ -42,10 +42,10 @@ using Tp.Integration.Plugin.Common;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("3.12.10.39797")]
+// [assembly: AssemblyVersion("3.13.18.50189")]
 
-[assembly: AssemblyVersion("3.12.10.39797")]
-[assembly: AssemblyFileVersion("3.12.10.39797")]
+[assembly: AssemblyVersion("3.13.18.50189")]
+[assembly: AssemblyFileVersion("3.13.18.50189")]
 [assembly:
     PluginAssembly("Subversion", "Exports revisions from Subversion and binds source code to TargetProcess user stories, bugs and tasks.",
         "Source Control",

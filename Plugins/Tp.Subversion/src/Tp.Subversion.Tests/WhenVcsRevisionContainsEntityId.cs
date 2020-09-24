@@ -1,5 +1,5 @@
 ﻿// 
-// Copyright (c) 2005-2011 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2018 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using StructureMap;
@@ -138,7 +137,7 @@ namespace Tp.Subversion
 
             assignableDtos
                 .SingleOrDefault(x => x.AssignableID == entityId)
-                .Should(Be.Not.Null, "Revision {0} wasn't attach to entity {1}", revisionId, entityId);
+                .Should(Be.Not.Null, "Revision {0} wasn't attached to entity {1}", revisionId, entityId);
         }
 
         [Given("TP will fail to attach revision to TP entity")]

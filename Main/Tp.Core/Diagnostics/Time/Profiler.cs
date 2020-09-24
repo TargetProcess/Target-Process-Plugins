@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using StructureMap;
 using Tp.Core.Annotations;
 using Tp.Core.Diagnostics.Event;
@@ -27,14 +28,15 @@ namespace Tp.Core.Diagnostics.Time
 
         public string Name { get; }
 
-        public IEnumerable<TimeInterval> GetData()
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Global
+        public IReadOnlyList<TimeInterval> GetDataCopy()
         {
             return _data.ToArray();
         }
 
-        public void AddData(TimeInterval data)
+        public IEnumerable<TimeInterval> GetDataRawEnumerable()
         {
-            _data.Push(data);
+            return _data;
         }
 
         public void AddData(IEnumerable<TimeInterval> data)
@@ -62,23 +64,73 @@ namespace Tp.Core.Diagnostics.Time
         {
             return ObjectFactory.GetInstance<Profiler>();
         }
+
+        public static (T, TimeSpan) Measure<T>([InstantHandle] [NotNull] Func<T> action)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var result = action();
+            sw.Stop();
+
+            return (result, sw.Elapsed);
+        }
+
+        public static TimeSpan Measure([NotNull] Action action)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            action();
+            sw.Stop();
+            return sw.Elapsed;
+        }
+
+        public static async Task<(T, TimeSpan)> MeasureAsync<T>([NotNull] [InstantHandle] Func<Task<T>> action)
+        {
+            var sw = Stopwatch.StartNew();
+            var result = await action();
+            sw.Stop();
+            return (result, sw.Elapsed);
+        }
+
+        public static async Task<TimeSpan> MeasureAsync([NotNull] [InstantHandle] Func<Task> action)
+        {
+            var sw = Stopwatch.StartNew();
+            await action();
+            sw.Stop();
+            return sw.Elapsed;
+        }
+
+        public static IDisposable TimeIt(Action<TimeSpan> handleElapsed)
+        {
+            var w = Stopwatch.StartNew();
+            return Disposable.Create(() =>
+            {
+                w.Stop();
+                handleElapsed(w.Elapsed);
+            });
+        }
     }
 
     public static class ProfilerExtensions
     {
-        public static IDisposable Track(this Profiler profiler, ProfilerTarget target, object context = null)
+        public static void AddData([NotNull] this IProfilerDataCollector profiler, TimeInterval interval)
+        {
+            profiler.AddData(interval.Yield());
+        }
+
+        public static IDisposable Track(
+            this IProfilerDataCollector profiler,
+            ProfilerTarget target,
+            object context = null)
         {
             var diagnosticConfiguration = ObjectFactory.GetInstance<DiagnosticConfiguration>();
             var stackTrace = diagnosticConfiguration.ShouldIncludeStackTraces ? Maybe.Return(new StackTrace().ToString()) : Maybe.Nothing;
             var resolvedContext = diagnosticConfiguration.ShouldIncludeTraceContexts ? context.NothingIfNull() : Maybe<object>.Nothing;
-            return
-                Chrono.TimeIt(
-                    elapsed =>
-                        profiler.AddData(new TimeInterval(target, elapsed, Thread.CurrentThread.ManagedThreadId, resolvedContext,
-                            stackTrace)));
+            return Profiler.TimeIt(elapsed => profiler.AddData(
+                new TimeInterval(target, elapsed, Thread.CurrentThread.ManagedThreadId, resolvedContext, stackTrace)));
         }
 
-        public static T Track<T>(this Profiler profiler, ProfilerTarget target, Func<T> f)
+        public static T Track<T>(this IProfilerDataCollector profiler, ProfilerTarget target, Func<T> f)
         {
             using (profiler.Track(target))
             {
@@ -86,7 +138,7 @@ namespace Tp.Core.Diagnostics.Time
             }
         }
 
-        public static void Track(this Profiler profiler, ProfilerTarget target, Action a)
+        public static void Track(this IProfilerDataCollector profiler, ProfilerTarget target, Action a)
         {
             Track(profiler, target, () =>
             {
@@ -95,11 +147,13 @@ namespace Tp.Core.Diagnostics.Time
             });
         }
 
-        public static T TrackSingleThreadedOnly<T>(this Profiler profiler, Func<T> f, int threadId,
+        public static T TrackSingleThreadedOnly<T>(
+            this Profiler profiler,
+            Func<T> f, int threadId,
             Action<Profiler, IEnumerable<TimeInterval>> onMultipleThreadsAccess)
         {
             var result = f();
-            var otherThreadsData = profiler.GetData().Where(x => x.ThreadId != threadId).ToArray();
+            var otherThreadsData = profiler.GetDataCopy().Where(x => x.ThreadId != threadId).ToArray();
             if (otherThreadsData.Any())
             {
                 onMultipleThreadsAccess(profiler, otherThreadsData);
@@ -113,10 +167,19 @@ namespace Tp.Core.Diagnostics.Time
         public int ThreadId { get; }
         public TimeSpan Elapsed { get; }
         public ProfilerTarget Target { get; }
+        /// <summary>
+        /// Arbitrary target-specific payload for this tracked time interval.
+        /// For example, SQL profile may include SQL command text.
+        /// </summary>
         public Maybe<object> Context { get; }
         public Maybe<string> StackTrace { get; }
 
-        public TimeInterval(ProfilerTarget target, TimeSpan elapsed, int threadId, Maybe<object> context, Maybe<string> stackTrace)
+        public TimeInterval(
+            ProfilerTarget target,
+            TimeSpan elapsed,
+            int threadId,
+            Maybe<object> context,
+            Maybe<string> stackTrace)
             : this()
         {
             Target = target;

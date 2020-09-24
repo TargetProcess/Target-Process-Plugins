@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using StructureMap.TypeRules;
 using Tp.Core;
+using Tp.Core.Annotations;
 
 namespace System
 {
@@ -11,14 +11,6 @@ namespace System
         public static object DefaultValue(this Type type)
         {
             return type.IsValueType ? Activator.CreateInstance(type) : null;
-        }
-
-        public static Type ResultType(this MemberInfo memberInfo)
-        {
-            var resultType = memberInfo.MaybeAs<PropertyInfo>().Select(x => x.PropertyType)
-                .OrElse(() => memberInfo.MaybeAs<MethodInfo>().Select(x => x.ReturnType))
-                .OrElse(() => memberInfo.MaybeAs<FieldInfo>().Select(x => x.FieldType)).Value;
-            return resultType;
         }
 
         public static IEnumerable<MemberInfo> GetInterfaceProperties(this Type type)
@@ -102,8 +94,45 @@ namespace System
         }
 
         public static bool IsSameTypeOrNullable(this Type target, Type type)
-        {            
+        {
             return target == type || Nullable.GetUnderlyingType(target) == type;
+        }
+
+        /// <summary>
+        /// Gets <typeparamref name="TInterface"/> method <paramref name="methodName"/> implementation from type <paramref name="implementationType"/>.
+        /// </summary>
+        /// <param name="implementationType">Type which implements <typeparamref name="TInterface"/>.</param>
+        /// <param name="methodName">Name of the method to get implementation of.</param>
+        /// <typeparam name="TInterface">Interface which </typeparam>
+        /// <returns><typeparamref name="TInterface"/> method <paramref name="methodName"/> implementation from type <paramref name="implementationType"/>.</returns>
+        /// <exception cref="MissingMethodException">
+        /// Method <paramref name="methodName"/> is missing from interface <typeparamref name="TInterface"/>
+        /// -or-
+        /// Method <paramref name="methodName"/> is missing from implementation of interface <typeparamref name="TInterface"/> by type <paramref name="implementationType"/>.
+        /// </exception>
+        [NotNull]
+        public static MethodInfo GetImplementationMethodOf<TInterface>(this Type implementationType, string methodName)
+        {
+            return implementationType.GetImplementationMethodOf(typeof(TInterface), methodName);
+        }
+
+        [NotNull]
+        internal static MethodInfo GetImplementationMethodOf(this Type implementationType, Type interfaceType, string methodName)
+        {
+            var interfaceMethod = interfaceType.GetMethod(methodName);
+            if (interfaceMethod == null)
+            {
+                throw new MissingMethodException($"Method {methodName} is missing from interface {interfaceType}");
+            }
+            var interfaceMapping = implementationType.GetInterfaceMap(interfaceType);
+            for (int i = 0; i < interfaceMapping.InterfaceMethods.Length; i++)
+            {
+                if (interfaceMapping.InterfaceMethods[i].Equals(interfaceMethod))
+                {
+                    return interfaceMapping.TargetMethods[i];
+                }
+            }
+            throw new MissingMethodException($"Method {interfaceMethod} is missing from interface {interfaceType} mapping of {implementationType}");
         }
     }
 }

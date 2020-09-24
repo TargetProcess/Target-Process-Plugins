@@ -1,71 +1,107 @@
-﻿using System;
+﻿// 
+// Copyright (c) 2005-2020 TargetProcess. All rights reserved.
+// TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
+// 
+
+using System;
 using System.Linq;
 using System.Net;
-using Microsoft.TeamFoundation;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
+using Microsoft.VisualStudio.Services.WebApi;
+using Tp.Integration.Plugin.Common.Validation;
 using Tp.SourceControl.Settings;
 using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 
 namespace Tp.Tfs
 {
+    public enum TfsCollection
+    {
+        None = 0,
+        Project = 1,
+        TeamProject = 2
+    }
+
     public class TfsConnectionParameters
     {
-        public Uri TfsCollectionUri { get; set; }
-        public string TeamProjectName { get; set; }
-        public int SegmentsCount { get; set; }
-        public VssCredentials Credential { get; set; }
+        public TfsConnectionParameters(NetworkCredential credential, Uri tfsCollectionUri, string teamProjectName, TfsCollection tfsCollection)
+        {
+            Credential = credential;
+            TfsCollectionUri = tfsCollectionUri;
+            TeamProjectName = teamProjectName;
+            TfsCollection = tfsCollection;
+        }
+
+        public Uri TfsCollectionUri { get; }
+        public string TeamProjectName { get; }
+        public TfsCollection TfsCollection { get; }
+        public NetworkCredential Credential { get; }
     }
 
     public static class TfsConnectionHelper
     {
-        public static TfsConnectionParameters GetTfsConnectionParameters(ISourceControlConnectionSettingsSource settings)
+        public static TfsConnectionParameters GetTfsConnectionParameters(ISourceControlConnectionSettingsSource settings, out bool useRest, PluginProfileErrorCollection errors = null)
         {
             try
             {
-                var parameters = new TfsConnectionParameters { Credential = CreateCredential(settings) };
-
                 var uri = new Uri(settings.Uri);
-                string[] absolutePathSegments = uri.LocalPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                string possibleVirtualDirectory = absolutePathSegments[0];
-                string[] segements = settings.Uri.Split('/');
-                string[] serverPathSegments =
-                    segements.TakeWhile(x => !x.Equals(possibleVirtualDirectory, StringComparison.OrdinalIgnoreCase)).ToArray();
-                string serverPath = string.Join("/", serverPathSegments);
+                var credential = CreateCredential(settings);
+                var absolutePathSegments = uri.LocalPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                var possibleVirtualDirectory = absolutePathSegments[0];
+                var segments = settings.Uri.Split('/');
+                var serverPathSegments =
+                    segments.TakeWhile(x => !x.Equals(possibleVirtualDirectory, StringComparison.OrdinalIgnoreCase)).ToArray();
+                var serverPath = string.Join("/", serverPathSegments);
 
-                if (CheckTfsServerPath(serverPath, parameters.Credential))
+                try
                 {
-                    parameters.TfsCollectionUri = new Uri(serverPath + "/" + possibleVirtualDirectory);
-
-                    if (absolutePathSegments.Length > 1)
-                        parameters.TeamProjectName = absolutePathSegments[1];
-
-                    parameters.SegmentsCount = absolutePathSegments.Length;
-
-                    return parameters;
+                    if (CheckTfsServerPath(serverPath, credential, out useRest, errors))
+                    {
+                        return new TfsConnectionParameters(credential, new Uri($"{serverPath}/{possibleVirtualDirectory}"),
+                            absolutePathSegments.Length > 1 ? absolutePathSegments[1] : null, (TfsCollection)absolutePathSegments.Length);
+                    }
                 }
+                catch (System.Net.Http.HttpRequestException httpRequestException)
+                {
+                    if (httpRequestException.InnerException is WebException webException
+                        && (webException.Status == WebExceptionStatus.NameResolutionFailure
+                            || webException.Status == WebExceptionStatus.TrustFailure
+                            || webException.Status == WebExceptionStatus.ConnectFailure))
+                    {
+                        throw webException; 
+                    }
+                }
+                catch (VssUnauthorizedException)
+                {
+                    throw;
+                }
+                // ReSharper disable once EmptyGeneralCatchClause
+                catch (Exception)
+                { }
 
-                serverPath += "/" + possibleVirtualDirectory;
+                serverPath = $"{serverPath}/{possibleVirtualDirectory}";
 
-                if (!CheckTfsServerPath(serverPath, parameters.Credential))
-                    throw new TeamFoundationServiceUnavailableException("Could not connect to server.");
+                CheckTfsServerPath(serverPath, credential, out useRest, errors);
+                var pathSegments =
+                    absolutePathSegments.SkipWhile(x => !x.Equals(absolutePathSegments[1], StringComparison.OrdinalIgnoreCase))
+                        .ToArray();
 
-                string[] pathSegments =
-                    absolutePathSegments.SkipWhile(x => !x.Equals(absolutePathSegments[1], StringComparison.OrdinalIgnoreCase)).ToArray();
-
-                parameters.TfsCollectionUri = new Uri(serverPath + "/" + pathSegments[0]);
-
-                if (pathSegments.Length > 1)
-                    parameters.TeamProjectName = pathSegments[1];
-
-                parameters.SegmentsCount = pathSegments.Length;
-                return parameters;
+                return new TfsConnectionParameters(credential, new Uri($"{serverPath}/{pathSegments[0]}"),
+                    pathSegments.Length > 1 ? pathSegments[1] : null, (TfsCollection)pathSegments.Length);
             }
-            catch (TeamFoundationServiceUnavailableException)
+            catch (VssUnauthorizedException)
+            {
+                throw;
+            }
+            catch (VssServiceResponseException)
+            {
+                throw;
+            }
+            catch (WebException)
             {
                 throw;
             }
@@ -77,9 +113,10 @@ namespace Tp.Tfs
 
         public static TeamProject[] GetAvailableTeamProjects(ISourceControlConnectionSettingsSource settings)
         {
-            var parameters = GetTfsConnectionParameters(settings);
+            var parameters = GetTfsConnectionParameters(settings, out var _);
 
-            var collection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
+            var collection = new TfsTeamProjectCollection(parameters.TfsCollectionUri,
+                new VssCredentials(new WindowsCredential(parameters.Credential), CredentialPromptType.DoNotPrompt));
             var vcs = collection.GetService<VersionControlServer>();
 
             if (string.IsNullOrEmpty(parameters.TeamProjectName))
@@ -89,14 +126,14 @@ namespace Tp.Tfs
             return new[] { teamProject };
         }
 
-        public static VssCredentials CreateCredential(ISourceControlConnectionSettingsSource settings)
+        private static NetworkCredential CreateCredential(ISourceControlConnectionSettingsSource settings)
         {
-            var domen = string.Empty;
+            var domain = string.Empty;
             string login;
 
             if (settings.Login.IndexOf('\\') > 0)
             {
-                domen = settings.Login.Substring(0, settings.Login.IndexOf('\\'));
+                domain = settings.Login.Substring(0, settings.Login.IndexOf('\\'));
                 login = settings.Login.Substring(settings.Login.IndexOf('\\') + 1);
             }
             else
@@ -104,11 +141,9 @@ namespace Tp.Tfs
                 login = settings.Login;
             }
 
-            var credential = string.IsNullOrEmpty(domen)
-                ? new VssClientCredentials(new VssBasicCredential(new NetworkCredential(login, settings.Password)))
-                : new VssClientCredentials(new WindowsCredential(new NetworkCredential(login, settings.Password, domen)));
-
-            return credential;
+            return string.IsNullOrEmpty(domain)
+                ? new NetworkCredential(login, settings.Password)
+                : new NetworkCredential(login, settings.Password, domain);
         }
 
         public static string[] GetWorkItemTypesForProject(TfsPluginProfile settings)
@@ -116,8 +151,9 @@ namespace Tp.Tfs
             if (settings.ProjectsMapping == null || settings.ProjectsMapping.Count == 0)
                 return null;
 
-            var parameters = GetTfsConnectionParameters(settings);
-            var collection = new TfsTeamProjectCollection(parameters.TfsCollectionUri, parameters.Credential);
+            var parameters = GetTfsConnectionParameters(settings, out var _);
+            var collection = new TfsTeamProjectCollection(parameters.TfsCollectionUri,
+                new VssCredentials(new WindowsCredential(parameters.Credential), CredentialPromptType.DoNotPrompt));
 
             string teamProjectName = settings.ProjectsMapping[0].Key;
             var workItemStore = collection.GetService<WorkItemStore>();
@@ -126,21 +162,94 @@ namespace Tp.Tfs
             return workItemTypes;
         }
 
-        private static bool CheckTfsServerPath(string path, VssCredentials credential)
+        private static bool CheckTfsServerPath(string path, NetworkCredential credential, out bool isRest, PluginProfileErrorCollection errors = null)
         {
-            TfsConfigurationServer tfsServer = null;
             try
             {
-                tfsServer = new TfsConfigurationServer(new Uri(path), credential);
-                tfsServer.Connect(ConnectOptions.None);
-                return true;
-            }
-            catch
-            {
-                tfsServer?.Dispose();
-            }
+                using (var vssConnection = new VssConnection(new Uri(path),
+                    new VssCredentials(new WindowsCredential(credential), CredentialPromptType.DoNotPrompt),
+                    new VssClientHttpRequestSettings
+                    {
+                        ServerCertificateValidationCallback =
+                            delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                            {
+                                if (!(sender is HttpWebRequest))
+                                {
+                                    //logging
+                                    return true;
+                                }
 
-            return false;
+                                // If the certificate is a valid, signed certificate, return true.
+                                if (sslPolicyErrors == SslPolicyErrors.None)
+                                {
+                                    return true;
+                                }
+
+                                // If there are errors in the certificate chain, look at each error to determine the cause.
+                                if ((sslPolicyErrors & SslPolicyErrors.RemoteCertificateChainErrors) != 0)
+                                {
+                                    if (chain != null)
+                                    {
+                                        foreach (X509ChainStatus status in chain.ChainStatus)
+                                        {
+                                            if ((certificate.Subject == certificate.Issuer) &&
+                                                (status.Status == X509ChainStatusFlags.UntrustedRoot))
+                                            {
+                                                errors?.Add(new PluginProfileError
+                                                {
+                                                    Status = PluginProfileErrorStatus.TrustFailure,
+                                                    FieldName = "Uri",
+                                                    Message = status.StatusInformation
+                                                });
+                                                // Self-signed certificates with an untrusted root are valid.
+                                                continue;
+                                            }
+
+                                            if (status.Status != X509ChainStatusFlags.NoError)
+                                            {
+                                                errors?.Add(new PluginProfileError
+                                                {
+                                                    Status = PluginProfileErrorStatus.Error,
+                                                    FieldName = "Uri",
+                                                    Message = status.StatusInformation
+                                                });
+                                                // If there are any other errors in the certificate chain, the certificate is invalid,
+                                                // so the method returns false.
+                                                return false;
+                                            }
+                                        }
+                                    }
+
+                                    // When processing reaches this line, the only errors in the certificate chain are
+                                    // untrusted root errors for self-signed certificates. These certificates are valid
+                                    // for default Exchange Server installations, so return true.
+                                    return true;
+                                }
+
+                                // In all other cases, return false.
+                                return false;
+                            }
+                    })
+                )
+                {
+                    isRest = true;
+                    vssConnection.ConnectAsync().SyncResult();
+                    return vssConnection.HasAuthenticated;
+                }
+            }
+            catch (VssServiceResponseException vssServiceResponseException)
+            {
+                if (vssServiceResponseException.HttpStatusCode == HttpStatusCode.NotFound)
+                {
+                    var tfsServer = new TfsConfigurationServer(new Uri(path),
+                        new VssCredentials(new WindowsCredential(credential), CredentialPromptType.DoNotPrompt));
+                    tfsServer.Connect(Microsoft.TeamFoundation.Framework.Common.ConnectOptions.None);
+
+                    isRest = false;
+                    return tfsServer.HasAuthenticated;
+                }
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using Tp.Core.Annotations;
+using Tp.Core.Linq;
 using Tp.I18n;
 
 // ReSharper disable once CheckNamespace
@@ -9,11 +10,6 @@ namespace System.Linq.Dynamic
     {
         public ParseException([NotNull] IFormattedMessage message, int position)
             : this(message, null, position)
-        {
-        }
-
-        public ParseException([NotNull] Exception innerException, int position)
-            : this(null, innerException, position)
         {
         }
 
@@ -48,7 +44,7 @@ namespace System.Linq.Dynamic
         public UnknownPropertyOrFieldParseException(
             int position, [NotNull] string memberName, [NotNull] Type targetType,
             [CanBeNull] IFormattedMessage message = null, [CanBeNull] Exception inner = null)
-            : base(position, message ?? Res.UnknownPropertyOrField(memberName, ExpressionParser.GetTypeName(targetType)), inner)
+            : base(position, message ?? Res.UnknownPropertyOrField(memberName, SharedParserUtils.GetTypeName(targetType)), inner)
         {
             MemberName = memberName;
             TargetType = targetType;
@@ -64,7 +60,7 @@ namespace System.Linq.Dynamic
         public UnknownMethodParseException(
             int position, [NotNull] string methodName, [NotNull] Type targetType,
             [CanBeNull] IFormattedMessage message = null, [CanBeNull] Exception inner = null)
-            : base(position, message ?? Res.NoApplicableMethod(methodName, ExpressionParser.GetTypeName(targetType)), inner)
+            : base(position, message ?? Res.NoApplicableMethod(methodName, SharedParserUtils.GetTypeName(targetType)), inner)
         {
             MethodName = methodName;
             TargetType = targetType;

@@ -11,6 +11,7 @@ namespace Tp.Integration.Plugin.TestRunImport.FrameworkTypes
         NUnit,
         JUnit,
         Selenium,
-        JenkinsHudson //http://jenkinsmaster-hv:8080/job/BuildCustomerCenter
+        JenkinsHudson, //http://jenkinsmaster-hv:8080/job/BuildCustomerCenter
+        Cucumber,
     }
 }

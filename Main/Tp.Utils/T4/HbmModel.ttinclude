@@ -50,10 +50,16 @@
 
 		private readonly List<string> _excludeEntites = new List<string>
 		{
+			"ClientStorageViewMenuAccess",
+			"ClientStorageViewMenuAccessItem",
+			"ClientStorageViewMenuReadModel",
 			"ClientStorageReadModel",
 			"ClientStorageGroupDto",
 			"MetricSetup",
-			"PersonalAccessToken"
+			"PersonalAccessToken",
+			"EntityPermission",
+			"QuickAddCustomizerEntityType",
+			"QuickAddCustomizerField"
 		};
 
 		private readonly List<string> _excludeRelationNames = new List<string>
@@ -309,7 +315,7 @@
 					var className = p.Attribute("class").Value;
 
 					var shouldAddNameProperty =
-						(name == "Owner" && entityName != "Attachment" && entityName != "Contact" && entityName != "CustomReport" && entityName != "Milestone" && entityName != "SavedFilter" && entityName != "TpProfile" && entityName != "TpSession") ||
+						(name == "Owner" && entityName != "Attachment" && entityName != "Contact" && entityName != "CustomReport" && entityName != "Milestone" && entityName != "TpProfile" && entityName != "TpSession") ||
 						!_excludeRelationNames.Contains(className);
 
 					if (shouldAddNameProperty)

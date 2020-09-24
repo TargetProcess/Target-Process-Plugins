@@ -23,7 +23,7 @@ namespace Tp.Core
             return token;
         }
 
-        public static void ApplyAutheticationTicket(WebServicesClientProtocol protocol, string userName, string password)
+        public static void ApplyAuthenticationTicket(WebServicesClientProtocol protocol, string userName, string password)
         {
             UsernameToken token = GetUsernameToken(userName, password, PasswordOption.SendPlainText);
             protocol.SetClientCredential(token);

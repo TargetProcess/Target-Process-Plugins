@@ -44,6 +44,9 @@
     <Reference Include="Common.Logging.Log4Net">
       <HintPath>..\..\..\packages\Common.Logging.Log4Net.1.2.0\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\HtmlAgilityPack.1.11.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
@@ -110,13 +113,14 @@
     <Compile Include="TestRunImportPluginProfileInitializationSaga.cs" />
     <Compile Include="TestRunImportPluginUpdatedProfileInitializationSaga.cs" />
     <Compile Include="TestRunImportReaders\AbstractTestRunImportResultsReader.cs" />
+    <Compile Include="TestRunImportReaders\CucumberResultsXmlReader.cs" />
     <Compile Include="TestRunImportReaders\ITestRunImportResultsReaderFactory.cs" />
     <Compile Include="TestRunImportReaders\JenkinsHudsonResultsXmlReader.cs" />
     <Compile Include="TestRunImportReaders\JUnitResultsXmlReader.cs" />
     <Compile Include="TestRunImportReaders\NUnitResultsXmlReader.cs" />
     <Compile Include="Mappers\IMappingChecker.cs" />
     <Compile Include="Mappers\IMappingProfileValidator.cs" />
-    <Compile Include="TestRunImportReaders\SeleniumResultsHtmlReader.cs" />
+    <Compile Include="TestRunImportReaders\SeleniumResultsReader.cs" />
     <Compile Include="TestRunImportReaders\SimpleTestRunImportResultsReaderFactory.cs" />
     <Compile Include="TestRunImport\TestRunImportResultInfo.cs" />
     <Compile Include="TestRunImport\TestRunImportSettings.cs" />
@@ -130,7 +134,6 @@
     <Compile Include="TestCaseResolvers\RegExpTestCaseResolver.cs" />
     <Compile Include="TestCaseResolvers\SimpleTestCaseResolver.cs" />
     <Compile Include="TestRunImport\TestRunImportInfo.cs" />
-    <Compile Include="Utils\HtmlReader.cs" />
     <Compile Include="Workflow\AutomaticTestRunImportListener.cs" />
     <Compile Include="Workflow\CreateTestPlanRunSaga.cs" />
   </ItemGroup>

@@ -25,9 +25,13 @@ namespace Tp.Core.Diagnostics.Event
                     {
                         return;
                     }
-                    var s = new DiagnosticEventSerializer();
-                    var serialized = s.Serialize(e);
-                    logger.Info(serialized);
+
+                    if (logger.IsInfoEnabled)
+                    {
+                        var s = new DiagnosticEventSerializer();
+                        var serialized = s.Serialize(e);
+                        logger.Info(serialized);
+                    }
                 }
                 catch (Exception error)
                 {

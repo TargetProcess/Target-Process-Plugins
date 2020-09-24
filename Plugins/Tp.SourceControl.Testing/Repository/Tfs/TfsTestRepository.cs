@@ -1,17 +1,19 @@
 // 
-// Copyright (c) 2005-2014 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
+using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.VisualStudio.Services.Common;
+using StructureMap;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.VersionControl.Client;
-using StructureMap;
+using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 
 namespace Tp.SourceControl.Testing.Repository.Tfs
 {
@@ -35,10 +37,7 @@ namespace Tp.SourceControl.Testing.Repository.Tfs
             }
         }
 
-        protected string Name
-        {
-            get { return "TestRepository"; }
-        }
+        protected string Name => "TestRepository";
 
         private string ClonedRepoFolder
         {
@@ -53,10 +52,7 @@ namespace Tp.SourceControl.Testing.Repository.Tfs
             }
         }
 
-        protected string LocalRepositoryPath
-        {
-            get { return Path.Combine(GetExecutingDirectory(), Name); }
-        }
+        protected string LocalRepositoryPath => Path.Combine(GetExecutingDirectory(), Name);
 
         protected static string GetExecutingDirectory()
         {
@@ -97,7 +93,9 @@ namespace Tp.SourceControl.Testing.Repository.Tfs
             else
                 collection = new TfsTeamProjectCollection(
                     new Uri(ConfigHelper.Instance.TestCollection),
-                    new NetworkCredential(ConfigHelper.Instance.Login, ConfigHelper.Instance.Password, ConfigHelper.Instance.Domen));
+                    new VssCredentials(
+                        new WindowsCredential(new NetworkCredential(ConfigHelper.Instance.Login, ConfigHelper.Instance.Password,
+                            ConfigHelper.Instance.Domen)), CredentialPromptType.DoNotPrompt));
 
             var vcs = collection.GetService<VersionControlServer>();
             TeamProject tp = vcs.GetTeamProject(ConfigHelper.Instance.TestCollectionProject);
@@ -141,20 +139,11 @@ namespace Tp.SourceControl.Testing.Repository.Tfs
             }
         }
 
-        public Uri Uri
-        {
-            get { return new Uri(string.Concat(ConfigHelper.Instance.TestCollection, "/", ConfigHelper.Instance.TestCollectionProject)); }
-        }
+        public Uri Uri => new Uri(string.Concat(ConfigHelper.Instance.TestCollection, "/", ConfigHelper.Instance.TestCollectionProject));
 
-        public string Login
-        {
-            get { return ConfigHelper.Instance.Login; }
-        }
+        public string Login => ConfigHelper.Instance.Login;
 
-        public string Password
-        {
-            get { return ConfigHelper.Instance.Password; }
-        }
+        public string Password => ConfigHelper.Instance.Password;
 
         public void Commit(string commitComment)
         {

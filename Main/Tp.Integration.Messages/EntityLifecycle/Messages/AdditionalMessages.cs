@@ -75,4 +75,22 @@ namespace Tp.Integration.Messages.EntityLifecycle.Messages
     public class TestCaseInTestPlanUpdatedMessage : EntityUpdatedMessage<TestCaseTestPlanDTO, TestCaseTestPlanField>, ISagaMessage
     {
     }
+
+    [Serializable]
+    public class ExtendableDomainAssignableCreatedMessage : EntityCreatedMessage<ExtendableDomainAssignableDTO>, ISagaMessage
+    {
+    }
+
+    [Serializable]
+    public class ExtendableDomainAssignableDeletedMessage : EntityDeletedMessage<ExtendableDomainAssignableDTO>, ISagaMessage
+    {
+    }
+
+    [Serializable]
+    public class ExtendableDomainAssignableUpdatedMessage : EntityUpdatedMessage<ExtendableDomainAssignableDTO, AssignableField>, ISagaMessage
+    {
+
+    }
+
+
 }

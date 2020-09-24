@@ -668,6 +668,16 @@ namespace Tp.Integration.Common
 		[DataMember]
 		[XmlElement(Order=128)]
 		public String CustomField100 { get; set; }
+
+		[ForeignKey]
+		[DataMember]
+		[XmlElement(Order=129)]
+		public int? MilestoneID { get; set; }
+
+		[RelationName]
+		[DataMember]
+		[XmlElement(Order=130)]
+		public string MilestoneName { get; set; }
 	}
 
 	public enum IterationField
@@ -797,5 +807,7 @@ namespace Tp.Integration.Common
 		CustomField98,
 		CustomField99,
 		CustomField100,
+		MilestoneID,
+		MilestoneName,
 	}
 }

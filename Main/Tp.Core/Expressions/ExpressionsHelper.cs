@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
+using Tp.Core.Annotations;
 
 namespace Tp.Core.Expressions
 {
-    public class ExpressionsHelper
+    public static class ExpressionsHelper
     {
         public static MemberInitExpression GenerateMemberInit(Dictionary<string, Expression> propertyInitializers)
         {
@@ -36,6 +37,22 @@ namespace Tp.Core.Expressions
                     .Select(arg => Expression.Bind(arg.property, arg.expression));
 
             return Expression.MemberInit(Expression.New(resultType), bindings);
+        }
+
+
+        [Pure]
+        [NotNull]
+        public static Expression<Func<TArg0, TResult>> Expr<TArg0, TResult>([NotNull] Expression<Func<TArg0, TResult>> expr)
+        {
+            return expr;
+        }
+
+        [Pure]
+        [NotNull]
+        public static Expression<Func<TArg0, TArg1, TResult>> Expr<TArg0, TArg1, TResult>(
+            [NotNull] Expression<Func<TArg0, TArg1, TResult>> expr)
+        {
+            return expr;
         }
     }
 }

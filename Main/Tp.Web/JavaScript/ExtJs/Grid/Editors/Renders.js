@@ -51,10 +51,10 @@ function stringRenderer() {
 function boolRenderer() {
     return function (value) {
         if (value === true) {
-            return "<img src='" + Application.baseUrl + "/javascript/tau/css/images/icons/yes.gif' />";
+            return "<img src='" + Application.baseUrl + "/img/yes.gif' />";
         }
         if (value === false) {
-            return "<img src='" + Application.baseUrl + "/javascript/tau/css/images/icons/no.gif' />";
+            return "<img src='" + Application.baseUrl + "/img/no.gif' />";
         }
         return "&nbsp;";
     };
@@ -98,7 +98,7 @@ function urlRenderer() {
                 url = Ext.util.Format.htmlEncode(value);
                 label = Ext.util.Format.htmlEncode(value);
             }
-            return "<a href=\"" + url + "\" target=\"_blank\">" + label + "</a>";
+            return "<a href=\"" + url + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + label + "</a>";
         }
         return "";
     };
@@ -126,23 +126,28 @@ function entityRenderer() {
             else {
                 return value;
             }
-            return icon + "<a href=\"" + url + "\" target=\"_blank\">" + label + "</a>";
+            return icon + "<a href=\"" + url + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + label + "</a>";
         }
         return "";
     };
 }
 
 function enumRenderer(dictionary) {
-    return function(value) {
-        if (value) {
-            for (n in dictionary) {
-                if (dictionary[n].Key == value) {
-                    return dictionary[n].Value;
-                }
+    function noValue(value) {
+        return value === '' || value === null || typeof (value) === 'undefined';
+    }
+
+    return function (value) {
+        for (n in dictionary) {
+            if (dictionary[n].Key === value) {
+                const enumDesc = dictionary[n];
+                return !enumDesc.IsNone ? enumDesc.Value : '';
             }
-            return "<span style=\"color: red;\">Undefined</span>";
         }
-        return "";
+        if (noValue(value)) {
+            return '';
+        }
+        return "<span style=\"color: red;\">Undefined</span>";
     };
 }
 

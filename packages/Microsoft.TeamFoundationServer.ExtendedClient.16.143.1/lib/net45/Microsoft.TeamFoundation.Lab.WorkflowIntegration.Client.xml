@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServiceProxy.SyncCapability(System.Uri,System.Boolean)">
+            <summary>
+            Makes the service call to UpdateDeploymentRig web method.
+            </summary>        
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServiceProxy.SoapNamespaceUrl">
+            <summary>
+            Gets the soap namespace for this service
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServiceProxy.ServiceType">
+            <summary>
+            Gets the service name
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServiceProxy.CollectionServiceIdentifier">
+            <summary>
+            Gets the collection service identifier
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServiceProxy.ComponentName">
+            <summary>
+            Gets the component name for this service
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.LabSystemWorkflowCapabilityInformation">
+            <summary>
+            Provides the workflow capability information of a particular lab system.
+            </summary>
+            <summary> 
+            Provides the workflow capability information of a particular lab system.
+            Details include:
+            1. Name of the agent. 
+            2. Labsystem on which it resides.
+            3. Status of the agent, this is defined by enum LabSystemCapabilityState
+            4. Status message of the agent if any.
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.LabSystemWorkflowCapabilityInformation.BuildAgentName">
+            <summary>
+            Gets the name of the build agent running on this lab system.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.LabSystemWorkflowCapabilityInformation.#ctor">
+            <summary>
+            Initializes a new instance of the LabSystemWorkflowCapabilityInformation class.
+            Parameterless constructor for deserialization
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.LabSystemWorkflowCapabilityInformation.#ctor(System.Uri,Microsoft.TeamFoundation.Lab.Client.LabSystemCapabilityState,System.String)">
+            <summary>
+            Initializes a new instance of the LabSystemWorkflowCapabilityInformation class.
+            </summary>
+            <param name="labSystemUri"> The uri of the labsystem whose workflow capbility information will be stored</param>
+            <param name="status"> The status of the build agent running on this lab system.</param>
+            <param name="buildAgentName"> The name of the build agent running on this lab system.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.LabSystemWorkflowCapabilityInformation.ToString">
+            <summary>
+            Returns the workflow capability information of lab system in string format. 
+            </summary>
+            <returns>String having workflow capability information of a lab system.</returns>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.ControllerInformation">
+            <summary>
+            Provides information about build controller.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.ControllerInformation.#ctor">
+            <summary>
+            Initializes a new instance of the ControllerInformation class
+            Parameterless constructor for deserialization
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.ControllerInformation.BuildControllerName">
+            <summary>
+            Gets the name of the build controller
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.ControllerInformation.ToString">
+            <summary>
+            Returns the build controller information in string format. 
+            </summary>
+            <returns>String having build controller information.</returns>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowCapabilityInformation">
+            <summary>
+            Provides workflow capability information of a lab environment.
+            </summary>
+            <summary>
+            Provides workflow capability information of a lab environment.
+            Details include:
+            1. Complete information of build controller using BuildController Object.
+            2. List of all agents with details using list of LabSystemsCapabilityInformation objects.
+            3. Capability Status, as defined by enum CapabilityState
+            4. Status message if any.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowCapabilityInformation.#ctor">
+            <summary>
+            Initializes a new instance of the WorkflowCapabilityInformation class
+            Parameterless constructor for deserialization
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowCapabilityInformation.BuildController">
+            <summary>
+            Gets the name of the build controller with which this environment is configured with.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowCapabilityInformation.ToString">
+            <summary>
+            Returns the workflow capability information of an environment in string format. 
+            </summary>
+            <returns>String having environment workflow capability information.</returns>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationService">
+            <summary>
+            Provides an implementation of IWorkflowIntegrationService
+            </summary>
+        </member>
+        <member name="P:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationService.TeamProjectCollection">
+            <summary>
+            The Team Foundation Server object that created this IBuildServer.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationService.GetCapabilityStatus(System.Uri)">
+            <summary>
+            Returns the status of DeploymentRig.         
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationService.GetCapabilityInformation(System.Uri)">
+            <summary>
+            Returns the details of DeploymentRig.         
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationService.GetBuildController(System.Uri)">
+            <summary>
+            Returns the Deployment controller on which this lab environment is configured. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException">
+            <summary>
+            Base class for all Workflow Integration Service exceptions
+            <remark> 
+            To catch all Workflow Integration Service errors, catch this exception. The details of the error can be known from the message
+            </remark>
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException.#ctor">
+            <summary>
+            Initializes a new instance of the WorkflowIntegrationServerException class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the WorkflowIntegrationServerException class.
+            </summary>
+            <param name="message"> The error message for the exception.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the WorkflowIntegrationServerException class.
+            </summary>
+            <param name="message"> The error message for the exception.</param>
+            <param name="innerException">Inner exception details</param>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.ExceptionConverter">
+            <summary>
+            Convert Soap Exception thrown by Workflow Integration Server back to Workflow Integration Service exception
+            User need not catch SoapException / generic Exception
+            It will enough if he catches only WorkflowIntegrationServiceException
+            </summary>
+        </member>
+        <member name="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.EnvironmentInUseException">
+            <summary>
+            The exception that is thrown when workflow integration services is not able to acquire lock to lab environment
+            for processing.
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.EnvironmentInUseException.#ctor">
+            <summary>
+            Initializes a new instance of EnvironmentInUseException class. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.EnvironmentInUseException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of EnvironmentInUseException class.
+            </summary>
+            <param name="message">The error message for the exception.</param>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.EnvironmentInUseException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of EnvironmentInUseException class.
+            </summary>
+            <param name="message">The error message for the exception.</param>
+            <param name="ex">Inner exception details</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.IWorkflowIntegrationService" -->
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.IWorkflowIntegrationService.GetCapabilityStatus(System.Uri)">
+            <summary>
+            Gets the status of workflow capability on a specified lab environment. 
+            Status of workflow capability is a cumulative status of controller and agents of lab environmnet. 
+            </summary>
+            <param name="labEnvironmentUri">Uri of the lab environment.</param>
+            <returns>CapabilityState - Status of the capability </returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException">thrown if some error occurred while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.IWorkflowIntegrationService.GetCapabilityInformation(System.Uri)">
+            <summary>
+            Provides details about workflow capability on a specified lab environment. 
+            Details include: 
+            a. Status of capability.
+            b. Details of build controller.
+            c. Details of each agent like name, labsystem uri, status and any agent specific error.
+            d. Errors if any at capability level.    
+            </summary>
+            <param name="labEnvironmentUri">Uri of the lab environment.</param>
+            <returns>DeploymentRigInfo object</returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException">thrown if some error occurred while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.IWorkflowIntegrationService.GetBuildController(System.Uri)">
+            <summary>
+            Returns the controller name on which this lab environment is configured.
+            If lab environment is not configured, then a null string is returned.
+            </summary>
+            <param name="labEnvironmentUri">Uri of the lab environment.</param>
+            <returns>String specifying controller's name</returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException">thrown if some error occurred while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.IWorkflowIntegrationService.SyncCapability(System.Uri,System.Boolean)">
+            <summary>
+            Synchronizes the workflow capability of the lab environment. 
+            It is used to setup, update or teardown workflow capability on lab environment. 
+            Reserved property called Microsoft.TeamFoundation.Lab.WorkflowIntegration.Configure defines 
+            the workflow capability on lab environment.
+            Reserved property Microsoft.TeamFoundation.Lab.WorkflowIntegration.ExternalControllerUri 
+            defines lab environment association with a build controller.
+            </summary>
+            <param name="labEnvironmentUri">Uri of the LabEnvironment.</param>
+            <param name="onlyCredentials">Indicates whether to update only the credentials.</param>
+            <returns>void </returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.EnvironmentInUseException">thrown if object is locked for another operation</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException">thrown if some error occurred while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.IWorkflowIntegrationService.SyncCapability(System.Uri)">
+            <summary>
+            Synchronizes the workflow capability of the lab environment. 
+            It is used to setup, update or teardown workflow capability on lab environment. 
+            Reserved property called Microsoft.TeamFoundation.Lab.WorkflowIntegration.Configure defines 
+            the workflow capability on lab environment.
+            Reserved property Microsoft.TeamFoundation.Lab.WorkflowIntegration.ExternalControllerUri 
+            defines lab environment association with a build controller.
+            </summary>
+            <param name="labEnvironmentUri">Uri of the LabEnvironment.</param>
+            <returns>void </returns>
+            <exception cref="T:System.ArgumentNullException">thrown when labEnvironmentUri is NULL</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.EnvironmentInUseException">thrown if object is locked for another operation</exception>
+            <exception cref="T:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.WorkflowIntegrationServerException">thrown if some error occurred while processing request</exception>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.#cctor">
+            Creates the resource manager instance.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.Get(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.GetInt(System.String)">
+            Returns a localized integer given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.GetBool(System.String)">
+            Returns a localized string given a resource string name.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.Format(System.String,System.Object[])">
+            A little helper function to alleviate some typing associated with loading resources and
+            formatting the strings.  In DEBUG builds, it also asserts that the number of format
+            arguments and the length of args match.
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.BuildControllerInformation(System.Object)">
+            <summary>
+            Build controller name: {0}
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.VirtualMachineInformation(System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Status: {0}Virtual machine URI: {1}Build agent name: {2}Status message: {3}
+            </summary>
+        </member>
+        <member name="M:Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.Resources.WorkflowCapabilityInformation(System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Status: {0}Status message: {3}Build controller: {2}Virtual machines - Workflow capability information: {1}    
+            </summary>
+        </member>
+    </members>
+</doc>

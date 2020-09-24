@@ -52,7 +52,7 @@ namespace Tp.Utils.Mime
             {
                 types = ReadMimeTypes(element);
             }
-            return types ?? new MimeType[0];
+            return types ?? Array.Empty<MimeType>();
         }
 
         private MimeType[] ReadMimeTypes(XmlElement element)

@@ -27,6 +27,12 @@ namespace Tp.Core.Configuration
             return Read(configurationKey, defaultValue, ushort.TryParse);
         }
 
+        public static TEnum ReadEnum<TEnum>(
+            [NotNull] string configurationKey, TEnum defaultValue) where TEnum: struct, IComparable, IFormattable, IConvertible
+        {
+            return Read(configurationKey, defaultValue, Enum.TryParse);
+        }
+
         public static TimeSpan ReadTimeSpan(
             [NotNull] string configurationKey, TimeSpan defaultValue)
         {
@@ -45,26 +51,26 @@ namespace Tp.Core.Configuration
             [NotNull] string configurationKey, T defaultValue,
             [NotNull] [InstantHandle] Maybe.TryDelegate<string, T> parser)
         {
-            Log.Debug($"Attempting to read {typeof(T)} '{configurationKey}' from app settings");
+            Log.DebugFormat("Attempting to read {0} '{1}' from app settings", typeof(T), configurationKey);
 
             var settings = ConfigurationManager.AppSettings;
             var storedValue = settings[configurationKey];
 
             if (storedValue == null)
             {
-                Log.Debug($"There is no configuration entry for '{configurationKey}', using default value '{defaultValue}' instead");
+                Log.DebugFormat("There is no configuration entry for '{0}', using default value '{1}' instead",
+                    configurationKey, defaultValue);
                 return defaultValue;
             }
 
-            T result;
-            if (!parser(storedValue, out result))
+            if (!parser(storedValue, out var result))
             {
                 Log.Error(
                     $"Unable to parse {typeof(T)} from '{configurationKey}' value '{storedValue}'. Using default value '{defaultValue}' instead");
                 return defaultValue;
             }
 
-            Log.Debug($"Parsed '{configurationKey}': '{result}'");
+            Log.DebugFormat("Parsed '{0}': '{1}'", configurationKey, result);
 
             return result;
         }

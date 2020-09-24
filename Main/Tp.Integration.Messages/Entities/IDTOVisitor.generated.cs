@@ -47,9 +47,11 @@ namespace Tp.Integration.Common
 		T VisitMessageGeneral(IMessageGeneralDTO entity);
 		T VisitMessageUid(IMessageUidDTO entity);
 		T VisitMilestone(IMilestoneDTO entity);
+		T VisitMilestoneProject(IMilestoneProjectDTO entity);
 		T VisitPasswordRecovery(IPasswordRecoveryDTO entity);
 		T VisitPluginProfile(IPluginProfileDTO entity);
 		T VisitPluginProfileMessage(IPluginProfileMessageDTO entity);
+		T VisitPortfolioEpic(IPortfolioEpicDTO entity);
 		T VisitPractice(IPracticeDTO entity);
 		T VisitPriority(IPriorityDTO entity);
 		T VisitProcess(IProcessDTO entity);
@@ -70,8 +72,8 @@ namespace Tp.Integration.Common
 		T VisitRole(IRoleDTO entity);
 		T VisitRoleEffort(IRoleEffortDTO entity);
 		T VisitRoleEntityType(IRoleEntityTypeDTO entity);
+		T VisitRoleEntityTypeProcessSetting(IRoleEntityTypeProcessSettingDTO entity);
 		T VisitRule(IRuleDTO entity);
-		T VisitSavedFilter(ISavedFilterDTO entity);
 		T VisitSeverity(ISeverityDTO entity);
 		T VisitSquad(ISquadDTO entity);
 		T VisitSquadIteration(ISquadIterationDTO entity);
@@ -276,6 +278,10 @@ namespace Tp.Integration.Common
 		{
 			return VisitDataTransferObject(dto);
 		}
+		public virtual T VisitMilestoneProject(IMilestoneProjectDTO dto)
+		{
+			return VisitDataTransferObject(dto);
+		}
 		public virtual T VisitPasswordRecovery(IPasswordRecoveryDTO dto)
 		{
 			return VisitDataTransferObject(dto);
@@ -287,6 +293,10 @@ namespace Tp.Integration.Common
 		public virtual T VisitPluginProfileMessage(IPluginProfileMessageDTO dto)
 		{
 			return VisitDataTransferObject(dto);
+		}
+		public virtual T VisitPortfolioEpic(IPortfolioEpicDTO dto)
+		{
+			return VisitAssignable(dto);
 		}
 		public virtual T VisitPractice(IPracticeDTO dto)
 		{
@@ -368,11 +378,11 @@ namespace Tp.Integration.Common
 		{
 			return VisitDataTransferObject(dto);
 		}
-		public virtual T VisitRule(IRuleDTO dto)
+		public virtual T VisitRoleEntityTypeProcessSetting(IRoleEntityTypeProcessSettingDTO dto)
 		{
 			return VisitDataTransferObject(dto);
 		}
-		public virtual T VisitSavedFilter(ISavedFilterDTO dto)
+		public virtual T VisitRule(IRuleDTO dto)
 		{
 			return VisitDataTransferObject(dto);
 		}
@@ -807,6 +817,13 @@ namespace Tp.Integration.Common
 			return visitor.VisitMilestone(this);
 		}
 	}
+	public partial class MilestoneProjectDTO
+	{
+		public override T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitMilestoneProject(this);
+		}
+	}
 	public partial class PasswordRecoveryDTO
 	{
 		public override T Accept<T>(IDTOVisitor<T> visitor)
@@ -826,6 +843,13 @@ namespace Tp.Integration.Common
 		public override T Accept<T>(IDTOVisitor<T> visitor)
 		{
 			return visitor.VisitPluginProfileMessage(this);
+		}
+	}
+	public partial class PortfolioEpicDTO
+	{
+		public override T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitPortfolioEpic(this);
 		}
 	}
 	public partial class PracticeDTO
@@ -968,18 +992,18 @@ namespace Tp.Integration.Common
 			return visitor.VisitRoleEntityType(this);
 		}
 	}
+	public partial class RoleEntityTypeProcessSettingDTO
+	{
+		public override T Accept<T>(IDTOVisitor<T> visitor)
+		{
+			return visitor.VisitRoleEntityTypeProcessSetting(this);
+		}
+	}
 	public partial class RuleDTO
 	{
 		public override T Accept<T>(IDTOVisitor<T> visitor)
 		{
 			return visitor.VisitRule(this);
-		}
-	}
-	public partial class SavedFilterDTO
-	{
-		public override T Accept<T>(IDTOVisitor<T> visitor)
-		{
-			return visitor.VisitSavedFilter(this);
 		}
 	}
 	public partial class SeverityDTO

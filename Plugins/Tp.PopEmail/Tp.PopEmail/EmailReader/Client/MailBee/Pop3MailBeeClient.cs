@@ -13,11 +13,14 @@ namespace Tp.PopEmailIntegration.EmailReader.Client.MailBee
 
         public Pop3MailBeeClient()
         {
-            Pop3.LicenseKey = MailBeeEmailClient.MAILBEE_LICENSE_KEY;
+            Global.LicenseKey = MailBeeEmailClient.MAILBEE_LICENSE_KEY;
 
             // Make sure to disable throwing exception explicitly. Otherwise strange things might happen. See bug #5748 for details.
             // So please don't change this option unless you know what you are doing!!!
-            _client = new Pop3 { ThrowExceptions = false };
+            _client = new Pop3
+            {
+                ThrowExceptions = true, InboxPreloadOptions = Pop3InboxPreloadOptions.List | Pop3InboxPreloadOptions.Uidl
+            };
         }
 
         public bool Connect(string serverName, int port, SslStartupMode? sslMode)
@@ -41,7 +44,16 @@ namespace Tp.PopEmailIntegration.EmailReader.Client.MailBee
         public bool IsConnected => _client.IsConnected;
 
         public bool LogIn(string login, string password, AuthenticationMethods authenticationMethod)
-            => _client.Login(login, password, authenticationMethod);
+        {
+            try
+            {
+                return _client.Login(login, password, authenticationMethod);
+            }
+            catch (MailBeePop3LoginBadCredentialsException)
+            {
+                return false;
+            }
+        }
 
         public bool IsLoggedIn => _client.IsLoggedIn;
 

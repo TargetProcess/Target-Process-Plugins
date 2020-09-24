@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using Tp.Core.Annotations;
+using Tp.Core.Expressions;
+using Tp.Core.Expressions.Evaluation;
+using Tp.Core.Expressions.Visitors;
 
 namespace System.Linq
 {
@@ -97,7 +100,7 @@ namespace System.Linq
             IEnumerable<IGrouping<TKey, TElement>> q =
                 source.GroupBy(keySelector, elementSelector);
 
-            if (typeof(TKey).GetInterface("IComparable") != null)
+            if (typeof(TKey).GetInterface(nameof(IComparable)) != null)
                 q = q.OrderBy(g => g.Key);
 
             q = q.Select(g => (IGrouping<TKey, TElement>) new Group<TKey, TElement>(g, skip, take)).Where(g => g.Any());
@@ -127,10 +130,7 @@ namespace System.Linq
                 return GetEnumerator();
             }
 
-            public TKey Key
-            {
-                get { return _key; }
-            }
+            public TKey Key => _key;
 
             public override string ToString()
             {
@@ -138,22 +138,63 @@ namespace System.Linq
             }
         }
 
-        [Pure]
         [NotNull]
-        public static IQueryable<T> TransformExpression<T>(
-            [NotNull] this IQueryable<T> query,
-            [NotNull] [InstantHandle] Func<Expression, Expression> transform)
+        [ItemNotNull]
+        public static IQueryable<T> WhereNotNull<T>([NotNull] [ItemCanBeNull] this IQueryable<T> source) where T : class
         {
-            return query.Provider.CreateQuery<T>(transform(query.Expression));
+            return source.Where(i => i != null);
         }
 
-        [Pure]
         [NotNull]
-        public static IQueryable TransformExpression(
-            [NotNull] this IQueryable query,
-            [NotNull] [InstantHandle] Func<Expression, Expression> transform)
+        [ItemNotNull]
+        public static IQueryable<T?> WhereNotNull<T>([NotNull] [ItemCanBeNull] this IQueryable<T?> source) where T : struct
         {
-            return query.Provider.CreateQuery(transform(query.Expression));
+            return source.Where(i => i != null);
+        }
+
+        // TODO: it's a replacement for Queryable.Replace, which avoids expression compilation. Should be moved to Tp.Core.Expressions when it's stable in production.
+        [Pure]
+        public static IQueryable<T> ReplaceNoCompile<T>(this IQueryable<T> queryable, LambdaExpression what, LambdaExpression with)
+        {
+            return queryable.TransformExpression(x => ReplaceLambda(x, what, with));
+        }
+
+        private static Expression ReplaceLambda(Expression e, LambdaExpression what, LambdaExpression with)
+        {
+            var r = new LambdaReplacer(what, with);
+            var newE = r.Visit(e);
+            return newE;
+        }
+
+        private class LambdaReplacer : ExpressionVisitor
+        {
+            private readonly MethodCallExpression _what;
+            private readonly LambdaExpression _with;
+
+            public LambdaReplacer(LambdaExpression what, LambdaExpression with)
+            {
+                _what = what.Body as MethodCallExpression;
+                _with = with;
+            }
+
+            protected override Expression VisitMethodCall(MethodCallExpression node)
+            {
+                if (AreTheSameMethod(node.Method, _what.Method))
+                    if (IsTheSameObject(node.Object, _what.Object))
+                        return LambdaSubstituter.ReplaceParameters(_with, node.Arguments);
+                return base.VisitMethodCall(node);
+            }
+
+            private static bool AreTheSameMethod(MethodInfo m1, MethodInfo m2)
+            {
+                return m1.Name == m2.Name && m1.ReturnType == m2.ReturnType && m1.DeclaringType == m2.DeclaringType;
+            }
+
+            private static bool IsTheSameObject(Expression expression, Expression other)
+            {
+                return new ExpressionComparison(expression.PartialEvalNoCompile(), other.PartialEvalNoCompile())
+                    .ExpressionsAreEqual;
+            }
         }
     }
 }

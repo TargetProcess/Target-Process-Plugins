@@ -23,11 +23,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
             IEnumerable<TestRunImportResultInfo> resultInfos,
             IEnumerable<TestCaseTestPlanDTO> testCaseTestPlans)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _log = log;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             if (settings == null)
             {
                 _log.Error("Ctor member TestRunImportSettings settings is null");
@@ -68,7 +64,7 @@ namespace Tp.Integration.Plugin.TestRunImport.TestCaseResolvers
         /// Resolves the specified name to a collection of test cases matching the specified name.
         /// </summary>
         /// <param name="testName">Name of test case.</param>
-        /// <returns>An enuberable over the resolved test cases.</returns>
+        /// <returns>An enumerable over the resolved test cases.</returns>
         protected abstract IEnumerable<TestCaseTestPlanDTO> ResolveTestCases(string testName);
 
         public CheckMappingResult ResolveTestCaseNames(PluginProfileErrorCollection errors)

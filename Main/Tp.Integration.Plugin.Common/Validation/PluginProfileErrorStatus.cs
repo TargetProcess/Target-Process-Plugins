@@ -6,6 +6,7 @@
         UnexistedRevisionWarning = 2,
         WrongCredentialsError = 3,
         WrongRevisionNumberError = 4,
-        WrongWorkItemNumberError = 5
+        WrongWorkItemNumberError = 5,
+        TrustFailure = 6
     }
 }

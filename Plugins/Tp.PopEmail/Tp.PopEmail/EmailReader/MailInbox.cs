@@ -72,6 +72,10 @@ namespace Tp.PopEmailIntegration.EmailReader
             {
                 serverMessageUids = client.GetServerUids().ToList();
             }
+            catch (MailBee.MailBeeException ex)
+            {
+                throw new EmailException("Error getting new Uids from Server", ex);
+            }
             catch (EmailException)
             {
                 throw;

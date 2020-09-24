@@ -151,7 +151,7 @@ namespace Tp.Subversion.LegacyProfileConversionFeature
             Context.TpUsers.InsertOnSubmit(new TpUser
             {
                 Login = userLogin,
-                Email = string.Format("{0}@targetprocess.com", userLogin),
+                Email = $"{userLogin}@targetprocess.com",
                 FirstName = "FirstName",
                 LastName = "LastName",
                 SecretWord = "abc",

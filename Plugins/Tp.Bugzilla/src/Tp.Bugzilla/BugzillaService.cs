@@ -125,8 +125,7 @@ namespace Tp.Bugzilla
         {
             var response = ExecuteBugzillaQuery(new BugzillaTimezoneQuery());
 
-            TimeSpan timeOffset;
-            if (TimeSpan.TryParse(response, out timeOffset))
+            if (TimeSpan.TryParse(response, out var timeOffset))
             {
                 return timeOffset;
             }

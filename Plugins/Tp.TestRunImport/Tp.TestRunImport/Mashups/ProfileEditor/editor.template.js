@@ -13,14 +13,15 @@ tau.mashups
 			'<p class="note">Imports automatic test run results to TargetProcess from testing framework.</p>' +
 			'<div class="n-unit-settings">' +
 			'	<div class="pad-box">' +
-			'		<p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span></p>' +
+			'		<p class="label">Profile Name&nbsp;<span class="error" name="NameErrorLabel"></span><br>' +
+			'		<span class="small">Once this name is saved, you can not change it.</span></p>' +
 			'		<input type="text" class="input" id="name" name="Name" value="${Name}" style="width: 275px;" />' +
 			'	</div>' +
 			'	<div class="separator"></div>' +
 			'	<div class="pad-box">' +
 			'		<p class="label">Select Framework&nbsp;<span class="error" name="FrameworkTypeErrorLabel"></span></p>' +
-			'		<p class="note"><span class="small">Testing framework results to be binded to the test plan.</span></p>' +
-			'		<select class="select" id="frameworkDropDown" name="FrameworkType"><option value="0">- Select Framework -</option><option value="1">NUnit</option><option value="2">JUnit</option><option value="3">Selenium</option><option value="4">JenkinsHudson</option></select>' +
+			'		<p class="note"><span class="small">Testing framework results to be bound to the test plan.</span></p>' +
+			'		<select class="select" id="frameworkDropDown" name="FrameworkType"><option value="0">- Select Framework -</option><option value="1">NUnit</option><option value="2">JUnit</option><option value="3">Selenium</option><option value="4">JenkinsHudson</option><option value="5">Cucumber</option></select>' +
 			'	</div>' +
 			'	<div class="separator"></div>' +
 			'	<div class="pad-box">' +

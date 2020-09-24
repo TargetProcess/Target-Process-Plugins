@@ -24,7 +24,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,6 +44,7 @@
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="NServiceBus">
       <HintPath>..\..\Libs\NServiceBus\binaries\NServiceBus.dll</HintPath>
     </Reference>
@@ -65,8 +65,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -94,6 +95,7 @@
     <Compile Include="DataTransferObject.cs" />
     <Compile Include="Entities\CustomFieldInfoExtensions.cs" />
     <Compile Include="Entities\Entities.cs" />
+    <Compile Include="Entities\ExtendableDomainAssignableDTO.cs" />
     <Compile Include="Entities\Generated\ApplicationContextDataDTO.generated.cs" />
     <Compile Include="Entities\Generated\AssignableDTO.generated.cs" />
     <Compile Include="Entities\Generated\AssignableSquadDTO.generated.cs" />
@@ -137,9 +139,11 @@
     <Compile Include="Entities\Generated\MessageUidDTO.generated.cs" />
     <Compile Include="Entities\Generated\MetricsUserDTO.generated.cs" />
     <Compile Include="Entities\Generated\MilestoneDTO.generated.cs" />
+    <Compile Include="Entities\Generated\MilestoneProjectDTO.generated.cs" />
     <Compile Include="Entities\Generated\PasswordRecoveryDTO.generated.cs" />
     <Compile Include="Entities\Generated\PluginProfileDTO.generated.cs" />
     <Compile Include="Entities\Generated\PluginProfileMessageDTO.generated.cs" />
+    <Compile Include="Entities\Generated\PortfolioEpicDTO.generated.cs" />
     <Compile Include="Entities\Generated\PracticeDTO.generated.cs" />
     <Compile Include="Entities\Generated\PriorityDTO.generated.cs" />
     <Compile Include="Entities\Generated\ProcessAdminDTO.generated.cs" />
@@ -161,9 +165,9 @@
     <Compile Include="Entities\Generated\RoleDTO.generated.cs" />
     <Compile Include="Entities\Generated\RoleEffortDTO.generated.cs" />
     <Compile Include="Entities\Generated\RoleEntityTypeDTO.generated.cs" />
+    <Compile Include="Entities\Generated\RoleEntityTypeProcessSettingDTO.generated.cs" />
     <Compile Include="Entities\Generated\RuleDTO.generated.cs" />
     <Compile Include="Entities\Generated\RuleEngineUserDTO.generated.cs" />
-    <Compile Include="Entities\Generated\SavedFilterDTO.generated.cs" />
     <Compile Include="Entities\Generated\SeverityDTO.generated.cs" />
     <Compile Include="Entities\Generated\SquadDTO.generated.cs" />
     <Compile Include="Entities\Generated\SquadIterationDTO.generated.cs" />
@@ -206,7 +210,12 @@
       <DependentUpon>IDTOVisitor.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\Interfaces.cs" />
-    <Compile Include="Entities\PermissionGroups\EntityPermissionsDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\AclEntityPermissionGroupsDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\AclEntityPermissionGroupsTempDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\AclUserPermissionGroupsDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\EntityPermissionGroupsDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\IEntityPermissionGroupsDTO.cs" />
+    <Compile Include="Entities\PermissionGroups\IUserPermissionGroupsDTO.cs" />
     <Compile Include="Entities\PermissionGroups\UserPermissionGroupsDTO.cs" />
     <Compile Include="Entities\StorageItemScopeDTO.cs" />
     <Compile Include="Entities\TestCaseRunStatusDTO.cs" />
@@ -254,6 +263,7 @@
     <Compile Include="EntityLifecycle\Commands\PasswordRecovery.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\PluginProfile.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\PluginProfileMessage.generated.cs" />
+    <Compile Include="EntityLifecycle\Commands\PortfolioEpic.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Practice.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Priority.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Process.generated.cs" />
@@ -277,7 +287,6 @@
     <Compile Include="EntityLifecycle\Commands\RoleEntityType.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Rule.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\RuleEngineUser.generated.cs" />
-    <Compile Include="EntityLifecycle\Commands\SavedFilter.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Severity.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\Squad.generated.cs" />
     <Compile Include="EntityLifecycle\Commands\SquadIteration.generated.cs" />
@@ -342,6 +351,8 @@
     <Compile Include="EntityLifecycle\Messages\CustomField.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomReport.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\CustomRule.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PermissionGroup\AclEntityPermissionGroups.cs" />
+    <Compile Include="EntityLifecycle\Messages\PermissionGroup\AclUserPermissionGroups.cs" />
     <Compile Include="EntityLifecycle\Messages\PermissionGroup\EntityPermissionGroups.cs" />
     <Compile Include="EntityLifecycle\Messages\EntityState.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\EntityType.generated.cs" />
@@ -369,6 +380,7 @@
     <Compile Include="EntityLifecycle\Messages\PermissionGroup\UserPermissionGroups.cs" />
     <Compile Include="EntityLifecycle\Messages\PluginProfile.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\PluginProfileMessage.generated.cs" />
+    <Compile Include="EntityLifecycle\Messages\PortfolioEpic.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Practice.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Priority.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Process.generated.cs" />
@@ -392,7 +404,6 @@
     <Compile Include="EntityLifecycle\Messages\RoleEntityType.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Rule.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\RuleEngineUser.generated.cs" />
-    <Compile Include="EntityLifecycle\Messages\SavedFilter.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Severity.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Squad.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\SquadIteration.generated.cs" />
@@ -425,6 +436,9 @@
     <Compile Include="EntityLifecycle\Messages\UserProjectAllocation.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\UserStory.generated.cs" />
     <Compile Include="EntityLifecycle\Messages\Workflow.generated.cs" />
+    <Compile Include="EntityLifecycle\Queries\AclEntityPermissionGroupsQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\AclEntityPermissionGroupsTempQuery.cs" />
+    <Compile Include="EntityLifecycle\Queries\AclUserPermissionGroupsQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\AssignableQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\CommentQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\AssignableSquadQuery.cs" />
@@ -454,7 +468,7 @@
     <Compile Include="EntityLifecycle\Queries\TestCaseQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\TestCaseRun.cs" />
     <Compile Include="EntityLifecycle\Queries\TestCaseTestPlan.cs" />
-    <Compile Include="EntityLifecycle\Queries\User.cs" />
+    <Compile Include="EntityLifecycle\Queries\RetrieveAllUsersQuery.cs" />
     <Compile Include="EntityLifecycle\Queries\SystemUser.cs" />
     <Compile Include="EntityLifecycle\Queries\UserPermissionGroupsQuery.cs" />
     <Compile Include="EntityLifecycle\SagaMessage.cs" />
@@ -558,9 +572,14 @@
     <Compile Include="ServiceBus\UnicastBus\ConfigTpUnicastBus.cs" />
     <Compile Include="ServiceBus\UnicastBus\ConfigureTpUnicastBus.cs" />
     <Compile Include="ServiceBus\UnicastBus\IBusExtended.cs" />
+    <Compile Include="ServiceBus\UnicastBus\IUnicastBusSession.cs" />
+    <Compile Include="ServiceBus\UnicastBus\SharedUnicastBusSession.cs" />
+    <Compile Include="ServiceBus\UnicastBus\PerThreadUnicastBusSession.cs" />
     <Compile Include="ServiceBus\UnicastBus\PluginRouterMode.cs" />
     <Compile Include="ServiceBus\UnicastBus\PluginRouterSection.cs" />
     <Compile Include="ServiceBus\UnicastBus\RouterSubscriptionStorage.cs" />
+    <Compile Include="ServiceBus\UnicastBus\SharedUnicastBusSessionContext.cs" />
+    <Compile Include="ServiceBus\UnicastBus\SharedUnicastBusSessionContextHolder.cs" />
     <Compile Include="ServiceBus\UnicastBus\TpUnicastBus.cs" />
     <Compile Include="TargetProcessLifecycle\ITargetProcessLifecycleMessage.cs" />
     <Compile Include="TargetProcessLifecycle\PluginInfoRequestedMessage.cs" />

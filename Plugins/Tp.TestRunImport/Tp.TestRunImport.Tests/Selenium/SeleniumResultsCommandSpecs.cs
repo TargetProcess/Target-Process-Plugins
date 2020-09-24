@@ -24,7 +24,7 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And projectId '11'
 				And testPlanId '101'
 				And post results to remote Url
-				And authenticaton user Id is '1'
+				And authentication user Id is '1'
 				And results remote Url is 'http://localhost/TargetProcess/api/v1/Plugins/Test%20Run%20Import/Profiles/Profile_1/Commands/SeleniumResults?token=YWRtaW46OTRDRDg2Qzg1NjgzQUZDMzg3Qjg2QTVERTAxRTZEQzY='
 				And current plugin profile settings saved under name 'Profile_1'
 			When command SeleniumResults is sent to TargetProcess
@@ -57,7 +57,7 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And testPlanId '101'
 				And post results to remote Url
 				And RegExp '_(?<testId>\d+)$'
-				And authenticaton user Id is '1'
+				And authentication user Id is '1'
 				And results remote Url is 'http://localhost/TargetProcess/api/v1/Plugins/Test%20Run%20Import/Profiles/Profile_1/Commands/SeleniumResults?token=YWRtaW46OTRDRDg2Qzg1NjgzQUZDMzg3Qjg2QTVERTAxRTZEQzY='
 				And current plugin profile settings saved under name 'Profile_1'
 			When command SeleniumResults is sent to TargetProcess
@@ -90,7 +90,7 @@ namespace Tp.TestRunImport.Tests.Selenium
 				And testPlanId '101'
 				And post results to remote Url
 				And RegExp '^(?<testName>[^_]+)_Test$'
-				And authenticaton user Id is '1'
+				And authentication user Id is '1'
 				And results remote Url is 'http://localhost/TargetProcess/api/v1/Plugins/Test%20Run%20Import/Profiles/Profile_1/Commands/SeleniumResults?token=YWRtaW46OTRDRDg2Qzg1NjgzQUZDMzg3Qjg2QTVERTAxRTZEQzY='
 				And current plugin profile settings saved under name 'Profile_1'
 			When command SeleniumResults is sent to TargetProcess

@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
@@ -19,12 +19,12 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
             _log = log;
         }
 
-        public AbstractTestRunImportResultsReader GetResolver(TestRunImportSettings settings, TextReader reader)
+        public AbstractTestRunImportResultsReader GetResolver(TestRunImportSettings settings, StreamReader reader)
         {
             if (settings == null)
             {
                 _log.Error("GetResolver member settings is null");
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             switch (settings.FrameworkType)
@@ -34,11 +34,13 @@ namespace Tp.Integration.Plugin.TestRunImport.TestRunImportReaders
                 case FrameworkTypes.FrameworkTypes.JUnit:
                     return new JUnitResultsXmlReader(_log, reader);
                 case FrameworkTypes.FrameworkTypes.Selenium:
-                    return new SeleniumResultsHtmlReader(_log, reader);
+                    return new SeleniumResultsReader(_log, reader);
                 case FrameworkTypes.FrameworkTypes.JenkinsHudson:
                     return new JenkinsHudsonResultsXmlReader(_log, reader);
+                case FrameworkTypes.FrameworkTypes.Cucumber:
+                    return new CucumberResultsXmlReader(_log, reader);
                 default:
-                    throw new ApplicationException(string.Format("Failed to get resolver for FrameworkType: {0}", settings.FrameworkType));
+                    throw new ApplicationException($"Failed to get resolver for FrameworkType: {settings.FrameworkType}");
             }
         }
     }

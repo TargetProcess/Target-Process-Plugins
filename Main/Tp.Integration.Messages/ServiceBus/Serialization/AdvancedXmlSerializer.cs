@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2016 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.IO;
@@ -42,7 +42,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
                 return result.Item1;
             }
 
-            var serializationPatcher = new SerializationPatcher(new IPatch[] { });
+            var serializationPatcher = new SerializationPatcher(Array.Empty<IPatch>());
             if (!serializationPatcher.ShouldApply(xmlDocument.InnerXml))
             {
                 return result.Item1;
@@ -70,7 +70,7 @@ namespace Tp.Integration.Messages.ServiceBus.Serialization
             });
 
             var messages = (IMessage[]) deserializer.Deserialize(xmlDocument);
-            return Tuple.Create(messages.Where(x => x != null).ToArray(), notFoundTypesCount);
+            return Tuple.Create(messages.WhereNotNull().ToArray(), notFoundTypesCount);
         }
     }
 }

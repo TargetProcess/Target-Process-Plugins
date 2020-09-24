@@ -86,6 +86,10 @@ namespace System
             string.Equals(a, b, StringComparison.InvariantCultureIgnoreCase);
 
         [Pure]
+        public static bool OrdinalEqualsIgnoreCase(this string a, string b) =>
+            string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+
+        [Pure]
         [ContractAnnotation("value:null => null")]
         public static string FilterInvalidXmlCharacters(this string value)
         {
@@ -171,6 +175,7 @@ namespace System
             {
                 return value;
             }
+
             var sb = new StringBuilder(value);
             sb[0] = char.ToLowerInvariant(sb[0]);
             return sb.ToString();
@@ -183,6 +188,34 @@ namespace System
             return value.IsNullOrEmpty()
                 ? Enumerable.Empty<string>()
                 : value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        [Pure]
+        [CanBeNull]
+        [SqlFunctionAttribute("[dbo].[f_GetUrlCustomFieldPart]", DbType.String)]
+        public static string GetUrlCustomFieldPart([CanBeNull] this string urlCustomFieldValue, UrlCustomFieldPart urlPart)
+        {
+            if (urlCustomFieldValue == null)
+            {
+                return urlCustomFieldValue;
+            }
+
+            var urlPartsSeparator = urlCustomFieldValue.IndexOf("\n", StringComparison.Ordinal);
+
+            if (urlPart == UrlCustomFieldPart.Description)
+            {
+                return urlPartsSeparator >= 0 ? urlCustomFieldValue.Substring(0, urlPartsSeparator) : null;
+            }
+
+            if (urlPart == UrlCustomFieldPart.Uri)
+            {
+                return urlPartsSeparator >= 0
+                    ? urlCustomFieldValue.Substring(urlPartsSeparator + 1,
+                        urlCustomFieldValue.Length - urlPartsSeparator - 1)
+                    : urlCustomFieldValue;
+            }
+
+            return urlCustomFieldValue;
         }
 
         [Pure]

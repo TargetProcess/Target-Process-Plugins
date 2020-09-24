@@ -13,7 +13,7 @@ namespace Tp.Integration.Messages.PluginLifecycle
         public PluginInfo(PluginName name)
         {
             Name = name;
-            Accounts = new PluginAccount[] { };
+            Accounts = Array.Empty<PluginAccount>();
         }
 
         public PluginName Name { get; set; }

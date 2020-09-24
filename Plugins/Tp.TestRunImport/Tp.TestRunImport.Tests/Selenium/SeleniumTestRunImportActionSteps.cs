@@ -40,7 +40,7 @@ namespace Tp.TestRunImport.Tests.Selenium
             Settings.RemoteResultsUrl = remoteUrl;
         }
 
-        [Given("authenticaton user Id is '$authTokenUserId'")]
+        [Given("authentication user Id is '$authTokenUserId'")]
         public void AuthTokenUserId(int authTokenUserId)
         {
             Settings.AuthTokenUserId = authTokenUserId;
@@ -71,7 +71,7 @@ namespace Tp.TestRunImport.Tests.Selenium
         private Stream GetTypeManifestResourceStream()
         {
             return Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                string.Format("{0}.{1}", TypeResourceLocation, ResourceFileNameForCurrentProfile));
+                $"{TypeResourceLocation}.{ResourceFileNameForCurrentProfile}");
         }
 
         private string ResourceFileNameForCurrentProfile
@@ -91,24 +91,12 @@ namespace Tp.TestRunImport.Tests.Selenium
             }
         }
 
-        protected override FrameworkTypes FrameworkType
-        {
-            get { return FrameworkTypes.Selenium; }
-        }
+        protected override FrameworkTypes FrameworkType => FrameworkTypes.Selenium;
 
-        private string SimpleResultsFile
-        {
-            get { return "SimpleSeleniumTestResult.txt"; }
-        }
+        private string SimpleResultsFile => "SimpleSeleniumTestResult.txt";
 
-        private string TestIdRegExpResultsFile
-        {
-            get { return "TestIdRegExpSeleniumTestResult.txt"; }
-        }
+        private string TestIdRegExpResultsFile => "TestIdRegExpSeleniumTestResult.txt";
 
-        private string TestNameRegExpResultsFile
-        {
-            get { return "TestNameRegExpSeleniumTestResult.txt"; }
-        }
+        private string TestNameRegExpResultsFile => "TestNameRegExpSeleniumTestResult.txt";
     }
 }

@@ -188,11 +188,12 @@ namespace Tp.PopEmailIntegration.Sagas
             if (!MatchedRule.IsNull || MessageContainsTicket(messageDto.Body))
             {
                 messageDto.FromID = fromUserId;
-                Log().Info($"Creating message with subject {messageDto.Subject} in tp ");
+                Log().Info($"Creating message with subject '{messageDto.Subject}' in tp");
                 Send(new CreateMessageCommand(messageDto));
             }
             else
             {
+                Log().Info($"Skip creating message with subject '{messageDto.Subject}' in tp, no Rule matched or Ticket# found");
                 CompleteSaga();
             }
         }

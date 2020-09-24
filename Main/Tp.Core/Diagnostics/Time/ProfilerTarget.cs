@@ -28,6 +28,7 @@ namespace Tp.Core.Diagnostics.Time
         [HttpHeader("X-DslLoadDynamicMembers")] [Description("Load dynamic members(custom fields) on dsl building, loading suggestions, etc.")] DslFilterLoadDynamicMembers,
         [HttpHeader("X-DslFilterBuildSuggestions")] [Description("Time spent on dsl suggestions filter building")] DslFilterBuildSuggestions,
         [HttpHeader("X-SliceBuildTotal")] [Description("Time spent on Slice building")] SliceBuildTotal,
+        [HttpHeader("X-Slice-MoveBatch")] [Description("Time spent on batch move cards")] SliceMoveBatch,
         BuildApplicationContext,
         BuildProjectContext,
         BuildProcessContext,
@@ -60,6 +61,8 @@ namespace Tp.Core.Diagnostics.Time
         DslCreateScriptSourceContext,
         DslAstBackwardCompatibilityTransformation,
         DslAstEvaluationTransformation,
-        DslAstPeopleCapacityTransformation
+        DslAstPeopleCapacityTransformation,
+        [HttpHeader("X-TransactionCompletedEvent-Publishing")] [Description("Time spent on publishing transaction completed event")] TransactionCompletedEventPublishing,
+        [Description("Time spent executing database query to build slice data items")] ExecuteSliceQueryCollection,
     }
 }

@@ -31,6 +31,9 @@ namespace Tp.Integration.Messages.PluginLifecycle
 
         [DataMember(EmitDefaultValue = false)]
         public MashupUserInfo LastModifiedBy { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string Publisher { get; set; }
     }
 
     [DataContract, Serializable]

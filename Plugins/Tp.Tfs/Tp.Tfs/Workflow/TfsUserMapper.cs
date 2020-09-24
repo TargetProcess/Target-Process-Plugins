@@ -1,12 +1,11 @@
 ﻿// 
-// Copyright (c) 2005-2012 TargetProcess. All rights reserved.
+// Copyright (c) 2005-2019 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
 // 
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tp.Integration.Common;
 using Tp.Integration.Plugin.Common.Activity;
 using Tp.Integration.Plugin.Common.Domain;
 using Tp.Integration.Plugin.Common.Mapping;
@@ -33,15 +32,11 @@ namespace Tp.Tfs.Workflow
 
                 if (result == null)
                 {
-                    var splittedLogin = revision.Author.Split('\\');
-
-                    var login = splittedLogin.Length > 1 ? splittedLogin[1] : splittedLogin[0];
+                    var login = GetDomainLogin(revision.Author) ?? revision.Author;
                     result = userDtos.FirstOrDefault(x => login.Equals(x.Login, StringComparison.OrdinalIgnoreCase));
 
                     if (result != null)
                         return result;
-
-                    result = userDtos.FirstOrDefault(x => login.Equals(x.FirstName + " " + x.LastName, StringComparison.OrdinalIgnoreCase));
                 }
             }
 
@@ -75,7 +70,7 @@ namespace Tp.Tfs.Workflow
                 if (lookup != null)
                     return lookup;
 
-                var login = GetLogin(revision.Author);
+                var login = GetDomainLogin(revision.Author);
 
                 if (login != null)
                     lookup = userMapping[login];
@@ -84,11 +79,11 @@ namespace Tp.Tfs.Workflow
             return lookup;
         }
 
-        private string GetLogin(string domenLogin)
+        private string GetDomainLogin(string domainLogin)
         {
-            var splitted = domenLogin.Split(new[] { '\\' });
+            var loginSplit = domainLogin.Split('\\');
 
-            return splitted.Length == 2 ? splitted[1] : null;
+            return loginSplit.Length == 2 ? loginSplit[1] : null;
         }
     }
 }

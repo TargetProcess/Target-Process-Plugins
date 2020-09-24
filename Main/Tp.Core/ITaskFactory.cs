@@ -7,9 +7,11 @@ namespace Tp.Core
 {
     public interface ITaskFactory
     {
-        void StartNew(Action aciton);
-
+        int? GetQueuedOrRunningTaskCount();
+        Task StartNew(Action action);
+        Task StartNew(Action action, CancellationToken cancellationToken);
         Task<T> StartNew<T>(Func<T> func);
+        Task<T> StartNew<T>(Func<T> func, CancellationToken cancellationToken);
     }
 
     public class TpTaskFactory : ITaskFactory
@@ -27,30 +29,51 @@ namespace Tp.Core
         {
             _useThreadPool = useThreadPool;
             _taskScheduler = maxDegreeOfParallelism == default
-                ? TaskScheduler.Current
+                ? TaskScheduler.Default
                 : new LimitedConcurrencyLevelTaskScheduler(maxDegreeOfParallelism);
+            IsLimitedTaskScheduler = _taskScheduler is LimitedConcurrencyLevelTaskScheduler;
         }
 
-        public void StartNew(Action action)
+        public bool IsLimitedTaskScheduler { get; }
+
+        public Task StartNew(Action action) => StartNewInternal(action, CancellationToken.None);
+
+        public Task StartNew(Action action, CancellationToken cancellationToken) =>
+            StartNewInternal(action, cancellationToken);
+
+        public Task<T> StartNew<T>(Func<T> func) => StartNewInternal(func, CancellationToken.None);
+
+        public Task<T> StartNew<T>(Func<T> func, CancellationToken cancellationToken) =>
+            StartNewInternal(func, cancellationToken);
+
+        private Task StartNewInternal(Action action, CancellationToken cancellationToken)
         {
             if (IsStartingLimitedFromLimited)
             {
                 action();
+                return Task.CompletedTask;
             }
-            else
-            {
-                Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions, _taskScheduler);
-            }
+
+            return Task.Factory.StartNew(action, cancellationToken, TaskCreationOptions, _taskScheduler);
         }
 
-        public Task<T> StartNew<T>(Func<T> func)
+        private Task<T> StartNewInternal<T>(Func<T> func, CancellationToken cancellationToken)
         {
             return IsStartingLimitedFromLimited
                 ? Task.FromResult(func())
-                : Task.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions, _taskScheduler);
+                : Task.Factory.StartNew(func, cancellationToken, TaskCreationOptions, _taskScheduler);
         }
 
-        private bool IsStartingLimitedFromLimited => _taskScheduler is LimitedConcurrencyLevelTaskScheduler
-            && TaskScheduler.Current == _taskScheduler;
+        private bool IsStartingLimitedFromLimited => IsLimitedTaskScheduler && TaskScheduler.Current == _taskScheduler;
+
+        int? ITaskFactory.GetQueuedOrRunningTaskCount()
+        {
+            if (_taskScheduler is LimitedConcurrencyLevelTaskScheduler limited)
+            {
+                return limited.GetQueuedOrRunningCount();
+            }
+
+            return null;
+        }
     }
 }
