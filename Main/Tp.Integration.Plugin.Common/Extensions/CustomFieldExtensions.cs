@@ -1,7 +1,7 @@
 ﻿using Tp.Core;
 using Tp.Integration.Common;
-using Tp.Integration.Messages;
 using Tp.Integration.Messages.Entities;
+using Tp.Model.Common;
 
 namespace Tp.Integration.Plugin.Common.Extensions
 {
@@ -11,7 +11,7 @@ namespace Tp.Integration.Plugin.Common.Extensions
         {
             return Try.Create(() =>
             {
-                var config = customField.Config.Deserialize<CustomFieldConfigHolderDto>();
+                var config = CustomFieldConfigSerializer.Instance.Deserialize(customField.Config);
                 return (ICustomFieldConfigHolder) config;
             });
         }

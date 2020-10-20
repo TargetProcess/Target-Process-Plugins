@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E510FB55-F6A2-4B9A-94E6-547D1B36AC3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tp.Model.Common</RootNamespace>
+    <AssemblyName>Tp.Model.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Tp.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.2.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223">
+      <HintPath>..\..\packages\structuremap.2.6.2\lib\StructureMap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.Core.Functional.0.1.7\lib\net45\Tp.Core.Functional.dll</HintPath>
+    </Reference>
+    <Reference Include="Tp.I18n.Interfaces, Version=0.1.0.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tp.I18n.Interfaces.0.1.1\lib\net45\Tp.I18n.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomFieldConfigSerializer.cs" />
+    <Compile Include="CustomFieldFormatSpecifier.cs" />
+    <Compile Include="Entities\CustomField\PredefinedCustomFieldConfigUnits.cs" />
+    <Compile Include="CacheableCustomFields\CacheableCustomFieldSchema.cs" />
+    <Compile Include="CacheableCustomFields\ICachedCustomFieldProvider.cs" />
+    <Compile Include="CacheableCustomFields\CachedCustomFieldsUtils.cs" />
+    <Compile Include="Entities\CustomField\EntityCustomValue.cs" />
+    <Compile Include="Entities\EntityType\CacheableEntityType.cs" />
+    <Compile Include="Exceptions\EntityCustomFieldEntityNotFoundException.cs" />
+    <Compile Include="ExtendableDomain.cs" />
+    <Compile Include="ExtendableDomainMultiTenantEnvironmentSetupAttribute.cs" />
+    <Compile Include="CommonMessages.cs" />
+    <Compile Include="CustomFieldUtils.cs" />
+    <Compile Include="Entities\CustomField\CustomFieldConfig.cs" />
+    <Compile Include="Entities\CustomField\TypeConverters\CustomFieldValueConverter.cs" />
+    <Compile Include="EntityKind.cs" />
+    <Compile Include="EntityKindExtensionsLight.cs" />
+    <Compile Include="EntityTypeIdentity.cs" />
+    <Compile Include="Exceptions\CustomFieldException.cs" />
+    <Compile Include="Exceptions\CustomFieldTypeMismatchException.cs" />
+    <Compile Include="Extensions\ProjectAllocationDatesExtensions.cs" />
+    <Compile Include="GeneralRelationTypes.cs" />
+    <Compile Include="IExtendableDomainEntityKindExtensionsLight.cs" />
+    <Compile Include="Interfaces\IApplicationPathFromRequestFirst.cs" />
+    <Compile Include="Interfaces\ICustomFieldConfigSerializer.cs" />
+    <Compile Include="Interfaces\IEntityState.cs" />
+    <Compile Include="Interfaces\IIdHolder.cs" />
+    <Compile Include="Interfaces\ITimePeriod.cs" />
+    <Compile Include="LabeledUri.cs" />
+    <Compile Include="Permissions\EntityOperationType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SliceConstants.cs" />
+    <Compile Include="TestCaseRunStatus.cs" />
+    <Compile Include="TpUri.cs" />
+    <Compile Include="UserEntityKind.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tp.Core\Tp.Core.csproj">
+      <Project>{93bf8935-0436-4e51-ac35-0ba1d93b8133}</Project>
+      <Name>Tp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
+      <Project>{ef010d25-b262-4051-b369-bd62f334a190}</Project>
+      <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Utils\Tp.Utils.csproj">
+      <Project>{bf902d46-3d03-46d6-9e0b-d4246584a881}</Project>
+      <Name>Tp.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

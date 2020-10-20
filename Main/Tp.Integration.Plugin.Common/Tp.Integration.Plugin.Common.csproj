@@ -153,7 +153,6 @@
     <Compile Include="Domain\ISpecificStorage.cs" />
     <Compile Include="Domain\IStorageRepository.cs" />
     <Compile Include="Domain\PluginContext.cs" />
-    <Compile Include="Extensions\CustomFieldConfigHolderDto.cs" />
     <Compile Include="Extensions\CustomFieldExtensions.cs" />
     <Compile Include="FileStorage\IProfileFileStorage.cs" />
     <Compile Include="FileStorage\ProfileFileStorage.cs" />
@@ -307,6 +306,10 @@
     <ProjectReference Include="..\Tp.Integration.Messages\Tp.Integration.Messages.csproj">
       <Project>{EF010D25-B262-4051-B369-BD62F334A190}</Project>
       <Name>Tp.Integration.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tp.Model.Common\Tp.Model.Common.csproj">
+      <Project>{e510fb55-f6a2-4b9a-94e6-547d1b36ac3a}</Project>
+      <Name>Tp.Model.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -120,7 +120,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.XML" />
     <Reference Include="Tp.Core.Expressions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Tp.Core.Expressions.1.0.0-rc2\lib\netstandard2.0\Tp.Core.Expressions.dll</HintPath>
+      <HintPath>..\..\packages\Tp.Core.Expressions.1.0.0-rc3\lib\netstandard2.0\Tp.Core.Expressions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Tp.Core.Functional, Version=0.1.7.0, Culture=neutral, PublicKeyToken=90e3261511aad98d, processorArchitecture=MSIL">
@@ -204,6 +204,7 @@
     <Compile Include="Linq\ClassFactory.cs" />
     <Compile Include="Linq\DynamicProperty.cs" />
     <Compile Include="Linq\ExpressionParserCache.cs" />
+    <Compile Include="Linq\ExpressionParserCacheFilter.cs" />
     <Compile Include="Linq\ExpressionStringHasher.cs" />
     <Compile Include="Linq\IExpressionParser.cs" />
     <Compile Include="Linq\QueryableType.cs" />

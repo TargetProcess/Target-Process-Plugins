@@ -1025,12 +1025,6 @@ namespace Tp.Core.Features
         DefaultInitialNumericPriorityForProjects,
 
         /// <summary>
-        /// When enabled, allows to define custom axes.
-        /// </summary>
-        [ClientFeature("customSlice")]
-        CustomSlice,
-
-        /// <summary>
         /// Applies logic enabled by feature DatesWithTZ for date custom fields
         /// </summary>
         DatesWithTZForCF,
@@ -1086,13 +1080,6 @@ namespace Tp.Core.Features
         /// </summary>
         [ClientFeature("searchUICreationDateFilter")]
         SearchUICreationDateFilter,
-
-        /// <summary>
-        /// Client-side feature toggle.
-        /// Used to generate extendable domain tabs using new format of axis ids
-        /// </summary>
-        [ClientFeature("customSliceManyToMany")]
-        CustomSliceManyToMany,
 
         /// <summary>
         /// Enables integration for view context service
@@ -1187,27 +1174,6 @@ namespace Tp.Core.Features
         FixHideEmptyLanesWithStateAxis,
 
         /// <summary>
-        /// When enabled, app metrics for LiteContext lazy fields are measured and exposed
-        /// </summary>
-        LiteContextAppMetrics,
-
-        /// <summary>
-        /// When enabled, app metrics for LiteContextService are measured and exposed
-        /// </summary>
-        LiteContextServiceAppMetrics,
-
-        /// <summary>
-        /// When enabled, LiteContext becomes lazy (not initialized until any field is read)
-        /// </summary>
-        LiteContextLazy,
-
-        /// <summary>
-        /// When enabled, Project and Team ids stored in LiteContext are actualized (intersected with available for user)
-        /// in database (using where predicate) instead of retrieving all and intersecting in memory
-        /// </summary>
-        LiteContextFilterAvailableProjectsTeamsInDb,
-
-        /// <summary>
         /// When enabled, maintains in-memory per-account cache of Resource Model -> Lang Types,
         /// which avoids redundant metamodel lookups.
         /// </summary>
@@ -1241,16 +1207,6 @@ namespace Tp.Core.Features
         SsoRelayStateQueryStringParameterName,
 
         /// <summary>
-        /// When enabled, Context V2 endpoint replies with context created without tp2 context involving (for performance reason)
-        /// </summary>
-        ExtendedContextBuildWithoutTp2Context,
-
-        /// <summary>
-        /// When enabled, Context V2 endpoint builds available Teams and Projects simply querying all instead of logic based on memberships
-        /// </summary>
-        ExtendedContextPermissionAvailableTeamsProjects,
-
-        /// <summary>
         /// When enabled, priorities and severities will be cached on start
         /// </summary>
         [ClientFeature("prioritiesAndSeveritiesCache")]
@@ -1261,12 +1217,6 @@ namespace Tp.Core.Features
         /// </summary>
         [ClientFeature("preventTausCalls")]
         PreventTausCalls,
-
-        /// <summary>
-        /// US#236810
-        /// When enabled, caches Account application host and path (base url) until restart or reset using account cache controller
-        /// </summary>
-        CacheAppHostAndPath,
 
         /// <summary>
         /// US#242916
@@ -1294,28 +1244,10 @@ namespace Tp.Core.Features
         SupportWhereItIsNoneInDsl,
 
         /// <summary>
-        /// When enabled, parsed context descriptor (Team/Project ids, any and no flags) cached in memory by acid
-        /// </summary>
-        ContextDescriptorCache,
-
-        /// <summary>
-        /// When enabled, Acid and Full applicable (Lite) contexts are cached in memory with some expiration period
-        ///
-        /// </summary>
-        LiteContextCache,
-
-        /// <summary>
         /// Adds support into DSL engine autoapply logic for properties from ED (e.g. UserStory.Capability)
         /// See US#240241
         /// </summary>
         FixDslAutoApplyForEDProperties,
-
-        /// <summary>
-        /// US#241857
-        /// When enabled, relations tab is shown on detailed view of extendable domain entity
-        /// </summary>
-        [ClientFeature("extendableDomainRelationsTab")]
-        ExtendableDomainRelationsTab,
 
         /// <summary>
         /// This feature toggle just mark if server have separated Requirements practice with Feature and Epic, so new frontend can
@@ -1341,12 +1273,6 @@ namespace Tp.Core.Features
         /// </summary>
         [ClientFeature("hideVelocityInCellHeader")]
         HideVelocityInCellHeader,
-
-        /// <summary>
-        /// US#247041
-        /// When enabled, filter for having assigned any Team is not added before filter for having assigned some context selected Team
-        /// </summary>
-        AppContextApplierDoNotAddSomeTeamFilterAlongWithConcreteTeamsFilter,
 
         /// <summary>
         /// US#247551
@@ -1403,13 +1329,6 @@ namespace Tp.Core.Features
         /// Supposed to increase performance in some cases.
         /// </summary>
         SliceSeparateCellsPerType,
-
-        /// <summary>
-        /// US#248416 Reduce the number of CASE-WHEN cases for custom field expressions
-        /// When enabled, custom field list used in projection to custom field axis is reduced (filtered)
-        /// by actual cell entity types configured in view
-        /// </summary>
-        CustomFieldsAxisFilterCustomFieldsInvolvedByActualCellItemTypes,
 
         /// <summary>
         /// BUG#251626
@@ -1562,10 +1481,52 @@ namespace Tp.Core.Features
         OptimizeTestRunItemIdFilters,
 
         /// <summary>
-        /// Allow to set form login for SystemUser when login form disabled for Sso.
+        /// US#247672
+        /// For Custom Reports queries that use filters similar to either `Count(...) > 0` or `Count(...) != 0`
+        /// that are semantically equivalent to `Any(...)`
+        /// `ISNULL` function could be removed safely in SQL predicate
+        /// for better DB statistics usage and building better query plans.
+        ///
+        /// Optimization is based on the following NULL value comparison rules in SQL:
+        ///     `NULL != 0` => FALSE and `ISNULL(NULL, 0) != 0` => FALSE
+        /// and
+        ///     `NULL > 0` => FALSE and `ISNULL(NULL, 0) > 0)` => FALSE
+        ///
+        /// As result, in the following query:
+        ///     ...
+        ///     FROM "General" AS "g0"
+        ///     INNER JOIN "Assignable" AS "a1" ON "g0"."GeneralID" = "a1"."AssignableID"
+        ///     LEFT JOIN (
+        ///       SELECT COUNT(*) AS "User Story:AssignedTeams",
+        ///              "as6"."AssignableID"
+        ///         FROM "AssignableSquad" AS "as6"
+        ///              ...
+        ///     ) AS "sq9" ON "a1"."AssignableID" = "sq9"."AssignableID"
+        ///     ...
+        ///     WHERE ... AND (ISNULL("sq9"."User Story:AssignedTeams", 0) != 0) AND ...
+        ///
+        /// predicate could be simplified to:
+        ///     WHERE ... AND "sq9"."User Story:AssignedTeams" != 0 AND ...
         /// </summary>
-        [ClientFeature("ssoSetFormLoginForSystemUser")]
-        SsoSetFormLoginForSystemUser,
+        RemoveIsNullFunctionForCountSubQueryIfPossible,
+
+        /// <summary>
+        /// US#247672
+        /// If "count" part of predicate satisfaction is required for entire predicate satisfaction, e.g
+        ///     WHERE "g0"."EntityTypeID" = 4 AND (ISNULL("sq9"."User Story:AssignedTeams", 0) != 0)
+        /// then "count" subquery could be joined with INNER JOIN and "count" part of predicate is removed:
+        ///     ...
+        ///     FROM "General" AS "g0"
+        ///     INNER JOIN "Assignable" AS "a1" ON "g0"."GeneralID" = "a1"."AssignableID"
+        ///     INNER JOIN (
+        ///       SELECT COUNT(*) AS "User Story:AssignedTeams",
+        ///              "as6"."AssignableID"
+        ///         FROM "AssignableSquad" AS "as6"
+        ///              ...
+        ///     ) AS "sq9" ON "a1"."AssignableID" = "sq9"."AssignableID"
+        ///     WHERE "g0"."EntityTypeID" = 4
+        /// </summary>
+        InnerJoinCountSubQueryIfPossible,
 
         /// <summary>
         /// US#260185
@@ -1732,5 +1693,67 @@ namespace Tp.Core.Features
         /// Can be enabled for all roles.
         /// </summary>
         AllowToFilterByEntityCustomFieldDirectly,
+
+        /// <summary>
+        /// US#226806
+        /// Use new chunk names for TP3 and TP2 pages, and expect targetprocess-frontend to load mashups bundle
+        /// and globals by itself, without script injection, for pages other than Board.aspx (__tauinit__ used there instead)
+        /// </summary>
+        FrontendCodeSplitting,
+
+        /// <summary>
+        /// US#266578 Allows assignment of multiple teams to a Request without using Team Workflows
+        /// </summary>
+        AssignMultipleTeamsToRequests,
+
+        /// <summary>
+        /// US#266746
+        /// Use raw SQL instead of REST to fetch data required for default metric calculation.
+        /// </summary>
+        UseRawSqlInDefaultMetrics,
+
+        /// <summary>
+        /// US#266982
+        /// Optimization toggle. When enabled, skips slow validation of custom field names for performance boost on hot path,
+        /// assuming that passed custom field names (CustomField1, 2, etc.) are always valid
+        /// since there are no known use-cases when they can be invalid.
+        ///
+        /// Can be enabled for all roles.
+        /// </summary>
+        DoNotValidateCustomFieldNamesOnRead,
+
+        /// <summary>
+        /// F#239939
+        /// If enables then view context filters will be managed by separate service
+        /// </summary>
+        ManagingViewContextFromService,
+
+        /// <summary>
+        /// US#241857
+        /// When enabled, relations tab is shown on detailed view of extendable domain entity
+        /// </summary>SpaceCalculator.cs
+        [ClientFeature("extendableDomainRelationsTab")]
+        ExtendableDomainRelationsTab,
+
+        /// <summary>
+        /// Client-side feature toggle.
+        /// Used to generate extendable domain tabs using new format of axis ids
+        /// </summary>
+        [ClientFeature("customSliceManyToMany")]
+        CustomSliceManyToMany,
+
+		/// <summary>
+        /// https://plan.tpondemand.com/entity/245538-add-possibility-to-customize-money-format
+        /// Allow to specify custom format for money custom field value during custom field creation.
+        /// </summary>
+        AllowSpecifyCustomMoneyFormat,
+
+        /// <summary>
+        /// US#266539
+        /// Allows to use Stored List widgets on dashboards. Stored List - list view which definition stored inside dashboard definition.
+        /// Unlike Linked List, Stored List is not showed as separate view menu item.
+        /// </summary>
+        [ClientFeature("dashboardStoredListTemplate")]
+        DashboardStoredListTemplate,
     }
 }

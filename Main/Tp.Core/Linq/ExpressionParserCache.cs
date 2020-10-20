@@ -23,20 +23,6 @@ namespace Tp.Core.Linq
                 AppSettingsReader.ReadInt32("ExpressionParser:LruCache:Size", 250000),
                 StringComparer.Ordinal);
 
-        /// <summary>
-        /// Input strings shorter than this value won't be put into cache
-        /// if they also contain literals like numbers or strings.
-        /// See <see cref="ShouldCache"/> for details.
-        /// </summary>
-        private static readonly int _shortInputLength = AppSettingsReader.ReadInt32(
-            "ExpressionParser:LruCache:ShortInputLength",
-            // There is a common pattern of client storage access filters like `((key=="user43322-5560931232390684936"))`
-            // It doesn't make much sense to cache such expressions.
-            // It would be more elegant to use non-caching parser from ClientStorageController,
-            // but it requires much more effort than this dumb and naive length filter.
-            // Let's use it and see how many false positive rejections we get with such length.
-            45);
-
         private readonly ConcurrentLruCache<string, (IReadOnlyList<DynamicOrdering>, ParameterExpression Parameter)> _parsedOrderings =
             new ConcurrentLruCache<string, (IReadOnlyList<DynamicOrdering>, ParameterExpression Parameter)>(
                 // Ordering inputs don't have such variety as regular lambda expressions,
@@ -135,27 +121,6 @@ namespace Tp.Core.Linq
             }
 
             return ExpressionStringHasher.CalculateHash(cacheKeyParts);
-        }
-
-        [Pure]
-        public static bool ShouldCache([NotNull] string input)
-        {
-            if (input.Length >= _shortInputLength)
-            {
-                return true;
-            }
-
-            var containsLiterals = input.Any(c => c == '"' || c == '\'' || char.IsDigit(c));
-            if (containsLiterals)
-            {
-                // It's a short string containing literals,
-                // most likely it's something like `id == 2320` or `x in ['A', 'B']`.
-                // No sense to put such expressions in cache - they are fast enough to parse,
-                // and there is a high chance they will be evicted from cache soon anyway.
-                return false;
-            }
-
-            return true;
         }
     }
 }

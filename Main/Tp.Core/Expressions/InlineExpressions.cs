@@ -173,11 +173,11 @@ namespace Tp.Core.Expressions
             var targetParams = method.GetParameters()
                 .Select(x => new { x.Name, x.ParameterType }).ToArray();
 
-            Func<MethodInfo, bool> matchByParameters = candidateMethod => candidateMethod
-                .GetParameters()
-                .Where(x => !x.GetCustomAttributeCached<InlineEnvironmentAttribute>().HasValue)
-                .Select(candidateParam => new { candidateParam.Name, candidateParam.ParameterType })
-                .All(targetParams.Contains);
+            bool MatchByParameters(MethodInfo candidateMethod) =>
+                candidateMethod.GetParameters()
+                    .Where(x => !x.GetCustomAttributeCached<InlineEnvironmentAttribute>().HasValue)
+                    .Select(candidateParam => new { candidateParam.Name, candidateParam.ParameterType })
+                    .All(targetParams.Contains);
 
             if (method.IsGenericMethod)
             {
@@ -189,13 +189,12 @@ namespace Tp.Core.Expressions
                 matchByGenericArguments = x => !x.IsGenericMethod;
             }
 
-
             var methodName = inlineMethodName ?? method.Name;
 
             var candidates = method.DeclaringType
                 .GetMethods()
                 .Where(x => x.Name == methodName && typeof(Expression).IsAssignableFrom(x.ReturnType))
-                .Where(matchByParameters)
+                .Where(MatchByParameters)
                 .Where(matchByGenericArguments)
                 .ToArray();
 
@@ -203,14 +202,15 @@ namespace Tp.Core.Expressions
             {
                 return
                     new Failure<MethodInfo>(
-                        new InvalidOperationException(string.Format("It's more than 1 overload of inlineable method {0}.{1}.", method.DeclaringType, method?.Name)));
+                        new InvalidOperationException(
+                            $"It's more than 1 overload of inlineable method {method.DeclaringType}.{method.Name}."));
             }
 
             if (candidates.Length == 0)
             {
                 return
                     new Failure<MethodInfo>(
-                        new InvalidOperationException(string.Format("There is no overload of inlineable method {0}.{1}.", method.DeclaringType, method?.Name)));
+                        new InvalidOperationException($"There is no overload of inlineable method {method.DeclaringType}.{method.Name}."));
             }
 
             return new Success<MethodInfo>(candidates.Single());
@@ -251,7 +251,7 @@ namespace Tp.Core.Expressions
             }
 
             throw new NotSupportedException(
-                string.Format("Only constant arguments can be passed to inline method {0}.{1}", methodToInline.DeclaringType, methodToInline.Name));
+                $"Only constant arguments can be passed to inline method {methodToInline.DeclaringType}.{methodToInline.Name}");
         }
 
         [NotNull]
@@ -263,13 +263,14 @@ namespace Tp.Core.Expressions
             var values = inlineEnvironments.Where(parameterType.IsInstanceOfType).ToArray();
             if (values.Length == 0)
             {
-                throw new InvalidOperationException(string.Format("There is no overload of inlineable method {0}.{1}.", methodToInline.DeclaringType, methodToInline.Name));
+                throw new InvalidOperationException(
+                    $"There is no overload of inlineable method {methodToInline.DeclaringType}.{methodToInline.Name}.");
             }
 
             if (values.Length > 1)
             {
                 throw new InvalidOperationException(
-                    string.Format("It's more then 1 element of type {0} in inline environment. Inline method {1}.{2} can't be called.", parameterType, methodToInline.DeclaringType, methodToInline.Name));
+                    $"It's more then 1 element of type {parameterType} in inline environment. Inline method {methodToInline.DeclaringType}.{methodToInline.Name} can't be called.");
             }
 
             return values.Single();

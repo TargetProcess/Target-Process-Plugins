@@ -1,7 +1,7 @@
-﻿// 
+﻿//
 // Copyright (c) 2005-2011 TargetProcess. All rights reserved.
 // TargetProcess proprietary/confidential. Use is subject to license terms. Redistribution of this file is strictly forbidden.
-// 
+//
 
 using System;
 using System.Collections.Generic;
@@ -51,6 +51,7 @@ namespace Tp.Integration.Plugin.Common.Tests.Core
             mockBufferSize.Stub(x => x.Value).Return(2);
             ObjectFactory.Configure(x => x.For<IBufferSize>().HybridHttpOrThreadLocalScoped().Use(mockBufferSize));
 
+            var counter = 0;
             ObjectFactory.GetInstance<TransportMock>().On<AddAttachmentPartToMessageCommand>()
                 .Reply(x =>
                 {
@@ -60,14 +61,14 @@ namespace Tp.Integration.Plugin.Common.Tests.Core
                     }
                     return new AttachmentCreatedMessage
                     {
-                        Dto = new AttachmentDTO { OriginalFileName = x.FileName, OwnerID = x.OwnerId, Description = x.Description }
+                        Dto = new AttachmentDTO { OriginalFileName = x.FileName, OwnerID = x.OwnerId, Description = x.Description, AttachmentID = ++counter}
                     };
                 });
-            Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path);
+            Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path, true);
         }
 
         [TearDown]
-        private void TearDown()
+        public void TearDown()
         {
             Directory.Delete(ObjectFactory.GetInstance<PluginDataFolder>().Path, true);
         }

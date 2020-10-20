@@ -96,6 +96,7 @@
     <Compile Include="Entities\CustomFieldInfoExtensions.cs" />
     <Compile Include="Entities\Entities.cs" />
     <Compile Include="Entities\ExtendableDomainAssignableDTO.cs" />
+    <Compile Include="Entities\FormatInfo.cs" />
     <Compile Include="Entities\Generated\ApplicationContextDataDTO.generated.cs" />
     <Compile Include="Entities\Generated\AssignableDTO.generated.cs" />
     <Compile Include="Entities\Generated\AssignableSquadDTO.generated.cs" />

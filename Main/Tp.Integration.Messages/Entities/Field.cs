@@ -84,6 +84,20 @@ namespace Tp.Integration.Messages.Entities
         [XmlElement(Order = 100)]
         public bool IsSystem { get; set; }
 
+        /// <summary>
+        /// Format specifier pattern for custom field.
+        /// </summary>
+        [DataMember]
+        [XmlElement(Order = 110)]
+        public string FormatSpecifier { get; set; }
+
+        /// <summary>
+        /// Format info to apply in <see cref="FormatSpecifier"/>.
+        /// </summary>
+        [DataMember]
+        [XmlElement(Order = 111)]
+        public FormatInfo FormatInfo { get; set; }
+
         public Field()
         {
             FieldType = FieldTypeEnum.None;
@@ -101,6 +115,8 @@ namespace Tp.Integration.Messages.Entities
             Units = other.Units;
             CalculationModelContainsCollections = other.CalculationModelContainsCollections;
             IsSystem = other.IsSystem;
+            FormatSpecifier = other.FormatSpecifier;
+            FormatInfo = other.FormatInfo;
             Items = new List<string>(other.Items);
         }
 
@@ -116,15 +132,12 @@ namespace Tp.Integration.Messages.Entities
 
         public override string ToString()
         {
-            long ticks;
-
-            if (FieldType == FieldTypeEnum.Date && Int64.TryParse(Value, out ticks))
+            if (FieldType == FieldTypeEnum.Date && Int64.TryParse(Value, out var ticks))
             {
                 return new DateTime(ticks).ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
             }
 
-            double number;
-            if (FieldType == FieldTypeEnum.Number && double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out number))
+            if (FieldType == FieldTypeEnum.Number && double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
             {
                 return number.ToString(CultureInfo.InvariantCulture);
             }

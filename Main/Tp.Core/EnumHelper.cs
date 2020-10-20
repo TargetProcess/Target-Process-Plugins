@@ -53,7 +53,7 @@ namespace System
         public class EnumCache<TEnum> : IEnumerable<KeyValuePair<TEnum, string>>
             where TEnum : struct
         {
-            private readonly IDictionary<TEnum, string> _values;
+            private readonly IReadOnlyDictionary<TEnum, string> _values;
 
             private readonly ConcurrentBag<Maybe.TryDelegate<TEnum, string>> _fallbackFunctions =
                 new ConcurrentBag<Maybe.TryDelegate<TEnum, string>>();
@@ -62,9 +62,9 @@ namespace System
             {
                 if (!typeof(TEnum).IsEnum)
                 {
-                    throw new ArgumentException(string.Format("Type {0} is not an enumeration.", typeof(TEnum)));
+                    throw new ArgumentException($"Type {typeof(TEnum)} is not an enumeration.");
                 }
-                _values = ((TEnum[]) Enum.GetValues(typeof(TEnum))).ToDictionary(e => e, valueProvider);
+                _values = ((TEnum[]) Enum.GetValues(typeof(TEnum))).ToDictionary(e => e, valueProvider).ToReadOnly();
             }
 
             public void AddFallbackFunction(Maybe.TryDelegate<TEnum, string> function)
@@ -148,9 +148,19 @@ namespace System
         public static Maybe<TEnum> TryParseEnum<TEnum>(this string val) where TEnum : struct
         {
             RaiseErrorIfNotEnum<TEnum>();
-            TEnum parsed;
+            return Enum.TryParse(val, true, out TEnum parsed) ? Maybe.Return(parsed) : Maybe.Nothing;
+        }
 
-            return Enum.TryParse(val, true, out parsed) ? Maybe.Return(parsed) : Maybe.Nothing;
+        public static TEnum? TryParseEnumCached<TEnum>(this string val) where TEnum : struct
+        {
+            RaiseErrorIfNotEnum<TEnum>();
+            return EnumStringCache<TEnum>.Cache
+                // It may look like it's ineffective to iterate over all items, and a map must be used instead, however:
+                //   - most of the time there is a small number of enum values
+                //   - with this approach we don't have to think about cache exhaustion when clients pass too many different strings
+                .Where(x => string.Equals(val, x.Value, StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.Key)
+                .FirstOrNull();
         }
 
         public static IReadOnlyDictionary<TEnum, string> TryParseEnumByDescription<TEnum>(this string description, bool ignoreCase)

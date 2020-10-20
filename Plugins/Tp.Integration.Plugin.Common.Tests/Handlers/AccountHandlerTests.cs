@@ -28,6 +28,8 @@ namespace Tp.Integration.Plugin.Common.Tests.Handlers
         [SetUp]
         public void Setup()
         {
+            ObjectFactory.Configure(x => x.For<TransportMock>().Use<TransportMock>());
+
             _accountCollection = new AccountCollectionMock();
             _bus = new TpBusMock();
             _pluginContextMock = new PluginContextMock();

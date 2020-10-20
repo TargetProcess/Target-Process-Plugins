@@ -8662,12 +8662,12 @@ Ext.XTemplate = function(){
         m,
         id = 0,
         tpls = [],
-        VALUES = 'values',
+        VALUES = '_values',
         PARENT = 'parent',
         XINDEX = 'xindex',
         XCOUNT = 'xcount',
         RETURN = 'return ',
-        WITHVALUES = 'with(values){ ';
+        WITHVALUES = 'with(_values){ ';
 
     s = ['<tpl>', s, '</tpl>'].join('');
 
